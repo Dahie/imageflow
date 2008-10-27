@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><nodeL version="1.0"><graph.Node label="booh!" x="40" y="30"/><graph.Node label="ciao" x="80" y="80"/><graph.Node label="visione" x="99" y="49"/><graph.Node label="origine" x="0" y="0"/><graph.Node label="4" x="36" y="90"/><graph.Node label="3" x="40" y="94"/><graph.Node label="2" x="44" y="98"/><graph.Node label="1" x="48" y="102"/><graph.Node label="SimpleBean" x="189" y="32"><java class="java.beans.XMLDecoder" version="1.6.0_02"> 
+ <object class="simplebean.SimpleBean"> 
+  <void property="location"> 
+   <object class="java.awt.Point"> 
+    <int>5</int> 
+    <int>5</int> 
+   </object> 
+  </void> 
+  <void property="color"> 
+   <object class="java.awt.Color"> 
+    <int>255</int> 
+    <int>200</int> 
+    <int>0</int> 
+    <int>255</int> 
+   </object> 
+  </void> 
+  <void property="name"> 
+   <string>canvas0</string> 
+  </void> 
+ </object> 
+</java></graph.Node></nodeL>

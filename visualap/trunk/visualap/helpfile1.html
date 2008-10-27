@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>VisualAp</TITLE>
+	<style type="text/css">
+	body {
+		margin-left: 10px;
+		padding: 0;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: small;
+		background-color: #F0F0F0;
+	}
+	h1 {
+		margin-bottom: 10px;
+		padding: 10px 0 10px 25px;
+		color: #101010;
+		font-size: 120%;
+		font-weight: bold;
+		text-align: center;
+		text-transform: uppercase;
+	}
+	h2, h3, h4 {
+		margin-bottom: 8px;
+		padding: 0;
+		color: #202020;
+		font-size: 100%;
+		font-weight: bold;
+	}
+	</style>
+</HEAD>
+<BODY LANG="it-IT" TEXT="#000000" LINK="#0000ff" DIR="LTR">
+<A HREF="HelpFile.html">[Main Index]</A>
+<H1>VisualAp</H1>
+<H2>Introduction</H2>
+VisualAp is a visual framework for building application and systems based on lightweight visual components, called proclets. 
+Users can add their own components in order to extend the capability of VisualAp.
+<br>
+The VisualAp application can be used to perform audio processing, image processing, text and other process-driven emulation.
+
+<BR>
+
+The user
+can create an application by selecting the components from a toolbox,
+configuring the parameters (via the Javabeans framework), and
+connecting the components together in order to set-up communication
+channels between the components.
+<BR>
+
+In the
+first release the user runs code execution through the engine
+included in VisualAp, in interpreted mode. In later releases it will
+be possible to generate Java code that can be compiled and run in
+standalone mode.
+<H2>Basic Concepts</H2>
+VisualAp
+is based on two main concepts: system and components.
+A
+component is the basic element providing some services. A system is
+build using a number of components that are configured and connected
+together in order to achieve a complex functionality.
+<br>
+A system is a graph whose nodes are the components.
+Note that in VisualAp a component is also called proclet (processing element). 
+
+
+<BR>
+
+There are
+three type of components:
+<UL>
+	<LI>source:
+	any component that generates some sort of data
+	<LI>sink:
+	any component that consumes data
+	<LI>processor:
+	any component that process input data into output data
+</UL>
+<BR>
+<BR>
+<A HREF="HelpFile.html">Main index</A>
+</BODY>
+</HTML>

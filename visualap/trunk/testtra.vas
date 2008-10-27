@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.6.0_03" class="java.beans.XMLDecoder"> 
+ <object class="graph.Header"> 
+  <void method="put"> 
+   <string>application</string> 
+   <string>VisualAp</string> 
+  </void> 
+  <void method="put"> 
+   <string>comment</string> 
+   <string>Created on Sat Feb 16 22:02:23 CET 2008</string> 
+  </void> 
+  <void method="put"> 
+   <string>version</string> 
+   <string>1.0</string> 
+  </void> 
+ </object> 
+ <object class="java.util.HashMap"> 
+  <void method="put"> 
+   <string>blocksize</string> 
+   <int>2048</int> 
+  </void> 
+ </object> 
+ <object class="graph.GList"> 
+  <void method="add"> 
+   <object class="graph.NodeText"> 
+    <void property="label"> 
+     <string>text$2</string> 
+    </void> 
+    <void property="origin"> 
+     <object class="java.awt.Point"> 
+      <int>131</int> 
+      <int>31</int> 
+     </object> 
+    </void> 
+    <void property="text"> 
+     <string>test image transform</string> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="add"> 
+   <object class="graph.NodeBean"> 
+    <void property="label"> 
+     <string>ReadFile</string> 
+    </void> 
+    <void property="object"> 
+     <object class="test.readfile.ReadFile"> 
+      <void property="file"> 
+       <string>sassi.jpg</string> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="origin"> 
+     <object class="java.awt.Point"> 
+      <int>91</int> 
+      <int>198</int> 
+     </object> 
+    </void> 
+    <void property="serialUID"> 
+     <long>621984702336837585</long> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="add"> 
+   <object class="graph.NodeBean"> 
+    <void property="label"> 
+     <string>Viewer</string> 
+    </void> 
+    <void property="object"> 
+     <object class="test.viewer.Viewer"/> 
+    </void> 
+    <void property="origin"> 
+     <object class="java.awt.Point"> 
+      <int>313</int> 
+      <int>226</int> 
+     </object> 
+    </void> 
+    <void property="serialUID"> 
+     <long>6529006835049087633</long> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="add"> 
+   <object class="graph.NodeBean"> 
+    <void property="label"> 
+     <string>Imagetransform</string> 
+    </void> 
+    <void property="object"> 
+     <object class="blackpower.image.Imagetransform"> 
+      <void property="rotation"> 
+       <double>30.0</double> 
+      </void> 
+      <void property="rotation_x"> 
+       <string>50.0%</string> 
+      </void> 
+      <void property="rotation_y"> 
+       <string>50.0%</string> 
+      </void> 
+      <void property="translate_x"> 
+       <string>30.0</string> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="origin"> 
+     <object class="java.awt.Point"> 
+      <int>197</int> 
+      <int>198</int> 
+     </object> 
+    </void> 
+    <void property="serialUID"> 
+     <long>4030855575522827107</long> 
+    </void> 
+    <void property="version"> 
+     <string>0.3</string> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="add"> 
+   <object class="graph.NodeBean"> 
+    <void property="label"> 
+     <string>Viewer0</string> 
+    </void> 
+    <void property="object"> 
+     <object class="test.viewer.Viewer"/> 
+    </void> 
+    <void property="origin"> 
+     <object class="java.awt.Point"> 
+      <int>338</int> 
+      <int>89</int> 
+     </object> 
+    </void> 
+    <void property="serialUID"> 
+     <long>6529006835049087633</long> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="add"> 
+   <object class="graph.NodeBean"> 
+    <void property="label"> 
+     <string>Imagetransform0</string> 
+    </void> 
+    <void property="object"> 
+     <object class="blackpower.image.Imagetransform"> 
+      <void property="scale_x"> 
+       <string>20.0%</string> 
+      </void> 
+      <void property="scale_y"> 
+       <string>20.0%</string> 
+      </void> 
+      <void property="shear_x"> 
+       <string>0.3</string> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="origin"> 
+     <object class="java.awt.Point"> 
+      <int>208</int> 
+      <int>124</int> 
+     </object> 
+    </void> 
+    <void property="serialUID"> 
+     <long>4030855575522827107</long> 
+    </void> 
+    <void property="version"> 
+     <string>0.3</string> 
+    </void> 
+   </object> 
+  </void> 
+ </object> 
+ <array class="java.lang.Object" length="4"> 
+  <void index="0"> 
+   <string>Imagetransform.input0,ReadFile.output0</string> 
+  </void> 
+  <void index="1"> 
+   <string>Viewer.input0,Imagetransform.output0</string> 
+  </void> 
+  <void index="2"> 
+   <string>Viewer0.input0,Imagetransform0.output0</string> 
+  </void> 
+  <void index="3"> 
+   <string>Imagetransform0.input0,ReadFile.output0</string> 
+  </void> 
+ </array> 
+</java> 

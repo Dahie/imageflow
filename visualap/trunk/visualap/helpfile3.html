@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Components</TITLE>
+	<style type="text/css">
+	body {
+		margin-left: 10px;
+		padding: 0;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: small;
+		background-color: #F0F0F0;
+	}
+	h1 {
+		margin-bottom: 10px;
+		padding: 10px 0 10px 25px;
+		color: #101010;
+		font-size: 120%;
+		font-weight: bold;
+		text-align: center;
+		text-transform: uppercase;
+	}
+	h2, h3, h4 {
+		margin-bottom: 8px;
+		padding: 0;
+		color: #202020;
+		font-size: 100%;
+		font-weight: bold;
+	}
+	</style>
+</HEAD>
+<BODY LANG="it-IT" TEXT="#000000" LINK="#0000ff" DIR="LTR">
+<A HREF="HelpFile.html">[Main Index]</A>
+<H1>Components</H1>
+<H2>Introduction</H2>
+A component (or proclet) is the building block of the VisualAp
+environment.
+A component is shown with its icon plus a number of terminals. 
+
+Terminals
+are represented by a small blue square. Terminals are also called
+pins.
+Input
+terminals are placed in the left side of a component, while output
+terminals are placed in the right side of a component.
+<H2>Using components</H2>
+It is
+possible to view/modify the configuration of a component by
+double-click over a component in the workplace panel.
+Components
+can be connected together by first pressing the mouse button over a
+terminal, then move the mouse pointer over another terminal and then
+release the mouse button: an edge between the two terminals is
+created. <BR><BR>
+
+The
+following rules must be followed when connecting a terminal to
+another one:
+<UL>
+	<LI>it is
+	not possible to connect together two or more output terminals
+	<LI>any
+	input terminal must be connected to an output terminal
+	<LI>loops
+	and cycles are not allowed in a system
+</UL>
+These
+errors are detected only when the system is checked (System-&gt;Check) or run (System-&gt;Run)
+<BR>
+
+It is
+possible to design and release new components for VisualAp. please
+read the related developer guide.<BR><BR>
+
+New
+components shall be placed in the &lt;beans&gt; directory under the
+VisualAp installation directory.
+<H2>Demo components</H2>
+The
+following components are provided with VisualAp 1.0:
+<BR>
+
+<UL>
+	<LI><U>Viewer</U>:
+	shows the incoming data in a floating window
+	<LI><U>ReadFile</U>:
+	read a file, contains a property &quot;file&quot; -&gt; a custom
+	editor is used for file property
+	<LI><U>WriteFile</U>:
+	write a file, supported type: text, audio, image
+	<LI><U>Mux</U>:
+	generate stereo audio from two mono audio inputs
+	<LI><U>DeMux</U>:
+	split stereo audio in two mono audio
+	<LI><U>Inspect</U>:
+	shows the type of the incoming data
+	<LI><U>Speaker</U>:
+	plays an audio stream
+	<LI><U>ToneGenerator</U>:
+	generate a simple audio tone, contains properties that are checked
+	against max values, contains a property &quot;type&quot; -&gt; a
+	custom editor is used to select a specific value
+</UL>
+<BR>
+
+<BR>
+<BR>
+<BR>
+<A HREF="HelpFile.html">Main index</A>
+</BODY>
+</HTML>
