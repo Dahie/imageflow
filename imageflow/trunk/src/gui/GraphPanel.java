@@ -11,9 +11,9 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.ListIterator;
 
+import models.Input;
+import models.unit.UnitList;
 import visualap.GPanel;
-import Models.Input;
-import Models.unit.UnitList;
 
 /**
  * @author danielsenff

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Models;
+package models;
 
 /**
  * @author danielsenff

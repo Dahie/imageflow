@@ -1,14 +1,14 @@
 /**
  * 
  */
-package Models.unit;
+package models.unit;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import Models.ParameterFactory;
+import models.ParameterFactory;
 
 
 /**

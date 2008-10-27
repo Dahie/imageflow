@@ -1,10 +1,10 @@
 /**
  * 
  */
-package Models;
+package models;
 
-import Models.unit.UnitElement;
 import helper.Tools;
+import models.unit.UnitElement;
 
 /**
  * @author danielsenff

@@ -17,11 +17,11 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
+import models.unit.UnitDelegate;
+import models.unit.UnitList;
 import visualap.Delegate;
 import visualap.GPanel;
 import visualap.GPanelListener;
-import Models.unit.UnitDelegate;
-import Models.unit.UnitList;
 import actions.RunMacroAction;
 import backend.GraphController;
 

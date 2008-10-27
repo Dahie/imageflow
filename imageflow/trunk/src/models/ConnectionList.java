@@ -1,14 +1,11 @@
 /**
  * 
  */
-package Models;
+package models;
 
-import graph.Edge;
 import graph.Edges;
 
 import java.util.HashMap;
-
-import Models.unit.UnitElement;
 
 /**
  * @author danielsenff

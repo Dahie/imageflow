@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Models.unit;
+package models.unit;
 
 import visualap.Delegate;
 

@@ -1,4 +1,4 @@
-package Models.unit;
+package models.unit;
 import graph.Node;
 import graph.NodeAbstract;
 import helper.PaintUtil;
@@ -18,11 +18,11 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.util.ArrayList;
 
-import Models.Input;
-import Models.MacroElement;
-import Models.Output;
-import Models.Parameter;
-import Models.StringParameter;
+import models.Input;
+import models.MacroElement;
+import models.Output;
+import models.Parameter;
+import models.StringParameter;
 
 
 /**

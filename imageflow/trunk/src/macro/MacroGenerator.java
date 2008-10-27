@@ -1,14 +1,10 @@
 package macro;
 
-import helper.Tools;
-import Models.Connection;
-import Models.DoubleParameter;
-import Models.Input;
-import Models.MacroElement;
-import Models.Parameter;
-import Models.StringParameter;
-import Models.unit.UnitElement;
-import Models.unit.UnitList;
+import models.Connection;
+import models.Input;
+import models.MacroElement;
+import models.unit.UnitElement;
+import models.unit.UnitList;
 
 
 

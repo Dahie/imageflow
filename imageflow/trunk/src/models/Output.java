@@ -1,12 +1,10 @@
-package Models;
+package models;
+
+import graph.Pin;
 
 import java.awt.Point;
 
-import graph.Node;
-import graph.Pin;
-import helper.PaintUtil;
-import Models.unit.NodeIcon;
-import Models.unit.UnitElement;
+import models.unit.UnitElement;
 
 /**
  * @author danielsenff

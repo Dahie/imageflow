@@ -1,10 +1,10 @@
 /**
  * 
  */
-package Models;
+package models;
 
 import junit.framework.TestCase;
-import Models.unit.UnitElement;
+import models.unit.UnitElement;
 
 /**
  * @author danielsenff

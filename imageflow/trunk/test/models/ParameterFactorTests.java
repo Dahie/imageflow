@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Models;
+package models;
 
 import junit.framework.TestCase;
 

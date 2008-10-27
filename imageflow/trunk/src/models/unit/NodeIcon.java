@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Models.unit;
+package models.unit;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
