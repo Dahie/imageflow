@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
 import models.unit.NodeIcon;
+import models.unit.UnitFactory;
 
 
 
@@ -31,7 +32,7 @@ public class IconPreview extends JFrame {
 	public IconPreview() {
 
 		
-		NodeIcon icon = new NodeIcon();
+		NodeIcon icon = new NodeIcon(UnitFactory.createGaussianBlurUnit());
 		bi = icon.getImage();
 		
 		
