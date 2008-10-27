@@ -35,7 +35,7 @@ public class UnitElement extends NodeAbstract {
 	static int ids;
 	
 	protected int unitID;						// the id of this unit	
-	protected String unitName;       			// name of this unit (will be shown) 
+	protected String unitName;       			// name of this unit (will be shown)
 	protected File iconfile;
 	protected Color color;				  	// unit color
 	protected String infoText;			  	// help text, describing the unit's functionality
@@ -58,10 +58,6 @@ public class UnitElement extends NodeAbstract {
 //	Parameter[] parameters;       	// parameters that control the functionality of the unit
 	protected ArrayList<Parameter> parameters;
 
-
-
- 
-
 	protected int numMaxParameters;
 	protected int numMaxInputs;
 	protected int numMaxOutputs;
@@ -69,8 +65,6 @@ public class UnitElement extends NodeAbstract {
 	private int FIRST_ELEMENT = 0;
 
 	
-
-
 
 	/**
 	 * @param unitName
@@ -85,10 +79,47 @@ public class UnitElement extends NodeAbstract {
 			final int numInputs, 
 			final int numOutputs, 
 			final int numParameters) {
-		super(new Point(30, 30), new MacroElement(unitsImageJSyntax));
+		super(new Point(30,30), new MacroElement(unitsImageJSyntax));
 		setDimension(new Dimension(100,100));
 		
 		
+		init(unitName, numInputs, numOutputs, numParameters);
+		
+	}
+
+	/**
+	 * @param origin
+	 * @param unitName
+	 * @param unitsImageJSyntax
+	 * @param numInputs
+	 * @param numOutputs
+	 * @param numParameters
+	 */
+	public UnitElement  (
+			Point origin,
+			final String unitName,
+			final String unitsImageJSyntax,
+			final int numInputs, 
+			final int numOutputs, 
+			final int numParameters) {
+		super(origin, new MacroElement(unitsImageJSyntax));
+		setDimension(new Dimension(100,100));
+		
+		
+		init(unitName, numInputs, numOutputs, numParameters);
+		
+	}
+
+
+
+	/**
+	 * @param unitName
+	 * @param numInputs
+	 * @param numOutputs
+	 * @param numParameters
+	 */
+	private void init(final String unitName, final int numInputs,
+			final int numOutputs, final int numParameters) {
 		ids++;
 		this.unitID = ids;
 		this.unitName = unitName;
@@ -117,7 +148,6 @@ public class UnitElement extends NodeAbstract {
 		}*/
 		
 		unitIcon = new NodeIcon(this).getImage();
-		
 	}
 	
 
@@ -127,7 +157,6 @@ public class UnitElement extends NodeAbstract {
 	 * @return
 	 */
 	public int getBitDepth() {
-//		String path = parameters[1].stringValue;
 		final String path = ((StringParameter)parameters.get(0)).getStringValue();
 		final ImagePlus imp = IJ.openImage(path);
 		imp.close();
@@ -179,6 +208,7 @@ public class UnitElement extends NodeAbstract {
 
 
 	/**
+	 * Returns the {@link Input} at the given index. Indecies start with 0.
 	 * @param index
 	 * @return
 	 */

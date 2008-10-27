@@ -3,6 +3,7 @@ import graph.Edges;
 import ij.IJ;
 import ij.ImageJ;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -42,10 +43,10 @@ public class GraphController {
 		final UnitElement sourceUnit = UnitFactory.createSourceUnit();
 		unitElements.add(sourceUnit);
 
-		final UnitElement blurUnit = UnitFactory.createGaussianBlurUnit();
+		final UnitElement blurUnit = UnitFactory.createGaussianBlurUnit(new Point(150, 150));
 		unitElements.add(blurUnit);
 		
-		final UnitElement mergeUnit = UnitFactory.createImageCalculatorUnit();
+		final UnitElement mergeUnit = UnitFactory.createImageCalculatorUnit(new Point(320, 30));
 		unitElements.add(mergeUnit);
 		
 		

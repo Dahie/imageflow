@@ -6,6 +6,8 @@ package models.unit;
 import visualap.Delegate;
 
 /**
+ * TODO for the moment this class is pretty much unused and a placeholder, 
+ * the GPanel requires it, but nothing else
  * @author danielsenff
  *
  */

@@ -18,8 +18,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import visualap.GPanel;
+
 
 /**
+ * This class draws the regular icon representation on the {@link GPanel}. 
  * @author danielsenff
  *
  */
@@ -67,7 +70,7 @@ public class NodeIcon {
 		this.unit = unit;
 		this.unitName = unit.getName();
 		try {
-			this.displayIcon = ImageIO.read(new File("display16.png"));
+			this.displayIcon = ImageIO.read(new File("res/display16.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
