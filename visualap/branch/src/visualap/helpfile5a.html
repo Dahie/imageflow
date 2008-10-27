@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>How to solve problems</TITLE>
+	<style type="text/css">
+	body {
+		margin-left: 10px;
+		padding: 0;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: small;
+		background-color: #F0F0F0;
+	}
+	h1 {
+		margin-bottom: 10px;
+		padding: 10px 0 10px 25px;
+		color: #101010;
+		font-size: 120%;
+		font-weight: bold;
+		text-align: center;
+		text-transform: uppercase;
+	}
+	h2, h3, h4 {
+		margin-bottom: 8px;
+		padding: 0;
+		color: #202020;
+		font-size: 100%;
+		font-weight: bold;
+	}
+	</style>
+</HEAD>
+<BODY LANG="it-IT" TEXT="#000000" LINK="#0000ff" DIR="LTR">
+<A HREF="HelpFile.html">[Main Index]</A>
+<h1>How to solve problems</h1><br><br>
+<TABLE WIDTH=600 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=100>
+	<COL WIDTH=500>
+	<TR BGCOLOR="#cccccc" VALIGN=TOP>
+		<TD WIDTH=100>
+			<P>Problem
+		</TD>
+		<TD WIDTH=500>
+			<P>Suggestion
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=100>
+			<P>Connection cannot be setup
+		</TD>
+		<TD WIDTH=500>
+			<P>If you are behind a proxy you need to configure the http proxy:
+			<br><br>java -Dhttp.proxyHost=proxyhost
+    [-Dhttp.proxyPort=portNumber] visualap.VisualAp
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=100>
+			<P>Detected collision between two or more output pins
+		</TD>
+		<TD WIDTH=500>
+			<P>You have to unbind the output pins that have been connected together
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=100>
+			<P>
+Detected a floating input pin
+		</TD>
+		<TD WIDTH=500>
+			<P>You need to connect the input pin to another output pin
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=100>
+			<P>
+Detected input pins not connected to any output pin
+		</TD>
+		<TD WIDTH=500>
+			<P>You need to connect the input pins to another output pin
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=100>
+			<P>
+Detected a loop<br>Detected a cycle
+		</TD>
+		<TD WIDTH=500>
+			<P>You have to break the loop by reconnecting pins in a different way
+		</TD>
+	</TR>
+</TABLE>
+<BR>
+<BR>
+<BR>
+<A HREF="HelpFile.html">Main index</A>
+</BODY>
+</HTML>

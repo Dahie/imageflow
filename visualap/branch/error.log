@@ -1,0 +1,797 @@
+Time: Fri Oct 17 14:17:46 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeBean.<init>(NodeBean.java:73)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:17:52 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeBean.<init>(NodeBean.java:73)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:18:37 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at visualap.GPanel.readXML(GPanel.java:204)
+	at visualap.VisualAp$7.actionPerformed(VisualAp.java:427)
+	at javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1882)
+	at javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2202)
+	at javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:420)
+	at javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:258)
+	at javax.swing.AbstractButton.doClick(AbstractButton.java:334)
+	at javax.swing.plaf.basic.BasicMenuItemUI.doClick(BasicMenuItemUI.java:1051)
+	at javax.swing.plaf.basic.BasicMenuItemUI$Handler.mouseReleased(BasicMenuItemUI.java:1092)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:18:50 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeBean.<init>(NodeBean.java:73)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:18:52 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeBean.<init>(NodeBean.java:73)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:18:55 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeBean.<init>(NodeBean.java:73)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:18:56 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeBean.<init>(NodeBean.java:73)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:18:56 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeBean.<init>(NodeBean.java:73)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:20:12 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeBean.<init>(NodeBean.java:73)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:20:52 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeBean.<init>(NodeBean.java:73)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:21:08 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeBean.<init>(NodeBean.java:74)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:21:41 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeAbstract.<init>(NodeAbstract.java:50)
+	at graph.NodeBean.<init>(NodeBean.java:71)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:22:28 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeAbstract.<init>(NodeAbstract.java:50)
+	at graph.NodeBean.<init>(NodeBean.java:71)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:35:08 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at graph.NodeAbstract.<init>(NodeAbstract.java:50)
+	at graph.NodeBean.<init>(NodeBean.java:71)
+	at visualap.GPanel.mouseReleased(GPanel.java:393)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
+Time: Fri Oct 17 14:37:05 CEST 2008
+java.lang.ClassCastException: java.lang.Long
+	at graph.NodeAbstract.getClassField(NodeAbstract.java:90)
+	at graph.NodeAbstract.getObjSerialUID(NodeAbstract.java:77)
+	at visualap.GPanel.readXML(GPanel.java:204)
+	at visualap.VisualAp$7.actionPerformed(VisualAp.java:427)
+	at javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1882)
+	at javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2202)
+	at javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:420)
+	at javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:258)
+	at javax.swing.AbstractButton.doClick(AbstractButton.java:334)
+	at javax.swing.plaf.basic.BasicMenuItemUI.doClick(BasicMenuItemUI.java:1051)
+	at javax.swing.plaf.basic.BasicMenuItemUI$Handler.mouseReleased(BasicMenuItemUI.java:1092)
+	at java.awt.Component.processMouseEvent(Component.java:5583)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3135)
+	at java.awt.Component.processEvent(Component.java:5348)
+	at java.awt.Container.processEvent(Container.java:2010)
+	at java.awt.Component.dispatchEventImpl(Component.java:4050)
+	at java.awt.Container.dispatchEventImpl(Container.java:2068)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4256)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:3936)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:3866)
+	at java.awt.Container.dispatchEventImpl(Container.java:2054)
+	at java.awt.Window.dispatchEventImpl(Window.java:1791)
+	at java.awt.Component.dispatchEvent(Component.java:3885)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:463)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:269)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:190)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:184)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:176)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:110)
+VisualAp: -4136461859164476015
+java.runtime.name=Java(TM) 2 Runtime Environment, Standard Edition
+java.vm.version=1.5.0_16-132
+java.vm.vendor="Apple Computer, Inc."
+java.vendor.url=http://apple.com/
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.runtime.version=1.5.0_16-b06-275
+java.awt.graphicsenv=apple.awt.CGraphicsEnvironment
+java.endorsed.dirs=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/endorsed
+java.io.tmpdir=/tmp
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.library.path=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+java.specification.name=Java Platform API Specification
+java.class.version=49.0
+java.awt.printerjob=apple.awt.CPrinterJob
+java.specification.version=1.5
+java.class.path=/Users/danielsenff/Programming/eclipse/visualap11/bin:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/.compatibility/14compatibility.jar
+java.vm.specification.version=1.0
+java.home=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home
+java.specification.vendor=Sun Microsystems Inc.
+java.vm.info=mixed mode, sharing
+java.version=1.5.0_16
+java.ext.dirs=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/ext
+java.vendor=Apple Computer, Inc.
+java.vendor.url.bug=http://developer.apple.com/java/
+========================================
