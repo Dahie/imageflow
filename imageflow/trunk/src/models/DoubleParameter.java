@@ -9,12 +9,8 @@ package models;
  */
 public class DoubleParameter extends Parameter {
 
-	
-	
-	double  doubleValue;
-
-
-	double  doubleValueDefault;
+	protected double  doubleValue;
+	protected double  doubleValueDefault;
 
 	
 	/**

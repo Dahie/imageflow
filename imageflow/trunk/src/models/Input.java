@@ -2,9 +2,11 @@ package models;
 
 import graph.Node;
 import graph.Pin;
+import helper.PaintUtil;
 
 import java.awt.Point;
 
+import models.unit.NodeIcon;
 import models.unit.UnitElement;
 
 /**
@@ -14,7 +16,7 @@ import models.unit.UnitElement;
 public class Input extends Pin {
 	protected int unitNumber;		// the number of this unit
 	protected Node unit;
-	protected int inputNumber;	// the number of this input 
+//	protected int i;	// the number of this input 
 
 	protected String displayName; 	// the name to be displayed in the context help
 	protected String shortDisplayName = "I"; // the short name to be displayed on the unit's icon
@@ -41,7 +43,6 @@ public class Input extends Pin {
 	public Input(final int unitNumber, final int inputNumber, final UnitElement nodeParent) {
 		super("input", inputNumber, nodeParent.getInputsMaxCount(), nodeParent);
 		this.unitNumber = unitNumber;
-		this.inputNumber = inputNumber;
 	}
 	
 	/**
@@ -126,12 +127,11 @@ public class Input extends Pin {
 	public Point getLocation() {
 //		System.out.println("Point of origin parent: " + parent.getOrigin());
 		int height = parent.getDimension().height;
-		//TODO
-		int y = parent.getOrigin().y+ (i*height / super.nump ) - (25);
+		System.out.println(i);
+		int y =  (i*height / super.nump ) - (height/(2*super.nump)) + parent.getOrigin().y;
 		Point point = new Point(parent.getOrigin().x, 
 //				parent.getOrigin().y + (parent.getDimension().height*i+parent.getDimension().height/2)/nump
-				//PaintUtil.alignY(super.nump, inputNumber, 100, NodeIcon.pinSize) + parent.getOrigin().y
-				
+//				PaintUtil.alignY(super.nump, i, 100, NodeIcon.pinSize) -50 + parent.getOrigin().y
 				y
 				);
 //		System.out.println(y);

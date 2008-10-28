@@ -10,8 +10,8 @@ package helper;
  */
 public class PaintUtil {
 
-	public static int alignY(int numberOutputs, int i, int height, int pinSize) {
-		int value = (i*height/numberOutputs) + (height/(2*numberOutputs));
+	public static int alignY(int maxOutputs, int inputN, int height, int pinSize) {
+		int value = (inputN*height/maxOutputs) + (height/(2*maxOutputs));
 		return value - (pinSize / 2);
 	}
 	

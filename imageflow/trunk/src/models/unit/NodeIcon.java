@@ -53,7 +53,7 @@ public class NodeIcon {
 	protected String infoLabel = "i";
 	protected Image icon;	// icon of the node
 	protected Image displayIcon; // icon for the display indicator
-	
+	String displayIconFile = "res"+File.separator+"display16.png";
 
 	protected UnitElement unit;
 	
@@ -70,7 +70,8 @@ public class NodeIcon {
 		this.unit = unit;
 		this.unitName = unit.getName();
 		try {
-			this.displayIcon = ImageIO.read(new File("res/display16.png"));
+			
+			this.displayIcon = ImageIO.read(new File(displayIconFile));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

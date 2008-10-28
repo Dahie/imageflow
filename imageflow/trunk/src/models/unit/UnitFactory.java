@@ -102,7 +102,7 @@ public class UnitFactory {
 		// 
 		UnitElement blurUnit = new UnitElement(origin, "Blur", "run(\"Gaussian Blur...\", \"sigma=PARA_DOUBLE_1\");\n",1,1,1);
 		try {
-			blurUnit.setIcon(ImageIO.read(new File("res/blur.png")));
+			blurUnit.setIcon(ImageIO.read(new File("res"+File.separator+"blur.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

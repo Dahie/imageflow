@@ -1,12 +1,18 @@
 package models;
 
 import graph.Edge;
+import graph.Pin;
 import models.unit.UnitElement;
 import models.unit.UnitList;
 
 
 
 
+/**
+ * Connection between two {@link Pin}s, {@link Input} and {@link Output}.
+ * @author danielsenff
+ *
+ */
 public class Connection extends Edge {
 	public int id;		// the id of this connection
 	
@@ -20,6 +26,11 @@ public class Connection extends Edge {
 	int toUnitNumber;		// of the unit with this number
 	protected UnitElement toUnit;
 	
+	/**
+	 * Connection-Status
+	 * @author danielsenff
+	 *
+	 */
 	public enum Status {OK, MISSING_TO_UNIT, MISSING_FROM_UNIT, MISSING_BOTH }
 	
 	/**
@@ -45,24 +56,6 @@ public class Connection extends Edge {
 	}
 	
 	
-	/**
-	 * @param fromUnitNumber
-	 * @param fromOutputNumber
-	 * @param toUnitNumber
-	 * @param toInputNumber
-	 */
-	/*public Connection(final int fromUnitNumber, 
-			final int fromOutputNumber, 
-			final int toUnitNumber, 
-			final int toInputNumber) {
-		super(fromUnit.getOutput(fromOutputNumber), toUnit.getInput(toInputNumber));
-		this.fromUnitNumber = fromUnitNumber;
-		this.fromOutputNumber = fromOutputNumber;
-		this.toUnitNumber = toUnitNumber;
-		this.toInputNumber = toInputNumber;
-		
-		id = getID(fromUnitNumber, fromOutputNumber, toUnitNumber, toInputNumber);
-	}*/
 
 	/**
 	 * connect the inputs and outputs of the units

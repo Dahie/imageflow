@@ -12,15 +12,15 @@ import models.unit.UnitElement;
  */
 public class MacroElement {
 
-	protected String unitsImageJSyntax;		// the syntax that is to be used for this unit
-	protected String commandSyntax; // syntax with replaced variables
+	protected String imageJSyntax;		// the syntax that is to be used for this unit
+	protected String commandSyntax; 	// syntax with replaced variables
 	
 	
 	/**
 	 * 
 	 */
 	public MacroElement(String unitsImageJSyntax) {
-		this.unitsImageJSyntax = unitsImageJSyntax;
+		this.imageJSyntax = unitsImageJSyntax;
 		this.commandSyntax = unitsImageJSyntax;
 	}
 	
@@ -28,11 +28,11 @@ public class MacroElement {
 	
 	/**
 	 * Returns the ImageJ-Macro syntax of this unit. 
-	 * This syntax is inserted in the macro and constructs the working flow.  
+	 * This syntax is inserted in the macro and constructs the working flow.
 	 * @return
 	 */
 	public String getImageJSyntax() {
-		return this.unitsImageJSyntax;
+		return this.imageJSyntax;
 	}
 
 	/**
@@ -96,6 +96,16 @@ public class MacroElement {
 		}
 		// boolean fehlt noch
 		return command;
+	}
+
+
+
+	/**
+	 * Returns the command-syntax with substituted variables.
+	 * @return
+	 */
+	public String getCommandSyntax() {
+		return this.commandSyntax;
 	}
 	
 }

@@ -119,7 +119,6 @@ public class MacroGenerator {
 	private static String duplicateImages(UnitElement unit,	int numInputs) {
 		String code = "";
 		for (int in = 0; in < numInputs; in++) {
-			//TODO knall peng
 			Input input = unit.getInput(in);
 			if(input.isNeedToCopyInput()) {
 				//String inputTitle = unit.inputs[in].imageTitle;
@@ -132,6 +131,12 @@ public class MacroGenerator {
 		return code;
 	}
 	
+	/**
+	 * TODO legacy
+	 * @param unitElement
+	 * @param connection
+	 * @return
+	 */
 	public static String generateMacro_Sample(UnitElement[] unitElement, Connection[] connection) {
 		
 		String macroText = 

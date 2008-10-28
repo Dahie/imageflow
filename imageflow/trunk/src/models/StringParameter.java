@@ -9,7 +9,8 @@ package models;
  */
 public class StringParameter extends Parameter {
 
-	
+	protected String  stringValue;	
+	protected String  stringValueDefault;
 
 	/**
 	 * @param parameterNumber
@@ -32,7 +33,7 @@ public class StringParameter extends Parameter {
 
 	}
 
-	String  stringValue;
+	
 	public String getStringValue() {
 		return this.stringValue;
 	}
@@ -41,7 +42,6 @@ public class StringParameter extends Parameter {
 		this.stringValue = stringValue;
 	}
 
-	String  stringValueDefault;
 	
 	/**
 	 * @param displayName

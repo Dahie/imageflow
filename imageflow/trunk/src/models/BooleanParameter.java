@@ -9,7 +9,8 @@ package models;
  */
 public class BooleanParameter extends Parameter {
 
-	boolean booleanValue;
+	protected boolean booleanValue;
+	protected boolean booleanValueDefault;
 	
 	
 	public boolean getBooleanValue() {
@@ -20,9 +21,6 @@ public class BooleanParameter extends Parameter {
 		this.booleanValue = booleanValue;
 	}
 
-	boolean booleanValueDefault;
-		
-	
 	/**
 	 * @param parameterNumber
 	 */
