@@ -94,7 +94,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	protected Rectangle rectToDraw = null;
 	protected Rectangle previousRectDrawn = new Rectangle();
     final static float dash1[] = {5.0f};
-	final static BasicStroke dashed = new BasicStroke(1.0f, 
+	protected final static BasicStroke dashed = new BasicStroke(1.0f, 
                                                       BasicStroke.CAP_BUTT, 
                                                       BasicStroke.JOIN_MITER, 
                                                       10.0f, dash1, 0.0f);
@@ -285,7 +285,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		// paint non printable items
 		if (drawEdge!= null)	{
 			Point origin = drawEdge.getLocation();
-			
+
 			Graphics2D g2 = (Graphics2D) g;
 			float lineWidth = 1.5f;
 		    g2.setStroke(new BasicStroke(lineWidth));
@@ -336,10 +336,10 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				changeCursor(Cursor.MOVE_CURSOR);
 				return;
 			}
-// check selected element, is it a Pin?
+			// check selected element, is it a Pin?
 			else if (sel instanceof Pin) {
 				drawEdge = (Pin) sel;
-//	System.out.println(drawEdge);
+				//	System.out.println(drawEdge);
 				mouse = new Point (x,y);
 				changeCursor(Cursor.CROSSHAIR_CURSOR);
 				return;
@@ -374,8 +374,6 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			for (ListIterator<Node> it = nodeL.listIterator(nodeL.size()); it.hasPrevious(); ) {
 				Node aNode = it.previous();
 				Object sel = aNode.contains(x,y);
-				System.out.println(sel);
-				System.out.println(sel instanceof Pin);
 				if ((sel instanceof Pin)&&(!drawEdge.equals(sel))) {
 					if (!EdgeL.contains(drawEdge, (Pin) sel)) {
 						EdgeL.add(drawEdge, (Pin) sel);

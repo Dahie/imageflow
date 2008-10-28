@@ -69,8 +69,6 @@ public class Pin {
 			return point;
 		} else {
 			// type.equals("output")
-			System.out.println(parent.origin);
-			System.out.println(parent.getDimension());
 			Point point = new Point(parent.origin.x+parent.getDimension().width, 
 					parent.origin.y + (parent.getDimension().height*i+parent.getDimension().height/2)/nump);
 			return point;

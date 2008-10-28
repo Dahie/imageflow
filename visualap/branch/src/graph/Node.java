@@ -61,7 +61,6 @@ public abstract class Node implements Selectable, Changeable, Labelable, Cloneab
 
 
 	public Object contains(int x, int y) {
-		System.out.println("Point of origin: " + origin);
 		if ((x >= origin.x)&&(x < origin.x + getDimension().width)
 				&&(y >= origin.y)&&(y < origin.y + getDimension().height)) 
 			return this;
