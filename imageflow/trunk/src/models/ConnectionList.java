@@ -3,7 +3,6 @@
  */
 package models;
 
-import graph.Edge;
 import graph.Edges;
 import graph.Pin;
 import models.unit.UnitElement;
@@ -27,6 +26,9 @@ public class ConnectionList extends Edges {
 			
 			Connection connection = new Connection(((UnitElement)from.getParent()), from.getIndex(), 
 					((UnitElement)to.getParent()), to.getIndex());
+			System.out.println("new connection: from Unit: " + from.getParent() 
+					+ " to Unit: " + to.getParent() 
+					+ " at Input" + to.getIndex());
 			return super.add(connection);
 		
 		} else if (  (from instanceof Input && to instanceof Output) ) {
@@ -34,6 +36,9 @@ public class ConnectionList extends Edges {
 			
 			Connection connection = new Connection(((UnitElement)to.getParent()), to.getIndex(), 
 					((UnitElement)from.getParent()), from.getIndex());
+			System.out.println("new connection: from Unit: " + from.getParent() 
+					+ " to Unit: " + to.getParent() 
+					+ " at Input" + to.getIndex());
 			return super.add(connection);
 		}
 		
@@ -48,7 +53,7 @@ public class ConnectionList extends Edges {
 	 */
 	public boolean add(final Connection connection) {
 		Input input = connection.getToUnit().getInput(connection.toInputNumber-1);
-		input.setConnection(connection.toInputNumber, connection.fromOutputNumber);
+		input.setConnection(connection.fromUnitNumber, connection.fromOutputNumber);
 		return super.add(connection);
 	}
 

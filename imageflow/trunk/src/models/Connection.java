@@ -51,9 +51,10 @@ public class Connection extends Edge {
 		this.toUnit = toUnit;
 		this.toUnitNumber = toUnit.getUnitID();
 		this.toInputNumber = toInputNumber;
+		this.toUnit.getInput(toInputNumber-1).setConnection(fromUnitNumber, fromOutputNumber);
 		
 		id = getID(fromUnitNumber, fromOutputNumber, toUnitNumber, toInputNumber);
-		connect();
+//		connect();
 	}
 
 

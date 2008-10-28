@@ -51,11 +51,13 @@ public class MacroGenerator {
 				macroElement.parseParameter(unit, p);
 			}
 			
+			System.out.println("parse Inputs \n");
 			// parse the command string for TITLE tags that need to be replaced
 			for (int in = 0; in < numInputs; in++) {
 				Input input = unit.getInput(in);
 				String searchString = "TITLE_" + (in+1);
 				String parameterString = "" + input.getImageTitle();
+				System.out.println(input.getImageTitle());
 				System.out.println("Unit: " + unitIndex + " Input: " + in + " Title: " + parameterString);
 				macroElement.replace(searchString, parameterString);
 			}
