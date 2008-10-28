@@ -10,7 +10,7 @@ import junit.framework.TestCase;
  * @author danielsenff
  *
  */
-public class ParameterFactorTests extends TestCase {
+public class ParameterFactoryTests extends TestCase {
 
 	/**
 	 * 

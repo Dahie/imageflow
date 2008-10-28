@@ -39,7 +39,7 @@ public class UnitElementTests extends TestCase {
 		//unit with one allowed parameter
 		UnitElement unit = new UnitElement("name", "", 1, 0, 1);
 		
-		assertEquals("number of possible inputs",1, unit.getInputsActualCount());
+		assertEquals("number of possible inputs",1, unit.getInputsMaxCount());
 		
 		//test usual adding
 		boolean addFirst = unit.addInput("input", "i", 4, false);
