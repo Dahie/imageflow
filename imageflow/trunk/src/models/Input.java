@@ -42,7 +42,8 @@ public class Input extends Pin {
 	 */
 	public Input(final int unitNumber, final int inputNumber, final UnitElement nodeParent) {
 		super("input", inputNumber, nodeParent.getInputsMaxCount(), nodeParent);
-		this.unitNumber = unitNumber;
+//		this.unitNumber = unitNumber;
+		setConnection(unitNumber, inputNumber);
 	}
 	
 	/**
@@ -61,12 +62,17 @@ public class Input extends Pin {
 	 * Returns whether or not this Input is connected.
 	 */
 	public boolean isConnected() {
-		final boolean isConnected = (fromUnitNumber > 0) || (fromOutputNumber > 0);
+		final boolean isConnected = parent != null || 
+			(fromUnitNumber > 0)
+			|| (fromOutputNumber > 0);
 		return isConnected;
 	}
 	
 
-	public void setupInput(final String displayName, final String shortDisplayName, final int inputImageBitDepth, final boolean needToCopyInput) {
+	public void setupInput(final String displayName, 
+			final String shortDisplayName, 
+			final int inputImageBitDepth, 
+			final boolean needToCopyInput) {
 		this.displayName = displayName;
 		this.shortDisplayName = shortDisplayName;
 		this.inputImageBitDepth = inputImageBitDepth;
@@ -125,16 +131,11 @@ public class Input extends Pin {
 	 */
 	@Override
 	public Point getLocation() {
-//		System.out.println("Point of origin parent: " + parent.getOrigin());
 		int height = parent.getDimension().height;
-		System.out.println(i);
 		int y =  (i*height / super.nump ) - (height/(2*super.nump)) + parent.getOrigin().y;
 		Point point = new Point(parent.getOrigin().x, 
-//				parent.getOrigin().y + (parent.getDimension().height*i+parent.getDimension().height/2)/nump
-//				PaintUtil.alignY(super.nump, i, 100, NodeIcon.pinSize) -50 + parent.getOrigin().y
 				y
 				);
-//		System.out.println(y);
 		return point;
 	}
 }

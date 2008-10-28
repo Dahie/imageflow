@@ -57,9 +57,7 @@ public class MacroGenerator {
 				String searchString = "TITLE_" + (in+1);
 				String parameterString = "" + input.getImageTitle();
 				System.out.println("Unit: " + unitIndex + " Input: " + in + " Title: " + parameterString);
-				//					command = Tools.replace(command, searchString, parameterString);
 				macroElement.replace(searchString, parameterString);
-				//					System.out.println(command);
 			}
 			
 			// andere Module brauchen manchmal die ID (dieser Teil fehlt noch)

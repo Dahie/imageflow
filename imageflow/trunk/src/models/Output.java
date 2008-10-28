@@ -76,10 +76,10 @@ public class Output extends Pin {
 	 */
 	@Override
 	public Point getLocation() {
+		int height = parent.getDimension().height;
+		int y =  (i*height / super.nump ) - (height/(2*super.nump)) + parent.getOrigin().y;
 		Point point = new Point(parent.getOrigin().x+parent.getDimension().width, 
-//				parent.getOrigin().y + (parent.getDimension().height*i+parent.getDimension().height/2)/nump
-//				PaintUtil.alignY(super.nump, outputNumber, 100, NodeIcon.pinSize)
-				parent.getOrigin().y+50
+				y
 				);
 		return point;
 	}

@@ -1,6 +1,7 @@
 package models;
 
 import graph.Edge;
+import graph.Node;
 import graph.Pin;
 import models.unit.UnitElement;
 import models.unit.UnitList;
@@ -52,16 +53,15 @@ public class Connection extends Edge {
 		this.toInputNumber = toInputNumber;
 		
 		id = getID(fromUnitNumber, fromOutputNumber, toUnitNumber, toInputNumber);
-		
+		connect();
 	}
-	
-	
+
 
 	/**
 	 * connect the inputs and outputs of the units
 	 * @param unitElements
 	 */
-	public void connect(final UnitList unitElements) {
+	public void connect() {
 		
 //		UnitElement toUnit = (UnitElement) unitElements.get(toUnitNumber);
 //		UnitElement fromUnit = (UnitElement) unitElements.get(fromUnitNumber);

@@ -62,7 +62,7 @@ public class Applicationframe extends JFrame implements GPanelListener {
 	public Applicationframe(GraphController controller) {
 		this.controller = controller;
 		this.units = controller.getUnitElements();
-		this.edges = controller.getEdges();
+		this.edges = controller.getConnections();
 		init();
 	}
 
@@ -104,7 +104,7 @@ public class Applicationframe extends JFrame implements GPanelListener {
 		
 		//working area aka graphpanel
 		
-		GPanel graphPanel = new GPanel(unitsDelegates , this);
+		GPanel graphPanel = new GraphPanel(unitsDelegates , this);
 		graphPanel.setSize(400, 300);
 		graphPanel.setNodeL(units);
 		graphPanel.setEdgeL(edges);

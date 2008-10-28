@@ -416,15 +416,12 @@ public class UnitElement extends NodeAbstract {
 	 */
 	public Object contains(int x, int y) {
 		int tolerance = 4;
-		System.out.println(this.origin);
-		System.out.println(x);
 		if ((x >= origin.x - tolerance)
 				&&(x < origin.x + tolerance))	{
 			System.out.println("hey close");
-			int inputsActualCount = getInputsActualCount();
-			for (int i = 0; i < inputsActualCount; i++) {
-//				int lower_y = origin.y-3 +(dimension.height*i+dimension.height/2)/inputsActualCount;
-				int lower_y = PaintUtil.alignY(inputsActualCount, i, getDimension().height, NodeIcon.pinSize);
+			int inputsMaxCount = getInputsMaxCount();
+			for (int i = 0; i < inputsMaxCount; i++) {
+				int lower_y = PaintUtil.alignY(inputsMaxCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
 				if ((y >= lower_y)&&(y <= lower_y + tolerance*2)) {
 					return getInput(i);
 				}
@@ -434,7 +431,6 @@ public class UnitElement extends NodeAbstract {
 				&&(x < origin.x + getDimension().width + tolerance)) {
 			int outputsCount = getOutputsMaxCount();
 			for (int i = 0; i < outputsCount; i++) {
-//				int lower_y = origin.y-3 +(dimension.height*i+dimension.height/2)/outputsCount;
 				int lower_y = PaintUtil.alignY(outputsCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
 				if ((y >= lower_y)&&(y <= lower_y + tolerance*2)) {
 					return getOutput(i);

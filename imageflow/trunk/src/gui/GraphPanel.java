@@ -4,16 +4,21 @@
 package gui;
 
 import graph.Node;
+import graph.Pin;
 
-import java.awt.Cursor;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.util.ListIterator;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
-import models.Input;
+import models.unit.UnitElement;
 import models.unit.UnitList;
+import visualap.Delegate;
 import visualap.GPanel;
+import visualap.GPanelListener;
 
 /**
  * @author danielsenff
@@ -21,61 +26,71 @@ import visualap.GPanel;
  */
 public class GraphPanel extends GPanel {
 
-	
 	protected UnitList units;
 	
 	/**
 	 * @param beans
 	 * @param parent
 	 */
-	public GraphPanel(UnitList units) {
-		super(null, null);
+	public GraphPanel(ArrayList<Delegate> beans, GPanelListener parent) {
+		super(beans, parent);
 	}
 
-	
+
 	/* (non-Javadoc)
-	 * @see visualap.GPanel#mousePressed(java.awt.event.MouseEvent)
+	 * @see visualap.GPanel#paintComponent(java.awt.Graphics)
 	 */
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// generato nell'istante in cui il mouse viene premuto
-				int x = e.getX();
-				int y = e.getY();
-		// qui è obbligatorio un iteratore che scandisce la lista al contrario!
-				for (ListIterator<Node> it = nodeL.listIterator(nodeL.size()); it.hasPrevious(); ) {
-					Node aNode = it.previous();
-					Object sel = aNode.contains(x,y);
-		// check selected element, is it a Node?
-					if (sel instanceof Node) {
-						pick = new Point(x,y);
-						if (!selection.contains(aNode)) {
-							selection.clear();
-							selection.add(aNode);
-						}
-						for (Node iNode : selection)
-							iNode.drag(true);
-						repaint();
-						e.consume();
-						changeCursor(Cursor.MOVE_CURSOR);
-						return;
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		// paint printable items
+//		paintPrintable(g);
+		
+		Graphics2D g2 = (Graphics2D) g;
+		
+		// paint non printable items
+		if (drawEdge!= null)	{
+			Point origin = drawEdge.getLocation();
+			
+			for (Node node : nodeL) {
+				if(isWithinRange(mouse.x, node.getOrigin().x, node.getOrigin().x+node.getDimension().width)
+						&& isWithinRange(mouse.y, node.getOrigin().y, node.getOrigin().y+node.getDimension().height)) {
+					g2.setColor(new Color(120,120,120));
+					g2.setStroke(new BasicStroke(1f));
+					g2.drawRect(node.getOrigin().x, node.getOrigin().y, 
+							node.getDimension().width, node.getDimension().height);
+					
+					for (Pin pin : ((UnitElement)node).getInputs()) {
+//						if() {
+							
+//						}
 					}
-		// check selected element, is it a Pin?
-					else if (sel instanceof Input) {
-						drawEdge = (Input) sel;
-//			System.out.println(drawEdge);
-						mouse = new Point (x,y);
-						changeCursor(Cursor.CROSSHAIR_CURSOR);
-						return;
-					}
+					
 				}
-				selection.clear();
-				parent.showFloatingMenu(e);
-			//	e.consume();
-
-			// handling of selection rectange 
-				currentRect = new Rectangle(x, y, 0, 0);
-				updateDrawableRect(getWidth(), getHeight());
-				repaint();
 			}
+			
+			
+			
+			float lineWidth = 1.5f;
+		    g2.setStroke(new BasicStroke(lineWidth));
+		    g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
+		    g2.draw(new Line2D.Double(origin.x, origin.y, mouse.x, mouse.y));
+		}
+		//If currentRect exists, paint a box on top.
+		if (currentRect != null) {
+			//Draw a rectangle on top of the image.
+			g2.setXORMode(Color.white); //Color of Edge varies
+			//depending on image colors
+//			g2.setColor(Color.GRAY);
+			g2.setStroke(dashed);
+			g2.drawRect(rectToDraw.x, rectToDraw.y, 
+					rectToDraw.width - 1, rectToDraw.height - 1);
+		}
+	}
+
+	public static boolean isWithinRange(int compareValue, int startValue, int endValue) {
+		return (compareValue > startValue 
+				&& compareValue < endValue);
+	}
 	
 }

@@ -1,4 +1,5 @@
 package backend;
+import graph.Edge;
 import graph.Edges;
 import ij.IJ;
 import ij.ImageJ;
@@ -6,6 +7,7 @@ import ij.ImageJ;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import macro.MacroGenerator;
 import models.Connection;
@@ -59,24 +61,21 @@ public class GraphController {
 		connectionMap = new ConnectionList();
 		
 		// add six connections
-		// fromUnitNumber, fromOutputNumber, toUnitNumber, toInputNumber
+		// the conn is established on adding
+		// fromUnit, fromOutputNumber, toUnit, toInputNumber
 		Connection con;
 		con = new Connection(sourceUnit,1,blurUnit,1);
-		connectionMap.put(con.id, con);
-		con = new Connection(blurUnit,1,mergeUnit,1);
-		connectionMap.put(con.id, con);
+		connectionMap.add(con);
+//		con = new Connection(blurUnit,1,mergeUnit,1);
+//		connectionMap.add(con);
 		con = new Connection(sourceUnit,1,mergeUnit,2);
-		connectionMap.put(con.id, con);
+		connectionMap.add(con);
 
 		
 		// remove one connection
 		//connectionMap.remove( Connection.getID(2,1,5,1) );
 		
 		
-		// apply the connections
-		for (final Connection connection : connectionMap.values()) {
-			connection.connect(unitElements);
-		}
 		
 	}
 
@@ -109,12 +108,15 @@ public class GraphController {
 	}
 	
 
-	public boolean checkNetwork(final HashMap<Integer, Connection> connectionMap) {
+	public boolean checkNetwork(final ConnectionList connectionMap) {
 		boolean networkOK = true;
 		
 		//TODO check if all connections have in and output
 		
-		for (final Connection connection : connectionMap.values()) {
+//		for (final Connection (Connection)connection : connectionMap) {
+		for (Iterator iterator = connectionMap.iterator(); iterator.hasNext();) {
+			Connection connection = (Connection) iterator.next();
+		
 			switch(connection.checkConnection()) {
 				case MISSING_BOTH:
 				case MISSING_FROM_UNIT:
@@ -162,8 +164,8 @@ public class GraphController {
 	/**
 	 * @return
 	 */
-	public Edges getEdges() {
-		return this.connectionMap.getEdges();
+	public Edges getConnections() {
+		return this.connectionMap;
 	}
 
 }
