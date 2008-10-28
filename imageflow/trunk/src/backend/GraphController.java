@@ -64,12 +64,12 @@ public class GraphController {
 		// the conn is established on adding
 		// fromUnit, fromOutputNumber, toUnit, toInputNumber
 		Connection con;
-		con = new Connection(sourceUnit,1,blurUnit,1);
+		/*con = new Connection(sourceUnit,1,blurUnit,1);
 		connectionMap.add(con);
-//		con = new Connection(blurUnit,1,mergeUnit,1);
-//		connectionMap.add(con);
+		con = new Connection(blurUnit,1,mergeUnit,1);
+		connectionMap.add(con);
 		con = new Connection(sourceUnit,1,mergeUnit,2);
-		connectionMap.add(con);
+		connectionMap.add(con);*/
 
 		
 		// remove one connection
