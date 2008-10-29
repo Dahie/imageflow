@@ -1,13 +1,8 @@
 package models;
 
 import graph.Edge;
-import graph.Node;
 import graph.Pin;
 import models.unit.UnitElement;
-import models.unit.UnitList;
-
-
-
 
 /**
  * Connection between two {@link Pin}s, {@link Input} and {@link Output}.
@@ -51,7 +46,7 @@ public class Connection extends Edge {
 		this.toUnit = toUnit;
 		this.toUnitNumber = toUnit.getUnitID();
 		this.toInputNumber = toInputNumber;
-		this.toUnit.getInput(toInputNumber-1).setConnection(fromUnitNumber, fromOutputNumber);
+		this.toUnit.getInput(toInputNumber-1).setConnection(fromUnit, fromOutputNumber);
 		
 		id = getID(fromUnitNumber, fromOutputNumber, toUnitNumber, toInputNumber);
 //		connect();
@@ -140,4 +135,28 @@ public class Connection extends Edge {
 		return string;
 	}
 	
+	
+
+	/**
+	 * Checks a unit, if it's inputs have already been registered in the algorithm.
+	 * @param unit
+	 * @return
+	 */
+	public boolean hasInputMarked() {
+		boolean hasMarked = true;
+		
+		if(toUnit.getInputsActualCount() > 0) {
+			// check each input, if it's parent has been registered
+			int mark = fromUnit.getOutput(0).getMark();
+			// if mark is not set
+			if(mark == 0) {
+				// this connected ouput hasn't been registered and is missing a mark, 
+				// so the whole unit isn't ready set. 
+				hasMarked = false;
+			} 
+			// else mark is already set, so this output is fine
+		}
+		
+		return hasMarked;
+	}
 }

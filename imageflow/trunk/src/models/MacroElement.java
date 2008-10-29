@@ -87,6 +87,13 @@ public class MacroElement {
 			command = Tools.replace(command, searchString, parameterString);
 			System.out.println(command);
 		}
+		searchString = "PARA_INTEGER_" + (p+1);
+		if(command.contains(searchString)) {
+			String parameterInteger = "" + ((StringParameter)parameter).getStringValue();
+			System.out.println("Unit: " + u + " Parameter: " + p + " Integer Parameter: " + parameterInteger);
+			command = Tools.replace(command, searchString, parameterInteger);
+			System.out.println(command);
+		}
 		searchString = "PARA_BOOL_" + (p+1);
 		if(command.contains(searchString)) {
 			String parameterString = "" + ((BooleanParameter)parameter).getBooleanValue();

@@ -241,7 +241,7 @@ public class UnitElement extends NodeAbstract {
 			String shortDisplayName, 
 			int inputImageBitDepth, 
 			boolean needToCopyInput) {
-		Input newInput = new Input(this.unitID, this.inputs.size()+1, this);
+		Input newInput = new Input(this, this.inputs.size()+1);
 		newInput.setupInput(displayName, shortDisplayName, inputImageBitDepth, needToCopyInput);
 		return this.inputs.add(newInput);
 	}
@@ -526,8 +526,56 @@ public class UnitElement extends NodeAbstract {
 		return null;
 	}
 
+	/**
+	 * Marks the attached pins.
+	 * @param mark
+	 */
+	public void setMark(int mark) {
+		for (Input input : inputs) {
+			input.setMark(mark);
+		}
+		for (Output output : outputs) {
+			output.setMark(mark);
+		}
+	}
+
 	
-	
+	/**
+	 * Checks a unit, if it's inputs have already been registered in the algorithm.
+	 * @param unit
+	 * @return
+	 */
+	public boolean hasAllInputsMarked() {
+		boolean hasAllMarked = true;
+		
+		if(getInputsActualCount() > 0) {
+			// check each input, if it's parent has been registered
+			for (Input input : getInputs()) {
+				if(input.isConnected()) {
+					int mark = input.getFromUnit().getOutput(0).getMark();
+					// if mark is not set
+					if(mark == 0) {
+//						input.setMark(mark+1);	
+						// this connected ouput hasn't been regisred and is missing a mark, 
+						// so the whole unit isn't ready set. 
+						hasAllMarked = false;
+					} 
+					// else mark is already set, so this output is fine
+//						input.setMark(mark+1);		
+				} else {
+					// since something must be missing, it is set to be false
+					return false;
+				}
+
+			}
+			
+		} else {
+			// if there are no inputs, it's true
+			return true;
+		}
+		
+		return hasAllMarked;
+	}
 	
 }
 

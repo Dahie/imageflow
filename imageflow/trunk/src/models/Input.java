@@ -15,7 +15,7 @@ import models.unit.UnitElement;
  */
 public class Input extends Pin {
 	protected int unitNumber;		// the number of this unit
-	protected Node unit;
+//	protected Node unit;
 //	protected int i;	// the number of this input 
 
 	protected String displayName; 	// the name to be displayed in the context help
@@ -34,16 +34,27 @@ public class Input extends Pin {
 	// connected to this input:
 	protected int fromUnitNumber;
 	protected int fromOutputNumber;
+	protected UnitElement fromUnit;
+	
 	
 	/**
-	 * @param unitNumber
+	 * @param fromUnit
 	 * @param inputNumber
 	 * @param nodeParent
 	 */
-	public Input(final int unitNumber, final int inputNumber, final UnitElement nodeParent) {
+	public Input(final UnitElement nodeParent, int inputNumber) {
 		super("input", inputNumber, nodeParent.getInputsMaxCount(), nodeParent);
-//		this.unitNumber = unitNumber;
-		setConnection(unitNumber, inputNumber);
+	}
+	
+	
+	/**
+	 * @param fromUnit
+	 * @param inputNumber
+	 * @param nodeParent
+	 */
+	public Input(final UnitElement fromUnit, final int inputNumber, final UnitElement nodeParent) {
+		super("input", inputNumber, nodeParent.getInputsMaxCount(), nodeParent);
+		setConnection(fromUnit.getUnitID(), inputNumber);
 	}
 	
 	/**
@@ -59,15 +70,15 @@ public class Input extends Pin {
 	}
 	
 	/**
-	 * Returns whether or not this Input is connected.
+	 * Sets the connection between this input and an output.
+	 * @param fromUnit
+	 * @param fromOutputNumber
 	 */
-	public boolean isConnected() {
-		final boolean isConnected = parent != null || 
-			(fromUnitNumber > 0)
-			|| (fromOutputNumber > 0);
-		return isConnected;
+	public void setConnection(final UnitElement fromUnit, final int fromOutputNumber) {
+		this.fromUnit = fromUnit;
+		setConnection(fromUnit.getUnitID(), fromOutputNumber);
 	}
-	
+
 
 	public void setupInput(final String displayName, 
 			final String shortDisplayName, 
@@ -79,6 +90,16 @@ public class Input extends Pin {
 		this.setNeedToCopyInput(needToCopyInput);
 	}
 
+	
+	/**
+	 * Returns whether or not this Input is connected.
+	 */
+	public boolean isConnected() {
+		final boolean isConnected = fromUnit != null || 
+			(fromUnitNumber > 0)
+			|| (fromOutputNumber > 0);
+		return isConnected;
+	}
 	
 
 	public String getImageTitle() {
@@ -133,9 +154,23 @@ public class Input extends Pin {
 	public Point getLocation() {
 		int height = parent.getDimension().height;
 		int y =  (i*height / super.nump ) - (height/(2*super.nump)) + parent.getOrigin().y;
-		Point point = new Point(parent.getOrigin().x, 
-				y
-				);
+		Point point = new Point(parent.getOrigin().x, y);
 		return point;
+	}
+	
+	/* (non-Javadoc)
+	 * @see graph.Pin#getParent()
+	 */
+	@Override
+	public UnitElement getParent() {
+		return (UnitElement)super.getParent();
+	}
+
+
+	/**
+	 * @return the fromUnit
+	 */
+	public UnitElement getFromUnit() {
+		return this.fromUnit;
 	}
 }

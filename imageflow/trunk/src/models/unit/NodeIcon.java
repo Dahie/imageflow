@@ -53,7 +53,7 @@ public class NodeIcon {
 	protected String infoLabel = "i";
 	protected Image icon;	// icon of the node
 	protected Image displayIcon; // icon for the display indicator
-	String displayIconFile = "res"+File.separator+"display16.png";
+	String displayIconFile = "src/res/display16.png";
 
 	protected UnitElement unit;
 	

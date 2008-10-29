@@ -29,6 +29,7 @@ public class MacroGenerator {
 		macroText = "setBatchMode(true); \n";
 		
 		// loop over all units
+		// TODO they have to be presorted so they are in the right order
 		for (int unitIndex = 1; unitIndex < unitElement.length; unitIndex++) {
 			macroText += " \n";
 			// read the ImageJ syntax for this unit

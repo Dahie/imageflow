@@ -1,9 +1,11 @@
 package gui;
 import graph.Edges;
+import helper.FileDrop;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.ScrollPane;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
 import models.unit.UnitDelegate;
+import models.unit.UnitFactory;
 import models.unit.UnitList;
 import visualap.Delegate;
 import visualap.GPanel;
@@ -72,7 +75,8 @@ public class Applicationframe extends JFrame implements GPanelListener {
 	private void init() {
 		this.setTitle(TITLE);
 		this.setName(TITLE);
-		this.setSize(500, 400);
+		this.setSize(600, 400);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		addComponents();
 		
@@ -112,7 +116,26 @@ public class Applicationframe extends JFrame implements GPanelListener {
 //		graphPanel.getSelection();
 		ScrollPane graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		
+		new FileDrop( null, graphPanel, /*dragBorder,*/ new FileDrop.Listener()
+	        {   
+				Point coordinates =new Point(75, 75);
+				
+				public void filesDropped( java.io.File[] files )
+	            {   
+	        		for( int i = 0; i < files.length; i++ )
+	                {   
+	        			//TODO check filetype
+	        			
+	            		// add Source-Units
+	        			controller.getUnitElements().add(UnitFactory.createSourceUnit(
+	        					files[i].getAbsolutePath(), coordinates));
+	                }   // end for: through each dropped file
+	            }   // end filesDropped
+	        }); // end FileDrop.Listener
+		
+		
 		
 		JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
 				true, 
