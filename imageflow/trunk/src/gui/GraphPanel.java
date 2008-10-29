@@ -27,6 +27,7 @@ import visualap.GPanelListener;
 public class GraphPanel extends GPanel {
 
 	protected UnitList units;
+	protected UnitList nodeL;
 	
 	/**
 	 * @param beans
@@ -91,6 +92,14 @@ public class GraphPanel extends GPanel {
 	public static boolean isWithinRange(int compareValue, int startValue, int endValue) {
 		return (compareValue > startValue 
 				&& compareValue < endValue);
+	}
+
+
+	/**
+	 * @param units2
+	 */
+	public void setNodeL(UnitList units2) {
+		this.nodeL = units2;
 	}
 	
 }

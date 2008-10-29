@@ -538,6 +538,12 @@ public class UnitElement extends NodeAbstract {
 			output.setMark(mark);
 		}
 	}
+	
+	
+	public int getMark() {
+		return outputs.get(0).getMark();
+		// doesn't help it if the mark is different on any pin
+	}
 
 	
 	/**
@@ -555,13 +561,11 @@ public class UnitElement extends NodeAbstract {
 					int mark = input.getFromUnit().getOutput(0).getMark();
 					// if mark is not set
 					if(mark == 0) {
-//						input.setMark(mark+1);	
 						// this connected ouput hasn't been regisred and is missing a mark, 
 						// so the whole unit isn't ready set. 
 						hasAllMarked = false;
 					} 
 					// else mark is already set, so this output is fine
-//						input.setMark(mark+1);		
 				} else {
 					// since something must be missing, it is set to be false
 					return false;

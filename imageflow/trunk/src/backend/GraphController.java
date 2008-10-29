@@ -122,12 +122,16 @@ public class GraphController {
 			System.out.println("Error in node network.");
 		}
 	}
-	
 
+	/**
+	 * check if all connections have in and output
+	 * @param connectionMap
+	 * @return
+	 */
 	public boolean checkNetwork(final ConnectionList connectionMap) {
 		boolean networkOK = true;
 		
-		//TODO check if all connections have in and output
+
 		
 //		for (final Connection (Connection)connection : connectionMap) {
 		if(connectionMap.size() > 0) {
@@ -149,22 +153,8 @@ public class GraphController {
 		}
 		
 		
-		//TODO check if units got all the inputs they need
-		for (final Object element : unitElements) {
-			final UnitElement unit = (UnitElement) element;
-			
-			if (unit != null) { // just to avoid the first null element, which is kinda legacy
-				if(unit.hasInputs()) {
-					final ArrayList<Input> inputs = unit.getInputs();
-					for (int i = 0; i < inputs.size(); i++) {
-						final Input input = inputs.get(i);
-						if(!input.isConnected() && input.isRequiredInput()) {
-							networkOK = false;
-						}
-					}	
-				}
-			}
-		}
+		//FIXME check if units got all the inputs they need
+		networkOK = unitElements.areAllInputsConnected();
 
 		//TODO check parameters
 		return networkOK;
@@ -190,39 +180,42 @@ public class GraphController {
 	}
 	
 	
-	private Vector sortList() {
+	public static UnitList sortList(UnitList unitElements) {
 		
-		Vector orderedList = new Vector<UnitElement>();
+		UnitList orderedList = new UnitList();
 		int sortedElementsCount = 0;
 		int mark = 1;
 		
 		//TODO reset all marks
 		
 		int i = 0;
+		int index = 0;
 		//loop over all units, selection sort, levelorder
-//		for (Node node : unitElements) {
-		while(unitElements.size() > sortedElementsCount) {
-			int index = i % unitElements.size();
+		//FIXME this breaks, if connections are missing!
+		while(!unitElements.isEmpty()) {
+			index = i % unitElements.size();
 			UnitElement unit = (UnitElement) unitElements.get(index); 
-			
+
 			
 			// check if all inputs of this node are marked
+			// if so, this unit is moved from the old list to the new one
 			if(unit.hasAllInputsMarked()) {
+				mark++;
 				
-				//increment mark
-				
+				// increment mark
 				// mark outputs
 				unit.setMark(mark);
 				
-				
-				
+				// remove from the old list and
 				// move this to the new ordered list
-				orderedList.add(unit);
-				
+				orderedList.add(unitElements.remove(index));
 			}
 			
-			
-			
+			// Selection Sort
+			// each time an element whose previous nodes have already been registered
+			// is found the next loop over the element list is one element shorter.
+			// thereby having O(n^2) :/ maybe this can be done better later
+			i++;
 		}
 		return orderedList;
 	}

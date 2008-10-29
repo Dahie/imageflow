@@ -1,5 +1,7 @@
 package gui;
 import graph.Edges;
+import graph.GList;
+import graph.Node;
 import helper.FileDrop;
 
 import java.awt.BorderLayout;
@@ -108,7 +110,7 @@ public class Applicationframe extends JFrame implements GPanelListener {
 		
 		//working area aka graphpanel
 		
-		GPanel graphPanel = new GraphPanel(unitsDelegates , this);
+		GraphPanel graphPanel = new GraphPanel(unitsDelegates , this);
 		graphPanel.setSize(400, 300);
 		graphPanel.setNodeL(units);
 		graphPanel.setEdgeL(edges);
