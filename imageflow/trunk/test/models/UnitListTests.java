@@ -3,6 +3,7 @@
  */
 package models;
 
+import graph.Node;
 import junit.framework.TestCase;
 import models.unit.UnitElement;
 import models.unit.UnitList;
@@ -24,9 +25,9 @@ public class UnitListTests extends TestCase {
 		final UnitList sortedList = GraphController.sortList(unsortedList);
 		
 		int expectedMark = 1;
-		for (final UnitElement unit : sortedList) {
+		for (final Node node : sortedList) {
 			expectedMark++;
-			assertEquals("mark for node "+ unit, expectedMark, unit.getMark());
+			assertEquals("mark for node "+ node, expectedMark, ((UnitElement)node).getMark());
 		}
 		
 		assertEquals("list length", usortedListOriginalLength, sortedList.size());

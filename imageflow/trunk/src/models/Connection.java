@@ -159,4 +159,14 @@ public class Connection extends Edge {
 		
 		return hasMarked;
 	}
+
+
+	/**
+	 * Checks if this connection is attached to the {@link Pin}
+	 * @param input
+	 * @return
+	 */
+	public boolean isConnected(Pin pin) {
+		return (this.from.equals(pin)) || this.to.equals(pin);
+	}
 }

@@ -14,7 +14,7 @@ import graph.Node;
  * @author danielsenff
  *
  */
-public class UnitList extends GList<UnitElement> {
+public class UnitList extends GList<Node> {
 
 	
 

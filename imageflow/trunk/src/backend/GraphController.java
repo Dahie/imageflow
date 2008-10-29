@@ -27,7 +27,7 @@ public class GraphController {
 
 	
 	
-	private final UnitList unitElements;
+	private UnitList unitElements;
 	private final ConnectionList connectionMap;
 
 	/**
@@ -50,18 +50,24 @@ public class GraphController {
 //		unitElements.add(null);
 		
 		final UnitElement sourceUnit = UnitFactory.createSourceUnit("/Users/danielsenff/zange1.png");
-		unitElements.add(sourceUnit);
+		
 
 		final UnitElement blurUnit = UnitFactory.createGaussianBlurUnit(new Point(150, 150));
-		unitElements.add(blurUnit);
+		
 		
 		final UnitElement mergeUnit = UnitFactory.createImageCalculatorUnit(new Point(320, 30));
-		unitElements.add(mergeUnit);
+		
 		
 		final UnitElement noiseUnit = UnitFactory.createAddNoiseUnit(new Point(450, 30));
 		noiseUnit.setDisplayUnit(true);
+		
+		
+		// some mixing, so they are not in order
 		unitElements.add(noiseUnit);
-
+		unitElements.add(blurUnit);
+		unitElements.add(sourceUnit);
+		unitElements.add(mergeUnit);
+		
 		
 		////////////////////////////////////////////////////////
 		// setup the connections
@@ -97,6 +103,8 @@ public class GraphController {
 		// analysis and 
 		// verification of the connection network
 		////////////////////////////////////////////////////////
+		
+		unitElements = sortList(unitElements);
 		
 		final boolean networkOK = checkNetwork(connectionMap);
 		

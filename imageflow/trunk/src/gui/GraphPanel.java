@@ -41,11 +41,11 @@ public class GraphPanel extends GPanel {
 	/* (non-Javadoc)
 	 * @see visualap.GPanel#paintComponent(java.awt.Graphics)
 	 */
-	@Override
+	/*@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// paint printable items
-//		paintPrintable(g);
+		paintPrintable(g);
 		
 		Graphics2D g2 = (Graphics2D) g;
 		
@@ -88,7 +88,9 @@ public class GraphPanel extends GPanel {
 					rectToDraw.width - 1, rectToDraw.height - 1);
 		}
 	}
-
+	 */
+	
+	
 	public static boolean isWithinRange(int compareValue, int startValue, int endValue) {
 		return (compareValue > startValue 
 				&& compareValue < endValue);
@@ -99,7 +101,7 @@ public class GraphPanel extends GPanel {
 	 * @param units2
 	 */
 	public void setNodeL(UnitList units2) {
-		this.nodeL = units2;
+		super.nodeL = units2;
 	}
 	
 }
