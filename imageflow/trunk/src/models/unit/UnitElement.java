@@ -226,7 +226,7 @@ public class UnitElement extends NodeAbstract {
 	 * @return
 	 */
 	public boolean hasInputs() {
-		return (this.inputs.size() == 0);
+		return (this.inputs.size() > 0);
 	}
 
 

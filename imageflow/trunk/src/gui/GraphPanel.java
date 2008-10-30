@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
@@ -40,23 +41,28 @@ public class GraphPanel extends GPanel {
 	/* (non-Javadoc)
 	 * @see visualap.GPanel#paintComponent(java.awt.Graphics)
 	 */
-	@Override
+/*	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// paint printable items
 		paintPrintable(g);
 		
 		Graphics2D g2 = (Graphics2D) g;
+	    g2.setRenderingHint(
+	    		RenderingHints.KEY_ANTIALIASING,
+	            RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		// paint non printable items
 		if (drawEdge!= null)	{
 			Point origin = drawEdge.getLocation();
-			
+//			g2.setStroke(new BasicStroke(1f));
 			for (Node node : nodeL) {
-				if(isWithinRange(mouse.x, node.getOrigin().x, node.getOrigin().x+node.getDimension().width)
-						&& isWithinRange(mouse.y, node.getOrigin().y, node.getOrigin().y+node.getDimension().height)) {
+				if(isWithinRange(mouse.x, node.getOrigin().x, 
+						node.getOrigin().x+node.getDimension().width)
+					&& isWithinRange(mouse.y, node.getOrigin().y, 
+						node.getOrigin().y+node.getDimension().height)) {
 					g2.setColor(new Color(120,120,120));
-					g2.setStroke(new BasicStroke(1f));
+//					g2.setStroke(new BasicStroke(1f));
 					g2.drawRect(node.getOrigin().x, node.getOrigin().y, 
 							node.getDimension().width, node.getDimension().height);
 					
@@ -69,10 +75,8 @@ public class GraphPanel extends GPanel {
 				}
 			}
 			
-			
-			
-			float lineWidth = 1.5f;
-		    g2.setStroke(new BasicStroke(lineWidth));
+			float lineWidth = 1.0f;
+//		    g2.setStroke(new BasicStroke(lineWidth));
 		    g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
 		    g2.draw(new Line2D.Double(origin.x, origin.y, mouse.x, mouse.y));
 		}
@@ -86,7 +90,7 @@ public class GraphPanel extends GPanel {
 			g2.drawRect(rectToDraw.x, rectToDraw.y, 
 					rectToDraw.width - 1, rectToDraw.height - 1);
 		}
-	}
+	}*/
 	
 	
 	public static boolean isWithinRange(int compareValue, int startValue, int endValue) {

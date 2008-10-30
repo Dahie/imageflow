@@ -12,8 +12,7 @@ import backend.GraphController;
  */
 public class ImageFlow {
 
-//	private static ResourceBundle bundle = ResourceBundle.getBundle("Texte");
-	
+
 	/**
 	 * @param args
 	 */

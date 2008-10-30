@@ -3,6 +3,7 @@ import graph.Edges;
 import graph.Node;
 import ij.IJ;
 import ij.ImageJ;
+import ij.plugin.Macro_Runner;
 
 import java.awt.Point;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import models.ConnectionList;
 import models.unit.UnitElement;
 import models.unit.UnitFactory;
 import models.unit.UnitList;
+import application.ApplicationController;
 
 
 
@@ -20,12 +22,12 @@ import models.unit.UnitList;
  * @author danielsenff
  *
  */
-public class GraphController {
+public class GraphController extends ApplicationController {
 
-	
 	
 	private UnitList unitElements;
 	private final ConnectionList connectionMap;
+	private ImageJ imagej;
 
 	/**
 	 * 
@@ -35,9 +37,6 @@ public class GraphController {
 		/*
 		 * Wurzelbaum
 		 */
-		
-		
-		
 		
 		////////////////////////////////////////////////////////
 		// setup of units
@@ -108,7 +107,6 @@ public class GraphController {
 		/*try {
 			System.out.println(new Check(unitElements, connectionMap).checkSystem());
 		} catch (CheckException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
 		
@@ -120,14 +118,22 @@ public class GraphController {
 		if(networkOK) {
 			final String macro = MacroGenerator.generateMacrofromUnitList(unitElements);
 			
-			new ImageJ(null, ImageJ.EMBEDDED);
-			IJ.log(macro);
+			if(imagej == null)
+				imagej = new ImageJ(null, ImageJ.EMBEDDED);
+//			IJ.log(macro);
 			IJ.runMacro(macro, "");
+//			runMacro(macro, "");
 		} else {
 			System.out.println("Error in node network.");
 		}
 	}
 
+	public static String runMacro(String macro, String arg) {
+		Macro_Runner mr = new Macro_Runner();
+		return mr.runMacroFromIJJar(macro, arg);
+	}
+	
+	
 	/**
 	 * check if all connections have in and output
 	 * @param connectionMap
@@ -187,9 +193,8 @@ public class GraphController {
 	
 	public static UnitList sortList(UnitList unitElements) {
 		
+		// temporary list, discarded after this method call
 		UnitList orderedList = new UnitList();
-		int sortedElementsCount = 0;
-
 		
 		// reset all marks
 		unmarkUnits(unitElements);
@@ -227,7 +232,12 @@ public class GraphController {
 			// thereby having O(n^2) :/ maybe this can be done better later
 			i++;
 		}
-		return orderedList;
+		
+		for (Node node : orderedList) {
+			unitElements.add(node);
+		}
+		
+		return unitElements;
 	}
 
 	/**

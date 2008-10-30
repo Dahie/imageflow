@@ -27,16 +27,15 @@ public class UnitList extends GList<Node> {
 		for (final Object element : this) {
 			final UnitElement unit = (UnitElement) element;
 			
-//			if (unit != null) { // just to avoid the first null element, which is kinda legacy
-				if(unit.hasInputs()) {
-					final ArrayList<Input> inputs = unit.getInputs();
-					for (int i = 0; i < inputs.size(); i++) {
-						final Input input = inputs.get(i);
-						if(!input.isConnected() && input.isRequiredInput()) {
-							return false;
-						}
-					}	
-//				}
+			if(unit.hasInputs()) {
+				final ArrayList<Input> inputs = unit.getInputs();
+				for (int i = 0; i < inputs.size(); i++) {
+					final Input input = inputs.get(i);
+					if (!input.isConnected() && input.isRequiredInput()) {
+						System.out.println(input + " is not connected");
+						return false;
+					}
+				}	
 			}
 		}
 		return true;

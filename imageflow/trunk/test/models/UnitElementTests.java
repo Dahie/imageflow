@@ -38,6 +38,18 @@ public class UnitElementTests extends TestCase {
 		assertEquals("add second",false, addSecond);
 	}
 	
+	public void testHasInputs() {
+		
+		// Sources have no inputs
+		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		assertEquals("source", false, sourceUnit.hasInputs());
+		
+		UnitElement filter = UnitFactory.createAddNoiseUnit();
+		assertEquals("filter",true , filter.hasInputs());
+		
+	}
+	
+	
 	public void testAddInput() {
 		//unit with one allowed parameter
 		UnitElement unit = new UnitElement("name", "", 1, 0, 1);
