@@ -30,7 +30,7 @@ public class ImageFlow {
 		
 		if (res == JFileChooser.APPROVE_OPTION) {
 			final File files = imageFileChooser.getSelectedFile();
-			
+			System.out.println(files);
 			GraphController controller = new GraphController(files.getAbsolutePath());
 		
 			new Applicationframe(controller);

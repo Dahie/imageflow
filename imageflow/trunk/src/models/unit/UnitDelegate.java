@@ -19,7 +19,6 @@ public class UnitDelegate extends Delegate {
 	 * 
 	 */
 	public UnitDelegate() {
-		this.unit = UnitFactory.createSourceUnit("/Users/danielsenff/zange1.png");
 	}
 	
 	
