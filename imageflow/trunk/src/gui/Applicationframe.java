@@ -37,7 +37,7 @@ import backend.GraphController;
  */
 public class Applicationframe extends JFrame {
 
-	public static String TITLE = "ImageFlow";
+	public static String TITLE = "ImageFlow for ImageJ";
 	
 	private UnitList units;
 	private Edges edges;

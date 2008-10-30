@@ -3,11 +3,13 @@
  */
 package application;
 
+import gui.Applicationframe;
+
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
-import gui.Applicationframe;
 import backend.GraphController;
 
 /**
@@ -26,7 +28,7 @@ public class ImageFlow {
 		
 		imageFileChooser.setMultiSelectionEnabled(false);
 		imageFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		final int res = imageFileChooser.showOpenDialog(null);
+		final int res = imageFileChooser.showOpenDialog(new JFrame());
 		
 		if (res == JFileChooser.APPROVE_OPTION) {
 			final File files = imageFileChooser.getSelectedFile();

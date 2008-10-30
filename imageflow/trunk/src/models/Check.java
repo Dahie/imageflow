@@ -13,6 +13,7 @@ import visualap.CheckException;
 import visualap.Vertex;
 
 /**
+ * Ignore 
  * @author danielsenff
  *
  */
