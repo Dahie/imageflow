@@ -587,4 +587,8 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		this.EdgeL = edgeL;
 	}
 
+	public HashMap<String, Object> getGlobalVars() {
+		return this.globalVars;
+	}
+
 };
