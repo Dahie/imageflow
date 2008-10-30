@@ -3,6 +3,8 @@
  */
 package application;
 
+import javax.swing.JFileChooser;
+
 /**
  * @author danielsenff
  *
@@ -10,5 +12,9 @@ package application;
 public class ApplicationController {
 
 //	private static ResourceBundle bundle = ResourceBundle.getBundle("Texte");
+	private JFileChooser imageFileChooser;
 	
+	public ApplicationController() {
+
+	}
 }

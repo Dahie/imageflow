@@ -29,10 +29,16 @@ public class GraphController extends ApplicationController {
 	private final ConnectionList connectionMap;
 	private ImageJ imagej;
 
+	
+	
+
+	public GraphController() {
+		this("/Users/danielsenff/zange1.png");
+	}
 	/**
 	 * 
 	 */
-	public GraphController() {
+	public GraphController(String absolutePath) {
 
 		/*
 		 * Wurzelbaum
@@ -45,7 +51,7 @@ public class GraphController extends ApplicationController {
 		unitElements = new UnitList();
 //		unitElements.add(null);
 		
-		final UnitElement sourceUnit = UnitFactory.createSourceUnit("/Users/danielsenff/zange1.png");
+		final UnitElement sourceUnit = UnitFactory.createSourceUnit(absolutePath);
 
 		final UnitElement blurUnit = UnitFactory.createGaussianBlurUnit(new Point(150, 150));
 		
@@ -87,6 +93,7 @@ public class GraphController extends ApplicationController {
 		
 		
 	}
+
 
 	/**
 	 * verification and generation of the ImageJ macro
