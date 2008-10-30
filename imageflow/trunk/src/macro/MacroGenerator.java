@@ -29,7 +29,7 @@ public class MacroGenerator {
 		macroText = "setBatchMode(true); \n";
 		
 		// loop over all units
-		// TODO they have to be presorted so they are in the right order
+		// they have to be presorted so they are in the right order
 		for (int unitIndex = 1; unitIndex < unitElement.length; unitIndex++) {
 			macroText += " \n";
 			// read the ImageJ syntax for this unit
@@ -86,7 +86,7 @@ public class MacroGenerator {
 		macroText +=  "// delete unwanted images \n";
 		for (int u = 1; u < unitElement.length; u++) {
 			UnitElement unit = unitElement[u];
-//			macroText += deleteImages(unit);
+			macroText += deleteImages(unit);
 		}
 
 		
@@ -102,7 +102,7 @@ public class MacroGenerator {
 		int numOutputs = unit.getOutputsMaxCount();
 
 		for (int out = 0; out < numOutputs; out++) {
-			if (!unit.getOutput(out).isDoDisplay()) {
+			if (!unit.isDisplayUnit()) {
 				String outputID = unit.getOutput(out).getImageID();
 			
 				macroText += "selectImage("+outputID+"); \n" +

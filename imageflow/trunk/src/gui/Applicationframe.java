@@ -1,11 +1,9 @@
 package gui;
 import graph.Edges;
-import graph.GList;
 import graph.Node;
 import helper.FileDrop;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.ScrollPane;
@@ -16,8 +14,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
@@ -25,7 +23,6 @@ import models.unit.UnitDelegate;
 import models.unit.UnitFactory;
 import models.unit.UnitList;
 import visualap.Delegate;
-import visualap.GPanel;
 import visualap.GPanelListener;
 import actions.RunMacroAction;
 import backend.GraphController;
@@ -38,7 +35,7 @@ import backend.GraphController;
  * @author danielsenff
  *
  */
-public class Applicationframe extends JFrame implements GPanelListener {
+public class Applicationframe extends JFrame {
 
 	public static String TITLE = "ImageFlow";
 	
@@ -47,6 +44,7 @@ public class Applicationframe extends JFrame implements GPanelListener {
 	private GraphController controller;
 
 	private JTextArea macroArea;
+	
 	
 	/**
 	 * 
@@ -110,7 +108,9 @@ public class Applicationframe extends JFrame implements GPanelListener {
 		
 		//working area aka graphpanel
 		
-		GraphPanel graphPanel = new GraphPanel(unitsDelegates , this);
+		GPanelPopup popup = new GPanelPopup();
+		GraphPanel graphPanel = new GraphPanel(unitsDelegates , popup);
+		popup.setActivePanel(graphPanel);
 		graphPanel.setSize(400, 300);
 		graphPanel.setNodeL(units);
 		graphPanel.setEdgeL(edges);
@@ -139,20 +139,14 @@ public class Applicationframe extends JFrame implements GPanelListener {
 		
 		
 		
-		JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
-				true, 
-				graphScrollpane, 
-				new InsertUnitPanel() );
-//		splitpane.setDividerLocation(0.8);
 		this.add(graphScrollpane, BorderLayout.CENTER);
 		
 		// area for selecting unit to insert them in the graphpanel
 		JPanel unitSelectionPanel = new JPanel();
 		unitSelectionPanel.setName("Insert filter");
 		
-		JPanel selectUnitPanel = new JPanel();
-		selectUnitPanel.setBackground(Color.WHITE);
-		selectUnitPanel.setPreferredSize(new Dimension(400, 80));
+		JPanel selectUnitPanel = new InsertUnitPanel();
+		
 		
 		JScrollPane selectUnitScrollpane = new JScrollPane(selectUnitPanel); 
 		unitSelectionPanel.add(selectUnitScrollpane);
@@ -189,26 +183,6 @@ public class Applicationframe extends JFrame implements GPanelListener {
 
 	public void setMacro(String macro) {
 		this.macroArea.setText(macro);
-	}
-	
-	public void showFloatingMenu(MouseEvent e) {
-		if (e.isPopupTrigger()) {
-		/*	savedPoint = e.getPoint();
-			//Create the popup menu.
-			JPopupMenu popup = new JPopupMenu();
-			if (activePanel.selection.size() == 0) popup.add(newItem("New"));
-			else {
-				if (activePanel.selection.size() == 1) {
-					popup.add(editItem("Properties"));
-					popup.addSeparator();
-				}
-				popup.add(cutItem("Cut"));
-				popup.add(unbindItem("Unbind"));
-				popup.add(copyItem("Copy"));
-			}
-			if (copyL.size() != 0) popup.add(pasteItem("Paste"));
-			popup.show(e.getComponent(), e.getX(), e.getY());*/
-		}
 	}
 	
 }

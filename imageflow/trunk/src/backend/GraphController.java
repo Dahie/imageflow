@@ -5,14 +5,11 @@ import ij.IJ;
 import ij.ImageJ;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
 
 import macro.MacroGenerator;
 import models.Connection;
 import models.ConnectionList;
-import models.Input;
 import models.unit.UnitElement;
 import models.unit.UnitFactory;
 import models.unit.UnitList;
@@ -123,7 +120,7 @@ public class GraphController {
 		if(networkOK) {
 			final String macro = MacroGenerator.generateMacrofromUnitList(unitElements);
 			
-			new ImageJ();
+			new ImageJ(null, ImageJ.EMBEDDED);
 			IJ.log(macro);
 			IJ.runMacro(macro, "");
 		} else {
@@ -192,10 +189,12 @@ public class GraphController {
 		
 		UnitList orderedList = new UnitList();
 		int sortedElementsCount = 0;
-		int mark = 1;
+
 		
-		//TODO reset all marks
+		// reset all marks
+		unmarkUnits(unitElements);
 		
+		int mark = 0;
 		int i = 0;
 		int index = 0;
 		//loop over all units, selection sort, levelorder
@@ -203,12 +202,11 @@ public class GraphController {
 		while(!unitElements.isEmpty()) {
 			index = i % unitElements.size();
 			UnitElement unit = (UnitElement) unitElements.get(index); 
-
 			
 			// check if all inputs of this node are marked
 			// if so, this unit is moved from the old list to the new one
 			if(unit.hasAllInputsMarked()) {
-				mark++;
+				mark++;	
 				
 				// increment mark
 				// mark outputs
@@ -216,8 +214,12 @@ public class GraphController {
 				
 				// remove from the old list and
 				// move this to the new ordered list
-				orderedList.add(unitElements.remove(index));
-			}
+				Node remove = unitElements.remove(index);
+				orderedList.add(remove);
+				
+				// we swap units. 
+//				Collections.swap(unitElements, mark, swap);
+			} 
 			
 			// Selection Sort
 			// each time an element whose previous nodes have already been registered
@@ -228,6 +230,17 @@ public class GraphController {
 		return orderedList;
 	}
 
-
+	/**
+	 * Resets all marks to zero.
+	 * @param units
+	 */
+	public static void unmarkUnits(UnitList units) {
+		
+		for (Node node : units) {
+			UnitElement unit = (UnitElement) node;
+			unit.setMark(0);
+		}
+		
+	}
 
 }

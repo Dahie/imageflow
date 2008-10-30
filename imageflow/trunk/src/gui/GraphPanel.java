@@ -19,15 +19,14 @@ import models.unit.UnitList;
 import visualap.Delegate;
 import visualap.GPanel;
 import visualap.GPanelListener;
+import backend.GraphController;
 
 /**
  * @author danielsenff
  *
  */
 public class GraphPanel extends GPanel {
-
 	protected UnitList units;
-	protected UnitList nodeL;
 	
 	/**
 	 * @param beans
@@ -41,7 +40,7 @@ public class GraphPanel extends GPanel {
 	/* (non-Javadoc)
 	 * @see visualap.GPanel#paintComponent(java.awt.Graphics)
 	 */
-	/*@Override
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// paint printable items
@@ -88,7 +87,6 @@ public class GraphPanel extends GPanel {
 					rectToDraw.width - 1, rectToDraw.height - 1);
 		}
 	}
-	 */
 	
 	
 	public static boolean isWithinRange(int compareValue, int startValue, int endValue) {

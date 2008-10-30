@@ -548,6 +548,7 @@ public class UnitElement extends NodeAbstract {
 	
 	/**
 	 * Checks a unit, if it's inputs have already been registered in the algorithm.
+	 * It's marked, when it's not 0. The int is conjecture to the order.
 	 * @param unit
 	 * @return
 	 */
