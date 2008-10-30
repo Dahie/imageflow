@@ -46,13 +46,10 @@ public class GraphController extends ApplicationController {
 //		unitElements.add(null);
 		
 		final UnitElement sourceUnit = UnitFactory.createSourceUnit("/Users/danielsenff/zange1.png");
-		
 
 		final UnitElement blurUnit = UnitFactory.createGaussianBlurUnit(new Point(150, 150));
 		
-		
 		final UnitElement mergeUnit = UnitFactory.createImageCalculatorUnit(new Point(320, 30));
-		
 		
 		final UnitElement noiseUnit = UnitFactory.createAddNoiseUnit(new Point(450, 30));
 		noiseUnit.setDisplayUnit(true);
