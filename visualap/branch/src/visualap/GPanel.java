@@ -287,7 +287,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			Point origin = drawEdge.getLocation();
 
 			Graphics2D g2 = (Graphics2D) g;
-			float lineWidth = 1.5f;
+			float lineWidth = 1.0f;
 		    g2.setStroke(new BasicStroke(lineWidth));
 		    g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
 		    g2.draw(new Line2D.Double(origin.x, origin.y, mouse.x, mouse.y));
@@ -315,6 +315,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
     }
 
     public void mousePressed(MouseEvent e) {
+    	
 // generato nell'istante in cui il mouse viene premuto
 		int x = e.getX();
 		int y = e.getY();
@@ -332,6 +333,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				for (Node iNode : selection)
 					iNode.drag(true);
 				repaint();
+				parent.showFloatingMenu(e);
 				e.consume();
 				changeCursor(Cursor.MOVE_CURSOR);
 				return;
@@ -345,8 +347,9 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				return;
 			}
 		}
-		selection.clear();
 		parent.showFloatingMenu(e);
+		selection.clear();
+		
 	//	e.consume();
 
 	// handling of selection rectange 
@@ -538,7 +541,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		return Printable.PAGE_EXISTS;
 	}
 
-	protected String shortName(String fullName) {
+	public String shortName(String fullName) {
 		int ix = fullName.lastIndexOf('.');
 		if (ix >= 0) {
 			return fullName.substring(ix+1);

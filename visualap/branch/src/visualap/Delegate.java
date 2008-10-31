@@ -25,6 +25,7 @@ public abstract class Delegate {
 			return fullName.substring(ix+1);
 		} else	return fullName;
 	}
+
 	
 	
 }
