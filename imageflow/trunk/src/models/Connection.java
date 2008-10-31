@@ -12,19 +12,34 @@ import models.unit.UnitElement;
 public class Connection extends Edge {
 	public int id;		// the id of this connection
 	
-							// a connection between
-	int fromOutputNumber;	// the output with this number
-	int fromUnitNumber;		// of the unit with this number
+	/** 
+	 * From which {@link Output}
+	 */
+	protected int fromOutputNumber;	
+	/**
+	 * From which {@link UnitElement}-number
+	 */
+	protected int fromUnitNumber;
+	/**
+	 * From which {@link UnitElement} connected.
+	 */
 	protected UnitElement fromUnit;
 	
-	// is connected to
-	int toInputNumber;		// the input of this number 
-	int toUnitNumber;		// of the unit with this number
+	/**
+	 * Connected to this Input.
+	 */
+	protected int toInputNumber;
+	/**
+	 * Connected to this {@link UnitElement}-number.
+	 */
+	protected int toUnitNumber;	
+	/**
+	 * Connected to this {@link UnitElement}.
+	 */
 	protected UnitElement toUnit;
 	
 	/**
 	 * Connection-Status
-	 * @author danielsenff
 	 *
 	 */
 	public enum Status {OK, MISSING_TO_UNIT, MISSING_FROM_UNIT, MISSING_BOTH }
@@ -64,7 +79,7 @@ public class Connection extends Edge {
 		
 		
 		super.to = toUnit.getInput(toInputNumber-1);
-		((Input) super.to).setConnection(fromUnitNumber, fromOutputNumber);	
+		((Input) super.to).setConnection(toUnit, fromOutputNumber);	
 	}
 	
 	/**
@@ -83,6 +98,7 @@ public class Connection extends Edge {
 	
 	/**
 	 * Returns the status of the connection, whether all ends are connected
+	 * @return 
 	 */
 	public Status checkConnection() {
 		if(this.fromUnit != null && this.toUnit != null) {
@@ -97,6 +113,7 @@ public class Connection extends Edge {
 	
 	/**
 	 * Returns the {@link UnitElement} from which this connection comes.
+	 * @return 
 	 */
 	public UnitElement getFromUnit() {
 		return this.fromUnit;
@@ -163,7 +180,7 @@ public class Connection extends Edge {
 
 	/**
 	 * Checks if this connection is attached to the {@link Pin}
-	 * @param input
+	 * @param pin
 	 * @return
 	 */
 	public boolean isConnected(Pin pin) {

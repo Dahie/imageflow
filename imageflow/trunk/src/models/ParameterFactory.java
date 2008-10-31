@@ -11,9 +11,14 @@ public class ParameterFactory {
 
 	/**
 	 * Creates the right UnitElement based on the given parameters.
-	 * 
+	 * @param displayName 
+	 * @param parameter 
+	 * @param helpString 
+	 * @return 
 	 */
-	public static Parameter createParameter(String displayName, Object parameter, String helpString) {
+	public static Parameter createParameter(final String displayName, 
+			Object parameter, 
+			String helpString) {
 		if(parameter instanceof String) {
 			return new StringParameter(displayName, (String) parameter, helpString);
 		} else if (parameter instanceof Double ) {

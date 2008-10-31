@@ -9,17 +9,16 @@ package models;
  */
 public class StringParameter extends Parameter {
 
-	protected String  stringValue;	
+	/**
+	 * Actual String value
+	 */
+	protected String  stringValue;
+	/**
+	 * Default String value
+	 */
 	protected String  stringValueDefault;
 
-	/**
-	 * @param parameterNumber
-	 */
-	public StringParameter(int parameterNumber) {
-		super(parameterNumber);
-		super.paraType = 1;
-	}
-	
+
 	/**
 	 * @param displayName
 	 * @param stringParameter
@@ -34,11 +33,19 @@ public class StringParameter extends Parameter {
 	}
 
 	
+	/**
+	 * Get the String parameter value
+	 * @return
+	 */
 	public String getStringValue() {
 		return this.stringValue;
 	}
 
-	public void setStringValue(String stringValue) {
+	/**
+	 * Set String parameter.
+	 * @param stringValue
+	 */
+	public void setStringValue(final String stringValue) {
 		this.stringValue = stringValue;
 	}
 
@@ -53,7 +60,7 @@ public class StringParameter extends Parameter {
 		this.stringValue = stringParameter;
 		this.stringValueDefault = stringParameter;
 		this.helpString = helpString;
-		this.paraType = 1;
+//		this.paraType = 1;
 	}
 	
 }

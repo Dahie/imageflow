@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -34,18 +35,41 @@ public class UnitElement extends NodeAbstract {
 	
 	static int ids;
 	
-	protected int unitID;						// the id of this unit	
-	protected String unitName;       			// name of this unit (will be shown)
+	/**
+	 * the id of this unit
+	 */
+	protected int unitID;
+	/**
+	 * name of this unit (will be shown)
+	 */
+	protected String unitName;    
 	protected File iconfile;
-	protected Color color;				  	// unit color
-	protected String infoText;			  	// help text, describing the unit's functionality
-	protected BufferedImage unitIcon;			// unitIcon on the graphpanel
-	protected BufferedImage icon;			// function icon
+	/**
+	 * unit color
+	 */
+	protected Color color; 
+	/**
+	 * help text, describing the unit's functionality
+	 */
+	protected String infoText; 
+	/**
+	 * unitIcon on the graphpanel
+	 */
+	protected BufferedImage unitIcon;
+	protected NodeIcon unitComponentIcon;
+	/**
+	 * function icon
+	 */
+	protected BufferedImage icon; 
 	
 	/**
 	 * status of this unit
 	 */
 	public enum Status {OK, ERROR, WAITING };
+	/**
+	 * Type of this UnitElement
+	 *
+	 */
 	public enum Type {SOURCE, FILTER, SINK};
 	protected Status status;
 	
@@ -53,13 +77,30 @@ public class UnitElement extends NodeAbstract {
 	private boolean isDisplayUnit = false;			// flag indicating if this unit is a display unit 
 
 	// all arrays start at 1, this will make it easy to detect unconnected inputs and outputs
-	protected ArrayList<Input> inputs;				// input array
-	protected ArrayList<Output> outputs;				// output array
-//	Parameter[] parameters;       	// parameters that control the functionality of the unit
+	/**
+	 * input array
+	 */
+	protected ArrayList<Input> inputs;
+	/**
+	 * output array
+	 */
+	protected ArrayList<Output> outputs;
+	/**
+	 * parameters that control the functionality of the unit
+	 */
 	protected ArrayList<Parameter> parameters;
 
+	/**
+	 * Maximum number of Parameters, that can be added to this UnitElement.
+	 */
 	protected int numMaxParameters;
+	/**
+	 * Maximum number of {@link Input}s, that can be added to this UnitElement.
+	 */
 	protected int numMaxInputs;
+	/**
+	 * Maximum number of {@link Output}s, that can be added to this UnitElement.
+	 */
 	protected int numMaxOutputs;
 
 	private int FIRST_ELEMENT = 0;
@@ -147,7 +188,8 @@ public class UnitElement extends NodeAbstract {
 			parameters[i] = new Parameter(i);
 		}*/
 		
-		unitIcon = new NodeIcon(this).getImage();
+		unitComponentIcon= new NodeIcon(this);
+		unitIcon = unitComponentIcon.getImage();
 	}
 	
 
@@ -170,12 +212,13 @@ public class UnitElement extends NodeAbstract {
 
 	/**
 	 * Adds an Output to the unit
-	 * @param string
-	 * @param string2
-	 * @param i
+	 * @param name 
+	 * @param shortname 
+	 * @param outputBitDepth 
+	 * @return 
 	 */
 	public boolean addOutput(String name, 
-			String shortname, 
+			final String shortname, 
 			int outputBitDepth) {
 		Output newOutput = new Output(unitID,this.outputs.size()+1, this);
 		newOutput.setupOutput(name, shortname, outputBitDepth);
@@ -201,6 +244,7 @@ public class UnitElement extends NodeAbstract {
 	}
 	
 	/**
+	 * @return 
 	 * 
 	 */
 	public int getOutputsMaxCount() {
@@ -217,6 +261,10 @@ public class UnitElement extends NodeAbstract {
 		return this.inputs.get(index);
 	}
 	
+	/**
+	 * List of all attached {@link Input}s
+	 * @return
+	 */
 	public ArrayList<Input> getInputs() {
 		return this.inputs;
 	}
@@ -233,10 +281,12 @@ public class UnitElement extends NodeAbstract {
 
 
 	/**
-	 * @param string
-	 * @param string2
-	 * @param doesAll
-	 * @param b
+
+	 * @param displayName 
+	 * @param shortDisplayName 
+	 * @param inputImageBitDepth 
+	 * @param needToCopyInput 
+	 * @return 
 	 */
 	public boolean addInput(String displayName, 
 			String shortDisplayName, 
@@ -318,6 +368,7 @@ public class UnitElement extends NodeAbstract {
 	/**
 	 * Add a Parameter to the unit
 	 * @param parameter
+	 * @return 
 	 */
 	public boolean addParameter(final Parameter parameter){
 		if(this.numMaxParameters > parameters.size()) {
@@ -415,7 +466,8 @@ public class UnitElement extends NodeAbstract {
 	/**
 	 * Checks if there is an input or an output at this mouse coordinates. 
 	 */
-	public Object contains(int x, int y) {
+	@Override
+	public Object contains(final int x, final int y) {
 		int tolerance = 4;
 		if ((x >= origin.x - tolerance)
 				&&(x < origin.x + tolerance))	{
@@ -466,7 +518,8 @@ public class UnitElement extends NodeAbstract {
 				g.setColor(Color.red);
 				g.drawRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4);
 			}
-			g.drawImage(unitIcon, origin.x, origin.y, getDimension().width, getDimension().height, io);
+//			g.drawImage(unitIcon, origin.x, origin.y, getDimension().width, getDimension().height, io);
+			unitComponentIcon.paintBigIcon((Graphics2D) g);
 		}
 		
 		
@@ -528,7 +581,7 @@ public class UnitElement extends NodeAbstract {
 	}
 
 	/**
-	 * Marks the attached pins.
+	 * Mark this unit by marking its {@link Input}s and {@link Output}s.
 	 * @param mark
 	 */
 	public void setMark(int mark) {
@@ -541,6 +594,11 @@ public class UnitElement extends NodeAbstract {
 	}
 	
 	
+	/**
+	 * Returns the mark of the attached {@link Output}.
+	 * Doesn't help it if the mark is different on any pin
+	 * @return
+	 */
 	public int getMark() {
 		return outputs.get(0).getMark();
 		// doesn't help it if the mark is different on any pin

@@ -10,6 +10,13 @@ import models.unit.UnitList;
 
 public class MacroGenerator {
 
+	//TODO leave nodes out, which:
+	// have no input connected
+	// have no input marked
+	// which are source, but no output and no display
+	
+	
+	
 	public static String generateMacrofromUnitList(UnitList unitElements) {
 		
 		UnitElement[] units = new UnitElement[unitElements.size()+1];

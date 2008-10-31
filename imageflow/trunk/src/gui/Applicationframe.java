@@ -1,30 +1,26 @@
 package gui;
 import graph.Edges;
-import graph.Node;
 import helper.FileDrop;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.ScrollPane;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import models.unit.UnitDelegate;
 import models.unit.UnitFactory;
 import models.unit.UnitList;
 import visualap.Delegate;
-import visualap.GPanelListener;
 import actions.RunMacroAction;
+import backend.DelegatesController;
 import backend.GraphController;
 
 /**
@@ -98,18 +94,15 @@ public class Applicationframe extends JFrame {
 	 */
 	private void addComponents() {
 		
-		ArrayList<Delegate> unitsDelegates = new ArrayList<Delegate>();
-		UnitDelegate unitDelegate = new UnitDelegate();
-		unitsDelegates.add(unitDelegate);
-		
+		ArrayList<Delegate> unitDelegates = DelegatesController.getInstance().getUnitDelegates();
 		
 		
 		this.setLayout(new BorderLayout());
 		
 		//working area aka graphpanel
 		
-		GPanelPopup popup = new GPanelPopup();
-		GraphPanel graphPanel = new GraphPanel(unitsDelegates , popup);
+		GPanelPopup popup = new GPanelPopup(unitDelegates);
+		final GraphPanel graphPanel = new GraphPanel(unitDelegates , popup);
 		popup.setActivePanel(graphPanel);
 		graphPanel.setSize(400, 300);
 		graphPanel.setNodeL(units);
@@ -133,6 +126,7 @@ public class Applicationframe extends JFrame {
 	            		// add Source-Units
 	        			controller.getUnitElements().add(UnitFactory.createSourceUnit(
 	        					files[i].getAbsolutePath(), coordinates));
+	        			graphPanel.repaint();
 	                }   // end for: through each dropped file
 	            }   // end filesDropped
 	        }); // end FileDrop.Listener

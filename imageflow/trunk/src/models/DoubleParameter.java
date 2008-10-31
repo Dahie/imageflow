@@ -12,14 +12,6 @@ public class DoubleParameter extends Parameter {
 	protected double  doubleValue;
 	protected double  doubleValueDefault;
 
-	
-	/**
-	 * @param parameterNumber
-	 */
-	public DoubleParameter(int parameterNumber) {
-		super(parameterNumber);
-		super.paraType = 0;
-	}
 
 	/**
 	 * @param string

@@ -11,17 +11,41 @@ import models.unit.UnitElement;
  *
  */
 public class Output extends Pin {
-	protected int unitNumber;			// the number of this unit
-	protected int outputNumber;		// the number of this output (mostly there is only one output)
+	/**
+	 * the number of this unit
+	 */
+	protected int unitNumber;
+	/**
+	 * the number of this output (mostly there is only one output)
+	 */
+	protected int outputNumber;
 
-	protected String name; 			// the name to be displayed in the context help
-	protected String shortName = "O"; // the short name to be displayed on the unit's icon
+	/**
+	 * the name to be displayed in the context help
+	 */
+	protected String name;
+	/**
+	 * the short name to be displayed on the unit's icon
+	 */
+	protected String shortName = "O";
 
-	protected int outputBitDepth; 	// the int value indicates the type of the generated image 
+	/**
+	 * the int value indicates the type of the generated image
+	 */
+	protected int outputBitDepth; 
 
-	protected String imageTitle;  	// the title of the image generated from this output
-	protected String imageID; 		// the id of the image generated from this output
-	protected boolean doDisplay; 	// indicates that this output should be shown
+	/**
+	 * the title of the image generated from this output
+	 */
+	protected String imageTitle; 
+	/**
+	 * the id of the image generated from this output
+	 */
+	protected String imageID; 
+	/**
+	 * indicates that this output should be shown
+	 */
+	protected boolean doDisplay; 
 		
 	
 	/**
@@ -39,6 +63,11 @@ public class Output extends Pin {
 
 
 
+	/**
+	 * @param name
+	 * @param shortname
+	 * @param outputBitDepth
+	 */
 	public void setupOutput(final String name, final String shortname, final int outputBitDepth) {
 		this.name = name;
 		this.shortName = shortname;
@@ -46,6 +75,10 @@ public class Output extends Pin {
 	}
 
 
+	/**
+	 * Activates to display the image at this output.
+	 * @param doDisplay
+	 */
 	public void setDoDisplay(final boolean doDisplay) {
 		this.doDisplay = doDisplay;
 	}
@@ -59,6 +92,10 @@ public class Output extends Pin {
 		return doDisplay;
 	}
 
+	/**
+	 * Title of the image in the macro.
+	 * @return
+	 */
 	public String getImageTitle() {
 		return this.imageTitle;
 	}

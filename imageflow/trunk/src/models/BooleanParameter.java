@@ -9,32 +9,25 @@ package models;
  */
 public class BooleanParameter extends Parameter {
 
+	/**
+	 * The actual value of this Parameter;
+	 */
 	protected boolean booleanValue;
+	/**
+	 * The default value of this Parameter.
+	 */
 	protected boolean booleanValueDefault;
 	
 	
-	public boolean getBooleanValue() {
-		return this.booleanValue;
-	}
-
-	public void setBooleanValue(boolean booleanValue) {
-		this.booleanValue = booleanValue;
-	}
 
 	/**
-	 * @param parameterNumber
+	 * @param displayName 
+	 * @param boolParameter 
+	 * @param helpString 
 	 */
-	public BooleanParameter(int parameterNumber) {
-		super(parameterNumber);
-		this.paraType = 2;
-	}
-
-	/**
-	 * @param string
-	 * @param b
-	 * @param string2
-	 */
-	public BooleanParameter(String displayName, boolean boolParameter, String helpString) {
+	public BooleanParameter(final String displayName, 
+			final boolean boolParameter, 
+			String helpString) {
 		this.displayName = displayName;
 		this.booleanValue = boolParameter;
 		this.booleanValueDefault = boolParameter;
@@ -53,5 +46,21 @@ public class BooleanParameter extends Parameter {
 		this.helpString = helpString;
 	}
 	
-	
+
+	/**
+	 * Get the value.
+	 * @return
+	 */
+	public boolean getBooleanValue() {
+		return this.booleanValue;
+	}
+
+	/**
+	 * Set the value.
+	 * @param booleanValue
+	 */
+	public void setBooleanValue(final boolean booleanValue) {
+		this.booleanValue = booleanValue;
+	}
+
 }

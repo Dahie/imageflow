@@ -29,16 +29,17 @@ public class GraphController extends ApplicationController {
 	private final ConnectionList connectionMap;
 	private ImageJ imagej;
 
-	
-	
 
-	public GraphController() {
-		this("/Users/danielsenff/zange1.png");
-	}
 	/**
 	 * 
 	 */
-	public GraphController(String absolutePath) {
+	public GraphController() {
+
+		this.unitElements = new UnitList();
+		this.connectionMap = new ConnectionList();
+	}
+
+	public void setupExample() {
 
 		/*
 		 * Wurzelbaum
@@ -48,10 +49,10 @@ public class GraphController extends ApplicationController {
 		// setup of units
 		////////////////////////////////////////////////////////
 		
-		unitElements = new UnitList();
+		
 //		unitElements.add(null);
 		
-		final UnitElement sourceUnit = UnitFactory.createSourceUnit(absolutePath);
+		final UnitElement sourceUnit = UnitFactory.createSourceUnit("/Users/danielsenff/zange1.png");
 
 		final UnitElement blurUnit = UnitFactory.createGaussianBlurUnit(new Point(150, 150));
 		
@@ -72,7 +73,7 @@ public class GraphController extends ApplicationController {
 		// setup the connections
 		////////////////////////////////////////////////////////
 		
-		connectionMap = new ConnectionList();
+		
 		
 		// add six connections
 		// the conn is established on adding
@@ -91,9 +92,8 @@ public class GraphController extends ApplicationController {
 		//connectionMap.remove( Connection.getID(2,1,5,1) );
 		
 		
-		
 	}
-
+	
 
 	/**
 	 * verification and generation of the ImageJ macro
@@ -184,6 +184,7 @@ public class GraphController extends ApplicationController {
 	
 	public static void main(final String[] args) {
 		final GraphController controller = new GraphController();
+		controller.setupExample();
 		controller.generateMacro();
 	}
 

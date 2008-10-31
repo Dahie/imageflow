@@ -3,11 +3,12 @@
  */
 package models.unit;
 
+import graph.GList;
+import graph.Node;
+
 import java.util.ArrayList;
 
 import models.Input;
-import graph.GList;
-import graph.Node;
 
 /**
  * List holding all {@link UnitElement}s. For the moment this is just an empty wrapper.
@@ -17,6 +18,11 @@ import graph.Node;
 public class UnitList extends GList<Node> {
 
 	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8204689428123811757L;
 
 	/**
 	 * Checks all Inputs if they are connected or not. 
@@ -41,5 +47,19 @@ public class UnitList extends GList<Node> {
 		return true;
 	}
 
+	/**
+	 * Remove this Unit from the workflow.
+	 * @param unitElement 
+	 * @return 
+	 */
+	public boolean remove(final UnitElement unitElement) {
+		
+		// remove any connections
+		
+		// remove unit itself
+		
+		return super.remove(unitElement);
+		
+	}
 	
 }

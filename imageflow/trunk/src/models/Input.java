@@ -1,12 +1,9 @@
 package models;
 
-import graph.Node;
 import graph.Pin;
-import helper.PaintUtil;
 
 import java.awt.Point;
 
-import models.unit.NodeIcon;
 import models.unit.UnitElement;
 
 /**
@@ -14,26 +11,59 @@ import models.unit.UnitElement;
  *
  */
 public class Input extends Pin {
-	protected int unitNumber;		// the number of this unit
+	/**
+	 * the number of this unit
+	 */
+	protected int unitNumber;
 //	protected Node unit;
 //	protected int i;	// the number of this input 
 
-	protected String displayName; 	// the name to be displayed in the context help
-	protected String shortDisplayName = "I"; // the short name to be displayed on the unit's icon
+	/**
+	 * the name to be displayed in the context help
+	 */
+	protected String displayName;
+	/**
+	 * the short name to be displayed on the unit's icon
+	 */
+	protected String shortDisplayName = "I";
 	
-	protected String imageID; 		// the id of the image connected to this input
-	protected String imageTitle;  	// the title of the image connected this output
+	/**
+	 * the id of the image connected to this input
+	 */
+	protected String imageID;
+	/**
+	 * the title of the image connected this output
+	 */
+	protected String imageTitle;  
 	
-	protected int inputImageBitDepth; // the int value indicates the acceptable image types 
+	/**
+	 * the int value indicates the acceptable image types
+	 */
+	protected int inputImageBitDepth; 
 	
-	protected boolean needToCopyInput; 		// flag indicating if the image at this input needs to be duplicated
+	/**
+	 * flag indicating if the image at this input needs to be duplicated
+	 */
+	protected boolean needToCopyInput;
+	/**
+	 * Placeholder for the flag to set inputs not required. Default is required.
+	 */
 	protected boolean requiredInput = true;
 	
 	
 
 	// connected to this input:
+	/**
+	 * Connected from this {@link UnitElement}-number.
+	 */
 	protected int fromUnitNumber;
+	/**
+	 * Connected from this {@link Output}
+	 */
 	protected int fromOutputNumber;
+	/**
+	 * Connected from this {@link UnitElement}
+	 */
 	protected UnitElement fromUnit;
 	
 	
@@ -62,7 +92,7 @@ public class Input extends Pin {
 	 * @param fromUnitNumber
 	 * @param fromOutputNumber
 	 */
-	public void setConnection(final int fromUnitNumber, final int fromOutputNumber) {
+	private void setConnection(final int fromUnitNumber, final int fromOutputNumber) {
 		this.fromUnitNumber = fromUnitNumber;
 		this.fromOutputNumber = fromOutputNumber;
 		this.imageTitle = "Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
@@ -80,6 +110,13 @@ public class Input extends Pin {
 	}
 
 
+	/**
+	 * Setup the basic data.
+	 * @param displayName Name of the Pin
+	 * @param shortDisplayName Abbreviation of the Pin
+	 * @param inputImageBitDepth Flag which defines, what image-formats can be taken.
+	 * @param needToCopyInput
+	 */
 	public void setupInput(final String displayName, 
 			final String shortDisplayName, 
 			final int inputImageBitDepth, 
@@ -93,6 +130,7 @@ public class Input extends Pin {
 	
 	/**
 	 * Returns whether or not this Input is connected.
+	 * @return 
 	 */
 	public boolean isConnected() {
 		final boolean isConnected = fromUnit != null || 
@@ -102,14 +140,25 @@ public class Input extends Pin {
 	}
 	
 
+	/**
+	 * Get the ImageTitle. 
+	 * This is the title of the image later used in the Macro
+	 * @return
+	 */
 	public String getImageTitle() {
 		return imageTitle;
 	}
 
+	/**
+	 * @param needToCopyInput
+	 */
 	public void setNeedToCopyInput(final boolean needToCopyInput) {
 		this.needToCopyInput = needToCopyInput;
 	}
 
+	/**
+	 * @return
+	 */
 	public boolean isNeedToCopyInput() {
 		return needToCopyInput;
 	}
@@ -168,9 +217,23 @@ public class Input extends Pin {
 
 
 	/**
+	 * Return the unit from which this Input is connected.
 	 * @return the fromUnit
 	 */
 	public UnitElement getFromUnit() {
 		return this.fromUnit;
+	}
+
+	/**
+	 * Checks if this Input is connected with the given {@link Output}
+	 * @param output 
+	 * @param source1Output
+	 * @return
+	 */
+	public boolean isConnectedWith(Output output) {
+		if(this.fromUnit != null) {
+			return this.fromUnit.getOutput(this.fromOutputNumber-1).equals(output);
+		}
+		return false;
 	}
 }

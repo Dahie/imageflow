@@ -4,15 +4,10 @@
 package application;
 
 import gui.Applicationframe;
-
-import java.io.File;
-
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-
 import backend.GraphController;
 
 /**
+ * Main-method
  * @author danielsenff
  *
  */
@@ -20,23 +15,14 @@ public class ImageFlow {
 
 
 	/**
+	 * Main, start of the application
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		
-		JFileChooser imageFileChooser = new JFileChooser();
+		GraphController controller = new GraphController();
+		new Applicationframe(controller);
 		
-		imageFileChooser.setMultiSelectionEnabled(false);
-		imageFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		final int res = imageFileChooser.showOpenDialog(new JFrame());
-		
-		if (res == JFileChooser.APPROVE_OPTION) {
-			final File files = imageFileChooser.getSelectedFile();
-			System.out.println(files);
-			GraphController controller = new GraphController(files.getAbsolutePath());
-		
-			new Applicationframe(controller);
-		}
 	}
 	
 

@@ -33,8 +33,9 @@ public class NodeIcon {
 	//Dimensions
 	protected int height = 100;
 	protected int width = 100;
-    int x = 5;
-    int y = 5;
+    int x;
+    int y;
+    int padding = 5;
     int widthIconBg = width - 10;
     int heightIconBg = height - 10;
     /**
@@ -69,6 +70,9 @@ public class NodeIcon {
 	public NodeIcon(final UnitElement unit) {
 		this.unit = unit;
 		this.unitName = unit.getName();
+		
+		
+		
 		try {
 			
 			this.displayIcon = ImageIO.read(new File(displayIconFile));
@@ -103,7 +107,7 @@ public class NodeIcon {
 		BufferedImage resultImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 	    Graphics2D g2 = resultImage.createGraphics();
 	    if(size == Size.BIG) {
-	    	paintBigComponent(g2);
+	    	paintBigIcon(g2);
 	    } else if (size == Size.MEDIUM){
 	    	paintMediumComponent(g2);
 	    }
@@ -121,7 +125,7 @@ public class NodeIcon {
 	}
 
 	/**
-	 * Returns the big unit-icon.
+	 * Returns the medium unit-icon.
 	 * @return
 	 */
 	public BufferedImage getImage() {
@@ -129,9 +133,14 @@ public class NodeIcon {
 	}
 	
 	/**
+	 * @param g2 
 	 * @return 
 	 */
-	public Graphics paintBigComponent(Graphics2D g2) {
+	public Graphics2D paintBigIcon(final Graphics2D g2) {
+		
+		// location and dimension
+		this.x = unit.getOrigin().x + padding;
+		this.y = unit.getOrigin().y + padding;
 		
 	    g2.setRenderingHint(
 	    		RenderingHints.KEY_ANTIALIASING,
@@ -153,20 +162,20 @@ public class NodeIcon {
 	    }
 	    // and if even now to small, then cut
 	    
-	    g2.drawString(unitName, x+5, heightIconBg);
+	    g2.drawString(unitName, x+5, y+85);
 	    
-	    Font font = g2.getFont();
+	    /*Font font = g2.getFont();
 	    g2.drawString(parametersLabel, x+5, y+20);
 	    
 	    g2.drawString(infoLabel, x+25, y+20);
 	    g2.setColor(Color.BLACK);
-	    g2.drawString("x", width-15, y+20);
+	    g2.drawString("x", x+width-20, y+20);*/
 	    
 	    // draw icon for display
 	    if(unit.isDisplayUnit()) {
-			int x = (width/2)-8;
-			int y = this.y+10;
-			g2.drawImage(this.displayIcon, x, y, null);
+			int xDisplay = this.x+(width/2)-8;
+			int yDisplay = this.y+8;
+			g2.drawImage(this.displayIcon, xDisplay, yDisplay, null);
 	    }
 	    
 	    //draw inputs and outputs
@@ -190,6 +199,8 @@ public class NodeIcon {
 			cBottom = new Color(136, 169, 242, 255);
 			break;
 		case SINK:
+			cTop = new Color(173, 137, 70, 255);
+			cBottom = new Color(200, 171, 118, 255);
 			break;
 		case SOURCE:
 			cTop = new Color(134, 171, 116, 255);
@@ -199,7 +210,7 @@ public class NodeIcon {
 
 		
 //		GradientPaint gradient1 = new GradientPaint(10,10,cTop,30,30,cBottom,true);
-		GradientPaint gradient1 = new GradientPaint(10,10,cTop,100,30,cBottom);
+		GradientPaint gradient1 = new GradientPaint(x+10,y+10,cTop,x+100,y+30,cBottom);
 	    g2.setPaint(gradient1);
 	    g2.fillRoundRect(x, y, widthIconBg, heightIconBg, arc, arc);
 

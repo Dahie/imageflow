@@ -10,8 +10,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
-import models.Parameter;
 import models.ParameterFactory;
 
 
@@ -21,6 +22,21 @@ import models.ParameterFactory;
  */
 public class UnitFactory {
 
+	public static UnitElement buildUnitElement(String name, String imageJsyntax, Point origin) {
+		
+		// 
+		UnitElement unit = new UnitElement(origin, name, imageJsyntax+" \n",1,1,0);
+		
+		// setup of the first input of unit 2
+		unit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
+		// setup of the first output of unit 2 
+		unit.addOutput("Output", "O", -1); // -1 means output will be the same type as the input
+		unit.updateUnitIcon();
+		return unit;
+		
+	}
+	
+	
 	/**
 	 * setup of a processing unit (Image Calculator  / Subtract)
 	 * display name, syntax, 2 inputs (as titles), 1 output, 1 parameter
@@ -50,6 +66,49 @@ public class UnitFactory {
 		mergeUnit.addOutput("Output", "O", 32); // 32 means output will be floatingpoint
 		mergeUnit.updateUnitIcon();
 		return mergeUnit;
+	}
+	
+	
+	/**
+	 * setup of a source (input) unit
+	 * display name, syntax: "open("path");", 0 inputs, 1 output, 1 parameter
+	 * @return 
+	 */
+	public static UnitElement createSourceUnit() {
+		// load filechooser, get path
+		JFileChooser imageFileChooser = new JFileChooser();
+		
+		imageFileChooser.setMultiSelectionEnabled(false);
+		imageFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		final int res = imageFileChooser.showOpenDialog(null);
+		
+		if (res == JFileChooser.APPROVE_OPTION) {
+			final File file = imageFileChooser.getSelectedFile();
+			System.out.println(file);
+			return createSourceUnit(file.getAbsolutePath());
+		}
+		return null;
+	}
+
+	/**
+	 * setup of a source (input) unit
+	 * display name, syntax: "open("path");", 0 inputs, 1 output, 1 parameter
+	 * @return 
+	 */
+	public static UnitElement createSourceUnit(Point origin) {
+		// load filechooser, get path
+		JFileChooser imageFileChooser = new JFileChooser();
+		
+		imageFileChooser.setMultiSelectionEnabled(false);
+		imageFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		final int res = imageFileChooser.showOpenDialog(null);
+		
+		if (res == JFileChooser.APPROVE_OPTION) {
+			final File file = imageFileChooser.getSelectedFile();
+			System.out.println(file);
+			return createSourceUnit(file.getAbsolutePath(), origin);
+		}
+		return null;
 	}
 	
 	/**
@@ -196,6 +255,19 @@ public class UnitFactory {
 		noiseUnit.updateUnitIcon();
 		return noiseUnit;
 	}
+	
+	
+	public static UnitElement createHistogramUnit(Point origin) {
+		// 
+		UnitElement unit = new UnitElement(origin, "Histogram", "run(\"Histogram\"); \n",1,0,0);
+		
+		// setup of the first input of unit 2
+		unit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
+		// setup of the first output of unit 2 
+		unit.updateUnitIcon();
+		return unit;
+	}
+	
 	
 	/**
 	 * setup of a processing unit (gaussian blur)

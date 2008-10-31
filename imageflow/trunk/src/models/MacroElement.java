@@ -12,14 +12,22 @@ import models.unit.UnitElement;
  */
 public class MacroElement {
 
-	protected String imageJSyntax;		// the syntax that is to be used for this unit
-	protected String commandSyntax; 	// syntax with replaced variables
+	/**
+	 * the syntax that is to be used for this unit
+	 */
+	protected String imageJSyntax;
+	/**
+	 * syntax with replaced variables
+	 */
+	protected String commandSyntax;
+//	private String inputMacroLog;
 	
 	
 	/**
+	 * @param unitsImageJSyntax 
 	 * 
 	 */
-	public MacroElement(String unitsImageJSyntax) {
+	public MacroElement(final String unitsImageJSyntax) {
 		this.imageJSyntax = unitsImageJSyntax;
 		this.commandSyntax = unitsImageJSyntax;
 	}
@@ -36,21 +44,22 @@ public class MacroElement {
 	}
 
 	/**
-	 * 
+	 * @param searchString 
+	 * @param parameterString 
 	 */
 	public void replace(final String searchString, final String parameterString) {
 		if(commandSyntax.contains(searchString)) { 
 			commandSyntax = Tools.replace(commandSyntax, searchString, parameterString);
-			System.out.println(commandSyntax);
 		}
 	}
 	
 	
 	
 	/**
-	 * 
+	 * @param inputMacroLog 
+	 * @return 
 	 */
-	public String output(String inputMacroLog) {
+	public String output(final String inputMacroLog) {
 		String outputMacroLog = inputMacroLog + this.commandSyntax;
 		
 		return outputMacroLog;
@@ -58,9 +67,10 @@ public class MacroElement {
 
 	
 	/**
-	 * 
+	 * @param unit 
+	 * @param p 
 	 */
-	public void parseParameter(UnitElement unit, int p) {
+	public void parseParameter(UnitElement unit, final int p) {
 		this.commandSyntax = parseParameters(unit, this.commandSyntax, p);
 	}
 	

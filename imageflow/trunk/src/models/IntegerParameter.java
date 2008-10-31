@@ -18,7 +18,7 @@ public class IntegerParameter extends Parameter {
 	 */
 	public IntegerParameter(int parameterNumber) {
 		super(parameterNumber);
-		super.paraType = 0;
+//		super.paraType = 0;
 	}
 
 	/**

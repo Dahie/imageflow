@@ -3,37 +3,67 @@
  */
 package models.unit;
 
+import java.awt.Point;
+
 import visualap.Delegate;
 
 /**
- * TODO for the moment this class is pretty much unused and a placeholder, 
+ * This class is a Meta-Class for the {@link UnitElement}.
+ * Basically what this does is describe a UnitElement 
+ * and give the interface to instantiate a new UnitElement-Object. 
  * the GPanel requires it, but nothing else
  * @author danielsenff
  *
  */
-public class UnitDelegate extends Delegate {
-
-	protected UnitElement unit;
+public abstract class UnitDelegate extends Delegate {
 
 	/**
-	 * 
+	 * @param unitName 
+	 * @param tooltipText 
 	 */
-	public UnitDelegate() {
+	public UnitDelegate(final String unitName, final String tooltipText) {
+		this.name = unitName;
+		this.toolTipText = tooltipText;
 	}
 	
-	
 	/**
-	 * @return the unit
+	 * Instantiates an object of this {@link UnitElement}
+	 * @param origin 
+	 * @return 
 	 */
-	public UnitElement getUnit() {
-		return this.unit;
+	public abstract UnitElement createUnit(Point origin);
+	
+
+	/**
+	 * Set the name.
+	 * @param name
+	 */
+	public void setName(final String name) {
+		this.name = name;
 	}
 
 	/**
-	 * @param unit the unit to set
+	 * Get the name
+	 * @return
 	 */
-	public void setUnit(UnitElement unit) {
-		this.unit = unit;
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Set the tooltip.
+	 * @param toolTipText
+	 */
+	public void setToolTipText(final String toolTipText) {
+		this.toolTipText = toolTipText;
+	}
+
+	/**
+	 * Get the ToolTip.
+	 * @return
+	 */
+	public String getToolTipText() {
+		return toolTipText;
 	}
 	
 }
