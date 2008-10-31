@@ -23,6 +23,7 @@ import models.Input;
 import models.MacroElement;
 import models.Output;
 import models.Parameter;
+import models.ParameterFactory;
 import models.StringParameter;
 
 
@@ -71,6 +72,9 @@ public class UnitElement extends NodeAbstract {
 	 *
 	 */
 	public enum Type {SOURCE, FILTER, SINK};
+	/**
+	 * {@link Status} of this Unit.
+	 */
 	protected Status status;
 	
 	
@@ -123,9 +127,7 @@ public class UnitElement extends NodeAbstract {
 		super(new Point(30,30), new MacroElement(unitsImageJSyntax));
 		setDimension(new Dimension(100,100));
 		
-		
 		init(unitName, numInputs, numOutputs, numParameters);
-		
 	}
 
 	/**
@@ -137,7 +139,7 @@ public class UnitElement extends NodeAbstract {
 	 * @param numParameters
 	 */
 	public UnitElement  (
-			Point origin,
+			final Point origin,
 			final String unitName,
 			final String unitsImageJSyntax,
 			final int numInputs, 
@@ -146,12 +148,29 @@ public class UnitElement extends NodeAbstract {
 		super(origin, new MacroElement(unitsImageJSyntax));
 		setDimension(new Dimension(100,100));
 		
-		
 		init(unitName, numInputs, numOutputs, numParameters);
-		
 	}
 
-
+	/**
+	 * @param origin
+	 * @param unitName
+	 * @param macroElement
+	 * @param numInputs
+	 * @param numOutputs
+	 * @param numParameters
+	 */
+	public UnitElement  (
+			final Point origin,
+			final String unitName,
+			final MacroElement macroElement,
+			final int numInputs, 
+			final int numOutputs, 
+			final int numParameters) {
+		super(origin, macroElement);
+		setDimension(new Dimension(100,100));
+		
+		init(unitName, numInputs, numOutputs, numParameters);
+	}
 
 	/**
 	 * @param unitName
@@ -199,7 +218,7 @@ public class UnitElement extends NodeAbstract {
 	 * @return
 	 */
 	public int getBitDepth() {
-		final String path = ((StringParameter)parameters.get(0)).getStringValue();
+		final String path = ((StringParameter)parameters.get(0)).getValue();
 		System.out.println("path of initial image " +path);
 		final ImagePlus imp = IJ.openImage(path);
 		imp.close();
@@ -225,6 +244,15 @@ public class UnitElement extends NodeAbstract {
 		return this.outputs.add(newOutput);
 	}
 
+	/**
+	 * Adds an Output-Object to the unit.
+	 * @param newOutput
+	 * @return
+	 */
+	public boolean addOutput(final Output newOutput) {
+		return this.outputs.add(newOutput);
+	}
+	
 	
 	/**
 	 * Get one {@link Output} at the index. Indecies start with 0;
@@ -268,7 +296,6 @@ public class UnitElement extends NodeAbstract {
 	public ArrayList<Input> getInputs() {
 		return this.inputs;
 	}
-	
 
 	/**
 	 * Returns if this unit has inputs.
@@ -278,10 +305,8 @@ public class UnitElement extends NodeAbstract {
 		return (this.inputs.size() > 0);
 	}
 
-
-
 	/**
-
+	 * Add new Input by setup.
 	 * @param displayName 
 	 * @param shortDisplayName 
 	 * @param inputImageBitDepth 
@@ -297,7 +322,14 @@ public class UnitElement extends NodeAbstract {
 		return this.inputs.add(newInput);
 	}
 
-
+	/**
+	 * Add new Input by Object.
+	 * @param newInput
+	 * @return
+	 */
+	public boolean addInput(final Input newInput) {
+		return this.inputs.add(newInput);
+	}
 
 	/**
 	 * How many {@link Input}s are actually registered.
@@ -575,9 +607,30 @@ public class UnitElement extends NodeAbstract {
 	 * @see graph.Node#clone()
 	 */
 	@Override
-	public Node clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		return null;
+	public UnitElement clone() throws CloneNotSupportedException {
+		UnitElement clone = new UnitElement(new Point(origin.x+15, origin.y+15), 
+				this.unitName, 
+				((MacroElement)this.obj).getImageJSyntax(), 
+				this.numMaxInputs, 
+				this.numMaxOutputs, 
+				this.numMaxParameters);
+		for (Input input : inputs) {
+			clone.addInput(input.getName(), 
+					input.getShortDisplayName(), 
+					input.getImageBitDepth(), 
+					input.isNeedToCopyInput());
+		}
+		for (Output output : outputs) {
+			clone.addOutput(output.getName(), 
+					output.getShortDisplayName(), 
+					output.getImageBitDepth());
+		}
+		for (Parameter parameter : parameters) {
+			clone.addParameter(ParameterFactory.createParameter(parameter.getDisplayName(), 
+					parameter.getValue(), parameter.getHelpString()));
+		}
+		
+		return clone;
 	}
 
 	/**

@@ -27,7 +27,7 @@ public class Output extends Pin {
 	/**
 	 * the short name to be displayed on the unit's icon
 	 */
-	protected String shortName = "O";
+	protected String shortDisplayName = "O";
 
 	/**
 	 * the int value indicates the type of the generated image
@@ -70,7 +70,7 @@ public class Output extends Pin {
 	 */
 	public void setupOutput(final String name, final String shortname, final int outputBitDepth) {
 		this.name = name;
-		this.shortName = shortname;
+		this.shortDisplayName = shortname;
 		this.outputBitDepth = outputBitDepth;
 	}
 
@@ -98,6 +98,23 @@ public class Output extends Pin {
 	 */
 	public String getImageTitle() {
 		return this.imageTitle;
+	}
+	
+
+	/**
+	 * Gets the Images bitdepth.
+	 * @return
+	 */
+	public int getImageBitDepth() {
+		return this.outputBitDepth;
+	}
+
+	/**
+	 * Get the abbreviated DisplayName
+	 * @return
+	 */
+	public String getShortDisplayName() {
+		return this.shortDisplayName;
 	}
 	
 	/**

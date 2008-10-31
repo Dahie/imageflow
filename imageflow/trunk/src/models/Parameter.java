@@ -5,7 +5,7 @@ package models;
  * @author danielsenff
  *
  */
-public class Parameter {
+public abstract class Parameter {
 	
 	/**
 	 * Index of the parameter in the Unit.
@@ -15,6 +15,8 @@ public class Parameter {
 	 * parameter name that is shown in the unit
 	 */
 	protected String displayName; 
+
+
 
 	/* 
 	 * legacy, unused
@@ -26,6 +28,7 @@ public class Parameter {
 	 * help text describing the functionality of this parameter
 	 */
 	protected String helpString;
+
 
 	/**
 	 * 
@@ -40,7 +43,25 @@ public class Parameter {
 		this.parameterNumber = parameterNumber;
 	}
 
+	public abstract Object getValue();
+	
+	/**
+	 * Returns the name of the Parameter. 
+	 * @return
+	 */
+	public String getDisplayName() {
+		return displayName;
+	}
 
+
+	/**
+	 * Get the help description of this Parameter.
+	 * @return
+	 */
+	public String getHelpString() {
+		return helpString;
+	}
+	
 	/**
 	 * @param parameterNumber
 	 */

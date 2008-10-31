@@ -41,6 +41,7 @@ public class Input extends Pin {
 	 */
 	protected int inputImageBitDepth; 
 	
+
 	/**
 	 * flag indicating if the image at this input needs to be duplicated
 	 */
@@ -162,7 +163,24 @@ public class Input extends Pin {
 	public boolean isNeedToCopyInput() {
 		return needToCopyInput;
 	}
+	
 
+	/**
+	 * Gets the Images bitdepth.
+	 * @return
+	 */
+	public int getImageBitDepth() {
+		return inputImageBitDepth;
+	}
+
+	/**
+	 * Get the abbreviated DisplayName
+	 * @return
+	 */
+	public String getShortDisplayName() {
+		return shortDisplayName;
+	}
+	
 	/**
 	 * @return the imageID
 	 */
@@ -195,6 +213,7 @@ public class Input extends Pin {
 		return super.toString()+" fromUnit: " + this.fromUnitNumber + " fromOutput: "+this.fromOutputNumber;
 	}
 
+	
 	
 	/* (non-Javadoc)
 	 * @see graph.Pin#getLocation()

@@ -26,7 +26,7 @@ public class UnitElementTests extends TestCase {
 		assertEquals("number of possible parameters",1, unit.getParametersPossibleCount());
 		
 		//test usual adding
-		boolean addFirst = unit.addParameter(new Parameter());
+		boolean addFirst = unit.addParameter(ParameterFactory.createParameter("integer", 1, "ein int"));
 		assertEquals("add first", true, addFirst);
 		
 		assertEquals("number of possible parameters",
@@ -34,7 +34,7 @@ public class UnitElementTests extends TestCase {
 				unit.getParametersActualCount());
 		
 		//add one more than actually allowed
-		boolean addSecond = unit.addParameter(new Parameter());
+		boolean addSecond = unit.addParameter(ParameterFactory.createParameter("integer", 1, "ein int"));
 		assertEquals("add second",false, addSecond);
 	}
 	

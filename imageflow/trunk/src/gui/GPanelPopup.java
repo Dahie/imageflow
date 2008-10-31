@@ -37,11 +37,21 @@ public class GPanelPopup implements GPanelListener {
 	protected GPanel activePanel;
 
 	protected Point savedPoint = new Point(0,0);
-	protected ArrayList<Node> copyL = new ArrayList<Node>();
+	protected ArrayList<Node> copyL;
 
 	protected ArrayList<Delegate> availableUnits;
 
 
+
+	/**
+	 * @param availableUnits
+	 * @param copyL
+	 */
+	public GPanelPopup(final ArrayList<Delegate> availableUnits, 
+			final ArrayList<Node> copyL) {
+		this.availableUnits = availableUnits;
+		this.copyL = copyL;
+	}
 
 	/**
 	 * @return the activePanel
@@ -51,9 +61,6 @@ public class GPanelPopup implements GPanelListener {
 	}
 
 	
-	public GPanelPopup(ArrayList<Delegate> availableUnits) {
-		this.availableUnits = availableUnits;
-	}
 
 	public void showFloatingMenu(MouseEvent e) {
 		if (e.isPopupTrigger()) {
@@ -129,7 +136,8 @@ public class GPanelPopup implements GPanelListener {
 					copyL.clear();
 					for (Node t : activePanel.getSelection())
 						try {
-							Node clone = t.clone();	clone.setLabel(t.getLabel());
+							Node clone = t.clone();	
+							clone.setLabel(t.getLabel());
 							copyL.add(clone);
 							if (clone instanceof NodeBean)
 								((NodeBean)clone).setContext(activePanel.getGlobalVars());

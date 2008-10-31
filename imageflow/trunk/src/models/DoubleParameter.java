@@ -32,11 +32,11 @@ public class DoubleParameter extends Parameter {
 		this.helpString = helpString;
 	}
 	
-	public double getDoubleValue() {
+	public Double getValue() {
 		return this.doubleValue;
 	}
 
-	public void setDoubleValue(double doubleValue) {
+	public void setValue(double doubleValue) {
 		this.doubleValue = doubleValue;
 	}
 	

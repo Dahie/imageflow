@@ -101,7 +101,7 @@ public class Applicationframe extends JFrame {
 		
 		//working area aka graphpanel
 		
-		GPanelPopup popup = new GPanelPopup(unitDelegates);
+		GPanelPopup popup = new GPanelPopup(unitDelegates, controller.getCopyNodesList());
 		final GraphPanel graphPanel = new GraphPanel(unitDelegates , popup);
 		popup.setActivePanel(graphPanel);
 		graphPanel.setSize(400, 300);

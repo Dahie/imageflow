@@ -37,7 +37,7 @@ public class StringParameter extends Parameter {
 	 * Get the String parameter value
 	 * @return
 	 */
-	public String getStringValue() {
+	public String getValue() {
 		return this.stringValue;
 	}
 
@@ -45,7 +45,7 @@ public class StringParameter extends Parameter {
 	 * Set String parameter.
 	 * @param stringValue
 	 */
-	public void setStringValue(final String stringValue) {
+	public void setValue(final String stringValue) {
 		this.stringValue = stringValue;
 	}
 

@@ -51,7 +51,7 @@ public class BooleanParameter extends Parameter {
 	 * Get the value.
 	 * @return
 	 */
-	public boolean getBooleanValue() {
+	public Boolean getValue() {
 		return this.booleanValue;
 	}
 
@@ -59,7 +59,7 @@ public class BooleanParameter extends Parameter {
 	 * Set the value.
 	 * @param booleanValue
 	 */
-	public void setBooleanValue(final boolean booleanValue) {
+	public void setValue(final boolean booleanValue) {
 		this.booleanValue = booleanValue;
 	}
 

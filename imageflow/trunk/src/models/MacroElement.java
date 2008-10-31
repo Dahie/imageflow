@@ -85,28 +85,28 @@ public class MacroElement {
 		
 		searchString = "PARA_DOUBLE_" + (p+1);
 		if(command.contains(searchString)) { 
-			String parameterString = "" + ((DoubleParameter)parameter).getDoubleValue();
+			String parameterString = "" + ((DoubleParameter)parameter).getValue();
 			System.out.println("Unit: " + u + " Parameter: " + p + " Double Parameter: " + parameterString);
 			command = Tools.replace(command, searchString, parameterString);
 			System.out.println(command);
 		}
 		searchString = "PARA_STRING_" + (p+1);
 		if(command.contains(searchString)) {
-			String parameterString = "" + ((StringParameter)parameter).getStringValue();
+			String parameterString = "" + ((StringParameter)parameter).getValue();
 			System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
 			command = Tools.replace(command, searchString, parameterString);
 			System.out.println(command);
 		}
 		searchString = "PARA_INTEGER_" + (p+1);
 		if(command.contains(searchString)) {
-			String parameterInteger = "" + ((StringParameter)parameter).getStringValue();
+			String parameterInteger = "" + ((StringParameter)parameter).getValue();
 			System.out.println("Unit: " + u + " Parameter: " + p + " Integer Parameter: " + parameterInteger);
 			command = Tools.replace(command, searchString, parameterInteger);
 			System.out.println(command);
 		}
 		searchString = "PARA_BOOL_" + (p+1);
 		if(command.contains(searchString)) {
-			String parameterString = "" + ((BooleanParameter)parameter).getBooleanValue();
+			String parameterString = "" + ((BooleanParameter)parameter).getValue();
 			System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
 			command = Tools.replace(command, searchString, parameterString);
 			System.out.println(command);

@@ -6,6 +6,7 @@ import ij.ImageJ;
 import ij.plugin.Macro_Runner;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import macro.MacroGenerator;
@@ -28,6 +29,10 @@ public class GraphController extends ApplicationController {
 	private UnitList unitElements;
 	private final ConnectionList connectionMap;
 	private ImageJ imagej;
+	/**
+	 * List which stores copied Nodes.
+	 */
+	protected ArrayList<Node> copyNodesList;;
 
 
 	/**
@@ -37,6 +42,7 @@ public class GraphController extends ApplicationController {
 
 		this.unitElements = new UnitList();
 		this.connectionMap = new ConnectionList();
+		this.copyNodesList = new ArrayList<Node>();
 	}
 
 	public void setupExample() {
@@ -258,4 +264,13 @@ public class GraphController extends ApplicationController {
 		
 	}
 
+
+	/**
+	 * Get the List of copied {@link Node};
+	 * @return
+	 */
+	public ArrayList<Node> getCopyNodesList() {
+		return copyNodesList;
+	}
+	
 }

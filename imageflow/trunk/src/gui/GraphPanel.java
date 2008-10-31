@@ -3,16 +3,6 @@
  */
 package gui;
 
-import graph.Node;
-import graph.Pin;
-
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 import models.unit.UnitElement;
@@ -20,13 +10,16 @@ import models.unit.UnitList;
 import visualap.Delegate;
 import visualap.GPanel;
 import visualap.GPanelListener;
-import backend.GraphController;
 
 /**
  * @author danielsenff
  *
  */
 public class GraphPanel extends GPanel {
+	
+	/**
+	 * List of all {@link UnitElement} added to the Workflow.
+	 */
 	protected UnitList units;
 	
 	/**

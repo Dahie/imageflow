@@ -9,7 +9,13 @@ package models;
  */
 public class IntegerParameter extends Parameter {
 
-	protected int  integerdoubleValue;
+	/**
+	 * Actual Integer value
+	 */
+	protected int  integerValue;
+	/**
+	 * Default Integer value
+	 */
 	protected int  integerValueDefault;
 
 	
@@ -28,24 +34,25 @@ public class IntegerParameter extends Parameter {
 	 */
 	public IntegerParameter(String displayName, int integerParameter, String helpString) {
 		this.displayName = displayName;
-		this.integerdoubleValue = integerParameter;
+		this.integerValue = integerParameter;
 		this.integerValueDefault = integerParameter;
 		this.helpString = helpString;
 	}
 
 	public void setParameter(String displayName, int integerParameter, String helpString) {
 		this.displayName = displayName;
-		this.integerdoubleValue = integerParameter;
+		this.integerValue = integerParameter;
 		this.integerValueDefault = integerParameter;
 		this.helpString = helpString;
 	}
 	
-	public double getDoubleValue() {
-		return this.integerdoubleValue;
+	public Integer getValue() {
+		return this.integerValue;
 	}
 
-	public void setIntegerValue(int value) {
-		this.integerdoubleValue = value;
+	public void setValue(int value) {
+		this.integerValue = value;
 	}
+
 	
 }
