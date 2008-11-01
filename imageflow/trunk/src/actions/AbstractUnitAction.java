@@ -17,13 +17,15 @@ public abstract class AbstractUnitAction extends AbstractAction {
 	/**
 	 * The {@link UnitElement} in question.
 	 */
-	protected Selection<Node> units;
+	protected Selection<Node> selectedUnits;
+	
+	private AbstractUnitAction() {}
 	
 	/**
 	 * @param unit
 	 */
 	public AbstractUnitAction(final Selection<Node> selection) {
-		this.units = selection;
+		this.selectedUnits = selection;
 	}
 	
 }

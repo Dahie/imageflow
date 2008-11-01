@@ -23,29 +23,29 @@ public class UnitElementTests extends TestCase {
 		//unit with one allowed parameter
 		UnitElement unit = new UnitElement("name", "", 0, 0, 1);
 		
-		assertEquals("number of possible parameters",1, unit.getParametersPossibleCount());
+		assertEquals("number of possible parameters",1, unit.getParametersMaxCount());
 		
 		//test usual adding
 		boolean addFirst = unit.addParameter(ParameterFactory.createParameter("integer", 1, "ein int"));
-		assertEquals("add first", true, addFirst);
+		assertTrue("add first", addFirst);
 		
 		assertEquals("number of possible parameters",
-				unit.getParametersPossibleCount(), 
+				unit.getParametersMaxCount(), 
 				unit.getParametersActualCount());
 		
 		//add one more than actually allowed
 		boolean addSecond = unit.addParameter(ParameterFactory.createParameter("integer", 1, "ein int"));
-		assertEquals("add second",false, addSecond);
+		assertFalse("add second", addSecond);
 	}
 	
 	public void testHasInputs() {
 		
 		// Sources have no inputs
 		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
-		assertEquals("source", false, sourceUnit.hasInputs());
+		assertFalse("source", sourceUnit.hasInputs());
 		
 		UnitElement filter = UnitFactory.createAddNoiseUnit();
-		assertEquals("filter",true , filter.hasInputs());
+		assertTrue("filter", filter.hasInputs());
 		
 	}
 	
@@ -58,7 +58,7 @@ public class UnitElementTests extends TestCase {
 		
 		//test usual adding
 		boolean addFirst = unit.addInput("input", "i", 4, false);
-		assertEquals("add first", true, addFirst);
+		assertTrue("add first", addFirst);
 		
 		assertEquals("number of possible parameters",
 				unit.getInputsMaxCount(), 
@@ -66,7 +66,7 @@ public class UnitElementTests extends TestCase {
 		
 		//add one more than actually allowed
 		boolean addSecond = unit.addInput("input", "i", 4, false);
-		assertEquals("add second",true, addSecond);
+		assertTrue("add second", addSecond);
 	}
 	
 
@@ -86,10 +86,10 @@ public class UnitElementTests extends TestCase {
 		
 		//assertion
 		
-		assertEquals("source has inputs marked", true, sourceUnit.hasAllInputsMarked());
+		assertTrue("source has inputs marked", sourceUnit.hasAllInputsMarked());
 		// the source is not yet marked, so the first filter should give false
-		assertEquals("filter1 has no inputs marked yet", false, filterUnit1.hasAllInputsMarked());
-		assertEquals("filter2 has inputs marked", false, filterUnit2.hasAllInputsMarked());
+		assertFalse("filter1 has no inputs marked yet", filterUnit1.hasAllInputsMarked());
+		assertFalse("filter2 has inputs marked", filterUnit2.hasAllInputsMarked());
 		
 		//set mark on the source, now the filter next connected should find this mark
 		sourceUnit.setMark(1);
@@ -130,6 +130,66 @@ public class UnitElementTests extends TestCase {
 		for (Output output : sourceUnit.getOutputs()) {
 			assertEquals("mark set in "+sourceUnit+" for "+output, expected, output.getMark());
 		}
+	}
+	
+	public void testClone() {
+		UnitElement mergeUnit = UnitFactory.createImageCalculatorUnit();
+		
+		try {
+			UnitElement clone = mergeUnit.clone();
+
+			//assertions
+			
+			assertFalse("object the same", mergeUnit.equals(clone));
+			assertEquals("number of max inputs", 
+					mergeUnit.getInputsMaxCount(), clone.getInputsMaxCount());
+			assertEquals("number of max outputs", 
+					mergeUnit.getOutputsMaxCount(), clone.getOutputsMaxCount());
+			assertEquals("number of max parameters", 
+					mergeUnit.getParametersMaxCount(), clone.getParametersMaxCount());
+			assertEquals("unit name", mergeUnit.getName(), clone.getName());
+			assertNotSame("unit id", mergeUnit.getUnitID(), clone.getUnitID());
+			assertFalse("Unitid not the same",(mergeUnit.getUnitID() == clone.getUnitID()));
+			
+			// assert Object
+			MacroElement mergeObject = (MacroElement) mergeUnit.getObject(); 
+			MacroElement cloneObject = (MacroElement) clone.getObject();
+			assertFalse("contained object", mergeObject.equals(cloneObject));
+			assertEquals("object imagej syntax", 
+					mergeObject.getImageJSyntax() , cloneObject.getImageJSyntax());
+			
+			// assert Inputs
+			assertEquals("inputs actual", mergeUnit.getInputsActualCount(), clone.getInputsActualCount());
+			for (int i = 0; i < clone.getInputsActualCount(); i++) {
+				Input cloneInput = clone.getInput(i);
+				Input mergeInput = mergeUnit.getInput(i);
+				assertFalse("input equals", cloneInput.equals(mergeInput));
+				assertFalse("input parents equals", 
+						cloneInput.getParent().equals(mergeInput.getParent()));
+				
+			}
+			
+			
+			// assert Outputs
+//			assertEquals("outputs actual", mergeUnit.getOutputsActualCount(), clone.getOutputsActualCount());
+			for (int i = 0; i < clone.getOutputsMaxCount(); i++) {
+				Output cloneOutput = clone.getOutput(i);
+				Output mergeOutput = mergeUnit.getOutput(i);
+				assertFalse("output equals", cloneOutput.equals(mergeOutput));
+				assertFalse("output parents equals", 
+						cloneOutput.getParent().equals(mergeOutput.getParent()));
+				
+			}
+			
+			
+			// assert Parameters
+			
+			
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 }

@@ -20,7 +20,7 @@ public class ParameterFactoryTests extends TestCase {
 		Parameter parameter = ParameterFactory.createParameter("testParameter", paramValue, "helpString");
 		
 		boolean classInstance = (parameter instanceof StringParameter);
-		assertEquals("is right class", true, classInstance);
+		assertTrue("is right class", classInstance);
 	}
 	
 	/**
@@ -31,7 +31,7 @@ public class ParameterFactoryTests extends TestCase {
 		Parameter parameter = ParameterFactory.createParameter("testParameter", paramValue, "helpString");
 		
 		boolean classInstance = (parameter instanceof BooleanParameter);
-		assertEquals("is right class", true, classInstance);
+		assertTrue("is right class", classInstance);
 	}
 	
 	/**
@@ -42,7 +42,7 @@ public class ParameterFactoryTests extends TestCase {
 		Parameter parameter = ParameterFactory.createParameter("testParameter", paramValue, "helpString");
 		
 		boolean classInstance = (parameter instanceof DoubleParameter);
-		assertEquals("is right class", true, classInstance);
+		assertTrue("is right class", classInstance);
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public class ParameterFactoryTests extends TestCase {
 		Parameter parameter = ParameterFactory.createParameter("testParameter", paramValue, "helpString");
 		
 		boolean classInstance = (parameter instanceof DoubleParameter);
-		assertEquals("is right class", true, classInstance);
+		assertTrue("is right class", classInstance);
 	}
 	
 	private void assertParameter(String text, Parameter expectedParameter, Parameter resultParameter) {

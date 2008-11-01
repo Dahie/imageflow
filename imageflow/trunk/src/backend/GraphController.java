@@ -26,6 +26,7 @@ import application.ApplicationController;
  */
 public class GraphController extends ApplicationController {
 
+	private ApplicationController controller;
 	
 	private UnitList unitElements;
 	private final ConnectionList connectionMap;
@@ -35,7 +36,8 @@ public class GraphController extends ApplicationController {
 	 */
 	protected ArrayList<Node> copyNodesList;;
 
-
+	
+	
 	/**
 	 * 
 	 */
@@ -265,7 +267,6 @@ public class GraphController extends ApplicationController {
 		
 	}
 
-
 	/**
 	 * Get the List of copied {@link Node};
 	 * @return
@@ -285,9 +286,12 @@ public class GraphController extends ApplicationController {
 		
 		for (int i = 0; i < connectionMap.size(); i++) {
 			Connection connection = (Connection) connectionMap.get(i);
-			connection.isConnectedToUnit(unit);
-			// delete connections
-			connectionMap.remove(connection);
+			if(connection.isConnectedToUnit(unit)) {
+				// delete connections
+				connectionMap.remove(connection);
+				i--;
+			}
+			
 		}
 		
 		

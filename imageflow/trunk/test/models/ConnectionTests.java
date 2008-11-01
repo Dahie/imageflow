@@ -24,7 +24,7 @@ public class ConnectionTests extends TestCase {
 		final UnitElement blur = UnitFactory.createGaussianBlurUnit(); 
 		
 		final Connection connection1 = new Connection(source, 1, blur, 1);
-		assertEquals("status check 1", true, (connection1.checkConnection() == Connection.Status.OK) );
+		assertTrue("status check 1", (connection1.checkConnection() == Connection.Status.OK) );
 	}
 	
 
@@ -41,7 +41,7 @@ public class ConnectionTests extends TestCase {
 		
 		//assertion
 		
-		assertEquals("con has no inputs marked yet", false, conn.hasInputMarked());
+		assertFalse("con has no inputs marked yet", conn.hasInputMarked());
 		// the source is not yet marked, so the first filter should give false
 //		assertEquals("filter1 has no inputs marked yet", false, filterUnit1.hasAllInputsMarked());
 //		assertEquals("filter2 has inputs marked", false, filterUnit2.hasAllInputsMarked());
@@ -49,7 +49,7 @@ public class ConnectionTests extends TestCase {
 		//set mark on the source, now the filter next connected should find this mark
 		sourceUnit.setMark(1);
 		
-		assertEquals("filter1 has inputs marked", true, conn.hasInputMarked());
+		assertTrue("filter1 has inputs marked", conn.hasInputMarked());
 	}
 	
 	public void testIsConnectedPin() {
@@ -70,11 +70,11 @@ public class ConnectionTests extends TestCase {
 		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
 		
 		//assertion
-		assertEquals("Source output", true, conn.isConnected(sourceOutput));
-		assertEquals("Filter1 input", true, conn.isConnected(filter1Input));
-		assertEquals("Filter1 output", false, conn.isConnected(filter1Output));
-		assertEquals("Filter2 input", false, conn.isConnected(filter2Input));
-		assertEquals("Filter2 Output", false, conn.isConnected(filter2Output));
+		assertTrue("Source output", conn.isConnected(sourceOutput));
+		assertTrue("Filter1 input", conn.isConnected(filter1Input));
+		assertFalse("Filter1 output", conn.isConnected(filter1Output));
+		assertFalse("Filter2 input", conn.isConnected(filter2Input));
+		assertFalse("Filter2 Output", conn.isConnected(filter2Output));
 		
 	}
 	
@@ -90,9 +90,9 @@ public class ConnectionTests extends TestCase {
 		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
 		
 		//assertion
-		assertEquals("Source", true, conn.isConnectedToUnit(sourceUnit));
-		assertEquals("Filter1", true, conn.isConnectedToUnit(filterUnit1));
-		assertEquals("Filter2", false, conn.isConnectedToUnit(filterUnit2));
+		assertTrue("Source", conn.isConnectedToUnit(sourceUnit));
+		assertTrue("Filter1", conn.isConnectedToUnit(filterUnit1));
+		assertFalse("Filter2", conn.isConnectedToUnit(filterUnit2));
 		
 	}
 	
@@ -116,48 +116,48 @@ public class ConnectionTests extends TestCase {
 		
 		//assert connectionList
 		
-		assertEquals("connection list empty", true, connectionList.isEmpty());
+		assertTrue("connection list empty", connectionList.isEmpty());
 		assertEquals("connection list empty", 0, connectionList.size());
 		
 		// assert pins
 		
-		assertEquals("filter1 input connected with source1", 
-				false, filter1Input.isConnectedWith(source1Output));
-		assertEquals("filter1 input connected with source2", 
-				false, filter1Input.isConnectedWith(source2Output));
+		assertFalse("filter1 input connected with source1", 
+				filter1Input.isConnectedWith(source1Output));
+		assertFalse("filter1 input connected with source2", 
+				filter1Input.isConnectedWith(source2Output));
 		
 		Connection conn1 = new Connection(source1Unit, 1, filterUnit1, 1);
 		Connection conn2 = new Connection(source2Unit, 1, filterUnit1, 1);
 		
 		connectionList.add(conn1);
 		
-		assertEquals("connection list first added", false, connectionList.isEmpty());
+		assertFalse("connection list first added", connectionList.isEmpty());
 		assertEquals("connection list first added", 1, connectionList.size());
-		assertEquals("connectin list contains conn1", true, connectionList.contains(conn1));
-		assertEquals("connectin list contains conn2", false, connectionList.contains(conn2));
+		assertTrue("connectin list contains conn1", connectionList.contains(conn1));
+		assertFalse("connectin list contains conn2", connectionList.contains(conn2));
 	
 		// assert pins
 		
-		assertEquals("filter1 input connected with source1", 
-				true, filter1Input.isConnectedWith(source1Output));
-		assertEquals("filter1 input connected with source2", 
-				false, filter1Input.isConnectedWith(source2Output));
+		assertTrue("filter1 input connected with source1", 
+				filter1Input.isConnectedWith(source1Output));
+		assertFalse("filter1 input connected with source2", 
+				filter1Input.isConnectedWith(source2Output));
 		
 		
 		
 		connectionList.add(conn2);
 		
-		assertEquals("connection list first replaced", false, connectionList.isEmpty());
+		assertFalse("connection list first replaced", connectionList.isEmpty());
 		assertEquals("connection list first replaced", 1, connectionList.size());
-		assertEquals("connectin list contains conn1", false, connectionList.contains(conn1));
-		assertEquals("connectin list contains conn2", true, connectionList.contains(conn2));
+		assertFalse("connectin list contains conn1", connectionList.contains(conn1));
+		assertTrue("connectin list contains conn2", connectionList.contains(conn2));
 		
 		// assert pins
 		
-		assertEquals("filter1 input connected with source1", 
-				false, filter1Input.isConnectedWith(source1Output));
-		assertEquals("filter1 input connected with source2", 
-				true, filter1Input.isConnectedWith(source2Output));
+		assertFalse("filter1 input connected with source1", 
+				filter1Input.isConnectedWith(source1Output));
+		assertTrue("filter1 input connected with source2", 
+				filter1Input.isConnectedWith(source2Output));
 		
 	}
 	

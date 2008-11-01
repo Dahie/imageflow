@@ -1,0 +1,41 @@
+package actions;
+
+import graph.Node;
+import graph.Selection;
+
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+
+import visualap.ErrorPrinter;
+
+public class CopyUnitAction extends AbstractUnitAction {
+
+	
+	private ArrayList<Node> copyUnitsList;
+
+	/**
+	 * @param selection
+	 * @param copyUnitsList
+	 */
+	public CopyUnitAction(final Selection<Node> selection, 
+			final ArrayList<Node> copyUnitsList) {
+		super(selection);
+		putValue(NAME, "Copy");
+		this.copyUnitsList = copyUnitsList;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		if (selectedUnits.size() > 0) {
+			copyUnitsList.clear();
+			for (Node t : selectedUnits)
+				try {
+					Node clone = t.clone();	
+					clone.setLabel(t.getLabel());
+					copyUnitsList.add(clone);
+				} catch(CloneNotSupportedException ex) {
+					ErrorPrinter.printInfo("CloneNotSupportedException");
+				}
+		}
+	}
+
+}

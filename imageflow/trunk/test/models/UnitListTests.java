@@ -58,13 +58,13 @@ public class UnitListTests extends TestCase {
 		
 		
 		//assertion
-		assertEquals("only nodes added, which are connected",true, units.areAllInputsConnected());
+		assertTrue("only nodes added, which are connected", units.areAllInputsConnected());
 		
 		// add one more which is not connected
 		units.add(filterUnit2);
 		
 		//assertion
-		assertEquals("contains nodes, which are not connected",false, units.areAllInputsConnected());
+		assertFalse("contains nodes, which are not connected", units.areAllInputsConnected());
 	}
 	
 }

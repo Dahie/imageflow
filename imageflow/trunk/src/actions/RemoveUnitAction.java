@@ -23,7 +23,7 @@ public class RemoveUnitAction extends AbstractUnitAction {
 	
 	
 	public void actionPerformed(ActionEvent arg0) {
-		for (Iterator iterator = units.iterator(); iterator.hasNext();) {
+		for (Iterator iterator = selectedUnits.iterator(); iterator.hasNext();) {
 			UnitElement unit = (UnitElement) iterator.next();
 			controller.removeUnit(unit);
 		}

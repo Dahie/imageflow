@@ -19,7 +19,7 @@ public class SetDisplayAction extends AbstractUnitAction {
 		
 		// if more selected units are invisible
 		int numberOfVisibleUnits = 0;
-		for (Iterator iterator = units.iterator(); iterator.hasNext();) {
+		for (Iterator iterator = selectedUnits.iterator(); iterator.hasNext();) {
 			UnitElement unit = (UnitElement) iterator.next();
 			if(unit.isDisplayUnit()) {
 				numberOfVisibleUnits++;
@@ -27,7 +27,7 @@ public class SetDisplayAction extends AbstractUnitAction {
 		}
 		
 		// get if selected node is display or not.
-		if(numberOfVisibleUnits > 0.5*units.size()) {
+		if(numberOfVisibleUnits > 0.5*selectedUnits.size()) {
 			text = "Deactivate display";
 		} else {
 			text = "Activate display";
@@ -39,7 +39,7 @@ public class SetDisplayAction extends AbstractUnitAction {
 		JMenuItem source = (JMenuItem)(e.getSource());
 		String action = source.getText();
 
-		for (Iterator iterator = units.iterator(); iterator.hasNext();) {
+		for (Iterator iterator = selectedUnits.iterator(); iterator.hasNext();) {
 			UnitElement unit = (UnitElement) iterator.next();
 			if(unit.isDisplayUnit()) {
 				// if it is a displayUnit, deactivate

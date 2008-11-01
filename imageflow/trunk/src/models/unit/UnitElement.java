@@ -33,6 +33,9 @@ import models.StringParameter;
  */
 public class UnitElement extends NodeAbstract {
 	
+	/**
+	 * number of units instatiated, incremented with each new object
+	 */
 	static int ids;
 	
 	/**
@@ -414,7 +417,7 @@ public class UnitElement extends NodeAbstract {
 	 * Returns how many {@link Parameter}s this can unit have.
 	 * @return
 	 */
-	public int getParametersPossibleCount() {
+	public int getParametersMaxCount() {
 		return this.numMaxParameters;
 	}
 	
@@ -607,28 +610,30 @@ public class UnitElement extends NodeAbstract {
 	 */
 	@Override
 	public UnitElement clone() throws CloneNotSupportedException {
+		System.out.println(this.obj);
+		String imageJSyntax = ((MacroElement)this.obj).getImageJSyntax();
 		UnitElement clone = new UnitElement(new Point(origin.x+15, origin.y+15), 
 				this.unitName, 
-				((MacroElement)this.obj).getImageJSyntax(), 
+				imageJSyntax, 
 				this.numMaxInputs, 
 				this.numMaxOutputs, 
 				this.numMaxParameters);
 		for (Input input : inputs) {
 			clone.addInput(input.getName(), 
-					input.getShortDisplayName(), 
-					input.getImageBitDepth(), 
-					input.isNeedToCopyInput());
+				input.getShortDisplayName(), 
+				input.getImageBitDepth(), 
+				input.isNeedToCopyInput());
 		}
 		for (Output output : outputs) {
 			clone.addOutput(output.getName(), 
-					output.getShortDisplayName(), 
-					output.getImageBitDepth());
+				output.getShortDisplayName(), 
+				output.getImageBitDepth());
 		}
 		for (Parameter parameter : parameters) {
 			clone.addParameter(ParameterFactory.createParameter(parameter.getDisplayName(), 
-					parameter.getValue(), parameter.getHelpString()));
+				parameter.getValue(), parameter.getHelpString()));
 		}
-		
+		clone.setDisplayUnit(this.isDisplayUnit);
 		return clone;
 	}
 

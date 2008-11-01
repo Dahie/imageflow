@@ -21,6 +21,9 @@ import visualap.Delegate;
 import visualap.ErrorPrinter;
 import visualap.GPanel;
 import visualap.GPanelListener;
+import actions.CopyUnitAction;
+import actions.CutUnitAction;
+import actions.PasteUnitAction;
 import actions.RemoveUnitAction;
 import actions.SetDisplayAction;
 import backend.GraphController;
@@ -78,37 +81,16 @@ public class GPanelPopup implements GPanelListener {
 					popup.add(new JMenuItem(new SetDisplayAction(activePanel.getSelection())));
 					popup.addSeparator();
 				}
-				popup.add(cutItem("Cut"));
+				popup.add(new CutUnitAction(copyL, activePanel));
+				popup.add(new CopyUnitAction(activePanel.getSelection(), copyL));
 				popup.add(unbindItem("Unbind"));
-				popup.add(copyItem("Copy"));
 				popup.add(new RemoveUnitAction(activePanel.getSelection(), graphController));
 			}
-			if (copyL.size() != 0) popup.add(pasteItem("Paste"));
+			if (copyL.size() != 0) popup.add(new PasteUnitAction(copyL, activePanel));
 			popup.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
 
-	public JMenuItem cutItem(String text) {
-		JMenuItem menuItem = new JMenuItem(text);
-		menuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (activePanel.getSelection().size() > 0) {
-					// il problema java.util.ConcurrentModificationException è stato risolto introducendo la lista garbage
-					HashSet<Edge> garbage = new HashSet<Edge>();
-					for (Node t : activePanel.getSelection()) {
-						for (Edge c : activePanel.getEdgeL())
-							if ((c.from.getParent() == t)||(t == c.to.getParent()))
-								garbage.add(c);
-						activePanel.getNodeL().remove(t);
-					}
-					for (Edge c : garbage)
-						activePanel.getEdgeL().remove(c);
-					activePanel.getSelection().clear();
-					activePanel.repaint();
-				}
-			}});
-		return menuItem;
-	}
 
 	public JMenuItem unbindItem(String text) {
 		JMenuItem menuItem = new JMenuItem(text);
@@ -132,55 +114,6 @@ public class GPanelPopup implements GPanelListener {
 	}
 
 	
-	public JMenuItem copyItem(String text) {
-		JMenuItem menuItem = new JMenuItem(text);
-		menuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (activePanel.getSelection().size() > 0) {
-					copyL.clear();
-					for (Node t : activePanel.getSelection())
-						try {
-							Node clone = t.clone();	
-							clone.setLabel(t.getLabel());
-							copyL.add(clone);
-							if (clone instanceof NodeBean)
-								((NodeBean)clone).setContext(activePanel.getGlobalVars());
-						} catch(CloneNotSupportedException ex) {
-							ErrorPrinter.printInfo("CloneNotSupportedException");
-						}
-				}
-			}});
-		return menuItem;
-	}
-
-	public JMenuItem pasteItem(String text) {
-		JMenuItem menuItem = new JMenuItem(text);
-		menuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (copyL.size() > 0) {
-					activePanel.getSelection().clear();activePanel.getSelection().addAll(copyL);
-					copyL.clear();
-					for (Node t : activePanel.getSelection()) {
-						try {
-							Node clone = t.clone();	clone.setLabel(t.getLabel());
-							activePanel.getNodeL().add(t, t.getLabel());
-							copyL.add(clone);
-							if (clone instanceof NodeBean)
-								((NodeBean)clone).setContext(activePanel.getGlobalVars());
-						} catch(CloneNotSupportedException ex) {
-							ErrorPrinter.printInfo("CloneNotSupportedException");
-						}
-					}
-					//					copyL.clear(); copyL.addAll(activePanel.selection);
-					activePanel.repaint();
-				}
-			}});
-		return menuItem;
-	}
-
-
-
-
 	/**
 	 * @param activePanel the activePanel to set
 	 */
