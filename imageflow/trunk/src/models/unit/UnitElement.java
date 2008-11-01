@@ -1,5 +1,4 @@
 package models.unit;
-import graph.Node;
 import graph.NodeAbstract;
 import helper.PaintUtil;
 import ij.IJ;

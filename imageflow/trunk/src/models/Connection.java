@@ -61,7 +61,7 @@ public class Connection extends Edge {
 		this.toUnit = toUnit;
 		this.toUnitNumber = toUnit.getUnitID();
 		this.toInputNumber = toInputNumber;
-		this.toUnit.getInput(toInputNumber-1).setConnection(fromUnit, fromOutputNumber);
+//		this.toUnit.getInput(toInputNumber-1).setConnection(fromUnit, fromOutputNumber);
 		
 		id = getID(fromUnitNumber, fromOutputNumber, toUnitNumber, toInputNumber);
 //		connect();
@@ -185,5 +185,15 @@ public class Connection extends Edge {
 	 */
 	public boolean isConnected(Pin pin) {
 		return (this.from.equals(pin)) || this.to.equals(pin);
+	}
+
+
+	/**
+	 * Gets whether this Connection is connected with this {@link UnitElement}.
+	 * @param unit
+	 * @return
+	 */
+	public boolean isConnectedToUnit(final UnitElement unit) {
+		return (this.fromUnit.equals(unit)) || (this.toUnit.equals(unit));
 	}
 }

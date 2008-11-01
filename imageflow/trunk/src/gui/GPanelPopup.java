@@ -6,7 +6,6 @@ package gui;
 import graph.Edge;
 import graph.Node;
 import graph.NodeBean;
-import graph.NodeText;
 
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -15,18 +14,16 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import actions.SetDisplayAction;
-
-import models.unit.UnitDelegate;
-import models.unit.UnitElement;
 import visualap.Delegate;
 import visualap.ErrorPrinter;
 import visualap.GPanel;
 import visualap.GPanelListener;
+import actions.RemoveUnitAction;
+import actions.SetDisplayAction;
+import backend.GraphController;
 
 /**
  * @author danielsenff
@@ -41,6 +38,8 @@ public class GPanelPopup implements GPanelListener {
 
 	protected ArrayList<Delegate> availableUnits;
 
+	private GraphController graphController;
+
 
 
 	/**
@@ -48,9 +47,10 @@ public class GPanelPopup implements GPanelListener {
 	 * @param copyL
 	 */
 	public GPanelPopup(final ArrayList<Delegate> availableUnits, 
-			final ArrayList<Node> copyL) {
+			final GraphController graphController) {
 		this.availableUnits = availableUnits;
-		this.copyL = copyL;
+		this.graphController = graphController;
+		this.copyL = graphController.getCopyNodesList();
 	}
 
 	/**
@@ -68,17 +68,20 @@ public class GPanelPopup implements GPanelListener {
 			//Create the popup menu.
 			JPopupMenu popup = new JPopupMenu();
 			if (activePanel.getSelection().size() == 0) { 
-				popup.add(insertItem("Insert unit"));
+				popup.add(new InsertUnitMenu("Insert unit", activePanel, availableUnits, savedPoint));
 			} else {
+//				UnitElement unit = (UnitElement)activePanel.getSelection().get(0);
+				
 				if (activePanel.getSelection().size() == 1) {
 					//					popup.add(editItem("Properties"));
-					UnitElement unit = (UnitElement)activePanel.getSelection().get(0);
-					popup.add(new JMenuItem(new SetDisplayAction(unit)));
+					
+					popup.add(new JMenuItem(new SetDisplayAction(activePanel.getSelection())));
 					popup.addSeparator();
 				}
 				popup.add(cutItem("Cut"));
 				popup.add(unbindItem("Unbind"));
 				popup.add(copyItem("Copy"));
+				popup.add(new RemoveUnitAction(activePanel.getSelection(), graphController));
 			}
 			if (copyL.size() != 0) popup.add(pasteItem("Paste"));
 			popup.show(e.getComponent(), e.getX(), e.getY());
@@ -128,6 +131,7 @@ public class GPanelPopup implements GPanelListener {
 		return menuItem;
 	}
 
+	
 	public JMenuItem copyItem(String text) {
 		JMenuItem menuItem = new JMenuItem(text);
 		menuItem.addActionListener(new ActionListener() {
@@ -172,57 +176,6 @@ public class GPanelPopup implements GPanelListener {
 				}
 			}});
 		return menuItem;
-	}
-
-	public JMenu insertItem(String text) {
-		JMenu newMenu = new JMenu(text);
-		ActionListener newAction = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JMenuItem source = (JMenuItem)(e.getSource());
-				String action = source.getText();
-				if (action.equals("Add Text")) {	
-					// corrected fault: NodeText instead of NodeBean
-					Node n = new NodeText(new Point(savedPoint), "text"); savedPoint.translate(4, 4);
-					activePanel.getNodeL().add(n, "text$0");
-					activePanel.getSelection().clear();
-					activePanel.getSelection().add(n);
-					activePanel.repaint();
-					return;
-				}
-
-				// add selected node
-				for (int i = 0; i < availableUnits.size(); i++) {
-					UnitDelegate delegate = (UnitDelegate)availableUnits.get(i); 
-					if (delegate.getName().equals(action)) {
-						try {
-							//							Object myBean = delegate.get(i).clazz.newInstance();
-							UnitElement n = delegate.createUnit(savedPoint);
-							n.setContext(activePanel.getGlobalVars());
-							activePanel.getNodeL().add(n, activePanel.shortName(action));
-							activePanel.getSelection().clear();
-							activePanel.getSelection().add(n);
-							activePanel.repaint();
-						} catch (Exception ex) {
-							ErrorPrinter.printInfo("instantiation of a new bean failed"+ ex);
-						}
-						return;
-					}
-				}
-			}}; 
-		JMenuItem mi = new JMenuItem("Add Text");
-		mi.setToolTipText("Insert text");
-		newMenu.add(mi).addActionListener(newAction);		
-
-		//list over all available units
-
-		for (int i = 0; i < availableUnits.size(); i++) {
-			UnitDelegate delegate = (UnitDelegate) availableUnits.get(i);
-
-			mi = new JMenuItem(delegate.getName());
-			mi.setToolTipText(delegate.getToolTipText());
-			newMenu.add(mi).addActionListener(newAction);		
-		}
-		return newMenu;
 	}
 
 

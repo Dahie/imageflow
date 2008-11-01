@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -37,9 +38,13 @@ public class Applicationframe extends JFrame {
 	
 	private UnitList units;
 	private Edges edges;
-	private GraphController controller;
+	private GraphController graphController;
 
 	private JTextArea macroArea;
+
+	private GraphPanel graphPanel;
+
+	private ArrayList<Delegate> unitDelegates;
 	
 	
 	/**
@@ -59,7 +64,7 @@ public class Applicationframe extends JFrame {
 	}
 	
 	public Applicationframe(GraphController controller) {
-		this.controller = controller;
+		this.graphController = controller;
 		this.units = controller.getUnitElements();
 		this.edges = controller.getConnections();
 		init();
@@ -86,7 +91,22 @@ public class Applicationframe extends JFrame {
 	 * Adds all components of
 	 */
 	private void addMenu() {
-		JMenu fileMenu;
+		JMenuBar menuBar = new JMenuBar();
+		
+		JMenu fileMenu = new JMenu("File");
+		JMenu editMenu = new JMenu("Edit");
+		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates);
+		JMenu windowMenu = new JMenu("Window");
+		JMenu helpMenu = new JMenu("Help");
+		
+		menuBar.add(fileMenu);
+		menuBar.add(editMenu);
+		menuBar.add(insertMenu);
+		menuBar.add(windowMenu);
+		menuBar.add(helpMenu);
+		
+		menuBar.setVisible(true);
+		setJMenuBar(menuBar);
 	}
 
 	/**
@@ -94,15 +114,15 @@ public class Applicationframe extends JFrame {
 	 */
 	private void addComponents() {
 		
-		ArrayList<Delegate> unitDelegates = DelegatesController.getInstance().getUnitDelegates();
+		unitDelegates = DelegatesController.getInstance().getUnitDelegates();
 		
 		
 		this.setLayout(new BorderLayout());
 		
 		//working area aka graphpanel
 		
-		GPanelPopup popup = new GPanelPopup(unitDelegates, controller.getCopyNodesList());
-		final GraphPanel graphPanel = new GraphPanel(unitDelegates , popup);
+		GPanelPopup popup = new GPanelPopup(unitDelegates, graphController);
+		graphPanel = new GraphPanel(unitDelegates , popup);
 		popup.setActivePanel(graphPanel);
 		graphPanel.setSize(400, 300);
 		graphPanel.setNodeL(units);
@@ -124,7 +144,7 @@ public class Applicationframe extends JFrame {
 	        			//TODO check filetype
 	        			
 	            		// add Source-Units
-	        			controller.getUnitElements().add(UnitFactory.createSourceUnit(
+	        			graphController.getUnitElements().add(UnitFactory.createSourceUnit(
 	        					files[i].getAbsolutePath(), coordinates));
 	        			graphPanel.repaint();
 	                }   // end for: through each dropped file
@@ -164,7 +184,7 @@ public class Applicationframe extends JFrame {
 		macroArea = new JTextArea();
 		JScrollPane macroAreaScrollpane = new JScrollPane(macroArea);
 		macroPanel.add(macroAreaScrollpane, BorderLayout.CENTER);
-		JButton buttonRun = new JButton(new RunMacroAction(controller));
+		JButton buttonRun = new JButton(new RunMacroAction(graphController));
 		macroPanel.add(buttonRun, BorderLayout.SOUTH);
 		
 		JTabbedPane functionTabPane = new JTabbedPane();

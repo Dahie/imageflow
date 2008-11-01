@@ -3,6 +3,7 @@
  */
 package application;
 
+import ij.IJ;
 import gui.Applicationframe;
 import backend.GraphController;
 
@@ -19,6 +20,11 @@ public class ImageFlow {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		if (IJ.isMacOSX()) {
+			System.setProperty("apple.laf.useScreenMenuBar", "true"); 
+			System.setProperty("apple.awt.brushMetalRounded", "true");
+		}
 		
 		GraphController controller = new GraphController();
 		new Applicationframe(controller);

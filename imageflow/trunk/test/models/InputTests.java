@@ -31,6 +31,9 @@ public class InputTests extends TestCase {
 		
 		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
 		
+		ConnectionList connList = new ConnectionList();
+		connList.add(conn);
+		
 		// test after connecting
 		assertEquals("input connected", true, filterInput.isConnected());	
 	}
@@ -55,6 +58,9 @@ public class InputTests extends TestCase {
 				false, filterInput.isConnectedWith(source2Output));
 		
 		Connection conn = new Connection(source1Unit, 1, filterUnit1, 1);
+		ConnectionList connList = new ConnectionList();
+		connList.add(conn);
+		
 		
 		// test after connecting
 		assertEquals("input not connected with source1Output", 

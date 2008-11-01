@@ -251,6 +251,7 @@ public class Input extends Pin {
 	 */
 	public boolean isConnectedWith(Output output) {
 		if(this.fromUnit != null) {
+			System.out.println(this.fromUnit);
 			return this.fromUnit.getOutput(this.fromOutputNumber-1).equals(output);
 		}
 		return false;

@@ -1,5 +1,8 @@
 package actions;
 
+import graph.Node;
+import graph.Selection;
+
 import javax.swing.AbstractAction;
 
 import models.unit.UnitElement;
@@ -14,13 +17,13 @@ public abstract class AbstractUnitAction extends AbstractAction {
 	/**
 	 * The {@link UnitElement} in question.
 	 */
-	protected UnitElement unit;
+	protected Selection<Node> units;
 	
 	/**
 	 * @param unit
 	 */
-	public AbstractUnitAction(final UnitElement unit) {
-		this.unit = unit;
+	public AbstractUnitAction(final Selection<Node> selection) {
+		this.units = selection;
 	}
 	
 }

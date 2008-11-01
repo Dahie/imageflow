@@ -1,4 +1,5 @@
 package backend;
+import graph.Edge;
 import graph.Edges;
 import graph.Node;
 import ij.IJ;
@@ -271,6 +272,27 @@ public class GraphController extends ApplicationController {
 	 */
 	public ArrayList<Node> getCopyNodesList() {
 		return copyNodesList;
+	}
+	
+	/**
+	 * Removes the {@link UnitElement} from the unitList and its Connections.
+	 * @param unit
+	 * @return
+	 */
+	public boolean removeUnit(final UnitElement unit) {
+
+		// find connections which are attached to this unit
+		
+		for (int i = 0; i < connectionMap.size(); i++) {
+			Connection connection = (Connection) connectionMap.get(i);
+			connection.isConnectedToUnit(unit);
+			// delete connections
+			connectionMap.remove(connection);
+		}
+		
+		
+		// delete Unit
+		return unitElements.remove(unit);
 	}
 	
 }

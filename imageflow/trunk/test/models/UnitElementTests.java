@@ -81,6 +81,8 @@ public class UnitElementTests extends TestCase {
 		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
 		
 		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
+		ConnectionList connList = new ConnectionList();
+		connList.add(conn);
 		
 		//assertion
 		
