@@ -196,4 +196,17 @@ public class Connection extends Edge {
 	public boolean isConnectedToUnit(final UnitElement unit) {
 		return (this.fromUnit.equals(unit)) || (this.toUnit.equals(unit));
 	}
+	
+	/**
+	 * Is true, when the ImageBitDepth given by the {@link Output} is 
+	 * supported by this Input.
+	 * @return
+	 */
+	public boolean areImageBitDepthCompatible() {
+		Input input = this.toUnit.getInput(this.toInputNumber-1);
+		Output output = this.fromUnit.getOutput(this.fromOutputNumber-1);
+		
+		boolean areCompatible = (input.getImageBitDepth()&output.getImageBitDepth()) != 0;
+		return areCompatible;
+	}
 }

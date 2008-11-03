@@ -1,9 +1,6 @@
 package gui;
 
 import graph.Node;
-import graph.NodeText;
-
-import ij.io.SaveDialog;
 
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -13,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import models.unit.CommentNode;
 import models.unit.UnitDelegate;
 import models.unit.UnitElement;
 import visualap.Delegate;
@@ -41,9 +39,10 @@ public class InsertUnitMenu extends JMenu {
 			public void actionPerformed(ActionEvent e) {
 				JMenuItem source = (JMenuItem)(e.getSource());
 				String action = source.getText();
-				if (action.equals("Add Text")) {	
+				if (action.equals("Comment")) {	
 					// corrected fault: NodeText instead of NodeBean
-					Node n = new NodeText(new Point(savedPoint), "text"); savedPoint.translate(4, 4);
+					Node n = new CommentNode(new Point(savedPoint), "text"); savedPoint.translate(4, 4);
+					System.out.println(n);
 					activePanel.getNodeL().add(n, "text$0");
 					activePanel.getSelection().clear();
 					activePanel.getSelection().add(n);
@@ -70,8 +69,8 @@ public class InsertUnitMenu extends JMenu {
 					}
 				}
 			}}; 
-		JMenuItem mi = new JMenuItem("Add Text");
-		mi.setToolTipText("Insert text");
+		JMenuItem mi = new JMenuItem("Comment");
+		mi.setToolTipText("Insert Notes or Comments to the graph.");
 		add(mi).addActionListener(newAction);		
 
 		//list over all available units

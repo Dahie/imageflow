@@ -3,6 +3,8 @@
  */
 package gui;
 
+import graph.Node;
+
 import java.util.ArrayList;
 
 import models.unit.UnitElement;
@@ -86,17 +88,35 @@ public class GraphPanel extends GPanel {
 	}*/
 	
 	
-	public static boolean isWithinRange(int compareValue, int startValue, int endValue) {
+	/**
+	 * Returns if the value is within this range of values.
+	 * @param compareValue
+	 * @param startValue
+	 * @param endValue
+	 * @return
+	 */
+	public static boolean isWithinRange(final int compareValue, 
+			final int startValue, 
+			final int endValue) {
 		return (compareValue > startValue 
 				&& compareValue < endValue);
 	}
 
 
 	/**
+	 * Replace the current {@link UnitList} with a different one.
 	 * @param units2
 	 */
 	public void setNodeL(UnitList units2) {
 		super.nodeL = units2;
+	}
+	
+	@Override
+	public void properties(Node node) {
+
+		
+		
+		super.properties(node);
 	}
 	
 }

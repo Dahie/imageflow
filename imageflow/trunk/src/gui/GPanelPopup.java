@@ -81,7 +81,7 @@ public class GPanelPopup implements GPanelListener {
 					popup.add(new JMenuItem(new SetDisplayAction(activePanel.getSelection())));
 					popup.addSeparator();
 				}
-				popup.add(new CutUnitAction(copyL, activePanel));
+				popup.add(new CutUnitAction(graphController, activePanel));
 				popup.add(new CopyUnitAction(activePanel.getSelection(), copyL));
 				popup.add(unbindItem("Unbind"));
 				popup.add(new RemoveUnitAction(activePanel.getSelection(), graphController));

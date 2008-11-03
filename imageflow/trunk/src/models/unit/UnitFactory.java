@@ -128,7 +128,7 @@ public class UnitFactory {
 	 */
 	public static UnitElement createSourceUnit(String path, Point origin) {
 
-		UnitElement sourceUnit = new UnitElement(origin, "Source1", "open(\"PARA_STRING_1\");\n", 0, 1, 1);
+		UnitElement sourceUnit = new UnitElement(origin, "File Source", "open(\"PARA_STRING_1\");\n", 0, 1, 1);
 		// setup of the first parameter
 		sourceUnit.addParameter(
 				ParameterFactory.createParameter("Input image file",	// parameter description
@@ -161,7 +161,7 @@ public class UnitFactory {
 	 */
 	public static UnitElement createBackgroundUnit(Dimension dimension, Point origin) {
 
-		UnitElement sourceUnit = new UnitElement(origin, "Source2", 
+		UnitElement sourceUnit = new UnitElement(origin, "Background", 
 				"newImage(\"Background\", \"8-bit White\", PARA_INTEGER_1, PARA_INTEGER_2, 1);\n", 0, 1, 2); 
 		// setup of the first parameter
 		sourceUnit.addParameter(
@@ -217,9 +217,10 @@ public class UnitFactory {
 			e.printStackTrace();
 		}
 		// setup of the parameter
-//		unitElements[2].parameters[1].setParameter("Radius", 4, "Radius of the gaussian kernel");
 		blurUnit.addParameter(
-				ParameterFactory.createParameter("Radius", 4, "Radius of the gaussian kernel"));
+				ParameterFactory.createParameter("Radius", 4.0, "Radius of the gaussian kernel"));
+		// attention, 4.0 as value 4 will be cast as integer and will lead to ClassCastExceptions
+		
 		
 		// setup of the first input of unit 2
 		blurUnit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
@@ -297,5 +298,16 @@ public class UnitFactory {
 	}
 
 	
+	public static UnitElement createInvertUnit(Point origin) {
+		// 
+		UnitElement unit = new UnitElement(origin, "Invert", "	run(\"Invert\");\n",1,1,0);
+		
+		// setup of the first input of unit 2
+		unit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
+		// setup of the first output of unit 2 
+		unit.addOutput("Output", "O", -1); // -1 means output will be the same type as the input
+		unit.updateUnitIcon();
+		return unit;
+	}
 	
 }

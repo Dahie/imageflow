@@ -3,6 +3,9 @@
  */
 package models;
 
+import ij.plugin.PlugIn;
+import ij.plugin.filter.PlugInFilter;
+
 import java.awt.Dimension;
 
 import junit.framework.TestCase;
@@ -188,8 +191,43 @@ public class UnitElementTests extends TestCase {
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void testAreImageDepthCompatible() {
 		
+		UnitElement unit1 = new UnitElement("unit1", "some syntax", 1, 1, 0);
+		unit1.addOutput("output1", "o", PlugInFilter.DOES_32);
+		unit1.addOutput("output2", "o", PlugInFilter.DOES_ALL);
+		unit1.addOutput("output2", "o", -1);
+		UnitElement unit2 = new UnitElement("unit2", "some syntax", 1, 1, 0);
+		unit2.addInput("input1", "i", PlugInFilter.DOES_32, false);
+		unit2.addInput("input2", "i", PlugInFilter.DOES_16, false);
+		unit2.addInput("input3", "i", PlugInFilter.DOES_ALL, false);
 		
+		// conn1 32 to 16		
+		Connection conn1 = new Connection(unit1,1,unit2,1);
+		assertTrue("both do 32", conn1.areImageBitDepthCompatible());
+		
+		// conn2 32 to 16		
+		Connection conn2 = new Connection(unit1,1,unit2,2);
+		assertFalse("both do 32", conn2.areImageBitDepthCompatible());
+
+		// conn3 ALL to 32
+		Connection conn3 = new Connection(unit1,2,unit2, 1);
+		assertTrue("all to 32", conn3.areImageBitDepthCompatible());
+		
+		// conn4 32 to all
+		Connection conn4 = new Connection(unit1,1,unit2, 3);
+		assertTrue("32 to all", conn4.areImageBitDepthCompatible());
+		
+		// now test pins, which don't care
+		//TODO hm how should this react actually? needs an input set
+		Connection conn5 = new Connection(unit1,3,unit2, 2);
+		assertTrue("-1 to 16", conn5.areImageBitDepthCompatible());
+		
+		// now test pins, which don't care
+		Connection conn6 = new Connection(unit1,3,unit2, 3);
+		assertTrue("-1 to ALL", conn6.areImageBitDepthCompatible());
 	}
 	
 }

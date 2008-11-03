@@ -99,7 +99,7 @@ public class MacroElement {
 		}
 		searchString = "PARA_INTEGER_" + (p+1);
 		if(command.contains(searchString)) {
-			String parameterInteger = "" + ((StringParameter)parameter).getValue();
+			String parameterInteger = "" + ((IntegerParameter)parameter).getValue();
 			System.out.println("Unit: " + u + " Parameter: " + p + " Integer Parameter: " + parameterInteger);
 			command = Tools.replace(command, searchString, parameterInteger);
 			System.out.println(command);

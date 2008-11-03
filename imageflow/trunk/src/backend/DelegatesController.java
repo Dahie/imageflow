@@ -1,7 +1,10 @@
 package backend;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 import models.unit.UnitDelegate;
 import models.unit.UnitElement;
@@ -30,7 +33,14 @@ public class DelegatesController extends ApplicationController {
 				return UnitFactory.createSourceUnit(origin);
 			}
 		});
-		
+		unitDelegates.add(new UnitDelegate("Background", "Creates a new canvas, an empty background.") {
+			@Override
+			public UnitElement createUnit(final Point origin) {
+				int width = Integer.parseInt(JOptionPane.showInputDialog("Width of the background:"));
+				int height = Integer.parseInt(JOptionPane.showInputDialog("Height of the background:"));
+				return UnitFactory.createBackgroundUnit(new Dimension(width,height), origin);
+			}
+		});
 		unitDelegates.add(new UnitDelegate("Add Noise", "This filter adds noise to the image.") {
 			@Override
 			public UnitElement createUnit(final Point origin) {
@@ -47,6 +57,12 @@ public class DelegatesController extends ApplicationController {
 			@Override
 			public UnitElement createUnit(final Point origin) {
 				return UnitFactory.createFindEdgesUnit(origin);
+			}
+		});
+		unitDelegates.add(new UnitDelegate("Invert", "Invert the image.") {
+			@Override
+			public UnitElement createUnit(final Point origin) {
+				return UnitFactory.createInvertUnit(origin);
 			}
 		});	
 		unitDelegates.add(new UnitDelegate("Subtract", "Subtracts to images from another") {
@@ -68,6 +84,7 @@ public class DelegatesController extends ApplicationController {
 				return UnitFactory.createHistogramUnit(origin);
 			}
 		});
+
 	}
 	
 	public static DelegatesController getInstance() {

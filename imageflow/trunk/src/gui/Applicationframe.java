@@ -20,6 +20,9 @@ import javax.swing.JTextArea;
 import models.unit.UnitFactory;
 import models.unit.UnitList;
 import visualap.Delegate;
+import actions.CopyUnitAction;
+import actions.ExampleAction;
+import actions.PasteUnitAction;
 import actions.RunMacroAction;
 import backend.DelegatesController;
 import backend.GraphController;
@@ -94,7 +97,10 @@ public class Applicationframe extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		
 		JMenu fileMenu = new JMenu("File");
+		fileMenu.add(new ExampleAction(graphController));
 		JMenu editMenu = new JMenu("Edit");
+		editMenu.add(new CopyUnitAction(graphPanel.getSelection(), graphController.getCopyNodesList()));
+		editMenu.add(new PasteUnitAction(graphController.getCopyNodesList(), graphPanel));
 		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates);
 		JMenu windowMenu = new JMenu("Window");
 		JMenu helpMenu = new JMenu("Help");

@@ -37,7 +37,9 @@ public class UnitList extends GList<Node> {
 				final ArrayList<Input> inputs = unit.getInputs();
 				for (int i = 0; i < inputs.size(); i++) {
 					final Input input = inputs.get(i);
-					if (!input.isConnected() && input.isRequiredInput()) {
+					if (!input.isConnected() 
+							// is this input actually required?
+							&& input.isRequiredInput()) {
 						System.out.println(input + " is not connected");
 						return false;
 					}

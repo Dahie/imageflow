@@ -24,7 +24,8 @@ public class ParameterFactory {
 		} else if (parameter instanceof Double ) {
 			return new DoubleParameter(displayName, (Double) parameter, helpString);
 		} else if ( parameter instanceof Integer) {
-			return new DoubleParameter(displayName, (Integer) parameter, helpString);
+//			return new DoubleParameter(displayName, (Double) parameter, helpString);
+			return new IntegerParameter(displayName, (Integer) parameter, helpString);
 		} else if (parameter instanceof Boolean) {
 			return new BooleanParameter(displayName, (Boolean) parameter, helpString);
 		}

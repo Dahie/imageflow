@@ -1,5 +1,4 @@
 package backend;
-import graph.Edge;
 import graph.Edges;
 import graph.Node;
 import ij.IJ;
@@ -16,6 +15,7 @@ import models.ConnectionList;
 import models.unit.UnitElement;
 import models.unit.UnitFactory;
 import models.unit.UnitList;
+import models.unit.UnitElement.Type;
 import application.ApplicationController;
 
 
@@ -34,7 +34,7 @@ public class GraphController extends ApplicationController {
 	/**
 	 * List which stores copied Nodes.
 	 */
-	protected ArrayList<Node> copyNodesList;;
+	protected ArrayList<Node> copyNodesList;
 
 	
 	
@@ -113,9 +113,14 @@ public class GraphController extends ApplicationController {
 		// verification of the connection network
 		////////////////////////////////////////////////////////
 		
+		final boolean networkOK = checkNetwork(connectionMap);
+		if (!networkOK) {
+			return;
+		}
+		
 		unitElements = sortList(unitElements);
 		
-		final boolean networkOK = checkNetwork(connectionMap);
+		
 		
 		/*try {
 			System.out.println(new Check(unitElements, connectionMap).checkSystem());
@@ -133,7 +138,7 @@ public class GraphController extends ApplicationController {
 			
 			if(imagej == null)
 				imagej = new ImageJ(null, ImageJ.EMBEDDED);
-//			IJ.log(macro);
+			IJ.log(macro);
 			IJ.runMacro(macro, "");
 //			runMacro(macro, "");
 		} else {
@@ -162,6 +167,9 @@ public class GraphController extends ApplicationController {
 			for (Iterator iterator = connectionMap.iterator(); iterator.hasNext();) {
 				Connection connection = (Connection) iterator.next();
 			
+				/*if (!connection.areImageBitDepthCompatible())
+					return false;*/
+				
 				switch(connection.checkConnection()) {
 					case MISSING_BOTH:
 					case MISSING_FROM_UNIT:
@@ -173,12 +181,17 @@ public class GraphController extends ApplicationController {
 				}
 			}
 		} else {
-			networkOK = false;
+			System.out.println("no existing connections ");
+			return false;
 		}
 		
 		
 		//FIXME check if units got all the inputs they need
-		networkOK = unitElements.areAllInputsConnected();
+		if (!unitElements.areAllInputsConnected()) {
+			System.out.println("not all required inputs are connected");
+			return false;
+		}
+			
 
 		//TODO check parameters
 		return networkOK;
@@ -217,7 +230,6 @@ public class GraphController extends ApplicationController {
 		int i = 0;
 		int index = 0;
 		//loop over all units, selection sort, levelorder
-		//FIXME this breaks, if connections are missing!
 		while(!unitElements.isEmpty()) {
 			index = i % unitElements.size();
 			UnitElement unit = (UnitElement) unitElements.get(index); 
@@ -234,11 +246,16 @@ public class GraphController extends ApplicationController {
 				// remove from the old list and
 				// move this to the new ordered list
 				Node remove = unitElements.remove(index);
-				orderedList.add(remove);
 				
-				// we swap units. 
-//				Collections.swap(unitElements, mark, swap);
-			} 
+				// if unit has no inputs, is not source, then discard as well
+//				if((unit.getType() != Type.SOURCE && !unit.hasInputs())) 
+					orderedList.add(remove);
+			} else if (!unit.hasInputsConnected() && unit.getType() != Type.SOURCE) {
+				// if unit has no connections actually, it can be discarded right away
+				unitElements.remove(index);
+				// TODO if there is a branch with two units connected, the first one will be discarded, 
+				// the second will still exist 
+			}
 			
 			// Selection Sort
 			// each time an element whose previous nodes have already been registered

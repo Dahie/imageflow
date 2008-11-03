@@ -300,7 +300,7 @@ public class UnitElement extends NodeAbstract {
 	}
 
 	/**
-	 * Returns if this unit has inputs.
+	 * Returns if this unit has inputs attached to this unit.
 	 * @return
 	 */
 	public boolean hasInputs() {
@@ -696,6 +696,18 @@ public class UnitElement extends NodeAbstract {
 		}
 		
 		return hasAllMarked;
+	}
+
+	/**
+	 * Is true as soon as it finds one connected {@link Input}.
+	 * @return
+	 */
+	public boolean hasInputsConnected() {
+		for (final Input input : inputs) {
+			if(input.isConnected())
+				return true;
+		}
+		return false;
 	}
 	
 }

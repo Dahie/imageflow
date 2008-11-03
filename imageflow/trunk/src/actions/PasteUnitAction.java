@@ -29,7 +29,6 @@ public class PasteUnitAction extends AbstractUnitAction {
 			copyUnitsList.clear();
 			for (Node t : selectedUnits) {
 				try {
-					System.out.println(t);
 					UnitElement clone = (UnitElement)t.clone();	
 					clone.setLabel(t.getLabel());
 					activePanel.getNodeL().add(t, t.getLabel());
