@@ -33,7 +33,7 @@ import java.lang.reflect.*;
 import java.util.HashMap;
 
 public class NodeText extends Node {
-	private String text;
+	protected String text;
 
 // constructor not to be used, XMLEncoder/XMLDecoder
 	public NodeText() {
