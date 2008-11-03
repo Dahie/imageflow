@@ -61,7 +61,7 @@ public class GraphController extends ApplicationController {
 		
 //		unitElements.add(null);
 		
-		final UnitElement sourceUnit = UnitFactory.createSourceUnit("/Users/danielsenff/zange1.png");
+		final UnitElement sourceUnit = UnitFactory.createSourceUnit("/Users/barthel/Applications/ImageJ/_images/zange1.png");
 
 		final UnitElement blurUnit = UnitFactory.createGaussianBlurUnit(new Point(150, 150));
 		
@@ -139,6 +139,7 @@ public class GraphController extends ApplicationController {
 			if(imagej == null)
 				imagej = new ImageJ(null, ImageJ.EMBEDDED);
 			IJ.log(macro);
+			// !!!
 			IJ.runMacro(macro, "");
 //			runMacro(macro, "");
 		} else {
@@ -204,6 +205,7 @@ public class GraphController extends ApplicationController {
 		return this.unitElements;
 	}
 	
+	// !!!
 	public static void main(final String[] args) {
 		final GraphController controller = new GraphController();
 		controller.setupExample();

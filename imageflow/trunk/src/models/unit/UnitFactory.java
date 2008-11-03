@@ -230,6 +230,32 @@ public class UnitFactory {
 		return blurUnit;
 	}
 	
+	
+	String[] unitDescription = {
+			
+	};
+	
+	public static UnitElement createProcessingUnit(Point origin) {
+		// 
+		UnitElement blurUnit = new UnitElement(origin, "Blur", "run(\"Gaussian Blur...\", \"sigma=PARA_DOUBLE_1\");\n",1,1,1);
+		try {
+			blurUnit.setIcon(ImageIO.read(new File("bin/res/blur.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// setup of the parameter
+//		unitElements[2].parameters[1].setParameter("Radius", 4, "Radius of the gaussian kernel");
+		blurUnit.addParameter(
+				ParameterFactory.createParameter("Radius", 4, "Radius of the gaussian kernel"));
+		
+		// setup of the first input of unit 2
+		blurUnit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
+		// setup of the first output of unit 2 
+		blurUnit.addOutput("Output", "O", -1); // -1 means output will be the same type as the input
+		blurUnit.updateUnitIcon();
+		return blurUnit;
+	}
+	
 	/**
 	 * setup of a processing unit (gaussian blur)
 	 * display name, syntax: "run("Gaussian Blur...", "sigma=2");", 1 input, 1 output, 1 parameter

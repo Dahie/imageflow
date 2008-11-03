@@ -3,14 +3,7 @@
  */
 package models;
 
-import graph.Node;
-import graph.NodeBean;
-import graph.Pin;
-import models.unit.UnitElement;
 import models.unit.UnitList;
-import visualap.Backward;
-import visualap.CheckException;
-import visualap.Vertex;
 
 /**
  * Ignore 
@@ -31,17 +24,15 @@ public class Check extends visualap.Check {
 		this.nodeL = nodeL;
 		this.EdgeL = edgeL;
 	}
-
-	@Override
-	protected void updateBranch(Pin from, Pin to) {
+	/*protected void updateBranch(Pin from, Pin to) {
 		int marka, markb;
 		marka = from.getMark();
 		markb = to.getMark();
 		if (marka == 0)
 			if (markb == 0) {
-				from.setMark(nextMark);
-				to.setMark(nextMark);
-				nextMark++;
+//				from.setMark(nextMark);
+//				to.setMark(nextMark);
+//				nextMark++;
 			} else from.setMark(markb);
 		else if (markb == 0) 
 				to.setMark(marka);
@@ -59,9 +50,9 @@ public class Check extends visualap.Check {
 					}						
 					lostMark++;
 				}
-	}
+	}*/
 	
-	@Override
+	/*@Override
 	protected void createUnmarkedNodeList() {
 		for (Node s : this.nodeL) {
 			UnitElement t = (UnitElement)s;
@@ -72,13 +63,12 @@ public class Check extends visualap.Check {
 				t.getOutput(i).setMark(0);
 			}			
 		}
-	}
+	}*/
 	
 	/* (non-Javadoc)
 	 * @see visualap.Check#bubbleAllPins(int, visualap.Backward[], visualap.Vertex[], int)
 	 */
-	@Override
-	protected int bubbleAllPins(int nout, Backward[] out, Vertex[] vertexL,
+	/*protected int bubbleAllPins(int nout, Backward[] out, Vertex[] vertexL,
 			int i) throws CheckException {
 		NodeBean t = (NodeBean) nodeL.get(i);
 		if (t.getObject() != null)
@@ -100,6 +90,6 @@ public class Check extends visualap.Check {
 			}
 		}
 		return nout;
-	}
+	}*/
 	
 }

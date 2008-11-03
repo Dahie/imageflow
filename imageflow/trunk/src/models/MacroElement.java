@@ -124,5 +124,11 @@ public class MacroElement {
 	public String getCommandSyntax() {
 		return this.commandSyntax;
 	}
+
+
+
+	public void reset() {
+		this.commandSyntax = this.imageJSyntax;
+	}
 	
 }

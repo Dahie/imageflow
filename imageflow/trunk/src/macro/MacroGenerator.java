@@ -35,6 +35,8 @@ public class MacroGenerator {
 
 		macroText = "setBatchMode(true); \n";
 		
+		System.out.println("number of units: "+unitElement.length);
+		
 		// loop over all units
 		// they have to be presorted so they are in the right order
 		for (int unitIndex = 1; unitIndex < unitElement.length; unitIndex++) {
@@ -44,6 +46,8 @@ public class MacroGenerator {
 			
 //			String command = unit.getImageJSyntax();
 			MacroElement macroElement = ((MacroElement)unit.getObject()); 
+			macroElement.reset();
+			
 			
 			int numInputs = unit.getInputsActualCount();
 			int numOutputs = unit.getOutputsMaxCount();

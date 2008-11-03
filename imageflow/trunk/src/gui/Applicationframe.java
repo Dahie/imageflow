@@ -24,6 +24,7 @@ import actions.CopyUnitAction;
 import actions.ExampleAction;
 import actions.PasteUnitAction;
 import actions.RunMacroAction;
+import actions.RunParaAction;
 import backend.DelegatesController;
 import backend.GraphController;
 
@@ -174,6 +175,8 @@ public class Applicationframe extends JFrame {
 		//properties of the selected node
 		JPanel propertiesPanel = new JPanel();
 		propertiesPanel.setName("Properties");
+		JButton buttonPara = new JButton(new RunParaAction(graphPanel.getSelection()));
+		propertiesPanel.add(buttonPara, BorderLayout.SOUTH);
 		
 		
 		// logging the history?
