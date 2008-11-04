@@ -507,7 +507,7 @@ public class UnitElement extends NodeAbstract {
 	 */
 	@Override
 	public Object contains(final int x, final int y) {
-		int tolerance = 4;
+		int tolerance = 8;
 		if ((x >= origin.x - tolerance)
 				&&(x < origin.x + tolerance))	{
 			System.out.println("hey close");
@@ -716,11 +716,14 @@ public class UnitElement extends NodeAbstract {
 	}
 	
 
+	/**
+	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
+	 */
 	public void showProperties() {
-		GenericDialog gd = new GenericDialog("Parameter");
-		ArrayList<Parameter> parameterList = getParameters();
+		final GenericDialog gd = new GenericDialog("Parameter");
+		final ArrayList<Parameter> parameterList = getParameters();
 		
-		for (Parameter parameter : parameterList) {
+		for (final Parameter parameter : parameterList) {
 			
 			if(parameter instanceof DoubleParameter) {
 				gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
@@ -744,7 +747,7 @@ public class UnitElement extends NodeAbstract {
 			return;
 		
 		
-		for (Parameter parameter : parameterList) {
+		for (final Parameter parameter : parameterList) {
 			if(parameter instanceof DoubleParameter) {
 				((DoubleParameter) parameter).setValue((double) (gd.getNextNumber()));
 			} else if (parameter instanceof IntegerParameter) {
