@@ -3,6 +3,7 @@ import graph.NodeAbstract;
 import helper.PaintUtil;
 import ij.IJ;
 import ij.ImagePlus;
+import ij.gui.GenericDialog;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,7 +19,11 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.util.ArrayList;
 
+import models.BooleanParameter;
+import models.ChoiceParameter;
+import models.DoubleParameter;
 import models.Input;
+import models.IntegerParameter;
 import models.MacroElement;
 import models.Output;
 import models.Parameter;
@@ -708,6 +713,50 @@ public class UnitElement extends NodeAbstract {
 				return true;
 		}
 		return false;
+	}
+	
+
+	public void showProperties() {
+		GenericDialog gd = new GenericDialog("Parameter");
+		ArrayList<Parameter> parameterList = getParameters();
+		
+		for (Parameter parameter : parameterList) {
+			
+			if(parameter instanceof DoubleParameter) {
+				gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
+			} else if(parameter instanceof IntegerParameter) {
+				gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
+			} else if(parameter instanceof BooleanParameter) {
+				gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
+			} else if(parameter instanceof ChoiceParameter) {
+				gd.addChoice(parameter.getDisplayName(), 
+						((ChoiceParameter)parameter).getChoices(), 
+						((ChoiceParameter)parameter).getValue());
+			} else if(parameter instanceof StringParameter) {
+				gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue());
+			}			
+		}
+		
+		// show properties window
+		gd.showDialog();
+
+		if( gd.wasCanceled())
+			return;
+		
+		
+		for (Parameter parameter : parameterList) {
+			if(parameter instanceof DoubleParameter) {
+				((DoubleParameter) parameter).setValue((double) (gd.getNextNumber()));
+			} else if (parameter instanceof IntegerParameter) {
+				((IntegerParameter) parameter).setValue((int) (gd.getNextNumber()));
+			} else if (parameter instanceof BooleanParameter) {
+				((BooleanParameter) parameter).setValue((boolean) (gd.getNextBoolean()));
+			} else if (parameter instanceof ChoiceParameter) {
+				((ChoiceParameter) parameter).setValue((String) (gd.getNextChoice()));
+			} else if (parameter instanceof StringParameter) {
+				((StringParameter) parameter).setValue((String) (gd.getNextString()));
+			}
+		}
 	}
 	
 }

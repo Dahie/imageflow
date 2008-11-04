@@ -4,8 +4,12 @@
 package gui;
 
 import graph.Node;
+import graph.NodeBean;
+import graph.NodeText;
 
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 import models.unit.UnitElement;
 import models.unit.UnitList;
@@ -113,10 +117,19 @@ public class GraphPanel extends GPanel {
 	
 	@Override
 	public void properties(Node node) {
-
-		
-		
-		super.properties(node);
+		if (node instanceof NodeText) {
+//			propertySheet.setVisible(false);
+			String inputValue = JOptionPane.showInputDialog("Edit text:",((NodeText)node).getText()); 
+			if ((inputValue != null)&&(inputValue.length() != 0)) {
+				((NodeText)node).setText(inputValue);
+				repaint();
+			}
+		}
+		else { // aNode instanceof NodeBean
+			UnitElement unit = (UnitElement) node;
+			unit.showProperties();
+		}
+//		super.properties(node);
 	}
 	
 }

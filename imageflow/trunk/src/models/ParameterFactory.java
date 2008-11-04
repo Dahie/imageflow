@@ -28,6 +28,9 @@ public class ParameterFactory {
 			return new IntegerParameter(displayName, (Integer) parameter, helpString);
 		} else if (parameter instanceof Boolean) {
 			return new BooleanParameter(displayName, (Boolean) parameter, helpString);
+		} else if (parameter instanceof String[]) {
+			return new ChoiceParameter(displayName, (String[]) parameter, 
+					((String[]) parameter)[0], helpString);
 		}
 		System.out.println("Parameter not recognized: " + parameter);
 		return null;

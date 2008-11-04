@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
+import models.ChoiceParameter;
 import models.ParameterFactory;
 
 
@@ -55,10 +56,15 @@ public class UnitFactory {
 	public static UnitElement createImageCalculatorUnit(Point origin) {
 		
 		UnitElement mergeUnit = new UnitElement(origin, "Image Calculator", 
-				"run(\"Image Calculator...\", \"image1=TITLE_1 operation=Subtract image2=TITLE_2 create 32-bit\"); \n",2,1,1);
+				"run(\"Image Calculator...\", \"image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create 32-bit\"); \n",2,1,1);
 		// setup of the parameter
+//		mergeUnit.addParameter(
+//				ParameterFactory.createParameter("32-bit", true, "generate a floating point result image"));
+		String[] mathChoices = {"Add", "Subtract", "Multiply", "Devide", "AND", "OR", "XOR"};
 		mergeUnit.addParameter(
-				ParameterFactory.createParameter("32-bit", true, "generate a floating point result image"));
+				new ChoiceParameter("Math", mathChoices, "Add",
+				"Defines what math should be used to merge both images"));
+		
 		// setup of the inputs
 		mergeUnit.addInput("Input1", "I1", ij.plugin.filter.PlugInFilter.DOES_ALL, false);
 		mergeUnit.addInput("Input2", "I2", ij.plugin.filter.PlugInFilter.DOES_ALL, false);
@@ -237,7 +243,7 @@ public class UnitFactory {
 	
 	public static UnitElement createProcessingUnit(Point origin) {
 		// 
-		UnitElement blurUnit = new UnitElement(origin, "Blur", "run(\"Gaussian Blur...\", \"sigma=PARA_DOUBLE_1\");\n",1,1,1);
+		UnitElement blurUnit = new UnitElement(origin, "Gaussian Blur", "run(\"Gaussian Blur...\", \"sigma=PARA_DOUBLE_1\");\n",1,1,1);
 		try {
 			blurUnit.setIcon(ImageIO.read(new File("bin/res/blur.png")));
 		} catch (IOException e) {

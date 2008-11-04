@@ -17,13 +17,6 @@ public abstract class Parameter {
 	protected String displayName; 
 
 
-
-	/* 
-	 * legacy, unused
-	 */
-	String  choiceStringValue;
-	String  choiceStringValueDefault;
-
 	/**
 	 * help text describing the functionality of this parameter
 	 */

@@ -65,7 +65,7 @@ public class DelegatesController extends ApplicationController {
 				return UnitFactory.createInvertUnit(origin);
 			}
 		});	
-		unitDelegates.add(new UnitDelegate("Subtract", "Subtracts to images from another") {
+		unitDelegates.add(new UnitDelegate("Math", "Subtracts to images from another") {
 			@Override
 			public UnitElement createUnit(final Point origin) {
 				return UnitFactory.createImageCalculatorUnit(origin);

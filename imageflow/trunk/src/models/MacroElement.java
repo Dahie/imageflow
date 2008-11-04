@@ -111,7 +111,7 @@ public class MacroElement {
 			command = Tools.replace(command, searchString, parameterString);
 			System.out.println(command);
 		}
-		// boolean fehlt noch
+		// choiceParameter uses the PARA_STRING_x
 		return command;
 	}
 
