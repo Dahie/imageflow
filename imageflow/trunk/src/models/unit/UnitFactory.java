@@ -59,7 +59,7 @@ public class UnitFactory {
 				"run(\"Image Calculator...\", \"image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create 32-bit\"); \n",2,1,1);
 		// setup of the parameter
 //		mergeUnit.addParameter(
-//				ParameterFactory.createParameter("32-bit", true, "generate a floating point result image"));
+//				ParameterFactory.createParameter(" 32-bit", true, "generate a floating point result image"));
 		String[] mathChoices = {"Add", "Subtract", "Multiply", "Devide", "AND", "OR", "XOR"};
 		mergeUnit.addParameter(
 				new ChoiceParameter("Math", mathChoices, "Add",

@@ -4,9 +4,15 @@
 package gui;
 
 import graph.Node;
-import graph.NodeBean;
 import graph.NodeText;
+import graph.Pin;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -40,9 +46,9 @@ public class GraphPanel extends GPanel {
 	/* (non-Javadoc)
 	 * @see visualap.GPanel#paintComponent(java.awt.Graphics)
 	 */
-/*	@Override
+	/*@Override
 	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
+//		super.paintComponent(g);
 		// paint printable items
 		paintPrintable(g);
 		
