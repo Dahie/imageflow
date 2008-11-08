@@ -55,7 +55,7 @@ public class UnitElement extends NodeAbstract {
 	/**
 	 * unit color
 	 */
-	protected Color color; 
+	private Color color = new Color(0xA0A0A0);
 	/**
 	 * help text, describing the unit's functionality
 	 */
@@ -115,6 +115,7 @@ public class UnitElement extends NodeAbstract {
 	protected int numMaxOutputs;
 
 	private int FIRST_ELEMENT = 0;
+
 
 	
 
@@ -361,7 +362,7 @@ public class UnitElement extends NodeAbstract {
 	 * Returns the name of this unit.
 	 * @return the unitName
 	 */
-	public String getName() {
+	public String getUnitName() {
 		return this.unitName;
 	}
 	
@@ -721,8 +722,13 @@ public class UnitElement extends NodeAbstract {
 	 */
 	public void showProperties() {
 		final GenericDialog gd = new GenericDialog("Parameter");
+		gd.addMessage(unitName);
+		gd.addMessage(" ");
 		final ArrayList<Parameter> parameterList = getParameters();
 		
+		if (parameterList.size() == 0)
+			gd.addMessage("No parameters that can be set");
+			
 		for (final Parameter parameter : parameterList) {
 			
 			if(parameter instanceof DoubleParameter) {
@@ -736,7 +742,7 @@ public class UnitElement extends NodeAbstract {
 						((ChoiceParameter)parameter).getChoices(), 
 						((ChoiceParameter)parameter).getValue());
 			} else if(parameter instanceof StringParameter) {
-				gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue());
+				gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(),40);
 			}			
 		}
 		
@@ -761,6 +767,15 @@ public class UnitElement extends NodeAbstract {
 			}
 		}
 	}
+
+	public Color getColor() {
+		return color;
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
+	}
+	
 	
 }
 

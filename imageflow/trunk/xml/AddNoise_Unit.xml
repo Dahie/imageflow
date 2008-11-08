@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This is the unit to add noise to an image. (No parameters to be set.)-->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Add Noise</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Add Noise");</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+  <HelpString>Adds noise to an image</HelpString>
+</General>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ImageType>-1</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ImageType>-1</ImageType>
+	</Output>
+</Outputs>
+
+</UnitDescription>

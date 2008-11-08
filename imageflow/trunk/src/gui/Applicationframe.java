@@ -21,7 +21,8 @@ import models.unit.UnitFactory;
 import models.unit.UnitList;
 import visualap.Delegate;
 import actions.CopyUnitAction;
-import actions.ExampleAction;
+import actions.Example1Action;
+import actions.Example2Action;
 import actions.PasteUnitAction;
 import actions.RunMacroAction;
 import actions.RunParaAction;
@@ -80,7 +81,7 @@ public class Applicationframe extends JFrame {
 	private void init() {
 		this.setTitle(TITLE);
 		this.setName(TITLE);
-		this.setSize(600, 400);
+		this.setSize(900, 450);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		addComponents();
@@ -98,7 +99,8 @@ public class Applicationframe extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		
 		JMenu fileMenu = new JMenu("File");
-		fileMenu.add(new ExampleAction(graphController));
+		fileMenu.add(new Example1Action(graphController));
+		fileMenu.add(new Example2Action(graphController));
 		JMenu editMenu = new JMenu("Edit");
 		editMenu.add(new CopyUnitAction(graphPanel.getSelection(), graphController.getCopyNodesList()));
 		editMenu.add(new PasteUnitAction(graphController.getCopyNodesList(), graphPanel));
@@ -163,14 +165,14 @@ public class Applicationframe extends JFrame {
 		this.add(graphScrollpane, BorderLayout.CENTER);
 		
 		// area for selecting unit to insert them in the graphpanel
-		JPanel unitSelectionPanel = new JPanel();
-		unitSelectionPanel.setName("Insert filter");
-		
-		JPanel selectUnitPanel = new InsertUnitPanel();
-		
-		
-		JScrollPane selectUnitScrollpane = new JScrollPane(selectUnitPanel); 
-		unitSelectionPanel.add(selectUnitScrollpane);
+//		JPanel unitSelectionPanel = new JPanel();
+//		unitSelectionPanel.setName("Insert filter");
+//		
+//		JPanel selectUnitPanel = new InsertUnitPanel();
+//		
+//		
+//		JScrollPane selectUnitScrollpane = new JScrollPane(selectUnitPanel); 
+//		unitSelectionPanel.add(selectUnitScrollpane);
 		
 		//properties of the selected node
 		JPanel propertiesPanel = new JPanel();
@@ -197,7 +199,7 @@ public class Applicationframe extends JFrame {
 		macroPanel.add(buttonRun, BorderLayout.SOUTH);
 		
 		JTabbedPane functionTabPane = new JTabbedPane();
-		functionTabPane.add(unitSelectionPanel);
+//		functionTabPane.add(unitSelectionPanel);
 		functionTabPane.add(propertiesPanel);
 		functionTabPane.add(logPanel);
 		functionTabPane.add(macroPanel);

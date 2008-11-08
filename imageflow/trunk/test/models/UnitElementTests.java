@@ -150,7 +150,7 @@ public class UnitElementTests extends TestCase {
 					mergeUnit.getOutputsMaxCount(), clone.getOutputsMaxCount());
 			assertEquals("number of max parameters", 
 					mergeUnit.getParametersMaxCount(), clone.getParametersMaxCount());
-			assertEquals("unit name", mergeUnit.getName(), clone.getName());
+			assertEquals("unit name", mergeUnit.getUnitName(), clone.getUnitName());
 			assertNotSame("unit id", mergeUnit.getUnitID(), clone.getUnitID());
 			assertFalse("Unitid not the same",(mergeUnit.getUnitID() == clone.getUnitID()));
 			

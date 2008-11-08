@@ -15,7 +15,17 @@ public abstract class Parameter {
 	 * parameter name that is shown in the unit
 	 */
 	protected String displayName; 
+	
+	protected boolean textArea = false;
 
+
+	public boolean isTextArea() {
+		return textArea;
+	}
+
+	public void setTextArea(boolean textfield) {
+		this.textArea = textfield;
+	}
 
 	/**
 	 * help text describing the functionality of this parameter

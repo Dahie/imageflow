@@ -23,7 +23,7 @@ public class RunMacroAction extends AbstractAction {
 	 * 
 	 */
 	public RunMacroAction() {
-		putValue(Action.NAME, "Run Generator");
+		putValue(Action.NAME, "Run Macro");
 	}
 	
 	

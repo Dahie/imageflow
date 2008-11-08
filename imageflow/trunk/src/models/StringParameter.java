@@ -18,6 +18,7 @@ public class StringParameter extends Parameter {
 	 */
 	protected String  stringValueDefault;
 
+	
 
 	/**
 	 * @param displayName
@@ -30,6 +31,14 @@ public class StringParameter extends Parameter {
 		this.stringValueDefault = stringParameter;
 		this.helpString = helpString;
 
+	}
+	
+	public StringParameter(String displayName, String stringParameter, String helpString, boolean isTextArea) {
+		this.displayName = displayName;
+		this.stringValue = stringParameter;
+		this.stringValueDefault = stringParameter;
+		this.helpString = helpString;
+		this.textArea = isTextArea; 
 	}
 
 	

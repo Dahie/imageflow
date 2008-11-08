@@ -6,12 +6,14 @@ import ij.ImageJ;
 import ij.plugin.Macro_Runner;
 
 import java.awt.Point;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import macro.MacroGenerator;
 import models.Connection;
 import models.ConnectionList;
+import models.unit.UnitDescription;
 import models.unit.UnitElement;
 import models.unit.UnitFactory;
 import models.unit.UnitList;
@@ -48,59 +50,59 @@ public class GraphController extends ApplicationController {
 		this.copyNodesList = new ArrayList<Node>();
 	}
 
-	public void setupExample() {
+	public void setupExample2() {
 
-		/*
-		 * Wurzelbaum
-		 */
 		
 		////////////////////////////////////////////////////////
 		// setup of units
 		////////////////////////////////////////////////////////
 		
 		
-//		unitElements.add(null);
+		UnitDescription sourceUnitDescription = new UnitDescription(new File("xml/ImageSource_Unit.xml"));
+		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 		
-		final UnitElement sourceUnit = UnitFactory.createSourceUnit("/Users/barthel/Applications/ImageJ/_images/zange1.png");
+		final UnitElement to8BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml/8Bit_Unit.xml")), new Point(150, 100));
+		final UnitElement to32BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml/32Bit_Unit.xml")), new Point(260, 100));
 
-		final UnitElement blurUnit = UnitFactory.createGaussianBlurUnit(new Point(150, 150));
+		final UnitElement convUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml/Convolver_Unit.xml")), new Point(400, 50));
+		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml/Convolver_Unit.xml")), new Point(400, 160));
+
+		final UnitElement squareUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml/Square_Unit.xml")), new Point(510, 50));
+		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml/Square_Unit.xml")), new Point(510, 160));
 		
-		final UnitElement mergeUnit = UnitFactory.createImageCalculatorUnit(new Point(320, 30));
-		
-		final UnitElement noiseUnit = UnitFactory.createAddNoiseUnit(new Point(450, 30));
-		noiseUnit.setDisplayUnit(true);
-		
+		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml/Add_Unit.xml")), new Point(650, 100));
+		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml/Fire_Unit.xml")), new Point(770, 100));
 		
 		// some mixing, so they are not in order
-		unitElements.add(noiseUnit);
-		unitElements.add(blurUnit);
 		unitElements.add(sourceUnit);
-		unitElements.add(mergeUnit);
-		
+		unitElements.add(to8BitUnit);
+		unitElements.add(to32BitUnit);
+		unitElements.add(convUnit);
+		unitElements.add(squareUnit);
+		unitElements.add(convUnit2);
+		unitElements.add(squareUnit2);
+		unitElements.add(addUnit);
+		unitElements.add(fireUnit);
+		fireUnit.setDisplayUnit(true);
 		
 		////////////////////////////////////////////////////////
 		// setup the connections
 		////////////////////////////////////////////////////////
 		
-		
-		
 		// add six connections
 		// the conn is established on adding
 		// fromUnit, fromOutputNumber, toUnit, toInputNumber
-		Connection con;
-		con = new Connection(sourceUnit,1,blurUnit,1);
-		connectionMap.add(con);
-		con = new Connection(blurUnit,1,mergeUnit,1);
-		connectionMap.add(con);
-		con = new Connection(sourceUnit,1,mergeUnit,2);
-		connectionMap.add(con);
-		con = new Connection(mergeUnit,1,noiseUnit,1);
-		connectionMap.add(con);
 		
-		// remove one connection
-		//connectionMap.remove( Connection.getID(2,1,5,1) );
-		
-		
+		connectionMap.add(new Connection(sourceUnit,1,to8BitUnit,1));
+		connectionMap.add(new Connection(to8BitUnit,1,to32BitUnit,1));
+		connectionMap.add(new Connection(to32BitUnit,1,convUnit,1));
+		connectionMap.add(new Connection(to32BitUnit,1,convUnit2,1));
+		connectionMap.add(new Connection(convUnit,1,squareUnit,1));
+		connectionMap.add(new Connection(convUnit2,1,squareUnit2,1));
+		connectionMap.add(new Connection(squareUnit,1,addUnit,1));
+		connectionMap.add(new Connection(squareUnit2,1,addUnit,2));
+		connectionMap.add(new Connection(addUnit,1,fireUnit,1));
+				
 	}
 	
 
@@ -208,7 +210,7 @@ public class GraphController extends ApplicationController {
 	// !!!
 	public static void main(final String[] args) {
 		final GraphController controller = new GraphController();
-		controller.setupExample();
+		controller.setupExample1();
 		controller.generateMacro();
 	}
 
@@ -317,5 +319,79 @@ public class GraphController extends ApplicationController {
 		// delete Unit
 		return unitElements.remove(unit);
 	}
+
+	public void setupExample1() {
+	
+			/*
+			 * Wurzelbaum
+			 */
+			
+			////////////////////////////////////////////////////////
+			// setup of units
+			////////////////////////////////////////////////////////
+			
+			
+	//		unitElements.add(null);
+			
+	//		final UnitElement sourceUnit = UnitFactory.createSourceUnit("/Users/barthel/Applications/ImageJ/_images/zange1.png");
+	//		
+	//		UnitDescription blurUnitDescription = new UnitDescription();
+	//		blurUnitDescription.setBlurValues();
+	//		blurUnitDescription.parseUnitValuesFromXmlFile("GaussianBlur_Unit.xml");
+	//		//final UnitElement blurUnit = UnitFactory.createGaussianBlurUnit(new Point(180, 50));
+	//		final UnitElement blurUnit = UnitFactory.createProcessingUnit(blurUnitDescription, new Point(180, 50));
+	//
+	//		UnitDescription mergeUnitDescription = new UnitDescription();
+	//		mergeUnitDescription.setImageCalculatorValues();
+	//		//final UnitElement mergeUnit = UnitFactory.createImageCalculatorUnit(new Point(320, 100));
+	//		final UnitElement mergeUnit = UnitFactory.createProcessingUnit(mergeUnitDescription,new Point(320, 100));
+	//		final UnitElement noiseUnit = UnitFactory.createAddNoiseUnit(new Point(450, 100));
+	//		noiseUnit.setDisplayUnit(true);
+			
+		//new File(uri)
+			UnitDescription sourceUnitDescription = new UnitDescription(new File("xml/ImageSource_Unit.xml"));
+			final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
+			
+			UnitDescription blurUnitDescription = new UnitDescription(new File("xml/GaussianBlur_Unit.xml"));
+			final UnitElement blurUnit = UnitFactory.createProcessingUnit(blurUnitDescription, new Point(180, 50));
+	
+			UnitDescription mergeUnitDescription = new UnitDescription(new File("xml/ImageCalculator_Unit.xml"));
+			final UnitElement mergeUnit = UnitFactory.createProcessingUnit(mergeUnitDescription,new Point(320, 100));
+			
+			UnitDescription noiseUnitDescription = new UnitDescription(new File("xml/AddNoise_Unit.xml"));
+			final UnitElement noiseUnit = UnitFactory.createProcessingUnit(noiseUnitDescription,new Point(450, 100));
+			noiseUnit.setDisplayUnit(true);
+			
+			// some mixing, so they are not in order
+			unitElements.add(noiseUnit);
+			unitElements.add(blurUnit);
+			unitElements.add(sourceUnit);
+			unitElements.add(mergeUnit);
+			
+			
+			////////////////////////////////////////////////////////
+			// setup the connections
+			////////////////////////////////////////////////////////
+			
+			
+			
+			// add six connections
+			// the conn is established on adding
+			// fromUnit, fromOutputNumber, toUnit, toInputNumber
+			Connection con;
+			con = new Connection(sourceUnit,1,blurUnit,1);
+			connectionMap.add(con);
+			con = new Connection(blurUnit,1,mergeUnit,1);
+			connectionMap.add(con);
+			con = new Connection(sourceUnit,1,mergeUnit,2);
+			connectionMap.add(con);
+			con = new Connection(mergeUnit,1,noiseUnit,1);
+			connectionMap.add(con);
+			
+			// remove one connection
+			//connectionMap.remove( Connection.getID(2,1,5,1) );
+			
+			
+		}
 	
 }

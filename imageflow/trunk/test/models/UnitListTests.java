@@ -22,7 +22,7 @@ public class UnitListTests extends TestCase {
 	public void testUnitListSelectionSorting() {
 		
 		final GraphController controller = new GraphController();
-		controller.setupExample();
+		controller.setupExample1();
 		final UnitList unsortedList = controller.getUnitElements();
 		int usortedListOriginalLength = unsortedList.size();
 		

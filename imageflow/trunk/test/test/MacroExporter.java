@@ -19,7 +19,7 @@ public class MacroExporter {
 		
 		// example UnitList
 		GraphController controller = new GraphController(); 
-		controller.setupExample();
+		controller.setupExample1();
 		UnitList unitList = controller.getUnitElements();
 		
 		XMLEncoder e;

@@ -69,7 +69,7 @@ public class NodeIcon {
 	 */
 	public NodeIcon(final UnitElement unit) {
 		this.unit = unit;
-		this.unitName = unit.getName();
+		this.unitName = unit.getUnitName();
 		
 		
 		
@@ -173,7 +173,7 @@ public class NodeIcon {
 	    
 	    // draw icon for display
 	    if(unit.isDisplayUnit()) {
-			int xDisplay = this.x+(width/2)-8;
+			int xDisplay = this.x+(width/2)+16;
 			int yDisplay = this.y+8;
 			g2.drawImage(this.displayIcon, xDisplay, yDisplay, null);
 	    }
@@ -192,22 +192,33 @@ public class NodeIcon {
 		Color cTop = new Color(84, 121, 203, 255);
 		Color cBottom = new Color(136, 169, 242, 255);
 
-		switch(unit.getType()) {
-		default:
-		case FILTER:
-			cTop = new Color(84, 121, 203, 255);
-			cBottom = new Color(136, 169, 242, 255);
-			break;
-		case SINK:
-			cTop = new Color(173, 137, 70, 255);
-			cBottom = new Color(200, 171, 118, 255);
-			break;
-		case SOURCE:
-			cTop = new Color(134, 171, 116, 255);
-			cBottom = new Color(179, 202, 176, 255);
-			break;
-		}
-
+		int delta = 20;
+		Color color = unit.getColor();
+		
+		int r = color.getRed();
+		int g = color.getGreen();
+		int b = color.getBlue();
+	
+//		switch(unit.getType()) {
+//		default:
+//		case FILTER:
+//			r = 110;
+//			g = 145;
+//			b = 222;
+//			break;
+//		case SINK:
+//			r = 186;
+//			g = 154;
+//			b = 94;
+//			break;
+//		case SOURCE:
+//			r = 156;
+//			g = 186;
+//			b = 146;
+//			break;
+//		}
+		cTop = new Color(r-delta, g-delta, b-delta, 255);
+		cBottom = new Color(r+delta, g+delta, b+delta, 255);
 		
 //		GradientPaint gradient1 = new GradientPaint(10,10,cTop,30,30,cBottom,true);
 		GradientPaint gradient1 = new GradientPaint(x+10,y+10,cTop,x+100,y+30,cBottom);
