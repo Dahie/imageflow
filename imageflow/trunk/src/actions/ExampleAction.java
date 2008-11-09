@@ -16,7 +16,7 @@ public class ExampleAction extends AbstractAction {
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
-		graphController.setupExample();
+		graphController.setupExample1();
 	}
 	
 	

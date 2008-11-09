@@ -220,7 +220,6 @@ public class NodeIcon {
 		cTop = new Color(r-delta, g-delta, b-delta, 255);
 		cBottom = new Color(r+delta, g+delta, b+delta, 255);
 		
-//		GradientPaint gradient1 = new GradientPaint(10,10,cTop,30,30,cBottom,true);
 		GradientPaint gradient1 = new GradientPaint(x+10,y+10,cTop,x+100,y+30,cBottom);
 	    g2.setPaint(gradient1);
 	    g2.fillRoundRect(x, y, widthIconBg, heightIconBg, arc, arc);

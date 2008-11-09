@@ -194,26 +194,12 @@ public class UnitElement extends NodeAbstract {
 		this.numMaxParameters = numParameters;
 		this.numMaxInputs = numInputs;
 		this.numMaxOutputs = numOutputs;
-		
+
+		this.parameters = new ArrayList<Parameter>();
 		this.inputs = new ArrayList<Input>();
-		/*for (int i = 1; i < getInputs().length; i++) {
-			getInputs()[i] = new Input(unitID,i);
-		}*/
-		
-		/*this.outputs = new Output[numOutputs+1]; 
-		for (int i = 1; i < outputs.length; i++) {
-			outputs[i] = new Output(unitID,i);
-		}*/
 		this.outputs = new ArrayList<Output>();
 		if(outputs.size() > 0)
 			outputs.get(FIRST_ELEMENT).setDoDisplay(false);
-		
-		
-		this.parameters = new ArrayList<Parameter>();
-//		this.parameters = new Parameter[numParameters+1];
-		/*for (int i = 1; i < parameters.length; i++) {
-			parameters[i] = new Parameter(i);
-		}*/
 		
 		unitComponentIcon= new NodeIcon(this);
 		unitIcon = unitComponentIcon.getImage();

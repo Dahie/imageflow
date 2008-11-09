@@ -6,6 +6,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/ij.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/junit-4.5.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/visualap11branch"/>
-	<classpathentry kind="lib" path="/Users/barthel/workspaces/VisualAp/imageflow/lib/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
