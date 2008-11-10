@@ -13,8 +13,11 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
+import models.BooleanParameter;
 import models.ChoiceParameter;
+import models.DoubleParameter;
 import models.ParameterFactory;
+import models.StringParameter;
 
 
 /**
@@ -23,20 +26,6 @@ import models.ParameterFactory;
  */
 public class UnitFactory {
 
-	public static UnitElement buildUnitElement(String name, String imageJsyntax, Point origin) {
-		
-		// 
-		UnitElement unit = new UnitElement(origin, name, imageJsyntax+" \n",1,1,0);
-		
-		// setup of the first input of unit 2
-		unit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
-		// setup of the first output of unit 2 
-		unit.addOutput("Output", "O", -1); // -1 means output will be the same type as the input
-		unit.updateUnitIcon();
-		return unit;
-		
-	}
-	
 	
 	/**
 	 * setup of a processing unit (Image Calculator  / Subtract)
@@ -57,9 +46,6 @@ public class UnitFactory {
 		
 		UnitElement mergeUnit = new UnitElement(origin, "Image Calculator", 
 				"run(\"Image Calculator...\", \"image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create 32-bit\"); \n",2,1,1);
-		// setup of the parameter
-//		mergeUnit.addParameter(
-//				ParameterFactory.createParameter(" 32-bit", true, "generate a floating point result image"));
 		String[] mathChoices = {"Add", "Subtract", "Multiply", "Devide", "AND", "OR", "XOR"};
 		mergeUnit.addParameter(
 				new ChoiceParameter("Math", mathChoices, "Add",
@@ -69,7 +55,7 @@ public class UnitFactory {
 		mergeUnit.addInput("Input1", "I1", ij.plugin.filter.PlugInFilter.DOES_ALL, false);
 		mergeUnit.addInput("Input2", "I2", ij.plugin.filter.PlugInFilter.DOES_ALL, false);
 		// setup of the first output of unit 1 
-		mergeUnit.addOutput("Output", "O", 32); // 32 means output will be floatingpoint
+		mergeUnit.addOutput("Output", "O", 32, false); // 32 means output will be floatingpoint
 		mergeUnit.updateUnitIcon();
 		return mergeUnit;
 	}
@@ -144,7 +130,7 @@ public class UnitFactory {
 		
 		// setup of the output of the (source) unit 0
 		int bitDepth = sourceUnit.getBitDepth();
-		sourceUnit.addOutput("Output", "O", bitDepth);
+		sourceUnit.addOutput("Output", "O", bitDepth, false);
 		sourceUnit.updateUnitIcon();
 		return sourceUnit;
 	}
@@ -176,7 +162,7 @@ public class UnitFactory {
 				ParameterFactory.createParameter("Background height", dimension.height, "Height of the background image"));
 		
 		// setup of the output of the (source) unit 0
-		sourceUnit.addOutput("Output", "O", ij.plugin.filter.PlugInFilter.DOES_RGB);
+		sourceUnit.addOutput("Output", "O", ij.plugin.filter.PlugInFilter.DOES_RGB, false);
 		sourceUnit.updateUnitIcon();
 		return sourceUnit;
 	}
@@ -230,7 +216,7 @@ public class UnitFactory {
 		// setup of the first input of unit 2
 		blurUnit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
 		// setup of the first output of unit 2 
-		blurUnit.addOutput("Output", "O", -1); // -1 means output will be the same type as the input
+		blurUnit.addOutput("Output", "O", -1, false); // -1 means output will be the same type as the input
 		blurUnit.updateUnitIcon();
 		return blurUnit;
 	}
@@ -243,7 +229,7 @@ public class UnitFactory {
 		int numInputs = unitDescription.numInputs;
 		int numOutputs = unitDescription.numOutputs;
 		int numParas = unitDescription.numParas;
-		UnitElement unitElement = new UnitElement(origin, unitName, imageJSyntax,numInputs,numOutputs,numParas);
+		UnitElement unitElement = new UnitElement(origin, unitName, imageJSyntax, numInputs, numOutputs, numParas);
 		Color color = unitDescription.color;
 		unitElement.setColor(color);
 		try {
@@ -254,23 +240,19 @@ public class UnitFactory {
 		
 		for (int i = 1; i <= numParas; i++) {
 			Para para = unitDescription.para[i];
-			String displayName = para.name;
-			Object value = null;
-			if (para.stringDataType.equals("double"))
-				value = para.doubleValue;
-			else if (para.stringDataType.equals("String"))
-				 value = para.stringValue;
-			else if (para.stringDataType.equals("StringArray"))
-				value = para.comboStringValues;
-			else if (para.stringDataType.equals("boolean"))
-				value = para.booleanValue;
-			else
-				System.err.println("Wrong parameter type");
-			
+			String name = para.name;
 			String helpString = para.helpString; 
-			unitElement.addParameter(ParameterFactory.createParameter(displayName, value, helpString));
+			if (para.dataTypeString.equals("double"))
+				unitElement.addParameter(new DoubleParameter(name, para.doubleValue, helpString));
+			else if (para.dataTypeString.equals("String"))
+				unitElement.addParameter(new StringParameter(name, para.stringValue, helpString));
+			else if (para.dataTypeString.equals("StringArray"))
+				unitElement.addParameter(new ChoiceParameter(name, para.comboStringValues, para.comboStringValues[para.choiceNumber], helpString));
+			else if (para.dataTypeString.equals("boolean"))
+				unitElement.addParameter(new BooleanParameter(name, para.booleanValue, para.trueString, helpString));
+		 	else
+				System.err.println("Wrong parameter type");			
 		}
-		
 		
 		// setup of the inputs
 		for (int i = 1; i <= numInputs; i++) {
@@ -289,8 +271,10 @@ public class UnitFactory {
 			String name = output.name;
 			String shortName = output.shortName;
 			int imageType = output.imageType;
+			boolean doDisplay = output.doDisplay;
 			
-			unitElement.addOutput(name, shortName, imageType); // -1 means output will be the same type as the input
+			unitElement.addOutput(name, shortName, imageType, doDisplay); // -1 means output will be the same type as the input
+			
 		}
 		
 		unitElement.updateUnitIcon();
@@ -319,7 +303,7 @@ public class UnitFactory {
 		// setup of the first input of unit 2
 		noiseUnit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
 		// setup of the first output of unit 2 
-		noiseUnit.addOutput("Output", "O", -1); // -1 means output will be the same type as the input
+		noiseUnit.addOutput("Output", "O", -1, false); // -1 means output will be the same type as the input
 		noiseUnit.updateUnitIcon();
 		return noiseUnit;
 	}
@@ -359,7 +343,7 @@ public class UnitFactory {
 		// setup of the first input of unit 2
 		noiseUnit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
 		// setup of the first output of unit 2 
-		noiseUnit.addOutput("Output", "O", -1); // -1 means output will be the same type as the input
+		noiseUnit.addOutput("Output", "O", -1, false); // -1 means output will be the same type as the input
 		noiseUnit.updateUnitIcon();
 		return noiseUnit;
 	}
@@ -372,7 +356,7 @@ public class UnitFactory {
 		// setup of the first input of unit 2
 		unit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
 		// setup of the first output of unit 2 
-		unit.addOutput("Output", "O", -1); // -1 means output will be the same type as the input
+		unit.addOutput("Output", "O", -1, false); // -1 means output will be the same type as the input
 		unit.updateUnitIcon();
 		return unit;
 	}
