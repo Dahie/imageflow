@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Convolve</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Convolve...", "text1=[PARA_STRING_1] PARA_BOOLEAN_1");</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+  <HelpString>Performs a convolution with the given kernel</HelpString>
+  	  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Kernel</Name>
+  		<DataType>String</DataType>
+  		<Value>-1 -1 -1   -1  8 -1    -1 -1 -1</Value>
+  		<HelpString>Kernel to be used for the convolution</HelpString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>normalize Kernel</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString>Should the kernel be normalized?</HelpString>
+  		<TrueString>normalize</TrueString>
+  	</Parameter> 
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>-1</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

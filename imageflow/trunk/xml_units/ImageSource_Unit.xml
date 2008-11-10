@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Image Source</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>open("PARA_STRING_1");</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Opens a new image</HelpString>
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Image</Name>
+  		<DataType>String</DataType>
+  		<Value>/Users/barthel/Applications/ImageJ/_images/zange1.png</Value>
+  		<HelpString>The source unit needs the path of an image file.</HelpString>
+  	</Parameter> 
+</Parameters>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
