@@ -194,12 +194,28 @@ public class UnitElement extends NodeAbstract {
 		this.numMaxParameters = numParameters;
 		this.numMaxInputs = numInputs;
 		this.numMaxOutputs = numOutputs;
-
-		this.parameters = new ArrayList<Parameter>();
+		
 		this.inputs = new ArrayList<Input>();
+		/*for (int i = 1; i < getInputs().length; i++) {
+			getInputs()[i] = new Input(unitID,i);
+		}*/
+		
+		/*this.outputs = new Output[numOutputs+1]; 
+		for (int i = 1; i < outputs.length; i++) {
+			outputs[i] = new Output(unitID,i);
+		}*/
+		
+		// ???
 		this.outputs = new ArrayList<Output>();
-		if(outputs.size() > 0)
-			outputs.get(FIRST_ELEMENT).setDoDisplay(false);
+//		if(outputs.size() > 0)
+//			outputs.get(FIRST_ELEMENT).setDoDisplay(false);
+		
+		
+		this.parameters = new ArrayList<Parameter>();
+//		this.parameters = new Parameter[numParameters+1];
+		/*for (int i = 1; i < parameters.length; i++) {
+			parameters[i] = new Parameter(i);
+		}*/
 		
 		unitComponentIcon= new NodeIcon(this);
 		unitIcon = unitComponentIcon.getImage();
@@ -232,9 +248,12 @@ public class UnitElement extends NodeAbstract {
 	 */
 	public boolean addOutput(String name, 
 			final String shortname, 
-			int outputBitDepth) {
+			int outputBitDepth,
+			boolean doDisplay) 
+	{
 		Output newOutput = new Output(unitID,this.outputs.size()+1, this);
 		newOutput.setupOutput(name, shortname, outputBitDepth);
+		newOutput.setDoDisplay(doDisplay);
 		return this.outputs.add(newOutput);
 	}
 
@@ -619,11 +638,12 @@ public class UnitElement extends NodeAbstract {
 		for (Output output : outputs) {
 			clone.addOutput(output.getName(), 
 				output.getShortDisplayName(), 
-				output.getImageBitDepth());
+				output.getImageBitDepth(),
+				output.isDoDisplay());
 		}
 		for (Parameter parameter : parameters) {
 			clone.addParameter(ParameterFactory.createParameter(parameter.getDisplayName(), 
-				parameter.getValue(), parameter.getHelpString()));
+				parameter.getValue(), parameter.getTrueString(), parameter.getHelpString()));
 		}
 		clone.setDisplayUnit(this.isDisplayUnit);
 		return clone;
@@ -748,6 +768,7 @@ public class UnitElement extends NodeAbstract {
 				((BooleanParameter) parameter).setValue((boolean) (gd.getNextBoolean()));
 			} else if (parameter instanceof ChoiceParameter) {
 				((ChoiceParameter) parameter).setValue((String) (gd.getNextChoice()));
+				// TODO set the ChoiceNumber to be able to save it
 			} else if (parameter instanceof StringParameter) {
 				((StringParameter) parameter).setValue((String) (gd.getNextString()));
 			}
