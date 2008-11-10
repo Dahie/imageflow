@@ -32,7 +32,7 @@ public class DelegatesController extends ApplicationController {
 	private DelegatesController() {
 		unitDelegates = new ArrayList<Delegate>();
 		
-		File folder = new File("xml");
+		File folder = new File("xml_units");
 	    File[] listOfFiles = folder.listFiles();
 
 	    for (int i = 0; i < listOfFiles.length; i++) {
