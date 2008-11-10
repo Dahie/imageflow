@@ -446,11 +446,11 @@ public class GraphController extends ApplicationController {
 				
 				// loop Ÿber alle connections
 				while (connectionsIterator.hasNext()) { 
-					Element actualUnitElement = (Element) connectionsIterator.next();
-					int fromUnitID = Integer.parseInt(actualUnitElement.getChild("FromUnitID").getValue());
-					int fromOutputNumber = Integer.parseInt(actualUnitElement.getChild("FromOutputNumber").getValue());
-					int toUnitID = Integer.parseInt(actualUnitElement.getChild("ToUnitID").getValue());
-					int toInputNumber = Integer.parseInt(actualUnitElement.getChild("ToInputNumber").getValue());
+					Element actualConnectionElement = (Element) connectionsIterator.next();
+					int fromUnitID = Integer.parseInt(actualConnectionElement.getChild("FromUnitID").getValue());
+					int fromOutputNumber = Integer.parseInt(actualConnectionElement.getChild("FromOutputNumber").getValue());
+					int toUnitID = Integer.parseInt(actualConnectionElement.getChild("ToUnitID").getValue());
+					int toInputNumber = Integer.parseInt(actualConnectionElement.getChild("ToInputNumber").getValue());
 					Connection con = new Connection(unitElement[fromUnitID], fromOutputNumber, unitElement[toUnitID], toInputNumber);
 					connectionMap.add(con);
 				}
