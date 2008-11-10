@@ -22,6 +22,7 @@ import models.unit.UnitList;
 import visualap.Delegate;
 import actions.CopyUnitAction;
 import actions.Example1Action;
+import actions.Example0_XML_Action;
 import actions.Example2Action;
 import actions.PasteUnitAction;
 import actions.RunMacroAction;
@@ -99,6 +100,7 @@ public class Applicationframe extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		
 		JMenu fileMenu = new JMenu("File");
+		fileMenu.add(new Example0_XML_Action(graphController));
 		fileMenu.add(new Example1Action(graphController));
 		fileMenu.add(new Example2Action(graphController));
 		JMenu editMenu = new JMenu("Edit");
