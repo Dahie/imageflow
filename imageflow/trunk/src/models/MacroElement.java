@@ -74,46 +74,112 @@ public class MacroElement {
 		this.commandSyntax = parseParameters(unit, this.commandSyntax, p);
 	}
 	
+	public void parseParameters(UnitElement unit, final int p) {
+		this.commandSyntax = parseParameters(unit, this.commandSyntax, p);
+	}
 
 	private static String parseParameters(UnitElement unit, 
 			String command,
-			int p) {
-		Parameter parameter = (Parameter) unit.getParameters().get(p);
+			int numParas) {
 		int u = unit.getUnitID();
 
+		int p = 0, pc = 0, pd = 0, ps = 0, pi = 0, pb = 0;
+
 		String searchString;
-		
-		searchString = "PARA_DOUBLE_" + (p+1);
-		if(command.contains(searchString)) { 
-			String parameterString = "" + ((DoubleParameter)parameter).getValue();
-			System.out.println("Unit: " + u + " Parameter: " + p + " Double Parameter: " + parameterString);
-			command = Tools.replace(command, searchString, parameterString);
-			System.out.println(command);
-		}
-		searchString = "PARA_STRING_" + (p+1);
-		if(command.contains(searchString)) {
-			String parameterString = "" + ((StringParameter)parameter).getValue();
-			System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
-			command = Tools.replace(command, searchString, parameterString);
-			System.out.println(command);
-		}
-		searchString = "PARA_INTEGER_" + (p+1);
-		if(command.contains(searchString)) {
-			String parameterInteger = "" + ((IntegerParameter)parameter).getValue();
-			System.out.println("Unit: " + u + " Parameter: " + p + " Integer Parameter: " + parameterInteger);
-			command = Tools.replace(command, searchString, parameterInteger);
-			System.out.println(command);
-		}
-		searchString = "PARA_BOOL_" + (p+1);
-		if(command.contains(searchString)) {
-			String parameterString = "" + ((BooleanParameter)parameter).getValue();
-			System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
-			command = Tools.replace(command, searchString, parameterString);
-			System.out.println(command);
+
+		while (p < numParas) {
+			Parameter parameter = (Parameter) unit.getParameters().get(p);
+
+			searchString = "PARA_DOUBLE_" + (pd+1);
+			if(command.contains(searchString) && parameter.getParaType().equals("double")) { 
+				String parameterString = "" + ((DoubleParameter)parameter).getValue();
+				System.out.println("Unit: " + u + " Parameter: " + p + " Double Parameter: " + parameterString);
+				command = Tools.replace(command, searchString, parameterString);
+				System.out.println(command);
+				pd++;
+				p++;
+			}
+			searchString = "PARA_STRING_" + (ps+1);
+			if(command.contains(searchString) && (parameter.getParaType().equals("String") || parameter.getParaType().equals("StringArray"))) {
+				String parameterString = "" + ((StringParameter)parameter).getValue();
+				System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
+				command = Tools.replace(command, searchString, parameterString);
+				System.out.println(command);
+				ps++;
+				p++;
+			}
+			searchString = "PARA_INTEGER_" + (pi+1);
+			if(command.contains(searchString) && parameter.getParaType().equals("int")) {
+				String parameterInteger = "" + ((IntegerParameter)parameter).getValue();
+				System.out.println("Unit: " + u + " Parameter: " + p + " Integer Parameter: " + parameterInteger);
+				command = Tools.replace(command, searchString, parameterInteger);
+				System.out.println(command);
+				pi++;
+				p++;
+			}
+			searchString = "PARA_BOOLEAN_" + (pb+1);
+			if(command.contains(searchString) && parameter.getParaType().equals("boolean")) {
+				boolean bool = ((BooleanParameter)parameter).getValue();
+				String parameterString =  (bool == true) ? ((BooleanParameter)parameter).getTrueString():""; 
+				//String parameterString = "" + ((BooleanParameter)parameter).getValue();
+				System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
+				command = Tools.replace(command, searchString, parameterString);
+				System.out.println(command);
+				pb++;
+				p++;
+			}
+			pc++;
+			if (p != pc) {
+				System.err.println("Error in parameters or ImageJ-syntax");
+				return command;
+			}
+				
 		}
 		// choiceParameter uses the PARA_STRING_x
 		return command;
 	}
+
+//	private static String parseParameters(UnitElement unit, 
+//			String command,
+//			int p) {
+//		Parameter parameter = (Parameter) unit.getParameters().get(p);
+//		int u = unit.getUnitID();
+//
+//		String searchString;
+//		
+//		searchString = "PARA_DOUBLE_" + (p+1);
+//		if(command.contains(searchString)) { 
+//			String parameterString = "" + ((DoubleParameter)parameter).getValue();
+//			System.out.println("Unit: " + u + " Parameter: " + p + " Double Parameter: " + parameterString);
+//			command = Tools.replace(command, searchString, parameterString);
+//			System.out.println(command);
+//		}
+//		searchString = "PARA_STRING_" + (p+1);
+//		if(command.contains(searchString)) {
+//			String parameterString = "" + ((StringParameter)parameter).getValue();
+//			System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
+//			command = Tools.replace(command, searchString, parameterString);
+//			System.out.println(command);
+//		}
+//		searchString = "PARA_INTEGER_" + (p+1);
+//		if(command.contains(searchString)) {
+//			String parameterInteger = "" + ((IntegerParameter)parameter).getValue();
+//			System.out.println("Unit: " + u + " Parameter: " + p + " Integer Parameter: " + parameterInteger);
+//			command = Tools.replace(command, searchString, parameterInteger);
+//			System.out.println(command);
+//		}
+//		searchString = "PARA_BOOLEAN_" + (p+1);
+//		if(command.contains(searchString)) {
+//			boolean bool = ((BooleanParameter)parameter).getValue();
+//			String parameterString =  (bool == true) ? ((BooleanParameter)parameter).getTrueString():""; 
+//			//String parameterString = "" + ((BooleanParameter)parameter).getValue();
+//			System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
+//			command = Tools.replace(command, searchString, parameterString);
+//			System.out.println(command);
+//		}
+//		// choiceParameter uses the PARA_STRING_x
+//		return command;
+//	}
 
 
 

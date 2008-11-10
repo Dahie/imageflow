@@ -23,6 +23,7 @@ public class DoubleParameter extends Parameter {
 		this.doubleValue = doubleParameter;
 		this.doubleValueDefault = doubleParameter;
 		this.helpString = helpString;
+		this.paraType = "double";
 	}
 
 	public void setParameter(String displayName, double doubleParameter, String helpString) {

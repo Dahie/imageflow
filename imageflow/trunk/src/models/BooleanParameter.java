@@ -27,11 +27,14 @@ public class BooleanParameter extends Parameter {
 	 */
 	public BooleanParameter(final String displayName, 
 			final boolean boolParameter, 
+			final String trueString,
 			String helpString) {
 		this.displayName = displayName;
 		this.booleanValue = boolParameter;
 		this.booleanValueDefault = boolParameter;
+		this.trueString = trueString;
 		this.helpString = helpString;
+		this.paraType = "boolean";
 	}
 
 	/**
@@ -44,6 +47,7 @@ public class BooleanParameter extends Parameter {
 		this.booleanValue = boolParameter;
 		this.booleanValueDefault = boolParameter;
 		this.helpString = helpString;
+		this.paraType = "boolean";
 	}
 	
 

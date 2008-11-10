@@ -132,9 +132,7 @@ public class Output extends Pin {
 	public Point getLocation() {
 		int height = parent.getDimension().height;
 		int y =  (i*height / super.nump ) - (height/(2*super.nump)) + parent.getOrigin().y;
-		Point point = new Point(parent.getOrigin().x+parent.getDimension().width, 
-				y
-				);
+		Point point = new Point(parent.getOrigin().x+parent.getDimension().width, y);
 		return point;
 	}
 

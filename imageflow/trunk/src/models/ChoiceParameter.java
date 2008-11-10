@@ -11,6 +11,7 @@ public class ChoiceParameter extends StringParameter {
 			final String helpString) {
 		super(displayName, choiceParameter, helpString);
 		this.choiceValues = choices;
+		this.paraType = "StringArray";
 	}
 	
 	/**

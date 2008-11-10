@@ -16,16 +16,9 @@ public abstract class Parameter {
 	 */
 	protected String displayName; 
 	
-	protected boolean textArea = false;
-
-
-	public boolean isTextArea() {
-		return textArea;
-	}
-
-	public void setTextArea(boolean textfield) {
-		this.textArea = textfield;
-	}
+	protected String trueString;
+	
+	protected String paraType;
 
 	/**
 	 * help text describing the functionality of this parameter
@@ -55,14 +48,24 @@ public abstract class Parameter {
 	public String getDisplayName() {
 		return displayName;
 	}
-
-
+	
+	public String getParaType() {
+		return paraType;
+	}
 	/**
 	 * Get the help description of this Parameter.
 	 * @return
 	 */
 	public String getHelpString() {
 		return helpString;
+	}
+	
+	/**
+	 * Get the help description of this Parameter.
+	 * @return
+	 */
+	public String getTrueString() {
+		return trueString;
 	}
 	
 	/**

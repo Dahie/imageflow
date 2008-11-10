@@ -30,15 +30,7 @@ public class StringParameter extends Parameter {
 		this.stringValue = stringParameter;
 		this.stringValueDefault = stringParameter;
 		this.helpString = helpString;
-
-	}
-	
-	public StringParameter(String displayName, String stringParameter, String helpString, boolean isTextArea) {
-		this.displayName = displayName;
-		this.stringValue = stringParameter;
-		this.stringValueDefault = stringParameter;
-		this.helpString = helpString;
-		this.textArea = isTextArea; 
+		this.paraType = "String";
 	}
 
 	
@@ -69,7 +61,6 @@ public class StringParameter extends Parameter {
 		this.stringValue = stringParameter;
 		this.stringValueDefault = stringParameter;
 		this.helpString = helpString;
-//		this.paraType = 1;
 	}
 	
 }
