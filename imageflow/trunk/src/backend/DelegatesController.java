@@ -1,5 +1,7 @@
 package backend;
 
+import helper.Tools;
+
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
@@ -37,7 +39,7 @@ public class DelegatesController extends ApplicationController {
 	    	if (listOfFiles[i].isFile()) {
 	    		System.out.println("File " + listOfFiles[i].getName());
 	    		
-	    		final UnitDescription unitDescription = new UnitDescription(listOfFiles[i]);
+	    		final UnitDescription unitDescription = new UnitDescription(Tools.getRoot(listOfFiles[i]));
 	    		unitDelegates.add(new UnitDelegate(unitDescription.getUnitName(), unitDescription.getHelpString()) {
 	    			@Override
 	    			public UnitElement createUnit(final Point origin) {
