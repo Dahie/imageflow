@@ -1,5 +1,11 @@
 package helper;
 
+import java.io.File;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
+
 public class Tools {
 
 	
@@ -16,5 +22,22 @@ public class Tools {
         result.append(str.substring(s));
         return result.toString();
     }
+	
+	public static Element getRoot(File file) {
+		try {
+			System.out.println("Reading xml-description");
+			SAXBuilder sb = new SAXBuilder();
+			Document doc = sb.build(file);
+
+			Element root = doc.getRootElement();
+			
+			return root;
+		}
+		catch (Exception e) {
+			System.err.println("Invalid XML-File!");
+			e.printStackTrace();
+		}
+		return null;
+	}	
 
 }
