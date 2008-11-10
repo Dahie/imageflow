@@ -196,9 +196,9 @@ public class UnitElementTests extends TestCase {
 	public void testAreImageDepthCompatible() {
 		
 		UnitElement unit1 = new UnitElement("unit1", "some syntax", 1, 1, 0);
-		unit1.addOutput("output1", "o", PlugInFilter.DOES_32);
-		unit1.addOutput("output2", "o", PlugInFilter.DOES_ALL);
-		unit1.addOutput("output2", "o", -1);
+		unit1.addOutput("output1", "o", PlugInFilter.DOES_32, false);
+		unit1.addOutput("output2", "o", PlugInFilter.DOES_ALL, false);
+		unit1.addOutput("output2", "o", -1, false);
 		UnitElement unit2 = new UnitElement("unit2", "some syntax", 1, 1, 0);
 		unit2.addInput("input1", "i", PlugInFilter.DOES_32, false);
 		unit2.addInput("input2", "i", PlugInFilter.DOES_16, false);
