@@ -11,12 +11,25 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
+import java.util.ArrayList;
 
-public class CommentNode extends NodeText {
+import backend.Model;
+import backend.ModelListener;
 
+import com.sun.tools.javac.util.List;
+
+/**
+ * Note-Node, sorry the pun, this is a Unit element, just for writing a note.
+ * @author danielsenff
+ *
+ */
+public class CommentNode extends NodeText implements Model {
+
+	private final ArrayList<ModelListener> listeners;
 	
 	public CommentNode(Point point, String string) {
 		super(point, string);
+		this.listeners = new ArrayList<ModelListener>();
 	}
 
 	@Override
@@ -52,6 +65,27 @@ public class CommentNode extends NodeText {
 		g2.setFont(saveFont);
 		g2.setColor(saveColor);
         return new Rectangle(origin, getDimension());
+	}
+
+	public void addModelListener(ModelListener listener) {
+		if (! this.listeners.contains(listener)) {
+			this.listeners.add(listener);
+			notifyModelListener(listener);
+		}
+	}
+
+	public void notifyModelListener(ModelListener listener) {
+		listener.modelChanged(this);
+	}
+
+	public void notifyModelListeners() {
+		for (final ModelListener listener : this.listeners) {
+			notifyModelListener(listener);
+		}
+	}
+
+	public void removeModelListener(ModelListener listener) {
+		this.listeners.remove(listener);
 	}
 	
 }

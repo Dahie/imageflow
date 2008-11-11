@@ -15,7 +15,7 @@
   	<Parameter>
   		<Name>Math</Name>
   		<DataType>StringArray</DataType>
-  		<Value>Add Subtract Multiply Devide AND OR XOR</Value>
+  		<Value>Add Subtract Multiply Divide AND OR XOR</Value>
   		<HelpString>Defines what math should be used to merge both images</HelpString>
   		<ChoiceNumber>1</ChoiceNumber></Parameter>
   	<Parameter>

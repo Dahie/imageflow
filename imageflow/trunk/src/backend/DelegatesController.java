@@ -113,6 +113,11 @@ public class DelegatesController extends ApplicationController {
 
 	}
 	
+	/**
+	 * {@link DelegatesController} is a Singleton, 
+	 * this returns the available Instance.
+	 * @return
+	 */
 	public static DelegatesController getInstance() {
 		if(controller == null) {
 			controller = new DelegatesController();

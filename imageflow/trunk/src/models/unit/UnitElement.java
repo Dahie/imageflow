@@ -19,6 +19,9 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.util.ArrayList;
 
+import backend.Model;
+import backend.ModelListener;
+
 import models.BooleanParameter;
 import models.ChoiceParameter;
 import models.DoubleParameter;
@@ -36,7 +39,7 @@ import models.StringParameter;
  * @author danielsenff
  *
  */
-public class UnitElement extends NodeAbstract {
+public class UnitElement extends NodeAbstract implements Model {
 	
 	/**
 	 * number of units instatiated, incremented with each new object
@@ -115,6 +118,8 @@ public class UnitElement extends NodeAbstract {
 	protected int numMaxOutputs;
 
 	private int FIRST_ELEMENT = 0;
+
+	private ArrayList<ModelListener> listeners;
 
 
 	
@@ -195,27 +200,10 @@ public class UnitElement extends NodeAbstract {
 		this.numMaxInputs = numInputs;
 		this.numMaxOutputs = numOutputs;
 		
+		this.listeners = new ArrayList<ModelListener>();
 		this.inputs = new ArrayList<Input>();
-		/*for (int i = 1; i < getInputs().length; i++) {
-			getInputs()[i] = new Input(unitID,i);
-		}*/
-		
-		/*this.outputs = new Output[numOutputs+1]; 
-		for (int i = 1; i < outputs.length; i++) {
-			outputs[i] = new Output(unitID,i);
-		}*/
-		
-		// ???
 		this.outputs = new ArrayList<Output>();
-//		if(outputs.size() > 0)
-//			outputs.get(FIRST_ELEMENT).setDoDisplay(false);
-		
-		
 		this.parameters = new ArrayList<Parameter>();
-//		this.parameters = new Parameter[numParameters+1];
-		/*for (int i = 1; i < parameters.length; i++) {
-			parameters[i] = new Parameter(i);
-		}*/
 		
 		unitComponentIcon= new NodeIcon(this);
 		unitIcon = unitComponentIcon.getImage();
@@ -254,6 +242,7 @@ public class UnitElement extends NodeAbstract {
 		Output newOutput = new Output(unitID,this.outputs.size()+1, this);
 		newOutput.setupOutput(name, shortname, outputBitDepth);
 		newOutput.setDoDisplay(doDisplay);
+		notifyModelListeners();
 		return this.outputs.add(newOutput);
 	}
 
@@ -263,6 +252,7 @@ public class UnitElement extends NodeAbstract {
 	 * @return
 	 */
 	public boolean addOutput(final Output newOutput) {
+		notifyModelListeners();
 		return this.outputs.add(newOutput);
 	}
 	
@@ -332,6 +322,7 @@ public class UnitElement extends NodeAbstract {
 			boolean needToCopyInput) {
 		Input newInput = new Input(this, this.inputs.size()+1);
 		newInput.setupInput(displayName, shortDisplayName, inputImageBitDepth, needToCopyInput);
+		notifyModelListeners();
 		return this.inputs.add(newInput);
 	}
 
@@ -379,6 +370,7 @@ public class UnitElement extends NodeAbstract {
 		this.isDisplayUnit = isDisplayUnit;
 		if(outputs.size() > 1)
 			outputs.get(FIRST_ELEMENT ).setDoDisplay(isDisplayUnit);
+		notifyModelListeners();
 	}
 
 	/**
@@ -388,27 +380,6 @@ public class UnitElement extends NodeAbstract {
 	public boolean isDisplayUnit() {
 		return isDisplayUnit;
 	}
-
-	/**
-	 * @param class1
-	 * @param string
-	 * @param string2
-	 * @param string3
-	 */
-	/*public void addParameter(Class type, String string,
-			String string2, String string3) {
-		
-		
-		if (type == String.class) {
-			StringParameter parameter = new StringParameter(parameterNumber);
-		} else if (type == Boolean.class) {
-			BooleanParameter parameter = new BooleanParameter(parameterNumber);
-		} else if (type == Double.class){
-			DoubleParameter parameter = new DoubleParameter(parameterNumber);
-		}
-		
-		addParameter(parameter);
-	}*/
 		
 	/**
 	 * Add a Parameter to the unit
@@ -419,6 +390,7 @@ public class UnitElement extends NodeAbstract {
 		if(this.numMaxParameters > parameters.size()) {
 			final int parameterNumber = parameters.size()+1;
 			parameter.setParameterNumber(parameterNumber);
+			notifyModelListeners();
 			return this.parameters.add(parameter);
 		}
 		return false;
@@ -501,6 +473,7 @@ public class UnitElement extends NodeAbstract {
 	 */
 	public void setIcon(BufferedImage bufferedImage) {
 		this.icon = bufferedImage;
+		notifyModelListeners();
 	}
 	
 	public void updateUnitIcon() {
@@ -660,6 +633,7 @@ public class UnitElement extends NodeAbstract {
 		for (Output output : outputs) {
 			output.setMark(mark);
 		}
+		notifyModelListeners();
 	}
 	
 	
@@ -781,8 +755,29 @@ public class UnitElement extends NodeAbstract {
 	
 	public void setColor(Color color) {
 		this.color = color;
+		notifyModelListeners();
 	}
+
 	
-	
+	public void addModelListener(ModelListener listener) {
+		if (! this.listeners.contains(listener)) {
+			this.listeners.add(listener);
+			notifyModelListener(listener);
+		}
+	}
+
+	public void notifyModelListener(ModelListener listener) {
+		listener.modelChanged(this);
+	}
+
+	public void notifyModelListeners() {
+		for (final ModelListener listener : this.listeners) {
+			notifyModelListener(listener);
+		}
+	}
+
+	public void removeModelListener(ModelListener listener) {
+		this.listeners.remove(listener);
+	}
 }
 

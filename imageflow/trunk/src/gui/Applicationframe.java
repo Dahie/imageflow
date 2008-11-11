@@ -1,5 +1,6 @@
 package gui;
 import graph.Edges;
+import graph.Node;
 import helper.FileDrop;
 
 import java.awt.BorderLayout;
@@ -17,18 +18,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
+import models.unit.CommentNode;
 import models.unit.UnitFactory;
 import models.unit.UnitList;
 import visualap.Delegate;
 import actions.CopyUnitAction;
-import actions.Example1Action;
 import actions.Example0_XML_Action;
+import actions.Example1Action;
 import actions.Example2Action;
 import actions.PasteUnitAction;
 import actions.RunMacroAction;
 import actions.RunParaAction;
 import backend.DelegatesController;
 import backend.GraphController;
+import backend.Model;
+import backend.ModelListener;
 
 /**
  * 
@@ -80,6 +84,7 @@ public class Applicationframe extends JFrame {
 	 * 
 	 */
 	private void init() {
+		
 		this.setTitle(TITLE);
 		this.setName(TITLE);
 		this.setSize(900, 450);
@@ -90,7 +95,33 @@ public class Applicationframe extends JFrame {
 		addMenu();
 		
 		this.setVisible(true);
+		
+		// register listeners
+		registerModelListeners();
+		
 //		this.pack();
+	}
+
+	/**
+	 * Register the Modellisteners.
+	 */
+	private void registerModelListeners() {
+		// usually on startup this is empty
+		for (Node node : units) {
+			((CommentNode)node).addModelListener(
+					new ModelListener () {
+						public void modelChanged (final Model hitModel)	{
+							graphPanel.invalidate();
+						}
+					});
+		}
+		
+		units.addModelListener(new ModelListener() {
+			public void modelChanged(Model model) {
+				graphPanel.repaint();
+			}
+			
+		});
 	}
 
 	/**

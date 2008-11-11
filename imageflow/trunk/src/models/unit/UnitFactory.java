@@ -222,7 +222,15 @@ public class UnitFactory {
 	}
 	
 	
-	public static UnitElement createProcessingUnit(UnitDescription unitDescription, Point origin) {
+	/**
+	 * Creates a {@link UnitElement} based on the given Descriptions.
+	 * @param unitDescription
+	 * @param origin
+	 * @return
+	 */
+	public static UnitElement createProcessingUnit(
+			final UnitDescription unitDescription, 
+			final Point origin) {
 		// 
 		String unitName = unitDescription.unitName;
 		String imageJSyntax = unitDescription.imageJSyntax;

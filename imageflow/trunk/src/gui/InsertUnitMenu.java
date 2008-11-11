@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import backend.Model;
+import backend.ModelListener;
+
 import models.unit.CommentNode;
 import models.unit.UnitDelegate;
 import models.unit.UnitElement;
@@ -40,13 +43,18 @@ public class InsertUnitMenu extends JMenu {
 				JMenuItem source = (JMenuItem)(e.getSource());
 				String action = source.getText();
 				if (action.equals("Comment")) {	
-					// corrected fault: NodeText instead of NodeBean
-					Node n = new CommentNode(new Point(savedPoint), "text"); savedPoint.translate(4, 4);
+					CommentNode n = new CommentNode(new Point(savedPoint), "text"); 
+					savedPoint.translate(4, 4);
 					System.out.println(n);
 					activePanel.getNodeL().add(n, "text$0");
 					activePanel.getSelection().clear();
 					activePanel.getSelection().add(n);
 					activePanel.repaint();
+					n.addModelListener(new ModelListener() {
+						public void modelChanged(Model model) {
+							activePanel.repaint();
+						}
+					});
 					return;
 				}
 
@@ -55,13 +63,17 @@ public class InsertUnitMenu extends JMenu {
 					UnitDelegate delegate = (UnitDelegate)availableUnits.get(i); 
 					if (delegate.getName().equals(action)) {
 						try {
-							//							Object myBean = delegate.get(i).clazz.newInstance();
 							UnitElement n = delegate.createUnit(savedPoint);
 							n.setContext(activePanel.getGlobalVars());
 							activePanel.getNodeL().add(n, activePanel.shortName(action));
 							activePanel.getSelection().clear();
 							activePanel.getSelection().add(n);
 							activePanel.repaint();
+							n.addModelListener(new ModelListener() {
+								public void modelChanged(Model model) {
+									activePanel.repaint();
+								}
+							});
 						} catch (Exception ex) {
 							ErrorPrinter.printInfo("instantiation of a new bean failed"+ ex);
 						}
