@@ -20,12 +20,12 @@
 </Parameters>
 
 <Outputs> 
-	<Output>
+	
+<Output>
 		<Name>Output</Name>
 		<ShortName>O</ShortName>	
 		<ImageType>-1</ImageType>
 		<DoDisplay>false</DoDisplay>
-	</Output>
-</Outputs>
+	</Output></Outputs>
 
 </UnitDescription>

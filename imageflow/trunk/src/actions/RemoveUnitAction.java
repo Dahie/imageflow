@@ -6,6 +6,8 @@ import graph.Selection;
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
 
+import javax.swing.KeyStroke;
+
 import models.unit.UnitElement;
 import backend.GraphController;
 
@@ -13,11 +15,13 @@ public class RemoveUnitAction extends AbstractUnitAction {
 
 	GraphController controller;
 	
-	
 	public RemoveUnitAction(final Selection<Node> selection, final GraphController controller) {
 		super(selection);
 		this.controller = controller;
-		putValue(NAME, "Remove unit");
+		putValue(NAME, "Remove");
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("DELETE"));
+//		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("BACKSPACE"));
+		
 	}
 
 	

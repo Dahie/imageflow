@@ -37,6 +37,7 @@ public class IntegerParameter extends Parameter {
 		this.integerValue = integerParameter;
 		this.integerValueDefault = integerParameter;
 		this.helpString = helpString;
+		this.paraType = "integer";
 	}
 
 	public void setParameter(String displayName, int integerParameter, String helpString) {
@@ -44,6 +45,7 @@ public class IntegerParameter extends Parameter {
 		this.integerValue = integerParameter;
 		this.integerValueDefault = integerParameter;
 		this.helpString = helpString;
+		this.paraType = "integer";
 	}
 	
 	public Integer getValue() {

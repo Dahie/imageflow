@@ -91,7 +91,8 @@ public class MacroElement {
 			Parameter parameter = (Parameter) unit.getParameters().get(p);
 
 			searchString = "PARA_DOUBLE_" + (pd+1);
-			if(command.contains(searchString) && parameter.getParaType().equals("double")) { 
+			String paraType = parameter.getParaType().toLowerCase();
+			if(command.contains(searchString) && paraType.equals("double")) { 
 				String parameterString = "" + ((DoubleParameter)parameter).getValue();
 				System.out.println("Unit: " + u + " Parameter: " + p + " Double Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, parameterString);
@@ -100,7 +101,7 @@ public class MacroElement {
 				p++;
 			}
 			searchString = "PARA_STRING_" + (ps+1);
-			if(command.contains(searchString) && (parameter.getParaType().equals("String") || parameter.getParaType().equals("StringArray"))) {
+			if(command.contains(searchString) && (paraType.equals("string") || paraType.equals("stringarray"))) {
 				String parameterString = "" + ((StringParameter)parameter).getValue();
 				System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, parameterString);
@@ -109,7 +110,7 @@ public class MacroElement {
 				p++;
 			}
 			searchString = "PARA_INTEGER_" + (pi+1);
-			if(command.contains(searchString) && parameter.getParaType().equals("int")) {
+			if(command.contains(searchString) && paraType.equals("integer")) {
 				String parameterInteger = "" + ((IntegerParameter)parameter).getValue();
 				System.out.println("Unit: " + u + " Parameter: " + p + " Integer Parameter: " + parameterInteger);
 				command = Tools.replace(command, searchString, parameterInteger);
@@ -118,7 +119,7 @@ public class MacroElement {
 				p++;
 			}
 			searchString = "PARA_BOOLEAN_" + (pb+1);
-			if(command.contains(searchString) && parameter.getParaType().equals("boolean")) {
+			if(command.contains(searchString) && paraType.equals("boolean")) {
 				boolean bool = ((BooleanParameter)parameter).getValue();
 				String parameterString =  (bool == true) ? ((BooleanParameter)parameter).getTrueString():""; 
 				//String parameterString = "" + ((BooleanParameter)parameter).getValue();

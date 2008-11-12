@@ -36,7 +36,7 @@ public class DelegatesController extends ApplicationController {
 	    File[] listOfFiles = folder.listFiles();
 
 	    for (int i = 0; i < listOfFiles.length; i++) {
-	    	if (listOfFiles[i].isFile()) {
+	    	if (listOfFiles[i].isFile() && isXML(listOfFiles[i])) {
 	    		System.out.println("File " + listOfFiles[i].getName());
 	    		
 	    		final UnitDescription unitDescription = new UnitDescription(Tools.getRoot(listOfFiles[i]));
@@ -113,6 +113,10 @@ public class DelegatesController extends ApplicationController {
 
 	}
 	
+	private boolean isXML(File file) {
+		return file.getName().toLowerCase().contains("xml");
+	}
+
 	/**
 	 * {@link DelegatesController} is a Singleton, 
 	 * this returns the available Instance.

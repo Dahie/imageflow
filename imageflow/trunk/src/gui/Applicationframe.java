@@ -27,6 +27,7 @@ import actions.Example0_XML_Action;
 import actions.Example1Action;
 import actions.Example2Action;
 import actions.PasteUnitAction;
+import actions.RemoveUnitAction;
 import actions.RunMacroAction;
 import actions.RunParaAction;
 import backend.DelegatesController;
@@ -137,6 +138,7 @@ public class Applicationframe extends JFrame {
 		JMenu editMenu = new JMenu("Edit");
 		editMenu.add(new CopyUnitAction(graphPanel.getSelection(), graphController.getCopyNodesList()));
 		editMenu.add(new PasteUnitAction(graphController.getCopyNodesList(), graphPanel));
+		editMenu.add(new RemoveUnitAction(graphPanel.getSelection(),graphController));
 		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates);
 		JMenu windowMenu = new JMenu("Window");
 		JMenu helpMenu = new JMenu("Help");

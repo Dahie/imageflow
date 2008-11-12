@@ -11,11 +11,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 
 import models.BooleanParameter;
 import models.ChoiceParameter;
 import models.DoubleParameter;
+import models.IntegerParameter;
 import models.ParameterFactory;
 import models.StringParameter;
 
@@ -27,6 +27,88 @@ import models.StringParameter;
 public class UnitFactory {
 
 	
+	
+	/**
+	 * Creates a {@link UnitElement} based on the given Descriptions.
+	 * @param unitDescription
+	 * @param origin
+	 * @return
+	 */
+	public static UnitElement createProcessingUnit(
+			final UnitDescription unitDescription, 
+			final Point origin) {
+		// 
+		String unitName = unitDescription.unitName;
+		String imageJSyntax = unitDescription.imageJSyntax;
+		int numInputs = unitDescription.numInputs;
+		int numOutputs = unitDescription.numOutputs;
+		int numParas = unitDescription.numParas;
+		UnitElement unitElement = new UnitElement(origin, unitName, imageJSyntax, numInputs, numOutputs, numParas);
+		Color color = unitDescription.color;
+		unitElement.setColor(color);
+		
+		// add an icon if there is one mentioned and found
+		File iconFile = new File(unitDescription.pathToIcon);
+//		String iconPath = "bin/res/blur.png";
+		if(iconFile.exists()) {
+			try {
+				unitElement.setIcon(ImageIO.read(iconFile));	
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		for (int i = 1; i <= numParas; i++) {
+			Para para = unitDescription.para[i];
+			String name = para.name;
+			String helpString = para.helpString; 
+			String paraType = para.dataTypeString.toLowerCase();
+			if (paraType.equals("double"))
+				unitElement.addParameter(new DoubleParameter(name, para.doubleValue, helpString));
+			else if (paraType.equals("integer"))
+				unitElement.addParameter(new IntegerParameter(name, para.integerValue, helpString));
+			else if (paraType.equals("string"))
+				unitElement.addParameter(new StringParameter(name, para.stringValue, helpString));
+			else if (paraType.equals("stringarray"))
+				unitElement.addParameter(new ChoiceParameter(name, para.comboStringValues, para.comboStringValues[para.choiceNumber], helpString));
+			else if (paraType.equals("boolean"))
+				unitElement.addParameter(new BooleanParameter(name, para.booleanValue, para.trueString, helpString));
+		 	else
+				System.err.println("Wrong parameter type");			
+		}
+		
+		// setup of the inputs
+		for (int i = 1; i <= numInputs; i++) {
+			Input input = unitDescription.input[i];
+			String name = input.name;
+			String shortName = input.shortName;
+			int imageType = input.imageType;
+			boolean needToCopyInput = input.needToCopyInput;
+			
+			unitElement.addInput(name, shortName, imageType, needToCopyInput);
+		}
+		
+		// setup of the output(s)
+		for (int i = 1; i <= numOutputs; i++) {
+			Output output = unitDescription.output[i];
+			String name = output.name;
+			String shortName = output.shortName;
+			int imageType = output.imageType;
+			boolean doDisplay = output.doDisplay;
+			
+			unitElement.addOutput(name, shortName, imageType, doDisplay); // -1 means output will be the same type as the input
+			
+		}
+		
+		unitElement.updateUnitIcon();
+		return unitElement;
+	}
+	
+	
+	
+	
+
+	
 	/**
 	 * setup of a processing unit (Image Calculator  / Subtract)
 	 * display name, syntax, 2 inputs (as titles), 1 output, 1 parameter
@@ -36,6 +118,88 @@ public class UnitFactory {
 		return createImageCalculatorUnit(new Point(30,30));
 	}
 	
+	
+	/**
+	 * setup of a processing unit (gaussian blur)
+	 * display name, syntax: "run("Gaussian Blur...", "sigma=2");", 1 input, 1 output, 1 parameter
+	 * @return
+	 */
+	public static UnitElement createAddNoiseUnit() {
+		return createAddNoiseUnit(new Point(30,30));
+	}
+	
+	/**
+	 * setup of a processing unit (add noise)
+	 * display name, syntax: "run("Add Noise");", 1 input, 1 output, 0 parameter
+	 * @param origin
+	 * @return
+	 */
+	public static UnitElement createAddNoiseUnit(Point origin) {
+		// 
+		UnitElement noiseUnit = new UnitElement(origin, "Add Noise", "run(\"Add Noise\"); \n",1,1,0);
+		
+		// setup of the first input of unit 2
+		noiseUnit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
+		// setup of the first output of unit 2 
+		noiseUnit.addOutput("Output", "O", -1, false); // -1 means output will be the same type as the input
+		noiseUnit.updateUnitIcon();
+		return noiseUnit;
+	}
+	
+	
+	public static UnitElement createHistogramUnit(Point origin) {
+		// 
+		UnitElement unit = new UnitElement(origin, "Histogram", "run(\"Histogram\"); \n",1,0,0);
+		
+		// setup of the first input of unit 2
+		unit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
+		// setup of the first output of unit 2 
+		unit.updateUnitIcon();
+		return unit;
+	}
+	
+	
+	/**
+	 * setup of a processing unit (gaussian blur)
+	 * display name, syntax: "run("Find Edges");", 1 input, 1 output, 1 parameter
+	 * @return
+	 */
+	public static UnitElement createFindEdgesUnit() {
+		return createFindEdgesUnit(new Point(30,30));
+	}
+	
+	/**
+	 * setup of a processing unit (add noise)
+	 * display name, syntax: "run("Find Edges");", 1 input, 1 output, 0 parameter
+	 * @param origin
+	 * @return
+	 */
+	public static UnitElement createFindEdgesUnit(Point origin) {
+		// 
+		UnitElement noiseUnit = new UnitElement(origin, "Find Edges", "	run(\"Find Edges\");\n",1,1,0);
+		
+		// setup of the first input of unit 2
+		noiseUnit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
+		// setup of the first output of unit 2 
+		noiseUnit.addOutput("Output", "O", -1, false); // -1 means output will be the same type as the input
+		noiseUnit.updateUnitIcon();
+		return noiseUnit;
+	}
+
+	
+	public static UnitElement createInvertUnit(Point origin) {
+		// 
+		UnitElement unit = new UnitElement(origin, "Invert", "	run(\"Invert\");\n",1,1,0);
+		
+		// setup of the first input of unit 2
+		unit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
+		// setup of the first output of unit 2 
+		unit.addOutput("Output", "O", -1, false); // -1 means output will be the same type as the input
+		unit.updateUnitIcon();
+		return unit;
+	}
+	
+
 	/**
 	 * setup of a processing unit (Image Calculator  / Subtract)
 	 * display name, syntax, 2 inputs (as titles), 1 output, 1 parameter
@@ -219,154 +383,6 @@ public class UnitFactory {
 		blurUnit.addOutput("Output", "O", -1, false); // -1 means output will be the same type as the input
 		blurUnit.updateUnitIcon();
 		return blurUnit;
-	}
-	
-	
-	/**
-	 * Creates a {@link UnitElement} based on the given Descriptions.
-	 * @param unitDescription
-	 * @param origin
-	 * @return
-	 */
-	public static UnitElement createProcessingUnit(
-			final UnitDescription unitDescription, 
-			final Point origin) {
-		// 
-		String unitName = unitDescription.unitName;
-		String imageJSyntax = unitDescription.imageJSyntax;
-		int numInputs = unitDescription.numInputs;
-		int numOutputs = unitDescription.numOutputs;
-		int numParas = unitDescription.numParas;
-		UnitElement unitElement = new UnitElement(origin, unitName, imageJSyntax, numInputs, numOutputs, numParas);
-		Color color = unitDescription.color;
-		unitElement.setColor(color);
-		try {
-			unitElement.setIcon(ImageIO.read(new File("bin/res/blur.png")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		for (int i = 1; i <= numParas; i++) {
-			Para para = unitDescription.para[i];
-			String name = para.name;
-			String helpString = para.helpString; 
-			if (para.dataTypeString.equals("double"))
-				unitElement.addParameter(new DoubleParameter(name, para.doubleValue, helpString));
-			else if (para.dataTypeString.equals("String"))
-				unitElement.addParameter(new StringParameter(name, para.stringValue, helpString));
-			else if (para.dataTypeString.equals("StringArray"))
-				unitElement.addParameter(new ChoiceParameter(name, para.comboStringValues, para.comboStringValues[para.choiceNumber], helpString));
-			else if (para.dataTypeString.equals("boolean"))
-				unitElement.addParameter(new BooleanParameter(name, para.booleanValue, para.trueString, helpString));
-		 	else
-				System.err.println("Wrong parameter type");			
-		}
-		
-		// setup of the inputs
-		for (int i = 1; i <= numInputs; i++) {
-			Input input = unitDescription.input[i];
-			String name = input.name;
-			String shortName = input.shortName;
-			int imageType = input.imageType;
-			boolean needToCopyInput = input.needToCopyInput;
-			
-			unitElement.addInput(name, shortName, imageType, needToCopyInput);
-		}
-		
-		// setup of the output(s)
-		for (int i = 1; i <= numOutputs; i++) {
-			Output output = unitDescription.output[i];
-			String name = output.name;
-			String shortName = output.shortName;
-			int imageType = output.imageType;
-			boolean doDisplay = output.doDisplay;
-			
-			unitElement.addOutput(name, shortName, imageType, doDisplay); // -1 means output will be the same type as the input
-			
-		}
-		
-		unitElement.updateUnitIcon();
-		return unitElement;
-	}
-	
-	/**
-	 * setup of a processing unit (gaussian blur)
-	 * display name, syntax: "run("Gaussian Blur...", "sigma=2");", 1 input, 1 output, 1 parameter
-	 * @return
-	 */
-	public static UnitElement createAddNoiseUnit() {
-		return createAddNoiseUnit(new Point(30,30));
-	}
-	
-	/**
-	 * setup of a processing unit (add noise)
-	 * display name, syntax: "run("Add Noise");", 1 input, 1 output, 0 parameter
-	 * @param origin
-	 * @return
-	 */
-	public static UnitElement createAddNoiseUnit(Point origin) {
-		// 
-		UnitElement noiseUnit = new UnitElement(origin, "Add Noise", "run(\"Add Noise\"); \n",1,1,0);
-		
-		// setup of the first input of unit 2
-		noiseUnit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
-		// setup of the first output of unit 2 
-		noiseUnit.addOutput("Output", "O", -1, false); // -1 means output will be the same type as the input
-		noiseUnit.updateUnitIcon();
-		return noiseUnit;
-	}
-	
-	
-	public static UnitElement createHistogramUnit(Point origin) {
-		// 
-		UnitElement unit = new UnitElement(origin, "Histogram", "run(\"Histogram\"); \n",1,0,0);
-		
-		// setup of the first input of unit 2
-		unit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
-		// setup of the first output of unit 2 
-		unit.updateUnitIcon();
-		return unit;
-	}
-	
-	
-	/**
-	 * setup of a processing unit (gaussian blur)
-	 * display name, syntax: "run("Find Edges");", 1 input, 1 output, 1 parameter
-	 * @return
-	 */
-	public static UnitElement createFindEdgesUnit() {
-		return createFindEdgesUnit(new Point(30,30));
-	}
-	
-	/**
-	 * setup of a processing unit (add noise)
-	 * display name, syntax: "run("Find Edges");", 1 input, 1 output, 0 parameter
-	 * @param origin
-	 * @return
-	 */
-	public static UnitElement createFindEdgesUnit(Point origin) {
-		// 
-		UnitElement noiseUnit = new UnitElement(origin, "Find Edges", "	run(\"Find Edges\");\n",1,1,0);
-		
-		// setup of the first input of unit 2
-		noiseUnit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
-		// setup of the first output of unit 2 
-		noiseUnit.addOutput("Output", "O", -1, false); // -1 means output will be the same type as the input
-		noiseUnit.updateUnitIcon();
-		return noiseUnit;
-	}
-
-	
-	public static UnitElement createInvertUnit(Point origin) {
-		// 
-		UnitElement unit = new UnitElement(origin, "Invert", "	run(\"Invert\");\n",1,1,0);
-		
-		// setup of the first input of unit 2
-		unit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
-		// setup of the first output of unit 2 
-		unit.addOutput("Output", "O", -1, false); // -1 means output will be the same type as the input
-		unit.updateUnitIcon();
-		return unit;
 	}
 	
 }

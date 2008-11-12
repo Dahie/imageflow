@@ -5,7 +5,7 @@
 
 <General>
   <UnitName>Add Noise</UnitName> 
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>xml_units/AddNoise_Unit.png</PathToIcon> 
   <ImageJSyntax>run("Add Noise");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Adds noise to an image</HelpString>

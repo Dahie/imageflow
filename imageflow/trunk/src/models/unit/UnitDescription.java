@@ -189,16 +189,18 @@ public class UnitDescription {
 					String dataTypeString = actPara.dataTypeString = actualParameterElement.getChild("DataType").getValue();
 					String valueString = actualParameterElement.getChild("Value").getValue();
 					
-					if (dataTypeString.equals("double")) 
+					if (dataTypeString.toLowerCase().equals("double")) 
 						actPara.doubleValue = Double.valueOf(valueString);
-					else if (dataTypeString.equals("String")) 
+					else if (dataTypeString.toLowerCase().equals("string")) 
 						actPara.stringValue = valueString;
-					else if (dataTypeString.equals("StringArray")) { 
+					else if (dataTypeString.toLowerCase().equals("integer")) 
+						actPara.integerValue = Integer.valueOf(valueString);
+					else if (dataTypeString.toLowerCase().equals("stringarray")) { 
 						actPara.choiceNumber = Integer.valueOf(actualParameterElement.getChild("ChoiceNumber").getValue());
 						actPara.comboStringValues = valueString.split(" ");
 						actPara.stringValue = actPara.comboStringValues[actPara.choiceNumber]; 
 					}
-					else if (dataTypeString.equals("boolean")) { 
+					else if (dataTypeString.toLowerCase().equals("boolean")) { 
 						actPara.trueString = actualParameterElement.getChild("TrueString").getValue();
 						actPara.booleanValue = valueString.equals("true") ? true : false;
 					}
@@ -278,6 +280,7 @@ class Para {
 
 	String dataTypeString;
 	double doubleValue;
+	int integerValue;
 	String stringValue;
 	String[] comboStringValues;
 	int choiceNumber;

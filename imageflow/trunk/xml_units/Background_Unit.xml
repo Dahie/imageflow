@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- UnitFile.xml -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Background</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>newImage("Background", "8-bit White", PARA_INTEGER_1, PARA_INTEGER_2, 1);</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Creates a new Background of defined size</HelpString>
+  	  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Width</Name>
+  		<DataType>integer</DataType>
+  		<Value>256</Value>
+  		<HelpString>Width of the background</HelpString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Height</Name>
+  		<DataType>integer</DataType>
+  		<Value>256</Value>
+  		<HelpString>Height of the background</HelpString>
+  	</Parameter> 
+</Parameters>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

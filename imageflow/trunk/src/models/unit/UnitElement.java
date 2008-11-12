@@ -473,6 +473,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	 */
 	public void setIcon(BufferedImage bufferedImage) {
 		this.icon = bufferedImage;
+		this.unitComponentIcon.setIcon(bufferedImage);
 		notifyModelListeners();
 	}
 	
@@ -521,14 +522,10 @@ public class UnitElement extends NodeAbstract implements Model {
 		Font saveFont = g.getFont();
 		if (unitIcon == null) {
 			// obj != null, icon == null
-			/*g.setFont(new Font("Arial", Font.PLAIN, 14));
-			FontMetrics fm = g.getFontMetrics();*/
 			g.setColor(selected ? Color.red : new Color(250, 220, 100));
-//			dimension.setSize(fm.stringWidth(label) + 10, fm.getHeight() + 4);
 			g.fillRect(origin.x, origin.y, getDimension().width, getDimension().height);
 			g.setColor(Color.black);
 			g.drawRect(origin.x, origin.y, getDimension().width-1, getDimension().height-1);
-//			g.drawString(label, origin.x + 5, (origin.y + 2) + fm.getAscent());
 		} else {
 			
 			// obj != null
@@ -536,7 +533,6 @@ public class UnitElement extends NodeAbstract implements Model {
 				g.setColor(Color.red);
 				g.drawRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4);
 			}
-//			g.drawImage(unitIcon, origin.x, origin.y, getDimension().width, getDimension().height, io);
 			unitComponentIcon.paintBigIcon((Graphics2D) g);
 		}
 		

@@ -25,7 +25,7 @@ public class Tools {
 	
 	public static Element getRoot(File file) {
 		try {
-			System.out.println("Reading xml-description");
+//			System.out.println("Reading xml-description");
 			SAXBuilder sb = new SAXBuilder();
 			Document doc = sb.build(file);
 

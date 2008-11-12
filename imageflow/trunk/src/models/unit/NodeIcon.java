@@ -6,11 +6,10 @@ package models.unit;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.GradientPaint;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -42,6 +41,9 @@ public class NodeIcon {
      * Size of the pins for In- and Outputs.
      */
     public static int pinSize = 8;
+	/**
+	 * Size of the arc of the round corners
+	 */
 	protected int arc = 10;	
 	
 	protected Color color1;
@@ -52,47 +54,51 @@ public class NodeIcon {
 	protected String unitName ;
 	protected String parametersLabel = "P";
 	protected String infoLabel = "i";
-	protected Image icon;	// icon of the node
-	protected Image displayIcon; // icon for the display indicator
+	/**
+	 * Functional icon of this unit. This symbol is illustration.
+	 */
+	protected Image icon;	
+	
+	/**
+	 * icon for the display indicator
+	 */
+	protected Image displayIcon;
 	String displayIconFile = "bin/res/display16.png";
 
+	/**
+	 * Associated unit of to this icon
+	 */
 	protected UnitElement unit;
 	
-	/**
-	 * 
-	 */
-	private NodeIcon() {
-	}
 	
 	/**
+	 * @param unit 
 	 * 
 	 */
 	public NodeIcon(final UnitElement unit) {
 		this.unit = unit;
 		this.unitName = unit.getUnitName();
 		
-		
-		
 		try {
-			
 			this.displayIcon = ImageIO.read(new File(displayIconFile));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if(unit.getIcon() !=null) 
+		if(unit.getIcon() !=null) {
 			this.icon = unit.getIcon();
+		}
 	}
 	
 
 	/**
-	 * 
+	 * @return 
 	 */
 	public int getWidth() {
 		return this.width;
 	}
 	
 	/**
-	 * 
+	 * @return 
 	 */
 	public int getHeight() {
 		return this.height;
@@ -149,27 +155,13 @@ public class NodeIcon {
 	    //draw background
 	    drawBackground(g2);
 
+	    
+	    
 	    // draw icon
 	    drawIcon(g2);
 	    
-	    //draw text, status
-	    g2.setColor(Color.WHITE);
-	    //TODO scale font on big lengths
-	    if(unitName.length() > 6) {
-	    	// medium
-	    } else if(unitName.length() > 12) {
-	    	// small
-	    }
-	    // and if even now to small, then cut
-	    
-	    g2.drawString(unitName, x+5, y+85);
-	    
-	    /*Font font = g2.getFont();
-	    g2.drawString(parametersLabel, x+5, y+20);
-	    
-	    g2.drawString(infoLabel, x+25, y+20);
-	    g2.setColor(Color.BLACK);
-	    g2.drawString("x", x+width-20, y+20);*/
+	    // draw texts
+	    drawTexts(g2);
 	    
 	    // draw icon for display
 	    if(unit.isDisplayUnit()) {
@@ -178,10 +170,38 @@ public class NodeIcon {
 			g2.drawImage(this.displayIcon, xDisplay, yDisplay, null);
 	    }
 	    
-	    //draw inputs and outputs
 		return g2;
+	}
+
+	private void drawTexts(final Graphics2D g2) {
+		//draw text, status
+	    g2.setColor(Color.WHITE);
+
+		// scale font on big lengths
+		FontMetrics fm = g2.getFontMetrics();
+	    int stringWidth = fm.stringWidth(unitName);
+		int fontsize = g2.getFont().getSize();
+		int fontsizeOriginal = fontsize;
+		Font font = g2.getFont();
+		while(stringWidth > widthIconBg-10) {
+			fontsize--;
+			Font newFont = new Font(font.getFamily(), font.getStyle(), fontsize);
+			g2.setFont(newFont);
+			stringWidth = g2.getFontMetrics().stringWidth(unitName);
+		}
+		
+		// and if even now to small, then cut
+		g2.drawString(unitName, x+5, y+85);
 	    
-	    //TODO draw shadow
+		g2.setFont(new Font(font.getFamily(), font.getStyle(), fontsizeOriginal));
+	    
+		/*legacy
+		 * Font font = g2.getFont();
+	    g2.drawString(parametersLabel, x+5, y+20);
+	    
+	    g2.drawString(infoLabel, x+25, y+20);
+	    g2.setColor(Color.BLACK);
+	    g2.drawString("x", x+width-20, y+20);*/
 	}
 
 	private void drawBackground(Graphics2D g2) {
@@ -233,16 +253,15 @@ public class NodeIcon {
 		if(this.icon != null) {
 			int iconWidth = icon.getWidth(null);
 			int iconHeight = icon.getHeight(null);
-
-			int x = (this.width/2)-(iconWidth/2);
-			int y = (this.height/2)-(iconHeight/2);
-
-			g2.drawImage(icon, x, y, null);
-	
+			int xIcon = (this.widthIconBg/2) - (iconWidth/2) + this.x;
+			int yIcon = (this.heightIconBg/2) - (iconHeight/2) + this.y;
+			g2.drawImage(icon, xIcon, yIcon, null);
 		}
 	}
 
-	private void drawInputs(final Graphics2D g2, final int number) {
+	/*
+	 * now painted in the UnitElement
+	 * private void drawInputs(final Graphics2D g2, final int number) {
 	    
 	    for (int i = 0; i < number; i++) {
 			g2.setColor(Color.BLACK);
@@ -267,9 +286,16 @@ public class NodeIcon {
 			g2.drawPolygon(po);
 			
 		}
+	}*/
+	
+	public Image getIcon() {
+		return icon;
 	}
-	
-	
+
+
+	public void setIcon(Image icon) {
+		this.icon = icon;
+	}
 	
 	
 }
