@@ -58,11 +58,6 @@ public class MacroGenerator {
 			macroText += duplicateImages(unit, numInputs);
 			
 			// parse the command string for parameter tags that need to be replaced
-//			for (int p = 0; p < numParas; p++) {
-//				//command = parseParameters(unitIndex, unit, command, p);
-//				macroElement.parseParameter(unit, p);
-//			}
-			
 			macroElement.parseParameters(unit, numParas);
 			
 			

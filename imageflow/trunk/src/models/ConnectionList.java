@@ -60,6 +60,9 @@ public class ConnectionList extends Edges {
 		final Input input = connection.getToUnit().getInput(connection.toInputNumber-1);
 		input.setConnection(connection.fromUnit, connection.fromOutputNumber);
 		
+		final Output output = connection.getFromUnit().getOutput(connection.fromOutputNumber-1);
+		output.setConnection(connection.toUnit, connection.fromOutputNumber);
+		
 		//check if input already got a connection, if yes, delete that one
 //		for (Edge node : this) {
 		for (int i = 0; i < this.size(); i++) {

@@ -232,6 +232,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	 * @param name 
 	 * @param shortname 
 	 * @param outputBitDepth 
+	 * @param doDisplay 
 	 * @return 
 	 */
 	public boolean addOutput(String name, 
@@ -239,7 +240,7 @@ public class UnitElement extends NodeAbstract implements Model {
 			int outputBitDepth,
 			boolean doDisplay) 
 	{
-		Output newOutput = new Output(unitID,this.outputs.size()+1, this);
+		Output newOutput = new Output(this,this.outputs.size()+1);
 		newOutput.setupOutput(name, shortname, outputBitDepth);
 		newOutput.setDoDisplay(doDisplay);
 		notifyModelListeners();
@@ -328,11 +329,11 @@ public class UnitElement extends NodeAbstract implements Model {
 
 	/**
 	 * Add new Input by Object.
-	 * @param newInput
+	 * @param input
 	 * @return
 	 */
-	public boolean addInput(final Input newInput) {
-		return this.inputs.add(newInput);
+	public boolean addInput(final Input input) {
+		return this.inputs.add(input);
 	}
 
 	/**
@@ -693,6 +694,15 @@ public class UnitElement extends NodeAbstract implements Model {
 	}
 	
 
+	public boolean hasOutputsConnected() {
+		for (final Output output : outputs) {
+			if(output.isConnected())
+				return true;
+		}
+		return false;
+	}
+	
+
 	/**
 	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
 	 */
@@ -755,6 +765,10 @@ public class UnitElement extends NodeAbstract implements Model {
 	}
 
 	
+	/*
+	 * (non-Javadoc)
+	 * @see backend.Model#addModelListener(backend.ModelListener)
+	 */
 	public void addModelListener(ModelListener listener) {
 		if (! this.listeners.contains(listener)) {
 			this.listeners.add(listener);
@@ -762,18 +776,31 @@ public class UnitElement extends NodeAbstract implements Model {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see backend.Model#notifyModelListener(backend.ModelListener)
+	 */
 	public void notifyModelListener(ModelListener listener) {
 		listener.modelChanged(this);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see backend.Model#notifyModelListeners()
+	 */
 	public void notifyModelListeners() {
 		for (final ModelListener listener : this.listeners) {
 			notifyModelListener(listener);
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see backend.Model#removeModelListener(backend.ModelListener)
+	 */
 	public void removeModelListener(ModelListener listener) {
 		this.listeners.remove(listener);
 	}
+
 }
 

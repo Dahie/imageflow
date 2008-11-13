@@ -14,7 +14,7 @@ public class Input extends Pin {
 	/**
 	 * the number of this unit
 	 */
-	protected int unitNumber;
+//	protected int unitNumber;
 //	protected Node unit;
 //	protected int i;	// the number of this input 
 
@@ -128,19 +128,6 @@ public class Input extends Pin {
 		this.setNeedToCopyInput(needToCopyInput);
 	}
 
-	
-	/**
-	 * Returns whether or not this Input is connected.
-	 * @return 
-	 */
-	public boolean isConnected() {
-		final boolean isConnected = fromUnit != null || 
-			(fromUnitNumber > 0)
-			|| (fromOutputNumber > 0);
-		return isConnected;
-	}
-	
-
 	/**
 	 * Get the ImageTitle. 
 	 * This is the title of the image later used in the Macro
@@ -243,15 +230,27 @@ public class Input extends Pin {
 		return this.fromUnit;
 	}
 
+	
+
+	/**
+	 * Returns whether or not this Input is connected.
+	 * @return 
+	 */
+	public boolean isConnected() {
+		final boolean isConnected = (fromUnit != null) 
+			|| (fromUnitNumber > 0)
+			|| (fromOutputNumber > 0);
+		return isConnected;
+	}
+	
+	
 	/**
 	 * Checks if this Input is connected with the given {@link Output}
 	 * @param output 
-	 * @param source1Output
 	 * @return
 	 */
 	public boolean isConnectedWith(Output output) {
 		if(this.fromUnit != null) {
-			System.out.println(this.fromUnit);
 			return this.fromUnit.getOutput(this.fromOutputNumber-1).equals(output);
 		}
 		return false;

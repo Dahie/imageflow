@@ -100,7 +100,7 @@ public class UnitFactory {
 			
 		}
 		
-		unitElement.updateUnitIcon();
+//		unitElement.updateUnitIcon();
 		return unitElement;
 	}
 	

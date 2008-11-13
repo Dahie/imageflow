@@ -61,10 +61,9 @@ public class Connection extends Edge {
 		this.toUnit = toUnit;
 		this.toUnitNumber = toUnit.getUnitID();
 		this.toInputNumber = toInputNumber;
-//		this.toUnit.getInput(toInputNumber-1).setConnection(fromUnit, fromOutputNumber);
 		
 		id = getID(fromUnitNumber, fromOutputNumber, toUnitNumber, toInputNumber);
-//		connect();
+		connect();
 	}
 
 
@@ -74,12 +73,10 @@ public class Connection extends Edge {
 	 */
 	public void connect() {
 		
-//		UnitElement toUnit = (UnitElement) unitElements.get(toUnitNumber);
-//		UnitElement fromUnit = (UnitElement) unitElements.get(fromUnitNumber);
-		
-		
-		super.to = toUnit.getInput(toInputNumber-1);
-		((Input) super.to).setConnection(toUnit, fromOutputNumber);	
+		this.toUnit.getInput(toInputNumber-1).setConnection(fromUnit, fromOutputNumber);
+		this.fromUnit.getOutput(fromOutputNumber-1).setConnection(toUnit, toInputNumber);
+//		super.to = toUnit.getInput(toInputNumber-1);
+//		((Input) super.to).setConnection(toUnit, fromOutputNumber);	
 	}
 	
 	/**
@@ -90,9 +87,13 @@ public class Connection extends Edge {
 	 * @param toInputNumber
 	 * @return
 	 */
-	public static int getID(final int fromUnitNumber, final int fromOutputNumber, final int toUnitNumber, final int toInputNumber) {
+	public static int getID(final int fromUnitNumber, 
+			final int fromOutputNumber, 
+			final int toUnitNumber, 
+			final int toInputNumber) {
 		
-		final int id = (fromUnitNumber<<20) | (fromOutputNumber<<16) | (toUnitNumber<<4) | toInputNumber;   
+		final int id = (fromUnitNumber<<20) 
+			| (fromOutputNumber<<16) | (toUnitNumber<<4) | toInputNumber;   
 		return id;
 	}
 	
@@ -167,7 +168,8 @@ public class Connection extends Edge {
 			int mark = fromUnit.getOutput(0).getMark();
 			// if mark is not set
 			if(mark == 0) {
-				// this connected ouput hasn't been registered and is missing a mark, 
+				// this connected ouput hasn't been registered and 
+				// is missing a mark, 
 				// so the whole unit isn't ready set. 
 				hasMarked = false;
 			} 

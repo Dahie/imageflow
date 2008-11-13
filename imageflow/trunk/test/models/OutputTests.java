@@ -1,6 +1,3 @@
-/**
- * 
- */
 package models;
 
 import java.awt.Dimension;
@@ -9,14 +6,11 @@ import models.unit.UnitElement;
 import models.unit.UnitFactory;
 import junit.framework.TestCase;
 
-/**
- * @author danielsenff
- *
- */
-public class InputTests extends TestCase {
+public class OutputTests extends TestCase {
 
-	public void testImageTitle() {
 	
+	public void testImageTitle() {
+		
 		// image title of style "Unit_1_Output_1"
 		// test output-only
 		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
@@ -25,21 +19,22 @@ public class InputTests extends TestCase {
 		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
 		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
 		
-		Input filter1Input = filterUnit1.getInput(0);
-		Input filter2Input = filterUnit1.getInput(0);
+		Output sourceOutput = sourceUnit.getOutput(0);
+		Output filter1Input = filterUnit1.getOutput(0);
 
 		Connection conn1 = new Connection(sourceUnit, 1, filterUnit1, 1);
 		Connection conn2 = new Connection(sourceUnit, 1, filterUnit2, 1);
 		
 		// the imagetitle is constructed from the unit and pin the 
 		// connection comes from and the 
-		assertEquals("imagetitle for input 1 at unit 2", 
-				"Unit_"+sourceUnit.getUnitID()+"_Output_1", filter1Input.getImageTitle());
+		assertEquals("imagetitle for output 1 at unit 1", 
+				"Unit_"+sourceUnit.getUnitID()+"_Output_1", sourceOutput.getImageTitle());
 		
-		assertEquals("imagetitle for input 1 at unit 3", 
-				"Unit_"+sourceUnit.getUnitID()+"_Output_1", filter1Input.getImageTitle());
+		assertEquals("imagetitle for input 1 at unit 2", 
+				"Unit_"+filterUnit1.getUnitID()+"_Output_1", filter1Input.getImageTitle());
 	}
 	
+
 	public void testIsConnected() {
 		
 		// test output-only
@@ -49,10 +44,10 @@ public class InputTests extends TestCase {
 		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
 		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
 		
-		Input filterInput = filterUnit1.getInput(0);
+		Output sourceOutput = sourceUnit.getOutput(0);
 		
 		// test beforehand
-		assertFalse("input not connected", filterInput.isConnected());
+		assertFalse("output not connected", sourceOutput.isConnected());
 		
 		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
 		
@@ -60,7 +55,8 @@ public class InputTests extends TestCase {
 		connList.add(conn);
 		
 		// test after connecting
-		assertTrue("input connected", filterInput.isConnected());	
+		assertTrue("output connected", sourceOutput.isConnected());	
+		assertFalse("output connected", filterUnit2.getOutput(0).isConnected());	
 	}
 	
 	public void testIsConnectedWith() {
@@ -74,13 +70,14 @@ public class InputTests extends TestCase {
 		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
 		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
 		
-		Input filterInput = filterUnit1.getInput(0);
+		Input filter1Input = filterUnit1.getInput(0);
+		Input filter2Input = filterUnit2.getInput(0);
 		
 		// test beforehand
-		assertFalse("input not connected with source1Output", 
-				filterInput.isConnectedWith(source1Output));
-		assertFalse("input not connected with source2Output", 
-				filterInput.isConnectedWith(source2Output));
+		assertFalse("output not connected with filter1Input", 
+				source1Output.isConnectedWith(filter1Input));
+		assertFalse("output not connected with filter2Input", 
+				source1Output.isConnectedWith(filter2Input));
 		
 		Connection conn = new Connection(source1Unit, 1, filterUnit1, 1);
 		ConnectionList connList = new ConnectionList();
@@ -88,12 +85,10 @@ public class InputTests extends TestCase {
 		
 		
 		// test after connecting
-		assertTrue("input not connected with source1Output", 
-				filterInput.isConnectedWith(source1Output));
-		assertFalse("input not connected with source2Output", 
-				filterInput.isConnectedWith(source2Output));
-		
+		assertTrue("output connected with filter1Input", 
+				source1Output.isConnectedWith(filter1Input));
+		assertFalse("output not connected with filter2Input", 
+				source1Output.isConnectedWith(filter2Input));
 	}
-	
 	
 }

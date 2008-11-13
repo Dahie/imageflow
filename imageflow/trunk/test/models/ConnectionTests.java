@@ -25,6 +25,10 @@ public class ConnectionTests extends TestCase {
 		
 		final Connection connection1 = new Connection(source, 1, blur, 1);
 		assertTrue("status check 1", (connection1.checkConnection() == Connection.Status.OK) );
+		assertTrue("check imageTitles generated on pins", 
+				source.getOutput(0).getImageTitle().equals(blur.getInput(0).getImageTitle()));
+		
+		
 	}
 	
 

@@ -56,61 +56,6 @@ public class GraphController extends ApplicationController {
 		this.copyNodesList = new ArrayList<Node>();
 	}
 
-	public void setupExample2() {
-
-		
-		////////////////////////////////////////////////////////
-		// setup of units
-		////////////////////////////////////////////////////////
-		
-		
-		UnitDescription sourceUnitDescription = new UnitDescription(Tools.getRoot(new File("xml_units/ImageSource_Unit.xml")));
-		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
-		
-		final UnitElement to8BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/8Bit_Unit.xml"))), new Point(150, 100));
-		final UnitElement to32BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/32Bit_Unit.xml"))), new Point(260, 100));
-
-		final UnitElement convUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Convolver_Unit.xml"))), new Point(400, 50));
-		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Convolver_Unit.xml"))), new Point(400, 160));
-
-		final UnitElement squareUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Square_Unit.xml"))), new Point(510, 50));
-		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Square_Unit.xml"))), new Point(510, 160));
-		
-		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Add_Unit.xml"))), new Point(650, 100));
-		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Fire_Unit.xml"))), new Point(770, 100));
-		
-		// some mixing, so they are not in order
-		unitElements.add(sourceUnit);
-		unitElements.add(to8BitUnit);
-		unitElements.add(to32BitUnit);
-		unitElements.add(convUnit);
-		unitElements.add(squareUnit);
-		unitElements.add(convUnit2);
-		unitElements.add(squareUnit2);
-		unitElements.add(addUnit);
-		unitElements.add(fireUnit);
-		fireUnit.setDisplayUnit(true);
-		
-		////////////////////////////////////////////////////////
-		// setup the connections
-		////////////////////////////////////////////////////////
-		
-		// add six connections
-		// the conn is established on adding
-		// fromUnit, fromOutputNumber, toUnit, toInputNumber
-		
-		connectionMap.add(new Connection(sourceUnit,1,to8BitUnit,1));
-		connectionMap.add(new Connection(to8BitUnit,1,to32BitUnit,1));
-		connectionMap.add(new Connection(to32BitUnit,1,convUnit,1));
-		connectionMap.add(new Connection(to32BitUnit,1,convUnit2,1));
-		connectionMap.add(new Connection(convUnit,1,squareUnit,1));
-		connectionMap.add(new Connection(convUnit2,1,squareUnit2,1));
-		connectionMap.add(new Connection(squareUnit,1,addUnit,1));
-		connectionMap.add(new Connection(squareUnit2,1,addUnit,2));
-		connectionMap.add(new Connection(addUnit,1,fireUnit,1));
-				
-	}
-	
 
 	/**
 	 * verification and generation of the ImageJ macro
@@ -127,14 +72,6 @@ public class GraphController extends ApplicationController {
 		}
 		
 		unitElements = sortList(unitElements);
-		
-		
-		
-		/*try {
-			System.out.println(new Check(unitElements, connectionMap).checkSystem());
-		} catch (CheckException e) {
-			e.printStackTrace();
-		}*/
 		
 		////////////////////////////////////////////////////////
 		// generation of the ImageJ macro
@@ -155,11 +92,6 @@ public class GraphController extends ApplicationController {
 		}
 	}
 
-	public static String runMacro(String macro, String arg) {
-		Macro_Runner mr = new Macro_Runner();
-		return mr.runMacroFromIJJar(macro, arg);
-	}
-	
 	
 	/**
 	 * check if all connections have in and output
@@ -265,8 +197,10 @@ public class GraphController extends ApplicationController {
 				unitElements.remove(index);
 				// TODO if there is a branch with two units connected, the first one will be discarded, 
 				// the second will still exist 
+//			} else if (!unit.hasOutputsConnected() && unit.getType() == Type.SOURCE && !unit.isDisplayUnit()) {
+				// if source has no connected outputs and is not visible
+//				unitElements.remove(index);
 			}
-			
 			// Selection Sort
 			// each time an element whose previous nodes have already been registered
 			// is found the next loop over the element list is one element shorter.
@@ -318,9 +252,7 @@ public class GraphController extends ApplicationController {
 				connectionMap.remove(connection);
 				i--;
 			}
-			
 		}
-		
 		
 		// delete Unit
 		return unitElements.remove(unit);
@@ -461,6 +393,63 @@ public class GraphController extends ApplicationController {
 			e.printStackTrace();
 		}	
 	}
+	
+
+	public void setupExample2() {
+
+		
+		////////////////////////////////////////////////////////
+		// setup of units
+		////////////////////////////////////////////////////////
+		
+		
+		UnitDescription sourceUnitDescription = new UnitDescription(Tools.getRoot(new File("xml_units/ImageSource_Unit.xml")));
+		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
+		
+		final UnitElement to8BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/8Bit_Unit.xml"))), new Point(150, 100));
+		final UnitElement to32BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/32Bit_Unit.xml"))), new Point(260, 100));
+
+		final UnitElement convUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Convolver_Unit.xml"))), new Point(400, 50));
+		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Convolver_Unit.xml"))), new Point(400, 160));
+
+		final UnitElement squareUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Square_Unit.xml"))), new Point(510, 50));
+		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Square_Unit.xml"))), new Point(510, 160));
+		
+		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Add_Unit.xml"))), new Point(650, 100));
+		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Fire_Unit.xml"))), new Point(770, 100));
+		
+		// some mixing, so they are not in order
+		unitElements.add(sourceUnit);
+		unitElements.add(to8BitUnit);
+		unitElements.add(to32BitUnit);
+		unitElements.add(convUnit);
+		unitElements.add(squareUnit);
+		unitElements.add(convUnit2);
+		unitElements.add(squareUnit2);
+		unitElements.add(addUnit);
+		unitElements.add(fireUnit);
+		fireUnit.setDisplayUnit(true);
+		
+		////////////////////////////////////////////////////////
+		// setup the connections
+		////////////////////////////////////////////////////////
+		
+		// add six connections
+		// the conn is established on adding
+		// fromUnit, fromOutputNumber, toUnit, toInputNumber
+		
+		connectionMap.add(new Connection(sourceUnit,1,to8BitUnit,1));
+		connectionMap.add(new Connection(to8BitUnit,1,to32BitUnit,1));
+		connectionMap.add(new Connection(to32BitUnit,1,convUnit,1));
+		connectionMap.add(new Connection(to32BitUnit,1,convUnit2,1));
+		connectionMap.add(new Connection(convUnit,1,squareUnit,1));
+		connectionMap.add(new Connection(convUnit2,1,squareUnit2,1));
+		connectionMap.add(new Connection(squareUnit,1,addUnit,1));
+		connectionMap.add(new Connection(squareUnit2,1,addUnit,2));
+		connectionMap.add(new Connection(addUnit,1,fireUnit,1));
+				
+	}
+	
 	
 }
 
