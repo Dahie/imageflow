@@ -12,7 +12,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
@@ -21,6 +20,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import models.Input;
+import models.Output;
 import models.unit.UnitElement;
 import models.unit.UnitList;
 import visualap.Delegate;
@@ -80,10 +81,28 @@ public class GraphPanel extends GPanel {
 						// draw pin marker if mouse within inner range
 						int lowerYpin = pin.getLocation().y - margin;
 						int upperYpin = pin.getLocation().y + margin;
-						if(isWithinRange(mouse.y, lowerYpin, upperYpin)
-							&& !pin.getParent().equals(drawEdge.getParent())) {
+						if(isWithin2DRange(mouse, pin.getLocation(), new Dimension(0,0), margin)) {
+
+							Input input;
+							Output output;
+
+							// we don't know, if the connection is created 
+							// input first or output first
+							if(drawEdge instanceof Output) {
+								input = (Input) pin;
+								output = (Output) drawEdge;
+							} else {
+								input = (Input) drawEdge;
+								output = (Output) pin;
+							}
+							// checking if the pins are compatible
+							if(input.isImageBitDepthCompatible(output.getImageBitDepth())) {
+								g2.setColor(Color.green);
+							} else {
+								g2.setColor(Color.red);
+							}
 							
-							g2.setColor(Color.green);
+							
 							
 							Ellipse2D.Double circle = 
 								new Ellipse2D.Double(pinX, pinY, diameter, diameter);

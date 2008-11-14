@@ -257,9 +257,23 @@ public class Input extends Pin {
 	}
 
 
+	/**
+	 * Resets the this Input, so that it is unconnected.
+	 */
 	public void disconnect() {
 		connectTo(0, 0); // reset connection
 		this.fromUnit = null;
+	}
+
+
+	/**
+	 * Returns true, if the imageBitDepth in question is supported
+	 * by this Input.
+	 * @param imageBitDepth
+	 * @return
+	 */
+	public boolean isImageBitDepthCompatible(final int imageBitDepth) {
+		return (getImageBitDepth()&imageBitDepth) != 0;
 	}
 
 

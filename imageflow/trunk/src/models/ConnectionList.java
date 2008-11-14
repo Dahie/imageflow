@@ -70,10 +70,7 @@ public class ConnectionList extends Edges implements Model {
 	 */
 	public boolean add(final Connection connection) {
 		final Input input = connection.getToUnit().getInput(connection.toInputNumber-1);
-		input.connectTo(connection.fromUnit, connection.fromOutputNumber);
-		
 		final Output output = connection.getFromUnit().getOutput(connection.fromOutputNumber-1);
-		output.connectTo(connection.toUnit, connection.fromOutputNumber);
 		
 		//check if input already got a connection, if yes, delete that one
 		for (int i = 0; i < this.size(); i++) {
@@ -85,6 +82,10 @@ public class ConnectionList extends Edges implements Model {
 				System.out.println("old connection removed");
 			}
 		}
+		
+		input.connectTo(connection.fromUnit, connection.fromOutputNumber);
+		output.connectTo(connection.toUnit, connection.fromOutputNumber);
+		
 		return super.add(connection);
 	}
 

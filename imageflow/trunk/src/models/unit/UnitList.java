@@ -9,6 +9,7 @@ import graph.Node;
 import java.util.ArrayList;
 
 import models.Input;
+import models.unit.UnitElement.Type;
 import backend.Model;
 import backend.ModelListener;
 
@@ -94,6 +95,24 @@ public class UnitList extends GList<Node> implements Model {
 		// remove unit itself
 		notifyModelListeners();
 		return super.remove(unitElement);
+	}
+	
+	public boolean hasUnitAsDisplay() {
+		for (int i = 0; i < size(); i++) {
+			UnitElement unit = (UnitElement) get(i);
+			if(unit.isDisplayUnit()) 
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean hasSourcesAsDisplay() {
+		for (int i = 0; i < size(); i++) {
+			UnitElement unit = (UnitElement) get(i);
+			if(unit.getType() == Type.SOURCE && unit.isDisplayUnit()) 
+				return true;
+		}
+		return false;
 	}
 
 

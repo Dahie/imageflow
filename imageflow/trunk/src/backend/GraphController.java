@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.sound.midi.SysexMessage;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -96,6 +98,11 @@ public class GraphController extends ApplicationController {
 	 */
 	public boolean checkNetwork() {
 		
+		if(!unitElements.hasUnitAsDisplay()) {
+			System.err.println("The flow has no displayable units, running it doesn't do anything.");
+			return false; 
+		}
+		
 		if(connectionMap.size() > 0) {
 			System.out.println("Number of connections: "+ connectionMap.size());
 			for (Iterator iterator = connectionMap.iterator(); iterator.hasNext();) {
@@ -114,7 +121,7 @@ public class GraphController extends ApplicationController {
 						return false;				
 				}
 			}
-		} else if (hasSourcesAsDisplay()) {
+		} else if (unitElements.hasSourcesAsDisplay()) {
 			// ok, we got no connections, but we have Source-units, 
 			// which are set to display.
 			
@@ -134,15 +141,6 @@ public class GraphController extends ApplicationController {
 
 		//TODO check parameters
 		return true;
-	}
-
-	private boolean hasSourcesAsDisplay() {
-		for (int i = 0; i < unitElements.size(); i++) {
-			UnitElement unit = (UnitElement) unitElements.get(i);
-			if(unit.getType() == Type.SOURCE && unit.isDisplayUnit()) 
-				return true;
-		}
-		return false;
 	}
 
 

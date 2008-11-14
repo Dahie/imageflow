@@ -208,7 +208,8 @@ public class Connection extends Edge {
 		Input input = this.toUnit.getInput(this.toInputNumber-1);
 		Output output = this.fromUnit.getOutput(this.fromOutputNumber-1);
 		
-		boolean areCompatible = (input.getImageBitDepth()&output.getImageBitDepth()) != 0;
+//		boolean areCompatible = (input.getImageBitDepth()&output.getImageBitDepth()) != 0;
+		boolean areCompatible = input.isImageBitDepthCompatible(output.getImageBitDepth());
 		return areCompatible;
 	}
 }
