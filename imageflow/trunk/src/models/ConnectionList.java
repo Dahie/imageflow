@@ -3,16 +3,28 @@
  */
 package models;
 
+import graph.Edge;
 import graph.Edges;
 import graph.Pin;
+
+import java.util.ArrayList;
+
 import models.unit.UnitElement;
+import backend.Model;
+import backend.ModelListener;
 
 /**
  * List that holds all {@link Connection}s.
  * @author danielsenff
  *
  */
-public class ConnectionList extends Edges {
+public class ConnectionList extends Edges implements Model {
+	
+	private ArrayList<ModelListener> listeners;
+	
+	public ConnectionList() {
+		this.listeners = new ArrayList<ModelListener>();
+	}
 	
 	/* (non-Javadoc)
 	 * @see graph.Edges#add(graph.Pin, graph.Pin)
@@ -58,13 +70,12 @@ public class ConnectionList extends Edges {
 	 */
 	public boolean add(final Connection connection) {
 		final Input input = connection.getToUnit().getInput(connection.toInputNumber-1);
-		input.setConnection(connection.fromUnit, connection.fromOutputNumber);
+		input.connectTo(connection.fromUnit, connection.fromOutputNumber);
 		
 		final Output output = connection.getFromUnit().getOutput(connection.fromOutputNumber-1);
-		output.setConnection(connection.toUnit, connection.fromOutputNumber);
+		output.connectTo(connection.toUnit, connection.fromOutputNumber);
 		
 		//check if input already got a connection, if yes, delete that one
-//		for (Edge node : this) {
 		for (int i = 0; i < this.size(); i++) {
 			final Connection conn = (Connection) this.get(i);
 			
@@ -73,9 +84,46 @@ public class ConnectionList extends Edges {
 				remove(conn);
 				System.out.println("old connection removed");
 			}
-			
 		}
 		return super.add(connection);
+	}
+
+	@Override
+	public Connection remove(int index) {
+		Connection connection = (Connection) this.get(index);
+		((Input)connection.from).disconnect();
+		notifyModelListeners();
+		return (Connection) super.remove(index);
+	}
+	
+	@Override
+	public boolean remove(Object o) {
+		Connection connection = (Connection) o;
+		((Input)connection.to).disconnect();
+		notifyModelListeners();
+		return super.remove(o);
+	}
+	
+
+	public void addModelListener(ModelListener listener) {
+		if (! this.listeners.contains(listener)) {
+			this.listeners.add(listener);
+			notifyModelListener(listener);
+		}
+	}
+
+	public void notifyModelListener(ModelListener listener) {
+		listener.modelChanged(this);
+	}
+
+	public void notifyModelListeners() {
+		for (final ModelListener listener : this.listeners) {
+			notifyModelListener(listener);
+		}
+	}
+
+	public void removeModelListener(ModelListener listener) {
+		this.listeners.remove(listener);
 	}
 
 	

@@ -85,7 +85,7 @@ public class Input extends Pin {
 	 */
 	public Input(final UnitElement fromUnit, final int inputNumber, final UnitElement nodeParent) {
 		super("input", inputNumber, nodeParent.getInputsMaxCount(), nodeParent);
-		setConnection(fromUnit.getUnitID(), inputNumber);
+		connectTo(fromUnit.getUnitID(), inputNumber);
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class Input extends Pin {
 	 * @param fromUnitNumber
 	 * @param fromOutputNumber
 	 */
-	private void setConnection(final int fromUnitNumber, final int fromOutputNumber) {
+	private void connectTo(final int fromUnitNumber, final int fromOutputNumber) {
 		this.fromUnitNumber = fromUnitNumber;
 		this.fromOutputNumber = fromOutputNumber;
 		this.imageTitle = "Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
@@ -105,9 +105,9 @@ public class Input extends Pin {
 	 * @param fromUnit
 	 * @param fromOutputNumber
 	 */
-	public void setConnection(final UnitElement fromUnit, final int fromOutputNumber) {
+	public void connectTo(final UnitElement fromUnit, final int fromOutputNumber) {
 		this.fromUnit = fromUnit;
-		setConnection(fromUnit.getUnitID(), fromOutputNumber);
+		connectTo(fromUnit.getUnitID(), fromOutputNumber);
 	}
 
 
@@ -254,6 +254,12 @@ public class Input extends Pin {
 			return this.fromUnit.getOutput(this.fromOutputNumber-1).equals(output);
 		}
 		return false;
+	}
+
+
+	public void disconnect() {
+		connectTo(0, 0); // reset connection
+		this.fromUnit = null;
 	}
 
 

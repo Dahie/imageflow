@@ -62,7 +62,7 @@ public class Output extends Pin {
 	
 	public Output(final UnitElement nodeParent, final int outputNumber) {
 		super("output", outputNumber, nodeParent.getOutputsMaxCount(), nodeParent);
-		setConnection(nodeParent.getUnitID(), outputNumber);
+		connectTo(nodeParent.getUnitID(), outputNumber);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class Output extends Pin {
 	public Output(final UnitElement toUnit, final int outputNumber,  final UnitElement nodeParent) {
 		super("output", outputNumber, nodeParent.getOutputsMaxCount(), nodeParent);
 		this.toUnit = toUnit;
-		setConnection(nodeParent.getUnitID(), outputNumber);
+		connectTo(nodeParent.getUnitID(), outputNumber);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class Output extends Pin {
 	 * @param fromUnitNumber
 	 * @param fromOutputNumber
 	 */
-	private void setConnection(final int unitNumber, final int outputNumber) {
+	private void connectTo(final int unitNumber, final int outputNumber) {
 //		this.toUnitNumber = unitNumber;
 //		this.toOutputNumber = outputNumber;
 		this.unitNumber = unitNumber;
@@ -96,7 +96,7 @@ public class Output extends Pin {
 	 * @param toUnit
 	 * @param toOutputNumber 
 	 */
-	public void setConnection(final UnitElement toUnit, final int toOutputNumber) {
+	public void connectTo(final UnitElement toUnit, final int toOutputNumber) {
 		this.toUnit = toUnit;
 		this.toInputNumber = toOutputNumber;
 //		setConnection(toUnit.getUnitID(), fromOutputNumber);

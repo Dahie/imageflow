@@ -5,6 +5,7 @@ import helper.FileDrop;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.ScrollPane;
 import java.util.ArrayList;
@@ -18,10 +19,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
+import models.ConnectionList;
 import models.unit.CommentNode;
 import models.unit.UnitFactory;
 import models.unit.UnitList;
 import visualap.Delegate;
+import actions.CheckGraphAction;
 import actions.CopyUnitAction;
 import actions.Example0_XML_Action;
 import actions.Example1Action;
@@ -29,7 +32,7 @@ import actions.Example2Action;
 import actions.PasteUnitAction;
 import actions.RemoveUnitAction;
 import actions.RunMacroAction;
-import actions.RunParaAction;
+import actions.ShowUnitParametersAction;
 import backend.DelegatesController;
 import backend.GraphController;
 import backend.Model;
@@ -48,7 +51,7 @@ public class Applicationframe extends JFrame {
 	public static String TITLE = "ImageFlow for ImageJ";
 	
 	private UnitList units;
-	private Edges edges;
+	private ConnectionList connections;
 	private GraphController graphController;
 
 	private JTextArea macroArea;
@@ -68,16 +71,16 @@ public class Applicationframe extends JFrame {
 	/**
 	 * 
 	 */
-	public Applicationframe(UnitList units, Edges edges) {
+	public Applicationframe(UnitList units, ConnectionList edges) {
 		this.units = units;
-		this.edges = edges;
+		this.connections = edges;
 		init();
 	}
 	
 	public Applicationframe(GraphController controller) {
 		this.graphController = controller;
 		this.units = controller.getUnitElements();
-		this.edges = controller.getConnections();
+		this.connections = controller.getConnections();
 		init();
 	}
 
@@ -121,7 +124,12 @@ public class Applicationframe extends JFrame {
 			public void modelChanged(Model model) {
 				graphPanel.repaint();
 			}
-			
+		});
+		
+		connections.addModelListener(new ModelListener() {
+			public void modelChanged(Model model) {
+				graphPanel.repaint();
+			}
 		});
 	}
 
@@ -170,7 +178,7 @@ public class Applicationframe extends JFrame {
 		popup.setActivePanel(graphPanel);
 		graphPanel.setSize(400, 300);
 		graphPanel.setNodeL(units);
-		graphPanel.setEdgeL(edges);
+		graphPanel.setEdgeL(connections);
 		graphPanel.setPreferredSize(new Dimension(400, 300));
 //		graphPanel.getSelection();
 		ScrollPane graphScrollpane = new ScrollPane();
@@ -212,7 +220,7 @@ public class Applicationframe extends JFrame {
 		//properties of the selected node
 		JPanel propertiesPanel = new JPanel();
 		propertiesPanel.setName("Properties");
-		JButton buttonPara = new JButton(new RunParaAction(graphPanel.getSelection()));
+		JButton buttonPara = new JButton(new ShowUnitParametersAction(graphPanel.getSelection()));
 		propertiesPanel.add(buttonPara, BorderLayout.SOUTH);
 		
 		
@@ -230,8 +238,17 @@ public class Applicationframe extends JFrame {
 		macroArea = new JTextArea();
 		JScrollPane macroAreaScrollpane = new JScrollPane(macroArea);
 		macroPanel.add(macroAreaScrollpane, BorderLayout.CENTER);
+		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout());
+		
+		
 		JButton buttonRun = new JButton(new RunMacroAction(graphController));
-		macroPanel.add(buttonRun, BorderLayout.SOUTH);
+		buttonPanel.add(buttonRun);
+		
+		JButton buttoncheck = new JButton(new CheckGraphAction(graphController));
+		buttonPanel.add(buttoncheck);
+		macroPanel.add(buttonPanel, BorderLayout.SOUTH);
 		
 		JTabbedPane functionTabPane = new JTabbedPane();
 //		functionTabPane.add(unitSelectionPanel);

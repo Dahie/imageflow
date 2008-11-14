@@ -73,8 +73,8 @@ public class Connection extends Edge {
 	 */
 	public void connect() {
 		
-		this.toUnit.getInput(toInputNumber-1).setConnection(fromUnit, fromOutputNumber);
-		this.fromUnit.getOutput(fromOutputNumber-1).setConnection(toUnit, toInputNumber);
+		this.toUnit.getInput(toInputNumber-1).connectTo(fromUnit, fromOutputNumber);
+		this.fromUnit.getOutput(fromOutputNumber-1).connectTo(toUnit, toInputNumber);
 //		super.to = toUnit.getInput(toInputNumber-1);
 //		((Input) super.to).setConnection(toUnit, fromOutputNumber);	
 	}

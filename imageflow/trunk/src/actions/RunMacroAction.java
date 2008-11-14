@@ -14,25 +14,14 @@ import backend.GraphController;
  * @author danielsenff
  *
  */
-public class RunMacroAction extends AbstractAction {
+public class RunMacroAction extends AbstractGraphAction {
 
-	private GraphController controller;
-	
-
-	/**
-	 * 
-	 */
-	public RunMacroAction() {
-		putValue(Action.NAME, "Run Macro");
-	}
-	
-	
 	/**
 	 * @param controller
 	 */
 	public RunMacroAction(GraphController controller) {
-		this();
-		this.controller = controller;
+		super(controller);
+		putValue(Action.NAME, "Run Macro");
 	}
 
 
@@ -42,6 +31,7 @@ public class RunMacroAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		controller.generateMacro();
 		
+//		runMacro();
 	}
 
 }

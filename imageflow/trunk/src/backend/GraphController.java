@@ -66,30 +66,26 @@ public class GraphController extends ApplicationController {
 		// verification of the connection network
 		////////////////////////////////////////////////////////
 		
-		final boolean networkOK = checkNetwork(connectionMap);
-		if (!networkOK) {
+		if (!checkNetwork()) {
+			System.out.println("Error in node network.");
 			return;
 		}
-		
+
+		// unitElements has to be ordered according to the correct processing sequence
 		unitElements = sortList(unitElements);
 		
 		////////////////////////////////////////////////////////
 		// generation of the ImageJ macro
 		////////////////////////////////////////////////////////
-		
-		// unitElements has to be ordered according to the correct processing sequence
-		if(networkOK) {
-			final String macro = MacroGenerator.generateMacrofromUnitList(unitElements);
-			
-			if(imagej == null)
-				imagej = new ImageJ(null, ImageJ.EMBEDDED);
-			IJ.log(macro);
-			// !!!
-			IJ.runMacro(macro, "");
-//			runMacro(macro, "");
-		} else {
-			System.out.println("Error in node network.");
-		}
+
+
+		final String macro = MacroGenerator.generateMacrofromUnitList(unitElements);
+
+		if(imagej == null)
+			imagej = new ImageJ(null, ImageJ.EMBEDDED);
+		//			IJ.log(macro);
+		// !!!
+		IJ.runMacro(macro, "");
 	}
 
 	
@@ -98,13 +94,10 @@ public class GraphController extends ApplicationController {
 	 * @param connectionMap
 	 * @return
 	 */
-	public boolean checkNetwork(final ConnectionList connectionMap) {
-		boolean networkOK = true;
+	public boolean checkNetwork() {
 		
-
-		
-//		for (final Connection (Connection)connection : connectionMap) {
 		if(connectionMap.size() > 0) {
+			System.out.println("Number of connections: "+ connectionMap.size());
 			for (Iterator iterator = connectionMap.iterator(); iterator.hasNext();) {
 				Connection connection = (Connection) iterator.next();
 			
@@ -115,28 +108,43 @@ public class GraphController extends ApplicationController {
 					case MISSING_BOTH:
 					case MISSING_FROM_UNIT:
 					case MISSING_TO_UNIT:
-						networkOK = false;
-						System.out.println(connection.checkConnection());
-						System.out.println(connection.toString());
-						break;					
+						System.err.println("Faulty connection, no input or output unit found.");
+						System.err.println(connection.toString() 
+								+ " with status " + connection.checkConnection());
+						return false;				
 				}
 			}
+		} else if (hasSourcesAsDisplay()) {
+			// ok, we got no connections, but we have Source-units, 
+			// which are set to display.
+			
+			//do nothing
 		} else {
-			System.out.println("no existing connections ");
+			System.err.println("no existing connections");
 			return false;
 		}
 		
 		
 		//FIXME check if units got all the inputs they need
 		if (!unitElements.areAllInputsConnected()) {
-			System.out.println("not all required inputs are connected");
+			System.err.println("not all required inputs are connected");
 			return false;
 		}
 			
 
 		//TODO check parameters
-		return networkOK;
+		return true;
 	}
+
+	private boolean hasSourcesAsDisplay() {
+		for (int i = 0; i < unitElements.size(); i++) {
+			UnitElement unit = (UnitElement) unitElements.get(i);
+			if(unit.getType() == Type.SOURCE && unit.isDisplayUnit()) 
+				return true;
+		}
+		return false;
+	}
+
 
 	/**
 	 * @return the unitElements
@@ -155,7 +163,7 @@ public class GraphController extends ApplicationController {
 	/**
 	 * @return
 	 */
-	public Edges getConnections() {
+	public ConnectionList getConnections() {
 		return this.connectionMap;
 	}
 	
@@ -192,14 +200,17 @@ public class GraphController extends ApplicationController {
 				// if unit has no inputs, is not source, then discard as well
 //				if((unit.getType() != Type.SOURCE && !unit.hasInputs())) 
 					orderedList.add(remove);
-			} else if (!unit.hasInputsConnected() && unit.getType() != Type.SOURCE) {
+			} else if (!unit.hasInputsConnected() 
+					&& unit.getType() != Type.SOURCE) {
 				// if unit has no connections actually, it can be discarded right away
 				unitElements.remove(index);
 				// TODO if there is a branch with two units connected, the first one will be discarded, 
 				// the second will still exist 
-//			} else if (!unit.hasOutputsConnected() && unit.getType() == Type.SOURCE && !unit.isDisplayUnit()) {
+			} else if (!unit.hasOutputsConnected() 
+					&& unit.getType() == Type.SOURCE 
+					&& !unit.isDisplayUnit()) {
 				// if source has no connected outputs and is not visible
-//				unitElements.remove(index);
+				unitElements.remove(index);
 			}
 			// Selection Sort
 			// each time an element whose previous nodes have already been registered
@@ -220,12 +231,10 @@ public class GraphController extends ApplicationController {
 	 * @param units
 	 */
 	public static void unmarkUnits(UnitList units) {
-		
 		for (Node node : units) {
 			UnitElement unit = (UnitElement) node;
 			unit.setMark(0);
 		}
-		
 	}
 
 	/**
@@ -243,8 +252,20 @@ public class GraphController extends ApplicationController {
 	 */
 	public boolean removeUnit(final UnitElement unit) {
 
-		// find connections which are attached to this unit
+		//TODO new connection between the nodes that this deleted node was inbetween
 		
+		unbindUnit(unit);
+		
+		// delete Unit
+		return unitElements.remove(unit);
+	}
+	
+	/**
+	 * Removes all connections to this {@link UnitElement}.
+	 * @param unit
+	 */
+	public void unbindUnit(final UnitElement unit) {
+		// find connections which are attached to this unit
 		for (int i = 0; i < connectionMap.size(); i++) {
 			Connection connection = (Connection) connectionMap.get(i);
 			if(connection.isConnectedToUnit(unit)) {
@@ -253,9 +274,6 @@ public class GraphController extends ApplicationController {
 				i--;
 			}
 		}
-		
-		// delete Unit
-		return unitElements.remove(unit);
 	}
 
 	public void setupExample1() {
@@ -393,7 +411,6 @@ public class GraphController extends ApplicationController {
 			e.printStackTrace();
 		}	
 	}
-	
 
 	public void setupExample2() {
 

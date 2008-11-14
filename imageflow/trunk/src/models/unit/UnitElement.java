@@ -707,52 +707,59 @@ public class UnitElement extends NodeAbstract implements Model {
 	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
 	 */
 	public void showProperties() {
-		final GenericDialog gd = new GenericDialog("Parameter");
-		gd.addMessage(unitName);
-		gd.addMessage(" ");
-		final ArrayList<Parameter> parameterList = getParameters();
-		
-		if (parameterList.size() == 0)
-			gd.addMessage("No parameters that can be set");
+		if(hasParameters()) {
+			final GenericDialog gd = new GenericDialog("Parameter");
+			gd.addMessage(unitName);
+			gd.addMessage(" ");
+			final ArrayList<Parameter> parameterList = getParameters();
 			
-		for (final Parameter parameter : parameterList) {
-			
-			if(parameter instanceof DoubleParameter) {
-				gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
-			} else if(parameter instanceof IntegerParameter) {
-				gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
-			} else if(parameter instanceof BooleanParameter) {
-				gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
-			} else if(parameter instanceof ChoiceParameter) {
-				gd.addChoice(parameter.getDisplayName(), 
-						((ChoiceParameter)parameter).getChoices(), 
-						((ChoiceParameter)parameter).getValue());
-			} else if(parameter instanceof StringParameter) {
-				gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(),40);
-			}			
-		}
-		
-		// show properties window
-		gd.showDialog();
-
-		if( gd.wasCanceled())
-			return;
-		
-		
-		for (final Parameter parameter : parameterList) {
-			if(parameter instanceof DoubleParameter) {
-				((DoubleParameter) parameter).setValue((double) (gd.getNextNumber()));
-			} else if (parameter instanceof IntegerParameter) {
-				((IntegerParameter) parameter).setValue((int) (gd.getNextNumber()));
-			} else if (parameter instanceof BooleanParameter) {
-				((BooleanParameter) parameter).setValue((boolean) (gd.getNextBoolean()));
-			} else if (parameter instanceof ChoiceParameter) {
-				((ChoiceParameter) parameter).setValue((String) (gd.getNextChoice()));
-				// TODO set the ChoiceNumber to be able to save it
-			} else if (parameter instanceof StringParameter) {
-				((StringParameter) parameter).setValue((String) (gd.getNextString()));
+			if (parameterList.size() == 0)
+				gd.addMessage("No parameters that can be set");
+				
+			for (final Parameter parameter : parameterList) {
+				
+				if(parameter instanceof DoubleParameter) {
+					gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
+				} else if(parameter instanceof IntegerParameter) {
+					gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
+				} else if(parameter instanceof BooleanParameter) {
+					gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
+				} else if(parameter instanceof ChoiceParameter) {
+					gd.addChoice(parameter.getDisplayName(), 
+							((ChoiceParameter)parameter).getChoices(), 
+							((ChoiceParameter)parameter).getValue());
+				} else if(parameter instanceof StringParameter) {
+					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(),40);
+				}			
 			}
+			
+			// show properties window
+			gd.showDialog();
+
+			if( gd.wasCanceled())
+				return;
+			
+			
+			for (final Parameter parameter : parameterList) {
+				if(parameter instanceof DoubleParameter) {
+					((DoubleParameter) parameter).setValue((double) (gd.getNextNumber()));
+				} else if (parameter instanceof IntegerParameter) {
+					((IntegerParameter) parameter).setValue((int) (gd.getNextNumber()));
+				} else if (parameter instanceof BooleanParameter) {
+					((BooleanParameter) parameter).setValue((boolean) (gd.getNextBoolean()));
+				} else if (parameter instanceof ChoiceParameter) {
+					((ChoiceParameter) parameter).setValue((String) (gd.getNextChoice()));
+					// TODO set the ChoiceNumber to be able to save it
+				} else if (parameter instanceof StringParameter) {
+					((StringParameter) parameter).setValue((String) (gd.getNextString()));
+				}
+			}	
 		}
+		
+	}
+
+	private boolean hasParameters() {
+		return !parameters.isEmpty();
 	}
 
 	public Color getColor() {

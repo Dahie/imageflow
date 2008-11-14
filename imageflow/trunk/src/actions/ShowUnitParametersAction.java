@@ -25,15 +25,14 @@ import models.unit.UnitElement;
  * @author danielsenff
  *
  */
-public class RunParaAction extends AbstractUnitAction {
-
+public class ShowUnitParametersAction extends AbstractUnitAction {
 	
 	/**
 	 * @param controller
 	 */
-	public RunParaAction(Selection<Node> selectedUnits) {
+	public ShowUnitParametersAction(Selection<Node> selectedUnits) {
 		super(selectedUnits);
-		putValue(Action.NAME, "Edit parameters");
+		putValue(Action.NAME, "Properties");
 	}
 
 
@@ -44,13 +43,8 @@ public class RunParaAction extends AbstractUnitAction {
 		
 		for (int i = 0; i < selectedUnits.size(); i++) {
 			UnitElement unit = (UnitElement)selectedUnits.get(i);
-
 			unit.showProperties();
-			
 		}
-		
 	}
-
-
 
 }

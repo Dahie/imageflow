@@ -59,17 +59,22 @@ public class UnitList extends GList<Node> implements Model {
 	 * @return
 	 */
 	public boolean areAllInputsConnected() {
+		// check inputs of all units
 		for (final Object element : this) {
 			final UnitElement unit = (UnitElement) element;
 			
+			// does the unit actually have inputs?
 			if(unit.hasInputs()) {
 				final ArrayList<Input> inputs = unit.getInputs();
+				
+				//check all inputs of this unit
 				for (int i = 0; i < inputs.size(); i++) {
 					final Input input = inputs.get(i);
+					// is this input connected?
 					if (!input.isConnected() 
 							// is this input actually required?
 							&& input.isRequiredInput()) {
-						System.out.println(input + " is not connected");
+						System.err.println(input + " is not connected");
 						return false;
 					}
 				}	
