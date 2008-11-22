@@ -91,7 +91,6 @@ public class UnitList extends GList<Node> implements Model {
 	 */
 	public boolean remove(final UnitElement unitElement) {
 		
-		// remove any connections
 		// remove unit itself
 		notifyModelListeners();
 		return super.remove(unitElement);

@@ -3,10 +3,8 @@
  */
 package models;
 
-import ij.plugin.PlugIn;
-import ij.plugin.filter.PlugInFilter;
-
 import java.awt.Dimension;
+import java.awt.Point;
 
 import junit.framework.TestCase;
 import models.unit.UnitElement;
@@ -19,26 +17,42 @@ import models.unit.UnitFactory;
 public class UnitElementTests extends TestCase {
 
 	
+	public void testInputsActualCount() {
+		
+		UnitElement unit = UnitFactory.createAddNoiseUnit();
+		
+		assertEquals("number outputs",1, unit.getOutputsCount());
+		assertEquals("number inputs",1, unit.getInputsCount());
+		
+		UnitElement source = UnitFactory.createBackgroundUnit(new Dimension(100,100));
+		assertEquals("number outputs",1, source.getOutputsCount());
+		assertEquals("number inputs",0, source.getInputsCount());
+		
+		UnitElement merge = UnitFactory.createImageCalculatorUnit();
+		assertEquals("number outputs",1, merge.getOutputsCount());
+		assertEquals("number inputs",2, merge.getInputsCount());
+		
+		UnitElement sink = UnitFactory.createHistogramUnit(new Point(0,0));
+		assertEquals("number outputs",0, sink.getOutputsCount());
+		assertEquals("number inputs",1, sink.getInputsCount());
+	}
+	
+	
 	/**
 	 *  
 	 */
 	public void testAddParameter() {
 		//unit with one allowed parameter
-		UnitElement unit = new UnitElement("name", "", 0, 0, 1);
-		
-		assertEquals("number of possible parameters",1, unit.getParametersMaxCount());
+		UnitElement unit = new UnitElement("name", "");
 		
 		//test usual adding
 		boolean addFirst = unit.addParameter(ParameterFactory.createParameter("integer", 1, "ein int"));
 		assertTrue("add first", addFirst);
 		
-		assertEquals("number of possible parameters",
-				unit.getParametersMaxCount(), 
-				unit.getParametersActualCount());
 		
 		//add one more than actually allowed
 		boolean addSecond = unit.addParameter(ParameterFactory.createParameter("integer", 1, "ein int"));
-		assertFalse("add second", addSecond);
+		assertTrue("add second", addSecond);
 	}
 	
 	public void testHasInputs() {
@@ -55,17 +69,12 @@ public class UnitElementTests extends TestCase {
 	
 	public void testAddInput() {
 		//unit with one allowed parameter
-		UnitElement unit = new UnitElement("name", "", 1, 0, 1);
-		
-		assertEquals("number of possible inputs",1, unit.getInputsMaxCount());
+		UnitElement unit = new UnitElement("name", "");
 		
 		//test usual adding
 		boolean addFirst = unit.addInput("input", "i", 4, false);
 		assertTrue("add first", addFirst);
 		
-		assertEquals("number of possible parameters",
-				unit.getInputsMaxCount(), 
-				unit.getInputsActualCount());
 		
 		//add one more than actually allowed
 		boolean addSecond = unit.addInput("input", "i", 4, false);
@@ -145,11 +154,11 @@ public class UnitElementTests extends TestCase {
 			
 			assertFalse("object the same", mergeUnit.equals(clone));
 			assertEquals("number of max inputs", 
-					mergeUnit.getInputsMaxCount(), clone.getInputsMaxCount());
+					mergeUnit.getInputsCount(), clone.getInputsCount());
 			assertEquals("number of max outputs", 
-					mergeUnit.getOutputsMaxCount(), clone.getOutputsMaxCount());
+					mergeUnit.getOutputsCount(), clone.getOutputsCount());
 			assertEquals("number of max parameters", 
-					mergeUnit.getParametersMaxCount(), clone.getParametersMaxCount());
+					mergeUnit.getParametersCount(), clone.getParametersCount());
 			assertEquals("unit name", mergeUnit.getUnitName(), clone.getUnitName());
 			assertNotSame("unit id", mergeUnit.getUnitID(), clone.getUnitID());
 			assertFalse("Unitid not the same",(mergeUnit.getUnitID() == clone.getUnitID()));
@@ -162,8 +171,8 @@ public class UnitElementTests extends TestCase {
 					mergeObject.getImageJSyntax() , cloneObject.getImageJSyntax());
 			
 			// assert Inputs
-			assertEquals("inputs actual", mergeUnit.getInputsActualCount(), clone.getInputsActualCount());
-			for (int i = 0; i < clone.getInputsActualCount(); i++) {
+			assertEquals("inputs actual", mergeUnit.getInputsCount(), clone.getInputsCount());
+			for (int i = 0; i < clone.getInputsCount(); i++) {
 				Input cloneInput = clone.getInput(i);
 				Input mergeInput = mergeUnit.getInput(i);
 				assertFalse("input equals", cloneInput.equals(mergeInput));
@@ -175,7 +184,7 @@ public class UnitElementTests extends TestCase {
 			
 			// assert Outputs
 //			assertEquals("outputs actual", mergeUnit.getOutputsActualCount(), clone.getOutputsActualCount());
-			for (int i = 0; i < clone.getOutputsMaxCount(); i++) {
+			for (int i = 0; i < clone.getOutputsCount(); i++) {
 				Output cloneOutput = clone.getOutput(i);
 				Output mergeOutput = mergeUnit.getOutput(i);
 				assertFalse("output equals", cloneOutput.equals(mergeOutput));
@@ -193,41 +202,5 @@ public class UnitElementTests extends TestCase {
 		}
 	}
 	
-	public void testAreImageDepthCompatible() {
-		
-		UnitElement unit1 = new UnitElement("unit1", "some syntax", 1, 1, 0);
-		unit1.addOutput("output1", "o", PlugInFilter.DOES_32, false);
-		unit1.addOutput("output2", "o", PlugInFilter.DOES_ALL, false);
-		unit1.addOutput("output2", "o", -1, false);
-		UnitElement unit2 = new UnitElement("unit2", "some syntax", 1, 1, 0);
-		unit2.addInput("input1", "i", PlugInFilter.DOES_32, false);
-		unit2.addInput("input2", "i", PlugInFilter.DOES_16, false);
-		unit2.addInput("input3", "i", PlugInFilter.DOES_ALL, false);
-		
-		// conn1 32 to 16		
-		Connection conn1 = new Connection(unit1,1,unit2,1);
-		assertTrue("both do 32", conn1.areImageBitDepthCompatible());
-		
-		// conn2 32 to 16		
-		Connection conn2 = new Connection(unit1,1,unit2,2);
-		assertFalse("both do 32", conn2.areImageBitDepthCompatible());
-
-		// conn3 ALL to 32
-		Connection conn3 = new Connection(unit1,2,unit2, 1);
-		assertTrue("all to 32", conn3.areImageBitDepthCompatible());
-		
-		// conn4 32 to all
-		Connection conn4 = new Connection(unit1,1,unit2, 3);
-		assertTrue("32 to all", conn4.areImageBitDepthCompatible());
-		
-		// now test pins, which don't care
-		//TODO hm how should this react actually? needs an input set
-		Connection conn5 = new Connection(unit1,3,unit2, 2);
-		assertTrue("-1 to 16", conn5.areImageBitDepthCompatible());
-		
-		// now test pins, which don't care
-		Connection conn6 = new Connection(unit1,3,unit2, 3);
-		assertTrue("-1 to ALL", conn6.areImageBitDepthCompatible());
-	}
 	
 }

@@ -11,6 +11,8 @@ import models.unit.UnitElement;
  *
  */
 public class Output extends Pin {
+	
+
 	/**
 	 * the number of this unit
 	 */
@@ -61,7 +63,7 @@ public class Output extends Pin {
 	
 	
 	public Output(final UnitElement nodeParent, final int outputNumber) {
-		super("output", outputNumber, nodeParent.getOutputsMaxCount(), nodeParent);
+		super("output", outputNumber, nodeParent.getOutputsCount(), nodeParent);
 		connectTo(nodeParent.getUnitID(), outputNumber);
 	}
 	
@@ -71,7 +73,7 @@ public class Output extends Pin {
 	 * @param nodeParent
 	 */
 	public Output(final UnitElement toUnit, final int outputNumber,  final UnitElement nodeParent) {
-		super("output", outputNumber, nodeParent.getOutputsMaxCount(), nodeParent);
+		super("output", outputNumber, nodeParent.getOutputsCount(), nodeParent);
 		this.toUnit = toUnit;
 		connectTo(nodeParent.getUnitID(), outputNumber);
 	}
@@ -170,12 +172,16 @@ public class Output extends Pin {
 	@Override
 	public Point getLocation() {
 		int height = parent.getDimension().height;
+		int nump = ((UnitElement) parent).getOutputsCount();
+		this.nump = nump;
 		int y =  (i*height / super.nump ) - (height/(2*super.nump)) + parent.getOrigin().y;
 		Point point = new Point(parent.getOrigin().x+parent.getDimension().width, y);
 		return point;
 	}
 
-
+	public int getOutputNumber() {
+		return outputNumber;
+	}
 
 	/**
 	 * Returns whether or not this Input is connected.
@@ -198,6 +204,10 @@ public class Output extends Pin {
 			return this.toUnit.getInput(this.toInputNumber-1).equals(input);
 		}
 		return false;
+	}
+
+	public Input getToInput() {
+		return toUnit.getInput(this.toInputNumber-1);
 	}
 
 }

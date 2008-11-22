@@ -18,6 +18,9 @@ public class Input extends Pin {
 //	protected Node unit;
 //	protected int i;	// the number of this input 
 
+
+
+
 	/**
 	 * the name to be displayed in the context help
 	 */
@@ -74,7 +77,7 @@ public class Input extends Pin {
 	 * @param nodeParent
 	 */
 	public Input(final UnitElement nodeParent, int inputNumber) {
-		super("input", inputNumber, nodeParent.getInputsMaxCount(), nodeParent);
+		super("input", inputNumber, nodeParent.getInputsCount(), nodeParent);
 	}
 	
 	
@@ -84,7 +87,7 @@ public class Input extends Pin {
 	 * @param nodeParent
 	 */
 	public Input(final UnitElement fromUnit, final int inputNumber, final UnitElement nodeParent) {
-		super("input", inputNumber, nodeParent.getInputsMaxCount(), nodeParent);
+		super("input", inputNumber, nodeParent.getInputsCount(), nodeParent);
 		connectTo(fromUnit.getUnitID(), inputNumber);
 	}
 	
@@ -208,6 +211,8 @@ public class Input extends Pin {
 	@Override
 	public Point getLocation() {
 		int height = parent.getDimension().height;
+		int nump = ((UnitElement) parent).getInputsCount();
+		this.nump = nump;
 		int y =  (i*height / super.nump ) - (height/(2*super.nump)) + parent.getOrigin().y;
 		Point point = new Point(parent.getOrigin().x, y);
 		return point;
@@ -230,7 +235,9 @@ public class Input extends Pin {
 		return this.fromUnit;
 	}
 
-	
+	public int getFromUnitNumber() {
+		return fromUnitNumber;
+	}
 
 	/**
 	 * Returns whether or not this Input is connected.
@@ -274,6 +281,11 @@ public class Input extends Pin {
 	 */
 	public boolean isImageBitDepthCompatible(final int imageBitDepth) {
 		return (getImageBitDepth()&imageBitDepth) != 0;
+	}
+
+
+	public Output getFromOutput() {
+		return fromUnit.getOutput(this.fromOutputNumber-1);
 	}
 
 

@@ -40,10 +40,10 @@ public class UnitFactory {
 		// 
 		String unitName = unitDescription.unitName;
 		String imageJSyntax = unitDescription.imageJSyntax;
+		int numParas = unitDescription.numParas;
 		int numInputs = unitDescription.numInputs;
 		int numOutputs = unitDescription.numOutputs;
-		int numParas = unitDescription.numParas;
-		UnitElement unitElement = new UnitElement(origin, unitName, imageJSyntax, numInputs, numOutputs, numParas);
+		UnitElement unitElement = new UnitElement(origin, unitName, imageJSyntax);
 		Color color = unitDescription.color;
 		unitElement.setColor(color);
 		
@@ -136,7 +136,7 @@ public class UnitFactory {
 	 */
 	public static UnitElement createAddNoiseUnit(Point origin) {
 		// 
-		UnitElement noiseUnit = new UnitElement(origin, "Add Noise", "run(\"Add Noise\"); \n",1,1,0);
+		UnitElement noiseUnit = new UnitElement(origin, "Add Noise", "run(\"Add Noise\"); \n");
 		
 		// setup of the first input of unit 2
 		noiseUnit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
@@ -149,7 +149,7 @@ public class UnitFactory {
 	
 	public static UnitElement createHistogramUnit(Point origin) {
 		// 
-		UnitElement unit = new UnitElement(origin, "Histogram", "run(\"Histogram\"); \n",1,0,0);
+		UnitElement unit = new UnitElement(origin, "Histogram", "run(\"Histogram\"); \n");
 		
 		// setup of the first input of unit 2
 		unit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
@@ -176,7 +176,7 @@ public class UnitFactory {
 	 */
 	public static UnitElement createFindEdgesUnit(Point origin) {
 		// 
-		UnitElement noiseUnit = new UnitElement(origin, "Find Edges", "	run(\"Find Edges\");\n",1,1,0);
+		UnitElement noiseUnit = new UnitElement(origin, "Find Edges", "	run(\"Find Edges\");\n");
 		
 		// setup of the first input of unit 2
 		noiseUnit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
@@ -189,7 +189,7 @@ public class UnitFactory {
 	
 	public static UnitElement createInvertUnit(Point origin) {
 		// 
-		UnitElement unit = new UnitElement(origin, "Invert", "	run(\"Invert\");\n",1,1,0);
+		UnitElement unit = new UnitElement(origin, "Invert", "	run(\"Invert\");\n");
 		
 		// setup of the first input of unit 2
 		unit.addInput("Input", "I", ij.plugin.filter.PlugInFilter.DOES_ALL, true);
@@ -209,7 +209,7 @@ public class UnitFactory {
 	public static UnitElement createImageCalculatorUnit(Point origin) {
 		
 		UnitElement mergeUnit = new UnitElement(origin, "Image Calculator", 
-				"run(\"Image Calculator...\", \"image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create 32-bit\"); \n",2,1,1);
+				"run(\"Image Calculator...\", \"image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create 32-bit\"); \n");
 		String[] mathChoices = {"Add", "Subtract", "Multiply", "Devide", "AND", "OR", "XOR"};
 		mergeUnit.addParameter(
 				new ChoiceParameter("Math", mathChoices, "Add",
@@ -284,7 +284,7 @@ public class UnitFactory {
 	 */
 	public static UnitElement createSourceUnit(String path, Point origin) {
 
-		UnitElement sourceUnit = new UnitElement(origin, "Image Source", "open(\"PARA_STRING_1\");\n", 0, 1, 1);
+		UnitElement sourceUnit = new UnitElement(origin, "Image Source", "open(\"PARA_STRING_1\");\n");
 		// setup of the first parameter
 		sourceUnit.addParameter(
 				ParameterFactory.createParameter("Input image file",	// parameter description
@@ -318,7 +318,7 @@ public class UnitFactory {
 	public static UnitElement createBackgroundUnit(Dimension dimension, Point origin) {
 
 		UnitElement sourceUnit = new UnitElement(origin, "Background", 
-				"newImage(\"Background\", \"8-bit White\", PARA_INTEGER_1, PARA_INTEGER_2, 1);\n", 0, 1, 2); 
+				"newImage(\"Background\", \"8-bit White\", PARA_INTEGER_1, PARA_INTEGER_2, 1);\n"); 
 		// setup of the first parameter
 		sourceUnit.addParameter(
 				ParameterFactory.createParameter("Background width", dimension.width, "Width of the background image"));
@@ -366,7 +366,7 @@ public class UnitFactory {
 	 */
 	public static UnitElement createGaussianBlurUnit(Point origin) {
 		// 
-		UnitElement blurUnit = new UnitElement(origin, "Gaussian Blur", "run(\"Gaussian Blur...\", \"sigma=PARA_DOUBLE_1\");\n",1,1,1);
+		UnitElement blurUnit = new UnitElement(origin, "Gaussian Blur", "run(\"Gaussian Blur...\", \"sigma=PARA_DOUBLE_1\");\n");
 		try {
 			blurUnit.setIcon(ImageIO.read(new File("bin/res/blur.png")));
 		} catch (IOException e) {

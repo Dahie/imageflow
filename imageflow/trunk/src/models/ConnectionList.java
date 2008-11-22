@@ -26,6 +26,7 @@ public class ConnectionList extends Edges implements Model {
 		this.listeners = new ArrayList<ModelListener>();
 	}
 	
+	
 	/* (non-Javadoc)
 	 * @see graph.Edges#add(graph.Pin, graph.Pin)
 	 */

@@ -1,6 +1,7 @@
 package models;
 
 import graph.Edge;
+import graph.Node;
 import graph.Pin;
 import models.unit.UnitElement;
 
@@ -65,6 +66,7 @@ public class Connection extends Edge {
 		id = getID(fromUnitNumber, fromOutputNumber, toUnitNumber, toInputNumber);
 		connect();
 	}
+
 
 
 	/**
@@ -163,7 +165,7 @@ public class Connection extends Edge {
 	public boolean hasInputMarked() {
 		boolean hasMarked = true;
 		
-		if(toUnit.getInputsActualCount() > 0) {
+		if(toUnit.getInputsCount() > 0) {
 			// check each input, if it's parent has been registered
 			int mark = fromUnit.getOutput(0).getMark();
 			// if mark is not set

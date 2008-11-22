@@ -49,8 +49,8 @@ public class MacroGenerator {
 			macroElement.reset();
 			
 			
-			int numInputs = unit.getInputsActualCount();
-			int numOutputs = unit.getOutputsMaxCount();
+			int numInputs = unit.getInputsCount();
+			int numOutputs = unit.getOutputsCount();
 			int numParas = unit.getParameters().size();
 
 			
@@ -107,7 +107,7 @@ public class MacroGenerator {
 
 	private static String deleteImages(UnitElement unit) {
 		String macroText = "";
-		int numOutputs = unit.getOutputsMaxCount();
+		int numOutputs = unit.getOutputsCount();
 
 		for (int out = 0; out < numOutputs; out++) {
 			if (!unit.isDisplayUnit()) {

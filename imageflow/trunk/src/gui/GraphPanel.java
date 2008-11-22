@@ -65,7 +65,7 @@ public class GraphPanel extends GPanel {
 	            RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		// paint non printable items
-		if (drawEdge!= null)	{
+		if (drawEdge != null) {
 			Point origin = drawEdge.getLocation();
 //			g2.setStroke(new BasicStroke(1f));
 			for (Node node : nodeL) {

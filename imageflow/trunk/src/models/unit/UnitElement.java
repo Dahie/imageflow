@@ -19,9 +19,6 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.util.ArrayList;
 
-import backend.Model;
-import backend.ModelListener;
-
 import models.BooleanParameter;
 import models.ChoiceParameter;
 import models.DoubleParameter;
@@ -32,6 +29,8 @@ import models.Output;
 import models.Parameter;
 import models.ParameterFactory;
 import models.StringParameter;
+import backend.Model;
+import backend.ModelListener;
 
 
 /**
@@ -107,15 +106,15 @@ public class UnitElement extends NodeAbstract implements Model {
 	/**
 	 * Maximum number of Parameters, that can be added to this UnitElement.
 	 */
-	protected int numMaxParameters;
+//	protected int numMaxParameters;
 	/**
 	 * Maximum number of {@link Input}s, that can be added to this UnitElement.
 	 */
-	protected int numMaxInputs;
+//	protected int numMaxInputs;
 	/**
 	 * Maximum number of {@link Output}s, that can be added to this UnitElement.
 	 */
-	protected int numMaxOutputs;
+//	protected int numMaxOutputs;
 
 	private int FIRST_ELEMENT = 0;
 
@@ -133,14 +132,11 @@ public class UnitElement extends NodeAbstract implements Model {
 	 */
 	public UnitElement  (
 			final String unitName,
-			final String unitsImageJSyntax,
-			final int numInputs, 
-			final int numOutputs, 
-			final int numParameters) {
+			final String unitsImageJSyntax) {
 		super(new Point(30,30), new MacroElement(unitsImageJSyntax));
 		setDimension(new Dimension(100,100));
 		
-		init(unitName, numInputs, numOutputs, numParameters);
+		init(unitName);
 	}
 
 	/**
@@ -154,14 +150,11 @@ public class UnitElement extends NodeAbstract implements Model {
 	public UnitElement  (
 			final Point origin,
 			final String unitName,
-			final String unitsImageJSyntax,
-			final int numInputs, 
-			final int numOutputs, 
-			final int numParameters) {
+			final String unitsImageJSyntax) {
 		super(origin, new MacroElement(unitsImageJSyntax));
 		setDimension(new Dimension(100,100));
 		
-		init(unitName, numInputs, numOutputs, numParameters);
+		init(unitName);
 	}
 
 	/**
@@ -175,14 +168,11 @@ public class UnitElement extends NodeAbstract implements Model {
 	public UnitElement  (
 			final Point origin,
 			final String unitName,
-			final MacroElement macroElement,
-			final int numInputs, 
-			final int numOutputs, 
-			final int numParameters) {
+			final MacroElement macroElement) {
 		super(origin, macroElement);
 		setDimension(new Dimension(100,100));
 		
-		init(unitName, numInputs, numOutputs, numParameters);
+		init(unitName);
 	}
 
 	/**
@@ -191,14 +181,10 @@ public class UnitElement extends NodeAbstract implements Model {
 	 * @param numOutputs
 	 * @param numParameters
 	 */
-	private void init(final String unitName, final int numInputs,
-			final int numOutputs, final int numParameters) {
+	private void init(final String unitName) {
 		ids++;
 		this.unitID = ids;
 		this.unitName = unitName;
-		this.numMaxParameters = numParameters;
-		this.numMaxInputs = numInputs;
-		this.numMaxOutputs = numOutputs;
 		
 		this.listeners = new ArrayList<ModelListener>();
 		this.inputs = new ArrayList<Input>();
@@ -275,15 +261,13 @@ public class UnitElement extends NodeAbstract implements Model {
 		return this.outputs;
 	}
 	
-	/**
-	 * @return 
-	 * 
-	 */
-	public int getOutputsMaxCount() {
-		return this.numMaxOutputs;
+
+	public int getOutputsCount() {
+		return this.outputs.size();
 	}
 
-
+	
+	
 	/**
 	 * Returns the {@link Input} at the given index. Indecies start with 0.
 	 * @param index
@@ -340,20 +324,11 @@ public class UnitElement extends NodeAbstract implements Model {
 	 * How many {@link Input}s are actually registered.
 	 * @return
 	 */
-	public int getInputsActualCount() {
+	public int getInputsCount() {
 		return this.inputs.size();
 	}
 	
 
-	/**
-	 * How many {@link Input}s can be registered.
-	 * @return
-	 */
-	public int getInputsMaxCount() {
-		return this.numMaxInputs;
-	}
-
-	
 
 	/**
 	 * Returns the name of this unit.
@@ -388,28 +363,18 @@ public class UnitElement extends NodeAbstract implements Model {
 	 * @return 
 	 */
 	public boolean addParameter(final Parameter parameter){
-		if(this.numMaxParameters > parameters.size()) {
-			final int parameterNumber = parameters.size()+1;
-			parameter.setParameterNumber(parameterNumber);
-			notifyModelListeners();
-			return this.parameters.add(parameter);
-		}
-		return false;
+		final int parameterNumber = parameters.size()+1;
+		parameter.setParameterNumber(parameterNumber);
+		notifyModelListeners();
+		return this.parameters.add(parameter);
 	}
 
-	/**
-	 * Returns how many {@link Parameter}s this can unit have.
-	 * @return
-	 */
-	public int getParametersMaxCount() {
-		return this.numMaxParameters;
-	}
 	
 	/**
 	 * Returns how many assigned {@link Parameter}s this unit actually has.
 	 * @return
 	 */
-	public int getParametersActualCount() {
+	public int getParametersCount() {
 		return this.parameters.size();
 	}
 
@@ -492,7 +457,7 @@ public class UnitElement extends NodeAbstract implements Model {
 		if ((x >= origin.x - tolerance)
 				&&(x < origin.x + tolerance))	{
 			System.out.println("hey close");
-			int inputsMaxCount = getInputsMaxCount();
+			int inputsMaxCount = getInputsCount();
 			for (int i = 0; i < inputsMaxCount; i++) {
 				int lower_y = PaintUtil.alignY(inputsMaxCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
 				if ((y >= lower_y)&&(y <= lower_y + tolerance*2)) {
@@ -502,7 +467,7 @@ public class UnitElement extends NodeAbstract implements Model {
 		}
 		if ((x >= origin.x + getDimension().width - tolerance)
 				&&(x < origin.x + getDimension().width + tolerance)) {
-			int outputsCount = getOutputsMaxCount();
+			int outputsCount = getOutputsCount();
 			for (int i = 0; i < outputsCount; i++) {
 				int lower_y = PaintUtil.alignY(outputsCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
 				if ((y >= lower_y)&&(y <= lower_y + tolerance*2)) {
@@ -539,7 +504,7 @@ public class UnitElement extends NodeAbstract implements Model {
 		
 		
 		//draw inputs
-		int numberInputs = getInputsActualCount();
+		int numberInputs = getInputsCount();
 		for (int i = 0; i < numberInputs; i++) {
 			g.setColor(Color.BLACK);
 			int y =  PaintUtil.alignY(numberInputs, i, unitIcon.getHeight(null), NodeIcon.pinSize);
@@ -547,7 +512,7 @@ public class UnitElement extends NodeAbstract implements Model {
 		}
 
 		//draw outputs
-		int numberOutputs = getOutputsMaxCount();
+		int numberOutputs = getOutputsCount();
 		for (int i = 0; i < numberOutputs; i++) {
 			g.setColor(Color.BLACK);
 
@@ -595,10 +560,7 @@ public class UnitElement extends NodeAbstract implements Model {
 		String imageJSyntax = ((MacroElement)this.obj).getImageJSyntax();
 		UnitElement clone = new UnitElement(new Point(origin.x+15, origin.y+15), 
 				this.unitName, 
-				imageJSyntax, 
-				this.numMaxInputs, 
-				this.numMaxOutputs, 
-				this.numMaxParameters);
+				imageJSyntax);
 		for (Input input : inputs) {
 			clone.addInput(input.getName(), 
 				input.getShortDisplayName(), 
@@ -654,16 +616,16 @@ public class UnitElement extends NodeAbstract implements Model {
 	public boolean hasAllInputsMarked() {
 		boolean hasAllMarked = true;
 		
-		if(getInputsActualCount() > 0) {
+		if(getInputsCount() > 0) {
 			// check each input, if it's parent has been registered
 			for (Input input : getInputs()) {
 				if(input.isConnected()) {
 					int mark = input.getFromUnit().getOutput(0).getMark();
 					// if mark is not set
 					if(mark == 0) {
-						// this connected ouput hasn't been regisred and is missing a mark, 
+						// this connected output hasn't been registered and is missing a mark, 
 						// so the whole unit isn't ready set. 
-						hasAllMarked = false;
+						return false;
 					} 
 					// else mark is already set, so this output is fine
 				} else {
@@ -679,6 +641,27 @@ public class UnitElement extends NodeAbstract implements Model {
 		}
 		
 		return hasAllMarked;
+	}
+	
+
+	/**
+	 * Returns true if an output is marked.
+	 * @return
+	 */
+	public boolean hasMarkedOutput() {
+		for (Output output : this.outputs) {
+			
+			// output is actually connected
+			if(output.isConnected()) {
+				
+				int mark = ((UnitElement)output.getParent()).getMark();
+				// if mark is set to anything
+				if(mark != 0) { 
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -808,6 +791,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	public void removeModelListener(ModelListener listener) {
 		this.listeners.remove(listener);
 	}
+
 
 }
 
