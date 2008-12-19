@@ -26,9 +26,25 @@ public class ConnectionTests extends TestCase {
 		final UnitElement blur = UnitFactory.createGaussianBlurUnit(); 
 		
 		final Connection connection1 = new Connection(source, 1, blur, 1);
+		connection1.connect();
 		assertTrue("status check 1", (connection1.checkConnection() == Connection.Status.OK) );
-		assertTrue("check imageTitles generated on pins", 
-				source.getOutput(0).getImageTitle().equals(blur.getInput(0).getImageTitle()));
+		
+		assertTrue("connection conncted", connection1.isConnected());
+		assertEquals(source, connection1.getFromUnit());
+		assertEquals(blur, connection1.getToUnit());
+		
+		
+		
+		Output output = source.getOutput(0);
+		Input input = blur.getInput(0);
+		assertEquals("source output parent", source, output.getParent());
+		assertEquals("source output to unit", blur, output.getToUnit());
+		assertEquals("blur input parent", blur, input.getParent());
+		assertEquals("blur input from unit", source, input.getFromUnit());
+		
+		assertEquals("check imageTitles generated on pins", 
+				output.getImageTitle(), 
+				input.getImageTitle());
 		
 		
 	}
@@ -99,6 +115,11 @@ public class ConnectionTests extends TestCase {
 		assertTrue("Source", conn.isConnectedToUnit(sourceUnit));
 		assertTrue("Filter1", conn.isConnectedToUnit(filterUnit1));
 		assertFalse("Filter2", conn.isConnectedToUnit(filterUnit2));
+		
+	}
+	
+	
+	public void testCauseLoops() {
 		
 	}
 	

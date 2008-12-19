@@ -83,7 +83,7 @@ public class MacroGenerator {
 				
 				macroText +=  "ID_temp = getImageID(); \n" +
 					"run(\"Duplicate...\", \"title=" + outputTitle  + "\"); \n" +
-				outputID + " = getImageID(); \n" +
+					outputID + " = getImageID(); \n" +
 					"selectImage(ID_temp); \n" +
 					"close(); \n";
 			}
@@ -120,17 +120,11 @@ public class MacroGenerator {
 		return macroText;
 	}
 
-
-
-
-
-
 	private static String duplicateImages(UnitElement unit,	int numInputs) {
 		String code = "";
 		for (int in = 0; in < numInputs; in++) {
 			Input input = unit.getInput(in);
 			if(input.isNeedToCopyInput()) {
-				//String inputTitle = unit.inputs[in].imageTitle;
 				String inputID = unit.getInput(in).getImageID();
 
 				code += "selectImage(" + inputID + "); \n";

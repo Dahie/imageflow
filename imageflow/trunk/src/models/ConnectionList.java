@@ -49,8 +49,7 @@ public class ConnectionList extends Edges implements Model {
 			final Connection connection = new Connection(((UnitElement)from.getParent()), from.getIndex(), 
 					((UnitElement)to.getParent()), to.getIndex());
 
-			// check the bit depth
-			if(!connection.areImageBitDepthCompatible()) return false;
+			
 			
 			System.out.println("new connection: from Unit: " + from.getParent() 
 					+ " to Unit: " + to.getParent() 
@@ -62,8 +61,8 @@ public class ConnectionList extends Edges implements Model {
 			
 			
 			// check for loops
-			final boolean isLoop = ((Input)from).knows(to.getParent());
-			if(isLoop) return false;
+//			final boolean isLoop = ((Input)from).knows(to.getParent());
+//			if(isLoop) return false;
 			
 			final Connection connection = new Connection(((UnitElement)to.getParent()), to.getIndex(), 
 					((UnitElement)from.getParent()), from.getIndex());
@@ -93,8 +92,7 @@ public class ConnectionList extends Edges implements Model {
 			final int fromOutput, 
 			final UnitElement to, 
 			final int toInput) {
-		final Connection conn = new Connection(from, fromOutput, to, toInput);
-		return this.add(conn);
+		return this.add(new Connection(from, fromOutput, to, toInput));
 	}
 	
 	
@@ -104,8 +102,8 @@ public class ConnectionList extends Edges implements Model {
 	 * @return
 	 */
 	public boolean add(final Connection connection) {
-		final Input input = connection.getToUnit().getInput(connection.toInputNumber-1);
-		final Output output = connection.getFromUnit().getOutput(connection.fromOutputNumber-1);
+		final Input input = connection.getToUnit().getInput(connection.to.getIndex()-1);
+		final Output output = connection.getFromUnit().getOutput(connection.from.getIndex()-1);
 		
 		// check the bit depth
 		if(!connection.areImageBitDepthCompatible()) {
@@ -115,10 +113,11 @@ public class ConnectionList extends Edges implements Model {
 		
 		//TODO check if connection produces loop
 //		if(output.knows(input.getParent())) return false;
-		/*if(input.knows(output.getParent())) {
+//		if(output.knows(input.getParent())) {
+		if(input.knows(output.getParent())) {
 			System.out.println("Connection disallowed: Loop detected");
 			return false;
-			}*/
+			}
 		
 		//check if input already got a connection, if yes, delete that one
 		for (int i = 0; i < this.size(); i++) {
@@ -131,8 +130,9 @@ public class ConnectionList extends Edges implements Model {
 			}
 		}
 		
-		input.connectTo(connection.fromUnit, connection.fromOutputNumber);
-		output.connectTo(connection.toUnit, connection.fromOutputNumber);
+//		input.connectTo(connection.getFromUnit(), connection.from.getIndex());
+//		output.connectTo(connection.getToUnit(), connection.to.getIndex());
+		connection.connect();
 		
 		return super.add(connection);
 	}

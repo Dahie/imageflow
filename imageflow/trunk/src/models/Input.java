@@ -12,7 +12,7 @@ import models.unit.UnitElement;
  * @author danielsenff
  *
  */
-public class Input extends Pin {
+public class Input extends Pin implements Connectable {
 	/**
 	 * the number of this unit
 	 */
@@ -62,15 +62,16 @@ public class Input extends Pin {
 	/**
 	 * Connected from this {@link UnitElement}-number.
 	 */
-	protected int fromUnitNumber;
+//	protected int fromUnitNumber;
 	/**
 	 * Connected from this {@link Output}
 	 */
-	protected int fromOutputNumber;
+//	protected int fromOutputNumber;
 	/**
 	 * Connected from this {@link UnitElement}
 	 */
 	protected UnitElement fromUnit;
+	protected Output from;
 	
 	
 	/**
@@ -88,19 +89,16 @@ public class Input extends Pin {
 	 * @param inputNumber
 	 * @param nodeParent
 	 */
-	public Input(final UnitElement fromUnit, final int inputNumber, final UnitElement nodeParent) {
+	/*public Input(final UnitElement fromUnit, final int inputNumber, final UnitElement nodeParent) {
 		super("input", inputNumber, nodeParent.getInputsCount(), nodeParent);
-		connectTo(fromUnit.getUnitID(), inputNumber);
-	}
+	}*/
 	
 	/**
 	 * Sets the connection between this input and an output.
 	 * @param fromUnitNumber
 	 * @param fromOutputNumber
 	 */
-	private void connectTo(final int fromUnitNumber, final int fromOutputNumber) {
-		this.fromUnitNumber = fromUnitNumber;
-		this.fromOutputNumber = fromOutputNumber;
+	private void generateID(final int fromUnitNumber, final int fromOutputNumber) {
 		this.imageTitle = "Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
 		this.imageID = "ID_Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
 	}
@@ -111,10 +109,14 @@ public class Input extends Pin {
 	 * @param fromOutputNumber
 	 */
 	public void connectTo(final UnitElement fromUnit, final int fromOutputNumber) {
-		this.fromUnit = fromUnit;
-		connectTo(fromUnit.getUnitID(), fromOutputNumber);
+		connectTo(fromUnit, fromUnit.getOutput(fromOutputNumber-1));
 	}
-
+	
+	public void connectTo(final UnitElement fromUnit, final Pin fromOutput) {
+		this.fromUnit = fromUnit;
+		this.from = (Output)fromOutput;
+		generateID(fromUnit.getUnitID(), fromOutput.getIndex());
+	}
 
 	/**
 	 * Setup the basic data.
@@ -202,7 +204,7 @@ public class Input extends Pin {
 	 */
 	@Override
 	public String toString() {
-		return super.toString()+" fromUnit: " + this.fromUnitNumber + " fromOutput: "+this.fromOutputNumber;
+		return super.toString()+" fromUnit: " + this.fromUnit + " fromOutput: "+ this.from;
 	}
 
 	
@@ -241,7 +243,7 @@ public class Input extends Pin {
 	 * @return
 	 */
 	public int getFromUnitNumber() {
-		return fromUnitNumber;
+		return fromUnit.getUnitID();
 	}
 
 	/**
@@ -250,8 +252,8 @@ public class Input extends Pin {
 	 */
 	public boolean isConnected() {
 		return (fromUnit != null) 
-			&& (fromUnitNumber > 0)
-			&& (fromOutputNumber > 0);
+//			&& (fromUnitNumber > 0)
+			&& (this.from != null);
 	}
 	
 	
@@ -260,9 +262,9 @@ public class Input extends Pin {
 	 * @param output 
 	 * @return
 	 */
-	public boolean isConnectedWith(Output output) {
-		if(this.fromUnit != null) {
-			return this.fromUnit.getOutput(this.fromOutputNumber-1).equals(output);
+	public boolean isConnectedWith(Pin output) {
+		if(output instanceof Output && isConnected()) {
+			return this.from.equals(output);
 		}
 		return false;
 	}
@@ -272,8 +274,9 @@ public class Input extends Pin {
 	 * Resets the this Input, so that it is unconnected.
 	 */
 	public void disconnect() {
-		connectTo(0, 0); // reset connection
+		generateID(0, 0); // reset connection
 		this.fromUnit = null;
+		this.from = null;
 	}
 
 
@@ -293,7 +296,7 @@ public class Input extends Pin {
 	 * @return
 	 */
 	public Output getFromOutput() {
-		return fromUnit.getOutput(this.fromOutputNumber-1);
+		return from;
 	}
 
 	/**
@@ -310,7 +313,7 @@ public class Input extends Pin {
 		if(this.isConnected()) {
 			for (Input input : fromUnit.getInputs()) {
 				// check if this parent is already what we are looking for
-				if(node.equals(input.getParent())) { 
+				if(input.getParent().equals(node)) { 
 					return true;
 				//check if this input is connected to more
 				} else if(input.isConnected()) {

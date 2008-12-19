@@ -28,10 +28,14 @@ public class InputTests extends TestCase {
 		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
 		
 		Input filter1Input = filterUnit1.getInput(0);
-		Input filter2Input = filterUnit1.getInput(0);
+		Input filter2Input = filterUnit2.getInput(0);
 
 		Connection conn1 = new Connection(sourceUnit, 1, filterUnit1, 1);
 		Connection conn2 = new Connection(sourceUnit, 1, filterUnit2, 1);
+		ConnectionList connList= new ConnectionList();
+		assertTrue(connList.add(conn1));
+		assertTrue(connList.add(conn2));
+		
 		
 		// the imagetitle is constructed from the unit and pin the 
 		// connection comes from and the 
@@ -39,7 +43,7 @@ public class InputTests extends TestCase {
 				"Unit_"+sourceUnit.getUnitID()+"_Output_1", filter1Input.getImageTitle());
 		
 		assertEquals("imagetitle for input 1 at unit 3", 
-				"Unit_"+sourceUnit.getUnitID()+"_Output_1", filter1Input.getImageTitle());
+				"Unit_"+sourceUnit.getUnitID()+"_Output_1", filter2Input.getImageTitle());
 	}
 	
 	public void testIsConnected() {
@@ -59,7 +63,7 @@ public class InputTests extends TestCase {
 		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
 		
 		ConnectionList connList = new ConnectionList();
-		connList.add(conn);
+		assertTrue(connList.add(conn));
 		
 		// test after connecting
 		assertTrue("input connected", filterInput.isConnected());	
@@ -161,7 +165,7 @@ public class InputTests extends TestCase {
 		
 		Input input2 = unit2.getInput(0);
 		assertTrue("input2 knows unit1", input2.knows(unit1));
-		assertTrue("input2 knows unit2", input2.knows(unit2));
+		assertFalse("input2 knows unit2", input2.knows(unit2));
 		assertFalse("input2 knows unit3", input2.knows(unit3));
 		
 		Connection conn2 = new Connection(unit2, 1, unit3, 1);
@@ -170,7 +174,7 @@ public class InputTests extends TestCase {
 		Input input3 = unit3.getInput(0);
 		assertTrue("input3 knows unit1", input3.knows(unit1));
 		assertTrue("input3 knows unit2", input3.knows(unit2));
-		assertTrue("input3 knows unit1", input3.knows(unit3));
+		assertFalse("input3 knows unit1", input3.knows(unit3));
 		assertFalse("input2 knows unit3", input2.knows(unit3));
 	}
 	

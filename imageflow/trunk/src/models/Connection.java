@@ -16,11 +16,11 @@ public class Connection extends Edge {
 	/** 
 	 * From which {@link Output}
 	 */
-	protected int fromOutputNumber;	
+//	protected int fromOutputNumber;	
 	/**
 	 * From which {@link UnitElement}-number
 	 */
-	protected int fromUnitNumber;
+//	protected int fromUnitNumber;
 	/**
 	 * From which {@link UnitElement} connected.
 	 */
@@ -29,11 +29,11 @@ public class Connection extends Edge {
 	/**
 	 * Connected to this Input.
 	 */
-	protected int toInputNumber;
+//	protected int toInputNumber;
 	/**
 	 * Connected to this {@link UnitElement}-number.
 	 */
-	protected int toUnitNumber;	
+//	protected int toUnitNumber;	
 	/**
 	 * Connected to this {@link UnitElement}.
 	 */
@@ -55,16 +55,43 @@ public class Connection extends Edge {
 			final int fromOutputNumber, 
 			final UnitElement toUnit, 
 			final int toInputNumber) {
-		super(fromUnit.getOutput(fromOutputNumber-1), toUnit.getInput(toInputNumber-1));
-		this.fromUnit = fromUnit;
-		this.fromUnitNumber = fromUnit.getUnitID();
-		this.fromOutputNumber = fromOutputNumber;
+		this(fromUnit, fromUnit.getOutput(fromOutputNumber-1), 
+				toUnit, toUnit.getInput(toInputNumber-1));
+		
+		
+		
+		/*this.fromUnit = fromUnit;
+//		this.fromUnitNumber = fromUnit.getUnitID();
+//		this.fromOutputNumber = fromOutputNumber;
 		this.toUnit = toUnit;
 		this.toUnitNumber = toUnit.getUnitID();
-		this.toInputNumber = toInputNumber;
+//		this.toInputNumber = toInputNumber;
 		
-		id = getID(fromUnitNumber, fromOutputNumber, toUnitNumber, toInputNumber);
-		connect();
+		
+		
+		id = getID(fromUnitNumber, fromOutputNumber, toUnitNumber, toInputNumber);*/
+//		connect();
+	}
+	
+	/**
+	 * @param fromUnit 
+	 * @param fromOutput 
+	 * @param toUnit 
+	 * @param toInput 
+	 * 
+	 */
+	public Connection(final UnitElement fromUnit, 
+			final Pin fromOutput, 
+			final UnitElement toUnit, 
+			final Pin toInput) {
+		super(fromOutput, toInput);
+		this.fromUnit = fromUnit;
+//		this.fromUnitNumber = fromUnit.getUnitID();
+		this.toUnit = toUnit;
+//		this.toUnitNumber = toUnit.getUnitID();
+		
+		id = getID(fromUnit.getUnitID(), fromOutput.getIndex(), 
+				toUnit.getUnitID(), toInput.getIndex());
 	}
 
 
@@ -74,9 +101,11 @@ public class Connection extends Edge {
 	 * @param unitElements
 	 */
 	public void connect() {
+		((Output)this.from).connectTo(toUnit, to);
+		((Input)this.to).connectTo(fromUnit, from);
 		
-		this.toUnit.getInput(toInputNumber-1).connectTo(fromUnit, fromOutputNumber);
-		this.fromUnit.getOutput(fromOutputNumber-1).connectTo(toUnit, toInputNumber);
+//		this.toUnit.getInput(toInputNumber-1).connectTo(fromUnit, fromOutputNumber);
+//		this.fromUnit.getOutput(fromOutputNumber-1).connectTo(toUnit, toInputNumber);
 //		super.to = toUnit.getInput(toInputNumber-1);
 //		((Input) super.to).setConnection(toUnit, fromOutputNumber);	
 	}
@@ -207,11 +236,27 @@ public class Connection extends Edge {
 	 * @return
 	 */
 	public boolean areImageBitDepthCompatible() {
-		Input input = this.toUnit.getInput(this.toInputNumber-1);
-		Output output = this.fromUnit.getOutput(this.fromOutputNumber-1);
+		Input input = ((Input)this.to);
+		Output output = ((Output)this.from);
 		
 //		boolean areCompatible = (input.getImageBitDepth()&output.getImageBitDepth()) != 0;
 		boolean areCompatible = input.isImageBitDepthCompatible(output.getImageBitDepth());
 		return areCompatible;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isConnected() {
+		if(((Input)this.to).isConnected() 
+				&& ((Output)this.from).isConnected()) return true;
+		return false;
+	}
+	
+	public boolean causesLoop() {
+		if(((Input)this.to).knows(this.fromUnit)) return true;
+		if(((Output)this.from).knows(this.toUnit)) return true;
+		return false;
 	}
 }

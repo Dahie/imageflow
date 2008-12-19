@@ -22,18 +22,24 @@ public class OutputTests extends TestCase {
 		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
 		
 		Output sourceOutput = sourceUnit.getOutput(0);
-		Output filter1Input = filterUnit1.getOutput(0);
+		Input filter1Input = filterUnit1.getInput(0);
+		Output filter1Output = filterUnit1.getOutput(0);
 
 		Connection conn1 = new Connection(sourceUnit, 1, filterUnit1, 1);
 		Connection conn2 = new Connection(sourceUnit, 1, filterUnit2, 1);
+		conn1.connect();
+		assertTrue(conn1.isConnected());
+		conn2.connect();
+		assertTrue(conn2.isConnected());
 		
 		// the imagetitle is constructed from the unit and pin the 
 		// connection comes from and the 
 		assertEquals("imagetitle for output 1 at unit 1", 
 				"Unit_"+sourceUnit.getUnitID()+"_Output_1", sourceOutput.getImageTitle());
-		
 		assertEquals("imagetitle for input 1 at unit 2", 
-				"Unit_"+filterUnit1.getUnitID()+"_Output_1", filter1Input.getImageTitle());
+				"Unit_"+sourceUnit.getUnitID()+"_Output_1", filter1Input.getImageTitle());
+		
+		assertNotNull("imagetitle for output 1 at unit 2", filter1Output.getImageTitle());
 	}
 	
 

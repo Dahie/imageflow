@@ -15,12 +15,18 @@ public class MacroTests extends TestCase {
 		
 		final Connection connection1 = new Connection(source, 1, blur, 1);
 		final Connection connection2 = new Connection(blur, 1, noise, 1);
+		ConnectionList connList = new ConnectionList();
+		assertTrue(connList.add(connection1));
+		assertTrue(connList.add(connection2));
+		
+		assertTrue("is conn1 connected", connection1.isConnected());
+		assertTrue("is conn2 connected", connection2.isConnected());
 		
 		assertTrue("status check 1", (connection1.checkConnection() == Connection.Status.OK) );
 		String outputImageTitleSource = source.getOutput(0).getImageTitle();
 		System.out.println(outputImageTitleSource);
 		String inputImageTitleBlur = blur.getInput(0).getImageTitle();
-		System.out.println(inputImageTitleBlur);
+//		System.out.println(inputImageTitleBlur);
 		assertEquals("check ImageTitles generated on pins", 
 				outputImageTitleSource, inputImageTitleBlur);
 		

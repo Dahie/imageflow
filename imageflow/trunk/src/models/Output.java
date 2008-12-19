@@ -11,17 +11,17 @@ import models.unit.UnitElement;
  * @author danielsenff
  *
  */
-public class Output extends Pin {
+public class Output extends Pin implements Connectable {
 	
 
 	/**
 	 * the number of this unit
 	 */
-	protected int unitNumber;
+//	protected int unitNumber;
 	/**
 	 * the number of this output (mostly there is only one output)
 	 */
-	protected int outputNumber;
+//	protected int outputNumber;
 
 	/**
 	 * the name to be displayed in the context help
@@ -55,17 +55,17 @@ public class Output extends Pin {
 	 * is not relevant for the ImageTitle.
 	 */
 	protected UnitElement toUnit;
+	protected Input to;
+	
+	
 	/**
-	 * Number of the pin on the toUnit
+	 * @param nodeParent
+	 * @param outputNumber
 	 */
-	protected int toInputNumber;
-	private int toUnitNumber; 
-		
-	
-	
-	public Output(final UnitElement nodeParent, final int outputNumber) {
+	public Output(final UnitElement nodeParent, 
+			final int outputNumber) {
 		super("output", outputNumber, nodeParent.getOutputsCount(), nodeParent);
-		connectTo(nodeParent.getUnitID(), outputNumber);
+		generateID(((UnitElement)this.parent).getUnitID(), getIndex());
 	}
 	
 	/**
@@ -73,22 +73,19 @@ public class Output extends Pin {
 	 * @param outputNumber
 	 * @param nodeParent
 	 */
-	public Output(final UnitElement toUnit, final int outputNumber,  final UnitElement nodeParent) {
+	/*public Output(final UnitElement toUnit, 
+			final int outputNumber,  
+			final UnitElement nodeParent) {
 		super("output", outputNumber, nodeParent.getOutputsCount(), nodeParent);
 		this.toUnit = toUnit;
-		connectTo(nodeParent.getUnitID(), outputNumber);
-	}
+	}*/
 
 	/**
 	 * Sets the connection between this input and an output.
 	 * @param fromUnitNumber
 	 * @param fromOutputNumber
 	 */
-	private void connectTo(final int unitNumber, final int outputNumber) {
-//		this.toUnitNumber = unitNumber;
-//		this.toOutputNumber = outputNumber;
-		this.unitNumber = unitNumber;
-		this.outputNumber = outputNumber;
+	private void generateID(final int unitNumber, final int outputNumber) {
 		this.imageTitle = "Unit_" + unitNumber + "_Output_" + outputNumber;
 		this.imageID = "ID_Unit_" + unitNumber + "_Output_" + outputNumber;
 	}
@@ -99,11 +96,13 @@ public class Output extends Pin {
 	 * @param toUnit
 	 * @param toOutputNumber 
 	 */
-	public void connectTo(final UnitElement toUnit, final int toOutputNumber) {
+	public void connectTo(final UnitElement toUnit, final int toInputNumber) {
+		connectTo(toUnit, toUnit.getInput(toInputNumber-1));
+	}
+	
+	public void connectTo(final UnitElement toUnit, final Pin toInput) {
 		this.toUnit = toUnit;
-		this.toInputNumber = toOutputNumber;
-		this.toUnitNumber = toUnit.getUnitID();
-//		setConnection(toUnit.getUnitID(), fromOutputNumber);
+		this.to = (Input)toInput;
 	}
 
 	/**
@@ -182,7 +181,7 @@ public class Output extends Pin {
 	}
 
 	public int getOutputNumber() {
-		return outputNumber;
+		return to.getIndex();
 	}
 
 	/**
@@ -191,8 +190,8 @@ public class Output extends Pin {
 	 */
 	public boolean isConnected() {
 		return (this.toUnit != null) 
-			&& (this.toUnitNumber > 0)
-			&& (this.toInputNumber > 0);
+//			&& (this.toUnitNumber > 0)
+			&& (this.to != null);
 	}
 	
 	/**
@@ -200,15 +199,15 @@ public class Output extends Pin {
 	 * @param input 
 	 * @return
 	 */
-	public boolean isConnectedWith(Input input) {
-		if(this.toUnit != null) {
-			return this.toUnit.getInput(this.toInputNumber-1).equals(input);
+	public boolean isConnectedWith(Pin input) {
+		if(this.toUnit != null && input instanceof Input) {
+			return this.to.equals(input);
 		}
 		return false;
 	}
 
 	public Input getToInput() {
-		return toUnit.getInput(this.toInputNumber-1);
+		return this.to;
 	}
 
 	/**
@@ -228,7 +227,7 @@ public class Output extends Pin {
 	public boolean knows(final Node node) {
 		// self reference is true
 		if(node.equals(parent))
-			return false;
+			return true;
 		
 		// can only check inputs, which are connected
 		if(this.isConnected()) {
@@ -252,8 +251,15 @@ public class Output extends Pin {
 	 * Resets the this Output, so that it is unconnected.
 	 */
 	public void disconnect() {
-		connectTo(0, 0); // reset connection
+		generateID(0, 0); // reset connection
 		this.toUnit = null;
+	}
+
+	/**
+	 * @return
+	 */
+	public UnitElement getToUnit() {
+		return this.toUnit;
 	}
 
 

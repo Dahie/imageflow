@@ -45,7 +45,7 @@ import backend.ModelListener;
 public class UnitElement extends NodeAbstract implements Model {
 	
 	/**
-	 * number of units instatiated, incremented with each new object
+	 * number of units instantiated, incremented with each new object
 	 */
 	static int ids;
 	
@@ -426,8 +426,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	 */
 	@Override
 	public String toString() {
-		String string = super.toString() + " Name:"+this.label + " Type:" + this.getType();
-		return string;
+		return super.toString() + " Name:"+this.label + " Type:" + this.getType();
 	}
 
 	/**
