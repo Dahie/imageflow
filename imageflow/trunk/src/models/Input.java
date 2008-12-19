@@ -1,8 +1,10 @@
 package models;
 
+import graph.Node;
 import graph.Pin;
 
 import java.awt.Point;
+import java.util.Iterator;
 
 import models.unit.UnitElement;
 
@@ -235,6 +237,9 @@ public class Input extends Pin {
 		return this.fromUnit;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getFromUnitNumber() {
 		return fromUnitNumber;
 	}
@@ -244,10 +249,9 @@ public class Input extends Pin {
 	 * @return 
 	 */
 	public boolean isConnected() {
-		final boolean isConnected = (fromUnit != null) 
-			|| (fromUnitNumber > 0)
-			|| (fromOutputNumber > 0);
-		return isConnected;
+		return (fromUnit != null) 
+			&& (fromUnitNumber > 0)
+			&& (fromOutputNumber > 0);
 	}
 	
 	
@@ -284,9 +288,41 @@ public class Input extends Pin {
 	}
 
 
+	/**
+	 * The {@link Output} which is connected with this Input.
+	 * @return
+	 */
 	public Output getFromOutput() {
 		return fromUnit.getOutput(this.fromOutputNumber-1);
 	}
 
+	/**
+	 * Returns true if the graph branch connected to this input contains the unit.
+	 * @param node
+	 * @return
+	 */
+	public boolean knows(Node node) {
+		// self reference is true
+		if(node.equals(parent))
+			return false;
+		
+		// can only check inputs, which are connected
+		if(this.isConnected()) {
+			for (Input input : fromUnit.getInputs()) {
+				// check if this parent is already what we are looking for
+				if(node.equals(input.getParent())) { 
+					return true;
+				//check if this input is connected to more
+				} else if(input.isConnected()) {
+					// if it is connected, maybe we have more luck here
+					return input.knows(node);
+				}
+			}
+		}
+
+		// if nothing helps, it's false
+		return false;
+	}
+	
 
 }

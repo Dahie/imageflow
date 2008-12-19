@@ -38,7 +38,6 @@ public class GraphController extends ApplicationController {
 	private ApplicationController controller;
 
 	private UnitList unitElements;
-	private final ConnectionList connectionMap;
 	private ImageJ imagej;
 	/**
 	 * List which stores copied Nodes.
@@ -53,7 +52,6 @@ public class GraphController extends ApplicationController {
 	public GraphController() {
 
 		this.unitElements = new UnitList();
-		this.connectionMap = new ConnectionList();
 		this.copyNodesList = new ArrayList<Node>();
 	}
 
@@ -103,9 +101,10 @@ public class GraphController extends ApplicationController {
 		}
 
 
-		if(connectionMap.size() > 0) {
-			System.out.println("Number of connections: "+ connectionMap.size());
-			for (Iterator iterator = connectionMap.iterator(); iterator.hasNext();) {
+		ConnectionList connections = unitElements.getConnections();
+		if(connections.size() > 0) {
+			System.out.println("Number of connections: "+ connections.size());
+			for (Iterator iterator = connections.iterator(); iterator.hasNext();) {
 				Connection connection = (Connection) iterator.next();
 
 				/*if (!connection.areImageBitDepthCompatible())
@@ -162,7 +161,7 @@ public class GraphController extends ApplicationController {
 	 * @return
 	 */
 	public ConnectionList getConnections() {
-		return this.connectionMap;
+		return this.unitElements.getConnections();
 	}
 
 
@@ -172,7 +171,7 @@ public class GraphController extends ApplicationController {
 		UnitList orderedList = new UnitList();
 
 		// reset all marks
-		unmarkUnits(unitElements);
+		unitElements.unmarkUnits();
 
 		int mark = 0;	// nth element, that has been sorted
 		int i = 0; 		// nth lap in the loop
@@ -187,7 +186,7 @@ public class GraphController extends ApplicationController {
 				// check if all inputs of this node are marked
 				// if so, this unit is moved from the old list to the new one
 				if(unit.hasMarkedOutput()) throw new Exception("Unit has Output marked, " +
-				"although the unit itself is not marked. This suggests an infinited loop.");
+					"although the unit itself is not marked. This suggests an infinited loop.");
 				if(unit.hasAllInputsMarked()) {
 					mark++;	
 
@@ -230,16 +229,6 @@ public class GraphController extends ApplicationController {
 		return unitElements;
 	}
 
-	/**
-	 * Resets all marks to zero.
-	 * @param units
-	 */
-	public static void unmarkUnits(UnitList units) {
-		for (Node node : units) {
-			UnitElement unit = (UnitElement) node;
-			unit.setMark(0);
-		}
-	}
 
 	/**
 	 * Get the List of copied {@link Node};
@@ -255,66 +244,10 @@ public class GraphController extends ApplicationController {
 	 * @return
 	 */
 	public boolean removeUnit(final UnitElement unit) {
-
-		// new connection between the nodes that this deleted node was inbetween
-
-		// get the outputs of the currently connected inputs
-		int numberConnectedInputs = unit.getInputsCount();
-		ArrayList<Output> connectedOutputs = new ArrayList<Output>(numberConnectedInputs);
-		// we use a vector, add stuff to the end and iterate over this without indecies
-		// check if pins are connected and ignor, if not
-		for (int i = 0; i < numberConnectedInputs; i++) {
-			Input input = unit.getInput(i);
-			if(input.isConnected()) {
-				connectedOutputs.add(input.getFromOutput());
-			}
-		}
-		
-		
-		// same for inputs
-		int numberConnectedOutputs = unit.getOutputsCount();
-		ArrayList<Input> connectedInputs = new ArrayList<Input>(numberConnectedOutputs);
-		for (int i = 0; i < numberConnectedOutputs; i++) {
-			Output output = unit.getOutput(i);
-			if(output.isConnected()) 
-				connectedInputs.add(output.getToInput()); 
-		}
-		                                      
-		// now we create new connections based on the lists of 
-		// formerly connected outputs and inputs.
-		// if it doesn't match, discard
-		
-		// get the longer list, inputs or outputs
-		int numPins = Math.min(connectedInputs.size(), connectedOutputs.size());
-		for (int i = 0; i < numPins; i++) {
-			connectionMap.add(connectedInputs.get(i), connectedOutputs.get(i));
-		}
-		
-		
-		
-		
-		// delete old connections
-		unbindUnit(unit);
-
-		// delete Unit
 		return unitElements.remove(unit);
 	}
 
-	/**
-	 * Removes all connections to this {@link UnitElement}.
-	 * @param unit
-	 */
-	public void unbindUnit(final UnitElement unit) {
-		// find connections which are attached to this unit
-		for (int i = 0; i < connectionMap.size(); i++) {
-			Connection connection = (Connection) connectionMap.get(i);
-			if(connection.isConnectedToUnit(unit)) {
-				// delete connections
-				connectionMap.remove(connection);
-				i--;
-			}
-		}
-	}
+
 
 	public void setupExample1() {
 
@@ -376,13 +309,13 @@ public class GraphController extends ApplicationController {
 		// fromUnit, fromOutputNumber, toUnit, toInputNumber
 		Connection con;
 		con = new Connection(sourceUnit,1,blurUnit,1);
-		connectionMap.add(con);
+		unitElements.addConnection(con);
 		con = new Connection(blurUnit,1,mergeUnit,1);
-		connectionMap.add(con);
+		unitElements.addConnection(con);
 		con = new Connection(sourceUnit,1,mergeUnit,2);
-		connectionMap.add(con);
+		unitElements.addConnection(con);
 		con = new Connection(mergeUnit,1,noiseUnit,1);
-		connectionMap.add(con);
+		unitElements.addConnection(con);
 
 		// remove one connection
 		//connectionMap.remove( Connection.getID(2,1,5,1) );
@@ -442,7 +375,7 @@ public class GraphController extends ApplicationController {
 					int toUnitID = Integer.parseInt(actualConnectionElement.getChild("ToUnitID").getValue());
 					int toInputNumber = Integer.parseInt(actualConnectionElement.getChild("ToInputNumber").getValue());
 					Connection con = new Connection(unitElement[fromUnitID], fromOutputNumber, unitElement[toUnitID], toInputNumber);
-					connectionMap.add(con);
+					unitElements.addConnection(con);
 				}
 			}
 		}
@@ -495,15 +428,15 @@ public class GraphController extends ApplicationController {
 		// the conn is established on adding
 		// fromUnit, fromOutputNumber, toUnit, toInputNumber
 
-		connectionMap.add(new Connection(sourceUnit,1,to8BitUnit,1));
-		connectionMap.add(new Connection(to8BitUnit,1,to32BitUnit,1));
-		connectionMap.add(new Connection(to32BitUnit,1,convUnit,1));
-		connectionMap.add(new Connection(to32BitUnit,1,convUnit2,1));
-		connectionMap.add(new Connection(convUnit,1,squareUnit,1));
-		connectionMap.add(new Connection(convUnit2,1,squareUnit2,1));
-		connectionMap.add(new Connection(squareUnit,1,addUnit,1));
-		connectionMap.add(new Connection(squareUnit2,1,addUnit,2));
-		connectionMap.add(new Connection(addUnit,1,fireUnit,1));
+		unitElements.addConnection(new Connection(sourceUnit,1,to8BitUnit,1));
+		unitElements.addConnection(new Connection(to8BitUnit,1,to32BitUnit,1));
+		unitElements.addConnection(new Connection(to32BitUnit,1,convUnit,1));
+		unitElements.addConnection(new Connection(to32BitUnit,1,convUnit2,1));
+		unitElements.addConnection(new Connection(convUnit,1,squareUnit,1));
+		unitElements.addConnection(new Connection(convUnit2,1,squareUnit2,1));
+		unitElements.addConnection(new Connection(squareUnit,1,addUnit,1));
+		unitElements.addConnection(new Connection(squareUnit2,1,addUnit,2));
+		unitElements.addConnection(new Connection(addUnit,1,fireUnit,1));
 
 	}
 

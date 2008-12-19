@@ -8,7 +8,10 @@ import graph.Node;
 
 import java.util.ArrayList;
 
+import models.Connection;
+import models.ConnectionList;
 import models.Input;
+import models.Output;
 import models.unit.UnitElement.Type;
 import backend.Model;
 import backend.ModelListener;
@@ -20,6 +23,8 @@ import backend.ModelListener;
  */
 public class UnitList extends GList<Node> implements Model {
 
+	private ConnectionList connections;
+	
 	/**
 	 * 
 	 */
@@ -28,6 +33,7 @@ public class UnitList extends GList<Node> implements Model {
 
 	public UnitList() {
 		this.listeners = new ArrayList<ModelListener>();
+		this.connections = new ConnectionList();
 	}
 	
 	@Override
@@ -89,12 +95,79 @@ public class UnitList extends GList<Node> implements Model {
 	 * @param unitElement 
 	 * @return 
 	 */
-	public boolean remove(final UnitElement unitElement) {
+	public boolean remove(final UnitElement unit) {
+		
+		// new connection between the nodes that this deleted node was inbetween
+		replaceConnection(unit);
+		
+		
+		// delete old connections
+		unbindUnit(unit);
+		
 		
 		// remove unit itself
 		notifyModelListeners();
-		return super.remove(unitElement);
+		return super.remove(unit);
 	}
+	
+
+	/**
+	 * Removes all connections to this {@link UnitElement}.
+	 * @param unit
+	 */
+	public void unbindUnit(final UnitElement unit) {
+		// find connections which are attached to this unit
+		ConnectionList connections = getConnections();
+		for (int i = 0; i < connections.size(); i++) {
+			Connection connection = (Connection) connections.get(i);
+			if(connection.isConnectedToUnit(unit)) {
+				// delete connections
+				connections.remove(connection);
+				i--;
+			}
+		}
+	}
+	
+
+	private void replaceConnection(final UnitElement unit) {
+		// replacing maks only sense, when it has inputs and outputs
+		if(!unit.hasInputsConnected() || !unit.hasOutputsConnected()) {
+			return;
+		}
+		
+		// get the outputs of the currently connected inputs
+		int numberConnectedInputs = unit.getInputsCount();
+		ArrayList<Output> connectedOutputs = new ArrayList<Output>(numberConnectedInputs);
+		// we use a vector, add stuff to the end and iterate over this without indicies
+		// check if pins are connected and ignore, if not
+		for (int i = 0; i < numberConnectedInputs; i++) {
+			Input input = unit.getInput(i);
+			if(input.isConnected()) {
+				connectedOutputs.add(input.getFromOutput());
+			}
+		}
+		
+		
+		// same for inputs
+		int numberConnectedOutputs = unit.getOutputsCount();
+		ArrayList<Input> connectedInputs = new ArrayList<Input>(numberConnectedOutputs);
+		for (int i = 0; i < numberConnectedOutputs; i++) {
+			Output output = unit.getOutput(i);
+			if(output.isConnected()) 
+				connectedInputs.add(output.getToInput()); 
+		}
+		                                      
+		// now we create new connections based on the lists of 
+		// formerly connected outputs and inputs.
+		// if it doesn't match, discard
+		
+		// get the longer list, inputs or outputs
+		int numPins = Math.min(connectedInputs.size(), connectedOutputs.size());
+		for (int i = 0; i < numPins; i++) {
+			getConnections().add(connectedInputs.get(i), connectedOutputs.get(i));
+		}
+	}
+
 	
 	public boolean hasUnitAsDisplay() {
 		for (int i = 0; i < size(); i++) {
@@ -134,6 +207,25 @@ public class UnitList extends GList<Node> implements Model {
 
 	public void removeModelListener(ModelListener listener) {
 		this.listeners.remove(listener);
+	}
+
+	public ConnectionList getConnections() {
+		return connections;
+	}
+
+	public boolean addConnection(Connection con) {
+		return this.connections.add(con);
+	}
+	
+	/**
+	 * Resets all marks to zero.
+	 * @param units
+	 */
+	public void unmarkUnits() {
+		for (Node node : this) {
+			UnitElement unit = (UnitElement) node;
+			unit.setMark(0);
+		}
 	}
 	
 }

@@ -17,7 +17,6 @@ public class UnbindUnitAction extends AbstractUnitAction {
 	public UnbindUnitAction(final Selection<Node> selection, GraphController controller) {
 		super(selection);
 		putValue(NAME, "Unbind");
-//		this.activePanel = gpanel;
 		this.controller = controller;
 	}
 	
@@ -36,7 +35,7 @@ public class UnbindUnitAction extends AbstractUnitAction {
 				connections.remove(c);*/
 			
 			for (Node unit : this.selectedUnits) {
-				controller.unbindUnit((UnitElement)unit);	
+				controller.getUnitElements().unbindUnit((UnitElement)unit);	
 			}
 			
 			this.selectedUnits.clear();

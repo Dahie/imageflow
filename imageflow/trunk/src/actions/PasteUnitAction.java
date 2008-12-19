@@ -28,6 +28,7 @@ public class PasteUnitAction extends AbstractUnitAction {
 			selectedUnits.addAll(copyUnitsList);
 			copyUnitsList.clear();
 			for (Node t : selectedUnits) {
+//			for (Node t : copyUnitsList) {
 				try {
 					UnitElement clone = (UnitElement)t.clone();	
 					clone.setLabel(t.getLabel());
@@ -37,7 +38,8 @@ public class PasteUnitAction extends AbstractUnitAction {
 					ErrorPrinter.printInfo("CloneNotSupportedException");
 				}
 			}
-			//					copyL.clear(); copyL.addAll(activePanel.selection);
+			//					copyL.clear(); 
+			//copyL.addAll(activePanel.selection);
 			activePanel.repaint();
 		}
 	}

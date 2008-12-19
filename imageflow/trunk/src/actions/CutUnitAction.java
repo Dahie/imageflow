@@ -29,13 +29,15 @@ public class CutUnitAction extends AbstractUnitAction {
 		if (selectedUnits.size() > 0) {
 			// il problema java.util.ConcurrentModificationException è stato risolto introducendo la lista garbage
 			HashSet<Edge> garbage = new HashSet<Edge>();
+			copyUnitsList.clear();
 			for (Node t : selectedUnits) {
 				/*for (Edge c : activePanel.getEdgeL())
 					if ((c.from.getParent() == t)||(t == c.to.getParent()))
 						garbage.add(c);
 				copyUnitsList.add(t);
 				activePanel.getNodeL().remove(t);*/
-				graphController.getCopyNodesList().add(t);
+				this.copyUnitsList.add(t);
+				System.out.println(((UnitElement)t).getObject());
 				graphController.removeUnit((UnitElement)t);
 			}
 			for (Edge c : garbage)

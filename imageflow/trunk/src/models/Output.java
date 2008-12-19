@@ -1,5 +1,6 @@
 package models;
 
+import graph.Node;
 import graph.Pin;
 
 import java.awt.Point;
@@ -101,6 +102,7 @@ public class Output extends Pin {
 	public void connectTo(final UnitElement toUnit, final int toOutputNumber) {
 		this.toUnit = toUnit;
 		this.toInputNumber = toOutputNumber;
+		this.toUnitNumber = toUnit.getUnitID();
 //		setConnection(toUnit.getUnitID(), fromOutputNumber);
 	}
 
@@ -188,10 +190,9 @@ public class Output extends Pin {
 	 * @return 
 	 */
 	public boolean isConnected() {
-		final boolean isConnected = (this.toUnit != null) 
-			|| (this.toUnitNumber > 0)
-			|| (this.toInputNumber > 0);
-		return isConnected;
+		return (this.toUnit != null) 
+			&& (this.toUnitNumber > 0)
+			&& (this.toInputNumber > 0);
 	}
 	
 	/**
@@ -209,5 +210,51 @@ public class Output extends Pin {
 	public Input getToInput() {
 		return toUnit.getInput(this.toInputNumber-1);
 	}
+
+	/**
+	 * Returns true, if the imageBitDepth in question is supported
+	 * by this Input.
+	 * @param imageBitDepth
+	 * @return
+	 */
+	public boolean isImageBitDepthCompatible(final int imageBitDepth) {
+		return (getImageBitDepth()&imageBitDepth) != 0;
+	}
+
+	/**
+	 * @param node
+	 * @return
+	 */
+	public boolean knows(final Node node) {
+		// self reference is true
+		if(node.equals(parent))
+			return false;
+		
+		// can only check inputs, which are connected
+		if(this.isConnected()) {
+			for (Output output : toUnit.getOutputs()) {
+				// check if this parent is already what we are looking for
+				if(node.equals(output.getParent())) { 
+						return true;
+				//check if this input is connected to more
+				} else if(output.isConnected()) {
+					// if it is connected, maybe we have more luck here
+					return output.knows(node);
+				}
+			}
+		}
+
+		// if nothing helps, it's false
+		return false;
+	}
+
+	/**
+	 * Resets the this Output, so that it is unconnected.
+	 */
+	public void disconnect() {
+		connectTo(0, 0); // reset connection
+		this.toUnit = null;
+	}
+
 
 }

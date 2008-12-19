@@ -16,7 +16,11 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import models.BooleanParameter;
@@ -52,7 +56,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	/**
 	 * name of this unit (will be shown)
 	 */
-	protected String unitName;    
+//	protected String unitName;    
 	protected File iconfile;
 	/**
 	 * unit color
@@ -184,7 +188,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	private void init(final String unitName) {
 		ids++;
 		this.unitID = ids;
-		this.unitName = unitName;
+		this.label = unitName;
 		
 		this.listeners = new ArrayList<ModelListener>();
 		this.inputs = new ArrayList<Input>();
@@ -335,7 +339,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	 * @return the unitName
 	 */
 	public String getUnitName() {
-		return this.unitName;
+		return getLabel();
 	}
 	
 	/**
@@ -422,7 +426,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	 */
 	@Override
 	public String toString() {
-		String string = super.toString() + " Name:"+this.unitName + " Type:" + this.getType();
+		String string = super.toString() + " Name:"+this.label + " Type:" + this.getType();
 		return string;
 	}
 
@@ -555,11 +559,19 @@ public class UnitElement extends NodeAbstract implements Model {
 	 * @see graph.Node#clone()
 	 */
 	@Override
-	public UnitElement clone() throws CloneNotSupportedException {
+	public UnitElement clone() {
 		System.out.println(this.obj);
-		String imageJSyntax = ((MacroElement)this.obj).getImageJSyntax();
+		// clone the object
+		String imageJSyntax;
+		try {
+			imageJSyntax = (String) cloneNonClonableObject(this.obj);
+		} catch (CloneNotSupportedException e) {
+			imageJSyntax = ((MacroElement)this.obj).getImageJSyntax();
+		}
+		
+		
 		UnitElement clone = new UnitElement(new Point(origin.x+15, origin.y+15), 
-				this.unitName, 
+				this.label, 
 				imageJSyntax);
 		for (Input input : inputs) {
 			clone.addInput(input.getName(), 
@@ -578,9 +590,26 @@ public class UnitElement extends NodeAbstract implements Model {
 				parameter.getValue(), parameter.getTrueString(), parameter.getHelpString()));
 		}
 		clone.setDisplayUnit(this.isDisplayUnit);
+		clone.setColor(this.color);
+		clone.setIcon(this.icon);
 		return clone;
 	}
 
+	private Object cloneNonClonableObject(Object obj) throws CloneNotSupportedException {
+		Object clobj;
+		try {
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(bos);
+			oos.writeObject(obj);
+			oos.close();
+			clobj = (new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()))).readObject();
+		} catch (Exception ex) {
+			throw new CloneNotSupportedException(ex.getMessage());
+		}
+		return clobj;
+	}
+	
+	
 	/**
 	 * Mark this unit by marking its {@link Input}s and {@link Output}s.
 	 * @param mark
@@ -692,7 +721,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	public void showProperties() {
 		if(hasParameters()) {
 			final GenericDialog gd = new GenericDialog("Parameter");
-			gd.addMessage(unitName);
+			gd.addMessage(label);
 			gd.addMessage(" ");
 			final ArrayList<Parameter> parameterList = getParameters();
 			

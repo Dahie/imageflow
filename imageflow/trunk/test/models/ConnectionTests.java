@@ -102,68 +102,6 @@ public class ConnectionTests extends TestCase {
 		
 	}
 	
-	public void testAddConnection() {
-		
-
-		// test output-only
-		UnitElement source1Unit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
-		Output source1Output = source1Unit.getOutput(0);
-		UnitElement source2Unit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
-		Output source2Output = source2Unit.getOutput(0);
-		
-		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		Input filter1Input = filterUnit1.getInput(0); 
-		Output filter1Output = filterUnit1.getOutput(0);
-		
-		ConnectionList connectionList = new ConnectionList();
-		
-		//assert connectionList
-		
-		assertTrue("connection list empty", connectionList.isEmpty());
-		assertEquals("connection list empty", 0, connectionList.size());
-		
-		// assert pins
-		
-		assertFalse("filter1 input connected with source1", 
-				filter1Input.isConnectedWith(source1Output));
-		assertFalse("filter1 input connected with source2", 
-				filter1Input.isConnectedWith(source2Output));
-		
-		Connection conn1 = new Connection(source1Unit, 1, filterUnit1, 1);
-		Connection conn2 = new Connection(source2Unit, 1, filterUnit1, 1);
-		
-		connectionList.add(conn1);
-		
-		assertFalse("connection list first added", connectionList.isEmpty());
-		assertEquals("connection list first added", 1, connectionList.size());
-		assertTrue("connectin list contains conn1", connectionList.contains(conn1));
-		assertFalse("connectin list contains conn2", connectionList.contains(conn2));
-	
-		// assert pins
-		
-		assertTrue("filter1 input connected with source1", 
-				filter1Input.isConnectedWith(source1Output));
-		assertFalse("filter1 input connected with source2", 
-				filter1Input.isConnectedWith(source2Output));
-		
-		
-		
-		connectionList.add(conn2);
-		
-		assertFalse("connection list first replaced", connectionList.isEmpty());
-		assertEquals("connection list first replaced", 1, connectionList.size());
-		assertFalse("connection list contains conn1", connectionList.contains(conn1));
-		assertTrue("connection list contains conn2", connectionList.contains(conn2));
-		
-		// assert pins
-		
-		assertFalse("filter1 input connected with source1", 
-				filter1Input.isConnectedWith(source1Output));
-		assertTrue("filter1 input connected with source2", 
-				filter1Input.isConnectedWith(source2Output));
-		
-	}
 	
 
 	public void testAreImageDepthCompatible() {

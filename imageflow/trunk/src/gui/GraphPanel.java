@@ -7,8 +7,11 @@ import graph.Node;
 import graph.NodeText;
 import graph.Pin;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -70,44 +73,18 @@ public class GraphPanel extends GPanel {
 //			g2.setStroke(new BasicStroke(1f));
 			for (Node node : nodeL) {
 				int margin = 15;
+				// check if mouse is within this dimensions of a node
 				if(isWithin2DRange(mouse, node.getOrigin(), node.getDimension(), margin)) {
 
+					// draw every pin
 					for (Pin pin : ((UnitElement)node).getInputs()) {
-						int diameter = 15;
-						Point pinLocation = pin.getLocation();
-						int pinX = pinLocation.x - (diameter/2); 
-						int pinY = pinLocation.y - (diameter/2);
+						if(!drawEdge.getParent().equals(node)) 
+							drawCompatbilityIndicator(g2, margin, pin);
+					}
 
-						// draw pin marker if mouse within inner range
-						int lowerYpin = pin.getLocation().y - margin;
-						int upperYpin = pin.getLocation().y + margin;
-						if(isWithin2DRange(mouse, pin.getLocation(), new Dimension(0,0), margin)) {
-
-							Input input;
-							Output output;
-
-							// we don't know, if the connection is created 
-							// input first or output first
-							if(drawEdge instanceof Output) {
-								input = (Input) pin;
-								output = (Output) drawEdge;
-							} else {
-								input = (Input) drawEdge;
-								output = (Output) pin;
-							}
-							// checking if the pins are compatible
-							if(input.isImageBitDepthCompatible(output.getImageBitDepth())) {
-								g2.setColor(Color.green);
-							} else {
-								g2.setColor(Color.red);
-							}
-							
-							
-							
-							Ellipse2D.Double circle = 
-								new Ellipse2D.Double(pinX, pinY, diameter, diameter);
-							g2.fill(circle);
-						}
+					for (Pin pin : ((UnitElement)node).getOutputs()) {
+						if(!drawEdge.getParent().equals(node))
+							drawCompatbilityIndicator(g2, margin, pin);
 					}
 				}
 			}
@@ -123,34 +100,95 @@ public class GraphPanel extends GPanel {
 			//Draw a rectangle on top of the image.
 			g2.setXORMode(Color.white); //Color of Edge varies
 			//depending on image colors
-//			g2.setColor(Color.GRAY);
-			g2.setStroke(dashed);
+			g2.setColor(Color.GRAY);
+//			g2.setStroke(dashed);
+			g2.setStroke(new BasicStroke(1f));
 			g2.drawRect(rectToDraw.x, rectToDraw.y, 
+					rectToDraw.width - 1, rectToDraw.height - 1);
+			g2.setColor(new Color(0,0,88, 100));
+			g2.fillRect(rectToDraw.x, rectToDraw.y, 
 					rectToDraw.width - 1, rectToDraw.height - 1);
 		}
 	}
-	
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		
-		// check distance for every pin on every unit
-		/*for (Iterator iterator = units.iterator(); iterator.hasNext();) {
-			UnitElement unit = (UnitElement) iterator.next();
+
+
+	private void drawCompatbilityIndicator(Graphics2D g2, int margin, Pin pin) {
+		int diameter = 15;
+		Point pinLocation = pin.getLocation();
+		int pinX = pinLocation.x - (diameter/2); 
+		int pinY = pinLocation.y - (diameter/2);
+
+		// draw pin marker if mouse within inner range
+		int lowerYpin = pin.getLocation().y - margin;
+		int upperYpin = pin.getLocation().y + margin;
+		if(isWithin2DRange(mouse, pin.getLocation(), new Dimension(0,0), margin)) {
+
+			Input input;
+			Output output;
+			boolean isCompatible = false;
+			boolean isLoop = false;
 			
-			for (Input input : unit.getInputs()) {
-				if (drawEdge != null)	{
-					mouse.x = e.getX(); mouse.y = e.getY();
-					repaint();
-					e.consume();
-				}
-				repaint();
+			// we don't know, if the connection is created 
+			// input first or output first
+			if(drawEdge instanceof Output
+					&& pin instanceof Input) {
+				isCompatible = ((Output)drawEdge).isImageBitDepthCompatible(((Input)pin).getImageBitDepth());
+				isLoop = ((Input)pin).knows(drawEdge.getParent());
+			} else if (drawEdge instanceof Input
+					&& pin instanceof Output) {
+				isCompatible = ((Input)drawEdge).isImageBitDepthCompatible(((Output)pin).getImageBitDepth());
 			}
+										
 			
-		}*/
-		
-		super.mouseDragged(e);
+			
+			
+			
+			g2.setColor(
+					(isCompatible && !isLoop) ? Color.green : Color.red);
+			Ellipse2D.Double circle = 
+				new Ellipse2D.Double(pinX, pinY, diameter, diameter);
+			g2.fill(circle);
+			g2.setColor(new Color(0,0,0,44));
+			g2.draw(circle);
+			
+			
+
+			String errorMessage = "";
+			if(!isCompatible)
+				errorMessage += "Incompatible bit depth";
+			else if(isLoop) 
+				errorMessage += "Loops are not allowed";
+			
+			if(errorMessage.length() != 0) 
+				drawErrorMessage(g2, errorMessage, pin.getLocation());
+			//TODO here also check if there are loops
+			
+		}
 	}
 	
+	private void drawErrorMessage(Graphics2D g2, String text, Point origin) {
+		g2.setFont(new Font("Arial", Font.PLAIN, 12));
+		FontMetrics fm = g2.getFontMetrics();
+		g2.setColor(new Color(200,200,200));
+		if (text == null) {
+			System.out.println("Node.paint: Null Pointer Exception");
+			text = "*Null Pointer Exception*"; //zz now the exception is hidden, but what the problem?
+		}
+		Dimension dimension = new Dimension();
+		dimension.setSize(fm.stringWidth(text) + 10, fm.getHeight() + 4);
+		int padding = 2;
+		g2.fillRoundRect(origin.x-padding, origin.y-padding, 
+				dimension.width+padding, dimension.height+padding, 4, 4);
+
+	    g2.setStroke(new BasicStroke(1f));
+//	    g2.setColor(new Color(0,0,0,44));
+	    g2.drawRoundRect(origin.x-padding, origin.y-padding, 
+				dimension.width+padding, dimension.height+padding, 4, 4);
+	    g2.setColor(Color.BLACK);
+		g2.drawString(text, origin.x + 5, (origin.y + padding) + fm.getAscent());
+	}
+
+
 	/**
 	 * Returns rue if the value is within this range of values.
 	 * @param compareValue
@@ -166,7 +204,7 @@ public class GraphPanel extends GPanel {
 	}
 
 	/**
-	 * Returns true, if the current point is withing this 2D-range.
+	 * Returns true, if the current point is within this 2D-range.
 	 * The Range is defined by its coordinates, 
 	 * the dimension of the rectangle and a margin around this rectangle.
 	 * @param currentPoint

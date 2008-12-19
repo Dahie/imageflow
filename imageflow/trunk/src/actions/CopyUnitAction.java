@@ -6,11 +6,11 @@ import graph.Selection;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-import visualap.ErrorPrinter;
+import models.unit.UnitElement;
 
 public class CopyUnitAction extends AbstractUnitAction {
 
-	
+
 	private ArrayList<Node> copyUnitsList;
 
 	/**
@@ -23,18 +23,15 @@ public class CopyUnitAction extends AbstractUnitAction {
 		putValue(NAME, "Copy");
 		this.copyUnitsList = copyUnitsList;
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		if (selectedUnits.size() > 0) {
 			copyUnitsList.clear();
-			for (Node t : selectedUnits)
-				try {
-					Node clone = t.clone();	
-					clone.setLabel(t.getLabel());
-					copyUnitsList.add(clone);
-				} catch(CloneNotSupportedException ex) {
-					ErrorPrinter.printInfo("CloneNotSupportedException");
-				}
+			for (Node t : selectedUnits) {
+				Node clone = ((UnitElement)t).clone();	
+				clone.setLabel(t.getLabel());
+				copyUnitsList.add(clone);
+			}
 		}
 	}
 
