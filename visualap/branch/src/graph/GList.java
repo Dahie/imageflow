@@ -85,7 +85,12 @@ public class GList<E extends Changeable&Labelable&Clearable> extends ArrayList<E
 		return labels;
 	}
 
-//zz build a unique name: da migliorare!
+	/**
+	 * zz build a unique name: da migliorare!
+	 * @param s
+	 * @param value
+	 * @return
+	 */
 	String getUniqueName(String s, Object value) {
 		if (! labels.containsKey(s)) {
 			labels.put(s, value);

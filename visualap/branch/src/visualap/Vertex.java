@@ -19,22 +19,22 @@ This class is used to perform graph analysis and running
 javalc6
 */
 package visualap;
-import graph.*;
-import java.lang.Class;
-import java.lang.Void;
-import java.lang.reflect.*;
-import java.beans.*;
-import java.util.HashMap;
+import graph.Node;
+import graph.NodeBean;
 
-class Backward {
-	int index;
-	Vertex obj;
-}
+
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.MethodDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+
 
 public class Vertex {
 	protected transient Object obj;
-	protected transient NodeBean aNode;
-	protected transient Backward [] backward = new Backward[0]; 
+	public transient Node aNode;
+	public transient Backward [] backward = new Backward[0]; 
 	protected transient Object [] iobuf_in = new Object[0]; 
 	protected transient Object [] iobuf_out = new Object[0]; 
 	protected transient Method [] methoda = new Method[0]; 
@@ -50,7 +50,7 @@ public class Vertex {
 		this.aNode = aNode;
 		obj = aNode.getObject();
 		try {
-// code here must be in sync with BeanDelegate.java constructor
+			// code here must be in sync with BeanDelegate.java constructor
 				Class clazz = obj.getClass();
 				try {
 					start = clazz.getMethod("start",new Class[0]);	
@@ -84,14 +84,22 @@ public class Vertex {
 
 	}
 
-// start() used only for running of graph
+	/**
+	 * start() used only for running of graph
+	 * @throws InvocationTargetException
+	 */
 	public void start() throws InvocationTargetException {
 		if (start!= null)
 				try {
 					start.invoke(obj,new Object[0]);
 				} catch (IllegalAccessException ex) { } // ignore
 	}
-// iterate() used only for running of graph
+	
+	/**
+	 *  iterate() used only for running of graph
+	 * @return
+	 * @throws InvocationTargetException
+	 */
 	public boolean iterate() throws InvocationTargetException  {
 		if (iterate!= null)
 				try {
@@ -101,12 +109,23 @@ public class Vertex {
 				return false;
 		return true;
 	}
-// stop() used only for running of graph
+
+	/*
+	 * stop() used only for running of graph
+	 */
 	public void stop()  {
 		if (stop!= null)
 				try {
 					stop.invoke(obj,new Object[0]);
 				} catch (IllegalAccessException ex) { // ignore
 				} catch (InvocationTargetException ex) { } // ignore
+	}
+	
+	public Node getANode() {
+		return aNode;
+	}
+
+	public Backward[] getBackward() {
+		return backward;
 	}
 }
