@@ -58,6 +58,10 @@ public class Pin {
 		return parent;
 	}
 
+	/**
+	 * Pin ID
+	 * @return
+	 */
 	public int getIndex () {
 		return i;
 	}
