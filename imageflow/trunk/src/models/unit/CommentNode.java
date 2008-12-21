@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import backend.Model;
 import backend.ModelListener;
 
-import com.sun.tools.javac.util.List;
-
 /**
  * Note-Node, sorry the pun, this is a Unit element, just for writing a note.
  * @author danielsenff
@@ -27,7 +25,11 @@ public class CommentNode extends NodeText implements Model {
 
 	private final ArrayList<ModelListener> listeners;
 	
-	public CommentNode(Point point, String string) {
+	/**
+	 * @param point
+	 * @param string
+	 */
+	public CommentNode(final Point point, final String string) {
 		super(point, string);
 		this.listeners = new ArrayList<ModelListener>();
 	}

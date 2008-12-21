@@ -65,16 +65,11 @@ public class MacroElement {
 		return outputMacroLog;
 	}
 
-	
 	/**
-	 * @param unit 
-	 * @param p 
+	 * @param unit
+	 * @param p
 	 */
-	public void parseParameter(UnitElement unit, final int p) {
-		this.commandSyntax = parseParameters(unit, this.commandSyntax, p);
-	}
-	
-	public void parseParameters(UnitElement unit, final int p) {
+	public void parseParameters(final UnitElement unit, final int p) {
 		this.commandSyntax = parseParameters(unit, this.commandSyntax, p);
 	}
 
@@ -88,7 +83,7 @@ public class MacroElement {
 		String searchString;
 
 		while (p < numParas) {
-			Parameter parameter = (Parameter) unit.getParameters().get(p);
+			AbstractParameter parameter = (AbstractParameter) unit.getParameters().get(p);
 
 			searchString = "PARA_DOUBLE_" + (pd+1);
 			String paraType = parameter.getParaType().toLowerCase();
@@ -194,6 +189,9 @@ public class MacroElement {
 
 
 
+	/**
+	 * Resets the MacroElement. All parsed commands will be removed.
+	 */
 	public void reset() {
 		this.commandSyntax = this.imageJSyntax;
 	}

@@ -1,10 +1,20 @@
 package models;
 
+/**
+ * @author danielsenff
+ *
+ */
 public class ChoiceParameter extends StringParameter {
 
-	private String[] choiceValues;
+	private final String[] choiceValues;
 	
 	
+	/**
+	 * @param displayName
+	 * @param choices
+	 * @param choiceParameter
+	 * @param helpString
+	 */
 	public ChoiceParameter(final String displayName, 
 			final String[] choices,
 			final String choiceParameter,

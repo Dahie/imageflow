@@ -18,6 +18,7 @@ public class ParameterFactory {
 	 */
 	
 	// old version should be removed
+	// TODO what does truestring, why is it added?
 	public static Parameter createParameter(final String displayName, 
 			Object parameter, 
 			String helpString) {
@@ -39,10 +40,17 @@ public class ParameterFactory {
 
 	}
 	
+	/**
+	 * @param displayName
+	 * @param parameter
+	 * @param trueString
+	 * @param helpString
+	 * @return
+	 */
 	public static Parameter createParameter(final String displayName, 
-			Object parameter,
-			String trueString,
-			String helpString) {
+			final Object parameter,
+			final String trueString,
+			final String helpString) {
 		if(parameter instanceof String) {
 			return new StringParameter(displayName, (String) parameter, helpString);
 		} else if (parameter instanceof Double ) {

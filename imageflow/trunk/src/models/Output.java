@@ -55,6 +55,9 @@ public class Output extends Pin implements Connectable {
 	 * is not relevant for the ImageTitle.
 	 */
 	protected UnitElement toUnit;
+	/**
+	 * Input to which this Output is connected
+	 */
 	protected Input to;
 	
 	
@@ -180,9 +183,7 @@ public class Output extends Pin implements Connectable {
 		return point;
 	}
 
-	public int getOutputNumber() {
-		return to.getIndex();
-	}
+
 
 	/**
 	 * Returns whether or not this Input is connected.
@@ -206,6 +207,10 @@ public class Output extends Pin implements Connectable {
 		return false;
 	}
 
+	/**
+	 * Returns the {@link Input} to which this Output is connected.
+	 * @return
+	 */
 	public Input getToInput() {
 		return this.to;
 	}

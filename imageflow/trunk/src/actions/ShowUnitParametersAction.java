@@ -16,7 +16,7 @@ import models.BooleanParameter;
 import models.ChoiceParameter;
 import models.DoubleParameter;
 import models.IntegerParameter;
-import models.Parameter;
+import models.AbstractParameter;
 import models.StringParameter;
 import models.unit.UnitElement;
 

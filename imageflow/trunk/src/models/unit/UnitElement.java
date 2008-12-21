@@ -23,6 +23,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import models.AbstractParameter;
 import models.BooleanParameter;
 import models.ChoiceParameter;
 import models.DoubleParameter;
@@ -375,7 +376,7 @@ public class UnitElement extends NodeAbstract implements Model {
 
 	
 	/**
-	 * Returns how many assigned {@link Parameter}s this unit actually has.
+	 * Returns how many assigned {@link AbstractParameter}s this unit actually has.
 	 * @return
 	 */
 	public int getParametersCount() {
@@ -383,7 +384,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	}
 
 	/**
-	 * List of all {@link Parameter}s available for this unit
+	 * List of all {@link AbstractParameter}s available for this unit
 	 * @return
 	 */
 	public ArrayList<Parameter> getParameters() {
@@ -585,7 +586,8 @@ public class UnitElement extends NodeAbstract implements Model {
 				output.isDoDisplay());
 		}
 		for (Parameter parameter : parameters) {
-			clone.addParameter(ParameterFactory.createParameter(parameter.getDisplayName(), 
+			clone.addParameter(
+					ParameterFactory.createParameter(parameter.getDisplayName(), 
 				parameter.getValue(), parameter.getTrueString(), parameter.getHelpString()));
 		}
 		clone.setDisplayUnit(this.isDisplayUnit);

@@ -12,12 +12,18 @@ public interface Connectable {
 
 	
 	/**
-	 * Sets the connection between this input and an output.
+	 * Connects to this {@link UnitElement} and the given pinNumber.
+	 * The implementation handles whether this is for {@link Input} or {@link Output}
 	 * @param unit 
 	 * @param pinNumber 
 	 */
 	public void connectTo(final UnitElement unit, final int pinNumber);
 	
+	/**
+	 * Connects to this {@link UnitElement} and the given {@link Pin}.
+	 * @param unit 
+	 * @param pin 
+	 */
 	public void connectTo(final UnitElement unit, final Pin pin);
 	
 	/**

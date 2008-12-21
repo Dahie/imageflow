@@ -4,7 +4,6 @@ import graph.Node;
 import graph.Pin;
 
 import java.awt.Point;
-import java.util.Iterator;
 
 import models.unit.UnitElement;
 
@@ -71,6 +70,9 @@ public class Input extends Pin implements Connectable {
 	 * Connected from this {@link UnitElement}
 	 */
 	protected UnitElement fromUnit;
+	/**
+	 * Output from which this Input is connected
+	 */
 	protected Output from;
 	
 	

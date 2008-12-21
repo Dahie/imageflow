@@ -7,7 +7,7 @@ package models;
  * @author danielsenff
  *
  */
-public class IntegerParameter extends Parameter {
+public class IntegerParameter extends AbstractParameter {
 
 	/**
 	 * Actual Integer value

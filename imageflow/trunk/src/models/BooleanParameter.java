@@ -7,7 +7,7 @@ package models;
  * @author danielsenff
  *
  */
-public class BooleanParameter extends Parameter {
+public class BooleanParameter extends AbstractParameter {
 
 	/**
 	 * The actual value of this Parameter;
@@ -23,6 +23,7 @@ public class BooleanParameter extends Parameter {
 	/**
 	 * @param displayName 
 	 * @param boolParameter 
+	 * @param trueString 
 	 * @param helpString 
 	 */
 	public BooleanParameter(final String displayName, 

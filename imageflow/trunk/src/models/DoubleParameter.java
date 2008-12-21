@@ -7,7 +7,7 @@ package models;
  * @author danielsenff
  *
  */
-public class DoubleParameter extends Parameter {
+public class DoubleParameter extends AbstractParameter {
 
 	protected double  doubleValue;
 	protected double  doubleValueDefault;

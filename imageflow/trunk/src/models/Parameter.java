@@ -1,77 +1,47 @@
 package models;
 
 /**
- * Parameter is a defined variable in the ImageJ-syntax, which has an expected type
+ * Parameter Interface
  * @author danielsenff
  *
  */
-public abstract class Parameter {
-	
-	/**
-	 * Index of the parameter in the Unit.
-	 */
-	protected int parameterNumber;
-	/**
-	 * parameter name that is shown in the unit
-	 */
-	protected String displayName; 
-	
-	protected String trueString;
-	
-	protected String paraType;
+public interface Parameter {
 
 	/**
-	 * help text describing the functionality of this parameter
+	 * Returns the Value of this Parameter as an {@link Object}.
+	 * @return
 	 */
-	protected String helpString;
-
-
-	/**
-	 * 
-	 */
-	public Parameter() {
-	}
-
-	/**
-	 * @param parameterNumber
-	 */
-	public Parameter(final int parameterNumber) {
-		this.parameterNumber = parameterNumber;
-	}
-
 	public abstract Object getValue();
 	
 	/**
 	 * Returns the name of the Parameter. 
 	 * @return
 	 */
-	public String getDisplayName() {
-		return displayName;
-	}
+	public String getDisplayName();
 	
-	public String getParaType() {
-		return paraType;
-	}
+	/*
+	 * Returns the type of the Parameter
+	 */
 	/**
-	 * Get the help description of this Parameter.
 	 * @return
 	 */
-	public String getHelpString() {
-		return helpString;
-	}
+	public String getParaType();
 	
 	/**
 	 * Get the help description of this Parameter.
 	 * @return
 	 */
-	public String getTrueString() {
-		return trueString;
-	}
+	public String getHelpString();
+	
+	/**
+	 * Get the help description of this Parameter.
+	 * @return
+	 */
+	public String getTrueString();
 	
 	/**
 	 * @param parameterNumber
 	 */
-	public void setParameterNumber(final int parameterNumber) {
-		this.parameterNumber = parameterNumber;
-	}
+	public void setParameterNumber(final int parameterNumber);
+	
 }

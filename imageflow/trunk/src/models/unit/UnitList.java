@@ -31,6 +31,9 @@ public class UnitList extends GList<Node> implements Model {
 	private static final long serialVersionUID = -8204689428123811757L;
 	private ArrayList<ModelListener> listeners;
 
+	/**
+	 * 
+	 */
 	public UnitList() {
 		this.listeners = new ArrayList<ModelListener>();
 		this.connections = new ConnectionList();
@@ -92,7 +95,7 @@ public class UnitList extends GList<Node> implements Model {
 
 	/**
 	 * Remove this Unit from the workflow.
-	 * @param unitElement 
+	 * @param unit 
 	 * @return 
 	 */
 	public boolean remove(final UnitElement unit) {
@@ -169,18 +172,26 @@ public class UnitList extends GList<Node> implements Model {
 	}
 
 	
+	/**
+	 * Returns true, if any {@link UnitElement} in this UnitList is set as a displayUnit
+	 * @return
+	 */
 	public boolean hasUnitAsDisplay() {
 		for (int i = 0; i < size(); i++) {
-			UnitElement unit = (UnitElement) get(i);
+			final UnitElement unit = (UnitElement) get(i);
 			if(unit.isDisplayUnit()) 
 				return true;
 		}
 		return false;
 	}
 	
+	/**
+	 * Returns true, if any source in this UnitList is set as a displayUnit
+	 * @return
+	 */
 	public boolean hasSourcesAsDisplay() {
 		for (int i = 0; i < size(); i++) {
-			UnitElement unit = (UnitElement) get(i);
+			final UnitElement unit = (UnitElement) get(i);
 			if(unit.getType() == Type.SOURCE && unit.isDisplayUnit()) 
 				return true;
 		}
@@ -209,10 +220,19 @@ public class UnitList extends GList<Node> implements Model {
 		this.listeners.remove(listener);
 	}
 
+	/**
+	 * Get the {@link ConnectionList}
+	 * @return
+	 */
 	public ConnectionList getConnections() {
 		return connections;
 	}
 
+	/**
+	 * Add a {@link Connection}
+	 * @param con
+	 * @return
+	 */
 	public boolean addConnection(Connection con) {
 		return this.connections.add(con);
 	}

@@ -7,7 +7,7 @@ package models;
  * @author danielsenff
  *
  */
-public class StringParameter extends Parameter {
+public class StringParameter extends AbstractParameter {
 
 	/**
 	 * Actual String value
