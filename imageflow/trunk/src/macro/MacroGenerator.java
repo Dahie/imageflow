@@ -1,5 +1,6 @@
 package macro;
 
+import backend.GraphController;
 import models.Connection;
 import models.Input;
 import models.MacroElement;
@@ -8,6 +9,10 @@ import models.unit.UnitList;
 
 
 
+/**
+ * @author danielsenff
+ *
+ */
 public class MacroGenerator {
 
 	//TODO leave nodes out, which:
@@ -15,11 +20,11 @@ public class MacroGenerator {
 	// have no input marked
 	// which are source, but no output and no display
 	
+//	GraphController 
 	
-	
-	public static String generateMacrofromUnitList(UnitList unitElements) {
+	public String generateMacrofromUnitList(final UnitList unitElements) {
 		
-		UnitElement[] units = new UnitElement[unitElements.size()+1];
+		final UnitElement[] units = new UnitElement[unitElements.size()+1];
 		for (int i = 0; i < unitElements.size(); i++) {
 			units[i+1] = (UnitElement) unitElements.get(i);
 		}
@@ -29,7 +34,7 @@ public class MacroGenerator {
 	
 	
 	
-	public static String generateMacro(UnitElement[] unitElement) {
+	public String generateMacro(final UnitElement[] unitElement) {
 		
 		String  macroText ="";
 
@@ -42,16 +47,16 @@ public class MacroGenerator {
 		for (int unitIndex = 1; unitIndex < unitElement.length; unitIndex++) {
 			macroText += " \n";
 			// read the ImageJ syntax for this unit
-			UnitElement unit = unitElement[unitIndex];
+			final UnitElement unit = unitElement[unitIndex];
 			
 //			String command = unit.getImageJSyntax();
-			MacroElement macroElement = ((MacroElement)unit.getObject()); 
+			final MacroElement macroElement = ((MacroElement)unit.getObject()); 
 			macroElement.reset();
 			
 			
-			int numInputs = unit.getInputsCount();
-			int numOutputs = unit.getOutputsCount();
-			int numParas = unit.getParameters().size();
+			final int numInputs = unit.getInputsCount();
+			final int numOutputs = unit.getOutputsCount();
+			final int numParas = unit.getParameters().size();
 
 			
 			// duplicate input images if necessary
@@ -63,9 +68,9 @@ public class MacroGenerator {
 			
 			// parse the command string for TITLE tags that need to be replaced
 			for (int in = 0; in < numInputs; in++) {
-				Input input = unit.getInput(in);
-				String searchString = "TITLE_" + (in+1);
-				String parameterString = "" + input.getImageTitle();
+				final Input input = unit.getInput(in);
+				final String searchString = "TITLE_" + (in+1);
+				final String parameterString = "" + input.getImageTitle();
 				System.out.println(input.getImageTitle());
 				System.out.println("Unit: " + unitIndex + " Input: " + in + " Title: " + parameterString);
 				macroElement.replace(searchString, parameterString);
@@ -78,8 +83,8 @@ public class MacroGenerator {
 			
 			// funktioniert nur fŸr einen Ausgang
 			for (int out = 0; out < numOutputs; out++) {
-				String outputTitle = unit.getOutput(out).getImageTitle();
-				String outputID = unit.getOutput(out).getImageID();
+				final String outputTitle = unit.getOutput(out).getImageTitle();
+				final String outputID = unit.getOutput(out).getImageID();
 				
 				macroText +=  "ID_temp = getImageID(); \n" +
 					"run(\"Duplicate...\", \"title=" + outputTitle  + "\"); \n" +
@@ -93,7 +98,7 @@ public class MacroGenerator {
 		// delete all images that are not to be displayed
 		macroText +=  "// delete unwanted images \n";
 		for (int u = 1; u < unitElement.length; u++) {
-			UnitElement unit = unitElement[u];
+			final UnitElement unit = unitElement[u];
 			macroText += deleteImages(unit);
 		}
 
@@ -105,13 +110,13 @@ public class MacroGenerator {
 
 
 
-	private static String deleteImages(UnitElement unit) {
+	private static String deleteImages(final UnitElement unit) {
 		String macroText = "";
-		int numOutputs = unit.getOutputsCount();
+		final int numOutputs = unit.getOutputsCount();
 
 		for (int out = 0; out < numOutputs; out++) {
 			if (!unit.isDisplayUnit()) {
-				String outputID = unit.getOutput(out).getImageID();
+				final String outputID = unit.getOutput(out).getImageID();
 			
 				macroText += "selectImage("+outputID+"); \n" +
 							 "close(); \n";
@@ -120,12 +125,12 @@ public class MacroGenerator {
 		return macroText;
 	}
 
-	private static String duplicateImages(UnitElement unit,	int numInputs) {
+	private static String duplicateImages(final UnitElement unit,	final int numInputs) {
 		String code = "";
 		for (int in = 0; in < numInputs; in++) {
-			Input input = unit.getInput(in);
+			final Input input = unit.getInput(in);
 			if(input.isNeedToCopyInput()) {
-				String inputID = unit.getInput(in).getImageID();
+				final String inputID = unit.getInput(in).getImageID();
 
 				code += "selectImage(" + inputID + "); \n";
 				code += "run(\"Duplicate...\", \"title=Title_Temp\"); \n";
@@ -140,9 +145,9 @@ public class MacroGenerator {
 	 * @param connection
 	 * @return
 	 */
-	public static String generateMacro_Sample(UnitElement[] unitElement, Connection[] connection) {
+	public static String generateMacro_Sample(final UnitElement[] unitElement, final Connection[] connection) {
 		
-		String macroText = 
+		final String macroText = 
 			
 		"setBatchMode(true); \n" +
 

@@ -26,8 +26,7 @@ public class ImageFlow {
 			System.setProperty("apple.awt.brushMetalRounded", "true");
 		}
 		
-		GraphController controller = new GraphController();
-		new Applicationframe(controller);
+		new Applicationframe();
 		
 	}
 	

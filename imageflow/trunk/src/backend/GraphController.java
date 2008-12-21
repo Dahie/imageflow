@@ -1,5 +1,6 @@
 package backend;
 import graph.Node;
+import gui.Applicationframe;
 import helper.Tools;
 import ij.IJ;
 import ij.ImageJ;
@@ -44,7 +45,12 @@ public class GraphController extends ApplicationController {
 	 */
 	protected ArrayList<Node> copyNodesList;
 
+	protected Applicationframe view;
 
+	public GraphController(Applicationframe view) {
+		this();
+		this.view = view;
+	}
 
 	/**
 	 * 
@@ -77,8 +83,8 @@ public class GraphController extends ApplicationController {
 		// generation of the ImageJ macro
 		////////////////////////////////////////////////////////
 
-
-		final String macro = MacroGenerator.generateMacrofromUnitList(unitElements);
+		MacroGenerator generator = new MacroGenerator();
+		final String macro = generator.generateMacrofromUnitList(unitElements);
 
 		if(imagej == null)
 			imagej = new ImageJ(null, ImageJ.EMBEDDED);
@@ -150,7 +156,6 @@ public class GraphController extends ApplicationController {
 		return this.unitElements;
 	}
 
-	// !!!
 	public static void main(final String[] args) {
 		final GraphController controller = new GraphController();
 		controller.setupExample1();

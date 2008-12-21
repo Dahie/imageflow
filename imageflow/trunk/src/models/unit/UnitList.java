@@ -248,4 +248,11 @@ public class UnitList extends GList<Node> implements Model {
 		}
 	}
 	
+	@Override
+	public void clear() {
+		super.clear();
+		connections.clear();
+		notifyModelListeners();
+	}
+	
 }

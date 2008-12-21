@@ -1,5 +1,4 @@
 package gui;
-import graph.Edges;
 import graph.Node;
 import helper.FileDrop;
 
@@ -25,6 +24,7 @@ import models.unit.UnitFactory;
 import models.unit.UnitList;
 import visualap.Delegate;
 import actions.CheckGraphAction;
+import actions.ClearGraphAction;
 import actions.CopyUnitAction;
 import actions.Example0_XML_Action;
 import actions.Example1Action;
@@ -61,12 +61,7 @@ public class Applicationframe extends JFrame {
 	private ArrayList<Delegate> unitDelegates;
 	
 	
-	/**
-	 * 
-	 */
-	public Applicationframe() {
-		init();
-	}
+
 	
 	/**
 	 * 
@@ -77,10 +72,10 @@ public class Applicationframe extends JFrame {
 		init();
 	}
 	
-	public Applicationframe(GraphController controller) {
-		this.graphController = controller;
-		this.units = controller.getUnitElements();
-		this.connections = controller.getConnections();
+	public Applicationframe() {
+		this.graphController = new GraphController(this);
+		this.units = this.graphController.getUnitElements();
+		this.connections = this.graphController.getConnections();
 		init();
 	}
 
@@ -147,6 +142,7 @@ public class Applicationframe extends JFrame {
 		editMenu.add(new CopyUnitAction(graphPanel.getSelection(), graphController.getCopyNodesList()));
 		editMenu.add(new PasteUnitAction(graphController.getCopyNodesList(), graphPanel));
 		editMenu.add(new RemoveUnitAction(graphPanel.getSelection(),graphController));
+		editMenu.add(new ClearGraphAction(graphController));
 		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates);
 		JMenu windowMenu = new JMenu("Window");
 		JMenu helpMenu = new JMenu("Help");
