@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Square</UnitName> 
+  <HelpString>Squares an image</HelpString>  
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Square");</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+</General>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>-1</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>	
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
