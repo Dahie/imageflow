@@ -1,32 +1,28 @@
 package backend;
 import graph.Node;
-import gui.Applicationframe;
 import helper.Tools;
 import ij.IJ;
 import ij.ImageJ;
+import imageflow.models.Connection;
+import imageflow.models.ConnectionList;
+import imageflow.models.parameter.Parameter;
+import imageflow.models.parameter.StringParameter;
+import imageflow.models.unit.UnitDescription;
+import imageflow.models.unit.UnitElement;
+import imageflow.models.unit.UnitFactory;
+import imageflow.models.unit.UnitList;
+import imageflow.models.unit.UnitElement.Type;
 
 import java.awt.Point;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import macro.MacroGenerator;
-import models.Connection;
-import models.ConnectionList;
-import models.Input;
-import models.Output;
-import models.unit.UnitDescription;
-import models.unit.UnitElement;
-import models.unit.UnitFactory;
-import models.unit.UnitList;
-import models.unit.UnitElement.Type;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
+import org.jdesktop.application.View;
 
-import application.ApplicationController;
 
 
 
@@ -34,9 +30,9 @@ import application.ApplicationController;
  * @author danielsenff
  *
  */
-public class GraphController extends ApplicationController {
+public class GraphController{
 
-	private ApplicationController controller;
+//	private ApplicationController controller;
 
 	private UnitList unitElements;
 	private ImageJ imagej;
@@ -45,9 +41,9 @@ public class GraphController extends ApplicationController {
 	 */
 	protected ArrayList<Node> copyNodesList;
 
-	protected Applicationframe view;
+	protected View view;
 
-	public GraphController(Applicationframe view) {
+	public GraphController(View view) {
 		this();
 		this.view = view;
 	}
@@ -63,9 +59,10 @@ public class GraphController extends ApplicationController {
 
 
 	/**
-	 * verification and generation of the ImageJ macro
+	 * verification and generation of the ImageJ macro for the full graph
+	 * @return 
 	 */
-	public void generateMacro() {
+	public String generateMacro() {
 		////////////////////////////////////////////////////////
 		// analysis and 
 		// verification of the connection network
@@ -73,7 +70,7 @@ public class GraphController extends ApplicationController {
 
 		if (!checkNetwork()) {
 			System.out.println("Error in node network.");
-			return;
+			return null;
 		}
 
 		// unitElements has to be ordered according to the correct processing sequence
@@ -86,6 +83,13 @@ public class GraphController extends ApplicationController {
 		MacroGenerator generator = new MacroGenerator();
 		final String macro = generator.generateMacrofromUnitList(unitElements);
 
+		return macro;
+	}
+	
+	
+	
+
+	public void runImageJMacro(final String macro) {
 		if(imagej == null)
 			imagej = new ImageJ(null, ImageJ.EMBEDDED);
 					IJ.log(macro);
@@ -106,6 +110,25 @@ public class GraphController extends ApplicationController {
 			return false; 
 		}
 
+		// sources -> file exists
+		for (Node node : unitElements) {
+			UnitElement unit = (UnitElement) node;
+			if(unit.getType() == Type.SOURCE) {
+				for (Parameter parameter : unit.getParameters()) {
+					if(parameter instanceof StringParameter) {
+						File file = new File((String) parameter.getValue());
+						if(!file.exists()) {
+							return false;
+						}
+					}	
+				}
+			}
+			
+		}
+		
+		
+		
+		
 
 		ConnectionList connections = unitElements.getConnections();
 		if(connections.size() > 0) {
@@ -184,6 +207,7 @@ public class GraphController extends ApplicationController {
 
 		try {
 			//loop over all units, selection sort, levelorder
+			// TODO I don't like this condition
 			while(!unitElements.isEmpty()) {
 				index = i % unitElements.size();
 				UnitElement unit = (UnitElement) unitElements.get(index); 
@@ -330,7 +354,17 @@ public class GraphController extends ApplicationController {
 
 	public void setupExample0_XML() {
 
-		UnitElement[] unitElement = null;
+		UnitList units = new UnitList();
+		try {
+			units.readUnitList(new File("xml_flows/Example0_flow.xml"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		/*UnitElement[] unitElement = null;
 		int numUnits = 0;
 
 		// setup of units
@@ -387,7 +421,7 @@ public class GraphController extends ApplicationController {
 		catch (Exception e) {
 			System.err.println("Invalid XML-File!");
 			e.printStackTrace();
-		}	
+		}	*/
 	}
 
 	public void setupExample2() {

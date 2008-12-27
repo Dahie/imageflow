@@ -3,10 +3,11 @@ package actions;
 import graph.Node;
 import graph.Selection;
 
+import imageflow.models.unit.UnitElement;
+
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-import models.unit.UnitElement;
 
 public class CopyUnitAction extends AbstractUnitAction {
 

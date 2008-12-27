@@ -1,7 +1,9 @@
 package models;
 
-import models.unit.UnitElement;
-import models.unit.UnitFactory;
+import imageflow.models.Connection;
+import imageflow.models.ConnectionList;
+import imageflow.models.unit.UnitElement;
+import imageflow.models.unit.UnitFactory;
 import junit.framework.TestCase;
 
 public class MacroTests extends TestCase {

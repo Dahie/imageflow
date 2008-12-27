@@ -3,6 +3,9 @@
  */
 package test;
 
+import imageflow.models.unit.NodeIcon;
+import imageflow.models.unit.UnitFactory;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,8 +14,6 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-import models.unit.NodeIcon;
-import models.unit.UnitFactory;
 
 
 
@@ -23,6 +24,7 @@ import models.unit.UnitFactory;
 public class IconPreview extends JFrame {
 
 	private BufferedImage bi;
+	private NodeIcon icon;
 
 
 
@@ -32,8 +34,8 @@ public class IconPreview extends JFrame {
 	public IconPreview() {
 
 		
-		NodeIcon icon = new NodeIcon(UnitFactory.createGaussianBlurUnit());
-		bi = icon.getImage();
+		icon = new NodeIcon(UnitFactory.createGaussianBlurUnit());
+		
 		
 		
 		setTitle("Icon Test");
@@ -46,12 +48,17 @@ public class IconPreview extends JFrame {
 	@Override
 	public void paint(Graphics g) {
 		
-		int width =  bi.getWidth(), height =  bi.getHeight();
+		Graphics2D g2 = (Graphics2D)g; 
+		bi = icon.getImage();
+		int width =  this.getWidth(), height =  this.getHeight();
 
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, width, height+25);
-		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);   
-        g.drawImage(bi, 0, 25, null);
+		g2.setColor(Color.WHITE);
+		g2.fillRect(0, 0, width, height+25);
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);   
+//        g.drawImage(bi, 0, 25, null);
+		icon.paintBigIcon(g2);
+		g2.translate(150, 0);
+		icon.paintMediumIcon(g2);
   	
 	}
 	

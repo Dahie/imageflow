@@ -4,12 +4,15 @@
 package models;
 
 import ij.plugin.filter.PlugInFilter;
+import imageflow.models.Connection;
+import imageflow.models.Input;
+import imageflow.models.Output;
+import imageflow.models.unit.UnitElement;
+import imageflow.models.unit.UnitFactory;
 
 import java.awt.Dimension;
 
 import junit.framework.TestCase;
-import models.unit.UnitElement;
-import models.unit.UnitFactory;
 
 /**
  * @author danielsenff

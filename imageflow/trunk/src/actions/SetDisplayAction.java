@@ -3,12 +3,13 @@ package actions;
 import graph.Node;
 import graph.Selection;
 
+import imageflow.models.unit.UnitElement;
+
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
 
 import javax.swing.JMenuItem;
 
-import models.unit.UnitElement;
 
 public class SetDisplayAction extends AbstractUnitAction {
 

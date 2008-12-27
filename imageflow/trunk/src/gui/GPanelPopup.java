@@ -5,24 +5,24 @@ package gui;
 
 import graph.Node;
 import graph.Selection;
+import imageflow.ImageFlow;
+import imageflow.ImageFlowView;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import visualap.Delegate;
 import visualap.GPanel;
 import visualap.GPanelListener;
-import actions.CopyUnitAction;
-import actions.CutUnitAction;
 import actions.PasteUnitAction;
-import actions.RemoveUnitAction;
 import actions.SetDisplayAction;
 import actions.ShowUnitParametersAction;
-import actions.UnbindUnitAction;
 import backend.GraphController;
 
 /**
@@ -72,21 +72,33 @@ public class GPanelPopup implements GPanelListener {
 				if (selectedUnits.size() == 1) {
 					popup.add(new JMenuItem(new SetDisplayAction(selectedUnits)));
 					popup.add(new ShowUnitParametersAction(selectedUnits));
+					popup.add(getAction("preview"));
 					popup.addSeparator();
 				}
-				popup.add(new CutUnitAction(graphController, activePanel));
-				popup.add(new CopyUnitAction(selectedUnits, copyL));
+				popup.add(getAction("cut"));
+				popup.add(getAction("copy"));
+				popup.add(getAction("paste"));
+				popup.add(getAction("unbind"));
+				popup.add(getAction("remove"));
+//						new CutUnitAction(graphController, activePanel));
+				/*popup.add(new CopyUnitAction(selectedUnits, copyL));
 				popup.add(new UnbindUnitAction(selectedUnits, graphController));
-				popup.add(new RemoveUnitAction(selectedUnits, graphController));
+				popup.add(new RemoveUnitAction(selectedUnits, graphController));*/
 			}
 			if (copyL.size() != 0) popup.add(new PasteUnitAction(copyL, activePanel));
 			popup.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
 
-
+	
 
 	
+	private Action getAction(String actionName) {
+		ActionMap actionMap = ImageFlow.getApplication().getContext().getActionMap(
+				ImageFlowView.class, ImageFlow.getApplication().getMainView());
+		return actionMap.get(actionName);
+	}
+
 	/**
 	 * @param activePanel the activePanel to set
 	 */

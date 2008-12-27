@@ -1,6 +1,10 @@
 package gui;
 import graph.Node;
 import helper.FileDrop;
+import imageflow.models.ConnectionList;
+import imageflow.models.unit.CommentNode;
+import imageflow.models.unit.UnitFactory;
+import imageflow.models.unit.UnitList;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -18,20 +22,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import models.ConnectionList;
-import models.unit.CommentNode;
-import models.unit.UnitFactory;
-import models.unit.UnitList;
 import visualap.Delegate;
 import actions.CheckGraphAction;
-import actions.ClearGraphAction;
 import actions.CopyUnitAction;
 import actions.Example0_XML_Action;
 import actions.Example1Action;
 import actions.Example2Action;
 import actions.PasteUnitAction;
-import actions.RemoveUnitAction;
-import actions.RunMacroAction;
 import actions.ShowUnitParametersAction;
 import backend.DelegatesController;
 import backend.GraphController;
@@ -43,6 +40,7 @@ import backend.ModelListener;
  */
 
 /**
+ * depricated
  * @author danielsenff
  *
  */
@@ -73,7 +71,7 @@ public class Applicationframe extends JFrame {
 	}
 	
 	public Applicationframe() {
-		this.graphController = new GraphController(this);
+		this.graphController = new GraphController();
 		this.units = this.graphController.getUnitElements();
 		this.connections = this.graphController.getConnections();
 		init();
@@ -141,8 +139,6 @@ public class Applicationframe extends JFrame {
 		JMenu editMenu = new JMenu("Edit");
 		editMenu.add(new CopyUnitAction(graphPanel.getSelection(), graphController.getCopyNodesList()));
 		editMenu.add(new PasteUnitAction(graphController.getCopyNodesList(), graphPanel));
-		editMenu.add(new RemoveUnitAction(graphPanel.getSelection(),graphController));
-		editMenu.add(new ClearGraphAction(graphController));
 		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates);
 		JMenu windowMenu = new JMenu("Window");
 		JMenu helpMenu = new JMenu("Help");

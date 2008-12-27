@@ -5,12 +5,15 @@ package models;
 
 import graph.Node;
 
+import imageflow.models.Connection;
+import imageflow.models.ConnectionList;
+import imageflow.models.unit.UnitElement;
+import imageflow.models.unit.UnitFactory;
+import imageflow.models.unit.UnitList;
+
 import java.awt.Dimension;
 
 import junit.framework.TestCase;
-import models.unit.UnitElement;
-import models.unit.UnitFactory;
-import models.unit.UnitList;
 import backend.GraphController;
 
 /**

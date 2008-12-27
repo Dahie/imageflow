@@ -1,22 +1,18 @@
 package backend;
 
 import helper.Tools;
+import imageflow.models.unit.UnitDelegate;
+import imageflow.models.unit.UnitDescription;
+import imageflow.models.unit.UnitElement;
+import imageflow.models.unit.UnitFactory;
 
-import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
-import models.unit.UnitDelegate;
-import models.unit.UnitDescription;
-import models.unit.UnitElement;
-import models.unit.UnitFactory;
 import visualap.Delegate;
-import application.ApplicationController;
 
-public class DelegatesController extends ApplicationController {
+public class DelegatesController {
 
 	private static DelegatesController controller;
 	private ArrayList<Delegate> unitDelegates;
@@ -43,7 +39,6 @@ public class DelegatesController extends ApplicationController {
 	    		unitDelegates.add(new UnitDelegate(unitDescription.getUnitName(), unitDescription.getHelpString()) {
 	    			@Override
 	    			public UnitElement createUnit(final Point origin) {
-	    				//return UnitFactory.createSourceUnit(origin);
 	    				return UnitFactory.createProcessingUnit(unitDescription, origin);
 	    			}
 	    		});

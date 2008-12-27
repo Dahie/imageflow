@@ -2,6 +2,10 @@ package gui;
 
 import graph.Node;
 
+import imageflow.models.unit.CommentNode;
+import imageflow.models.unit.UnitDelegate;
+import imageflow.models.unit.UnitElement;
+
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,9 +17,6 @@ import javax.swing.JMenuItem;
 import backend.Model;
 import backend.ModelListener;
 
-import models.unit.CommentNode;
-import models.unit.UnitDelegate;
-import models.unit.UnitElement;
 import visualap.Delegate;
 import visualap.ErrorPrinter;
 import visualap.GPanel;

@@ -6,19 +6,19 @@ package actions;
 import graph.Node;
 import graph.Selection;
 import ij.gui.GenericDialog;
+import imageflow.models.parameter.AbstractParameter;
+import imageflow.models.parameter.BooleanParameter;
+import imageflow.models.parameter.ChoiceParameter;
+import imageflow.models.parameter.DoubleParameter;
+import imageflow.models.parameter.IntegerParameter;
+import imageflow.models.parameter.StringParameter;
+import imageflow.models.unit.UnitElement;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import javax.swing.Action;
 
-import models.BooleanParameter;
-import models.ChoiceParameter;
-import models.DoubleParameter;
-import models.IntegerParameter;
-import models.AbstractParameter;
-import models.StringParameter;
-import models.unit.UnitElement;
 
 
 /**

@@ -1,5 +1,7 @@
 package test;
 
+import imageflow.models.unit.UnitList;
+
 import java.beans.XMLEncoder;
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
@@ -7,7 +9,6 @@ import java.io.FileOutputStream;
 
 import javax.swing.JButton;
 
-import models.unit.UnitList;
 
 import backend.GraphController;
 

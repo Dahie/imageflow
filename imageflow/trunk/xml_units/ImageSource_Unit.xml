@@ -13,7 +13,7 @@
 <Parameters>
   	<Parameter>
   		<Name>Image</Name>
-  		<DataType>String</DataType>
+  		<DataType>File</DataType>
   		<Value>/Users/barthel/Applications/ImageJ/_images/zange1.png</Value>
   		<HelpString>The source unit needs the path of an image file.</HelpString>
   	</Parameter> 

@@ -1,11 +1,11 @@
 package backend;
 
+import imageflow.models.Input;
+import imageflow.models.Output;
+import imageflow.models.unit.UnitElement;
 import graph.Edges;
 import graph.GList;
 import graph.Node;
-import models.Input;
-import models.Output;
-import models.unit.UnitElement;
 import visualap.Backward;
 import visualap.Check;
 import visualap.CheckException;

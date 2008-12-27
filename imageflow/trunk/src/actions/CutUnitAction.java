@@ -2,12 +2,14 @@ package actions;
 
 import graph.Edge;
 import graph.Node;
+import graph.Selection;
+
+import imageflow.models.unit.UnitElement;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import models.unit.UnitElement;
 import visualap.GPanel;
 import backend.GraphController;
 
@@ -25,6 +27,7 @@ public class CutUnitAction extends AbstractUnitAction {
 		this.copyUnitsList = graphController.getCopyNodesList();
 	}
 
+
 	public void actionPerformed(ActionEvent e) {
 		if (selectedUnits.size() > 0) {
 			// il problema java.util.ConcurrentModificationException è stato risolto introducendo la lista garbage
@@ -37,13 +40,14 @@ public class CutUnitAction extends AbstractUnitAction {
 				copyUnitsList.add(t);
 				activePanel.getNodeL().remove(t);*/
 				this.copyUnitsList.add(t);
-				System.out.println(((UnitElement)t).getObject());
 				graphController.removeUnit((UnitElement)t);
 			}
-			for (Edge c : garbage)
-				activePanel.getEdgeL().remove(c);
+			for (Edge c : garbage) {
+				graphController.getConnections().remove(c);
+//				activePanel.getEdgeL().remove(c);
+			}
 			selectedUnits.clear();
-			activePanel.repaint();
+//			activePanel.repaint();
 		}
 	}
 

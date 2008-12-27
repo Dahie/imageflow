@@ -1,11 +1,11 @@
 package actions;
 
+import imageflow.models.unit.UnitElement;
 import graph.Node;
 import graph.Selection;
 
 import javax.swing.AbstractAction;
 
-import models.unit.UnitElement;
 
 /**
  * Superclass for Actions which directly work on a {@link UnitElement}.

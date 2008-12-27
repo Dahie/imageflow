@@ -7,6 +7,11 @@ import graph.Node;
 import graph.NodeText;
 import graph.Pin;
 
+import imageflow.models.Input;
+import imageflow.models.Output;
+import imageflow.models.unit.UnitElement;
+import imageflow.models.unit.UnitList;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,11 +27,10 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentListener;
 
-import models.Input;
-import models.Output;
-import models.unit.UnitElement;
-import models.unit.UnitList;
+import backend.GraphController;
+
 import visualap.Delegate;
 import visualap.GPanel;
 import visualap.GPanelListener;
@@ -248,6 +252,13 @@ public class GraphPanel extends GPanel {
 			unit.showProperties();
 		}
 //		super.properties(node);
+	}
+
+
+	public void setGraphController(GraphController graphController) {
+		this.nodeL = graphController.getUnitElements();
+		this.EdgeL = graphController.getConnections();
+		this.selection.clear();
 	}
 	
 	
