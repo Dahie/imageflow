@@ -2,10 +2,14 @@ package imageflow;
 
 import graph.Node;
 import graph.Selection;
-import gui.GPanelPopup;
-import gui.GraphPanel;
-import gui.InsertUnitMenu;
 import helper.FileDrop;
+import imageflow.backend.DelegatesController;
+import imageflow.backend.GraphController;
+import imageflow.backend.Model;
+import imageflow.backend.ModelListener;
+import imageflow.gui.GPanelPopup;
+import imageflow.gui.GraphPanel;
+import imageflow.gui.InsertUnitMenu;
 import imageflow.models.ConnectionList;
 import imageflow.models.unit.CommentNode;
 import imageflow.models.unit.UnitElement;
@@ -52,12 +56,12 @@ import actions.Example1Action;
 import actions.Example2Action;
 import actions.PasteUnitAction;
 import actions.ShowUnitParametersAction;
-import backend.DelegatesController;
-import backend.GraphController;
-import backend.Model;
-import backend.ModelListener;
 
 
+/**
+ * @author danielsenff
+ *
+ */
 public class ImageFlowView extends FrameView {
 
 //	private static final Logger logger = Logger.getLogger(DocumentEditorView.class.getName());
@@ -79,7 +83,6 @@ public class ImageFlowView extends FrameView {
 	
 
 	private boolean modified = false;
-	private boolean selectedUnits = false;
 	
 	
 	public ImageFlowView(Application app) {
@@ -192,7 +195,8 @@ public class ImageFlowView extends FrameView {
 		graphPanel.setSize(400, 300);
 		graphPanel.setGraphController(graphController);
 		graphPanel.setPreferredSize(new Dimension(400, 300));
-//		graphPanel.getSelection();
+		graphPanel.getSelection();
+		
 
 		
 		
@@ -233,10 +237,10 @@ public class ImageFlowView extends FrameView {
 //		unitSelectionPanel.add(selectUnitScrollpane);
 		
 		//properties of the selected node
-		JPanel propertiesPanel = new JPanel();
+		/*JPanel propertiesPanel = new JPanel();
 		propertiesPanel.setName("Properties");
 		JButton buttonPara = new JButton(new ShowUnitParametersAction(graphPanel.getSelection()));
-		propertiesPanel.add(buttonPara, BorderLayout.SOUTH);
+		propertiesPanel.add(buttonPara, BorderLayout.SOUTH);*/
 		
 		
 		// logging the history?
@@ -267,7 +271,6 @@ public class ImageFlowView extends FrameView {
 		
 		JTabbedPane functionTabPane = new JTabbedPane();
 //		functionTabPane.add(unitSelectionPanel);
-		functionTabPane.add(propertiesPanel);
 		functionTabPane.add(logPanel);
 		functionTabPane.add(macroPanel);
 		getRootPane().add(functionTabPane, BorderLayout.SOUTH);
@@ -275,16 +278,22 @@ public class ImageFlowView extends FrameView {
 	}
 	
 
+	/**
+	 * @return
+	 */
 	public GraphController getGraphController() {
 		return graphController;
 	}
 
-	public void setGraphController(GraphController graphController) {
+	/**
+	 * @param graphController
+	 */
+	public void setGraphController(final GraphController graphController) {
 		this.graphController = graphController;
 		this.units = this.graphController.getUnitElements();
 		this.connections = this.graphController.getConnections();
 		graphPanel.setGraphController(this.graphController);
-		graphPanel.invalidate();
+		graphPanel.repaint();
 	}
 	
 	/**
@@ -312,22 +321,14 @@ public class ImageFlowView extends FrameView {
     }
     
     public boolean hasSelectedUnits() { 
-        return this.selectedUnits;
+        return !this.graphPanel.getSelection().isEmpty();
     }
+   
     
-    /**
-     *  Set the bound modified property and update the GUI.
-     */
-    public void setModified(final boolean modified) {
+    public void setModified(final boolean selected) {
         boolean oldValue = this.modified;
-        this.modified = modified;
-        firePropertyChange("modified", oldValue, this.modified);
-    }
-    
-    public void setSelectedUnits(final boolean selected) {
-        boolean oldValue = this.selectedUnits;
         this.modified = selected;
-        firePropertyChange("selected", oldValue, this.selectedUnits);
+        firePropertyChange("selected", oldValue, this.modified);
     }
 	
 	public File getFile() {
@@ -419,7 +420,6 @@ public class ImageFlowView extends FrameView {
 	private javax.swing.Action getAction(String actionName) {
 //		ActionMap actionMap = Application.getInstance(ImageFlow.class).getContext().getActionMap(ImageFlowView.class, this);
 		ActionMap actionMap = getContext().getActionMap(ImageFlowView.class, this);
-		System.out.println(actionMap.allKeys());
 		initActions(actionMap);
 	    return actionMap.get(actionName);
 	}

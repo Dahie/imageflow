@@ -2,11 +2,11 @@ package imageflow.tasks;
 
 import imageflow.ImageFlow;
 import imageflow.ImageFlowView;
+import imageflow.backend.GraphController;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 
-import backend.GraphController;
 
 /**
  * @author danielsenff
@@ -26,7 +26,8 @@ public class GenerateMacroTask extends Task {
 		
 		String macro = graphController.generateMacro();
 //		((ImageFlowView)ImageFlow.getApplication().getMainView()).
-		graphController.runImageJMacro(macro);
+		System.out.println(macro);
+		graphController.runImageJMacro(macro, false);
 		return null;
 	}
 	

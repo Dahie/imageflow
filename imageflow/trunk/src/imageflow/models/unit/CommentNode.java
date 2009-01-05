@@ -2,6 +2,9 @@ package imageflow.models.unit;
 
 import graph.NodeText;
 
+import imageflow.backend.Model;
+import imageflow.backend.ModelListener;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -13,8 +16,6 @@ import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 
-import backend.Model;
-import backend.ModelListener;
 
 /**
  * Note-Node, sorry the pun, this is a Unit element, just for writing a note.

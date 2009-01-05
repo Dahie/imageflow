@@ -1,6 +1,10 @@
-package gui;
+package imageflow.gui;
 import graph.Node;
 import helper.FileDrop;
+import imageflow.backend.DelegatesController;
+import imageflow.backend.GraphController;
+import imageflow.backend.Model;
+import imageflow.backend.ModelListener;
 import imageflow.models.ConnectionList;
 import imageflow.models.unit.CommentNode;
 import imageflow.models.unit.UnitFactory;
@@ -30,10 +34,6 @@ import actions.Example1Action;
 import actions.Example2Action;
 import actions.PasteUnitAction;
 import actions.ShowUnitParametersAction;
-import backend.DelegatesController;
-import backend.GraphController;
-import backend.Model;
-import backend.ModelListener;
 
 /**
  * 

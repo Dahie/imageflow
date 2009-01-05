@@ -1,4 +1,4 @@
-package gui;
+package imageflow.gui;
 
 import ij.gui.GenericDialog;
 

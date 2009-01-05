@@ -1,12 +1,13 @@
 /**
  * 
  */
-package gui;
+package imageflow.gui;
 
 import graph.Node;
 import graph.NodeText;
 import graph.Pin;
 
+import imageflow.backend.GraphController;
 import imageflow.models.Input;
 import imageflow.models.Output;
 import imageflow.models.unit.UnitElement;
@@ -29,7 +30,6 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentListener;
 
-import backend.GraphController;
 
 import visualap.Delegate;
 import visualap.GPanel;
@@ -143,10 +143,6 @@ public class GraphPanel extends GPanel {
 				isCompatible = ((Input)drawEdge).isImageBitDepthCompatible(((Output)pin).getImageBitDepth());
 			}
 										
-			
-			
-			
-			
 			g2.setColor(
 					(isCompatible && !isLoop) ? Color.green : Color.red);
 			Ellipse2D.Double circle = 

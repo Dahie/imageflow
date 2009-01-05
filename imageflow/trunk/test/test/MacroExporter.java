@@ -1,5 +1,6 @@
 package test;
 
+import imageflow.backend.GraphController;
 import imageflow.models.unit.UnitList;
 
 import java.beans.XMLEncoder;
@@ -10,7 +11,6 @@ import java.io.FileOutputStream;
 import javax.swing.JButton;
 
 
-import backend.GraphController;
 
 public class MacroExporter {
 

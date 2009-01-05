@@ -1,8 +1,9 @@
-package backend;
+package imageflow.backend;
 import graph.Node;
 import helper.Tools;
 import ij.IJ;
 import ij.ImageJ;
+import imageflow.MacroGenerator;
 import imageflow.models.Connection;
 import imageflow.models.ConnectionList;
 import imageflow.models.parameter.Parameter;
@@ -19,7 +20,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import macro.MacroGenerator;
 
 import org.jdesktop.application.View;
 
@@ -89,10 +89,15 @@ public class GraphController{
 	
 	
 
-	public void runImageJMacro(final String macro) {
+	public void runImageJMacro(final String macro, boolean showLog) {
 		if(imagej == null)
 			imagej = new ImageJ(null, ImageJ.EMBEDDED);
-					IJ.log(macro);
+		
+		if(showLog)
+			IJ.log(macro);
+		
+		imagej.setVisible(false);
+		
 		// !!!
 		IJ.runMacro(macro, "");
 	}

@@ -4,6 +4,8 @@ import helper.PaintUtil;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
+import imageflow.backend.Model;
+import imageflow.backend.ModelListener;
 import imageflow.models.Input;
 import imageflow.models.MacroElement;
 import imageflow.models.Output;
@@ -34,8 +36,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import backend.Model;
-import backend.ModelListener;
 
 
 /**

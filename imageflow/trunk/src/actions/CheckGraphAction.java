@@ -3,6 +3,9 @@
  */
 package actions;
 
+import imageflow.backend.GraphCheck;
+import imageflow.backend.GraphController;
+
 import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
@@ -10,8 +13,6 @@ import javax.swing.JOptionPane;
 
 import visualap.Check;
 import visualap.CheckException;
-import backend.GraphCheck;
-import backend.GraphController;
 
 /**
  * @author danielsenff

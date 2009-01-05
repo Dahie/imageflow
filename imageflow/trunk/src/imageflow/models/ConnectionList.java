@@ -6,12 +6,12 @@ package imageflow.models;
 import graph.Edges;
 import graph.Pin;
 
+import imageflow.backend.Model;
+import imageflow.backend.ModelListener;
 import imageflow.models.unit.UnitElement;
 
 import java.util.ArrayList;
 
-import backend.Model;
-import backend.ModelListener;
 
 /**
  * List that holds all {@link Connection}s.

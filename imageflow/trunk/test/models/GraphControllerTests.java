@@ -1,8 +1,8 @@
 package models;
 
+import imageflow.backend.GraphController;
 import imageflow.models.unit.UnitElement;
 import junit.framework.TestCase;
-import backend.GraphController;
 
 public class GraphControllerTests extends TestCase {
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package gui;
+package imageflow.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;

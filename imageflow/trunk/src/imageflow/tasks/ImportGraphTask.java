@@ -2,12 +2,12 @@ package imageflow.tasks;
 
 import imageflow.ImageFlow;
 import imageflow.ImageFlowView;
+import imageflow.backend.GraphController;
 import imageflow.models.unit.UnitList;
 
 import java.io.File;
 import java.io.IOException;
 
-import backend.GraphController;
 
 public class ImportGraphTask extends LoadFileTask<GraphController, Void> {
 
@@ -32,7 +32,9 @@ public class ImportGraphTask extends LoadFileTask<GraphController, Void> {
      */
     @Override
     protected GraphController doInBackground() throws IOException {
-        GraphController graphController = ((ImageFlowView)ImageFlow.getApplication().getMainView()).getGraphController();
+        GraphController graphController = 
+        	((ImageFlowView)ImageFlow.getApplication()
+        			.getMainView()).getGraphController();
         UnitList unitList = graphController.getUnitElements();
         unitList.readUnitList(file);
         

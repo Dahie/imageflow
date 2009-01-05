@@ -1,4 +1,4 @@
-package backend;
+package imageflow.backend;
 
 import imageflow.models.Input;
 import imageflow.models.Output;

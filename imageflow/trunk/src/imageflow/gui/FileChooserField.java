@@ -1,4 +1,4 @@
-package gui;
+package imageflow.gui;
 /*
  * Baba XP - Extreme Programming Projects Manager
  * Copyright (c) 2004 Baba XP

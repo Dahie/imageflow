@@ -1,11 +1,11 @@
-package macro;
+package imageflow;
 
+import imageflow.backend.GraphController;
 import imageflow.models.Connection;
 import imageflow.models.Input;
 import imageflow.models.MacroElement;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitList;
-import backend.GraphController;
 
 
 

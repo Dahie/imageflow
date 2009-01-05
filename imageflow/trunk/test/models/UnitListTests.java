@@ -5,6 +5,7 @@ package models;
 
 import graph.Node;
 
+import imageflow.backend.GraphController;
 import imageflow.models.Connection;
 import imageflow.models.ConnectionList;
 import imageflow.models.unit.UnitElement;
@@ -14,7 +15,6 @@ import imageflow.models.unit.UnitList;
 import java.awt.Dimension;
 
 import junit.framework.TestCase;
-import backend.GraphController;
 
 /**
  * @author danielsenff

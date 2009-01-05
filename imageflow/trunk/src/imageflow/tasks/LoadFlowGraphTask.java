@@ -1,11 +1,11 @@
 package imageflow.tasks;
 
+import imageflow.backend.GraphController;
 import imageflow.models.unit.UnitList;
 
 import java.io.File;
 import java.io.IOException;
 
-import backend.GraphController;
 
 public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
 

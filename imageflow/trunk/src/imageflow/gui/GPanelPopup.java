@@ -1,12 +1,13 @@
 /**
  * 
  */
-package gui;
+package imageflow.gui;
 
 import graph.Node;
 import graph.Selection;
 import imageflow.ImageFlow;
 import imageflow.ImageFlowView;
+import imageflow.backend.GraphController;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -23,7 +24,6 @@ import visualap.GPanelListener;
 import actions.PasteUnitAction;
 import actions.SetDisplayAction;
 import actions.ShowUnitParametersAction;
-import backend.GraphController;
 
 /**
  * @author danielsenff

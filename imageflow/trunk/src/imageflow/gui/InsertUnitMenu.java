@@ -1,7 +1,9 @@
-package gui;
+package imageflow.gui;
 
 import graph.Node;
 
+import imageflow.backend.Model;
+import imageflow.backend.ModelListener;
 import imageflow.models.unit.CommentNode;
 import imageflow.models.unit.UnitDelegate;
 import imageflow.models.unit.UnitElement;
@@ -14,8 +16,6 @@ import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import backend.Model;
-import backend.ModelListener;
 
 import visualap.Delegate;
 import visualap.ErrorPrinter;

@@ -2,6 +2,7 @@ package imageflow.tasks;
 
 import imageflow.ImageFlow;
 import imageflow.ImageFlowView;
+import imageflow.backend.GraphController;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -11,7 +12,6 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Task;
 
-import backend.GraphController;
 
 
 public abstract class LoadFileTask<T, V> extends Task<T, V> {
@@ -47,6 +47,7 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
     protected void succeeded(T fileContents) {
         view.setFile(getFile());
         view.setGraphController((GraphController)fileContents);
+        
 //        textArea.setText(fileContents);
         view.setModified(false);
     }

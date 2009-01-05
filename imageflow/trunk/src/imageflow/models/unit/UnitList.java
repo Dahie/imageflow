@@ -5,6 +5,8 @@ package imageflow.models.unit;
 
 import graph.GList;
 import graph.Node;
+import imageflow.backend.Model;
+import imageflow.backend.ModelListener;
 import imageflow.models.Connection;
 import imageflow.models.ConnectionList;
 import imageflow.models.Input;
@@ -22,8 +24,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
-import backend.Model;
-import backend.ModelListener;
 
 /**
  * List holding all {@link UnitElement}s. For the moment this is just an empty wrapper.

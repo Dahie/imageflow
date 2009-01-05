@@ -4,6 +4,7 @@ import graph.Edge;
 import graph.Node;
 import graph.Selection;
 
+import imageflow.backend.GraphController;
 import imageflow.models.unit.UnitElement;
 
 import java.awt.event.ActionEvent;
@@ -11,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import visualap.GPanel;
-import backend.GraphController;
 
 public class CutUnitAction extends AbstractUnitAction {
 

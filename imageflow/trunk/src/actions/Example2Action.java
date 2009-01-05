@@ -1,10 +1,11 @@
 package actions;
 
+import imageflow.backend.GraphController;
+
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import backend.GraphController;
 
 public class Example2Action extends AbstractAction {
 
