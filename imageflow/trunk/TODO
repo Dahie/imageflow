@@ -4,7 +4,8 @@ GUI:
 
 Functions:
 - Save workflows
-- 
+- as imageJ plugin / standalone
+- no other jars (jdom)
 
 Graph:
 - fixed imagebizdepth test during connection
@@ -13,8 +14,15 @@ Graph:
 
 
 Nice-to-have:
-- Editing history (for nodes and properties)
+- display help info of the units
 - Automatic load of new plugins
-- Multi-Document-Application
-- Grouping of units
 - have a nice info text on the empty panel
+- cleanup of the graph
+- zoomable graph
+- labels of inputs and outputs
+
+V2:
+- Editing history (for nodes and properties)
+- Grouping of units
+- Multi-Document-Application
+- no more visualapp?
