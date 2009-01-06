@@ -37,7 +37,6 @@ public class SetDisplayAction extends AbstractUnitAction {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		JMenuItem source = (JMenuItem)(e.getSource());
 
 		for (Iterator iterator = selectedUnits.iterator(); iterator.hasNext();) {
 			UnitElement unit = (UnitElement) iterator.next();

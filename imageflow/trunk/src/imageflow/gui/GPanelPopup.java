@@ -21,7 +21,6 @@ import javax.swing.JPopupMenu;
 import visualap.Delegate;
 import visualap.GPanel;
 import visualap.GPanelListener;
-import actions.PasteUnitAction;
 import actions.SetDisplayAction;
 import actions.ShowUnitParametersAction;
 
@@ -70,8 +69,8 @@ public class GPanelPopup implements GPanelListener {
 			} else {
 				
 				if (selectedUnits.size() == 1) {
-					popup.add(new JMenuItem(new SetDisplayAction(selectedUnits)));
-					popup.add(new ShowUnitParametersAction(selectedUnits));
+					popup.add(getAction("setDisplayUnit"));
+					popup.add(getAction("showUnitParameters"));
 					popup.add(getAction("preview"));
 					popup.addSeparator();
 				}
@@ -80,12 +79,8 @@ public class GPanelPopup implements GPanelListener {
 				popup.add(getAction("paste"));
 				popup.add(getAction("unbind"));
 				popup.add(getAction("remove"));
-//						new CutUnitAction(graphController, activePanel));
-				/*popup.add(new CopyUnitAction(selectedUnits, copyL));
-				popup.add(new UnbindUnitAction(selectedUnits, graphController));
-				popup.add(new RemoveUnitAction(selectedUnits, graphController));*/
 			}
-			if (copyL.size() != 0) popup.add(new PasteUnitAction(copyL, activePanel));
+			if (copyL.size() != 0) popup.add(getAction("paste"));
 			popup.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}

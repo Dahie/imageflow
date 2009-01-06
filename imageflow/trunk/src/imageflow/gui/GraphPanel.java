@@ -6,10 +6,10 @@ package imageflow.gui;
 import graph.Node;
 import graph.NodeText;
 import graph.Pin;
-
 import imageflow.backend.GraphController;
 import imageflow.models.Input;
 import imageflow.models.Output;
+import imageflow.models.SelectionList;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitList;
 
@@ -22,14 +22,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
-import javax.swing.event.DocumentListener;
-
 
 import visualap.Delegate;
 import visualap.GPanel;
@@ -55,6 +52,8 @@ public class GraphPanel extends GPanel {
 	}
 
 
+	
+	
 	/* (non-Javadoc)
 	 * @see visualap.GPanel#paintComponent(java.awt.Graphics)
 	 */
@@ -252,10 +251,14 @@ public class GraphPanel extends GPanel {
 
 
 	public void setGraphController(GraphController graphController) {
+		this.selection.clear();
 		this.nodeL = graphController.getUnitElements();
 		this.EdgeL = graphController.getConnections();
-		this.selection.clear();
+		
 	}
 	
+	public void setSelections(SelectionList selections) {
+		this.selection = selections;
+	}
 	
 }

@@ -1,5 +1,6 @@
 package imageflow;
 
+import graph.Edge;
 import graph.Node;
 import graph.Selection;
 import helper.FileDrop;
@@ -11,6 +12,9 @@ import imageflow.gui.GPanelPopup;
 import imageflow.gui.GraphPanel;
 import imageflow.gui.InsertUnitMenu;
 import imageflow.models.ConnectionList;
+import imageflow.models.Selectable;
+import imageflow.models.SelectionList;
+import imageflow.models.SelectionListener;
 import imageflow.models.unit.CommentNode;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
@@ -26,6 +30,8 @@ import java.awt.Point;
 import java.awt.ScrollPane;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import javax.swing.ActionMap;
 import javax.swing.JButton;
@@ -38,8 +44,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
@@ -48,14 +52,11 @@ import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
 
 import visualap.Delegate;
+import visualap.ErrorPrinter;
 import actions.CheckGraphAction;
-import actions.CopyUnitAction;
-import actions.CutUnitAction;
 import actions.Example0_XML_Action;
 import actions.Example1Action;
 import actions.Example2Action;
-import actions.PasteUnitAction;
-import actions.ShowUnitParametersAction;
 
 
 /**
@@ -83,6 +84,10 @@ public class ImageFlowView extends FrameView {
 	
 
 	private boolean modified = false;
+	private boolean selected = false;
+
+	private SelectionList selections;
+
 	
 	
 	public ImageFlowView(Application app) {
@@ -92,6 +97,7 @@ public class ImageFlowView extends FrameView {
 		this.graphController = new GraphController(this);
 		this.units = this.graphController.getUnitElements();
 		this.connections = this.graphController.getConnections();
+		this.selections = new SelectionList();
 		
 		initComponents();
 	}
@@ -136,6 +142,15 @@ public class ImageFlowView extends FrameView {
 				setModified(true);
 			}
 		});
+		
+		
+		selections.addSelectionListener(new SelectionListener() {
+			public void selectionChanged(Selectable selections) {
+				System.out.println(selections.isSelected());
+				setSelected(selections.isSelected());
+			}
+		});
+		
 	}
 
 	
@@ -162,6 +177,9 @@ public class ImageFlowView extends FrameView {
 		editMenu.add(getAction("paste"));
 		editMenu.add(getAction("remove"));
 		editMenu.add(getAction("clear"));
+		editMenu.add(new JSeparator());
+		editMenu.add(getAction("setDisplayUnit"));
+		editMenu.add(getAction("showUnitParameters"));
 		
 		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates);
 		JMenu windowMenu = new JMenu("Window");
@@ -195,8 +213,7 @@ public class ImageFlowView extends FrameView {
 		graphPanel.setSize(400, 300);
 		graphPanel.setGraphController(graphController);
 		graphPanel.setPreferredSize(new Dimension(400, 300));
-		graphPanel.getSelection();
-		
+		graphPanel.setSelections(this.selections);
 
 		
 		
@@ -320,17 +337,23 @@ public class ImageFlowView extends FrameView {
         return this.modified;
     }
     
-    public boolean hasSelectedUnits() { 
-        return !this.graphPanel.getSelection().isEmpty();
+    public boolean isSelected() { 
+        return this.selected;
     }
    
     
-    public void setModified(final boolean selected) {
+    public void setModified(final boolean modified) {
         boolean oldValue = this.modified;
-        this.modified = selected;
-        firePropertyChange("selected", oldValue, this.modified);
+        this.modified = modified;
+        firePropertyChange("modified", oldValue, this.modified);
     }
 	
+    public void setSelected(final boolean selected) {
+        boolean oldValue = this.selected;
+        this.selected = selected;
+        firePropertyChange("selected", oldValue, this.selected);
+    }
+    
 	public File getFile() {
 		return file;
 	}
@@ -358,7 +381,8 @@ public class ImageFlowView extends FrameView {
 	    return task;
 	}
 	
-	@Action public Task preview() {
+	@Action(enabledProperty = "selected")
+	public Task preview() {
 		UnitElement unit = (UnitElement) graphPanel.getSelection().get(0);
 		
 	    Task task = null;
@@ -367,6 +391,8 @@ public class ImageFlowView extends FrameView {
 	    }*/
 	    return task;
 	}
+	
+
 	
 	@Action public Task importGraph() {
 	    JFileChooser fc = new JFileChooser();
@@ -379,22 +405,109 @@ public class ImageFlowView extends FrameView {
 	    return task;
 	}
 	
-	@Action public void unbind() {
+	@Action(enabledProperty = "selected")
+	public void setDisplayUnit() {
+		for (Iterator iterator = selections.iterator(); iterator.hasNext();) {
+			UnitElement unit = (UnitElement) iterator.next();
+			if(unit.isDisplayUnit()) {
+				// if it is a displayUnit, deactivate
+				unit.setDisplayUnit(false);
+			} else {
+				// if it is a displayUnit, activate
+				unit.setDisplayUnit(true);
+			}
+		}
+		graphPanel.repaint();
+	}
+	
+	@Action(enabledProperty = "selected")
+	public void unbind() {
 		Selection<Node> selection = graphPanel.getSelection();
 		for (Node unit : selection) {
 			units.unbindUnit((UnitElement)unit);	
 		}
 	}
 
-	@Action public void remove() {
+	@Action(enabledProperty = "selected")
+	public void remove() {
 		Selection<Node> selection = graphPanel.getSelection();
 		for (Node unit : selection) {
 			graphController.removeUnit((UnitElement)unit);
 		}
 	}
 	
-	@Action public void clear() {
+	@Action	public void clear() {
 		this.units.clear();
+	}
+	
+	@Action(enabledProperty = "selected")
+	public void cut() {
+		Selection<Node> selectedUnits = graphPanel.getSelection();
+		ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
+		if (selectedUnits.size() > 0) {
+			// il problema java.util.ConcurrentModificationException è stato risolto introducendo la lista garbage
+			HashSet<Edge> garbage = new HashSet<Edge>();
+			copyUnitsList.clear();
+			for (Node t : selectedUnits) {
+				/*for (Edge c : activePanel.getEdgeL())
+					if ((c.from.getParent() == t)||(t == c.to.getParent()))
+						garbage.add(c);
+				copyUnitsList.add(t);
+				activePanel.getNodeL().remove(t);*/
+				copyUnitsList.add(t);
+				graphController.removeUnit((UnitElement)t);
+			}
+			for (Edge c : garbage) {
+				graphController.getConnections().remove(c);
+//				activePanel.getEdgeL().remove(c);
+			}
+			selectedUnits.clear();
+		}
+	}
+	
+	@Action(enabledProperty = "selected")
+	public void copy() { 
+		Selection<Node> selectedUnits = graphPanel.getSelection();
+		ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
+		if (selectedUnits.size() > 0) {
+			copyUnitsList.clear();
+			for (Node t : selectedUnits) {
+				Node clone = ((UnitElement)t).clone();	
+				clone.setLabel(t.getLabel());
+				copyUnitsList.add(clone);
+			}
+		}
+	}
+	
+	@Action	public void paste() {
+		Selection<Node> selectedUnits = graphPanel.getSelection();
+		ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
+		if (copyUnitsList.size() > 0) {
+			selectedUnits.clear();
+			selectedUnits.addAll(copyUnitsList);
+			copyUnitsList.clear();
+			for (Node t : selectedUnits) {
+//			for (Node t : copyUnitsList) {
+				try {
+					UnitElement clone = (UnitElement)t.clone();	
+					clone.setLabel(t.getLabel());
+					graphPanel.getNodeL().add(t, t.getLabel());
+					copyUnitsList.add(clone);
+				} catch(CloneNotSupportedException ex) {
+					ErrorPrinter.printInfo("CloneNotSupportedException");
+				}
+			}
+			graphPanel.repaint();
+		}
+	}
+	
+	@Action(enabledProperty = "selected")
+	public void showUnitParameters() {
+		Selection<Node> selectedUnits = graphPanel.getSelection();
+		for (int i = 0; i < selectedUnits.size(); i++) {
+			UnitElement unit = (UnitElement)selectedUnits.get(i);
+			unit.showProperties();
+		}
 	}
 	
     @Action(enabledProperty = "modified")
@@ -429,13 +542,6 @@ public class ImageFlowView extends FrameView {
 	private void initActions(ActionMap actionMap) {
 		Selection<Node> selection = graphPanel.getSelection();
 		ArrayList<Node> copyList = graphController.getCopyNodesList();
-		actionMap.put("cut", 
-				new CutUnitAction(graphController, graphPanel));
-		actionMap.put("copy", 
-				new CopyUnitAction(selection, copyList));
-		actionMap.put("paste", 
-				new PasteUnitAction(copyList, graphPanel));
-
 
 		
 		actionMap.put("checkGraph", 

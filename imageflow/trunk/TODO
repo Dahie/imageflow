@@ -1,0 +1,20 @@
+GUI:
+- Insert-Panel, that displays all possible nodes, from which a node can be dragged on the workflow
+
+
+Functions:
+- Save workflows
+- 
+
+Graph:
+- fixed imagebizdepth test during connection
+- fixed loop detection
+- optional Node-Alignment
+
+
+Nice-to-have:
+- Editing history (for nodes and properties)
+- Automatic load of new plugins
+- Multi-Document-Application
+- Grouping of units
+- have a nice info text on the empty panel
