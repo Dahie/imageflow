@@ -12,8 +12,8 @@
 
 <Inputs> 
 	<Input>
-		<Name>Input1</Name>
-		<ShortName>I</ShortName>	
+		<Name></Name>
+		<ShortName></ShortName>	
 		<ImageType>-1</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>	
@@ -21,8 +21,8 @@
 
 <Outputs> 
 	<Output>
-		<Name>Output</Name>
-		<ShortName>O</ShortName>	
+		<Name></Name>
+		<ShortName></ShortName>	
 		<ImageType>-1</ImageType>
 		<DoDisplay>true</DoDisplay>
 	</Output>

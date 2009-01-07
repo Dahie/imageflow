@@ -15,14 +15,11 @@ import java.util.ArrayList;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import visualap.Delegate;
 import visualap.GPanel;
 import visualap.GPanelListener;
-import actions.SetDisplayAction;
-import actions.ShowUnitParametersAction;
 
 /**
  * @author danielsenff

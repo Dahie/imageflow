@@ -146,7 +146,6 @@ public class ImageFlowView extends FrameView {
 		
 		selections.addSelectionListener(new SelectionListener() {
 			public void selectionChanged(Selectable selections) {
-				System.out.println(selections.isSelected());
 				setSelected(selections.isSelected());
 			}
 		});
@@ -432,8 +431,9 @@ public class ImageFlowView extends FrameView {
 	public void remove() {
 		Selection<Node> selection = graphPanel.getSelection();
 		for (Node unit : selection) {
-			graphController.removeUnit((UnitElement)unit);
+			graphController.removeNode((UnitElement)unit);
 		}
+		graphPanel.repaint();
 	}
 	
 	@Action	public void clear() {
@@ -455,7 +455,7 @@ public class ImageFlowView extends FrameView {
 				copyUnitsList.add(t);
 				activePanel.getNodeL().remove(t);*/
 				copyUnitsList.add(t);
-				graphController.removeUnit((UnitElement)t);
+				graphController.removeNode(t);
 			}
 			for (Edge c : garbage) {
 				graphController.getConnections().remove(c);
@@ -467,14 +467,20 @@ public class ImageFlowView extends FrameView {
 	
 	@Action(enabledProperty = "selected")
 	public void copy() { 
-		Selection<Node> selectedUnits = graphPanel.getSelection();
+		Selection<Node> selectedNodes = graphPanel.getSelection();
 		ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
-		if (selectedUnits.size() > 0) {
+		if (!selectedNodes.isEmpty()) {
 			copyUnitsList.clear();
-			for (Node t : selectedUnits) {
-				Node clone = ((UnitElement)t).clone();	
-				clone.setLabel(t.getLabel());
-				copyUnitsList.add(clone);
+			for (Node t : selectedNodes) {
+				Node clone;
+				try {
+					clone = t.clone();
+					clone.setLabel(t.getLabel());
+					copyUnitsList.add(clone);
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}	
+				
 			}
 		}
 	}
@@ -482,14 +488,17 @@ public class ImageFlowView extends FrameView {
 	@Action	public void paste() {
 		Selection<Node> selectedUnits = graphPanel.getSelection();
 		ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
-		if (copyUnitsList.size() > 0) {
+		if (!copyUnitsList.isEmpty()) {
 			selectedUnits.clear();
+			// this is added here so that the new pasted units are selected
 			selectedUnits.addAll(copyUnitsList);
 			copyUnitsList.clear();
 			for (Node t : selectedUnits) {
 //			for (Node t : copyUnitsList) {
 				try {
-					UnitElement clone = (UnitElement)t.clone();	
+					
+//					UnitElement clone = (UnitElement)t.clone();	
+					Node clone = t.clone();
 					clone.setLabel(t.getLabel());
 					graphPanel.getNodeL().add(t, t.getLabel());
 					copyUnitsList.add(clone);

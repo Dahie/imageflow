@@ -7,6 +7,7 @@ import graph.Node;
 import graph.Selection;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * @author danielsenff
@@ -38,6 +39,13 @@ public class SelectionList extends Selection<Node> implements Selectable {
 	public void add(int index, Node element) {
 		super.add(index, element);
 		this.notifySelectionListeners();
+	}
+	
+	@Override
+	public boolean addAll(Collection<? extends Node> c) {
+		boolean addAll = super.addAll(c);
+		this.notifySelectionListeners();
+		return addAll;
 	}
 	
 	@Override

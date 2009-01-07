@@ -107,8 +107,30 @@ public class UnitFactory {
 //		unitElement.updateUnitIcon();
 		return unitElement;
 	}
+
+	/**
+	 * Creates a new {@link CommentNode}. 
+	 * @param string
+	 * @param point
+	 * @return
+	 */
+	public static CommentNode createComment(final String string, final Point point) {
+		return new CommentNode(point, string);
+	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * From here on it's kinda legacy. 
+	 * They are still used for the testing framework, but not for the application.
+	 */
 	
 	
 
@@ -388,5 +410,10 @@ public class UnitFactory {
 		blurUnit.updateUnitIcon();
 		return blurUnit;
 	}
+
+
+
+
+
 	
 }

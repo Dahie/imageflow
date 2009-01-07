@@ -14,7 +14,7 @@ public class GraphControllerTests extends TestCase {
 		assertEquals("number of connections", 4, controller.getConnections().size());
 		
 		UnitElement merge = (UnitElement) controller.getUnitElements().get(3);
-		assertTrue("has removed sucessfully", controller.removeUnit(merge));
+		assertTrue("has removed sucessfully", controller.removeNode(merge));
 	}
 	
 }

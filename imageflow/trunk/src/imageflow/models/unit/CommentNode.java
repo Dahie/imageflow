@@ -1,5 +1,6 @@
 package imageflow.models.unit;
 
+import graph.Node;
 import graph.NodeText;
 
 import imageflow.backend.Model;
@@ -32,7 +33,13 @@ public class CommentNode extends NodeText implements Model {
 	 */
 	public CommentNode(final Point point, final String string) {
 		super(point, string);
+		this.label = string;
 		this.listeners = new ArrayList<ModelListener>();
+	}
+	
+	@Override
+	public Node clone() throws CloneNotSupportedException {
+		return new CommentNode(new Point(origin.x+15, origin.y+15), new String(text));
 	}
 
 	@Override
