@@ -18,7 +18,10 @@ public class BooleanParameter extends AbstractParameter {
 	 */
 	protected boolean booleanValueDefault;
 	
-	
+	/**
+	 * The string that is inserted in the imagej-syntax if the condidation is true.
+	 */
+	protected String trueString;
 
 	/**
 	 * @param displayName 
@@ -29,7 +32,7 @@ public class BooleanParameter extends AbstractParameter {
 	public BooleanParameter(final String displayName, 
 			final boolean boolParameter, 
 			final String trueString,
-			String helpString) {
+			final String helpString) {
 		this.displayName = displayName;
 		this.booleanValue = boolParameter;
 		this.booleanValueDefault = boolParameter;
@@ -66,6 +69,19 @@ public class BooleanParameter extends AbstractParameter {
 	 */
 	public void setValue(final boolean booleanValue) {
 		this.booleanValue = booleanValue;
+	}
+	
+	
+	/**
+	 * This is the string to insert in the macro-syntax, if the condition is true
+	 * @return
+	 */
+	public String getTrueString() {
+		return trueString;
+	}
+
+	public Boolean getDefaultValue() {
+		return this.booleanValueDefault;
 	}
 
 }

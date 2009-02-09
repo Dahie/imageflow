@@ -1,6 +1,6 @@
 GUI:
 - Insert-Panel, that displays all possible nodes, from which a node can be dragged on the workflow
-
+- imagej plugin menu wie verzeichnisse für delegates
 
 Functions:
 - Save workflows
@@ -11,6 +11,7 @@ Graph:
 - fixed imagebizdepth test during connection
 - fixed loop detection
 - optional Node-Alignment
+- ordner image source aka stack-support
 
 
 Nice-to-have:
@@ -20,6 +21,7 @@ Nice-to-have:
 - cleanup of the graph
 - zoomable graph
 - labels of inputs and outputs
+- insert new units not on existing units
 
 V2:
 - Editing history (for nodes and properties)

@@ -1,7 +1,10 @@
 package imageflow.models.unit;
 
+import imageflow.models.parameter.BooleanParameter;
+
 import java.awt.Color;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -182,32 +185,7 @@ public class UnitDescription {
 				while (parametersIterator.hasNext()) {
 					Element actualParameterElement = (Element) parametersIterator.next();
 					
-					Para actPara = para[num] = new Para();
-					
-					actPara.name = actualParameterElement.getChild("Name").getValue();
-					actPara.helpString = actualParameterElement.getChild("HelpString").getValue();
-					String dataTypeString = actPara.dataTypeString = actualParameterElement.getChild("DataType").getValue();
-					String valueString = actualParameterElement.getChild("Value").getValue();
-					
-					if (dataTypeString.toLowerCase().equals("double")) 
-						actPara.doubleValue = Double.valueOf(valueString);
-					else if (dataTypeString.toLowerCase().equals("file"))
-						actPara.stringValue = valueString;
-					else if (dataTypeString.toLowerCase().equals("string")) 
-						actPara.stringValue = valueString;
-					else if (dataTypeString.toLowerCase().equals("integer")) 
-						actPara.integerValue = Integer.valueOf(valueString);
-					else if (dataTypeString.toLowerCase().equals("stringarray")) { 
-						actPara.choiceNumber = Integer.valueOf(actualParameterElement.getChild("ChoiceNumber").getValue());
-						actPara.comboStringValues = valueString.split(" ");
-						actPara.stringValue = actPara.comboStringValues[actPara.choiceNumber]; 
-					}
-					else if (dataTypeString.toLowerCase().equals("boolean")) { 
-						actPara.trueString = actualParameterElement.getChild("TrueString").getValue();
-						actPara.booleanValue = valueString.equals("true") ? true : false;
-					}
-					else 
-						throw new Exception("invalid datatype");
+					processParameters(num, actualParameterElement);
 					num++;
 				}
 			}
@@ -263,6 +241,41 @@ public class UnitDescription {
 	}
 
 
+	private void processParameters(int num, Element actualParameterElement)
+			throws Exception {
+		Para actPara = para[num] = new Para();
+		
+		actPara.name = actualParameterElement.getChild("Name").getValue();
+		actPara.helpString = actualParameterElement.getChild("HelpString").getValue();
+		String dataTypeString = actPara.dataTypeString = actualParameterElement.getChild("DataType").getValue();
+		String valueString = actualParameterElement.getChild("Value").getValue();
+		
+		if (dataTypeString.toLowerCase().equals("double")) 
+			actPara.value = Double.valueOf(valueString);
+		else if (dataTypeString.toLowerCase().equals("file"))
+			actPara.value = valueString;
+		else if (dataTypeString.toLowerCase().equals("string")) 
+			actPara.value = valueString;
+		else if (dataTypeString.toLowerCase().equals("integer")) 
+			actPara.value = Integer.valueOf(valueString);
+		else if (dataTypeString.toLowerCase().equals("stringarray")) { 
+			int choiceNumber = Integer.valueOf(actualParameterElement.getChild("ChoiceNumber").getValue());
+			String[] strings = valueString.split(" ");
+			ArrayList<String> choicesList = new ArrayList<String>(strings.length);
+			for (int i = 0; i < strings.length; i++) {
+				choicesList.add(strings[i]);
+			}
+			actPara.value = choicesList;
+			actPara.choiceIndex = Integer.valueOf(choiceNumber);
+		}
+		else if (dataTypeString.toLowerCase().equals("boolean")) {
+			actPara.value = Boolean.valueOf(valueString);
+			actPara.trueString = actualParameterElement.getChild("TrueString").getValue();
+		} else 
+			throw new Exception("invalid datatype");
+	}
+
+
 	public String getHelpString() {
 		return helpString;
 	}
@@ -281,12 +294,32 @@ class Para {
 	String name;
 
 	String dataTypeString;
-	double doubleValue;
+	/*double doubleValue;
 	int integerValue;
 	String stringValue;
 	String[] comboStringValues;
 	int choiceNumber;
-	boolean booleanValue;
+	boolean booleanValue;*/
+	
+	/**
+	 * can be
+	 * ArrayList
+	 * Integer
+	 * Double
+	 * String
+	 * Boolean
+	 */
+	Object value;
+	
+	/**
+	 * Enumeration of possible values, the actual value has to be 
+	 * element in this list.
+	 */
+	int choiceIndex;
+	
+	/**
+	 * String used when value true for {@link BooleanParameter}
+	 */
 	public String trueString;
 
 	String helpString;

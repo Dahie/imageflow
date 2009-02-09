@@ -13,6 +13,8 @@ public interface Parameter {
 	 */
 	public abstract Object getValue();
 	
+	public abstract Object getDefaultValue();
+	
 	/**
 	 * Returns the name of the Parameter. 
 	 * @return
@@ -32,12 +34,6 @@ public interface Parameter {
 	 * @return
 	 */
 	public String getHelpString();
-	
-	/**
-	 * Get the help description of this Parameter.
-	 * @return
-	 */
-	public String getTrueString();
 	
 	/**
 	 * @param parameterNumber

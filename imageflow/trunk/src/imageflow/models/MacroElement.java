@@ -3,13 +3,13 @@
  */
 package imageflow.models;
 
-import imageflow.models.parameter.AbstractParameter;
+import helper.Tools;
 import imageflow.models.parameter.BooleanParameter;
 import imageflow.models.parameter.DoubleParameter;
 import imageflow.models.parameter.IntegerParameter;
+import imageflow.models.parameter.Parameter;
 import imageflow.models.parameter.StringParameter;
 import imageflow.models.unit.UnitElement;
-import helper.Tools;
 
 /**
  * @author danielsenff
@@ -88,7 +88,7 @@ public class MacroElement {
 		String searchString;
 
 		while (p < numParas) {
-			AbstractParameter parameter = (AbstractParameter) unit.getParameters().get(p);
+			Parameter parameter = unit.getParameters().get(p);
 
 			searchString = "PARA_DOUBLE_" + (pd+1);
 			String paraType = parameter.getParaType().toLowerCase();
@@ -96,7 +96,7 @@ public class MacroElement {
 				String parameterString = "" + ((DoubleParameter)parameter).getValue();
 				System.out.println("Unit: " + u + " Parameter: " + p + " Double Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, parameterString);
-				System.out.println(command);
+//				System.out.println(command);
 				pd++;
 				p++;
 			}
@@ -105,7 +105,7 @@ public class MacroElement {
 				String parameterString = "" + ((StringParameter)parameter).getValue();
 				System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, parameterString);
-				System.out.println(command);
+//				System.out.println(command);
 				ps++;
 				p++;
 			}
@@ -114,18 +114,18 @@ public class MacroElement {
 				String parameterInteger = "" + ((IntegerParameter)parameter).getValue();
 				System.out.println("Unit: " + u + " Parameter: " + p + " Integer Parameter: " + parameterInteger);
 				command = Tools.replace(command, searchString, parameterInteger);
-				System.out.println(command);
+//				System.out.println(command);
 				pi++;
 				p++;
 			}
 			searchString = "PARA_BOOLEAN_" + (pb+1);
 			if(command.contains(searchString) && paraType.equals("boolean")) {
 				boolean bool = ((BooleanParameter)parameter).getValue();
-				String parameterString =  (bool == true) ? ((BooleanParameter)parameter).getTrueString():""; 
+				String parameterString =  (bool) ? ((BooleanParameter)parameter).getTrueString() : ""; 
 				//String parameterString = "" + ((BooleanParameter)parameter).getValue();
 				System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, parameterString);
-				System.out.println(command);
+//				System.out.println(command);
 				pb++;
 				p++;
 			}

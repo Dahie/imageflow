@@ -69,6 +69,7 @@ public class NodeIcon {
 	 * Associated unit of to this icon
 	 */
 	protected UnitElement unit;
+	private int unitID;
 	
 	
 	/**
@@ -78,6 +79,7 @@ public class NodeIcon {
 	public NodeIcon(final UnitElement unit) {
 		this.unit = unit;
 		this.unitName = unit.getUnitName();
+		this.unitID = unit.getUnitID();
 		
 		try {
 			this.displayIcon = ImageIO.read(new File(displayIconFile));
@@ -145,6 +147,7 @@ public class NodeIcon {
 	    		RenderingHints.KEY_ANTIALIASING,
 	            RenderingHints.VALUE_ANTIALIAS_ON);
 
+	    
 	    //draw background
 	    drawBackground(g2, arc, widthIconBg, heightIconBg);
 	    
@@ -199,9 +202,11 @@ public class NodeIcon {
 		
 		// and if even now to small, then cut
 		g2.drawString(unitName, x+5, y+85);
-	    
+		
 		g2.setFont(new Font(font.getFamily(), font.getStyle(), fontsizeOriginal));
-	    
+		
+		g2.drawString(unitID+"", x+5, y+15);
+		
 		/*legacy
 		 * Font font = g2.getFont();
 	    g2.drawString(parametersLabel, x+5, y+20);
@@ -272,6 +277,11 @@ public class NodeIcon {
 	 */
 	public void setIcon(final Image icon) {
 		this.icon = icon;
+	}
+
+
+	public void setSelected(boolean b) {
+		
 	}
 	
 	

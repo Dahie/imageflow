@@ -12,6 +12,7 @@ import imageflow.backend.GraphController;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -30,7 +31,7 @@ public class GPanelPopup implements GPanelListener {
 	protected GPanel activePanel;
 	protected Point savedPoint = new Point(0,0);
 	protected ArrayList<Node> copyL;
-	protected ArrayList<Delegate> availableUnits;
+	protected Collection<Delegate> availableUnits;
 	private GraphController graphController;
 
 
@@ -39,7 +40,7 @@ public class GPanelPopup implements GPanelListener {
 	 * @param availableUnits
 	 * @param copyL
 	 */
-	public GPanelPopup(final ArrayList<Delegate> availableUnits, 
+	public GPanelPopup(final Collection<Delegate> availableUnits, 
 			final GraphController graphController) {
 		this.availableUnits = availableUnits;
 		this.graphController = graphController;
@@ -61,7 +62,7 @@ public class GPanelPopup implements GPanelListener {
 			//Create the popup menu.
 			JPopupMenu popup = new JPopupMenu();
 			Selection<Node> selectedUnits = activePanel.getSelection();
-			if (selectedUnits.size() == 0) { 
+			if (selectedUnits.isEmpty()) { 
 				popup.add(new InsertUnitMenu("Insert unit", activePanel, availableUnits, savedPoint));
 			} else {
 				
@@ -77,7 +78,8 @@ public class GPanelPopup implements GPanelListener {
 				popup.add(getAction("unbind"));
 				popup.add(getAction("remove"));
 			}
-			if (copyL.size() != 0) popup.add(getAction("paste"));
+			if (!copyL.isEmpty()) 
+				popup.add(getAction("paste"));
 			popup.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}

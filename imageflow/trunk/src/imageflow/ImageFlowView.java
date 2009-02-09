@@ -8,6 +8,7 @@ import imageflow.backend.DelegatesController;
 import imageflow.backend.GraphController;
 import imageflow.backend.Model;
 import imageflow.backend.ModelListener;
+import imageflow.gui.DelegatesPanel;
 import imageflow.gui.GPanelPopup;
 import imageflow.gui.GraphPanel;
 import imageflow.gui.InsertUnitMenu;
@@ -30,6 +31,7 @@ import java.awt.Point;
 import java.awt.ScrollPane;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -37,13 +39,15 @@ import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.tree.TreeNode;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
@@ -54,9 +58,6 @@ import org.jdesktop.application.Task;
 import visualap.Delegate;
 import visualap.ErrorPrinter;
 import actions.CheckGraphAction;
-import actions.Example0_XML_Action;
-import actions.Example1Action;
-import actions.Example2Action;
 
 
 /**
@@ -77,7 +78,7 @@ public class ImageFlowView extends FrameView {
 
 	private JTextArea macroArea;
 	private GraphPanel graphPanel;
-	private ArrayList<Delegate> unitDelegates;
+	private HashMap<TreeNode,Delegate> unitDelegates;
 
 	private File file;
 
@@ -98,6 +99,7 @@ public class ImageFlowView extends FrameView {
 		this.units = this.graphController.getUnitElements();
 		this.connections = this.graphController.getConnections();
 		this.selections = new SelectionList();
+		this.unitDelegates = DelegatesController.getInstance().getUnitDelegates();
 		
 		initComponents();
 	}
@@ -165,10 +167,7 @@ public class ImageFlowView extends FrameView {
 		fileMenu.add(getAction("generateMacro"));
 		fileMenu.add(getAction("saveAs"));
 		fileMenu.add(getAction("importGraph"));
-		fileMenu.add(new JSeparator());
-		fileMenu.add(new Example0_XML_Action(graphController));
-		fileMenu.add(new Example1Action(graphController));
-		fileMenu.add(new Example2Action(graphController));
+		
 		
 		JMenu editMenu = new JMenu("Edit");
 		editMenu.add(getAction("cut"));
@@ -180,13 +179,22 @@ public class ImageFlowView extends FrameView {
 		editMenu.add(getAction("setDisplayUnit"));
 		editMenu.add(getAction("showUnitParameters"));
 		
-		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates);
+		JMenu debugMenu = new JMenu("Debug");
+		debugMenu.add(getAction("debugPrintNodes"));
+		debugMenu.add(new JSeparator());
+		debugMenu.add(getAction("exampleFlow1"));
+		debugMenu.add(getAction("exampleFlow2"));
+		debugMenu.add(getAction("exampleFlowXML"));
+		
+		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates.values());
+		
 		JMenu windowMenu = new JMenu("Window");
 		JMenu helpMenu = new JMenu("Help");
 		
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
 		menuBar.add(insertMenu);
+		menuBar.add(debugMenu);
 		menuBar.add(windowMenu);
 		menuBar.add(helpMenu);
 		
@@ -199,15 +207,14 @@ public class ImageFlowView extends FrameView {
 	 */
 	private void addComponents() {
 		
-		unitDelegates = DelegatesController.getInstance().getUnitDelegates();
-		
-		
 		getRootPane().setLayout(new BorderLayout());
 		
 		//working area aka graphpanel
 		
-		GPanelPopup popup = new GPanelPopup(unitDelegates, graphController);
-		graphPanel = new GraphPanel(unitDelegates , popup);
+		GPanelPopup popup = new GPanelPopup(unitDelegates.values(), graphController);
+		ArrayList<Delegate> delegatesArrayList = new ArrayList<Delegate>();
+		delegatesArrayList.addAll(unitDelegates.values());
+		graphPanel = new GraphPanel(delegatesArrayList, popup);
 		popup.setActivePanel(graphPanel);
 		graphPanel.setSize(400, 300);
 		graphPanel.setGraphController(graphController);
@@ -240,59 +247,33 @@ public class ImageFlowView extends FrameView {
 		
 		
 		
-		getRootPane().add(graphScrollpane, BorderLayout.CENTER);
 		
-		// area for selecting unit to insert them in the graphpanel
-//		JPanel unitSelectionPanel = new JPanel();
-//		unitSelectionPanel.setName("Insert filter");
-//		
-//		JPanel selectUnitPanel = new InsertUnitPanel();
-//		
-//		
-//		JScrollPane selectUnitScrollpane = new JScrollPane(selectUnitPanel); 
-//		unitSelectionPanel.add(selectUnitScrollpane);
-		
-		//properties of the selected node
-		/*JPanel propertiesPanel = new JPanel();
-		propertiesPanel.setName("Properties");
-		JButton buttonPara = new JButton(new ShowUnitParametersAction(graphPanel.getSelection()));
-		propertiesPanel.add(buttonPara, BorderLayout.SOUTH);*/
-		
-		
-		// logging the history?
-		JPanel logPanel = new JPanel();
-		logPanel.setName("Log");
-		
-		
-		
-		// display the generated macro
-		JPanel macroPanel = new JPanel();
-		macroPanel.setName("Macro");
-		macroPanel.setLayout(new BorderLayout());
-		
-		macroArea = new JTextArea();
-		JScrollPane macroAreaScrollpane = new JScrollPane(macroArea);
-		macroPanel.add(macroAreaScrollpane, BorderLayout.CENTER);
 		
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new FlowLayout());
-		
-		
+		FlowLayout flowLayout = new FlowLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		buttonPanel.setLayout(flowLayout);
 		JButton buttonRun = new JButton(getAction("generateMacro"));
 		buttonPanel.add(buttonRun);
-		
 		JButton buttoncheck = new JButton(new CheckGraphAction(graphController));
 		buttonPanel.add(buttoncheck);
-		macroPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+//		JPanel delegatesPanel = new DelegatesPanel();
+
+		JPanel sidePane = new JPanel();
+		sidePane.setLayout(new BorderLayout());
+//		sidePane.add(delegatesPanel, BorderLayout.CENTER);
+		sidePane.add(buttonPanel, BorderLayout.PAGE_END);
 		
-		JTabbedPane functionTabPane = new JTabbedPane();
-//		functionTabPane.add(unitSelectionPanel);
-		functionTabPane.add(logPanel);
-		functionTabPane.add(macroPanel);
-		getRootPane().add(functionTabPane, BorderLayout.SOUTH);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+		splitPane.setLeftComponent(sidePane);
+		splitPane.setRightComponent(graphScrollpane);
+//		splitPane.setDividerLocation(200);
+		splitPane.setOneTouchExpandable(true);
+		
+		getRootPane().add(splitPane , BorderLayout.CENTER);
 //		fr.injectComponents(functionTabPane);
 	}
-	
 
 	/**
 	 * @return
@@ -364,6 +345,19 @@ public class ImageFlowView extends FrameView {
 	 */
 	
 	
+	
+	@Action public void exampleFlow1() {
+		graphController.setupExample1();
+	}
+	
+	@Action public void exampleFlow2() {
+		graphController.setupExample2();
+	}
+	
+	@Action public void exampleFlowXML() {
+		graphController.setupExample0_XML();
+	}
+	
 	@Action public Task generateMacro() {
 	    return new GenerateMacroTask(getApplication(), graphController);
 	}
@@ -431,7 +425,7 @@ public class ImageFlowView extends FrameView {
 	public void remove() {
 		Selection<Node> selection = graphPanel.getSelection();
 		for (Node unit : selection) {
-			graphController.removeNode((UnitElement)unit);
+			graphController.removeNode(unit);
 		}
 		graphPanel.repaint();
 	}
@@ -539,6 +533,20 @@ public class ImageFlowView extends FrameView {
         return fc;
     }
 	
+    @Action public void debugPrintNodes() {
+    	JDialog dialog = new JDialog();
+    	JList list = new JList();
+    	String text = "";
+    	for (Node node : this.graphController.getUnitElements()) {
+			text += node.getLabel()+'\n';
+		}
+    	
+    	JLabel label = new JLabel();
+    	label.setText(text);
+		dialog.add(label);
+    	dialog.setVisible(true);
+    }
+    
 	private javax.swing.Action getAction(String actionName) {
 //		ActionMap actionMap = Application.getInstance(ImageFlow.class).getContext().getActionMap(ImageFlowView.class, this);
 		ActionMap actionMap = getContext().getActionMap(ImageFlowView.class, this);

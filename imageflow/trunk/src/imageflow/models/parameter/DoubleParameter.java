@@ -40,5 +40,10 @@ public class DoubleParameter extends AbstractParameter {
 	public void setValue(double doubleValue) {
 		this.doubleValue = doubleValue;
 	}
+
+	public Double getDefaultValue() {
+		return this.doubleValueDefault;
+	}
+
 	
 }

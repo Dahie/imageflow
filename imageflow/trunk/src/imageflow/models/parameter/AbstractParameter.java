@@ -17,11 +17,6 @@ public abstract class AbstractParameter implements Parameter {
 	protected String displayName; 
 	
 	/**
-	 * TODO: dunno :(
-	 */
-	protected String trueString;
-	
-	/**
 	 * Name of the parameter type
 	 */
 	protected String paraType;
@@ -64,14 +59,7 @@ public abstract class AbstractParameter implements Parameter {
 	public String getHelpString() {
 		return helpString;
 	}
-	
-	/**
-	 * Get the help description of this Parameter.
-	 * @return
-	 */
-	public String getTrueString() {
-		return trueString;
-	}
+
 	
 	/**
 	 * @param parameterNumber

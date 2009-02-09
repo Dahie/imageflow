@@ -3,19 +3,15 @@
  */
 package imageflow.models.unit;
 
-import imageflow.models.parameter.BooleanParameter;
 import imageflow.models.parameter.ChoiceParameter;
-import imageflow.models.parameter.DoubleParameter;
-import imageflow.models.parameter.FileParameter;
-import imageflow.models.parameter.IntegerParameter;
 import imageflow.models.parameter.ParameterFactory;
-import imageflow.models.parameter.StringParameter;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -27,8 +23,6 @@ import javax.swing.JFileChooser;
  *
  */
 public class UnitFactory {
-
-	
 	
 	/**
 	 * Creates a {@link UnitElement} based on the given Descriptions.
@@ -39,7 +33,7 @@ public class UnitFactory {
 	public static UnitElement createProcessingUnit(
 			final UnitDescription unitDescription, 
 			final Point origin) {
-		// 
+		
 		String unitName = unitDescription.unitName;
 		String imageJSyntax = unitDescription.imageJSyntax;
 		int numParas = unitDescription.numParas;
@@ -51,7 +45,6 @@ public class UnitFactory {
 		
 		// add an icon if there is one mentioned and found
 		File iconFile = new File(unitDescription.pathToIcon);
-//		String iconPath = "bin/res/blur.png";
 		if(iconFile.exists()) {
 			try {
 				unitElement.setIcon(ImageIO.read(iconFile));	
@@ -60,12 +53,20 @@ public class UnitFactory {
 			}
 		}
 		
+		System.out.println(numParas);
 		for (int i = 1; i <= numParas; i++) {
 			Para para = unitDescription.para[i];
-			String name = para.name;
+			
+			unitElement.addParameter(
+					ParameterFactory.createParameter(para.name, 
+							para.value, para.helpString, para.trueString, para.choiceIndex));
+			
+			/*String name = para.name;
 			String helpString = para.helpString; 
 			String paraType = para.dataTypeString.toLowerCase();
 			if (paraType.equals("double"))
+				unitElement.addParameter(
+						ParameterFactory.createParameter(para.name, para.value, para.trueString, para.helpString))
 				unitElement.addParameter(new DoubleParameter(name, para.doubleValue, helpString));
 			else if (paraType.equals("integer"))
 				unitElement.addParameter(new IntegerParameter(name, para.integerValue, helpString));
@@ -78,7 +79,7 @@ public class UnitFactory {
 			else if (paraType.equals("boolean"))
 				unitElement.addParameter(new BooleanParameter(name, para.booleanValue, para.trueString, helpString));
 		 	else
-				System.err.println("Wrong parameter type");			
+				System.err.println("Wrong parameter type");		*/	
 		}
 		
 		// setup of the inputs
@@ -236,7 +237,16 @@ public class UnitFactory {
 		
 		UnitElement mergeUnit = new UnitElement(origin, "Image Calculator", 
 				"run(\"Image Calculator...\", \"image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create 32-bit\"); \n");
-		String[] mathChoices = {"Add", "Subtract", "Multiply", "Devide", "AND", "OR", "XOR"};
+		ArrayList<String> mathChoices = new ArrayList<String>();
+		mathChoices.add("Add");
+		mathChoices.add("Subtract");
+		mathChoices.add("Multiply");
+		mathChoices.add("Devide");
+		mathChoices.add("AND"); 
+		mathChoices.add("OR");
+		mathChoices.add("XOR");
+		
+		
 		mergeUnit.addParameter(
 				new ChoiceParameter("Math", mathChoices, "Add",
 				"Defines what math should be used to merge both images"));

@@ -56,5 +56,9 @@ public class IntegerParameter extends AbstractParameter {
 		this.integerValue = value;
 	}
 
+	public Integer getDefaultValue() {
+		return this.integerValueDefault;
+	}
+
 	
 }

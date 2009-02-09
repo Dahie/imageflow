@@ -13,6 +13,7 @@ import imageflow.models.parameter.AbstractParameter;
 import imageflow.models.parameter.BooleanParameter;
 import imageflow.models.parameter.ChoiceParameter;
 import imageflow.models.parameter.DoubleParameter;
+import imageflow.models.parameter.FileParameter;
 import imageflow.models.parameter.IntegerParameter;
 import imageflow.models.parameter.Parameter;
 import imageflow.models.parameter.ParameterFactory;
@@ -44,12 +45,12 @@ import java.util.ArrayList;
  *
  */
 public class UnitElement extends NodeAbstract implements Model {
-	
+
 	/**
 	 * number of units instantiated, incremented with each new object
 	 */
 	static int ids;
-	
+
 	/**
 	 * the id of this unit
 	 */
@@ -57,7 +58,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	/**
 	 * name of this unit (will be shown)
 	 */
-//	protected String unitName;    
+	//	protected String unitName;    
 	protected File iconfile;
 	/**
 	 * unit color
@@ -76,7 +77,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	 * function icon
 	 */
 	protected BufferedImage icon; 
-	
+
 	/**
 	 * status of this unit
 	 */
@@ -90,8 +91,8 @@ public class UnitElement extends NodeAbstract implements Model {
 	 * {@link Status} of this Unit.
 	 */
 	protected Status status;
-	
-	
+
+
 	private boolean isDisplayUnit = false;			// flag indicating if this unit is a display unit 
 
 	// all arrays start at 1, this will make it easy to detect unconnected inputs and outputs
@@ -111,22 +112,22 @@ public class UnitElement extends NodeAbstract implements Model {
 	/**
 	 * Maximum number of Parameters, that can be added to this UnitElement.
 	 */
-//	protected int numMaxParameters;
+	//	protected int numMaxParameters;
 	/**
 	 * Maximum number of {@link Input}s, that can be added to this UnitElement.
 	 */
-//	protected int numMaxInputs;
+	//	protected int numMaxInputs;
 	/**
 	 * Maximum number of {@link Output}s, that can be added to this UnitElement.
 	 */
-//	protected int numMaxOutputs;
+	//	protected int numMaxOutputs;
 
 	private int FIRST_ELEMENT = 0;
 
 	private ArrayList<ModelListener> listeners;
 
 
-	
+
 
 	/**
 	 * @param unitName
@@ -140,7 +141,7 @@ public class UnitElement extends NodeAbstract implements Model {
 			final String unitsImageJSyntax) {
 		super(new Point(30,30), new MacroElement(unitsImageJSyntax));
 		setDimension(new Dimension(100,100));
-		
+
 		init(unitName);
 	}
 
@@ -158,7 +159,7 @@ public class UnitElement extends NodeAbstract implements Model {
 			final String unitsImageJSyntax) {
 		super(origin, new MacroElement(unitsImageJSyntax));
 		setDimension(new Dimension(100,100));
-		
+
 		init(unitName);
 	}
 
@@ -176,7 +177,7 @@ public class UnitElement extends NodeAbstract implements Model {
 			final MacroElement macroElement) {
 		super(origin, macroElement);
 		setDimension(new Dimension(100,100));
-		
+
 		init(unitName);
 	}
 
@@ -190,18 +191,18 @@ public class UnitElement extends NodeAbstract implements Model {
 		ids++;
 		this.unitID = ids;
 		this.label = unitName;
-		
+
 		this.listeners = new ArrayList<ModelListener>();
 		this.inputs = new ArrayList<Input>();
 		this.outputs = new ArrayList<Output>();
 		this.parameters = new ArrayList<Parameter>();
-		
+
 		unitComponentIcon= new NodeIcon(this);
 		unitIcon = unitComponentIcon.getImage();
 	}
-	
 
-	
+
+
 	/**
 	 * for source units only
 	 * @return
@@ -216,7 +217,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	}
 
 
-	
+
 
 	/**
 	 * Adds an Output to the unit
@@ -247,8 +248,8 @@ public class UnitElement extends NodeAbstract implements Model {
 		notifyModelListeners();
 		return this.outputs.add(newOutput);
 	}
-	
-	
+
+
 	/**
 	 * Get one {@link Output} at the index. Indecies start with 0;
 	 * @param index
@@ -257,7 +258,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	public Output getOutput(final int index) {
 		return this.outputs.get(index);
 	}
-	
+
 	/**
 	 * Returns a list of all {@link Output}s
 	 * @return
@@ -265,14 +266,14 @@ public class UnitElement extends NodeAbstract implements Model {
 	public ArrayList<Output> getOutputs() {
 		return this.outputs;
 	}
-	
+
 
 	public int getOutputsCount() {
 		return this.outputs.size();
 	}
 
-	
-	
+
+
 	/**
 	 * Returns the {@link Input} at the given index. Indecies start with 0.
 	 * @param index
@@ -281,7 +282,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	public Input getInput(final int index) {
 		return this.inputs.get(index);
 	}
-	
+
 	/**
 	 * List of all attached {@link Input}s
 	 * @return
@@ -332,7 +333,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	public int getInputsCount() {
 		return this.inputs.size();
 	}
-	
+
 
 
 	/**
@@ -342,7 +343,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	public String getUnitName() {
 		return getLabel();
 	}
-	
+
 	/**
 	 * If activated, the unit will display the current image.
 	 * @param isDisplayUnit
@@ -361,7 +362,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	public boolean isDisplayUnit() {
 		return isDisplayUnit;
 	}
-		
+
 	/**
 	 * Add a Parameter to the unit
 	 * @param parameter
@@ -370,11 +371,12 @@ public class UnitElement extends NodeAbstract implements Model {
 	public boolean addParameter(final Parameter parameter){
 		final int parameterNumber = parameters.size()+1;
 		parameter.setParameterNumber(parameterNumber);
+		boolean add = this.parameters.add(parameter);
 		notifyModelListeners();
-		return this.parameters.add(parameter);
+		return add;
 	}
 
-	
+
 	/**
 	 * Returns how many assigned {@link AbstractParameter}s this unit actually has.
 	 * @return
@@ -390,7 +392,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	public ArrayList<Parameter> getParameters() {
 		return this.parameters;
 	}
-	
+
 
 	/**
 	 * Returns the ID of this Unit.
@@ -399,7 +401,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	public int getUnitID() {
 		return this.unitID;
 	}
-	
+
 
 
 
@@ -421,7 +423,7 @@ public class UnitElement extends NodeAbstract implements Model {
 		}
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -446,11 +448,11 @@ public class UnitElement extends NodeAbstract implements Model {
 		this.unitComponentIcon.setIcon(bufferedImage);
 		notifyModelListeners();
 	}
-	
+
 	public void updateUnitIcon() {
 		this.unitIcon = new NodeIcon(this).getImage();
 	}
-	
+
 
 	/**
 	 * Checks if there is an input or an output at this mouse coordinates. 
@@ -497,7 +499,7 @@ public class UnitElement extends NodeAbstract implements Model {
 			g.setColor(Color.black);
 			g.drawRect(origin.x, origin.y, getDimension().width-1, getDimension().height-1);
 		} else {
-			
+
 			// obj != null
 			if (selected) {
 				g.setColor(Color.red);
@@ -505,8 +507,8 @@ public class UnitElement extends NodeAbstract implements Model {
 			}
 			unitComponentIcon.paintBigIcon((Graphics2D) g);
 		}
-		
-		
+
+
 		//draw inputs
 		int numberInputs = getInputsCount();
 		for (int i = 0; i < numberInputs; i++) {
@@ -522,9 +524,9 @@ public class UnitElement extends NodeAbstract implements Model {
 
 			int x = (unitIcon.getWidth(null) - 8) + origin.x;
 			int y = PaintUtil.alignY(numberOutputs, i, unitIcon.getHeight(null), NodeIcon.pinSize)+origin.y;
-			
+
 			Polygon po=new Polygon(); 
-//			System.out.println(" x"+x+" y"+y);
+			//			System.out.println(" x"+x+" y"+y);
 			po.addPoint(x, y); //top
 			po.addPoint(x + NodeIcon.pinSize, y + (NodeIcon.pinSize/2)); //pointy
 			po.addPoint(x, y+NodeIcon.pinSize); //bottom
@@ -532,14 +534,14 @@ public class UnitElement extends NodeAbstract implements Model {
 			g.drawPolygon(po);
 		}
 
-			
-			
+
+
 		// during draggin
 		if (dragging != null) {
 			g.setColor(Color.black);
 			g.drawRect(dragging.x, dragging.y, dragging.width-1, dragging.height-1);
 		}
-		
+
 		return new Rectangle(origin, getDimension());
 	}
 
@@ -568,27 +570,27 @@ public class UnitElement extends NodeAbstract implements Model {
 		} catch (CloneNotSupportedException e) {
 			imageJSyntax = ((MacroElement)this.obj).getImageJSyntax();
 		}
-		
-		
+
+
 		UnitElement clone = new UnitElement(new Point(origin.x+15, origin.y+15), 
 				this.label, 
 				imageJSyntax);
 		for (Input input : inputs) {
 			clone.addInput(input.getName(), 
-				input.getShortDisplayName(), 
-				input.getImageBitDepth(), 
-				input.isNeedToCopyInput());
+					input.getShortDisplayName(), 
+					input.getImageBitDepth(), 
+					input.isNeedToCopyInput());
 		}
 		for (Output output : outputs) {
 			clone.addOutput(output.getName(), 
-				output.getShortDisplayName(), 
-				output.getImageBitDepth(),
-				output.isDoDisplay());
+					output.getShortDisplayName(), 
+					output.getImageBitDepth(),
+					output.isDoDisplay());
 		}
 		for (Parameter parameter : parameters) {
 			clone.addParameter(
 					ParameterFactory.createParameter(parameter.getDisplayName(), 
-				parameter.getValue(), parameter.getTrueString(), parameter.getHelpString()));
+							parameter.getValue(), parameter.getHelpString()));
 		}
 		clone.setDisplayUnit(this.isDisplayUnit);
 		clone.setColor(this.color);
@@ -609,8 +611,8 @@ public class UnitElement extends NodeAbstract implements Model {
 		}
 		return clobj;
 	}
-	
-	
+
+
 	/**
 	 * Mark this unit by marking its {@link Input}s and {@link Output}s.
 	 * @param mark
@@ -624,8 +626,8 @@ public class UnitElement extends NodeAbstract implements Model {
 		}
 		notifyModelListeners();
 	}
-	
-	
+
+
 	/**
 	 * Returns the mark of the attached {@link Output}.
 	 * Doesn't help it if the mark is different on any pin
@@ -636,7 +638,7 @@ public class UnitElement extends NodeAbstract implements Model {
 		// doesn't help it if the mark is different on any pin
 	}
 
-	
+
 	/**
 	 * Checks a unit, if it's inputs have already been registered in the algorithm.
 	 * It's marked, when it's not 0. The int is conjecture to the order.
@@ -645,7 +647,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	 */
 	public boolean hasAllInputsMarked() {
 		boolean hasAllMarked = true;
-		
+
 		if(getInputsCount() > 0) {
 			// check each input, if it's parent has been registered
 			for (Input input : getInputs()) {
@@ -664,15 +666,15 @@ public class UnitElement extends NodeAbstract implements Model {
 				}
 
 			}
-			
+
 		} else {
 			// if there are no inputs, it's true
 			return true;
 		}
-		
+
 		return hasAllMarked;
 	}
-	
+
 
 	/**
 	 * Returns true if an output is marked.
@@ -680,10 +682,10 @@ public class UnitElement extends NodeAbstract implements Model {
 	 */
 	public boolean hasMarkedOutput() {
 		for (Output output : this.outputs) {
-			
+
 			// output is actually connected
 			if(output.isConnected()) {
-				
+
 				int mark = ((UnitElement)output.getParent()).getMark();
 				// if mark is set to anything
 				if(mark != 0) { 
@@ -705,7 +707,7 @@ public class UnitElement extends NodeAbstract implements Model {
 		}
 		return false;
 	}
-	
+
 
 	public boolean hasOutputsConnected() {
 		for (final Output output : outputs) {
@@ -714,49 +716,52 @@ public class UnitElement extends NodeAbstract implements Model {
 		}
 		return false;
 	}
-	
+
 
 	/**
 	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
 	 */
 	public void showProperties() {
 		if(hasParameters()) {
-			final GenericDialog gd = new GenericDialog("Parameter");
+			final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters");
 			gd.addMessage(label);
 			gd.addMessage(" ");
-			
-			
+
+
 			final ArrayList<Parameter> parameterList = getParameters();
-			
-			if (parameterList.size() == 0)
+
+			if (parameterList.isEmpty())
 				gd.addMessage("No parameters that can be set");
+			else if(parameterList.get(0) instanceof FileParameter) {
+				// TODO open filechooser
 				
-			for (final Parameter parameter : parameterList) {
-				
-				if(parameter instanceof DoubleParameter) {
-					gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
-				} else if(parameter instanceof IntegerParameter) {
-					gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
-				} else if(parameter instanceof BooleanParameter) {
-					gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
-				} else if(parameter instanceof ChoiceParameter) {
-					gd.addChoice(parameter.getDisplayName(), 
-							((ChoiceParameter)parameter).getChoices(), 
-							((ChoiceParameter)parameter).getValue());
-//				} else if(parameter instanceof FileParameter) {
-//					gd.add(new FileChooserField("choose file", "choose", "jpg", "jpg"));
-				} else if(parameter instanceof StringParameter) {
-					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(),40);
-				}			
+			} else {
+				for (final Parameter parameter : parameterList) {
+
+					if(parameter instanceof DoubleParameter) {
+						gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
+					} else if(parameter instanceof IntegerParameter) {
+						gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
+					} else if(parameter instanceof BooleanParameter) {
+						gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
+					} else if(parameter instanceof ChoiceParameter) {
+						gd.addChoice(parameter.getDisplayName(), 
+								((ChoiceParameter)parameter).getChoicesArray(), 
+								((ChoiceParameter)parameter).getValue());
+					} else if(parameter instanceof StringParameter) {
+						gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(),40);
+					}		
+				}
+					
 			}
-			
+
 			// show properties window
 			gd.showDialog();
 
 			if( gd.wasCanceled())
 				return;
-			
-			
+
+
 			for (final Parameter parameter : parameterList) {
 				if(parameter instanceof DoubleParameter) {
 					((DoubleParameter) parameter).setValue((double) (gd.getNextNumber()));
@@ -772,7 +777,7 @@ public class UnitElement extends NodeAbstract implements Model {
 				}
 			}	
 		}
-		
+
 	}
 
 	private boolean hasParameters() {
@@ -782,13 +787,13 @@ public class UnitElement extends NodeAbstract implements Model {
 	public Color getColor() {
 		return color;
 	}
-	
+
 	public void setColor(Color color) {
 		this.color = color;
 		notifyModelListeners();
 	}
 
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see backend.Model#addModelListener(backend.ModelListener)

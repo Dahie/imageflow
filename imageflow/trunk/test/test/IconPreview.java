@@ -49,14 +49,21 @@ public class IconPreview extends JFrame {
 	public void paint(Graphics g) {
 		
 		Graphics2D g2 = (Graphics2D)g; 
-		bi = icon.getImage();
+//		bi = icon.getImage();
 		int width =  this.getWidth(), height =  this.getHeight();
 
+		
+		
 		g2.setColor(Color.WHITE);
 		g2.fillRect(0, 0, width, height+25);
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);   
 //        g.drawImage(bi, 0, 25, null);
 		icon.paintBigIcon(g2);
+		
+		icon.setSelected(true);
+		icon.paintBigIcon(g2);
+		
+		
 		g2.translate(150, 0);
 		icon.paintMediumIcon(g2);
   	

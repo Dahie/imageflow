@@ -22,17 +22,32 @@ public class StringParameter extends AbstractParameter {
 
 	/**
 	 * @param displayName
-	 * @param stringParameter
+	 * @param stringValue 
+	 * @param defaultValue 
 	 * @param helpString
 	 */
-	public StringParameter(String displayName, String stringParameter, String helpString) {
+	public StringParameter(String displayName, 
+			String stringValue, 
+			String defaultValue, 
+			String helpString) {
 		this.displayName = displayName;
-		this.stringValue = stringParameter;
-		this.stringValueDefault = stringParameter;
+		this.stringValue = stringValue;
+		this.stringValueDefault = defaultValue;
 		this.helpString = helpString;
 		this.paraType = "String";
 	}
 
+	/**
+	 * @param displayName
+	 * @param stringValue
+	 * @param helpString
+	 */
+	public StringParameter(final String displayName, 
+			final String stringValue, 
+			final String helpString) {
+		this(displayName, stringValue, stringValue, helpString);
+	}
+	
 	
 	/**
 	 * Get the String parameter value
@@ -61,6 +76,10 @@ public class StringParameter extends AbstractParameter {
 		this.stringValue = stringParameter;
 		this.stringValueDefault = stringParameter;
 		this.helpString = helpString;
+	}
+
+	public String getDefaultValue() {
+		return this.stringValueDefault;
 	}
 	
 }

@@ -25,6 +25,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.JOptionPane;
 
@@ -44,11 +45,24 @@ public class GraphPanel extends GPanel {
 	protected UnitList units;
 	
 	/**
+	 * Draw a small grid on the {@link GraphPanel}
+	 */
+	protected boolean drawGrid = false;
+	/**
+	 * size of the grid
+	 */
+	protected int gridsize = 120; 
+	/**
+	 * Auto align nodes
+	 */
+	protected boolean align = false;
+	
+	/**
 	 * @param beans
 	 * @param parent
 	 */
-	public GraphPanel(ArrayList<Delegate> beans, GPanelListener parent) {
-		super(beans, parent);
+	public GraphPanel(ArrayList<Delegate> delegates, GPanelListener parent) {
+		super(delegates, parent);
 	}
 
 
@@ -93,8 +107,6 @@ public class GraphPanel extends GPanel {
 			}
 			
 			g2.setColor(Color.BLACK);
-			float lineWidth = 1.0f;
-//		    g2.setStroke(new BasicStroke(lineWidth));
 		    g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
 		    g2.draw(new Line2D.Double(origin.x, origin.y, mouse.x, mouse.y));
 		}
@@ -126,8 +138,6 @@ public class GraphPanel extends GPanel {
 		int upperYpin = pin.getLocation().y + margin;
 		if(isWithin2DRange(mouse, pin.getLocation(), new Dimension(0,0), margin)) {
 
-			Input input;
-			Output output;
 			boolean isCompatible = false;
 			boolean isLoop = false;
 			
