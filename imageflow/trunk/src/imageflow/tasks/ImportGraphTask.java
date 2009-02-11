@@ -36,7 +36,7 @@ public class ImportGraphTask extends LoadFileTask<GraphController, Void> {
         	((ImageFlowView)ImageFlow.getApplication()
         			.getMainView()).getGraphController();
         UnitList unitList = graphController.getUnitElements();
-        unitList.readUnitList(file);
+        unitList.read(file);
         
         if (!isCancelled()) {
             return graphController;

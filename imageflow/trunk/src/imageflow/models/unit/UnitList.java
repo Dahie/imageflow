@@ -10,19 +10,25 @@ import imageflow.backend.ModelListener;
 import imageflow.models.Connection;
 import imageflow.models.ConnectionList;
 import imageflow.models.Input;
+import imageflow.models.MacroElement;
 import imageflow.models.Output;
+import imageflow.models.parameter.Parameter;
 import imageflow.models.unit.UnitElement.Type;
 
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bouncycastle.asn1.cmp.GenRepContent;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 
 /**
@@ -53,7 +59,7 @@ public class UnitList extends GList<Node> implements Model {
 	 * @param file
 	 * @throws FileNotFoundException 
 	 */
-	public void readUnitList(File file) throws FileNotFoundException {
+	public void read(File file) throws FileNotFoundException {
 		UnitElement[] unitElement = null;
 
 		if(!file.exists()) throw new FileNotFoundException("reading failed, the file as not found");
@@ -117,6 +123,152 @@ public class UnitList extends GList<Node> implements Model {
 		}	
 	}
 
+	public void write(File file) throws IOException {
+		SAXBuilder sb = new SAXBuilder();
+		Element root = new Element("FlowDescription");
+		Document flowGraph = new Document(root);
+
+		Element units = new Element("Units");
+		root.addContent(units);
+
+		for (Node node : this) {
+
+			Element unitElement = new Element("Unit");
+			units.addContent(unitElement);
+
+			// unit details 
+			
+			Element xPos = new Element("XPos");
+			xPos.addContent(node.getOrigin().x+"");
+			unitElement.addContent(xPos);
+			Element yPos = new Element("YPos");
+			yPos.addContent(node.getOrigin().y+"");
+			unitElement.addContent(yPos);
+			Element label = new Element("Label");
+			label.addContent(node.getLabel());
+			unitElement.addContent(label);
+
+
+			if(node instanceof UnitElement) {
+
+				UnitElement unit = (UnitElement) node;
+				
+				Element unitID = new Element("UnitID");
+				unitID.addContent(unit.getUnitID()+"");
+				unitElement.addContent(unitID);
+
+				// unit description analog to the Unit-XML
+				Element unitDescription = new Element("UnitDescription");
+				unitElement.addContent(unitDescription);
+
+				Element general = new Element("General");
+				unitDescription.addContent(general);
+
+				Element unitName = new Element("UnitName");
+				unitName.addContent(unit.getUnitName());
+				general.addContent(unitName);
+				Element pathToIcon = new Element("PathToIcon");
+				general.addContent(pathToIcon);
+				Element imageJSyntax = new Element("ImageJSyntax");
+				imageJSyntax.addContent(((MacroElement)unit.getObject()).getCommandSyntax());
+				general.addContent(imageJSyntax);
+				Element color = new Element("Color");
+				String colorHex =""; //TODO conversion from Color-Object to hex-string
+				color.addContent(colorHex);
+				general.addContent(color);
+				Element helpStringU = new Element("HelpString");
+				helpStringU.addContent(unit.getInfoText());
+				general.addContent(helpStringU);
+
+
+				// deal with all parameters
+				Element parameters = new Element("Parameters");
+				unitDescription.addContent(parameters);
+				for (Parameter parameter : unit.getParameters()) {
+					Element parameterElement = new Element("Parameter");
+					parameters.addContent(parameterElement);	
+
+					Element name = new Element("Name");
+					name.addContent(parameter.getDisplayName());
+					parameterElement.addContent(name);
+
+					Element dataType = new Element("DataType");
+					dataType.addContent(parameter.getParaType());
+					parameterElement.addContent(dataType);
+
+					Element value = new Element("Value");
+					value.addContent(parameter.getValue()+"");
+					parameterElement.addContent(value);
+
+					Element helpStringP = new Element("HelpString");
+					helpStringP.addContent(parameter.getHelpString());
+					parameterElement.addContent(helpStringP);
+				}
+
+				// deal with inputs
+				Element inputs = new Element("Inputs");
+				unitDescription.addContent(inputs);
+				for (Input input : unit.getInputs()) {
+					Element inputElement = new Element("Input");
+					inputs.addContent(inputElement);	
+
+					Element name = new Element("Name");
+					name.addContent(input.getName());
+					inputElement.addContent(name);
+
+					Element shortName = new Element("ShortName");
+					shortName.addContent(input.getShortDisplayName());
+					inputElement.addContent(shortName);
+
+					Element imageType = new Element("ImageType");
+					//				name.addContent(input.getImageBitDepth()); //FIXME
+					inputElement.addContent(imageType);
+
+					Element needToCopyInput = new Element("NeedToCopyInput");
+					String boolNeedCopy = input.isNeedToCopyInput() ? "true" : "false"; 
+					needToCopyInput.addContent(boolNeedCopy);
+					inputElement.addContent(needToCopyInput);
+				}
+
+				// deal with inputs
+				Element outputs = new Element("Outputs");
+				unitDescription.addContent(outputs);
+				for (Output output : unit.getOutputs()) {
+					Element outputElement = new Element("Output");
+					outputs.addContent(outputElement);	
+
+					Element name = new Element("Name");
+					name.addContent(output.getName());
+					outputElement.addContent(name);
+
+					Element shortName = new Element("ShortName");
+					shortName.addContent(output.getShortDisplayName());
+					outputElement.addContent(shortName);
+
+					Element imageType = new Element("ImageType");
+					//				name.addContent(input.getImageBitDepth()); //FIXME
+					outputElement.addContent(imageType);
+
+					// FIXME does it make sense to hang this on the output?
+					// what if there are several outputs, everyone displays the same?
+					Element doDisplay = new Element("DoDisplay");
+					String boolIsDisplay = output.isDoDisplay() ? "true" : "false"; 
+					doDisplay.addContent(boolIsDisplay);
+					outputElement.addContent(doDisplay);
+				}
+
+
+			}
+
+		}
+
+
+
+
+
+		// output
+		new XMLOutputter(Format.getPrettyFormat()).output(flowGraph, System.out);
+	}
 
 	@Override
 	public boolean add(Node node, String label) {
@@ -324,7 +476,7 @@ public class UnitList extends GList<Node> implements Model {
 				UnitElement unit = (UnitElement) node;
 				unit.setMark(0);
 			}
-			
+
 		}
 	}
 

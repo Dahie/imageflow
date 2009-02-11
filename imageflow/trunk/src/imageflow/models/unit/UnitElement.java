@@ -56,9 +56,9 @@ public class UnitElement extends NodeAbstract implements Model {
 	 */
 	protected int unitID;
 	/**
-	 * name of this unit (will be shown)
+	 * name of this unit, this is not display, Label is displayed
 	 */
-	//	protected String unitName;    
+	protected String unitName;    
 	protected File iconfile;
 	/**
 	 * unit color
@@ -68,6 +68,7 @@ public class UnitElement extends NodeAbstract implements Model {
 	 * help text, describing the unit's functionality
 	 */
 	protected String infoText; 
+
 	/**
 	 * unitIcon on the graphpanel
 	 */
@@ -191,6 +192,7 @@ public class UnitElement extends NodeAbstract implements Model {
 		ids++;
 		this.unitID = ids;
 		this.label = unitName;
+		this.unitName = unitName;
 
 		this.listeners = new ArrayList<ModelListener>();
 		this.inputs = new ArrayList<Input>();
@@ -337,11 +339,11 @@ public class UnitElement extends NodeAbstract implements Model {
 
 
 	/**
-	 * Returns the name of this unit.
+	 * Returns the typename of this unit.
 	 * @return the unitName
 	 */
 	public String getUnitName() {
-		return getLabel();
+		return this.unitName;
 	}
 
 	/**
@@ -773,7 +775,8 @@ public class UnitElement extends NodeAbstract implements Model {
 					((ChoiceParameter) parameter).setValue((String) (gd.getNextChoice()));
 					// TODO set the ChoiceNumber to be able to save it
 				} else if (parameter instanceof StringParameter) {
-					((StringParameter) parameter).setValue((String) (gd.getNextString()));
+					String newString = (String) (gd.getNextString()).trim();
+					((StringParameter) parameter).setValue(newString);
 				}
 			}	
 		}
@@ -793,7 +796,13 @@ public class UnitElement extends NodeAbstract implements Model {
 		notifyModelListeners();
 	}
 
-
+	/**
+	 * @return the infoText
+	 */
+	public String getInfoText() {
+		return infoText;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see backend.Model#addModelListener(backend.ModelListener)

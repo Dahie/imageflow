@@ -2,7 +2,6 @@ package imageflow.tasks;
 
 import imageflow.ImageFlow;
 import imageflow.ImageFlowView;
-import imageflow.backend.GraphController;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -14,12 +13,12 @@ import org.jdesktop.application.Task;
 
 
 
-public abstract class LoadFileTask<T, V> extends Task<T, V> {
+public abstract class SaveFileTask<T, V> extends Task<T, V> {
 	
 	protected boolean modified = false;
-	private static final Logger logger = Logger.getLogger(ImageFlowView.class.getName());
     protected final File file;
     protected ImageFlowView view;
+    private static final Logger logger = Logger.getLogger(ImageFlowView.class.getName());
 	
     /* Construct the LoadFileTask object.  The constructor
      * will run on the EDT, so we capture a reference to the 
@@ -28,7 +27,7 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
      * ResourceMap as the DocumentEditorView class's resources.
      * They're defined in resources/DocumentEditorView.properties.
      */
-    public LoadFileTask(File file) {
+    public SaveFileTask(File file) {
     	super(ImageFlow.getApplication());
 		this.file = file;
 		this.view = (ImageFlowView) ImageFlow.getApplication().getMainView();
@@ -46,7 +45,6 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
      */
     protected void succeeded(T fileContents) {
         view.setFile(getFile());
-        view.setGraphController((GraphController)fileContents);
         
 //        textArea.setText(fileContents);
         view.setModified(false);
@@ -63,7 +61,7 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
      */
     @Override 
     protected void failed(Throwable e) {
-        logger.log(Level.WARNING, "couldn't load " + getFile(), e);
+        logger.log(Level.WARNING, "couldn't save " + getFile(), e);
         String msg = getResourceMap().getString("loadFailedMessage", getFile());
         String title = getResourceMap().getString("loadFailedTitle");
         int type = JOptionPane.ERROR_MESSAGE;

@@ -1,22 +1,18 @@
 package imageflow.tasks;
 
 import imageflow.backend.GraphController;
-import imageflow.models.unit.UnitList;
 
 import java.io.File;
 import java.io.IOException;
 
+public class SaveFlowGraphTask extends SaveFileTask<GraphController, Void> {
 
-public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
-
-
-	
 	/**
-     * Construct a LoadFlowGraphTask.
+     * Construct a LoadTextFileTask.
      *
      * @param file the file to load from.
      */
-	public LoadFlowGraphTask(File file) {
+	public SaveFlowGraphTask( File file) {
 		super(file);
 	}
 
@@ -28,10 +24,10 @@ public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
      */
     @Override
     protected GraphController doInBackground() throws IOException {
-        GraphController graphController = new GraphController();
-        UnitList unitList = graphController.getUnitElements();
-        unitList.clear();
-        unitList.read(file);
+//        GraphController graphController = new GraphController();
+    	// get current graphcontroller
+    	GraphController graphController = view.getGraphController();
+        graphController.write(file);
     	
         if (!isCancelled()) {
             return graphController;
@@ -39,5 +35,5 @@ public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
             return null;
         }
     }
-    
+	
 }

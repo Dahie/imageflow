@@ -8,7 +8,7 @@ Functions:
 - no other jars (jdom)
 
 Graph:
-- fixed imagebizdepth test during connection
+- fixed imagebitdepth test during connection
 - fixed loop detection
 - optional Node-Alignment
 - ordner image source aka stack-support

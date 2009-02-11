@@ -18,6 +18,7 @@ import imageflow.models.unit.UnitElement.Type;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -292,6 +293,9 @@ public class GraphController{
 		return nodes.remove(node);
 	}
 
+	public void write(File file) throws IOException {
+			nodes.write(file);
+	}
 
 
 	public void setupExample1() {
@@ -375,7 +379,7 @@ public class GraphController{
 
 		nodes.clear();
 		try {
-			nodes.readUnitList(new File("xml_flows/Example0_flow.xml"));
+			nodes.read(new File("xml_flows/Example0_flow.xml"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

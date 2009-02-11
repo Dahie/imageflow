@@ -23,6 +23,7 @@ import imageflow.models.unit.UnitList;
 import imageflow.tasks.GenerateMacroTask;
 import imageflow.tasks.ImportGraphTask;
 import imageflow.tasks.LoadFlowGraphTask;
+import imageflow.tasks.SaveFlowGraphTask;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -36,10 +37,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.swing.ActionMap;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -122,13 +123,24 @@ public class ImageFlowView extends FrameView {
 	private void registerModelListeners() {
 		// usually on startup this is empty
 		for (Node node : units) {
-			((CommentNode)node).addModelListener(
-					new ModelListener () {
-						public void modelChanged (final Model hitModel)	{
-							graphPanel.invalidate();
-							setModified(true);
-						}
-					});
+			if(node instanceof CommentNode) {
+				((CommentNode)node).addModelListener(
+						new ModelListener () {
+							public void modelChanged (final Model hitModel)	{
+								graphPanel.invalidate();
+								setModified(true);
+							}
+						});	
+			} else if(node instanceof UnitElement) {
+				((CommentNode)node).addModelListener(
+						new ModelListener () {
+							public void modelChanged (final Model hitModel)	{
+								graphPanel.invalidate();
+								setModified(true);
+							}
+						});	
+			}
+			
 		}
 		
 		units.addModelListener(new ModelListener() {
@@ -386,8 +398,6 @@ public class ImageFlowView extends FrameView {
 	    return task;
 	}
 	
-
-	
 	@Action public Task importGraph() {
 	    JFileChooser fc = new JFileChooser();
 
@@ -514,14 +524,18 @@ public class ImageFlowView extends FrameView {
 		}
 	}
 	
+    @Action
+    public Task runMacro() {
+        return new GenerateMacroTask(this.getApplication(), graphController);
+    }
+    
     @Action(enabledProperty = "modified")
     public Task saveAs() {
         JFileChooser fc = createFileChooser("saveAsFileChooser");
         int option = fc.showSaveDialog(getFrame());
         Task task = null;
         if (JFileChooser.APPROVE_OPTION == option) {
-//            task = new SaveFileTask(fc.getSelectedFile());
-        	task = new GenerateMacroTask(this.getApplication(), graphController);
+            task = new SaveFlowGraphTask(fc.getSelectedFile());
         }
         return task;
     }
@@ -536,16 +550,17 @@ public class ImageFlowView extends FrameView {
 	
     @Action public void debugPrintNodes() {
     	JDialog dialog = new JDialog();
-    	JList list = new JList();
-    	String text = "";
-    	for (Node node : this.graphController.getUnitElements()) {
-			text += node.getLabel()+'\n';
-		}
+
+    	DefaultListModel lm = new DefaultListModel();
+    	for (Node node : graphController.getUnitElements()) {
+    		lm.addElement(node);	
+    	}
+    	JList list = new JList(lm);
     	
-    	JLabel label = new JLabel();
-    	label.setText(text);
-		dialog.add(label);
-    	dialog.setVisible(true);
+		dialog.add(list);
+		dialog.pack();
+		dialog.setVisible(true);
+    	
     }
     
 	private javax.swing.Action getAction(String actionName) {
@@ -554,13 +569,10 @@ public class ImageFlowView extends FrameView {
 		initActions(actionMap);
 	    return actionMap.get(actionName);
 	}
-	
-
 
 	private void initActions(ActionMap actionMap) {
 		Selection<Node> selection = graphPanel.getSelection();
 		ArrayList<Node> copyList = graphController.getCopyNodesList();
-
 		
 		actionMap.put("checkGraph", 
 				new CheckGraphAction(graphController));
