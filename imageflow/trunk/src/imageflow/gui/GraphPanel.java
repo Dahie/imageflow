@@ -51,7 +51,7 @@ public class GraphPanel extends GPanel {
 	/**
 	 * size of the grid
 	 */
-	protected int gridsize = 120; 
+	public static int GRIDSIZE = 120; 
 	/**
 	 * Auto align nodes
 	 */
@@ -76,6 +76,10 @@ public class GraphPanel extends GPanel {
 //		super.paintComponent(g);
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		
+		//paint grid
+		paintGrid(g);
+		
 		// paint printable items
 		paintPrintable(g);
 		
@@ -124,6 +128,29 @@ public class GraphPanel extends GPanel {
 			g2.fillRect(rectToDraw.x, rectToDraw.y, 
 					rectToDraw.width - 1, rectToDraw.height - 1);
 		}
+	}
+
+	/** 
+	 * paints a simple grid on the canvas
+	 * @param g
+	 */
+	private void paintGrid(Graphics g) {
+		if(drawGrid) {
+			g.setColor(new Color(220, 220, 220));
+			for (int x = 0; x < this.getWidth(); x+=GRIDSIZE) {
+				g.drawLine(x, 0, x, getHeight());
+			}
+			for (int y = 0; y < this.getHeight(); y+=GRIDSIZE) {
+				g.drawLine(0, y, getWidth(), y);
+			}	
+		}
+	}
+
+	/**
+	 * aligns the elements to the grid
+	 */
+	public void alignElements() {
+		
 	}
 
 

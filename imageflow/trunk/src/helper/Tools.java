@@ -23,7 +23,7 @@ public class Tools {
         return result.toString();
     }
 	
-	public static Element getRoot(File file) {
+	public static Element getXMLRoot(File file) {
 		try {
 //			System.out.println("Reading xml-description");
 			SAXBuilder sb = new SAXBuilder();

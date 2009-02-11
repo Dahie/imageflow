@@ -42,7 +42,6 @@ public class ParameterFactory {
 			final String helpString, 
 			final String boolTrueString,
 			final int choiceIndex) {
-		System.out.println(displayName+", "+ value);
 		
 		// see what parameter instance has to be created
 		if(value instanceof String) {

@@ -7,35 +7,35 @@
 		<XPos>50</XPos>
 		<YPos>50</YPos>
 	
-	<UnitDescription>
+		<UnitDescription>
+		
+			<General>
+	  			<UnitName>Image Source</UnitName> 
+	  			<PathToIcon></PathToIcon> 
+	  			<ImageJSyntax>open("PARA_STRING_1");</ImageJSyntax> 
+	  			<Color>0x9cba92</Color>
+	  			<HelpString>Opens a new image</HelpString>
+			</General>
 	
-		<General>
-  			<UnitName>Image Source</UnitName> 
-  			<PathToIcon></PathToIcon> 
-  			<ImageJSyntax>open("PARA_STRING_1");</ImageJSyntax> 
-  			<Color>0x9cba92</Color>
-  			<HelpString>Opens a new image</HelpString>
-		</General>
-
-		<Parameters>
-  			<Parameter>
-  				<Name>Image</Name>
-  				<DataType>String</DataType>
-  				<Value>/Users/barthel/Applications/ImageJ/_images/zange1.png</Value>
-  				<HelpString>The source unit needs the path of an image file.</HelpString>
-  			</Parameter> 
-		</Parameters>
-
-		<Outputs> 
-			<Output>
-				<Name>Output</Name>
-				<ShortName>O</ShortName>	
-				<ImageType>-1</ImageType>
-				<DoDisplay>false</DoDisplay>
-			</Output>
-		</Outputs>
-
-	</UnitDescription>
+			<Parameters>
+	  			<Parameter>
+	  				<Name>Image</Name>
+	  				<DataType>String</DataType>
+	  				<Value>/Users/barthel/Applications/ImageJ/_images/zange1.png</Value>
+	  				<HelpString>The source unit needs the path of an image file.</HelpString>
+	  			</Parameter> 
+			</Parameters>
+	
+			<Outputs> 
+				<Output>
+					<Name>Output</Name>
+					<ShortName>O</ShortName>	
+					<ImageType>-1</ImageType>
+					<DoDisplay>false</DoDisplay>
+				</Output>
+			</Outputs>
+	
+		</UnitDescription>
 	</Unit>
 	
 	<Unit>
@@ -44,41 +44,41 @@
 		<YPos>50</YPos>
             
 		<UnitDescription>
-
-		<General>
-  			<UnitName>Gaussian Blur</UnitName> 
-  			<PathToIcon></PathToIcon> 
-  			<ImageJSyntax>run("Gaussian Blur...", "sigma=PARA_DOUBLE_1");</ImageJSyntax> 
-  			<Color>0x6e91de</Color>
-  			<HelpString>Performs a gaussian blur</HelpString>
-  		</General>
-
-		<Parameters>
-  			<Parameter>
-  				<Name>Radius</Name>
-  				<DataType>double</DataType>
-  				<Value>4</Value>
-  				<HelpString>Radius of the gaussian kernel</HelpString>
-  			</Parameter> 
-		</Parameters>
-
-		<Inputs> 
-			<Input>
-				<Name>Input</Name>
-				<ShortName>I</ShortName>	
-				<ImageType>-1</ImageType>
-				<NeedToCopyInput>true</NeedToCopyInput>
-			</Input>
-		</Inputs>
-
-		<Outputs> 
-			<Output>
-				<Name>Output</Name>
-				<ShortName>O</ShortName>	
-				<ImageType>-1</ImageType>	
-				<DoDisplay>true</DoDisplay>
-			</Output>
-		</Outputs>
+	
+			<General>
+	  			<UnitName>Gaussian Blur</UnitName> 
+	  			<PathToIcon></PathToIcon> 
+	  			<ImageJSyntax>run("Gaussian Blur...", "sigma=PARA_DOUBLE_1");</ImageJSyntax> 
+	  			<Color>0x6e91de</Color>
+	  			<HelpString>Performs a gaussian blur</HelpString>
+	  		</General>
+	
+			<Parameters>
+	  			<Parameter>
+	  				<Name>Radius</Name>
+	  				<DataType>double</DataType>
+	  				<Value>4</Value>
+	  				<HelpString>Radius of the gaussian kernel</HelpString>
+	  			</Parameter> 
+			</Parameters>
+	
+			<Inputs> 
+				<Input>
+					<Name>Input</Name>
+					<ShortName>I</ShortName>	
+					<ImageType>-1</ImageType>
+					<NeedToCopyInput>true</NeedToCopyInput>
+				</Input>
+			</Inputs>
+	
+			<Outputs> 
+				<Output>
+					<Name>Output</Name>
+					<ShortName>O</ShortName>	
+					<ImageType>-1</ImageType>	
+					<DoDisplay>true</DoDisplay>
+				</Output>
+			</Outputs>
 
 		</UnitDescription>
 	</Unit>
@@ -98,25 +98,25 @@
   				<Color>0x6e91de</Color>
 			</General>
 
-		<Inputs> 
-			<Input>
-				<Name>Input</Name>
-				<ShortName>I</ShortName>	
-				<ImageType>-1</ImageType>
-				<NeedToCopyInput>true</NeedToCopyInput>
-			</Input>	
-		</Inputs>
-
-		<Outputs> 
-			<Output>
-				<Name>Output</Name>
-				<ShortName>O</ShortName>	
-				<ImageType>-1</ImageType>
-				<DoDisplay>false</DoDisplay>
-			</Output>
-		</Outputs>
-
-	</UnitDescription>
+			<Inputs> 
+				<Input>
+					<Name>Input</Name>
+					<ShortName>I</ShortName>	
+					<ImageType>-1</ImageType>
+					<NeedToCopyInput>true</NeedToCopyInput>
+				</Input>	
+			</Inputs>
+	
+			<Outputs> 
+				<Output>
+					<Name>Output</Name>
+					<ShortName>O</ShortName>	
+					<ImageType>-1</ImageType>
+					<DoDisplay>false</DoDisplay>
+				</Output>
+			</Outputs>
+	
+		</UnitDescription>
 	</Unit>
 
 	<Unit>

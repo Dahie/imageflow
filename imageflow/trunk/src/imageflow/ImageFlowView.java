@@ -262,7 +262,8 @@ public class ImageFlowView extends FrameView {
 
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
-//		sidePane.add(delegatesPanel, BorderLayout.CENTER);
+		JPanel delegatesPanel = new DelegatesPanel(unitDelegates);
+		sidePane.add(delegatesPanel, BorderLayout.CENTER);
 		sidePane.add(buttonPanel, BorderLayout.PAGE_END);
 		
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);

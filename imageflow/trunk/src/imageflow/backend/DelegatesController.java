@@ -49,6 +49,7 @@ public class DelegatesController {
 		delegatesModel = new DefaultTreeModel(top);
 
 		File folder = new File("xml_units");
+		
 		readDelegatesFromFolder(top, folder); 
 	}
 
@@ -58,11 +59,11 @@ public class DelegatesController {
 		for (int i = 0; i < listOfFiles.length; i++) {
 			File file = listOfFiles[i];
 			if(file.isDirectory()) {
-				//				readDelegatesFromFolder(new DefaultMutableTreeNode(file.getName()), file);
+				readDelegatesFromFolder(new DefaultMutableTreeNode(file.getName()), file);
 			} else if (file.isFile() && isXML(file)) {
-				//				System.out.println("File " + file.getName());
+//				System.out.println("File " + file.getName());
 
-				final UnitDescription unitDescription = new UnitDescription(Tools.getRoot(file));
+				final UnitDescription unitDescription = new UnitDescription(Tools.getXMLRoot(file));
 				final UnitDelegate unitDelegate = 
 					new UnitDelegate(unitDescription.getUnitName(), unitDescription.getHelpString()) {
 

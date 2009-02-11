@@ -9,6 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import visualap.Delegate;
@@ -23,13 +24,15 @@ public class DelegatesPanel extends JPanel {
 		setLayout(new BorderLayout());
 		
 		DefaultMutableTreeNode top =
-	        new DefaultMutableTreeNode("The Java Series");
+	        new DefaultMutableTreeNode("ImageJ Filters");
 		DefaultTreeModel delegatesModel = new DefaultTreeModel(top);
 		createNodes(top);
 		
 		
 		
 		JTree delegatesTree = new JTree(delegatesModel);
+		delegatesTree.setRootVisible(false);
+		delegatesTree.setToggleClickCount(1);
 		
 		JScrollPane scrollPane = new JScrollPane(delegatesTree);
 		add(scrollPane, BorderLayout.CENTER);
@@ -39,9 +42,13 @@ public class DelegatesPanel extends JPanel {
 	private void createNodes(DefaultMutableTreeNode top) {
 		
 		Set<TreeNode> keys = delegates.keySet();
-		for (TreeNode treeNode : keys) {
-			top.add(new DefaultMutableTreeNode("Analysis"));
-		}
+		
+			DefaultMutableTreeNode nodeAnalysis = new DefaultMutableTreeNode("Analysis");
+			top.add(nodeAnalysis);
+		
+			for (TreeNode treeNode : keys) {
+				nodeAnalysis.add((MutableTreeNode) treeNode);
+			}
 		
 		
 		/*top.add(new DefaultMutableTreeNode("Filter"));

@@ -323,16 +323,16 @@ public class GraphController{
 		//		noiseUnit.setDisplayUnit(true);
 
 
-		UnitDescription sourceUnitDescription = new UnitDescription(Tools.getRoot(new File("xml_units/ImageSource_Unit.xml")));
+		UnitDescription sourceUnitDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/ImageSource_Unit.xml")));
 		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 
-		UnitDescription blurUnitDescription = new UnitDescription(Tools.getRoot(new File("xml_units/GaussianBlur_Unit.xml")));
+		UnitDescription blurUnitDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/GaussianBlur_Unit.xml")));
 		final UnitElement blurUnit = UnitFactory.createProcessingUnit(blurUnitDescription, new Point(180, 50));
 
-		UnitDescription mergeUnitDescription = new UnitDescription(Tools.getRoot(new File("xml_units/ImageCalculator_Unit.xml")));
+		UnitDescription mergeUnitDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/ImageCalculator_Unit.xml")));
 		final UnitElement mergeUnit = UnitFactory.createProcessingUnit(mergeUnitDescription,new Point(320, 100));
 
-		UnitDescription noiseUnitDescription = new UnitDescription(Tools.getRoot(new File("xml_units/AddNoise_Unit.xml")));
+		UnitDescription noiseUnitDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/AddNoise_Unit.xml")));
 		final UnitElement noiseUnit = UnitFactory.createProcessingUnit(noiseUnitDescription,new Point(450, 100));
 		noiseUnit.setDisplayUnit(true);
 		
@@ -373,15 +373,12 @@ public class GraphController{
 
 	public void setupExample0_XML() {
 
-		UnitList units = new UnitList();
+		nodes.clear();
 		try {
-			units.readUnitList(new File("xml_flows/Example0_flow.xml"));
+			nodes.readUnitList(new File("xml_flows/Example0_flow.xml"));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
 
 		/*UnitElement[] unitElement = null;
 		int numUnits = 0;
@@ -451,20 +448,20 @@ public class GraphController{
 		////////////////////////////////////////////////////////
 
 
-		UnitDescription sourceUnitDescription = new UnitDescription(Tools.getRoot(new File("xml_units/ImageSource_Unit.xml")));
+		UnitDescription sourceUnitDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/ImageSource_Unit.xml")));
 		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 
-		final UnitElement to8BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/8Bit_Unit.xml"))), new Point(150, 100));
-		final UnitElement to32BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/32Bit_Unit.xml"))), new Point(260, 100));
+		final UnitElement to8BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Image/8Bit_Unit.xml"))), new Point(150, 100));
+		final UnitElement to32BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Image/32Bit_Unit.xml"))), new Point(260, 100));
 
-		final UnitElement convUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Convolver_Unit.xml"))), new Point(400, 50));
-		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Convolver_Unit.xml"))), new Point(400, 160));
+		final UnitElement convUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Convolver_Unit.xml"))), new Point(400, 50));
+		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Convolver_Unit.xml"))), new Point(400, 160));
 
-		final UnitElement squareUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Square_Unit.xml"))), new Point(510, 50));
-		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Square_Unit.xml"))), new Point(510, 160));
+		final UnitElement squareUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Square_Unit.xml"))), new Point(510, 50));
+		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Square_Unit.xml"))), new Point(510, 160));
 
-		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Add_Unit.xml"))), new Point(650, 100));
-		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getRoot(new File("xml_units/Fire_Unit.xml"))), new Point(770, 100));
+		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/Add_Unit.xml"))), new Point(650, 100));
+		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Fire_Unit.xml"))), new Point(770, 100));
 
 		// some mixing, so they are not in order
 		nodes.add(sourceUnit);

@@ -53,7 +53,6 @@ public class UnitFactory {
 			}
 		}
 		
-		System.out.println(numParas);
 		for (int i = 1; i <= numParas; i++) {
 			Para para = unitDescription.para[i];
 			
