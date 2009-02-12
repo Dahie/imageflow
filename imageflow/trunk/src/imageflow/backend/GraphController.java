@@ -458,11 +458,13 @@ public class GraphController{
 		final UnitElement to8BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Image/8Bit_Unit.xml"))), new Point(150, 100));
 		final UnitElement to32BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Image/32Bit_Unit.xml"))), new Point(260, 100));
 
-		final UnitElement convUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Convolver_Unit.xml"))), new Point(400, 50));
-		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Convolver_Unit.xml"))), new Point(400, 160));
+		UnitDescription unitConvolveDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/Convolver_Unit.xml")));
+		final UnitElement convUnit = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 50));
+		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 160));
 
-		final UnitElement squareUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Square_Unit.xml"))), new Point(510, 50));
-		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Square_Unit.xml"))), new Point(510, 160));
+		UnitDescription unitSquareDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Square_Unit.xml")));
+		final UnitElement squareUnit = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 50));
+		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 160));
 
 		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/Add_Unit.xml"))), new Point(650, 100));
 		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Fire_Unit.xml"))), new Point(770, 100));
