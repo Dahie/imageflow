@@ -80,7 +80,9 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	protected Point mouse;
 
 	HashMap<String, Object> globalVars = new HashMap<String, Object>();
+	
 
+	
 	boolean cursor=true; // cursor is under control?
 	Rectangle rect;
 	String insertBeanName;
@@ -345,9 +347,17 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				mouse = new Point (x,y);
 				changeCursor(Cursor.CROSSHAIR_CURSOR);
 				return;
+			} 
+			// change
+			else {
+				selection.clear();
 			}
+			
+			//change
+			
 		}
-		parent.showFloatingMenu(e);
+		parent.showFloatingMenu(e);	
+		
 		selection.clear();
 		
 	//	e.consume();

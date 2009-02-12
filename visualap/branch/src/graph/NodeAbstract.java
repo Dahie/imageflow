@@ -54,7 +54,9 @@ public abstract class NodeAbstract extends Node {
 	/**
 	 * 
 	 */
-	public abstract void setObject(Object obj);
+	public void setObject(Object obj) {
+		this.obj = obj;
+	};
 
 	public long getSerialUID() {
 		return serialUID;
