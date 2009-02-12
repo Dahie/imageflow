@@ -71,7 +71,6 @@ public class UnitFactory {
 			String shortName = input.shortName;
 			int imageType = input.imageType;
 			boolean needToCopyInput = input.needToCopyInput;
-			System.out.println(imageType);
 			
 			unitElement.addInput(name, shortName, imageType, needToCopyInput);
 		}

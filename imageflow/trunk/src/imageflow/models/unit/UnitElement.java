@@ -441,7 +441,6 @@ public class UnitElement extends AbstractUnit {
 		int tolerance = 8;
 		if ((x >= origin.x - tolerance)
 				&&(x < origin.x + tolerance))	{
-			System.out.println("hey close");
 			int inputsMaxCount = getInputsCount();
 			for (int i = 0; i < inputsMaxCount; i++) {
 				int lower_y = PaintUtil.alignY(inputsMaxCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;

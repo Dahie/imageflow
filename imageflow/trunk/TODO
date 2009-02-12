@@ -3,7 +3,6 @@ GUI:
 - imagej plugin menu wie verzeichnisse für delegates
 
 Functions:
-- Save workflows
 - as imageJ plugin / standalone
 - no other jars (jdom)
 
