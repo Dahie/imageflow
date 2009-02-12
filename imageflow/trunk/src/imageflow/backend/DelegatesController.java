@@ -10,6 +10,8 @@ import java.awt.Point;
 import java.io.File;
 import java.util.HashMap;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
@@ -47,19 +49,24 @@ public class DelegatesController {
 		DefaultMutableTreeNode top =
 			new DefaultMutableTreeNode("Node delegates");
 		delegatesModel = new DefaultTreeModel(top);
+		JMenu insertMenu = new JMenu("Insert unit");
 
 		File folder = new File("xml_units");
 		
-		readDelegatesFromFolder(top, folder); 
+		readDelegatesFromFolder(top, insertMenu, folder); 
 	}
 
-	private void readDelegatesFromFolder(MutableTreeNode node, File folder) {
+	private void readDelegatesFromFolder(MutableTreeNode node, JMenu menu, File folder) {
 		File[] listOfFiles = folder.listFiles();
-
+		
 		for (int i = 0; i < listOfFiles.length; i++) {
 			File file = listOfFiles[i];
-			if(file.isDirectory()) {
-				readDelegatesFromFolder(new DefaultMutableTreeNode(file.getName()), file);
+			if(file.isDirectory() && !file.isHidden()) {
+				DefaultMutableTreeNode subNode = new DefaultMutableTreeNode(file.getName());
+				JMenu subMenu = new JMenu(file.getName());
+				readDelegatesFromFolder(subNode, subMenu, file);
+				((DefaultMutableTreeNode) node).add(subNode);
+				menu.add(subMenu);
 			} else if (file.isFile() && isXML(file)) {
 //				System.out.println("File " + file.getName());
 
@@ -77,6 +84,8 @@ public class DelegatesController {
 				delegates.put(treeNode, unitDelegate);
 
 				((DefaultMutableTreeNode) node).add(treeNode);
+				JMenuItem item = new JMenuItem(unitDelegate.getName());
+				menu.add(item);
 			}
 		}
 	}

@@ -24,7 +24,7 @@
 <Output>
 		<Name>Output</Name>
 		<ShortName>O</ShortName>	
-		<ImageType>-1</ImageType>
+		<ImageType>31</ImageType>
 		<DoDisplay>false</DoDisplay>
 	</Output></Outputs>
 

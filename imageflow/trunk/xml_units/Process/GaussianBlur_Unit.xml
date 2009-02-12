@@ -25,7 +25,7 @@
 	<Input>
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
-		<ImageType>-1</ImageType>
+		<ImageType>31</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
 </Inputs>
@@ -34,7 +34,7 @@
 	<Output>
 		<Name>Output</Name>
 		<ShortName>O</ShortName>	
-		<ImageType>-1</ImageType>	
+		<ImageType>31</ImageType>	
 		<DoDisplay>false</DoDisplay>
 	</Output>
 </Outputs>

@@ -1,5 +1,7 @@
 package imageflow.gui;
 
+import imageflow.backend.DelegatesController;
+
 import java.awt.BorderLayout;
 import java.util.HashMap;
 import java.util.Set;
@@ -18,15 +20,15 @@ public class DelegatesPanel extends JPanel {
 
 	private HashMap<TreeNode, Delegate> delegates;
 
-	public DelegatesPanel(HashMap<TreeNode, Delegate> delegates) {
-	
-		this.delegates = delegates;
+	public DelegatesPanel() {
+		DelegatesController delegatesController = DelegatesController.getInstance();
+		this.delegates = delegatesController.getUnitDelegates();
 		setLayout(new BorderLayout());
 		
 		DefaultMutableTreeNode top =
 	        new DefaultMutableTreeNode("ImageJ Filters");
-		DefaultTreeModel delegatesModel = new DefaultTreeModel(top);
-		createNodes(top);
+		DefaultTreeModel delegatesModel = delegatesController.getDelegatesModel();
+//		createNodes(top);
 		
 		
 		

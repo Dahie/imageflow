@@ -44,17 +44,8 @@ import java.util.ArrayList;
  * @author danielsenff
  *
  */
-public class UnitElement extends NodeAbstract implements Model {
+public class UnitElement extends AbstractUnit {
 
-	/**
-	 * number of units instantiated, incremented with each new object
-	 */
-	static int ids;
-
-	/**
-	 * the id of this unit
-	 */
-	protected int unitID;
 	/**
 	 * name of this unit, this is not display, Label is displayed
 	 */
@@ -125,8 +116,6 @@ public class UnitElement extends NodeAbstract implements Model {
 
 	private int FIRST_ELEMENT = 0;
 
-	private ArrayList<ModelListener> listeners;
-
 
 
 
@@ -189,12 +178,10 @@ public class UnitElement extends NodeAbstract implements Model {
 	 * @param numParameters
 	 */
 	private void init(final String unitName) {
-		ids++;
-		this.unitID = ids;
+
 		this.label = unitName;
 		this.unitName = unitName;
 
-		this.listeners = new ArrayList<ModelListener>();
 		this.inputs = new ArrayList<Input>();
 		this.outputs = new ArrayList<Output>();
 		this.parameters = new ArrayList<Parameter>();
@@ -396,16 +383,6 @@ public class UnitElement extends NodeAbstract implements Model {
 	}
 
 
-	/**
-	 * Returns the ID of this Unit.
-	 * @return
-	 */
-	public int getUnitID() {
-		return this.unitID;
-	}
-
-
-
 
 
 	/**
@@ -552,7 +529,6 @@ public class UnitElement extends NodeAbstract implements Model {
 	/* (non-Javadoc)
 	 * @see graph.NodeAbstract#setObject(java.lang.Object)
 	 */
-	@Override
 	public void setObject(Object obj) {
 		this.obj = obj;
 	}
@@ -730,6 +706,9 @@ public class UnitElement extends NodeAbstract implements Model {
 			gd.addMessage(" ");
 
 
+			// TODO label field 
+			
+			
 			final ArrayList<Parameter> parameterList = getParameters();
 
 			if (parameterList.isEmpty())
@@ -799,47 +778,14 @@ public class UnitElement extends NodeAbstract implements Model {
 	/**
 	 * @return the infoText
 	 */
-	public String getInfoText() {
+	public String getHelpString() {
 		return infoText;
 	}
+
+	public void setHelpString(String helpString) {
+		this.infoText = helpString;		
+	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see backend.Model#addModelListener(backend.ModelListener)
-	 */
-	public void addModelListener(ModelListener listener) {
-		if (! this.listeners.contains(listener)) {
-			this.listeners.add(listener);
-			notifyModelListener(listener);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see backend.Model#notifyModelListener(backend.ModelListener)
-	 */
-	public void notifyModelListener(ModelListener listener) {
-		listener.modelChanged(this);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see backend.Model#notifyModelListeners()
-	 */
-	public void notifyModelListeners() {
-		for (final ModelListener listener : this.listeners) {
-			notifyModelListener(listener);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see backend.Model#removeModelListener(backend.ModelListener)
-	 */
-	public void removeModelListener(ModelListener listener) {
-		this.listeners.remove(listener);
-	}
-
 
 }
 

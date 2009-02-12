@@ -13,9 +13,12 @@ import imageflow.gui.GPanelPopup;
 import imageflow.gui.GraphPanel;
 import imageflow.gui.InsertUnitMenu;
 import imageflow.models.ConnectionList;
+import imageflow.models.Input;
+import imageflow.models.Output;
 import imageflow.models.Selectable;
 import imageflow.models.SelectionList;
 import imageflow.models.SelectionListener;
+import imageflow.models.parameter.Parameter;
 import imageflow.models.unit.CommentNode;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
@@ -175,6 +178,7 @@ public class ImageFlowView extends FrameView {
 		
 		
 		JMenu fileMenu = new JMenu("File");
+		fileMenu.add(getAction("newDocument"));
 		fileMenu.add(getAction("open"));
 		fileMenu.add(getAction("generateMacro"));
 		fileMenu.add(getAction("saveAs"));
@@ -193,6 +197,7 @@ public class ImageFlowView extends FrameView {
 		
 		JMenu debugMenu = new JMenu("Debug");
 		debugMenu.add(getAction("debugPrintNodes"));
+		debugMenu.add(getAction("debugPrintNodeDetails"));
 		debugMenu.add(new JSeparator());
 		debugMenu.add(getAction("exampleFlow1"));
 		debugMenu.add(getAction("exampleFlow2"));
@@ -222,10 +227,12 @@ public class ImageFlowView extends FrameView {
 		getRootPane().setLayout(new BorderLayout());
 		
 		//working area aka graphpanel
-		
-		GPanelPopup popup = new GPanelPopup(unitDelegates.values(), graphController);
 		ArrayList<Delegate> delegatesArrayList = new ArrayList<Delegate>();
 		delegatesArrayList.addAll(unitDelegates.values());
+		GPanelPopup popup = new GPanelPopup(unitDelegates.values(), graphController);
+//		GPanelPopup popup = new GPanelPopup(graphController);
+		
+		
 		graphPanel = new GraphPanel(delegatesArrayList, popup);
 		popup.setActivePanel(graphPanel);
 		graphPanel.setSize(400, 300);
@@ -274,7 +281,7 @@ public class ImageFlowView extends FrameView {
 
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
-		JPanel delegatesPanel = new DelegatesPanel(unitDelegates);
+		JPanel delegatesPanel = new DelegatesPanel();
 		sidePane.add(delegatesPanel, BorderLayout.CENTER);
 		sidePane.add(buttonPanel, BorderLayout.PAGE_END);
 		
@@ -375,6 +382,12 @@ public class ImageFlowView extends FrameView {
 	    return new GenerateMacroTask(getApplication(), graphController);
 	}
 	
+
+	
+	@Action public void newDocument() {
+	    graphController.getUnitElements().clear();
+	    this.file = new File("new document");
+	}
 	
 	@Action public Task open() {
 	    JFileChooser fc = new JFileChooser();
@@ -560,6 +573,36 @@ public class ImageFlowView extends FrameView {
 		dialog.add(list);
 		dialog.pack();
 		dialog.setVisible(true);
+    }
+    
+    @Action(enabledProperty = "selected")
+    public void debugPrintNodeDetails() {
+    	Selection<Node> selectedUnits = graphPanel.getSelection();
+		for (int i = 0; i < selectedUnits.size(); i++) {
+			UnitElement unit = (UnitElement)selectedUnits.get(i);
+    		JDialog dialog = new JDialog();
+
+    		// list parameters
+        	DefaultListModel lm = new DefaultListModel();
+        	for (Parameter parameter : unit.getParameters()) {
+        		lm.addElement(parameter);	
+        	}
+        	for (Input input : unit.getInputs()) {
+        		lm.addElement(input);
+        		lm.addElement("name:"+input.getName());
+        		lm.addElement("imagetype:"+input.getImageBitDepth());
+        	}
+        	for (Output output : unit.getOutputs()) {
+        		lm.addElement(output);
+        		lm.addElement("name:"+output.getName());
+        		lm.addElement("imagetype:"+output.getImageBitDepth());
+        	}
+        	JList list = new JList(lm);
+        	
+    		dialog.add(list);
+    		dialog.pack();
+    		dialog.setVisible(true);	
+		}
     	
     }
     

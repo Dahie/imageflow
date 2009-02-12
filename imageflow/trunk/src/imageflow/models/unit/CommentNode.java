@@ -1,9 +1,6 @@
 package imageflow.models.unit;
 
 import graph.Node;
-import graph.NodeText;
-
-import imageflow.backend.Model;
 import imageflow.backend.ModelListener;
 
 import java.awt.BasicStroke;
@@ -23,9 +20,9 @@ import java.util.ArrayList;
  * @author danielsenff
  *
  */
-public class CommentNode extends NodeText implements Model {
+public class CommentNode extends AbstractUnit {
 
-	private final ArrayList<ModelListener> listeners;
+	protected String text;
 	
 	/**
 	 * @param point
@@ -34,8 +31,18 @@ public class CommentNode extends NodeText implements Model {
 	public CommentNode(final Point point, final String string) {
 		super(point, string);
 		this.label = string;
-		this.listeners = new ArrayList<ModelListener>();
+		setText(string);
 	}
+	
+
+	public String getText() {
+		return(text);
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
 	
 	@Override
 	public Node clone() throws CloneNotSupportedException {
@@ -75,27 +82,6 @@ public class CommentNode extends NodeText implements Model {
 		g2.setFont(saveFont);
 		g2.setColor(saveColor);
         return new Rectangle(origin, getDimension());
-	}
-
-	public void addModelListener(ModelListener listener) {
-		if (! this.listeners.contains(listener)) {
-			this.listeners.add(listener);
-			notifyModelListener(listener);
-		}
-	}
-
-	public void notifyModelListener(ModelListener listener) {
-		listener.modelChanged(this);
-	}
-
-	public void notifyModelListeners() {
-		for (final ModelListener listener : this.listeners) {
-			notifyModelListener(listener);
-		}
-	}
-
-	public void removeModelListener(ModelListener listener) {
-		this.listeners.remove(listener);
 	}
 	
 }

@@ -3,6 +3,7 @@
  */
 package imageflow.models.unit;
 
+import graph.Edge;
 import graph.GList;
 import graph.Node;
 import imageflow.backend.Model;
@@ -18,6 +19,7 @@ import imageflow.models.unit.UnitElement.Type;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,7 +62,7 @@ public class UnitList extends GList<Node> implements Model {
 	 * @throws FileNotFoundException 
 	 */
 	public void read(File file) throws FileNotFoundException {
-		UnitElement[] unitElement = null;
+		Node[] node = null;
 
 		if(!file.exists()) throw new FileNotFoundException("reading failed, the file as not found");
 		int numUnits = 0;
@@ -81,20 +83,36 @@ public class UnitList extends GList<Node> implements Model {
 				List<Element> unitsList = unitsElement.getChildren();
 				Iterator<Element> unitsIterator = unitsList.iterator();
 				numUnits = unitsList.size() + 1;
-				unitElement = new UnitElement[numUnits];
+//				node = new Node[numUnits];
 
 				// loop Ÿber alle Units
 				while (unitsIterator.hasNext()) { 
 					Element actualUnitElement = (Element) unitsIterator.next();
-					int unitID 		= Integer.parseInt(actualUnitElement.getChild("UnitID").getValue());
 					int xPos 		= Integer.parseInt(actualUnitElement.getChild("XPos").getValue());
 					int yPos		= Integer.parseInt(actualUnitElement.getChild("YPos").getValue());
-					UnitDescription unitDescription = new UnitDescription(actualUnitElement.getChild("UnitDescription"));
+					String label = "";
+					if(actualUnitElement.getChild("Label") != null)
+						label = actualUnitElement.getChild("Label").getValue();
+						
+					if(actualUnitElement.getChild("UnitID") != null &&
+							actualUnitElement.getChild("UnitDescription") != null) {
+						
+						int unitID 	= Integer.parseInt(actualUnitElement.getChild("UnitID").getValue());
+						UnitDescription unitDescription = new UnitDescription(actualUnitElement.getChild("UnitDescription"));
 
-					// create unit
-					unitElement[unitID] = UnitFactory.createProcessingUnit(unitDescription, new Point(xPos, yPos));
-					unitElement[unitID].setDisplayUnit(unitDescription.getIsDisplayUnit());
-					add(unitElement[unitID]);
+						// create unit
+						UnitElement unitElement = UnitFactory.createProcessingUnit(unitDescription, new Point(xPos, yPos));
+						unitElement.setDisplayUnit(unitDescription.getIsDisplayUnit());
+						unitElement.setHelpString(unitDescription.helpString);
+						unitElement.setLabel(label);
+						add(unitElement);
+					} else {
+						CommentNode comment = new CommentNode(new Point(xPos, yPos), label);
+						add(comment);
+					}
+
+					
+					
 				}
 			}
 
@@ -112,7 +130,8 @@ public class UnitList extends GList<Node> implements Model {
 					int fromOutputNumber 	= Integer.parseInt(actualConnectionElement.getChild("FromOutputNumber").getValue());
 					int toUnitID 			= Integer.parseInt(actualConnectionElement.getChild("ToUnitID").getValue());
 					int toInputNumber 		= Integer.parseInt(actualConnectionElement.getChild("ToInputNumber").getValue());
-					Connection con = new Connection(unitElement[fromUnitID], fromOutputNumber, unitElement[toUnitID], toInputNumber);
+					Connection con 			= new Connection(((UnitElement)this.get(fromUnitID-1)), fromOutputNumber, 
+							((UnitElement)this.get(toUnitID-1)), toInputNumber);
 					addConnection(con);
 				}
 			}
@@ -173,11 +192,11 @@ public class UnitList extends GList<Node> implements Model {
 				imageJSyntax.addContent(((MacroElement)unit.getObject()).getCommandSyntax());
 				general.addContent(imageJSyntax);
 				Element color = new Element("Color");
-				String colorHex =""; //TODO conversion from Color-Object to hex-string
-				color.addContent(colorHex);
+				String colorHex = Integer.toHexString( unit.getColor().getRGB() );
+				color.addContent("0x"+colorHex.substring(2));
 				general.addContent(color);
 				Element helpStringU = new Element("HelpString");
-				helpStringU.addContent(unit.getInfoText());
+				helpStringU.addContent(unit.getHelpString());
 				general.addContent(helpStringU);
 
 
@@ -221,7 +240,7 @@ public class UnitList extends GList<Node> implements Model {
 					inputElement.addContent(shortName);
 
 					Element imageType = new Element("ImageType");
-					//				name.addContent(input.getImageBitDepth()); //FIXME
+					imageType.addContent(""+input.getImageBitDepth());
 					inputElement.addContent(imageType);
 
 					Element needToCopyInput = new Element("NeedToCopyInput");
@@ -246,7 +265,7 @@ public class UnitList extends GList<Node> implements Model {
 					outputElement.addContent(shortName);
 
 					Element imageType = new Element("ImageType");
-					//				name.addContent(input.getImageBitDepth()); //FIXME
+					imageType.addContent(""+output.getImageBitDepth());
 					outputElement.addContent(imageType);
 
 					// FIXME does it make sense to hang this on the output?
@@ -262,12 +281,40 @@ public class UnitList extends GList<Node> implements Model {
 
 		}
 
-
+		
+		// now for connections
+		Element connectionsElement = new Element("Connections");
+		root.addContent(connectionsElement);
+		
+		for (Edge edge : connections) {
+			Connection conn = (Connection) edge;
+			
+			Element connectionElement = new Element("Connection");
+			connectionsElement.addContent(connectionElement);
+			
+			Element fromUnitID = new Element("FromUnitID");
+			fromUnitID.addContent(""+conn.getFromUnit().getUnitID());
+			connectionElement.addContent(fromUnitID);
+			
+			Element fromOutputNumber = new Element("FromOutputNumber");
+			fromOutputNumber.addContent(""+conn.getOutput().getIndex());
+			connectionElement.addContent(fromOutputNumber);
+			
+			Element toUnitID = new Element("ToUnitID");
+			toUnitID.addContent(""+conn.getToUnit().getUnitID());
+			connectionElement.addContent(toUnitID);
+			
+			Element toInputNumber = new Element("ToInputNumber");
+			toInputNumber.addContent(""+conn.getInput().getIndex());
+			connectionElement.addContent(toInputNumber);
+		}
 
 
 
 		// output
 		new XMLOutputter(Format.getPrettyFormat()).output(flowGraph, System.out);
+		FileOutputStream fos = new FileOutputStream(file);
+		new XMLOutputter(Format.getPrettyFormat()).output(flowGraph, fos);
 	}
 
 	@Override
@@ -321,6 +368,16 @@ public class UnitList extends GList<Node> implements Model {
 		return true;
 	}
 
+	public Node getUnit(int id) {
+		for (Iterator node = this.iterator(); node.hasNext();) {
+			AbstractUnit unit = (AbstractUnit) node.next();
+			if(unit.getUnitID() == id) 
+				return unit;
+		}
+		return null;
+	}
+	
+	
 	/**
 	 * Remove this Unit from the workflow.
 	 * @param unit 

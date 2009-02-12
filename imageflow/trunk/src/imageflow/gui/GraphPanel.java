@@ -97,16 +97,29 @@ public class GraphPanel extends GPanel {
 				// check if mouse is within this dimensions of a node
 				if(isWithin2DRange(mouse, node.getOrigin(), node.getDimension(), margin)) {
 
+					/*
+					 * TODO
+					 * The imagebitdepth check works, but the current solution has one major disadvantage
+					 * Most units can take several bitdepth, most are DOES_ALL on their inputs and outputs.
+					 * So are the image-sources. Therefore at the moment of drawing the graph there is no way
+					 * to know the imagetype that will eactually be input during runtime of the macro, since 
+					 * this is determined by the file opened by IJ.
+					 */
+					
+					
 					// draw every pin
-					for (Pin pin : ((UnitElement)node).getInputs()) {
-						if(!drawEdge.getParent().equals(node)) 
-							drawCompatbilityIndicator(g2, margin, pin);
-					}
+					if(node instanceof UnitElement) {
+						for (Pin pin : ((UnitElement)node).getInputs()) {
+							if(!drawEdge.getParent().equals(node)) 
+								drawCompatbilityIndicator(g2, margin, pin);
+						}
 
-					for (Pin pin : ((UnitElement)node).getOutputs()) {
-						if(!drawEdge.getParent().equals(node))
-							drawCompatbilityIndicator(g2, margin, pin);
+						for (Pin pin : ((UnitElement)node).getOutputs()) {
+							if(!drawEdge.getParent().equals(node))
+								drawCompatbilityIndicator(g2, margin, pin);
+						}	
 					}
+					
 				}
 			}
 			

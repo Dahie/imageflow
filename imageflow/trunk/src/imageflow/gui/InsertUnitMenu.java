@@ -24,11 +24,11 @@ public class InsertUnitMenu extends JMenu {
 	private GPanel activePanel;
 	private final Collection<Delegate> availableUnits;
 	private static Point savedPoint = new Point(75, 75);
-	
+
 	public InsertUnitMenu(final GPanel gpanel, final Collection<Delegate> availableUnits) {
 		this("Insert", gpanel, availableUnits, savedPoint);
 	}
-	
+
 	public InsertUnitMenu(final String name, 
 			final GPanel gpanel, 
 			final Collection<Delegate> availableUnits, 
@@ -58,8 +58,8 @@ public class InsertUnitMenu extends JMenu {
 				}
 
 				// add selected node
-//				for (int i = 0; i < availableUnits.size(); i++) {
-//					UnitDelegate delegate = (UnitDelegate)availableUnits.get(i);
+				//				for (int i = 0; i < availableUnits.size(); i++) {
+				//					UnitDelegate delegate = (UnitDelegate)availableUnits.get(i);
 				for (Delegate delegate : availableUnits) {
 					if(delegate instanceof UnitDelegate) {
 						UnitDelegate unitDelegate = (UnitDelegate) delegate;
@@ -84,23 +84,23 @@ public class InsertUnitMenu extends JMenu {
 					}
 				}
 			}}; 
-		JMenuItem mi = new JMenuItem("Comment");
-		mi.setToolTipText("Insert Notes or Comments to the graph.");
-		add(mi).addActionListener(newAction);		
+			JMenuItem mi = new JMenuItem("Comment");
+			mi.setToolTipText("Insert Notes or Comments to the graph.");
+			add(mi).addActionListener(newAction);		
 
-		//list over all available units
+			//list over all available units
 
-//		for (int i = 0; i < availableUnits.size(); i++) {
-//			UnitDelegate delegate = (UnitDelegate) availableUnits.get(i);
-		for (Delegate delegate : availableUnits) {
-			if(delegate instanceof UnitDelegate) {
-				UnitDelegate unitDelegate = (UnitDelegate) delegate;
+			//		for (int i = 0; i < availableUnits.size(); i++) {
+			//			UnitDelegate delegate = (UnitDelegate) availableUnits.get(i);
+			for (Delegate delegate : availableUnits) {
+				if(delegate instanceof UnitDelegate) {
+					UnitDelegate unitDelegate = (UnitDelegate) delegate;
 
-				mi = new JMenuItem(unitDelegate.getName());
-				mi.setToolTipText(unitDelegate.getToolTipText());
-				add(mi).addActionListener(newAction);
+					mi = new JMenuItem(unitDelegate.getName());
+					mi.setToolTipText(unitDelegate.getToolTipText());
+					add(mi).addActionListener(newAction);
+				}
 			}
-		}
 	}
-	
+
 }

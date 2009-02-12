@@ -8,7 +8,6 @@ Functions:
 - no other jars (jdom)
 
 Graph:
-- fixed imagebitdepth test during connection
 - fixed loop detection
 - optional Node-Alignment
 - ordner image source aka stack-support
@@ -16,15 +15,21 @@ Graph:
 
 Nice-to-have:
 - display help info of the units
-- Automatic load of new plugins
+- save unknown units from graph to directory of delegates
 - have a nice info text on the empty panel
 - cleanup of the graph
 - zoomable graph
 - labels of inputs and outputs
 - insert new units not on existing units
+- editor for unit xml
 
 V2:
 - Editing history (for nodes and properties)
 - Grouping of units
 - Multi-Document-Application
 - no more visualapp?
+
+
+
+Known problems:
+- fixed imagebitdepth test during connection: the image bitdepth is not known during build time, only in macro runtime

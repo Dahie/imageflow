@@ -14,7 +14,7 @@
 	<Input>
 		<Name></Name>
 		<ShortName></ShortName>	
-		<ImageType>-1</ImageType>
+		<ImageType>15</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>	
 </Inputs>

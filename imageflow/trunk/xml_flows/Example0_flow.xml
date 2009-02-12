@@ -6,7 +6,7 @@
 		<UnitID>1</UnitID>
 		<XPos>50</XPos>
 		<YPos>50</YPos>
-		<Label>Custom Source</Label>
+		<Label>Source</Label>
 	
 		<UnitDescription>
 		
@@ -43,6 +43,7 @@
 		<UnitID>2</UnitID> 
 		<XPos>200</XPos>
 		<YPos>50</YPos>
+		<Label>Blur</Label>
             
 		<UnitDescription>
 	
@@ -67,7 +68,7 @@
 				<Input>
 					<Name>Input</Name>
 					<ShortName>I</ShortName>	
-					<ImageType>-1</ImageType>
+					<ImageType>31</ImageType>
 					<NeedToCopyInput>true</NeedToCopyInput>
 				</Input>
 			</Inputs>
@@ -76,7 +77,7 @@
 				<Output>
 					<Name>Output</Name>
 					<ShortName>O</ShortName>	
-					<ImageType>-1</ImageType>	
+					<ImageType>31</ImageType>	
 					<DoDisplay>true</DoDisplay>
 				</Output>
 			</Outputs>
@@ -88,6 +89,7 @@
 		<UnitID>3</UnitID> 
 		<XPos>350</XPos>
 		<YPos>50</YPos>
+		<Label>to 8 bit</Label>
             
 		<UnitDescription>
 
@@ -103,7 +105,7 @@
 				<Input>
 					<Name>Input</Name>
 					<ShortName>I</ShortName>	
-					<ImageType>-1</ImageType>
+					<ImageType>31</ImageType>
 					<NeedToCopyInput>true</NeedToCopyInput>
 				</Input>	
 			</Inputs>
@@ -124,6 +126,7 @@
 		<UnitID>4</UnitID> 
 		<XPos>500</XPos>
 		<YPos>50</YPos>
+		<Label>Fire</Label>
             
 		<UnitDescription>
 
@@ -139,7 +142,7 @@
 				<Input>
 					<Name>Input1</Name>
 					<ShortName>I</ShortName>	
-					<ImageType>-1</ImageType>
+					<ImageType>15</ImageType>
 					<NeedToCopyInput>true</NeedToCopyInput>
 				</Input>	
 			</Inputs>
@@ -148,7 +151,7 @@
 				<Output>
 					<Name>Output</Name>
 					<ShortName>O</ShortName>	
-					<ImageType>-1</ImageType>
+					<ImageType>15</ImageType>
 					<DoDisplay>true</DoDisplay>
 				</Output>
 			</Outputs>

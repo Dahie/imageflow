@@ -3,18 +3,18 @@
 <UnitDescription>
 
 <General>
-  <UnitName>Green</UnitName> 
-  <HelpString>Applies the fire LUT</HelpString>  
+  <UnitName>to RGB Color</UnitName> 
+  <HelpString>Converts the image to an RGB Color image</HelpString>  
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Green");</ImageJSyntax> 
-  <Color>0xbe91de</Color>
+  <ImageJSyntax>run("RGB Color");</ImageJSyntax> 
+  <Color>0x6e91de</Color>
 </General>
 
 <Inputs> 
 	<Input>
-		<Name>Input1</Name>
+		<Name>Input</Name>
 		<ShortName>I</ShortName>	
-		<ImageType>15</ImageType>
+		<ImageType>31</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>	
 </Inputs>
@@ -23,7 +23,7 @@
 	<Output>
 		<Name>Output</Name>
 		<ShortName>O</ShortName>	
-		<ImageType>31</ImageType>
+		<ImageType>16</ImageType>
 		<DoDisplay>false</DoDisplay>
 	</Output>
 </Outputs>

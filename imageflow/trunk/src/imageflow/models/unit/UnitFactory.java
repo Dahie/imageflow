@@ -58,27 +58,10 @@ public class UnitFactory {
 			
 			unitElement.addParameter(
 					ParameterFactory.createParameter(para.name, 
-							para.value, para.helpString, para.trueString, para.choiceIndex));
-			
-			/*String name = para.name;
-			String helpString = para.helpString; 
-			String paraType = para.dataTypeString.toLowerCase();
-			if (paraType.equals("double"))
-				unitElement.addParameter(
-						ParameterFactory.createParameter(para.name, para.value, para.trueString, para.helpString))
-				unitElement.addParameter(new DoubleParameter(name, para.doubleValue, helpString));
-			else if (paraType.equals("integer"))
-				unitElement.addParameter(new IntegerParameter(name, para.integerValue, helpString));
-			else if (paraType.equals("file"))
-				unitElement.addParameter(new FileParameter(name, para.stringValue, helpString));
-			else if (paraType.equals("string"))
-				unitElement.addParameter(new StringParameter(name, para.stringValue, helpString));
-			else if (paraType.equals("stringarray"))
-				unitElement.addParameter(new ChoiceParameter(name, para.comboStringValues, para.comboStringValues[para.choiceNumber], helpString));
-			else if (paraType.equals("boolean"))
-				unitElement.addParameter(new BooleanParameter(name, para.booleanValue, para.trueString, helpString));
-		 	else
-				System.err.println("Wrong parameter type");		*/	
+													para.value, 
+													para.helpString, 
+													para.trueString, 
+													para.choiceIndex));
 		}
 		
 		// setup of the inputs
@@ -88,6 +71,7 @@ public class UnitFactory {
 			String shortName = input.shortName;
 			int imageType = input.imageType;
 			boolean needToCopyInput = input.needToCopyInput;
+			System.out.println(imageType);
 			
 			unitElement.addInput(name, shortName, imageType, needToCopyInput);
 		}

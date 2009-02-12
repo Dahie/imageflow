@@ -150,12 +150,37 @@ public class InputTests extends TestCase {
 		assertTrue("all to 32", input1.isImageBitDepthCompatible(output2.getImageBitDepth()));
 		assertTrue("32 to all", input3.isImageBitDepthCompatible(output1.getImageBitDepth()));
 
-		// now test pins, which don't care
-		//TODO hm how should this react actually? needs an input set
-		assertTrue("-1 to 16", input2.isImageBitDepthCompatible(output3.getImageBitDepth()));
-		assertTrue("-1 to ALL", input3.isImageBitDepthCompatible(output3.getImageBitDepth()));
 	}
 
+	void testForwardingImageBitDepth() {
+		// -1 requires to check the imagebitdepth of the input
+		
+		UnitElement unit1 = new UnitElement("unit1", "some syntax");
+		unit1.addInput("input1", "i", PlugInFilter.DOES_32, false);
+		unit1.addOutput("output1", "o", PlugInFilter.DOES_32, false);
+		unit1.addOutput("output2", "o", PlugInFilter.DOES_ALL, false);
+		unit1.addOutput("output2", "o", -1, false);
+		Output output1 = unit1.getOutput(0);
+		Output output2 = unit1.getOutput(1);
+		Output output3 = unit1.getOutput(2);
+		
+		UnitElement unit2 = new UnitElement("unit2", "some syntax");
+		unit2.addInput("input1", "i", PlugInFilter.DOES_32, false);
+		unit2.addInput("input2", "i", PlugInFilter.DOES_16, false);
+		unit2.addInput("input3", "i", PlugInFilter.DOES_ALL, false);
+		Input input1 = unit2.getInput(0);
+		Input input2 = unit2.getInput(1);
+		Input input3 = unit2.getInput(2);
+		
+		
+		// now test pins, which don't care
+		//TODO hm how should this react actually? needs an input set
+//		assertTrue("-1 to 16", input2.isImageBitDepthCompatible(output3.getImageBitDepth()));
+//		assertTrue("-1 to ALL", input3.isImageBitDepthCompatible(output3.getImageBitDepth()));
+		
+	}
+	
+	
 	public void testUnitConnectedInBranch() {
 		
 		UnitElement unit1 = UnitFactory.createAddNoiseUnit();
