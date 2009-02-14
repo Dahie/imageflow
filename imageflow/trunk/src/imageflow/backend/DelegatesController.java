@@ -51,9 +51,13 @@ public class DelegatesController {
 		delegatesModel = new DefaultTreeModel(top);
 		JMenu insertMenu = new JMenu("Insert unit");
 
-		File folder = new File("xml_units");
-		
-		readDelegatesFromFolder(top, insertMenu, folder); 
+		String unitsFolder = System.getProperty("user.dir")+File.separator+"xml_units";
+		File folder = new File(unitsFolder);
+		System.out.println(folder.getAbsolutePath());
+		if(folder.exists()) 
+			readDelegatesFromFolder(top, insertMenu, folder);
+		else 
+			System.out.println("No units-folder found");
 	}
 
 	private void readDelegatesFromFolder(MutableTreeNode node, JMenu menu, File folder) {

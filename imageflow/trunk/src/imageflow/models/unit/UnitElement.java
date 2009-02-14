@@ -699,76 +699,89 @@ public class UnitElement extends AbstractUnit {
 	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
 	 */
 	public void showProperties() {
-		if(hasParameters()) {
-			final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters");
-			gd.addMessage(label);
-			gd.addMessage(" ");
+		final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters");
+		gd.addMessage(label);
+		gd.addMessage(" ");
 
 
-			// TODO label field 
-			
-			
-			final ArrayList<Parameter> parameterList = getParameters();
+		// label field 
+		gd.addStringField("Unit label", this.getLabel(),40);
 
-			if (parameterList.isEmpty())
-				gd.addMessage("No parameters that can be set");
-			else if(parameterList.get(0) instanceof FileParameter) {
-				// TODO open filechooser
-				
-			} else {
-				for (final Parameter parameter : parameterList) {
+		final ArrayList<Parameter> parameterList = getParameters();
 
-					if(parameter instanceof DoubleParameter) {
-						gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
-					} else if(parameter instanceof IntegerParameter) {
-						gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
-					} else if(parameter instanceof BooleanParameter) {
-						gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
-					} else if(parameter instanceof ChoiceParameter) {
-						gd.addChoice(parameter.getDisplayName(), 
-								((ChoiceParameter)parameter).getChoicesArray(), 
-								((ChoiceParameter)parameter).getValue());
-					} else if(parameter instanceof StringParameter) {
-						gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(),40);
-					}		
-				}
-					
+		if (parameterList.isEmpty())
+			gd.addMessage("No parameters that can be set");
+		else if(parameterList.get(0) instanceof FileParameter) {
+			// TODO open filechooser
+
+		} else {
+			for (final Parameter parameter : parameterList) {
+
+				if(parameter instanceof DoubleParameter) {
+					gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
+				} else if(parameter instanceof IntegerParameter) {
+					gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
+				} else if(parameter instanceof BooleanParameter) {
+					gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
+				} else if(parameter instanceof ChoiceParameter) {
+					gd.addChoice(parameter.getDisplayName(), 
+							((ChoiceParameter)parameter).getChoicesArray(), 
+							((ChoiceParameter)parameter).getValue());
+				} else if(parameter instanceof StringParameter) {
+					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(),40);
+				}		
 			}
 
-			// show properties window
-			gd.showDialog();
-
-			if( gd.wasCanceled())
-				return;
-
-
-			for (final Parameter parameter : parameterList) {
-				if(parameter instanceof DoubleParameter) {
-					((DoubleParameter) parameter).setValue((double) (gd.getNextNumber()));
-				} else if (parameter instanceof IntegerParameter) {
-					((IntegerParameter) parameter).setValue((int) (gd.getNextNumber()));
-				} else if (parameter instanceof BooleanParameter) {
-					((BooleanParameter) parameter).setValue((boolean) (gd.getNextBoolean()));
-				} else if (parameter instanceof ChoiceParameter) {
-					((ChoiceParameter) parameter).setValue((String) (gd.getNextChoice()));
-					// TODO set the ChoiceNumber to be able to save it
-				} else if (parameter instanceof StringParameter) {
-					String newString = (String) (gd.getNextString()).trim();
-					((StringParameter) parameter).setValue(newString);
-				}
-			}	
 		}
+
+		// show properties window
+		gd.showDialog();
+
+		if( gd.wasCanceled())
+			return;
+
+		String newLabel = (String) (gd.getNextString()).trim();
+		setLabel(newLabel);
+
+		for (final Parameter parameter : parameterList) {
+			if(parameter instanceof DoubleParameter) {
+				((DoubleParameter) parameter).setValue((double) (gd.getNextNumber()));
+			} else if (parameter instanceof IntegerParameter) {
+				((IntegerParameter) parameter).setValue((int) (gd.getNextNumber()));
+			} else if (parameter instanceof BooleanParameter) {
+				((BooleanParameter) parameter).setValue((boolean) (gd.getNextBoolean()));
+			} else if (parameter instanceof ChoiceParameter) {
+				((ChoiceParameter) parameter).setValue((String) (gd.getNextChoice()));
+				// TODO set the ChoiceNumber to be able to save it
+			} else if (parameter instanceof StringParameter) {
+				String newString = (String) (gd.getNextString()).trim();
+				((StringParameter) parameter).setValue(newString);
+			}
+		}	
 
 	}
 
-	private boolean hasParameters() {
+	/**
+	 * Returns whether this unit has parameters or not.
+	 * This doesn't concern the unitlabel.
+	 * @return
+	 */
+	public boolean hasParameters() {
 		return !parameters.isEmpty();
 	}
 
+	/**
+	 * returns the color of the unit.
+	 * @return
+	 */
 	public Color getColor() {
 		return color;
 	}
 
+	/**
+	 * Set the color of the unit.
+	 * @param color
+	 */
 	public void setColor(Color color) {
 		this.color = color;
 		notifyModelListeners();
@@ -784,7 +797,7 @@ public class UnitElement extends AbstractUnit {
 	public void setHelpString(String helpString) {
 		this.infoText = helpString;		
 	}
-	
+
 
 }
 

@@ -99,6 +99,7 @@ public class GraphController{
 			IJ.log(macro);
 
 		imagej.setVisible(false);
+		imagej.quit();
 
 		// !!!
 		IJ.runMacro(macro, "");

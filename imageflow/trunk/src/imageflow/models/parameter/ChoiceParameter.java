@@ -46,7 +46,11 @@ public class ChoiceParameter extends StringParameter {
 	}
 
 	public String[] getChoicesArray() {
-		return (String[]) this.getChoices().toArray();
+		String[] array = new String[getChoices().size()];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = getChoices().get(i);
+		}
+		return array;
 	}
 	
 }

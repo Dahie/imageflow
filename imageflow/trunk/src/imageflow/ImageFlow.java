@@ -4,25 +4,20 @@
 package imageflow;
 
 import ij.IJ;
-import imageflow.tasks.GenerateMacroTask;
+import ij.plugin.PlugIn;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 
-import javax.swing.JFileChooser;
-
-import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.Task;
 
 /**
  * Main-method
  * @author danielsenff
  *
  */
-public class ImageFlow extends SingleFrameApplication {
+public class ImageFlow extends SingleFrameApplication implements PlugIn {
 
 
 	/**
@@ -80,5 +75,10 @@ public class ImageFlow extends SingleFrameApplication {
             exit(e);
         }
     }
+
+
+	public void run(String args) {
+		startup();
+	}
 
 }

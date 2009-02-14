@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project imageflow">
+<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+<!--ANT 1.7 is required                                        -->
+<target name="create_run_jar">
+<jar destfile="${basedir}/imageflow005.jar" filesetmanifest="mergewithoutmain">
+	<manifest>
+		<attribute name="Built-By" value="${user.name}"/>
+		<attribute name="Main-Class" value="imageflow.ImageFlow"/>
+		<attribute name="Class-Path" value="."/>
+	</manifest>
+	<fileset dir="${basedir}/bin"/>
+	<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/ij.jar"/>
+	<!--<zipfileset excludes="META-INF/*.SF" src="/Users/danielsenff/Programming/Java/workspace/imageflow/lib/junit-4.5.jar"/>-->
+	<fileset dir="/Users/danielsenff/Programming/Java/workspace/visualap11branch/bin" excludes="**/test/**, *.wav, *.pdf" />
+	<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/jdom.jar"/>
+	<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/appframework-1.0.3.jar"/>
+	<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-worker-1.1.jar"/>
+</jar>
+</target>
+</project>

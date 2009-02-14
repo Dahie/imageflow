@@ -69,6 +69,7 @@ public abstract class AbstractUnit extends NodeAbstract implements Model {
 		for (final ModelListener listener : this.listeners) {
 			notifyModelListener(listener);
 		}
+		setChanged(true);
 	}
 
 	/*
@@ -79,4 +80,15 @@ public abstract class AbstractUnit extends NodeAbstract implements Model {
 		this.listeners.remove(listener);
 	}
 	
+	@Override
+	public void setOrigin(Point aOrigin) {
+		super.setOrigin(aOrigin);
+		notifyModelListeners();
+	}
+	
+	@Override
+	public void setLabel(String label) {
+		super.setLabel(label);
+		notifyModelListeners();
+	}
 }

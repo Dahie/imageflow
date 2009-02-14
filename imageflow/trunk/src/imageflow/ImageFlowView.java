@@ -23,9 +23,9 @@ import imageflow.models.unit.CommentNode;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
 import imageflow.models.unit.UnitList;
-import imageflow.tasks.GenerateMacroTask;
 import imageflow.tasks.ImportGraphTask;
 import imageflow.tasks.LoadFlowGraphTask;
+import imageflow.tasks.RunMacroTask;
 import imageflow.tasks.SaveFlowGraphTask;
 
 import java.awt.BorderLayout;
@@ -47,6 +47,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
@@ -135,7 +136,7 @@ public class ImageFlowView extends FrameView {
 							}
 						});	
 			} else if(node instanceof UnitElement) {
-				((CommentNode)node).addModelListener(
+				((UnitElement)node).addModelListener(
 						new ModelListener () {
 							public void modelChanged (final Model hitModel)	{
 								graphPanel.invalidate();
@@ -160,13 +161,12 @@ public class ImageFlowView extends FrameView {
 			}
 		});
 		
-		
 		selections.addSelectionListener(new SelectionListener() {
 			public void selectionChanged(Selectable selections) {
 				setSelected(selections.isSelected());
 			}
 		});
-		
+		setModified(false);
 	}
 
 	
@@ -181,6 +181,7 @@ public class ImageFlowView extends FrameView {
 		fileMenu.add(getAction("newDocument"));
 		fileMenu.add(getAction("open"));
 		fileMenu.add(getAction("generateMacro"));
+		fileMenu.add(getAction("save"));
 		fileMenu.add(getAction("saveAs"));
 		fileMenu.add(getAction("importGraph"));
 		
@@ -379,7 +380,11 @@ public class ImageFlowView extends FrameView {
 	}
 	
 	@Action public Task generateMacro() {
-	    return new GenerateMacroTask(getApplication(), graphController);
+	    return new RunMacroTask(getApplication(), graphController);
+	}
+	
+	@Action public Task exportMacro() {
+	    return new RunMacroTask(getApplication(), graphController);
 	}
 	
 
@@ -539,7 +544,12 @@ public class ImageFlowView extends FrameView {
 	
     @Action
     public Task runMacro() {
-        return new GenerateMacroTask(this.getApplication(), graphController);
+        return new RunMacroTask(this.getApplication(), graphController);
+    }
+    
+    @Action(enabledProperty = "modified")
+    public Task save() {
+        return new SaveFlowGraphTask(getFile());
     }
     
     @Action(enabledProperty = "modified")
@@ -548,7 +558,17 @@ public class ImageFlowView extends FrameView {
         int option = fc.showSaveDialog(getFrame());
         Task task = null;
         if (JFileChooser.APPROVE_OPTION == option) {
-            task = new SaveFlowGraphTask(fc.getSelectedFile());
+        	File selectedFile = fc.getSelectedFile();
+        	if(selectedFile.exists()) {
+				int response = JOptionPane.showConfirmDialog(this.getFrame(), 
+						"This file already exists. Do you want to overwrite it?",
+						"Overwrite existing file?", 
+						JOptionPane.OK_CANCEL_OPTION);
+				if (response == JOptionPane.OK_OPTION)
+					task = new SaveFlowGraphTask(selectedFile);
+					
+        	}
+            
         }
         return task;
     }

@@ -12,11 +12,11 @@ import org.jdesktop.application.Task;
  * @author danielsenff
  *
  */
-public class GenerateMacroTask extends Task {
+public class RunMacroTask extends Task {
 	
 	GraphController graphController;
 	
-	public GenerateMacroTask(final Application app, GraphController graphController) {
+	public RunMacroTask(final Application app, GraphController graphController) {
 		super(app);
 		this.graphController = graphController;
 	}
