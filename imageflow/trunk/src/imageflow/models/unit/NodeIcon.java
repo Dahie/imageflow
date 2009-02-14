@@ -78,7 +78,7 @@ public class NodeIcon {
 	 */
 	public NodeIcon(final UnitElement unit) {
 		this.unit = unit;
-		this.unitName = unit.getUnitName();
+		this.unitName = unit.getLabel();
 		this.unitID = unit.getUnitID();
 		
 		try {

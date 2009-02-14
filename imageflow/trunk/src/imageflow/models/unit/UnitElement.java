@@ -480,8 +480,14 @@ public class UnitElement extends AbstractUnit {
 
 			// obj != null
 			if (selected) {
-				g.setColor(Color.red);
-				g.drawRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4);
+				/*g.setColor(Color.red);
+				g.drawRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4);*/
+				g.setColor(new Color(0,0,255,40));
+			    g.fillRoundRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4, 
+			    		unitComponentIcon.arc, unitComponentIcon.arc);
+			    g.setColor(new Color(0,0,0,44));
+			    g.drawRoundRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4, 
+			    		unitComponentIcon.arc, unitComponentIcon.arc);
 			}
 			unitComponentIcon.paintBigIcon((Graphics2D) g);
 		}
@@ -516,8 +522,15 @@ public class UnitElement extends AbstractUnit {
 
 		// during draggin
 		if (dragging != null) {
-			g.setColor(Color.black);
-			g.drawRect(dragging.x, dragging.y, dragging.width-1, dragging.height-1);
+			/*g.setColor(Color.black);
+			g.drawRect(dragging.x, dragging.y, dragging.width-1, dragging.height-1);*/
+			
+			g.setColor(new Color(0,0,255, 40));
+		    g.fillRoundRect(dragging.x+5, dragging.y+5, getDimension().width-10, getDimension().height-10, 
+		    		unitComponentIcon.arc, unitComponentIcon.arc);
+		    g.setColor(new Color(0,0,0));
+		    g.drawRoundRect(dragging.x+5, dragging.y+5, getDimension().width-10, getDimension().height-10, 
+		    		unitComponentIcon.arc, unitComponentIcon.arc);
 		}
 
 		return new Rectangle(origin, getDimension());

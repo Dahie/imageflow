@@ -143,6 +143,26 @@ public class GraphPanel extends GPanel {
 		}
 	}
 
+	/**
+	 * @return the align
+	 */
+	public boolean isAlign() {
+		return align;
+	}
+
+	/**
+	 * @param align the align to set
+	 */
+	public void setAlign(boolean align) {
+		this.align = align;
+		if(align) {
+			alignElements();
+		}
+	}
+
+
+
+
 	/** 
 	 * paints a simple grid on the canvas
 	 * @param g
