@@ -53,4 +53,12 @@ public class ChoiceParameter extends StringParameter {
 		return array;
 	}
 	
+	/**
+	 * Return the index of the selected choice
+	 * @return
+	 */
+	public int getChoiceIndex() {
+		return this.choiceValues.indexOf(this.stringValue);
+	}
+	
 }

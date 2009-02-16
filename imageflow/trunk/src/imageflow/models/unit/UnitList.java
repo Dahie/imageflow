@@ -13,6 +13,8 @@ import imageflow.models.ConnectionList;
 import imageflow.models.Input;
 import imageflow.models.MacroElement;
 import imageflow.models.Output;
+import imageflow.models.parameter.BooleanParameter;
+import imageflow.models.parameter.ChoiceParameter;
 import imageflow.models.parameter.Parameter;
 import imageflow.models.unit.UnitElement.Type;
 
@@ -24,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -62,6 +65,7 @@ public class UnitList extends GList<Node> implements Model {
 	 */
 	public void read(File file) throws FileNotFoundException {
 		Node[] node = null;
+		Vector<UnitElement> newNodes = new Vector();
 
 		if(!file.exists()) throw new FileNotFoundException("reading failed, the file as not found");
 		int numUnits = 0;
@@ -83,6 +87,7 @@ public class UnitList extends GList<Node> implements Model {
 				Iterator<Element> unitsIterator = unitsList.iterator();
 				numUnits = unitsList.size() + 1;
 //				node = new Node[numUnits];
+				
 
 				// loop Ÿber alle Units
 				while (unitsIterator.hasNext()) { 
@@ -97,6 +102,7 @@ public class UnitList extends GList<Node> implements Model {
 							actualUnitElement.getChild("UnitDescription") != null) {
 						
 						int unitID 	= Integer.parseInt(actualUnitElement.getChild("UnitID").getValue());
+						System.out.println(label);
 						UnitDescription unitDescription = new UnitDescription(actualUnitElement.getChild("UnitDescription"));
 
 						// create unit
@@ -104,13 +110,12 @@ public class UnitList extends GList<Node> implements Model {
 						unitElement.setDisplayUnit(unitDescription.getIsDisplayUnit());
 						unitElement.setHelpString(unitDescription.helpString);
 						unitElement.setLabel(label);
+						newNodes.add(unitElement);
 						add(unitElement);
 					} else {
 						CommentNode comment = new CommentNode(new Point(xPos, yPos), label);
 						add(comment);
 					}
-
-					
 					
 				}
 			}
@@ -118,7 +123,7 @@ public class UnitList extends GList<Node> implements Model {
 			// read connections
 			Element connectionsElement = root.getChild("Connections");
 
-			if (connectionsElement != null) {  
+			if (unitsElement != null && connectionsElement != null) {  
 				List<Element> connectionsList = connectionsElement.getChildren();
 				Iterator<Element> connectionsIterator = connectionsList.iterator();
 
@@ -129,8 +134,8 @@ public class UnitList extends GList<Node> implements Model {
 					int fromOutputNumber 	= Integer.parseInt(actualConnectionElement.getChild("FromOutputNumber").getValue());
 					int toUnitID 			= Integer.parseInt(actualConnectionElement.getChild("ToUnitID").getValue());
 					int toInputNumber 		= Integer.parseInt(actualConnectionElement.getChild("ToInputNumber").getValue());
-					Connection con 			= new Connection(((UnitElement)this.get(fromUnitID-1)), fromOutputNumber, 
-							((UnitElement)this.get(toUnitID-1)), toInputNumber);
+					Connection con 			= new Connection(((UnitElement)newNodes.get(fromUnitID-1)), fromOutputNumber, 
+							((UnitElement)newNodes.get(toUnitID-1)), toInputNumber);
 					addConnection(con);
 				}
 			}
@@ -221,6 +226,20 @@ public class UnitList extends GList<Node> implements Model {
 					Element helpStringP = new Element("HelpString");
 					helpStringP.addContent(parameter.getHelpString());
 					parameterElement.addContent(helpStringP);
+					
+					//special parameters
+					
+					if(parameter instanceof ChoiceParameter) {
+						Element choiceNumber = new Element("ChoiceNumber");
+						choiceNumber.addContent(((ChoiceParameter)parameter).getChoiceIndex()+"");
+						parameterElement.addContent(choiceNumber);	
+					}
+					
+					if(parameter instanceof BooleanParameter) {
+						Element trueString = new Element("TrueString");
+						trueString.addContent(((BooleanParameter)parameter).getTrueString());
+						parameterElement.addContent(trueString);	
+					}
 				}
 
 				// deal with inputs

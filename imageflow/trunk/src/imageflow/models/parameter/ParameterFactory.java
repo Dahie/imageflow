@@ -41,7 +41,7 @@ public class ParameterFactory {
 			final Object value,
 			final String helpString, 
 			final String boolTrueString,
-			final int choiceIndex) {
+			final int choiceIndex) throws IllegalArgumentException {
 		
 		// see what parameter instance has to be created
 		if(value instanceof String) {

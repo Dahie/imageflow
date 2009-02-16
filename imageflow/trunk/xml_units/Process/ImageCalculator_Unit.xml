@@ -17,7 +17,8 @@
   		<DataType>StringArray</DataType>
   		<Value>Add Subtract Multiply Divide AND OR XOR</Value>
   		<HelpString>Defines what math should be used to merge both images</HelpString>
-  		<ChoiceNumber>1</ChoiceNumber></Parameter>
+  		<ChoiceNumber>1</ChoiceNumber>
+  	</Parameter>
   	<Parameter>
   		<Name>32 bit result</Name>
   		<DataType>boolean</DataType>
