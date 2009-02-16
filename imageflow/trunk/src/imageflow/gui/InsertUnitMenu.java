@@ -42,7 +42,7 @@ public class InsertUnitMenu extends JMenu {
 				JMenuItem source = (JMenuItem)(e.getSource());
 				String action = source.getText();
 				if (action.equals("Comment")) {	
-					CommentNode n = new CommentNode(new Point(savedPoint), "text"); 
+					CommentNode n = new CommentNode(savedPoint, "text"); 
 					savedPoint.translate(4, 4);
 					System.out.println(n);
 					activePanel.getNodeL().add(n, "text$0");

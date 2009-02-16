@@ -771,7 +771,8 @@ public class UnitElement extends AbstractUnit {
 				((StringParameter) parameter).setValue(newString);
 			}
 		}	
-
+		
+		notifyModelListeners();
 	}
 
 	/**

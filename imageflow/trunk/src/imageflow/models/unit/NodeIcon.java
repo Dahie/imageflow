@@ -51,7 +51,7 @@ public class NodeIcon {
 	protected Graphics2D g2;
 	
 	//Texts
-	protected String unitName ;
+//	protected String unitName ;
 	protected String parametersLabel = "P";
 	protected String infoLabel = "i";
 	/**
@@ -78,7 +78,6 @@ public class NodeIcon {
 	 */
 	public NodeIcon(final UnitElement unit) {
 		this.unit = unit;
-		this.unitName = unit.getLabel();
 		this.unitID = unit.getUnitID();
 		
 		try {
@@ -187,6 +186,8 @@ public class NodeIcon {
 		//draw text, status
 	    g2.setColor(Color.WHITE);
 
+	    String unitName = unit.getLabel();
+	    
 		// scale font on big lengths
 		FontMetrics fm = g2.getFontMetrics();
 	    int stringWidth = fm.stringWidth(unitName);
