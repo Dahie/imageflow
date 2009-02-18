@@ -496,7 +496,7 @@ public class UnitList extends GList<Node> implements Model {
 	public boolean hasSourcesAsDisplay() {
 		for (int i = 0; i < size(); i++) {
 			final UnitElement unit = (UnitElement) get(i);
-			if(unit.getType() == Type.SOURCE && unit.isDisplayUnit()) 
+			if(unit.getUnitType() == Type.SOURCE && unit.isDisplayUnit()) 
 				return true;
 		}
 		return false;

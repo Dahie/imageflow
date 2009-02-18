@@ -3,6 +3,8 @@
  */
 package imageflow.models.unit;
 
+import ij.ImagePlus;
+import ij.plugin.filter.PlugInFilter;
 import imageflow.models.parameter.ChoiceParameter;
 import imageflow.models.parameter.ParameterFactory;
 
@@ -50,7 +52,6 @@ public class UnitFactory {
 		} else 
 			unitElement = new UnitElement(new Point(origin), unitName, imageJSyntax);
 		
-		
 		unitElement.setColor(color);
 		
 		// add an icon if there is one mentioned and found
@@ -61,9 +62,6 @@ public class UnitFactory {
 					unitElement.setIcon(ImageIO.read(((SourceUnitElement) unitElement).getFile()));
 				else 
 					unitElement.setIcon(ImageIO.read(iconFile));	
-				
-				
-					
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -99,9 +97,9 @@ public class UnitFactory {
 			int imageType = output.imageType;
 			boolean doDisplay = output.doDisplay;
 			
-			if(unitElement instanceof SourceUnitElement) 
-				imageType = ((SourceUnitElement)unitElement).getBitDepth();
-			
+			if(unitElement instanceof SourceUnitElement) {
+				imageType = ((SourceUnitElement)unitElement).getImageType();
+			}
 			// imagetype -1 means output will be the same type as the input
 			unitElement.addOutput(name, shortName, imageType, doDisplay); 
 			

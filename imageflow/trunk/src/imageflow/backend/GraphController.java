@@ -123,7 +123,7 @@ public class GraphController{
 			if(node instanceof UnitElement) {
 				UnitElement unit = (UnitElement) node;
 				if(unit instanceof UnitElement
-						&& unit.getType() == Type.SOURCE) {
+						&& unit.getUnitType() == Type.SOURCE) {
 					for (Parameter parameter : unit.getParameters()) {
 						if(parameter instanceof StringParameter) {
 							File file = new File((String) parameter.getValue());
@@ -245,14 +245,14 @@ public class GraphController{
 						orderedList.add(remove);
 
 					} else if (!unit.hasInputsConnected() 
-							&& unit.getType() != Type.SOURCE) {
+							&& unit.getUnitType() != Type.SOURCE) {
 						// if unit has no connections actually, it can be discarded right away
 						unitElements.remove(index);
 						// if there is a branch with two units connected, the first one will be discarded, 
 						// the second will still exist, but as the input is now missing, it will 
 						// be deleted in the next lap
 					} else if (!unit.hasOutputsConnected() 
-							&& unit.getType() == Type.SOURCE 
+							&& unit.getUnitType() == Type.SOURCE 
 							&& !unit.isDisplayUnit()) {
 						// if source has no connected outputs and is not visible
 						unitElements.remove(index);

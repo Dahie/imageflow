@@ -3,6 +3,8 @@ package imageflow.models;
 import graph.Node;
 import graph.Pin;
 
+import ij.ImagePlus;
+import ij.plugin.filter.PlugInFilter;
 import imageflow.models.unit.UnitElement;
 
 import java.awt.Point;
@@ -38,7 +40,7 @@ public class Output extends Pin implements Connectable {
 	/**
 	 * the int value indicates the type of the generated image
 	 */
-	protected int outputBitDepth; 
+	protected int imageType; 
 
 	/**
 	 * the title of the image generated from this output
@@ -119,7 +121,7 @@ public class Output extends Pin implements Connectable {
 	public void setupOutput(final String name, final String shortname, final int outputBitDepth) {
 		this.name = name;
 		this.shortDisplayName = shortname;
-		this.outputBitDepth = outputBitDepth;
+		this.imageType = outputBitDepth;
 	}
 
 
@@ -154,21 +156,21 @@ public class Output extends Pin implements Connectable {
 	 * @return
 	 */
 	public int getImageBitDepth() {
-		return this.outputBitDepth;
+		return this.imageType;
 	}
 	
 	/**
 	 * @return the outputBitDepth
 	 */
 	public int getOutputBitDepth() {
-		return outputBitDepth;
+		return imageType;
 	}
 
 	/**
 	 * @param outputBitDepth the outputBitDepth to set
 	 */
 	public void setOutputBitDepth(int outputBitDepth) {
-		this.outputBitDepth = outputBitDepth;
+		this.imageType = outputBitDepth;
 	}
 
 	/**
@@ -233,16 +235,17 @@ public class Output extends Pin implements Connectable {
 	}
 
 	/**
-	 * Returns true, if the imageBitDepth in question is supported
-	 * by this Input.
+	 * Returns true, if the imageBitDepth in question is supported by this Input.
 	 * @param imageBitDepth
 	 * @return
 	 */
 	public boolean isImageBitDepthCompatible(final int imageBitDepth) {
-		System.out.println(getImageBitDepth()+" "+imageBitDepth);
+//		System.out.println(getImageBitDepth()+" "+imageBitDepth);
+//		System.out.println(getImageBitDepth()&imageBitDepth);
 		// -1 doesn't specify so ignore for now
+		
 		if(getImageBitDepth() != -1 && imageBitDepth != -1) {
-			return (getImageBitDepth()&imageBitDepth) != 0;	
+			return (getImageBitDepth()&imageBitDepth) != 0;
 		}
 		return false;
 	}

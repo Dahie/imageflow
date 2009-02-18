@@ -267,7 +267,6 @@ public class GraphPanel extends GPanel {
 
 			if(errorMessage.length() != 0) 
 				drawErrorMessage(g2, errorMessage, pin.getLocation());
-			//TODO here also check if there are loops
 
 		}
 	}
@@ -305,8 +304,8 @@ public class GraphPanel extends GPanel {
 	public static boolean isWithinRange(final int compareValue, 
 			final int startValue, 
 			final int endValue) {
-		return (compareValue > startValue 
-				&& compareValue < endValue);
+		return (compareValue > startValue) 
+				&& (compareValue < endValue);
 	}
 
 	/**
@@ -324,12 +323,10 @@ public class GraphPanel extends GPanel {
 			final Dimension dimension, 
 			final int margin) {
 		return isWithinRange(currentPoint.x, origin.x-margin, 
-				origin.x+dimension.width+margin)
+						origin.x+dimension.width+margin)
 				&& isWithinRange(currentPoint.y, origin.y - margin, 
 						origin.y + dimension.height + margin);
 	}
-
-
 
 	/**
 	 * Replace the current {@link UnitList} with a different one.

@@ -380,7 +380,7 @@ public class UnitElement extends AbstractUnit {
 	 * FILTER - {@link Input} and {@link Output}
 	 * @return
 	 */
-	public Type getType() {
+	public Type getUnitType() {
 		if(this.inputs.size() > 0 && this.outputs.size() == 0) {
 			return Type.SINK;
 		} else if ( this.inputs.size() == 0  && this.outputs.size() > 0) {
@@ -396,7 +396,7 @@ public class UnitElement extends AbstractUnit {
 	 */
 	@Override
 	public String toString() {
-		return super.toString() + " Name:"+this.label + " Type:" + this.getType();
+		return super.toString() + " Name:"+this.label + " Type:" + this.getUnitType();
 	}
 
 	/**

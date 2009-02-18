@@ -50,7 +50,8 @@ public class ConnectionList extends Edges implements Model {
 			final Connection connection = new Connection(((UnitElement)from.getParent()), from.getIndex(), 
 					((UnitElement)to.getParent()), to.getIndex());
 
-			
+			if(connection.areImageBitDepthCompatible())
+				return false;
 			
 			System.out.println("new connection: from Unit: " + from.getParent() 
 					+ " to Unit: " + to.getParent() 
@@ -68,6 +69,8 @@ public class ConnectionList extends Edges implements Model {
 			final Connection connection = new Connection(((UnitElement)to.getParent()), to.getIndex(), 
 					((UnitElement)from.getParent()), from.getIndex());
 			
+			if(connection.areImageBitDepthCompatible())
+				return false;
 			
 			
 			System.out.println("new connection: from Unit: " + from.getParent() 
