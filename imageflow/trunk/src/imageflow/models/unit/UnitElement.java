@@ -192,18 +192,6 @@ public class UnitElement extends AbstractUnit {
 
 
 
-	/**
-	 * for source units only
-	 * @return
-	 */
-	public int getBitDepth() {
-		final String path = ((StringParameter)parameters.get(0)).getValue();
-		System.out.println("path of initial image " +path);
-		final ImagePlus imp = IJ.openImage(path);
-		imp.close();
-		final int bitDepth = imp.getBitDepth();
-		return bitDepth;
-	}
 
 
 

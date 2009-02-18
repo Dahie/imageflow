@@ -28,6 +28,8 @@ public class Output extends Pin implements Connectable {
 	 * the name to be displayed in the context help
 	 */
 	protected String name;
+
+
 	/**
 	 * the short name to be displayed on the unit's icon
 	 */
@@ -154,6 +156,20 @@ public class Output extends Pin implements Connectable {
 	public int getImageBitDepth() {
 		return this.outputBitDepth;
 	}
+	
+	/**
+	 * @return the outputBitDepth
+	 */
+	public int getOutputBitDepth() {
+		return outputBitDepth;
+	}
+
+	/**
+	 * @param outputBitDepth the outputBitDepth to set
+	 */
+	public void setOutputBitDepth(int outputBitDepth) {
+		this.outputBitDepth = outputBitDepth;
+	}
 
 	/**
 	 * Get the abbreviated DisplayName
@@ -223,7 +239,12 @@ public class Output extends Pin implements Connectable {
 	 * @return
 	 */
 	public boolean isImageBitDepthCompatible(final int imageBitDepth) {
-		return (getImageBitDepth()&imageBitDepth) != 0;
+		System.out.println(getImageBitDepth()+" "+imageBitDepth);
+		// -1 doesn't specify so ignore for now
+		if(getImageBitDepth() != -1 && imageBitDepth != -1) {
+			return (getImageBitDepth()&imageBitDepth) != 0;	
+		}
+		return false;
 	}
 
 	/**

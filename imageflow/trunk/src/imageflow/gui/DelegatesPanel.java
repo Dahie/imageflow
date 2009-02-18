@@ -35,6 +35,7 @@ public class DelegatesPanel extends JPanel {
 		JTree delegatesTree = new JTree(delegatesModel);
 		delegatesTree.setRootVisible(false);
 		delegatesTree.setToggleClickCount(1);
+		delegatesTree.setDragEnabled(true);
 		
 		JScrollPane scrollPane = new JScrollPane(delegatesTree);
 		add(scrollPane, BorderLayout.CENTER);

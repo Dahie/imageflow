@@ -78,16 +78,11 @@ public class ImageFlowView extends FrameView {
 	private ConnectionList connections;
 	private GraphController graphController;
 
-
-
-
 	private JTextArea macroArea;
 	private GraphPanel graphPanel;
 	private HashMap<TreeNode,Delegate> unitDelegates;
 
 	private File file;
-
-	
 
 	private boolean modified = false;
 	private boolean selected = false;

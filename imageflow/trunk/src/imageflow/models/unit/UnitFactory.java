@@ -39,15 +39,31 @@ public class UnitFactory {
 		int numParas = unitDescription.numParas;
 		int numInputs = unitDescription.numInputs;
 		int numOutputs = unitDescription.numOutputs;
-		UnitElement unitElement = new UnitElement(origin, unitName, imageJSyntax);
 		Color color = unitDescription.color;
+		
+		// usual case, we deal with a UnitElement
+		
+		// if we have a SourceUnit, we have to take the according class
+		UnitElement unitElement;
+		if(unitName.equals("Image Source")) {
+			unitElement = new SourceUnitElement(new Point(origin), unitName, imageJSyntax);
+		} else 
+			unitElement = new UnitElement(new Point(origin), unitName, imageJSyntax);
+		
+		
 		unitElement.setColor(color);
 		
 		// add an icon if there is one mentioned and found
 		File iconFile = new File(unitDescription.pathToIcon);
 		if(iconFile.exists()) {
 			try {
-				unitElement.setIcon(ImageIO.read(iconFile));	
+				if(unitElement instanceof SourceUnitElement) 
+					unitElement.setIcon(ImageIO.read(((SourceUnitElement) unitElement).getFile()));
+				else 
+					unitElement.setIcon(ImageIO.read(iconFile));	
+				
+				
+					
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -83,7 +99,11 @@ public class UnitFactory {
 			int imageType = output.imageType;
 			boolean doDisplay = output.doDisplay;
 			
-			unitElement.addOutput(name, shortName, imageType, doDisplay); // -1 means output will be the same type as the input
+			if(unitElement instanceof SourceUnitElement) 
+				imageType = ((SourceUnitElement)unitElement).getBitDepth();
+			
+			// imagetype -1 means output will be the same type as the input
+			unitElement.addOutput(name, shortName, imageType, doDisplay); 
 			
 		}
 		
@@ -143,6 +163,7 @@ public class UnitFactory {
 	 * @param origin
 	 * @return
 	 */
+	@Deprecated
 	public static UnitElement createAddNoiseUnit(Point origin) {
 		// 
 		UnitElement noiseUnit = new UnitElement(origin, "Add Noise", "run(\"Add Noise\"); \n");
@@ -156,6 +177,7 @@ public class UnitFactory {
 	}
 	
 	
+	@Deprecated
 	public static UnitElement createHistogramUnit(Point origin) {
 		// 
 		UnitElement unit = new UnitElement(origin, "Histogram", "run(\"Histogram\"); \n");
@@ -215,6 +237,7 @@ public class UnitFactory {
 	 * @param origin
 	 * @return
 	 */
+	@Deprecated
 	public static UnitElement createImageCalculatorUnit(Point origin) {
 		
 		UnitElement mergeUnit = new UnitElement(origin, "Image Calculator", 
@@ -248,6 +271,7 @@ public class UnitFactory {
 	 * display name, syntax: "open("path");", 0 inputs, 1 output, 1 parameter
 	 * @return 
 	 */
+	@Deprecated
 	public static UnitElement createSourceUnit() {
 		// load filechooser, get path
 		JFileChooser imageFileChooser = new JFileChooser();
@@ -269,6 +293,7 @@ public class UnitFactory {
 	 * display name, syntax: "open("path");", 0 inputs, 1 output, 1 parameter
 	 * @return 
 	 */
+	@Deprecated
 	public static UnitElement createSourceUnit(Point origin) {
 		// load filechooser, get path
 		JFileChooser imageFileChooser = new JFileChooser();
@@ -290,6 +315,7 @@ public class UnitFactory {
 	 * display name, syntax: "open("path");", 0 inputs, 1 output, 1 parameter
 	 * @return 
 	 */
+	@Deprecated
 	public static UnitElement createSourceUnit(String path) {
 		return createSourceUnit(path, new Point(30,100));
 	}
@@ -300,9 +326,10 @@ public class UnitFactory {
 	 * @param origin
 	 * @return
 	 */
+	@Deprecated
 	public static UnitElement createSourceUnit(String path, Point origin) {
 
-		UnitElement sourceUnit = new UnitElement(origin, "Image Source", "open(\"PARA_STRING_1\");\n");
+		SourceUnitElement sourceUnit = new SourceUnitElement(origin, "Image Source", "open(\"PARA_STRING_1\");\n");
 		// setup of the first parameter
 		sourceUnit.addParameter(
 				ParameterFactory.createParameter("Input image file",	// parameter description
@@ -312,6 +339,7 @@ public class UnitFactory {
 		
 		// setup of the output of the (source) unit 0
 		int bitDepth = sourceUnit.getBitDepth();
+		sourceUnit.setColor(Color.decode("0x9cba92"));
 		sourceUnit.addOutput("Output", "O", bitDepth, false);
 		sourceUnit.updateUnitIcon();
 		return sourceUnit;
@@ -322,6 +350,7 @@ public class UnitFactory {
 	 * @param dimension
 	 * @return
 	 */
+	@Deprecated
 	public static UnitElement createBackgroundUnit(Dimension dimension) {
 		return createBackgroundUnit(dimension, new Point(30,30));
 	}
@@ -345,26 +374,11 @@ public class UnitFactory {
 		
 		// setup of the output of the (source) unit 0
 		sourceUnit.addOutput("Output", "O", ij.plugin.filter.PlugInFilter.DOES_RGB, false);
+		sourceUnit.setColor(new Color(0x9cba92));
 		sourceUnit.updateUnitIcon();
 		return sourceUnit;
 	}
 	
-	
-	
-//	public static UnitElement createFillBackground(Color color, Point origin){
-//		UnitElement fillUnit = new UnitElement(origin, "Source2", 
-//				"setForegroundColor(PARA_INTEGER_1, PARA_INTEGER_2, PARA_INTEGER_3); \n"+
-//				"floodFill(1, 1); \n", 0, 1, 3); 
-//		
-//		fillUnit.addParameter(
-//				ParameterFactory.createParameter("Red value", color.getRed(), "Red value"));
-//		fillUnit.addParameter(
-//				ParameterFactory.createParameter("Green value", color.getGreen(), "Green value"));
-//		fillUnit.addParameter(
-//				ParameterFactory.createParameter("Blue value", color.getBlue(), "Blue value"));
-//		fillUnit.addOutput("Output", "O", ij.plugin.filter.PlugInFilter.DOES_RGB);
-//		return fillUnit;
-//	}
 	
 	
 	/**
@@ -382,6 +396,7 @@ public class UnitFactory {
 	 * @param origin
 	 * @return
 	 */
+	@Deprecated
 	public static UnitElement createGaussianBlurUnit(Point origin) {
 		// 
 		UnitElement blurUnit = new UnitElement(origin, "Gaussian Blur", "run(\"Gaussian Blur...\", \"sigma=PARA_DOUBLE_1\");\n");
