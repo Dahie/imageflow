@@ -39,7 +39,7 @@ public abstract class Node implements Selectable, Changeable, Labelable, Cloneab
 
 // basic constructor
 	public Node(Point origin) {
-		setOrigin(origin);
+		this.origin = origin;
 	}
 
 	public String getLabel() {

@@ -84,7 +84,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 
 	
 	boolean cursor=true; // cursor is under control?
-	Rectangle rect;
+	protected Rectangle rect;
 	String insertBeanName;
 	Class insertBean = null;
 	JMenu newMenu;
