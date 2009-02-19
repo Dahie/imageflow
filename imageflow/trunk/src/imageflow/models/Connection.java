@@ -47,9 +47,9 @@ public class Connection extends Edge {
 	
 	/**
 	 * @param fromUnit
-	 * @param fromOutputNumber
+	 * @param fromOutputNumber index starting with 1
 	 * @param toUnit
-	 * @param toInputNumber
+	 * @param toInputNumber index starting with 1
 	 */
 	public Connection(final UnitElement fromUnit, 
 			final int fromOutputNumber, 
@@ -240,7 +240,8 @@ public class Connection extends Edge {
 		Output output = ((Output)this.from);
 		
 //		boolean areCompatible = (input.getImageBitDepth()&output.getImageBitDepth()) != 0;
-		boolean areCompatible = input.isImageBitDepthCompatible(output.getImageBitDepth());
+//		boolean areCompatible = input.isImageBitDepthCompatible(output.getImageBitDepth());
+		boolean areCompatible = output.isImageBitDepthCompatible(input.getImageBitDepth());
 		return areCompatible;
 	}
 

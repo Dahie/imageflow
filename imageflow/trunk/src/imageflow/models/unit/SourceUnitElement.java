@@ -9,6 +9,7 @@ import imageflow.models.Output;
 import imageflow.models.parameter.StringParameter;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class SourceUnitElement extends UnitElement {
@@ -26,19 +27,21 @@ public class SourceUnitElement extends UnitElement {
 	@Override
 	public void showProperties() {
 		super.showProperties();
-
-		String path = (String) parameters.get(0).getValue();
-		if(new File(path).exists()) {
-			int imageType = getImageType();
-
-			// change bitdepth for all outputs
-			for (Output output : outputs) {
-				output.setOutputBitDepth(imageType);
-			}
-
+		int imageType = -1;
+		if(getFile().exists()) {
+			imageType = getImageType();
+			this.unitComponentIcon.setIcon(getImagePlus().getImage().getScaledInstance(48, 48, BufferedImage.SCALE_FAST));
+			
 		} else {
 			System.out.println("file doesn't exist");
 		}
+		
+		this.setLabel(getFile().getName());
+		// change bitdepth for all outputs
+		for (Output output : outputs) {
+			output.setOutputBitDepth(imageType);
+		}
+		
 		notifyModelListeners();
 	}
 
@@ -47,8 +50,7 @@ public class SourceUnitElement extends UnitElement {
 	 * @return
 	 */
 	public int getBitDepth() {
-		final String path = ((StringParameter)parameters.get(0)).getValue();
-		System.out.println("path of image: " +path);
+		final String path = getFilePath();
 		if(new File(path).exists()) {
 			final ImagePlus imp = IJ.openImage(path);
 			imp.close();
@@ -59,8 +61,7 @@ public class SourceUnitElement extends UnitElement {
 	}
 	
 	public int getImageType() {
-		final String path = ((StringParameter)parameters.get(0)).getValue();
-		System.out.println("path of image: " +path);
+		final String path = getFilePath();
 		if(new File(path).exists()) {
 			final ImagePlus imp = IJ.openImage(path);
 			imp.close();
@@ -78,11 +79,23 @@ public class SourceUnitElement extends UnitElement {
 			case ImagePlus.COLOR_RGB:
 				return PlugInFilter.DOES_RGB;
 			}
-			
 		}
 		return -1; 
 	}
 	
+
+	public ImagePlus getImagePlus() {
+		final String path = getFilePath();
+		if(new File(path).exists()) {
+			final ImagePlus imp = IJ.openImage(path);
+			return imp;
+		}
+		return null; 
+	}
+	
+	public String getFilePath() {
+		return ((StringParameter)parameters.get(0)).getValue();
+	}
 	
 	public File getFile() {
 		final String path = ((StringParameter)parameters.get(0)).getValue();

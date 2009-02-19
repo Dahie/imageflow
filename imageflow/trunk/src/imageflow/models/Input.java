@@ -290,7 +290,10 @@ public class Input extends Pin implements Connectable {
 	 * @return
 	 */
 	public boolean isImageBitDepthCompatible(final int imageBitDepth) {
-		return (getImageBitDepth()&imageBitDepth) != 0;
+		if(getImageBitDepth() != -1 && imageBitDepth != -1) {
+			return (getImageBitDepth()&imageBitDepth) != 0;	
+		}
+		return false;
 	}
 
 

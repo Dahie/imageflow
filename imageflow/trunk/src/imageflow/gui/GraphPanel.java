@@ -3,13 +3,16 @@
  */
 package imageflow.gui;
 
+import graph.Edge;
 import graph.Node;
 import graph.NodeText;
 import graph.Pin;
 import imageflow.backend.GraphController;
+import imageflow.models.Connection;
 import imageflow.models.Input;
 import imageflow.models.Output;
 import imageflow.models.SelectionList;
+import imageflow.models.unit.CommentNode;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitList;
 
@@ -21,6 +24,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -103,14 +107,32 @@ public class GraphPanel extends GPanel {
 
 			// Jemand hat die Art des Drops (Move, Copy, Link)
 			// geändert
-			public void dropActionChanged(
-					DropTargetDragEvent e) {}
+			public void dropActionChanged(DropTargetDragEvent e) {}
 
 		};
 //		DropTarget dropTarget = new DropTarget(del, dropTargetListener);
 	}
 
-
+	/**
+	 * paint things that eventually go on a printer
+	 * @param g
+	 */
+    public void paintPrintable(Graphics g) {
+        rect = new Rectangle();
+		for (Node t : nodeL) {
+			rect = rect.union(t.paint(g, this));	
+		}
+        setPreferredSize(rect.getSize());
+        Connection conn;
+		for (Edge aEdge : EdgeL) {
+			conn = (Connection)aEdge; 
+			Point from = aEdge.from.getLocation();
+			Point to = aEdge.to.getLocation();
+			g.setColor(  (conn.areImageBitDepthCompatible()) ? Color.BLACK : Color.RED );
+			g.drawLine(from.x, from.y, to.x, to.y);
+		}
+		revalidate();
+    }
 
 
 	/* (non-Javadoc)
@@ -338,11 +360,11 @@ public class GraphPanel extends GPanel {
 
 	@Override
 	public void properties(Node node) {
-		if (node instanceof NodeText) {
+		if (node instanceof CommentNode) {
 			//			propertySheet.setVisible(false);
-			String inputValue = JOptionPane.showInputDialog("Edit text:",((NodeText)node).getText()); 
+			String inputValue = JOptionPane.showInputDialog("Edit text:",((CommentNode)node).getText()); 
 			if ((inputValue != null)&&(inputValue.length() != 0)) {
-				((NodeText)node).setText(inputValue);
+				((CommentNode)node).setText(inputValue);
 				repaint();
 			}
 		}

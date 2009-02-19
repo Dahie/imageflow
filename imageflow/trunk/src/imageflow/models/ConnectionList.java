@@ -34,14 +34,14 @@ public class ConnectionList extends Edges implements Model {
 	 * @see graph.Edges#add(graph.Pin, graph.Pin)
 	 */
 	@Override
-	public boolean add(final Pin from, final Pin to) {
+	/*public boolean add(final Pin from, final Pin to) {
 		
 		// check if both pins are on the same node
 		if(from.getParent().equals(to.getParent())) return false;
 		
 		System.out.println("add connection");
 			
-			
+		
 		// check if connection is between input and output, not 2 outputs or two inputs
 		if((from instanceof Output && to instanceof Input) ) {
 			// connect from Input to Output
@@ -50,7 +50,7 @@ public class ConnectionList extends Edges implements Model {
 			final Connection connection = new Connection(((UnitElement)from.getParent()), from.getIndex(), 
 					((UnitElement)to.getParent()), to.getIndex());
 
-			if(connection.areImageBitDepthCompatible())
+			if(!connection.areImageBitDepthCompatible())
 				return false;
 			
 			System.out.println("new connection: from Unit: " + from.getParent() 
@@ -66,22 +66,46 @@ public class ConnectionList extends Edges implements Model {
 //			final boolean isLoop = ((Input)from).knows(to.getParent());
 //			if(isLoop) return false;
 			
-			final Connection connection = new Connection(((UnitElement)to.getParent()), to.getIndex(), 
+			final Connection connection = new Connection(
+					((UnitElement)to.getParent()), to.getIndex(), 
 					((UnitElement)from.getParent()), from.getIndex());
 			
-			if(connection.areImageBitDepthCompatible())
-				return false;
+//			if(!connection.areImageBitDepthCompatible())
+//				return false;
 			
 			
 			System.out.println("new connection: from Unit: " + from.getParent() 
 					+ " to Unit: " + to.getParent() 
 					+ " at Input" + to.getIndex());
 			return this.add(connection);
+//		}
+		
+//		System.out.println("disallowed connection");
+//		return false;
+		
+	}*/
+	
+	public boolean add(final Pin from, final Pin to) {
+		
+		// check if both pins are on the same node
+		if(from.getParent().equals(to.getParent())) return false;
+		
+		System.out.println("add connection");
+
+		// check if connection is between input and output, not 2 outputs or two inputs
+		if((from instanceof Output && to instanceof Input) ) {
+			final Connection connection = new Connection(
+					((UnitElement)from.getParent()), from.getIndex(), 
+					((UnitElement)to.getParent()), to.getIndex());
+			return this.add(connection);
+		} else if (  (from instanceof Input && to instanceof Output) ) {
+			final Connection connection = new Connection(
+					((UnitElement)to.getParent()), to.getIndex(), 
+					((UnitElement)from.getParent()), from.getIndex());
+			return this.add(connection);
 		}
 		
-		System.out.println("disallowed connection");
 		return false;
-		
 	}
 	
 	/**
@@ -112,11 +136,10 @@ public class ConnectionList extends Edges implements Model {
 		// check the bit depth
 		if(!connection.areImageBitDepthCompatible()) {
 			System.out.println("Connection disallowed: Incombatible bit depth");
-			return false;
+//			return false;
 			}
 		
 		//TODO check if connection produces loop
-//		if(output.knows(input.getParent())) return false;
 //		if(output.knows(input.getParent())) {
 		if(input.knows(output.getParent())) {
 			System.out.println("Connection disallowed: Loop detected");
@@ -134,20 +157,31 @@ public class ConnectionList extends Edges implements Model {
 			}
 		}
 		
-//		input.connectTo(connection.getFromUnit(), connection.from.getIndex());
-//		output.connectTo(connection.getToUnit(), connection.to.getIndex());
 		connection.connect();
 		
-		return super.add(connection);
+		boolean add = super.add(connection);
+		notifyModelListeners();
+		return add;
 	}
+	
+	
+	public boolean addUnchecked(final Connection connection) {
+		connection.connect();
+		boolean add = super.add(connection);
+		notifyModelListeners();
+		return add;
+	}
+	
+	
 
 	@Override
 	public Connection remove(final int index) {
 		final Connection connection = (Connection) this.get(index);
 		((Input)connection.to).disconnect();
 		((Output)connection.from).disconnect();
+		Connection remove = (Connection) super.remove(index);
 		notifyModelListeners();
-		return (Connection) super.remove(index);
+		return remove;
 	}
 	
 	@Override

@@ -118,6 +118,7 @@ public class GraphController{
 			return false; 
 		}
 
+		
 		// sources -> file exists
 		for (Node node : nodes) {
 			if(node instanceof UnitElement) {
@@ -145,8 +146,11 @@ public class GraphController{
 			for (Iterator iterator = connections.iterator(); iterator.hasNext();) {
 				Connection connection = (Connection) iterator.next();
 
-				/*if (!connection.areImageBitDepthCompatible())
-					return false;*/
+				if (!connection.areImageBitDepthCompatible()) {
+					System.err.println("Faulty connection, image type not compatible");
+					return false;
+				}
+					
 
 				switch(connection.checkConnection()) {
 				case MISSING_BOTH:

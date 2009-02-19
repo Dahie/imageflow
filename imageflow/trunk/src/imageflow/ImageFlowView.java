@@ -127,19 +127,21 @@ public class ImageFlowView extends FrameView {
 						new ModelListener () {
 							public void modelChanged (final Model hitModel)	{
 								graphPanel.invalidate();
+								graphPanel.repaint();
 								setModified(true);
 							}
 						});	
-			} else if(node instanceof UnitElement) {
+			} else //if(node instanceof UnitElement) 
+			{
 				((UnitElement)node).addModelListener(
 						new ModelListener () {
 							public void modelChanged (final Model hitModel)	{
 								graphPanel.invalidate();
+								graphPanel.repaint();
 								setModified(true);
 							}
 						});	
 			}
-			
 		}
 		
 		units.addModelListener(new ModelListener() {

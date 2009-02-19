@@ -151,27 +151,7 @@ public class Output extends Pin implements Connectable {
 	}
 	
 
-	/**
-	 * Gets the Images bitdepth.
-	 * @return
-	 */
-	public int getImageBitDepth() {
-		return this.imageType;
-	}
-	
-	/**
-	 * @return the outputBitDepth
-	 */
-	public int getOutputBitDepth() {
-		return imageType;
-	}
 
-	/**
-	 * @param outputBitDepth the outputBitDepth to set
-	 */
-	public void setOutputBitDepth(int outputBitDepth) {
-		this.imageType = outputBitDepth;
-	}
 
 	/**
 	 * Get the abbreviated DisplayName
@@ -234,6 +214,50 @@ public class Output extends Pin implements Connectable {
 		return this.to;
 	}
 
+	
+	/**
+	 * Gets the true Image type. This can be either the own imagetype of this output
+	 * or by traversing along the graph until it gets it's initial type.
+	 * @return
+	 */
+	public int getImageBitDepth() {
+		
+		if(this.imageType != -1 && this.imageType != PlugInFilter.DOES_ALL) {
+			return this.imageType; 
+		} else {
+			
+			// return type of parents input connected output
+			UnitElement unitElement = (UnitElement)parent;
+
+			//TODO this could be nicer, how to handle multiple inputs?
+			if(unitElement.hasInputsConnected()) {
+				Input input = unitElement.getInput(0);
+				return input.getFromOutput().getImageBitDepth();	
+				
+			} else {
+				// this means our output doesn't know his own capabilities
+				// and because it has no inputs, it can't get them anywhere
+				// this sucks
+				return -1;
+			}
+			
+		}
+	}
+	
+	/**
+	 * @return the outputBitDepth
+	 */
+	public int getOutputBitDepth() {
+		return imageType;
+	}
+
+	/**
+	 * @param outputBitDepth the outputBitDepth to set
+	 */
+	public void setOutputBitDepth(int outputBitDepth) {
+		this.imageType = outputBitDepth;
+	}
+	
 	/**
 	 * Returns true, if the imageBitDepth in question is supported by this Input.
 	 * @param imageBitDepth
@@ -244,8 +268,11 @@ public class Output extends Pin implements Connectable {
 //		System.out.println(getImageBitDepth()&imageBitDepth);
 		// -1 doesn't specify so ignore for now
 		
-		if(getImageBitDepth() != -1 && imageBitDepth != -1) {
-			return (getImageBitDepth()&imageBitDepth) != 0;
+		int myImageBitDepth = getImageBitDepth();
+		if(myImageBitDepth != -1 && imageBitDepth != -1) {
+			return (myImageBitDepth&imageBitDepth) != 0;
+		} else if (myImageBitDepth == -1 && imageBitDepth != -1) {
+			System.err.println("couldn't find type");
 		}
 		return false;
 	}

@@ -2,7 +2,7 @@
  
 <FlowDescription> 
 	<Units>
-	<Unit>
+	<Unit type="Source">
 		<UnitID>1</UnitID>
 		<XPos>50</XPos>
 		<YPos>50</YPos>

@@ -32,13 +32,13 @@
 	<Input>
 		<Name>Input1</Name>
 		<ShortName>I1</ShortName>	
-		<ImageType>-1</ImageType>
+		<ImageType>31</ImageType>
 		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
 	<Input>
 		<Name>Input2</Name>
 		<ShortName>I2</ShortName>	
-		<ImageType>-1</ImageType>
+		<ImageType>31</ImageType>
 		<NeedToCopyInput>false</NeedToCopyInput></Input>
 </Inputs>
 

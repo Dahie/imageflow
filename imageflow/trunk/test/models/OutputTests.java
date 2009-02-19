@@ -134,7 +134,7 @@ public class OutputTests extends TestCase {
 		UnitElement unit1 = new UnitElement("unit1", "some syntax");
 		unit1.addOutput("output1", "o", PlugInFilter.DOES_32, false);
 		unit1.addOutput("output2", "o", PlugInFilter.DOES_ALL, false);
-		unit1.addOutput("output2", "o", -1, false);
+		unit1.addOutput("output3", "o", -1, false);
 		Output output1 = unit1.getOutput(0);
 		Output output2 = unit1.getOutput(1);
 		Output output3 = unit1.getOutput(2);
@@ -153,16 +153,123 @@ public class OutputTests extends TestCase {
 		assertTrue("32 to all", input3.isImageBitDepthCompatible(output1.getImageBitDepth()));*/
 		
 		assertTrue("both do 32", output1.isImageBitDepthCompatible(input1.getImageBitDepth()));
-		assertTrue("All to 16", output2.isImageBitDepthCompatible(input1.getImageBitDepth()));
+		// ok, technically ALL to 32 does work, but since the input tests for a concrete type, 
+		// and not for a could-be, this is false
+		//
+		assertTrue("All to 32", output2.isImageBitDepthCompatible(input1.getImageBitDepth()));
 		assertFalse("32 to 16", output1.isImageBitDepthCompatible(input2.getImageBitDepth()));
-		assertTrue("32 to all", output3.isImageBitDepthCompatible(input1.getImageBitDepth()));
-		
-		
-		// now test pins, which don't care
-		//TODO hm how should this react actually? needs an input set
-		/*assertTrue("-1 to 16", input2.isImageBitDepthCompatible(output3.getImageBitDepth()));
-		assertTrue("-1 to ALL", input3.isImageBitDepthCompatible(output3.getImageBitDepth()));*/
+		assertFalse("-1 to 16", output3.isImageBitDepthCompatible(input2.getImageBitDepth()));
+		assertFalse("32 to 16", output1.isImageBitDepthCompatible(input2.getImageBitDepth()));
 
+	}
+	
+	public String verboseBitDepth(int imagetype) {
+		switch(imagetype) {
+		case PlugInFilter.DOES_16:
+			return "DOES_16";
+		case PlugInFilter.DOES_32:
+			return "DOES_32";
+		case PlugInFilter.DOES_8G:
+			return "DOES_8G";
+		case PlugInFilter.DOES_8C:
+			return "DOES_8C";
+		case PlugInFilter.DOES_RGB:
+			return "DOES_RGB";
+		case PlugInFilter.DOES_ALL:
+			return "DOES_ALL";
+		case PlugInFilter.DOES_STACKS:
+			return "DOES_STACKS";
+		case -1:
+			return "predecessor type";
+		}
+		return "unknown";
+	}
+	
+	public void traverseImageBitDepth(int unit1Obitdepth, 
+			int unit2Ibitdepth, int unit2Obitdepth, 
+			int unit3Ibitdepth,
+			boolean expFirstConn, boolean expScndConn) {
+		UnitElement unit1 = new UnitElement("unit1", "some syntax");
+		unit1.addOutput("output1", "o", unit1Obitdepth, false);
+		
+		UnitElement unit2 = new UnitElement("unit2", "some syntax");
+		unit2.addInput("input1", "i", unit2Ibitdepth, false);
+		unit2.addOutput("output1", "o", unit2Obitdepth, false);
+
+		UnitElement unit3 = new UnitElement("unit3", "some syntax");
+		unit3.addInput("input1", "i", unit3Ibitdepth, false);
+
+		Connection conn1 = new Connection(unit1, 1, unit2, 1); // 32 to 32
+		conn1.connect();
+		assertEquals("Conn1: "+verboseBitDepth(unit1Obitdepth)+" to "+ verboseBitDepth(unit2Ibitdepth), 
+				expFirstConn, conn1.areImageBitDepthCompatible());
+		Connection conn2 = new Connection(unit2, 1, unit3, 1); // 32 to 32
+		conn2.connect();
+		assertEquals("Conn2: "+verboseBitDepth(unit2Obitdepth)+" to "+ verboseBitDepth(unit3Ibitdepth), 
+				expScndConn, conn2.areImageBitDepthCompatible());
+	}
+	
+	public void testImageBitDepthTraversing() {
+		
+		traverseImageBitDepth(PlugInFilter.DOES_32, //unit 1 output
+				PlugInFilter.DOES_32, PlugInFilter.DOES_32,  //unit2 input, output
+				PlugInFilter.DOES_32, true, true); // unit 3, expectations
+		
+		traverseImageBitDepth(PlugInFilter.DOES_32, //unit 1 output
+				PlugInFilter.DOES_ALL, PlugInFilter.DOES_32,  //unit2 input, output
+				PlugInFilter.DOES_ALL, true, true); // unit 3, expectations
+		
+		
+		
+		traverseImageBitDepth(PlugInFilter.DOES_32, //unit 1 output
+				PlugInFilter.DOES_ALL, PlugInFilter.DOES_32,  //unit2 input, output
+				PlugInFilter.DOES_16, true, false); // unit 3, expectations
+		traverseImageBitDepth(PlugInFilter.DOES_32, //unit 1 output
+				PlugInFilter.DOES_16, PlugInFilter.DOES_32,  //unit2 input, output
+				PlugInFilter.DOES_32, false, true); // unit 3, expectations
+		
+		
+		traverseImageBitDepth(PlugInFilter.DOES_32, //unit 1 output
+				PlugInFilter.DOES_ALL, -1,  //unit2 input, output
+				PlugInFilter.DOES_32, true, true); // unit 3, expectations
+		
+		traverseImageBitDepth(PlugInFilter.DOES_16, //unit 1 output
+				PlugInFilter.DOES_ALL, -1,  //unit2 input, output
+				PlugInFilter.DOES_32, true, false); // unit 3, expectations
+
+		traverseImageBitDepth(PlugInFilter.DOES_16, //unit 1 output
+				PlugInFilter.DOES_ALL, -1,  //unit2 input, output
+				PlugInFilter.DOES_ALL, true, true); // unit 3, expectations	
+	}
+	
+	
+	public void testTraversingImageBitDepth() {
+		UnitElement unit1 = new UnitElement("unit1", "some syntax");
+		unit1.addOutput("output1", "o", PlugInFilter.DOES_32, false);
+		Output output1 = unit1.getOutput(0);
+		
+		UnitElement unit2 = new UnitElement("unit2", "some syntax");
+		unit2.addInput("input1", "i", PlugInFilter.DOES_ALL, false);
+		Input input1 = unit2.getInput(0);
+		unit2.addOutput("output1", "o", -1, false);
+		Output output2 = unit2.getOutput(0);
+		
+//		UnitElement unit3 = new UnitElement("unit3", "some syntax");
+//		unit3.addInput("input1", "i", unit3Ibitdepth, false);
+
+		Connection conn1 = new Connection(unit1, 1, unit2, 1);
+		conn1.connect();
+		
+		assertTrue("travers from DOES_32", 
+				output1.isImageBitDepthCompatible(PlugInFilter.DOES_32));
+		assertFalse("travers from DOES_32", 
+				output1.isImageBitDepthCompatible(PlugInFilter.DOES_16));
+		
+		assertTrue("travers from DOES_32 via DOES_ALL to -1", 
+				output2.isImageBitDepthCompatible(PlugInFilter.DOES_32));
+		
+		assertFalse("travers from DOES_32 via DOES_ALL to -1", 
+				output2.isImageBitDepthCompatible(PlugInFilter.DOES_16));
 
 	}
 	
