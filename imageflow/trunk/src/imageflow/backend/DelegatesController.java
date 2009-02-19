@@ -8,6 +8,7 @@ import imageflow.models.unit.UnitFactory;
 
 import java.awt.Point;
 import java.io.File;
+import java.util.Enumeration;
 import java.util.HashMap;
 
 import javax.swing.JMenu;
@@ -82,12 +83,13 @@ public class DelegatesController {
 					public UnitElement createUnit(final Point origin) {
 						return UnitFactory.createProcessingUnit(unitDescription, origin);
 					}
+
 				};
 				//				unitDelegates.add(unitDelegate);
 				DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(unitDelegate.getName());
 				delegates.put(treeNode, unitDelegate);
 
-				((DefaultMutableTreeNode) node).add(treeNode);
+				((DefaultMutableTreeNode) node).add(unitDelegate);
 				JMenuItem item = new JMenuItem(unitDelegate.getName());
 				menu.add(item);
 			}

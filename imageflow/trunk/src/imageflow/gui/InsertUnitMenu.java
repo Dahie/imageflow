@@ -1,5 +1,6 @@
 package imageflow.gui;
 
+import imageflow.backend.DelegatesController;
 import imageflow.backend.Model;
 import imageflow.backend.ModelListener;
 import imageflow.models.unit.CommentNode;
@@ -9,11 +10,12 @@ import imageflow.models.unit.UnitElement;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeModel;
 
 import visualap.Delegate;
 import visualap.ErrorPrinter;
@@ -58,8 +60,6 @@ public class InsertUnitMenu extends JMenu {
 				}
 
 				// add selected node
-				//				for (int i = 0; i < availableUnits.size(); i++) {
-				//					UnitDelegate delegate = (UnitDelegate)availableUnits.get(i);
 				for (Delegate delegate : availableUnits) {
 					if(delegate instanceof UnitDelegate) {
 						UnitDelegate unitDelegate = (UnitDelegate) delegate;
@@ -88,11 +88,14 @@ public class InsertUnitMenu extends JMenu {
 			mi.setToolTipText("Insert Notes or Comments to the graph.");
 			add(mi).addActionListener(newAction);		
 
+			TreeModel tree = DelegatesController.getInstance().delegatesModel;
+			
+			MutableTreeNode root =  (MutableTreeNode) tree.getRoot();
+			createMenu(this, newAction, root);
+			
+			
 			//list over all available units
-
-			//		for (int i = 0; i < availableUnits.size(); i++) {
-			//			UnitDelegate delegate = (UnitDelegate) availableUnits.get(i);
-			for (Delegate delegate : availableUnits) {
+			/*for (Delegate delegate : availableUnits) {
 				if(delegate instanceof UnitDelegate) {
 					UnitDelegate unitDelegate = (UnitDelegate) delegate;
 
@@ -100,7 +103,24 @@ public class InsertUnitMenu extends JMenu {
 					mi.setToolTipText(unitDelegate.getToolTipText());
 					add(mi).addActionListener(newAction);
 				}
+			}*/
+	}
+
+	private void createMenu(JMenu menu, ActionListener newAction, MutableTreeNode root) {
+		JMenuItem mi;
+		for (int i = 0; i < root.getChildCount(); i++) {
+			MutableTreeNode node = (MutableTreeNode) root.getChildAt(i);
+			if(node instanceof UnitDelegate) {
+				UnitDelegate unitDelegate = (UnitDelegate)node;
+				mi = new JMenuItem(unitDelegate.getName());
+				mi.setToolTipText(unitDelegate.getToolTipText());
+				menu.add(mi).addActionListener(newAction);
+			} else {
+				JMenu subMenu = new JMenu(node.toString());
+				createMenu(subMenu, newAction, node);
+				menu.add(subMenu);
 			}
+		}
 	}
 
 }

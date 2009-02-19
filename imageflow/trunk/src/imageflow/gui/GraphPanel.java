@@ -5,7 +5,6 @@ package imageflow.gui;
 
 import graph.Edge;
 import graph.Node;
-import graph.NodeText;
 import graph.Pin;
 import imageflow.backend.GraphController;
 import imageflow.models.Connection;
@@ -28,6 +27,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
@@ -110,7 +110,8 @@ public class GraphPanel extends GPanel {
 			public void dropActionChanged(DropTargetDragEvent e) {}
 
 		};
-//		DropTarget dropTarget = new DropTarget(del, dropTargetListener);
+		DropTarget dropTarget = new DropTarget(this, dropTargetListener);
+		this.setDropTarget(dropTarget);
 	}
 
 	/**
