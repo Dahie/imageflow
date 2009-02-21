@@ -2,7 +2,6 @@ package imageflow.models.unit;
 
 import ij.IJ;
 import ij.ImagePlus;
-import ij.io.Opener;
 import ij.plugin.filter.PlugInFilter;
 import imageflow.models.MacroElement;
 import imageflow.models.Output;
@@ -11,6 +10,8 @@ import imageflow.models.parameter.StringParameter;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
+
+import javax.swing.JFileChooser;
 
 public class SourceUnitElement extends UnitElement {
 
@@ -26,7 +27,24 @@ public class SourceUnitElement extends UnitElement {
 
 	@Override
 	public void showProperties() {
+		
+		// display filedialog
+	    JFileChooser fc = new JFileChooser();
+	    String filepath = (String)getParameter(0).getValue();
+	    fc.setSelectedFile(new File(filepath));
+	    
+	    int option = fc.showOpenDialog(null);
+	    if (option == JFileChooser.APPROVE_OPTION) {
+	    	filepath = fc.getSelectedFile().getAbsolutePath();
+	    	// backslashes need to be escaped
+	    	filepath = filepath.replace("\\", "\\\\"); // \ to \\
+	    	((StringParameter)getParameter(0)).setValue(filepath);
+	    }
+		
+		
 		super.showProperties();
+		
+		
 		int imageType = -1;
 		if(getFile().exists()) {
 			imageType = getImageType();

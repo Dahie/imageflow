@@ -49,6 +49,8 @@ public class UnitFactory {
 		UnitElement unitElement;
 		if(unitName.equals("Image Source")) {
 			unitElement = new SourceUnitElement(new Point(origin), unitName, imageJSyntax);
+		} else if(unitName.equals("Background")) {
+			unitElement = new BackgroundUnitElement(new Point(origin), unitName, imageJSyntax);
 		} else 
 			unitElement = new UnitElement(new Point(origin), unitName, imageJSyntax);
 		
@@ -98,6 +100,8 @@ public class UnitFactory {
 			boolean doDisplay = output.doDisplay;
 			
 			if(unitElement instanceof SourceUnitElement) {
+				imageType = ((SourceUnitElement)unitElement).getImageType();
+			} else if(unitElement instanceof SourceUnitElement) {
 				imageType = ((SourceUnitElement)unitElement).getImageType();
 			}
 			// imagetype -1 means output will be the same type as the input

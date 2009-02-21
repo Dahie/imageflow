@@ -73,7 +73,8 @@ public class InsertUnitMenu extends JMenu {
 								activePanel.repaint();
 								n.addModelListener(new ModelListener() {
 									public void modelChanged(Model model) {
-										activePanel.repaint();
+										activePanel.invalidate();
+										//TODO setModiefied
 									}
 								});
 							} catch (Exception ex) {

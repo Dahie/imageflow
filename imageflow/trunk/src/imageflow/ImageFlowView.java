@@ -4,6 +4,7 @@ import graph.Edge;
 import graph.Node;
 import graph.Selection;
 import helper.FileDrop;
+import ij.IJ;
 import imageflow.backend.DelegatesController;
 import imageflow.backend.GraphController;
 import imageflow.backend.Model;
@@ -181,6 +182,10 @@ public class ImageFlowView extends FrameView {
 		fileMenu.add(getAction("save"));
 		fileMenu.add(getAction("saveAs"));
 		fileMenu.add(getAction("importGraph"));
+//		if(!IJ.isMacintosh()) {
+			fileMenu.add(new JSeparator());
+			fileMenu.add(getAction("quit"));
+//		}
 		
 		
 		JMenu editMenu = new JMenu("Edit");
@@ -214,7 +219,7 @@ public class ImageFlowView extends FrameView {
 		menuBar.add(helpMenu);
 		
 		menuBar.setVisible(true);
-		getFrame().setJMenuBar(menuBar);
+		setMenuBar(menuBar);
 	}
 
 	/**
@@ -222,7 +227,9 @@ public class ImageFlowView extends FrameView {
 	 */
 	private void addComponents() {
 		
-		getRootPane().setLayout(new BorderLayout());
+		JPanel mainPanel = new JPanel();
+		
+		mainPanel.setLayout(new BorderLayout());
 		
 		//working area aka graphpanel
 		ArrayList<Delegate> delegatesArrayList = new ArrayList<Delegate>();
@@ -243,8 +250,8 @@ public class ImageFlowView extends FrameView {
 		ScrollPane graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
 
-		
-		new FileDrop( null, graphPanel, /*dragBorder,*/ new FileDrop.Listener()
+		/*
+		new FileDrop( null, graphPanel,  new FileDrop.Listener()
 	        {   
 				Point coordinates =new Point(75, 75);
 				
@@ -261,7 +268,7 @@ public class ImageFlowView extends FrameView {
 	                }   // end for: through each dropped file
 	            }   // end filesDropped
 	        }); // end FileDrop.Listener
-		
+		*/
 		
 		
 		
@@ -275,11 +282,9 @@ public class ImageFlowView extends FrameView {
 		JButton buttoncheck = new JButton(new CheckGraphAction(graphController));
 		buttonPanel.add(buttoncheck);
 
-//		JPanel delegatesPanel = new DelegatesPanel();
-
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
-		JPanel delegatesPanel = new DelegatesPanel();
+		JPanel delegatesPanel = new DelegatesPanel(this.units);
 		sidePane.add(delegatesPanel, BorderLayout.CENTER);
 		sidePane.add(buttonPanel, BorderLayout.PAGE_END);
 		
@@ -289,7 +294,8 @@ public class ImageFlowView extends FrameView {
 //		splitPane.setDividerLocation(200);
 		splitPane.setOneTouchExpandable(true);
 		
-		getRootPane().add(splitPane , BorderLayout.CENTER);
+		mainPanel.add(splitPane , BorderLayout.CENTER);
+		setComponent(mainPanel);
 //		fr.injectComponents(functionTabPane);
 	}
 

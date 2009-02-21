@@ -34,9 +34,13 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import visualap.Delegate;
@@ -67,6 +71,10 @@ public class GraphPanel extends GPanel {
 	 */
 	protected boolean align = false;
 
+	private BufferedImage iwIcon;
+
+	private String iconFile = "bin/imageflow/resources/iw-logo.png";
+
 	/**
 	 * @param beans
 	 * @param parent
@@ -96,7 +104,7 @@ public class GraphPanel extends GPanel {
 							List files = (List) tr.getTransferData(flavors[i]);
 							// Wir setzen in das Label den Namen der ersten 
 							// Datei
-//							label.setText(files.get(0).toString());
+							//							label.setText(files.get(0).toString());
 							e.dropComplete(true);
 							return;
 						}
@@ -112,19 +120,27 @@ public class GraphPanel extends GPanel {
 		};
 		DropTarget dropTarget = new DropTarget(this, dropTargetListener);
 		this.setDropTarget(dropTarget);
+		
+		
+		try {
+			this.iwIcon = ImageIO.read(new File(iconFile ));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**
 	 * paint things that eventually go on a printer
 	 * @param g
 	 */
-    public void paintPrintable(Graphics g) {
-        rect = new Rectangle();
+	public void paintPrintable(Graphics g) {
+		rect = new Rectangle();
 		for (Node t : nodeL) {
 			rect = rect.union(t.paint(g, this));	
 		}
-        setPreferredSize(rect.getSize());
-        Connection conn;
+		setPreferredSize(rect.getSize());
+		Connection conn;
 		for (Edge aEdge : EdgeL) {
 			conn = (Connection)aEdge; 
 			Point from = aEdge.from.getLocation();
@@ -133,7 +149,7 @@ public class GraphPanel extends GPanel {
 			g.drawLine(from.x, from.y, to.x, to.y);
 		}
 		revalidate();
-    }
+	}
 
 
 	/* (non-Javadoc)
@@ -145,59 +161,95 @@ public class GraphPanel extends GPanel {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-		//paint grid
-		paintGrid(g);
-
-		// paint printable items
-		paintPrintable(g);
-
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(
 				RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
-		// paint non printable items
-		if (drawEdge != null) {
-			Point origin = drawEdge.getLocation();
-			//			g2.setStroke(new BasicStroke(1f));
-			for (Node node : nodeL) {
-				int margin = 15;
-				// check if mouse is within this dimensions of a node
-				if(isWithin2DRange(mouse, node.getOrigin(), node.getDimension(), margin)) {
+		//paint grid
+		paintGrid(g2);
 
-					// draw every pin
-					if(node instanceof UnitElement) {
-						for (Pin pin : ((UnitElement)node).getInputs()) {
-							if(!drawEdge.getParent().equals(node)) 
-								drawCompatbilityIndicator(g2, margin, pin);
+		if(!nodeL.isEmpty()) {
+
+			// paint printable items
+			paintPrintable(g2);
+
+			// paint non printable items
+			if (drawEdge != null) {
+				Point origin = drawEdge.getLocation();
+				//			g2.setStroke(new BasicStroke(1f));
+				for (Node node : nodeL) {
+					int margin = 15;
+					// check if mouse is within this dimensions of a node
+					if(isWithin2DRange(mouse, node.getOrigin(), node.getDimension(), margin)) {
+
+						// draw every pin
+						if(node instanceof UnitElement) {
+							for (Pin pin : ((UnitElement)node).getInputs()) {
+								if(!drawEdge.getParent().equals(node)) 
+									drawCompatbilityIndicator(g2, margin, pin);
+							}
+
+							for (Pin pin : ((UnitElement)node).getOutputs()) {
+								if(!drawEdge.getParent().equals(node))
+									drawCompatbilityIndicator(g2, margin, pin);
+							}	
 						}
 
-						for (Pin pin : ((UnitElement)node).getOutputs()) {
-							if(!drawEdge.getParent().equals(node))
-								drawCompatbilityIndicator(g2, margin, pin);
-						}	
 					}
-
 				}
-			}
 
-			g2.setColor(Color.BLACK);
-			g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
-			g2.draw(new Line2D.Double(origin.x, origin.y, mouse.x, mouse.y));
-		}
-		//If currentRect exists, paint a box on top.
-		if (currentRect != null) {
-			//Draw a rectangle on top of the image.
-			g2.setXORMode(Color.white); //Color of Edge varies
-			//depending on image colors
+				g2.setColor(Color.BLACK);
+				g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
+				g2.draw(new Line2D.Double(origin.x, origin.y, mouse.x, mouse.y));
+			}
+			//If currentRect exists, paint a box on top.
+			if (currentRect != null) {
+				//Draw a rectangle on top of the image.
+//				g2.setXORMode(Color.white); //Color of Edge varies
+				//depending on image colors
+				g2.setColor(new Color(0,0,255, 80));
+				//			g2.setStroke(dashed);
+				g2.setStroke(new BasicStroke(1f));
+				g2.drawRect(rectToDraw.x, rectToDraw.y, 
+						rectToDraw.width - 1, rectToDraw.height - 1);
+				g2.setColor(new Color(0,0,255, 40));
+				g2.fillRect(rectToDraw.x, rectToDraw.y, 
+						rectToDraw.width - 1, rectToDraw.height - 1);
+			}	
+		} else {
+			//draw a nice message to promote creating a graph
+
+			int x = 50;
+			int y = 80;
+
+			g2.drawImage(this.iwIcon, 25, 25, null);
+			
+			String headline = "Create your workflow";
+			String description1 = "Add new units to the graph by using the";
+			String description2 = "context menu or drag-n-drop units on the canvas.";
+
 			g2.setColor(Color.GRAY);
-			//			g2.setStroke(dashed);
-			g2.setStroke(new BasicStroke(1f));
-			g2.drawRect(rectToDraw.x, rectToDraw.y, 
-					rectToDraw.width - 1, rectToDraw.height - 1);
-			g2.setColor(new Color(0,0,88, 100));
-			g2.fillRect(rectToDraw.x, rectToDraw.y, 
-					rectToDraw.width - 1, rectToDraw.height - 1);
+			
+			// scale font on big lengths
+			FontMetrics fm = g2.getFontMetrics();
+			int stringWidth = fm.stringWidth(headline);
+			int fontsize = 24;
+			int fontsizeOriginal = 12;
+			Font font = g2.getFont();
+			Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
+			/*while(stringWidth > getWidth()-10) {
+				fontsize--;
+				newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
+				g2.setFont(newFont);
+				stringWidth = g2.getFontMetrics().stringWidth(headline);
+			}*/
+			g2.setFont(newFont);
+			// and if even now to small, then cut
+			g2.drawString(headline, x+5, y+15);
+			g2.setFont(new Font(font.getFamily(), Font.PLAIN, fontsizeOriginal));
+			g2.drawString(description1+"", x+5, y+45);
+			g2.drawString(description2+"", x+5, y+65);
 		}
 	}
 
@@ -328,7 +380,7 @@ public class GraphPanel extends GPanel {
 			final int startValue, 
 			final int endValue) {
 		return (compareValue > startValue) 
-				&& (compareValue < endValue);
+		&& (compareValue < endValue);
 	}
 
 	/**
@@ -346,7 +398,7 @@ public class GraphPanel extends GPanel {
 			final Dimension dimension, 
 			final int margin) {
 		return isWithinRange(currentPoint.x, origin.x-margin, 
-						origin.x+dimension.width+margin)
+				origin.x+dimension.width+margin)
 				&& isWithinRange(currentPoint.y, origin.y - margin, 
 						origin.y + dimension.height + margin);
 	}

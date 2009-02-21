@@ -23,6 +23,11 @@ import visualap.Delegate;
 public abstract class UnitDelegate extends Delegate implements MutableTreeNode {
 
 	/**
+	 * default startpoint of nodes
+	 */
+	public static Point POINT = new Point(25, 25);
+	
+	/**
 	 * @param unitName 
 	 * @param tooltipText 
 	 */

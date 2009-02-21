@@ -191,30 +191,20 @@ public class NodeIcon {
 		// scale font on big lengths
 		FontMetrics fm = g2.getFontMetrics();
 	    int stringWidth = fm.stringWidth(unitName);
-		int fontsize = g2.getFont().getSize();
-		int fontsizeOriginal = fontsize;
+		int fontsize = 12;
+		int fontsizeOriginal = 12;
 		Font font = g2.getFont();
 		while(stringWidth > widthIconBg-10) {
 			fontsize--;
-			Font newFont = new Font(font.getFamily(), font.getStyle(), fontsize);
+			Font newFont = new Font(font.getFamily(), Font.PLAIN, fontsize);
 			g2.setFont(newFont);
 			stringWidth = g2.getFontMetrics().stringWidth(unitName);
 		}
 		
 		// and if even now to small, then cut
 		g2.drawString(unitName, x+5, y+85);
-		
 		g2.setFont(new Font(font.getFamily(), font.getStyle(), fontsizeOriginal));
-		
 		g2.drawString(unitID+"", x+5, y+15);
-		
-		/*legacy
-		 * Font font = g2.getFont();
-	    g2.drawString(parametersLabel, x+5, y+20);
-	    
-	    g2.drawString(infoLabel, x+25, y+20);
-	    g2.setColor(Color.BLACK);
-	    g2.drawString("x", x+width-20, y+20);*/
 	}
 
 	/**

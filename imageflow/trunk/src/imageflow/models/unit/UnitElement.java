@@ -18,6 +18,7 @@ import imageflow.models.parameter.IntegerParameter;
 import imageflow.models.parameter.Parameter;
 import imageflow.models.parameter.ParameterFactory;
 import imageflow.models.parameter.StringParameter;
+import imageflow.tasks.LoadFlowGraphTask;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -36,6 +37,10 @@ import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+
+import javax.swing.JFileChooser;
+
+import org.jdesktop.application.Task;
 
 
 
@@ -370,7 +375,9 @@ public class UnitElement extends AbstractUnit {
 		return this.parameters;
 	}
 
-
+	public Parameter getParameter(int i) {
+		return this.parameters.get(i);
+	}
 
 
 	/**
@@ -707,14 +714,12 @@ public class UnitElement extends AbstractUnit {
 
 		// label field 
 		gd.addStringField("Unit label", this.getLabel(),40);
+		gd.addCheckbox("Display", this.isDisplayUnit);
 
 		final ArrayList<Parameter> parameterList = getParameters();
 
-		if (parameterList.isEmpty())
+		if (parameterList.isEmpty()) {
 			gd.addMessage("No parameters that can be set");
-		else if(parameterList.get(0) instanceof FileParameter) {
-			// TODO open filechooser
-
 		} else {
 			for (final Parameter parameter : parameterList) {
 
@@ -729,7 +734,7 @@ public class UnitElement extends AbstractUnit {
 							((ChoiceParameter)parameter).getChoicesArray(), 
 							((ChoiceParameter)parameter).getValue());
 				} else if(parameter instanceof StringParameter) {
-					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(),40);
+				    gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
 				}		
 			}
 
@@ -743,6 +748,8 @@ public class UnitElement extends AbstractUnit {
 
 		String newLabel = (String) (gd.getNextString()).trim();
 		setLabel(newLabel);
+		boolean isNewDisplay = gd.getNextBoolean();
+		setDisplayUnit(isNewDisplay);
 
 		for (final Parameter parameter : parameterList) {
 			if(parameter instanceof DoubleParameter) {

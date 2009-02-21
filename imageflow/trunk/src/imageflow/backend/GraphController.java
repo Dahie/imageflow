@@ -9,6 +9,7 @@ import imageflow.models.ConnectionList;
 import imageflow.models.parameter.Parameter;
 import imageflow.models.parameter.StringParameter;
 import imageflow.models.unit.CommentNode;
+import imageflow.models.unit.SourceUnitElement;
 import imageflow.models.unit.UnitDescription;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
@@ -121,19 +122,15 @@ public class GraphController{
 		
 		// sources -> file exists
 		for (Node node : nodes) {
-			if(node instanceof UnitElement) {
+			if(node instanceof SourceUnitElement) {
 				UnitElement unit = (UnitElement) node;
-				if(unit instanceof UnitElement
-						&& unit.getUnitType() == Type.SOURCE) {
-					for (Parameter parameter : unit.getParameters()) {
-						if(parameter instanceof StringParameter) {
-							File file = new File((String) parameter.getValue());
-							return file.exists();
-						}	
-					}
+				for (Parameter parameter : unit.getParameters()) {
+					if(parameter instanceof StringParameter) {
+						File file = new File((String) parameter.getValue());
+						return file.exists();
+					}	
 				}
 			}
-
 		}
 
 
