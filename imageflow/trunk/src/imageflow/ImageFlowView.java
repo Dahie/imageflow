@@ -3,8 +3,6 @@ package imageflow;
 import graph.Edge;
 import graph.Node;
 import graph.Selection;
-import helper.FileDrop;
-import ij.IJ;
 import imageflow.backend.DelegatesController;
 import imageflow.backend.GraphController;
 import imageflow.backend.Model;
@@ -22,7 +20,6 @@ import imageflow.models.SelectionListener;
 import imageflow.models.parameter.Parameter;
 import imageflow.models.unit.CommentNode;
 import imageflow.models.unit.UnitElement;
-import imageflow.models.unit.UnitFactory;
 import imageflow.models.unit.UnitList;
 import imageflow.tasks.ImportGraphTask;
 import imageflow.tasks.LoadFlowGraphTask;
@@ -32,9 +29,9 @@ import imageflow.tasks.SaveFlowGraphTask;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Point;
 import java.awt.ScrollPane;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,6 +42,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -210,6 +208,10 @@ public class ImageFlowView extends FrameView {
 		
 		JMenu windowMenu = new JMenu("Window");
 		JMenu helpMenu = new JMenu("Help");
+		helpMenu.add(getAction("openDevblogURL"));
+		helpMenu.add(getAction("openImageJURL"));
+		helpMenu.add(new JSeparator());
+        helpMenu.add(getAction("showAboutBox"));
 		
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
@@ -627,6 +629,30 @@ public class ImageFlowView extends FrameView {
     		dialog.setVisible(true);	
 		}
     	
+    }
+    
+    @Action 
+    public void openDevblogURL() {
+    	try {
+			ij.plugin.BrowserLauncher.openURL("http://imageflow.danielsenff.de");
+		} catch (IOException e) { e.printStackTrace(); }
+    }
+    @Action 
+    public void openImageJURL() {
+    	try {
+			ij.plugin.BrowserLauncher.openURL("http://rsb.info.nih.gov/ij/");
+		} catch (IOException e) { e.printStackTrace(); }
+    }
+    
+
+    @Action
+    public void showAboutBox() {
+        if (aboutBox == null) {
+            JFrame mainFrame = ImageFlow.getApplication().getMainFrame();
+            aboutBox = new ImageFlowAboutBox(mainFrame);
+            aboutBox.setLocationRelativeTo(mainFrame);
+        }
+        ImageFlow.getApplication().show(aboutBox);
     }
     
 	private javax.swing.Action getAction(String actionName) {
