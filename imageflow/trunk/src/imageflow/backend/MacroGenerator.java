@@ -1,7 +1,5 @@
-package imageflow;
+package imageflow.backend;
 
-import imageflow.backend.GraphController;
-import imageflow.models.Connection;
 import imageflow.models.Input;
 import imageflow.models.MacroElement;
 import imageflow.models.unit.UnitElement;
@@ -24,30 +22,29 @@ public class MacroGenerator {
 	
 	public String generateMacrofromUnitList(final UnitList unitElements) {
 		
-		final UnitElement[] units = new UnitElement[unitElements.size()+1];
+		/*final UnitElement[] units = new UnitElement[unitElements.size()+1];
 		for (int i = 0; i < unitElements.size(); i++) {
 			units[i+1] = (UnitElement) unitElements.get(i);
 		}
 		
 		return generateMacro(units);
 	}
+	*/
 	
-	
-	
-	public String generateMacro(final UnitElement[] unitElement) {
+//	public String generateMacro(final UnitElement[] unitElement) {
+//	public String generateMacro(final UnitElement[] unitElement) {
 		
 		String  macroText ="";
 
 		macroText = "setBatchMode(true); \n";
 		
-		System.out.println("number of units: "+unitElement.length);
-		
 		// loop over all units
 		// they have to be presorted so they are in the right order
-		for (int unitIndex = 1; unitIndex < unitElement.length; unitIndex++) {
+//		for (int unitIndex = 1; unitIndex < unitElement.length; unitIndex++) {
+		for (int unitIndex = 1; unitIndex < unitElements.size()+1; unitIndex++) {
 			macroText += " \n";
 			// read the ImageJ syntax for this unit
-			final UnitElement unit = unitElement[unitIndex];
+			final UnitElement unit = (UnitElement) unitElements.get(unitIndex-1);
 			
 //			String command = unit.getImageJSyntax();
 			final MacroElement macroElement = ((MacroElement)unit.getObject()); 
@@ -97,8 +94,8 @@ public class MacroGenerator {
 		
 		// delete all images that are not to be displayed
 		macroText +=  "// delete unwanted images \n";
-		for (int u = 1; u < unitElement.length; u++) {
-			final UnitElement unit = unitElement[u];
+		for (int u = 1; u < unitElements.size()+1; u++) {
+			final UnitElement unit = (UnitElement) unitElements.get(u-1);
 			macroText += deleteImages(unit);
 		}
 
@@ -109,6 +106,7 @@ public class MacroGenerator {
 	}
 
 
+	
 
 	private static String deleteImages(final UnitElement unit) {
 		String macroText = "";
@@ -138,40 +136,4 @@ public class MacroGenerator {
 		}
 		return code;
 	}
-	
-	/**
-	 * TODO legacy
-	 * @param unitElement
-	 * @param connection
-	 * @return
-	 */
-	public static String generateMacro_Sample(final UnitElement[] unitElement, final Connection[] connection) {
-		
-		final String macroText = 
-			
-		"setBatchMode(true); \n" +
-
-		"// open an image \n" +
-		"open(\"/Users/barthel/Applications/ImageJ/_images/zange1.png\"); \n" +
-		"ID_temp = getImageID(); \n" +
-		"run(\"Duplicate...\", \"title=Source1\"); \n" +
-		"ID_Source1 = getImageID(); \n" +
-		"selectImage(ID_temp); \n" +
-		"close(); \n" +
-
-		"// blur image\n" +
-		"selectImage(ID_Source1); \n" +
-		"run(\"Duplicate...\", \"title=Proc1_out1\"); \n" +
-		"ID_Proc1_out1 = getImageID(); \n" +
-		"run(\"Gaussian Blur...\", \"sigma=2\"); \n" +
-
-		"// close the images that are not to be displayed \n" +
-		"selectImage(ID_Source1); \n" +
-		"close(); \n" +
-
-		"setBatchMode(\"exit and display\"); ";
-
-		return macroText;
-	}
-
 }

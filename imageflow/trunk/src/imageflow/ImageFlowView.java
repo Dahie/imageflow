@@ -5,21 +5,22 @@ import graph.Node;
 import graph.Selection;
 import imageflow.backend.DelegatesController;
 import imageflow.backend.GraphController;
-import imageflow.backend.Model;
-import imageflow.backend.ModelListener;
+import imageflow.backend.MacroFlowRunner;
 import imageflow.gui.DelegatesPanel;
 import imageflow.gui.GPanelPopup;
 import imageflow.gui.GraphPanel;
 import imageflow.gui.InsertUnitMenu;
 import imageflow.models.ConnectionList;
 import imageflow.models.Input;
+import imageflow.models.Model;
+import imageflow.models.ModelListener;
 import imageflow.models.Output;
 import imageflow.models.Selectable;
 import imageflow.models.SelectionList;
 import imageflow.models.SelectionListener;
 import imageflow.models.parameter.Parameter;
-import imageflow.models.unit.CommentNode;
 import imageflow.models.unit.UnitElement;
+import imageflow.models.unit.UnitFactory;
 import imageflow.models.unit.UnitList;
 import imageflow.tasks.ImportGraphTask;
 import imageflow.tasks.LoadFlowGraphTask;
@@ -121,26 +122,7 @@ public class ImageFlowView extends FrameView {
 	private void registerModelListeners() {
 		// usually on startup this is empty
 		for (Node node : units) {
-			if(node instanceof CommentNode) {
-				((CommentNode)node).addModelListener(
-						new ModelListener () {
-							public void modelChanged (final Model hitModel)	{
-								graphPanel.invalidate();
-								graphPanel.repaint();
-								setModified(true);
-							}
-						});	
-			} else //if(node instanceof UnitElement) 
-			{
-				((UnitElement)node).addModelListener(
-						new ModelListener () {
-							public void modelChanged (final Model hitModel)	{
-								graphPanel.invalidate();
-								graphPanel.repaint();
-								setModified(true);
-							}
-						});	
-			}
+			UnitFactory.registerModelListener(node);
 		}
 		
 		units.addModelListener(new ModelListener() {
@@ -164,6 +146,9 @@ public class ImageFlowView extends FrameView {
 		});
 		setModified(false);
 	}
+
+
+
 
 	
 	/**
@@ -190,7 +175,7 @@ public class ImageFlowView extends FrameView {
 		editMenu.add(getAction("cut"));
 		editMenu.add(getAction("copy"));
 		editMenu.add(getAction("paste"));
-		editMenu.add(getAction("remove"));
+		editMenu.add(getAction("delete"));
 		editMenu.add(getAction("clear"));
 		editMenu.add(new JSeparator());
 		editMenu.add(getAction("setDisplayUnit"));
@@ -411,14 +396,20 @@ public class ImageFlowView extends FrameView {
 	}
 	
 	@Action(enabledProperty = "selected")
-	public Task preview() {
+	public void preview() {
 		UnitElement unit = (UnitElement) graphPanel.getSelection().get(0);
+		MacroFlowRunner mfr = new MacroFlowRunner(this.units);
+		if(mfr.contains(unit)) {
+			unit.setDisplayUnit(true);
+			mfr.getSubMacroFlowRunner(unit).generateMacro();
+			unit.setDisplayUnit(false);
+		}
 		
-	    Task task = null;
-	    /*if (option == JFileChooser.APPROVE_OPTION) {
+	    /*Task task = null;
+	    if (option == JFileChooser.APPROVE_OPTION) {
 	    	task = new LoadFlowGraphTask(fc.getSelectedFile());
 	    }*/
-	    return task;
+//	    return task;
 	}
 	
 	@Action public Task importGraph() {
@@ -456,7 +447,7 @@ public class ImageFlowView extends FrameView {
 	}
 
 	@Action(enabledProperty = "selected")
-	public void remove() {
+	public void delete() {
 		Selection<Node> selection = graphPanel.getSelection();
 		for (Node unit : selection) {
 			graphController.removeNode(unit);
@@ -569,17 +560,18 @@ public class ImageFlowView extends FrameView {
 						"This file already exists. Do you want to overwrite it?",
 						"Overwrite existing file?", 
 						JOptionPane.OK_CANCEL_OPTION);
-				if (response == JOptionPane.OK_OPTION)
-					task = new SaveFlowGraphTask(selectedFile);
-					
+				if (!(response == JOptionPane.OK_OPTION)) {
+					return null;
+				}
         	}
+        	task = new SaveFlowGraphTask(selectedFile);
             
         }
         return task;
     }
     
     private JFileChooser createFileChooser(String name) {
-        JFileChooser fc = new JFileChooser();
+        JFileChooser fc = new JFileChooser(this.file);
         fc.setDialogTitle(getResourceMap().getString(name + ".dialogTitle"));
         String textFilesDesc = getResourceMap().getString("txtFileExtensionDescription");
 //        fc.setFileFilter(new TextFileFilter(textFilesDesc));
@@ -668,6 +660,12 @@ public class ImageFlowView extends FrameView {
 		
 		actionMap.put("checkGraph", 
 				new CheckGraphAction(graphController));
+	}
+
+
+
+	public GraphPanel getGraphPanel() {
+		return this.graphPanel;
 	}
 
 }

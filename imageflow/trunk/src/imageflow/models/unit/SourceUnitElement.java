@@ -7,8 +7,12 @@ import imageflow.models.MacroElement;
 import imageflow.models.Output;
 import imageflow.models.parameter.StringParameter;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -120,4 +124,21 @@ public class SourceUnitElement extends UnitElement {
 		return new File(path);
 	}
 
+	@Override
+	public Rectangle paint(Graphics g, ImageObserver io) {
+		
+		if(!getFile().exists() && !selected) {
+			g.setColor(new Color(255,0,0,80));
+		    g.fillRoundRect(origin.x, origin.y, getDimension().width, getDimension().height, 
+		    		unitComponentIcon.arc, unitComponentIcon.arc);
+		}
+		
+		Rectangle paint = super.paint(g, io);
+		
+		
+		
+		
+		return paint;
+	}
+	
 }

@@ -3,8 +3,12 @@
  */
 package imageflow.models.unit;
 
-import ij.ImagePlus;
-import ij.plugin.filter.PlugInFilter;
+import graph.Node;
+import imageflow.ImageFlow;
+import imageflow.ImageFlowView;
+import imageflow.gui.GraphPanel;
+import imageflow.models.Model;
+import imageflow.models.ModelListener;
 import imageflow.models.parameter.ChoiceParameter;
 import imageflow.models.parameter.ParameterFactory;
 
@@ -110,6 +114,9 @@ public class UnitFactory {
 		}
 		
 //		unitElement.updateUnitIcon();
+		if(ImageFlow.getApplication() != null) 
+			registerModelListener(unitElement);
+		
 		return unitElement;
 	}
 
@@ -120,11 +127,37 @@ public class UnitFactory {
 	 * @return
 	 */
 	public static CommentNode createComment(final String string, final Point point) {
-		return new CommentNode(point, string);
+		CommentNode commentNode = new CommentNode(point, string);
+		registerModelListener(commentNode);
+		return commentNode;
 	}
 	
 	
-	
+
+	public static void registerModelListener(Node node) {
+		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
+		final GraphPanel graphPanel = ifView.getGraphPanel();
+		if(node instanceof CommentNode) {
+			((CommentNode)node).addModelListener(
+					new ModelListener () {
+						public void modelChanged (final Model hitModel)	{
+							graphPanel.invalidate();
+							graphPanel.repaint();
+							ifView.setModified(true);
+						}
+					});	
+		} else //if(node instanceof UnitElement) 
+		{
+			((UnitElement)node).addModelListener(
+					new ModelListener () {
+						public void modelChanged (final Model hitModel)	{
+							graphPanel.invalidate();
+							graphPanel.repaint();
+							ifView.setModified(true);
+						}
+					});	
+		}
+	}
 	
 	
 	

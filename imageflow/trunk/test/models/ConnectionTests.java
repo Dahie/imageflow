@@ -149,7 +149,8 @@ public class ConnectionTests extends TestCase {
 
 		// conn3 ALL to 32
 		Connection conn3 = new Connection(unit1,2,unit2, 1);
-		assertTrue("all to 32", conn3.areImageBitDepthCompatible());
+		// technically compatable, but we expect something explicit and no guesses
+		assertFalse("all to 32", conn3.areImageBitDepthCompatible());
 		
 		// conn4 32 to all
 		Connection conn4 = new Connection(unit1,1,unit2, 3);

@@ -1,8 +1,8 @@
 package imageflow.models.unit;
 
 import graph.NodeAbstract;
-import imageflow.backend.Model;
-import imageflow.backend.ModelListener;
+import imageflow.models.Model;
+import imageflow.models.ModelListener;
 
 import java.awt.Point;
 import java.util.ArrayList;

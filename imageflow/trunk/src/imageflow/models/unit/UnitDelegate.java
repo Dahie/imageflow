@@ -124,7 +124,6 @@ public abstract class UnitDelegate extends Delegate implements MutableTreeNode {
 	}
 
 	public int getChildCount() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

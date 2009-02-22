@@ -2,12 +2,11 @@ package imageflow.models;
 
 import graph.Node;
 import graph.Pin;
-
-import ij.ImagePlus;
 import ij.plugin.filter.PlugInFilter;
 import imageflow.models.unit.UnitElement;
 
 import java.awt.Point;
+import java.util.Vector;
 
 
 /**
@@ -200,7 +199,7 @@ public class Output extends Pin implements Connectable {
 	 * @return
 	 */
 	public boolean isConnectedWith(Pin input) {
-		if(this.toUnit != null && input instanceof Input) {
+		if(isConnected() && input instanceof Input) {
 			return this.to.equals(input);
 		}
 		return false;
@@ -213,6 +212,7 @@ public class Output extends Pin implements Connectable {
 	public Input getToInput() {
 		return this.to;
 	}
+
 
 	
 	/**
@@ -228,11 +228,15 @@ public class Output extends Pin implements Connectable {
 			
 			// return type of parents input connected output
 			UnitElement unitElement = (UnitElement)parent;
-
+			
 			//TODO this could be nicer, how to handle multiple inputs?
 			if(unitElement.hasInputsConnected()) {
-				Input input = unitElement.getInput(0);
-				return input.getFromOutput().getImageBitDepth();	
+				for (Input input : unitElement.getInputs()) {
+					if(input.isConnected())
+						return input.getFromOutput().getImageBitDepth();
+				}
+				
+				return -1;
 				
 			} else {
 				// this means our output doesn't know his own capabilities
@@ -272,38 +276,46 @@ public class Output extends Pin implements Connectable {
 		if(myImageBitDepth != -1 && imageBitDepth != -1) {
 			return (myImageBitDepth&imageBitDepth) != 0;
 		} else if (myImageBitDepth == -1 && imageBitDepth != -1) {
-			System.err.println("couldn't find type");
+//			System.err.println("couldn't find type");
 		}
 		return false;
 	}
 
+	@Override
+	public UnitElement getParent() {
+		return (UnitElement)super.getParent();
+	}
+	
 	/**
-	 * @param node
+	 * Traverses through {@link Input}s to see if the {@link Node} is connected somewhere.
+	 * @param goal
 	 * @return
 	 */
-	public boolean knows(final Node node) {
+	public boolean existsInInputSubgraph(final Node goal) {
 		// self reference is true
-		if(node.equals(parent))
+		if(goal.equals(parent))
 			return true;
 		
-		// can only check inputs, which are connected
-		if(this.isConnected()) {
-			for (Output output : toUnit.getOutputs()) {
-				// check if this parent is already what we are looking for
-				if(node.equals(output.getParent())) { 
-						return true;
-				//check if this input is connected to more
-				} else if(output.isConnected()) {
-					// if it is connected, maybe we have more luck here
-					return output.knows(node);
-				}
-			}
-		}
-
+		return traverseInput(getParent(), goal);
+		
 		// if nothing helps, it's false
-		return false;
 	}
 
+	
+	private boolean traverseInput(UnitElement parent, Node goal) {
+		if(parent.equals(goal)) {
+			return true;
+		} else if (parent.hasInputsConnected()) {
+			for (Input input : parent.getInputs()) {
+				if(input.isConnected()) {
+					return traverseInput(input.getFromUnit(), goal);
+				}
+			}
+		} 
+		
+		return false;
+	}
+	
 	/**
 	 * Resets the this Output, so that it is unconnected.
 	 */

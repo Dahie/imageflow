@@ -155,8 +155,7 @@ public class OutputTests extends TestCase {
 		assertTrue("both do 32", output1.isImageBitDepthCompatible(input1.getImageBitDepth()));
 		// ok, technically ALL to 32 does work, but since the input tests for a concrete type, 
 		// and not for a could-be, this is false
-		//
-		assertTrue("All to 32", output2.isImageBitDepthCompatible(input1.getImageBitDepth()));
+		assertFalse("All to 32", output2.isImageBitDepthCompatible(input1.getImageBitDepth()));
 		assertFalse("32 to 16", output1.isImageBitDepthCompatible(input2.getImageBitDepth()));
 		assertFalse("-1 to 16", output3.isImageBitDepthCompatible(input2.getImageBitDepth()));
 		assertFalse("32 to 16", output1.isImageBitDepthCompatible(input2.getImageBitDepth()));
@@ -274,6 +273,93 @@ public class OutputTests extends TestCase {
 	}
 	
 	
+	public void testLoopScenario1() {
+		
+		UnitElement unit1 = UnitFactory.createFindEdgesUnit();
+		UnitElement unit2 = UnitFactory.createImageCalculatorUnit();
+		UnitElement unit3 = UnitFactory.createAddNoiseUnit();
+		UnitElement unit4 = UnitFactory.createGaussianBlurUnit();
+		
+		Connection conn1 = new Connection(unit1, 1, unit2, 1);
+		conn1.connect();
+		assertTrue(conn1.isConnected());
+		Connection conn2 = new Connection(unit3, 1, unit2, 2);
+		conn2.connect();
+		assertTrue(conn2.isConnected());
+		
+		Output outputU2 = unit2.getOutput(0);
+		Input inputU4 = unit4.getInput(0);
+		
+		assertFalse(outputU2.existsInInputSubgraph(unit4));
+		assertFalse(inputU4.isConnectedInInputBranch(unit2));
+		
+		// now we create a loop
+		
+		Connection conn3 = new Connection(unit4, 1, unit1, 1);
+		conn3.connect();
+		assertTrue(conn3.isConnected());
+		
+		assertTrue(outputU2.existsInInputSubgraph(unit4));
+		assertTrue(inputU4.isConnectedInInputBranch(unit2));
+	}
+	
+
+	public void testLoopScenario2() {
+		
+		UnitElement unit1 = UnitFactory.createFindEdgesUnit();
+		UnitElement unit2 = UnitFactory.createImageCalculatorUnit();
+		UnitElement unit4 = UnitFactory.createGaussianBlurUnit();
+		
+		Connection conn1 = new Connection(unit1, 1, unit2, 1);
+		conn1.connect();
+		Connection conn2 = new Connection(unit1, 1, unit2, 2);
+		conn2.connect();
+		assertTrue(conn2.isConnected());
+		
+		Output outputU2 = unit2.getOutput(0);
+		Input inputU4 = unit4.getInput(0);
+		
+		assertFalse(outputU2.existsInInputSubgraph(unit4));
+		assertFalse(inputU4.isConnectedInInputBranch(unit2));
+		
+		// now we create a loop
+		
+		Connection conn3 = new Connection(unit4, 1, unit1, 1);
+		conn3.connect();
+		assertTrue(conn3.isConnected());
+		
+		assertTrue(outputU2.existsInInputSubgraph(unit4));
+		assertTrue(inputU4.isConnectedInInputBranch(unit2));
+	}
+	
+	public void testLoopScenario3() {
+		UnitElement unit1 = UnitFactory.createFindEdgesUnit();
+		UnitElement unit4 = UnitFactory.createGaussianBlurUnit();
+		
+		Output outputU1 = unit1.getOutput(0);
+		Input inputU4 = unit4.getInput(0);
+		
+		assertFalse(outputU1.existsInInputSubgraph(unit4));
+		assertFalse(inputU4.isConnectedInInputBranch(unit1));
+		
+		//connecting first time
+		
+		Connection conn1 = new Connection(unit1, 1, unit4, 1);
+		conn1.connect();
+		assertTrue(conn1.isConnected());
+		
+		assertFalse(outputU1.existsInInputSubgraph(unit4));
+		assertFalse(inputU4.isConnectedInInputBranch(unit1));
+		
+		// creating the same connection a second time
+		
+		Connection conn3 = new Connection(unit4, 1, unit1, 1);
+		conn3.connect();
+		assertTrue(conn3.isConnected());
+//		assertFalse(conn1.isConnected());
+	}
+	
+	
 	public void testUnitConnectedInBranch() {
 		
 		UnitElement unit1 = UnitFactory.createAddNoiseUnit();
@@ -286,31 +372,30 @@ public class OutputTests extends TestCase {
 		connList.add(conn1);
 		
 		Output output2 = unit2.getOutput(0);
-		assertFalse("output2 knows unit1", output2.knows(unit1));
-		assertTrue("output2 knows unit2", output2.knows(unit2));
-		assertFalse("output2 knows unit3", output2.knows(unit3));
+		assertFalse("output2 knows unit1", output2.existsInInputSubgraph(unit1));
+		assertTrue("output2 knows unit2", output2.existsInInputSubgraph(unit2));
+		assertFalse("output2 knows unit3", output2.existsInInputSubgraph(unit3));
 		
 		Connection conn2 = new Connection(unit2, 1, unit3, 1);
 //		connList.add(conn2);
 		
 		
-		assertFalse("output2 knows unit1", output2.knows(unit1));
-		assertTrue("output2 knows unit2", output2.knows(unit2));
-		assertFalse("output2 knows unit3", output2.knows(unit3));
+		assertFalse("output2 knows unit1", output2.existsInInputSubgraph(unit1));
+		assertTrue("output2 knows unit2", output2.existsInInputSubgraph(unit2));
+		assertFalse("output2 knows unit3", output2.existsInInputSubgraph(unit3));
 		
 		Output output1 = unit1.getOutput(0);
-		assertTrue("output1 knows unit1", output1.knows(unit1));
-		assertTrue("output1 knows unit2", output2.knows(unit2));
-		assertFalse("output1 knows unit3", output2.knows(unit3));
+		assertTrue("output1 knows unit1", output1.existsInInputSubgraph(unit1));
+		assertTrue("output1 knows unit2", output2.existsInInputSubgraph(unit2));
+		assertFalse("output1 knows unit3", output2.existsInInputSubgraph(unit3));
 		
 		
 		connList.add(conn2);
 		
 		
-		assertTrue("output1 knows unit1", output1.knows(unit1));
-		assertTrue("output1 knows unit2", output1.knows(unit2));
-		assertTrue("output1 knows unit3", output2.knows(unit3));
+		assertTrue("output1 knows unit1", output1.existsInInputSubgraph(unit1));
+		assertTrue("output1 knows unit2", output1.existsInInputSubgraph(unit2));
+		assertTrue("output1 knows unit3", output2.existsInInputSubgraph(unit3));
 		
 	}
-	
 }

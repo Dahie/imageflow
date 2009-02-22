@@ -4,6 +4,7 @@
 package imageflow;
 
 import ij.IJ;
+import ij.ImageJ;
 import ij.plugin.PlugIn;
 
 import java.awt.event.WindowAdapter;
@@ -19,22 +20,12 @@ import org.jdesktop.application.SingleFrameApplication;
  */
 public class ImageFlow extends SingleFrameApplication implements PlugIn {
 
+	protected ImageJ imageJ;
 
 	/**
 	 * Main, start of the application
 	 * @param args
 	 */
-	/*public static void main(String[] args) {
-		
-		if (IJ.isMacOSX()) {
-			System.setProperty("apple.laf.useScreenMenuBar", "true"); 
-			System.setProperty("apple.awt.brushMetalRounded", "true");
-		}
-		
-		new Applicationframe();
-		
-	}*/
-	
 	public static void main(String[] args) {
 		launch(ImageFlow.class, args);
 	}
@@ -72,13 +63,18 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	
 	private class MainFrameListener extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
-            exit(e);
+        	exit(e);
         }
     }
 
-
 	public void run(String args) {
-		startup();
+		launch(ImageFlow.class, null);
+		if(IJ.getInstance() == null)
+			this.imageJ = new ImageJ();
 	}
 
+	public ImageJ getImageJInstance() {
+		return this.imageJ;
+	}
+	
 }

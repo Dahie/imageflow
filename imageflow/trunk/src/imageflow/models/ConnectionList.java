@@ -6,11 +6,12 @@ package imageflow.models;
 import graph.Edges;
 import graph.Pin;
 
-import imageflow.backend.Model;
-import imageflow.backend.ModelListener;
+import imageflow.ImageFlow;
 import imageflow.models.unit.UnitElement;
 
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 
 /**
@@ -28,62 +29,6 @@ public class ConnectionList extends Edges implements Model {
 	public ConnectionList() {
 		this.listeners = new ArrayList<ModelListener>();
 	}
-	
-	
-	/* (non-Javadoc)
-	 * @see graph.Edges#add(graph.Pin, graph.Pin)
-	 */
-	@Override
-	/*public boolean add(final Pin from, final Pin to) {
-		
-		// check if both pins are on the same node
-		if(from.getParent().equals(to.getParent())) return false;
-		
-		System.out.println("add connection");
-			
-		
-		// check if connection is between input and output, not 2 outputs or two inputs
-		if((from instanceof Output && to instanceof Input) ) {
-			// connect from Input to Output
-			
-			
-			final Connection connection = new Connection(((UnitElement)from.getParent()), from.getIndex(), 
-					((UnitElement)to.getParent()), to.getIndex());
-
-			if(!connection.areImageBitDepthCompatible())
-				return false;
-			
-			System.out.println("new connection: from Unit: " + from.getParent() 
-					+ " to Unit: " + to.getParent() 
-					+ " at Input" + to.getIndex());
-			return this.add(connection);
-		
-		} else if (  (from instanceof Input && to instanceof Output) ) {
-			// connect from Output to Input
-			
-			
-			// check for loops
-//			final boolean isLoop = ((Input)from).knows(to.getParent());
-//			if(isLoop) return false;
-			
-			final Connection connection = new Connection(
-					((UnitElement)to.getParent()), to.getIndex(), 
-					((UnitElement)from.getParent()), from.getIndex());
-			
-//			if(!connection.areImageBitDepthCompatible())
-//				return false;
-			
-			
-			System.out.println("new connection: from Unit: " + from.getParent() 
-					+ " to Unit: " + to.getParent() 
-					+ " at Input" + to.getIndex());
-			return this.add(connection);
-//		}
-		
-//		System.out.println("disallowed connection");
-//		return false;
-		
-	}*/
 	
 	public boolean add(final Pin from, final Pin to) {
 		
@@ -133,18 +78,25 @@ public class ConnectionList extends Edges implements Model {
 		final Input input = connection.getToUnit().getInput(connection.to.getIndex()-1);
 		final Output output = connection.getFromUnit().getOutput(connection.from.getIndex()-1);
 		
+		//TODO check if connection produces loop
+//		if(output.knows(input.getParent())) {
+		if(input.isConnectedInInputBranch(output.getParent())) {
+			System.out.println("Connection disallowed: Loop detected");
+			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+					"The connection you tried to establish is not allowed " + '\n' +
+					"and will be dismissed because it would cause loops.",
+					"Connection refused", 
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+			}
+		
 		// check the bit depth
 		if(!connection.areImageBitDepthCompatible()) {
 			System.out.println("Connection disallowed: Incombatible bit depth");
 //			return false;
 			}
 		
-		//TODO check if connection produces loop
-//		if(output.knows(input.getParent())) {
-		if(input.knows(output.getParent())) {
-			System.out.println("Connection disallowed: Loop detected");
-			return false;
-			}
+
 		
 		//check if input already got a connection, if yes, delete that one
 		for (int i = 0; i < this.size(); i++) {

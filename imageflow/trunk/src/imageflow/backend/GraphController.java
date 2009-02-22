@@ -3,13 +3,10 @@ import graph.Node;
 import helper.Tools;
 import ij.IJ;
 import ij.ImageJ;
-import imageflow.MacroGenerator;
+import imageflow.ImageFlow;
 import imageflow.models.Connection;
 import imageflow.models.ConnectionList;
-import imageflow.models.parameter.Parameter;
-import imageflow.models.parameter.StringParameter;
 import imageflow.models.unit.CommentNode;
-import imageflow.models.unit.SourceUnitElement;
 import imageflow.models.unit.UnitDescription;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
@@ -21,8 +18,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-
 
 import org.jdesktop.application.View;
 
@@ -38,7 +33,6 @@ public class GraphController{
 	//	private ApplicationController controller;
 
 	private UnitList nodes;
-	private ImageJ imagej;
 	/**
 	 * List which stores copied Nodes.
 	 */
@@ -61,38 +55,13 @@ public class GraphController{
 	}
 
 
-	/**
-	 * verification and generation of the ImageJ macro for the full graph
-	 * @return 
-	 */
-	public String generateMacro() {
-		////////////////////////////////////////////////////////
-		// analysis and 
-		// verification of the connection network
-		////////////////////////////////////////////////////////
-
-		if (!checkNetwork()) {
-			System.out.println("Error in node network.");
-			return null;
-		}
-
-		// unitElements has to be ordered according to the correct processing sequence
-		nodes = sortList(nodes);
-
-		////////////////////////////////////////////////////////
-		// generation of the ImageJ macro
-		////////////////////////////////////////////////////////
-
-		MacroGenerator generator = new MacroGenerator();
-		final String macro = generator.generateMacrofromUnitList(nodes);
-
-		return macro;
-	}
+	
 
 
 
 
 	public void runImageJMacro(final String macro, boolean showLog) {
+		ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
 		if(imagej == null)
 			imagej = new ImageJ(null, ImageJ.EMBEDDED);
 
@@ -100,85 +69,8 @@ public class GraphController{
 			IJ.log(macro);
 
 		imagej.setVisible(false);
-		imagej.quit();
-
-		// !!!
 		IJ.runMacro(macro, "");
-	}
-
-
-	/**
-	 * check if all connections have in and output
-	 * @param connectionMap
-	 * @return
-	 */
-	public boolean checkNetwork() {
-
-		if(!nodes.hasUnitAsDisplay()) {
-			System.err.println("The flow has no displayable units, running it doesn't do anything.");
-			return false; 
-		}
-
-		
-		// sources -> file exists
-		for (Node node : nodes) {
-			if(node instanceof SourceUnitElement) {
-				UnitElement unit = (UnitElement) node;
-				for (Parameter parameter : unit.getParameters()) {
-					if(parameter instanceof StringParameter) {
-						File file = new File((String) parameter.getValue());
-						return file.exists();
-					}	
-				}
-			}
-		}
-
-
-
-
-
-		ConnectionList connections = nodes.getConnections();
-		if(connections.size() > 0) {
-			System.out.println("Number of connections: "+ connections.size());
-			for (Iterator iterator = connections.iterator(); iterator.hasNext();) {
-				Connection connection = (Connection) iterator.next();
-
-				if (!connection.areImageBitDepthCompatible()) {
-					System.err.println("Faulty connection, image type not compatible");
-					return false;
-				}
-					
-
-				switch(connection.checkConnection()) {
-				case MISSING_BOTH:
-				case MISSING_FROM_UNIT:
-				case MISSING_TO_UNIT:
-					System.err.println("Faulty connection, no input or output unit found.");
-					System.err.println(connection.toString() 
-							+ " with status " + connection.checkConnection());
-					return false;				
-				}
-			}
-		} else if (nodes.hasSourcesAsDisplay()) {
-			// ok, we got no connections, but we have Source-units, 
-			// which are set to display.
-
-			//do nothing
-		} else {
-			System.err.println("no existing connections");
-			return false;
-		}
-
-
-		//FIXME check if units got all the inputs they need
-		if (!nodes.areAllInputsConnected()) {
-			System.err.println("not all required inputs are connected");
-			return false;
-		}
-
-
-		//TODO check parameters
-		return true;
+		imagej.quit();
 	}
 
 
@@ -193,6 +85,11 @@ public class GraphController{
 		final GraphController controller = new GraphController();
 		controller.setupExample1();
 		controller.generateMacro();
+	}
+
+	public String generateMacro() {
+		MacroFlowRunner macroFlowRunner = new MacroFlowRunner(this.nodes);
+		return macroFlowRunner.generateMacro();
 	}
 
 	/**
@@ -385,65 +282,6 @@ public class GraphController{
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
-		/*UnitElement[] unitElement = null;
-		int numUnits = 0;
-
-		// setup of units
-		try {
-			System.out.println("Reading xml-description");
-			SAXBuilder sb = new SAXBuilder();
-			Document doc = sb.build(new File("xml_flows/Example0_flow.xml"));
-
-			Element root = doc.getRootElement();
-
-			// read units
-			Element unitsElement = root.getChild("Units");
-
-			if (unitsElement != null) {  
-				List<Element> unitsList = unitsElement.getChildren();
-				Iterator<Element> unitsIterator = unitsList.iterator();
-				numUnits = unitsList.size() + 1;
-				unitElement = new UnitElement[numUnits];
-
-				// loop Ÿber alle Units
-				while (unitsIterator.hasNext()) { 
-					Element actualUnitElement = (Element) unitsIterator.next();
-					int unitID = Integer.parseInt(actualUnitElement.getChild("UnitID").getValue());
-					int xPos = Integer.parseInt(actualUnitElement.getChild("XPos").getValue());
-					int yPos = Integer.parseInt(actualUnitElement.getChild("YPos").getValue());
-					UnitDescription unitDescription = new UnitDescription(actualUnitElement.getChild("UnitDescription"));
-
-					// create unit
-					unitElement[unitID] = UnitFactory.createProcessingUnit(unitDescription, new Point(xPos, yPos));
-					unitElement[unitID].setDisplayUnit(unitDescription.getIsDisplayUnit());
-					unitElements.add(unitElement[unitID]);
-				}
-			}
-
-			// read connections
-			Element connectionsElement = root.getChild("Connections");
-
-			if (connectionsElement != null) {  
-				List<Element> connectionsList = connectionsElement.getChildren();
-				Iterator<Element> connectionsIterator = connectionsList.iterator();
-
-				// loop Ÿber alle connections
-				while (connectionsIterator.hasNext()) { 
-					Element actualConnectionElement = (Element) connectionsIterator.next();
-					int fromUnitID = Integer.parseInt(actualConnectionElement.getChild("FromUnitID").getValue());
-					int fromOutputNumber = Integer.parseInt(actualConnectionElement.getChild("FromOutputNumber").getValue());
-					int toUnitID = Integer.parseInt(actualConnectionElement.getChild("ToUnitID").getValue());
-					int toInputNumber = Integer.parseInt(actualConnectionElement.getChild("ToInputNumber").getValue());
-					Connection con = new Connection(unitElement[fromUnitID], fromOutputNumber, unitElement[toUnitID], toInputNumber);
-					unitElements.addConnection(con);
-				}
-			}
-		}
-		catch (Exception e) {
-			System.err.println("Invalid XML-File!");
-			e.printStackTrace();
-		}	*/
 	}
 
 	public void setupExample2() {
@@ -464,12 +302,12 @@ public class GraphController{
 		final UnitElement convUnit = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 50));
 		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 160));
 
-		UnitDescription unitSquareDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Square_Unit.xml")));
+		UnitDescription unitSquareDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/Square_Unit.xml")));
 		final UnitElement squareUnit = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 50));
 		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 160));
 
 		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/Add_Unit.xml"))), new Point(650, 100));
-		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Fire_Unit.xml"))), new Point(770, 100));
+		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Lookup Tables/Fire_Unit.xml"))), new Point(770, 100));
 
 		// some mixing, so they are not in order
 		nodes.add(sourceUnit);

@@ -39,8 +39,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 
 import visualap.Delegate;
@@ -48,6 +51,7 @@ import visualap.GPanel;
 import visualap.GPanelListener;
 
 /**
+ * Graphical workspace on which the units are drawn and which handles the mouse actions.
  * @author danielsenff
  *
  */
@@ -73,58 +77,60 @@ public class GraphPanel extends GPanel {
 
 	private BufferedImage iwIcon;
 
-	private String iconFile = "bin/imageflow/resources/iw-logo.png";
+	private final String iconFile = "bin/imageflow/resources/iw-logo.png";
 
 	/**
 	 * @param beans
 	 * @param parent
 	 */
-	public GraphPanel(ArrayList<Delegate> delegates, GPanelListener parent) {
+	public GraphPanel(final ArrayList<Delegate> delegates, final GPanelListener parent) {
 		super(delegates, parent);
 
-		DropTargetListener dropTargetListener = new DropTargetListener() {
+		this.setBorder(BorderFactory.createLoweredBevelBorder());
+		
+		final DropTargetListener dropTargetListener = new DropTargetListener() {
 			// Die Maus betritt die Komponente mit
 			// einem Objekt
-			public void dragEnter(DropTargetDragEvent e) {}
+			public void dragEnter(final DropTargetDragEvent e) {}
 
 			// Die Komponente wird verlassen 
-			public void dragExit(DropTargetEvent e) {}
+			public void dragExit(final DropTargetEvent e) {}
 
 			// Die Maus bewegt sich Ÿber die Komponente
-			public void dragOver(DropTargetDragEvent e) {}
+			public void dragOver(final DropTargetDragEvent e) {}
 
-			public void drop(DropTargetDropEvent e) {
+			public void drop(final DropTargetDropEvent e) {
 				try {
-					Transferable tr = e.getTransferable();
-					DataFlavor[] flavors = tr.getTransferDataFlavors();
+					final Transferable tr = e.getTransferable();
+					final DataFlavor[] flavors = tr.getTransferDataFlavors();
 					for (int i = 0; i < flavors.length; i++)
 						if (flavors[i].isFlavorJavaFileListType()) {
 							// ZunŠchst annehmen
 							e.acceptDrop (e.getDropAction());
-							List files = (List) tr.getTransferData(flavors[i]);
+							final List files = (List) tr.getTransferData(flavors[i]);
 							// Wir setzen in das Label den Namen der ersten 
 							// Datei
 							//							label.setText(files.get(0).toString());
 							e.dropComplete(true);
 							return;
 						}
-				} catch (Throwable t) { t.printStackTrace(); }
+				} catch (final Throwable t) { t.printStackTrace(); }
 				// Ein Problem ist aufgetreten
 				e.rejectDrop();
 			}
 
 			// Jemand hat die Art des Drops (Move, Copy, Link)
 			// geŠndert
-			public void dropActionChanged(DropTargetDragEvent e) {}
+			public void dropActionChanged(final DropTargetDragEvent e) {}
 
 		};
-		DropTarget dropTarget = new DropTarget(this, dropTargetListener);
+		final DropTarget dropTarget = new DropTarget(this, dropTargetListener);
 		this.setDropTarget(dropTarget);
 		
 		
 		try {
 			this.iwIcon = ImageIO.read(new File(iconFile ));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		
@@ -134,17 +140,17 @@ public class GraphPanel extends GPanel {
 	 * paint things that eventually go on a printer
 	 * @param g
 	 */
-	public void paintPrintable(Graphics g) {
+	public void paintPrintable(final Graphics g) {
 		rect = new Rectangle();
-		for (Node t : nodeL) {
+		for (final Node t : nodeL) {
 			rect = rect.union(t.paint(g, this));	
 		}
 		setPreferredSize(rect.getSize());
 		Connection conn;
-		for (Edge aEdge : EdgeL) {
+		for (final Edge aEdge : EdgeL) {
 			conn = (Connection)aEdge; 
-			Point from = aEdge.from.getLocation();
-			Point to = aEdge.to.getLocation();
+			final Point from = aEdge.from.getLocation();
+			final Point to = aEdge.to.getLocation();
 			g.setColor(  (conn.areImageBitDepthCompatible()) ? Color.BLACK : Color.RED );
 			g.drawLine(from.x, from.y, to.x, to.y);
 		}
@@ -156,12 +162,12 @@ public class GraphPanel extends GPanel {
 	 * @see visualap.GPanel#paintComponent(java.awt.Graphics)
 	 */
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paintComponent(final Graphics g) {
 		//		super.paintComponent(g);
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-		Graphics2D g2 = (Graphics2D) g;
+		final Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(
 				RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
@@ -176,21 +182,21 @@ public class GraphPanel extends GPanel {
 
 			// paint non printable items
 			if (drawEdge != null) {
-				Point origin = drawEdge.getLocation();
+				final Point origin = drawEdge.getLocation();
 				//			g2.setStroke(new BasicStroke(1f));
-				for (Node node : nodeL) {
-					int margin = 15;
+				for (final Node node : nodeL) {
+					final int margin = 15;
 					// check if mouse is within this dimensions of a node
 					if(isWithin2DRange(mouse, node.getOrigin(), node.getDimension(), margin)) {
 
 						// draw every pin
 						if(node instanceof UnitElement) {
-							for (Pin pin : ((UnitElement)node).getInputs()) {
+							for (final Pin pin : ((UnitElement)node).getInputs()) {
 								if(!drawEdge.getParent().equals(node)) 
 									drawCompatbilityIndicator(g2, margin, pin);
 							}
 
-							for (Pin pin : ((UnitElement)node).getOutputs()) {
+							for (final Pin pin : ((UnitElement)node).getOutputs()) {
 								if(!drawEdge.getParent().equals(node))
 									drawCompatbilityIndicator(g2, margin, pin);
 							}	
@@ -220,24 +226,24 @@ public class GraphPanel extends GPanel {
 		} else {
 			//draw a nice message to promote creating a graph
 
-			int x = 50;
-			int y = 80;
+			final int x = 50;
+			final int y = 80;
 
 			g2.drawImage(this.iwIcon, 25, 25, null);
 			
-			String headline = "Create your workflow";
-			String description1 = "Add new units to the graph by using the";
-			String description2 = "context menu or drag-n-drop units on the canvas.";
+			final String headline = "Create your workflow";
+			final String description1 = "Add new units to the graph by using the";
+			final String description2 = "context menu or drag-n-drop units on the canvas.";
 
 			g2.setColor(Color.GRAY);
 			
 			// scale font on big lengths
-			FontMetrics fm = g2.getFontMetrics();
-			int stringWidth = fm.stringWidth(headline);
-			int fontsize = 24;
-			int fontsizeOriginal = 12;
-			Font font = g2.getFont();
-			Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
+			final FontMetrics fm = g2.getFontMetrics();
+			final int stringWidth = fm.stringWidth(headline);
+			final int fontsize = 24;
+			final int fontsizeOriginal = 12;
+			final Font font = g2.getFont();
+			final Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
 			/*while(stringWidth > getWidth()-10) {
 				fontsize--;
 				newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
@@ -263,7 +269,7 @@ public class GraphPanel extends GPanel {
 	/**
 	 * @param align the align to set
 	 */
-	public void setAlign(boolean align) {
+	public void setAlign(final boolean align) {
 		this.align = align;
 		if(align) {
 			alignElements();
@@ -277,7 +283,7 @@ public class GraphPanel extends GPanel {
 	 * paints a simple grid on the canvas
 	 * @param g
 	 */
-	private void paintGrid(Graphics g) {
+	private void paintGrid(final Graphics g) {
 		if(drawGrid) {
 			g.setColor(new Color(220, 220, 220));
 			for (int x = 0; x < this.getWidth(); x+=GRIDSIZE) {
@@ -290,22 +296,20 @@ public class GraphPanel extends GPanel {
 	}
 
 	/**
-	 * aligns the elements to the grid
+	 * TODO aligns the elements to the grid
 	 */
 	public void alignElements() {
 
 	}
 
 
-	private void drawCompatbilityIndicator(Graphics2D g2, int margin, Pin pin) {
-		int diameter = 15;
-		Point pinLocation = pin.getLocation();
-		int pinX = pinLocation.x - (diameter/2); 
-		int pinY = pinLocation.y - (diameter/2);
+	private void drawCompatbilityIndicator(final Graphics2D g2, final int margin, final Pin pin) {
+		final int diameter = 15;
+		final Point pinLocation = pin.getLocation();
+		final int pinX = pinLocation.x - (diameter/2); 
+		final int pinY = pinLocation.y - (diameter/2);
 
 		// draw pin marker if mouse within inner range
-		int lowerYpin = pin.getLocation().y - margin;
-		int upperYpin = pin.getLocation().y + margin;
 		if(isWithin2DRange(mouse, pin.getLocation(), new Dimension(0,0), margin)) {
 
 			boolean isCompatible = false;
@@ -315,18 +319,19 @@ public class GraphPanel extends GPanel {
 			// input first or output first
 			if(drawEdge instanceof Output
 					&& pin instanceof Input) {
+				isLoop = ((Input)pin).isConnectedInInputBranch(drawEdge.getParent());
 				isCompatible = ((Output)drawEdge).isImageBitDepthCompatible(
 						((Input)pin).getImageBitDepth());
-				isLoop = ((Input)pin).knows(drawEdge.getParent());
+				
 			} else if (drawEdge instanceof Input
 					&& pin instanceof Output) {
+				isLoop = ((Output)pin).existsInInputSubgraph(drawEdge.getParent());
 				isCompatible = ((Input)drawEdge).isImageBitDepthCompatible(
 						((Output)pin).getImageBitDepth());
 			}
 
-			g2.setColor(
-					(isCompatible && !isLoop) ? Color.green : Color.red);
-			Ellipse2D.Double circle = 
+			g2.setColor((isCompatible && !isLoop) ? Color.green : Color.red);
+			final Ellipse2D.Double circle = 
 				new Ellipse2D.Double(pinX, pinY, diameter, diameter);
 			g2.fill(circle);
 			g2.setColor(new Color(0,0,0,44));
@@ -336,9 +341,9 @@ public class GraphPanel extends GPanel {
 
 			String errorMessage = "";
 			if(!isCompatible)
-				errorMessage += "Incompatible bit depth";
-			else if(isLoop) 
-				errorMessage += "Loops are not allowed";
+				errorMessage += "Incompatible bit depth \n";
+			if(isLoop) 
+				errorMessage += "Loops are not allowed\n";
 
 			if(errorMessage.length() != 0) 
 				drawErrorMessage(g2, errorMessage, pin.getLocation());
@@ -346,26 +351,51 @@ public class GraphPanel extends GPanel {
 		}
 	}
 
-	private void drawErrorMessage(Graphics2D g2, String text, Point origin) {
-		g2.setFont(new Font("Arial", Font.PLAIN, 12));
-		FontMetrics fm = g2.getFontMetrics();
-		g2.setColor(new Color(200,200,200));
-		if (text == null) {
-			System.out.println("Node.paint: Null Pointer Exception");
-			text = "*Null Pointer Exception*"; //zz now the exception is hidden, but what the problem?
+	private void drawErrorMessage(final Graphics2D g2, String text, final Point origin) {
+		
+		StringTokenizer stringTokenizer = new StringTokenizer(text, "\n");
+		Vector<String> lines = new Vector<String>();
+		while(stringTokenizer.hasMoreTokens()) {
+			lines.add(stringTokenizer.nextToken());
 		}
-		Dimension dimension = new Dimension();
-		dimension.setSize(fm.stringWidth(text) + 10, fm.getHeight() + 4);
-		int padding = 2;
+		
+		
+		g2.setFont(new Font("Arial", Font.PLAIN, 12));
+		final FontMetrics fm = g2.getFontMetrics();
+		
+		
+		
+		
+		final Dimension dimension = new Dimension();
+		String longestLine = "";
+		for (String line : lines) {
+			if(line.length() > longestLine.length())
+				longestLine = line;
+		}
+		
+		dimension.setSize(fm.stringWidth(longestLine) + 10, (fm.getHeight() + 4)*lines.size());
+		final int padding = 2;
+		
+		g2.setColor(new Color(255,255,180));
 		g2.fillRoundRect(origin.x-padding, origin.y-padding, 
 				dimension.width+padding, dimension.height+padding, 4, 4);
-
 		g2.setStroke(new BasicStroke(1f));
 		//	    g2.setColor(new Color(0,0,0,44));
 		g2.drawRoundRect(origin.x-padding, origin.y-padding, 
 				dimension.width+padding, dimension.height+padding, 4, 4);
+		
+		
 		g2.setColor(Color.BLACK);
-		g2.drawString(text, origin.x + 5, (origin.y + padding) + fm.getAscent());
+		
+		int lineheight = fm.getHeight() + 5;
+		int yT = (origin.y + padding) + fm.getAscent();
+		for (String line : lines) {
+			g2.drawString(line, origin.x + 5, yT);
+			yT += lineheight;
+		}
+		
+		
+		
 	}
 
 
@@ -407,36 +437,36 @@ public class GraphPanel extends GPanel {
 	 * Replace the current {@link UnitList} with a different one.
 	 * @param units2
 	 */
-	public void setNodeL(UnitList units2) {
+	public void setNodeL(final UnitList units2) {
 		super.nodeL = units2;
 	}
 
 	@Override
-	public void properties(Node node) {
+	public void properties(final Node node) {
 		if (node instanceof CommentNode) {
 			//			propertySheet.setVisible(false);
-			String inputValue = JOptionPane.showInputDialog("Edit text:",((CommentNode)node).getText()); 
+			final String inputValue = JOptionPane.showInputDialog("Edit text:",((CommentNode)node).getText()); 
 			if ((inputValue != null)&&(inputValue.length() != 0)) {
 				((CommentNode)node).setText(inputValue);
 				repaint();
 			}
 		}
 		else { // aNode instanceof NodeBean
-			UnitElement unit = (UnitElement) node;
+			final UnitElement unit = (UnitElement) node;
 			unit.showProperties();
 		}
 		//		super.properties(node);
 	}
 
 
-	public void setGraphController(GraphController graphController) {
+	public void setGraphController(final GraphController graphController) {
 		this.selection.clear();
 		this.nodeL = graphController.getUnitElements();
 		this.EdgeL = graphController.getConnections();
 
 	}
 
-	public void setSelections(SelectionList selections) {
+	public void setSelections(final SelectionList selections) {
 		this.selection = selections;
 	}
 

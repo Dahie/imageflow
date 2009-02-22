@@ -307,29 +307,43 @@ public class Input extends Pin implements Connectable {
 
 	/**
 	 * Returns true if the graph branch connected to this input contains the unit.
-	 * @param node
+	 * @param goal
 	 * @return
 	 */
-	public boolean knows(Node node) {
+	public boolean isConnectedInInputBranch(Node goal) {
 		// self reference is true
-		if(node.equals(parent))
+		if(goal.equals(parent))
 			return false;
 		
 		// can only check inputs, which are connected
-		if(this.isConnected()) {
-			for (Input input : fromUnit.getInputs()) {
+		return traverseOutput((UnitElement)parent, goal);
+	}
+
+
+	private boolean traverseOutput(UnitElement parent, Node goal) {
+		if(parent.equals(goal)) {
+			return true;
+		} else if (parent.hasOutputsConnected()) {
+			for (Output output : parent.getOutputs()) {
+				if(output.isConnected()) {
+					return traverseOutput(output.getToUnit(), goal);
+				}
+			}
+		} 
+		
+		
+		/*if(parent.hasInputsConnected()) {
+			for (Input input : parent.getInputs()) {
 				// check if this parent is already what we are looking for
-				if(input.getParent().equals(node)) { 
+				if(input.getParent().equals(goal)) { 
 					return true;
 				//check if this input is connected to more
 				} else if(input.isConnected()) {
 					// if it is connected, maybe we have more luck here
-					return input.knows(node);
+					return traverseInput(input.getFromUnit(), node);
 				}
 			}
-		}
-
-		// if nothing helps, it's false
+		}*/
 		return false;
 	}
 	

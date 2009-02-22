@@ -1,6 +1,7 @@
 package imageflow.backend;
 
 import helper.Tools;
+import imageflow.ImageFlow;
 import imageflow.models.unit.UnitDelegate;
 import imageflow.models.unit.UnitDescription;
 import imageflow.models.unit.UnitElement;
@@ -8,11 +9,11 @@ import imageflow.models.unit.UnitFactory;
 
 import java.awt.Point;
 import java.io.File;
-import java.util.Enumeration;
 import java.util.HashMap;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
@@ -22,11 +23,17 @@ import visualap.Delegate;
 
 public class DelegatesController {
 
+	private static String unitFolder = "xml_units";
+	
 	private static DelegatesController controller;
 	//	private ArrayList<Delegate> unitDelegates;
 	HashMap<TreeNode, Delegate> delegates;
 	public DefaultTreeModel delegatesModel;
 
+	public DelegatesController(String unitFolderPath) {
+		this.unitFolder = unitFolderPath;
+	}
+	
 	/**
 	 * Get a list of all Units that can be added to the workflow.
 	 * @return
@@ -52,12 +59,15 @@ public class DelegatesController {
 		delegatesModel = new DefaultTreeModel(top);
 		JMenu insertMenu = new JMenu("Insert unit");
 
-		String unitsFolder = System.getProperty("user.dir")+File.separator+"xml_units";
+		String unitsFolder = System.getProperty("user.dir")+File.separator+unitFolder;
 		File folder = new File(unitsFolder);
-		System.out.println(folder.getAbsolutePath());
 		if(folder.exists()) 
 			readDelegatesFromFolder(top, insertMenu, folder);
 		else 
+			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+					"The folder "+unitFolder+" is missing. No units have been found.",
+					"No unit defintions found", 
+					JOptionPane.WARNING_MESSAGE);
 			System.out.println("No units-folder found");
 	}
 
@@ -73,8 +83,6 @@ public class DelegatesController {
 				((DefaultMutableTreeNode) node).add(subNode);
 				menu.add(subMenu);
 			} else if (file.isFile() && isXML(file)) {
-//				System.out.println("File " + file.getName());
-
 				final UnitDescription unitDescription = new UnitDescription(Tools.getXMLRoot(file));
 				final UnitDelegate unitDelegate = 
 					new UnitDelegate(unitDescription.getUnitName(), unitDescription.getHelpString()) {
@@ -95,69 +103,6 @@ public class DelegatesController {
 			}
 		}
 	}
-
-
-	//		unitDelegates.add(new UnitDelegate("Source", "This is an image source, which loads an imagefile into the workflow.") {
-	//			@Override
-	//			public UnitElement createUnit(final Point origin) {
-	//				return UnitFactory.createSourceUnit(origin);
-	//			}
-	//		});
-
-
-	//		unitDelegates.add(new UnitDelegate("Background", "Creates a new canvas, an empty background.") {
-	//			@Override
-	//			public UnitElement createUnit(final Point origin) {
-	//				int width = Integer.parseInt(JOptionPane.showInputDialog("Width of the background:"));
-	//				int height = Integer.parseInt(JOptionPane.showInputDialog("Height of the background:"));
-	//				return UnitFactory.createBackgroundUnit(new Dimension(width,height), origin);
-	//			}
-	//		});
-	//		unitDelegates.add(new UnitDelegate("Add Noise", "This filter adds noise to the image.") {
-	//			@Override
-	//			public UnitElement createUnit(final Point origin) {
-	//				return UnitFactory.createAddNoiseUnit(origin);
-	//			}
-	//		});
-	//		unitDelegates.add(new UnitDelegate("Gaussian Blur", "The image is blurred using Gaussian Blur.") {
-	//			@Override
-	//			public UnitElement createUnit(final Point origin) {
-	//				return UnitFactory.createGaussianBlurUnit(origin);
-	//			}
-	//		});
-	//		unitDelegates.add(new UnitDelegate("Find Edges", "Finds edges in the image and filters them.") {
-	//			@Override
-	//			public UnitElement createUnit(final Point origin) {
-	//				return UnitFactory.createFindEdgesUnit(origin);
-	//			}
-	//		});
-	//		unitDelegates.add(new UnitDelegate("Invert", "Invert the image.") {
-	//			@Override
-	//			public UnitElement createUnit(final Point origin) {
-	//				return UnitFactory.createInvertUnit(origin);
-	//			}
-	//		});	
-	//		unitDelegates.add(new UnitDelegate("Math", "Subtracts to images from another") {
-	//			@Override
-	//			public UnitElement createUnit(final Point origin) {
-	//				return UnitFactory.createImageCalculatorUnit(origin);
-	//			}
-	//		});
-	//		
-	//		unitDelegates.add(new UnitDelegate("Measure", "Prints several measurements of the image.") {
-	//			@Override
-	//			public UnitElement createUnit(final Point origin) {
-	//				return UnitFactory.buildUnitElement(name, "run(\"Measure\");", origin);
-	//			}
-	//		});
-	//		unitDelegates.add(new UnitDelegate("Histogram", "Shows the histogramm of the input image.") {
-	//			@Override
-	//			public UnitElement createUnit(final Point origin) {
-	//				return UnitFactory.createHistogramUnit(origin);
-	//			}
-	//		});
-
-	//}
 
 	private boolean isXML(File file) {
 		return file.getName().toLowerCase().contains("xml");

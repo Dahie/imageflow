@@ -1,8 +1,8 @@
 package imageflow.gui;
 
 import imageflow.backend.DelegatesController;
-import imageflow.backend.Model;
-import imageflow.backend.ModelListener;
+import imageflow.models.Model;
+import imageflow.models.ModelListener;
 import imageflow.models.unit.CommentNode;
 import imageflow.models.unit.UnitDelegate;
 import imageflow.models.unit.UnitElement;

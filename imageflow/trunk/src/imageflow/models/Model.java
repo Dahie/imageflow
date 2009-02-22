@@ -1,4 +1,4 @@
-package imageflow.backend;
+package imageflow.models;
 
 
 public interface Model {

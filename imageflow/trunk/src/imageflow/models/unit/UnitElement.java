@@ -1,11 +1,6 @@
 package imageflow.models.unit;
-import graph.NodeAbstract;
 import helper.PaintUtil;
-import ij.IJ;
-import ij.ImagePlus;
 import ij.gui.GenericDialog;
-import imageflow.backend.Model;
-import imageflow.backend.ModelListener;
 import imageflow.models.Input;
 import imageflow.models.MacroElement;
 import imageflow.models.Output;
@@ -13,12 +8,10 @@ import imageflow.models.parameter.AbstractParameter;
 import imageflow.models.parameter.BooleanParameter;
 import imageflow.models.parameter.ChoiceParameter;
 import imageflow.models.parameter.DoubleParameter;
-import imageflow.models.parameter.FileParameter;
 import imageflow.models.parameter.IntegerParameter;
 import imageflow.models.parameter.Parameter;
 import imageflow.models.parameter.ParameterFactory;
 import imageflow.models.parameter.StringParameter;
-import imageflow.tasks.LoadFlowGraphTask;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -38,10 +31,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import javax.swing.JFileChooser;
-
-import org.jdesktop.application.Task;
-
 
 
 /**
@@ -51,6 +40,8 @@ import org.jdesktop.application.Task;
  */
 public class UnitElement extends AbstractUnit {
 
+	final private static int PIN_TOLERANCE = 12;
+	
 	/**
 	 * name of this unit, this is not display, Label is displayed
 	 */
@@ -317,7 +308,6 @@ public class UnitElement extends AbstractUnit {
 	}
 
 
-
 	/**
 	 * Returns the typename of this unit.
 	 * @return the unitName
@@ -433,23 +423,22 @@ public class UnitElement extends AbstractUnit {
 	 */
 	@Override
 	public Object contains(final int x, final int y) {
-		int tolerance = 8;
-		if ((x >= origin.x - tolerance)
-				&&(x < origin.x + tolerance))	{
+		if ((x >= origin.x - PIN_TOLERANCE)
+				&&(x < origin.x + PIN_TOLERANCE))	{
 			int inputsMaxCount = getInputsCount();
 			for (int i = 0; i < inputsMaxCount; i++) {
 				int lower_y = PaintUtil.alignY(inputsMaxCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
-				if ((y >= lower_y)&&(y <= lower_y + tolerance*2)) {
+				if ((y >= lower_y)&&(y <= lower_y + PIN_TOLERANCE*2)) {
 					return getInput(i);
 				}
 			}
 		}
-		if ((x >= origin.x + getDimension().width - tolerance)
-				&&(x < origin.x + getDimension().width + tolerance)) {
+		if ((x >= origin.x + getDimension().width - PIN_TOLERANCE)
+				&&(x < origin.x + getDimension().width + PIN_TOLERANCE)) {
 			int outputsCount = getOutputsCount();
 			for (int i = 0; i < outputsCount; i++) {
 				int lower_y = PaintUtil.alignY(outputsCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
-				if ((y >= lower_y)&&(y <= lower_y + tolerance*2)) {
+				if ((y >= lower_y)&&(y <= lower_y + PIN_TOLERANCE*2)) {
 					return getOutput(i);
 				}
 			}
@@ -573,9 +562,19 @@ public class UnitElement extends AbstractUnit {
 					output.isDoDisplay());
 		}
 		for (Parameter parameter : parameters) {
-			clone.addParameter(
-					ParameterFactory.createParameter(parameter.getDisplayName(), 
-							parameter.getValue(), parameter.getHelpString()));
+			Parameter newParameter;
+			if(parameter instanceof ChoiceParameter) {
+				newParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+								parameter.getValue(), parameter.getHelpString(), null, ((ChoiceParameter)parameter).getChoiceIndex());
+			} else if (parameter instanceof BooleanParameter){
+				newParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+								parameter.getValue(), parameter.getHelpString(), ((BooleanParameter)parameter).getTrueString(), 0);
+			} else {
+				newParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+								parameter.getValue(), parameter.getHelpString());	
+			}
+			clone.addParameter(parameter);
+			
 		}
 		clone.setDisplayUnit(this.isDisplayUnit);
 		clone.setColor(this.color);
@@ -682,7 +681,7 @@ public class UnitElement extends AbstractUnit {
 	}
 
 	/**
-	 * Is true as soon as it finds one connected {@link Input}.
+	 * Is true as soon as one connected {@link Input} is found.
 	 * @return
 	 */
 	public boolean hasInputsConnected() {
@@ -693,7 +692,10 @@ public class UnitElement extends AbstractUnit {
 		return false;
 	}
 
-
+	/**
+	 * Is true as soon as oneconnected {@link Output} is found.
+	 * @return
+	 */
 	public boolean hasOutputsConnected() {
 		for (final Output output : outputs) {
 			if(output.isConnected())

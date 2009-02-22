@@ -1,7 +1,7 @@
 package imageflow.models.unit;
 
 import graph.Node;
-import imageflow.backend.ModelListener;
+import imageflow.models.ModelListener;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

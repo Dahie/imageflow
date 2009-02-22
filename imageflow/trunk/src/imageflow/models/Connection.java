@@ -1,9 +1,8 @@
 package imageflow.models;
 
-import imageflow.models.unit.UnitElement;
 import graph.Edge;
-import graph.Node;
 import graph.Pin;
+import imageflow.models.unit.UnitElement;
 
 /**
  * Connection between two {@link Pin}s, {@link Input} and {@link Output}.
@@ -250,14 +249,23 @@ public class Connection extends Edge {
 	 * @return
 	 */
 	public boolean isConnected() {
-		if(((Input)this.to).isConnected() 
-				&& ((Output)this.from).isConnected()) return true;
-		return false;
+		Output from = (Output)this.from;
+		Input to = (Input)this.to;
+		
+		System.out.println(from +" and "+ to);
+		
+		if(from.isConnectedWith(to) && to.isConnectedWith(from)) 
+			return true;
+		else
+			return false;
+//		if(((Input)this.to).isConnected() 
+//				&& ((Output)this.from).isConnected()) return true;
+		// technically, if the connection isn true, this connection object is kinda zombie
 	}
 	
 	public boolean causesLoop() {
-		if(((Input)this.to).knows(this.fromUnit)) return true;
-		if(((Output)this.from).knows(this.toUnit)) return true;
+		if(((Input)this.to).isConnectedInInputBranch(this.fromUnit)) return true;
+		if(((Output)this.from).existsInInputSubgraph(this.toUnit)) return true;
 		return false;
 	}
 }

@@ -147,7 +147,7 @@ public class InputTests extends TestCase {
 
 		assertTrue("both do 32", input1.isImageBitDepthCompatible(output1.getImageBitDepth()));
 		assertFalse("32 to 16", input2.isImageBitDepthCompatible(output1.getImageBitDepth()));
-		assertTrue("all to 32", input1.isImageBitDepthCompatible(output2.getImageBitDepth()));
+		assertFalse("all to 32", input1.isImageBitDepthCompatible(output2.getImageBitDepth()));
 		assertTrue("32 to all", input3.isImageBitDepthCompatible(output1.getImageBitDepth()));
 
 	}
@@ -193,18 +193,18 @@ public class InputTests extends TestCase {
 		assertTrue(connList.add(conn1));
 		
 		Input input2 = unit2.getInput(0);
-		assertTrue("input2 knows unit1", input2.knows(unit1));
-		assertFalse("input2 knows unit2", input2.knows(unit2));
-		assertFalse("input2 knows unit3", input2.knows(unit3));
+		assertTrue("input2 knows unit1", input2.isConnectedInInputBranch(unit1));
+		assertFalse("input2 knows unit2", input2.isConnectedInInputBranch(unit2));
+		assertFalse("input2 knows unit3", input2.isConnectedInInputBranch(unit3));
 		
 		Connection conn2 = new Connection(unit2, 1, unit3, 1);
 		assertTrue(connList.add(conn2));
 		
 		Input input3 = unit3.getInput(0);
-		assertTrue("input3 knows unit1", input3.knows(unit1));
-		assertTrue("input3 knows unit2", input3.knows(unit2));
-		assertFalse("input3 knows unit1", input3.knows(unit3));
-		assertFalse("input2 knows unit3", input2.knows(unit3));
+		assertTrue("input3 knows unit1", input3.isConnectedInInputBranch(unit1));
+		assertTrue("input3 knows unit2", input3.isConnectedInInputBranch(unit2));
+		assertFalse("input3 knows unit1", input3.isConnectedInInputBranch(unit3));
+		assertFalse("input2 knows unit3", input2.isConnectedInInputBranch(unit3));
 	}
 	
 	

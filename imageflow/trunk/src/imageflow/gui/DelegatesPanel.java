@@ -170,6 +170,7 @@ public class DelegatesPanel extends JPanel {
 				
 				setLayout(new BorderLayout());
 				filename.setText(theLabel);
+				filename.setToolTipText(unitDelegate.getToolTipText());
 				filename.setAlignmentX(Component.LEFT_ALIGNMENT);
 				if(isSelected){	//set the red ball
 					setBackground(SystemColor.textHighlight);

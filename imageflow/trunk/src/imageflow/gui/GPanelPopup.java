@@ -76,7 +76,7 @@ public class GPanelPopup implements GPanelListener {
 				popup.add(getAction("copy"));
 				popup.add(getAction("paste"));
 				popup.add(getAction("unbind"));
-				popup.add(getAction("remove"));
+				popup.add(getAction("delete"));
 			}
 			if (!copyL.isEmpty()) 
 				popup.add(getAction("paste"));

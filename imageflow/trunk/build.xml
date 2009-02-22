@@ -3,7 +3,7 @@
 <!--this file was created by Eclipse Runnable JAR Export Wizard-->
 <!--ANT 1.7 is required                                        -->
 <target name="create_run_jar">
-<jar destfile="${basedir}/imageflow005.jar" filesetmanifest="mergewithoutmain">
+<jar destfile="${basedir}/Imageflow_.jar" filesetmanifest="mergewithoutmain">
 	<manifest>
 		<attribute name="Built-By" value="${user.name}"/>
 		<attribute name="Main-Class" value="imageflow.ImageFlow"/>
@@ -16,6 +16,7 @@
 	<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/jdom.jar"/>
 	<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/appframework-1.0.3.jar"/>
 	<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-worker-1.1.jar"/>
+	<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-layout-1.0.3.jar"/>
 </jar>
 </target>
 </project>

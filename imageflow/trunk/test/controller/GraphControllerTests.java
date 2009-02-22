@@ -1,4 +1,4 @@
-package models;
+package controller;
 
 import imageflow.backend.GraphController;
 import imageflow.models.unit.UnitElement;

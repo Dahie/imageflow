@@ -6,12 +6,12 @@ package imageflow.models.unit;
 import graph.Edge;
 import graph.GList;
 import graph.Node;
-import imageflow.backend.Model;
-import imageflow.backend.ModelListener;
 import imageflow.models.Connection;
 import imageflow.models.ConnectionList;
 import imageflow.models.Input;
 import imageflow.models.MacroElement;
+import imageflow.models.Model;
+import imageflow.models.ModelListener;
 import imageflow.models.Output;
 import imageflow.models.parameter.BooleanParameter;
 import imageflow.models.parameter.ChoiceParameter;
@@ -40,7 +40,7 @@ import org.jdom.output.XMLOutputter;
  * @author danielsenff
  *
  */
-public class UnitList extends GList<Node> implements Model {
+public class UnitList extends GList<Node> implements Model, Cloneable {
 
 	private ConnectionList connections;
 
@@ -64,11 +64,9 @@ public class UnitList extends GList<Node> implements Model {
 	 * @throws FileNotFoundException 
 	 */
 	public void read(File file) throws FileNotFoundException {
-		Node[] node = null;
-		Vector<UnitElement> newNodes = new Vector();
+		Vector<UnitElement> newNodes = new Vector<UnitElement>();
 
 		if(!file.exists()) throw new FileNotFoundException("reading failed, the file as not found");
-		int numUnits = 0;
 
 		// setup of units
 		try {
@@ -85,13 +83,13 @@ public class UnitList extends GList<Node> implements Model {
 			if (unitsElement != null) {  
 				List<Element> unitsList = unitsElement.getChildren();
 				Iterator<Element> unitsIterator = unitsList.iterator();
-				numUnits = unitsList.size() + 1;
+				int numUnits = unitsList.size() + 1;
 //				node = new Node[numUnits];
 				
 
 				// loop Ÿber alle Units
 				while (unitsIterator.hasNext()) { 
-					Element actualUnitElement = (Element) unitsIterator.next();
+					Element actualUnitElement = unitsIterator.next();
 					int xPos 		= Integer.parseInt(actualUnitElement.getChild("XPos").getValue());
 					int yPos		= Integer.parseInt(actualUnitElement.getChild("YPos").getValue());
 					String label = "";
@@ -129,13 +127,13 @@ public class UnitList extends GList<Node> implements Model {
 
 				// loop Ÿber alle connections
 				while (connectionsIterator.hasNext()) { 
-					Element actualConnectionElement = (Element) connectionsIterator.next();
+					Element actualConnectionElement = connectionsIterator.next();
 					int fromUnitID 			= Integer.parseInt(actualConnectionElement.getChild("FromUnitID").getValue());
 					int fromOutputNumber 	= Integer.parseInt(actualConnectionElement.getChild("FromOutputNumber").getValue());
 					int toUnitID 			= Integer.parseInt(actualConnectionElement.getChild("ToUnitID").getValue());
 					int toInputNumber 		= Integer.parseInt(actualConnectionElement.getChild("ToInputNumber").getValue());
-					Connection con 			= new Connection(((UnitElement)newNodes.get(fromUnitID-1)), fromOutputNumber, 
-							((UnitElement)newNodes.get(toUnitID-1)), toInputNumber);
+					Connection con 			= new Connection(newNodes.get(fromUnitID-1), fromOutputNumber, 
+							newNodes.get(toUnitID-1), toInputNumber);
 					addConnection(con);
 				}
 			}
@@ -146,8 +144,12 @@ public class UnitList extends GList<Node> implements Model {
 		}	
 	}
 
-	public void write(File file) throws IOException {
-		SAXBuilder sb = new SAXBuilder();
+	/**
+	 * @param file
+	 * @throws IOException
+	 */
+	public void write(final File file) throws IOException {
+		final SAXBuilder sb = new SAXBuilder();
 		Element root = new Element("FlowDescription");
 		Document flowGraph = new Document(root);
 
@@ -332,6 +334,7 @@ public class UnitList extends GList<Node> implements Model {
 		// output
 		new XMLOutputter(Format.getPrettyFormat()).output(flowGraph, System.out);
 		FileOutputStream fos = new FileOutputStream(file);
+		System.out.println(file);
 		new XMLOutputter(Format.getPrettyFormat()).output(flowGraph, fos);
 	}
 
@@ -386,8 +389,12 @@ public class UnitList extends GList<Node> implements Model {
 		return true;
 	}
 
-	public Node getUnit(int id) {
-		for (Iterator node = this.iterator(); node.hasNext();) {
+	/**
+	 * @param id
+	 * @return
+	 */
+	public Node getUnit(final int id) {
+		for (Iterator<Node> node = this.iterator(); node.hasNext();) {
 			AbstractUnit unit = (AbstractUnit) node.next();
 			if(unit.getUnitID() == id) 
 				return unit;
@@ -401,6 +408,7 @@ public class UnitList extends GList<Node> implements Model {
 	 * @param unit 
 	 * @return 
 	 */
+	@Override
 	public boolean remove(final Node node) {
 		if(node instanceof UnitElement) {
 			UnitElement unit = (UnitElement) node;
