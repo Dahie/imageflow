@@ -49,16 +49,16 @@ public class CheckGraphAction extends AbstractGraphAction {
 			}
 			ex.printStackTrace();
 		}
-		
-		String status;
-		if(controller.checkNetwork()) {
-			status = "OK";
-		} else {
-			status = "not OK";
-		}
-		//TODO
-		JOptionPane.showMessageDialog(null, "The graph is " + status + "\n"
-				+ chksys.getErrorList());
+//		
+//		String status;
+//		if(controller.checkNetwork()) {
+//			status = "OK";
+//		} else {
+//			status = "not OK";
+//		}
+//		//TODO
+//		JOptionPane.showMessageDialog(null, "The graph is " + status + "\n"
+//				+ chksys.getErrorList());
 	}
 	
 }

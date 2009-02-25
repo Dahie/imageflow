@@ -63,14 +63,13 @@ public class GraphController{
 	public void runImageJMacro(final String macro, boolean showLog) {
 		ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
 		if(imagej == null)
-			imagej = new ImageJ(null, ImageJ.EMBEDDED);
+			imagej = new ImageJ(null);
 
 		if(showLog)
 			IJ.log(macro);
 
 		imagej.setVisible(false);
 		IJ.runMacro(macro, "");
-		imagej.quit();
 	}
 
 

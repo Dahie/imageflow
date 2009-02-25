@@ -85,7 +85,7 @@ public class DelegatesController {
 			} else if (file.isFile() && isXML(file)) {
 				final UnitDescription unitDescription = new UnitDescription(Tools.getXMLRoot(file));
 				final UnitDelegate unitDelegate = 
-					new UnitDelegate(unitDescription.getUnitName(), unitDescription.getHelpString()) {
+					new UnitDelegate(unitDescription) {
 
 					@Override
 					public UnitElement createUnit(final Point origin) {

@@ -4,8 +4,14 @@ import imageflow.backend.DelegatesController;
 import imageflow.models.unit.UnitDelegate;
 import imageflow.models.unit.UnitList;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.SystemColor;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -18,18 +24,15 @@ import java.awt.dnd.DragSource;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Set;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.filechooser.FileSystemView;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
@@ -38,20 +41,23 @@ import javax.swing.tree.TreePath;
 
 import visualap.Delegate;
 
+/**
+ * Panel which displays the units that can be inserted into the workflow.
+ * @author danielsenff
+ *
+ */
 public class DelegatesPanel extends JPanel {
 
-	private HashMap<TreeNode, Delegate> delegates;
+	private final HashMap<TreeNode, Delegate> delegates;
 
+	/**
+	 * @param unitList
+	 */
 	public DelegatesPanel(final UnitList unitList) {
-		DelegatesController delegatesController = DelegatesController.getInstance();
+		final DelegatesController delegatesController = DelegatesController.getInstance();
 		this.delegates = delegatesController.getUnitDelegates();
 		setLayout(new BorderLayout());
-
-		DefaultMutableTreeNode top =
-			new DefaultMutableTreeNode("ImageJ Filters");
-		DefaultTreeModel delegatesModel = delegatesController.getDelegatesModel();
-		//		createNodes(top);
-
+		final DefaultTreeModel delegatesModel = delegatesController.getDelegatesModel();
 
 
 		final JTree delegatesTree = new JTree(delegatesModel);
@@ -59,15 +65,15 @@ public class DelegatesPanel extends JPanel {
 		delegatesTree.setToggleClickCount(1);
 		delegatesTree.addMouseMotionListener(new MouseMotionListener() {
 
-			public void mouseDragged(MouseEvent e) {
-				DragGestureListener dragGestureListener = new DragGestureListener() {
-					public void dragGestureRecognized(DragGestureEvent e) {
+			public void mouseDragged(final MouseEvent e) {
+				final DragGestureListener dragGestureListener = new DragGestureListener() {
+					public void dragGestureRecognized(final DragGestureEvent e) {
 						// Der Text des Label soll
 						// JVM-intern Ÿbertragen werden
 						//						StringSelection selection = new StringSelection("test");
-						Transferable trans = new Transferable() {
+						final Transferable trans = new Transferable() {
 
-							public Object getTransferData(DataFlavor arg0)
+							public Object getTransferData(final DataFlavor arg0)
 							throws UnsupportedFlavorException,
 							IOException {
 								return null;
@@ -77,7 +83,7 @@ public class DelegatesPanel extends JPanel {
 								return null;
 							}
 
-							public boolean isDataFlavorSupported(DataFlavor arg0) {
+							public boolean isDataFlavorSupported(final DataFlavor arg0) {
 								return false;
 							}
 
@@ -85,116 +91,140 @@ public class DelegatesPanel extends JPanel {
 						e.startDrag(null, trans);
 					} 
 				};
-				DragSource dragSource = new DragSource();
-				DragGestureRecognizer dgr = dragSource.createDefaultDragGestureRecognizer(
+				final DragSource dragSource = new DragSource();
+				final DragGestureRecognizer dgr = dragSource.createDefaultDragGestureRecognizer(
 						delegatesTree, DnDConstants.ACTION_MOVE, dragGestureListener);
 			}
 
-			public void mouseMoved(MouseEvent e) {}
+			public void mouseMoved(final MouseEvent e) {}
 		});
 
 		delegatesTree.addMouseListener(new MouseListener() {
 
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(final MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					JTree tree = (JTree) e.getSource();
+					final JTree tree = (JTree) e.getSource();
 
-					int selRow = tree.getRowForLocation(e.getX(), e.getY());
-					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+					final int selRow = tree.getRowForLocation(e.getX(), e.getY());
+					final TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 					if(selRow != -1 && selPath.getLastPathComponent() instanceof UnitDelegate) {
 						//			        	 myDoubleClick(selRow, selPath);
-						UnitDelegate ud = ((UnitDelegate)selPath.getLastPathComponent());
+						final UnitDelegate ud = ((UnitDelegate)selPath.getLastPathComponent());
 						unitList.add(ud.createUnit(UnitDelegate.POINT));
 					}
 				}
 			}
 
-			public void mouseEntered(MouseEvent arg0) {}
+			public void mouseEntered(final MouseEvent arg0) {}
 
-			public void mouseExited(MouseEvent arg0) {}
+			public void mouseExited(final MouseEvent arg0) {}
 
-			public void mousePressed(MouseEvent arg0) {}
+			public void mousePressed(final MouseEvent arg0) {}
 
-			public void mouseReleased(MouseEvent arg0) {}
+			public void mouseReleased(final MouseEvent arg0) {}
 
 		});
 		delegatesTree.setCellRenderer(new IFTreeCellRenderer());
 
-		JScrollPane scrollPane = new JScrollPane(delegatesTree);
+		final JScrollPane scrollPane = new JScrollPane(delegatesTree);
 		add(scrollPane, BorderLayout.CENTER);
 
-	}
-
-	private void createNodes(DefaultMutableTreeNode top) {
-
-		Set<TreeNode> keys = delegates.keySet();
-
-		DefaultMutableTreeNode nodeAnalysis = new DefaultMutableTreeNode("Analysis");
-		top.add(nodeAnalysis);
-
-		for (TreeNode treeNode : keys) {
-			nodeAnalysis.add((MutableTreeNode) treeNode);
-		}
-
-
-		/*top.add(new DefaultMutableTreeNode("Filter"));
-		top.add(new DefaultMutableTreeNode("Adjust"));
-		top.add(new DefaultMutableTreeNode("Lookup Tables"));*/
 	}
 
 
 	class IFTreeCellRenderer extends JPanel implements TreeCellRenderer {
 		JLabel filename = new JLabel();
 		private JLabel fileicon;
+		private BufferedImage icon;
 
 
-		public Component getTreeCellRendererComponent(JTree tree, Object value,
-				boolean isSelected, boolean expanded, boolean isLeaf, int row,
-				boolean hasFocus) {
+		public Component getTreeCellRendererComponent(final JTree tree, final Object value,
+				final boolean isSelected, final boolean expanded, final boolean isLeaf, final int row,
+				final boolean hasFocus) {
 
 			init(value, isSelected, isLeaf);
 
 			return this;//return component used to render
 		}
 
-		private void init(Object value, boolean isSelected, boolean isLeaf) {
-
+		private void init(final Object value, final boolean isSelected, final boolean isLeaf) {
+			String theLabel = ((MutableTreeNode)value).toString();
+			String tooltip = "";
 			
-			if(value instanceof UnitDelegate && isLeaf) {
-				UnitDelegate unitDelegate = (UnitDelegate)value;
-				String theLabel = unitDelegate.getName();
+			setLayout(new BorderLayout());
+			fileicon = new JLabel();
+			filename.setText(theLabel);
+			filename.setToolTipText(tooltip);
+			filename.setAlignmentX(Component.LEFT_ALIGNMENT);
+			if(isSelected) {	
+				setBackground(SystemColor.textHighlight);
+			}else{	
+				setBackground(SystemColor.text);
+			}
+			this.icon = drawIcon(Color.WHITE, 16, 16);
+			
+			
+			if (value instanceof UnitDelegate && isLeaf) {
 				
+				final UnitDelegate unitDelegate = (UnitDelegate)value;
+				theLabel = unitDelegate.getName();
+				tooltip = unitDelegate.getToolTipText();
 
-//				Icon systemIcon = FileSystemView.getFileSystemView().getSystemIcon(file);
-//				fileicon = new JLabel(systemIcon);
-				
-				setLayout(new BorderLayout());
-				filename.setText(theLabel);
-				filename.setToolTipText(unitDelegate.getToolTipText());
-				filename.setAlignmentX(Component.LEFT_ALIGNMENT);
-				if(isSelected){	//set the red ball
-					setBackground(SystemColor.textHighlight);
-				}else{	//set the blue ball for not selected
-					setBackground(SystemColor.text);
-				}
-//				this.add(fileicon, BorderLayout.LINE_START);
-				this.add(filename, BorderLayout.CENTER);
-				
-			} else if (value instanceof MutableTreeNode && !isLeaf) {
-				String theLabel = ((MutableTreeNode)value).toString();
-				setLayout(new BorderLayout());
-				filename.setText(theLabel);
-				filename.setAlignmentX(Component.LEFT_ALIGNMENT);
-				if(isSelected){	//set the red ball
-					setBackground(SystemColor.textHighlight);
-				}else{	//set the blue ball for not selected
-					setBackground(SystemColor.text);
-				}
-//				this.add(fileicon, BorderLayout.LINE_START);
-				this.add(filename, BorderLayout.CENTER);
+				this.icon = drawIcon(unitDelegate.getColor(), 16, 16);
+				fileicon = new JLabel(new Icon() {
+					public int getIconHeight() { return 16;	}
+					public int getIconWidth() { return 16; 	}
+					public void paintIcon(final Component arg0, final Graphics g,
+							final int arg2, final int arg3) {
+						g.drawImage(icon, 0, 0, null);
+					}
+				});
 			}
 
 			
+			fileicon.setPreferredSize(new Dimension(20, 16));
+			this.add(fileicon, BorderLayout.LINE_START);
+			this.add(filename, BorderLayout.CENTER);
+
+
+		}
+
+		private BufferedImage drawIcon(final Color color, final int width, final int height) {
+			final BufferedImage icon = new BufferedImage(16, 16, BufferedImage.TYPE_4BYTE_ABGR);
+			final Graphics2D g2 = icon.createGraphics();
+
+			final int x=0, y=0;
+			final int arc = 5;
+
+			Color cTop = new Color(84, 121, 203, 255);
+			Color cBottom = new Color(136, 169, 242, 255);
+
+			final int delta = 20;
+
+			final int r = color.getRed();
+			final int g = color.getGreen();
+			final int b = color.getBlue();
+
+			cTop = new Color(
+					(r-delta) > 255 ? 255 : r-delta,
+					(g-delta) > 255 ? 255 : g-delta,
+					(b-delta) > 255 ? 255 : b-delta,
+					255);
+			cBottom = new Color(
+					(r+delta) > 255 ? 255 : r+delta,
+					(g+delta) > 255 ? 255 : g+delta,
+					(b+delta) > 255 ? 255 : b+delta,
+							255);
+
+			final GradientPaint gradient1 = new GradientPaint(x,y,cTop,x+10,y+10,cBottom);
+			g2.setPaint(gradient1);
+			g2.fillRoundRect(x+2, y+2, width-4, height-4, arc, arc);
+
+			g2.setStroke(new BasicStroke(1f));
+			g2.setColor(new Color(0,0,0,44));
+			g2.drawRoundRect(x+2, y+2, width-4, height-4, arc, arc); 
+
+			return icon;
 		}
 	}
 

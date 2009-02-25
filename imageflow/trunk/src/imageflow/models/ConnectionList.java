@@ -78,8 +78,7 @@ public class ConnectionList extends Edges implements Model {
 		final Input input = connection.getToUnit().getInput(connection.to.getIndex()-1);
 		final Output output = connection.getFromUnit().getOutput(connection.from.getIndex()-1);
 		
-		//TODO check if connection produces loop
-//		if(output.knows(input.getParent())) {
+		// check if connection produces loop
 		if(input.isConnectedInInputBranch(output.getParent())) {
 			System.out.println("Connection disallowed: Loop detected");
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 

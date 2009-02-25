@@ -153,6 +153,14 @@ public class GraphPanel extends GPanel {
 			final Point to = aEdge.to.getLocation();
 			g.setColor(  (conn.areImageBitDepthCompatible()) ? Color.BLACK : Color.RED );
 			g.drawLine(from.x, from.y, to.x, to.y);
+			
+			if(!conn.areImageBitDepthCompatible()) {
+				int dX = Math.abs(from.x - to.x)/2 + Math.min(from.x, to.x);
+				int dY = Math.abs(from.y - to.y)/2 + Math.min(from.y, to.y);
+				Point origin = new Point(dX, dY);
+				drawErrorMessage((Graphics2D) g, "incompatible image type", origin);
+			}
+			
 		}
 		revalidate();
 	}
@@ -244,12 +252,6 @@ public class GraphPanel extends GPanel {
 			final int fontsizeOriginal = 12;
 			final Font font = g2.getFont();
 			final Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
-			/*while(stringWidth > getWidth()-10) {
-				fontsize--;
-				newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
-				g2.setFont(newFont);
-				stringWidth = g2.getFontMetrics().stringWidth(headline);
-			}*/
 			g2.setFont(newFont);
 			// and if even now to small, then cut
 			g2.drawString(headline, x+5, y+15);
@@ -359,6 +361,10 @@ public class GraphPanel extends GPanel {
 			lines.add(stringTokenizer.nextToken());
 		}
 		
+		g2.setColor(Color.RED);
+		final Ellipse2D.Double circle = 
+			new Ellipse2D.Double(origin.getX()-3, origin.getY()-3, 5, 5);
+		g2.fill(circle);
 		
 		g2.setFont(new Font("Arial", Font.PLAIN, 12));
 		final FontMetrics fm = g2.getFontMetrics();
@@ -380,7 +386,7 @@ public class GraphPanel extends GPanel {
 		g2.fillRoundRect(origin.x-padding, origin.y-padding, 
 				dimension.width+padding, dimension.height+padding, 4, 4);
 		g2.setStroke(new BasicStroke(1f));
-		//	    g2.setColor(new Color(0,0,0,44));
+		g2.setColor(new Color(255,0,0,44));
 		g2.drawRoundRect(origin.x-padding, origin.y-padding, 
 				dimension.width+padding, dimension.height+padding, 4, 4);
 		

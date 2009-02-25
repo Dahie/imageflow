@@ -3,6 +3,7 @@
  */
 package imageflow.models.unit;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -26,17 +27,23 @@ public abstract class UnitDelegate extends Delegate implements MutableTreeNode {
 	 * default startpoint of nodes
 	 */
 	public static Point POINT = new Point(25, 25);
+	private UnitDescription unitDescription;
 	
 	/**
 	 * @param unitName 
 	 * @param tooltipText 
 	 */
-	public UnitDelegate(final String unitName, final String tooltipText) {
+	private UnitDelegate(final String unitName, final String tooltipText) {
 		this.name = unitName;
 		this.toolTipText = tooltipText;
 		this.treenodes = new Vector<MutableTreeNode>();
 	}
 	
+	public UnitDelegate(UnitDescription unitDescription) {
+		this(unitDescription.getUnitName(), unitDescription.getHelpString());
+		this.unitDescription = unitDescription;
+	}
+
 	/**
 	 * Instantiates an object of this {@link UnitElement}
 	 * @param origin 
@@ -75,6 +82,14 @@ public abstract class UnitDelegate extends Delegate implements MutableTreeNode {
 	 */
 	public String getToolTipText() {
 		return toolTipText;
+	}
+	
+	public UnitDescription getUnitDescription() {
+		return unitDescription;
+	}
+	
+	public Color getColor() {
+		return unitDescription.color;
 	}
 	
 	@Override
