@@ -69,7 +69,7 @@ public class GPanelPopup implements GPanelListener {
 				if (selectedUnits.size() == 1) {
 					popup.add(getAction("setDisplayUnit"));
 					popup.add(getAction("showUnitParameters"));
-					popup.add(getAction("preview"));
+//					popup.add(getAction("preview"));
 					popup.addSeparator();
 				}
 				popup.add(getAction("cut"));

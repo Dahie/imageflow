@@ -11,6 +11,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +64,7 @@ public class NodeIcon {
 	 * icon for the display indicator
 	 */
 	protected Image displayIcon;
-	String displayIconFile = "bin/imageflow/resources/display16.png";
+	String displayIconFile = "/imageflow/resources/display16.png";
 
 	/**
 	 * Associated unit of to this icon
@@ -81,7 +82,9 @@ public class NodeIcon {
 		this.unitID = unit.getUnitID();
 		
 		try {
-			this.displayIcon = ImageIO.read(new File(displayIconFile));
+			System.out.println(new File(displayIconFile));
+			this.displayIcon = ImageIO.read(Class.class.getResourceAsStream(displayIconFile));
+//			this.displayIcon = ImageIO.read(new File(displayIconFile));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

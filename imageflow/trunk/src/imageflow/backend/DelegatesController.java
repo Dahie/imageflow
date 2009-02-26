@@ -68,7 +68,7 @@ public class DelegatesController {
 					"The folder "+unitFolder+" is missing. No units have been found.",
 					"No unit defintions found", 
 					JOptionPane.WARNING_MESSAGE);
-			System.out.println("No units-folder found");
+//			System.out.println("No units-folder found");
 	}
 
 	private void readDelegatesFromFolder(MutableTreeNode node, JMenu menu, File folder) {

@@ -1,4 +1,4 @@
-
+say/display why connection is red
 
 Functions:
 - as imageJ plugin / standalone
@@ -17,10 +17,12 @@ Nice-to-have:
 - zoomable graph
 - labels of inputs and outputs
 - insert new units not right on existing units
-- editor for unit xml
+
 - drag and drop from delegatespanel
+- list of steps to create a full graph
 
 V2:
+- editor for unit xml
 - Editing history (for nodes and properties)
 - Grouping of units
 - Multi-Document-Application
@@ -28,5 +30,10 @@ V2:
 
 
 
-Known problems:
-- fixed imagebitdepth test during connection: the image bitdepth is not known during build time, only in macro runtime
+
+themen luxemburg absage
+imageflow, status
+frage xml unit-bild
+
+noch offen, optimierung der plugin-anbindung wenn von imagej aus gestartet
+
