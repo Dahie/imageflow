@@ -710,7 +710,7 @@ public class UnitElement extends AbstractUnit {
 	 */
 	public void showProperties() {
 		final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters");
-		gd.addMessage(label);
+		gd.addMessage(getHelpString());
 		gd.addMessage(" ");
 
 

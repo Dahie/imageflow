@@ -6,6 +6,7 @@ package imageflow.gui;
 import graph.Edge;
 import graph.Node;
 import graph.Pin;
+import ij.IJ;
 import imageflow.backend.GraphController;
 import imageflow.models.Connection;
 import imageflow.models.Input;
@@ -132,7 +133,8 @@ public class GraphPanel extends GPanel {
 		
 		try {
 //			this.iwIcon = ImageIO.read(new File(iconFile ));
-			this.iwIcon = ImageIO.read(Class.class.getResourceAsStream(iconFile));
+			
+			this.iwIcon = ImageIO.read(this.getClass().getResourceAsStream(iconFile));
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

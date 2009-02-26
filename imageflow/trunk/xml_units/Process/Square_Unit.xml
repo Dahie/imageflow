@@ -4,10 +4,10 @@
 
 <General>
   <UnitName>Square</UnitName> 
-  <HelpString>Squares an image</HelpString>  
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>run("Square");</ImageJSyntax> 
   <Color>0x6e91de</Color>
+  <HelpString>Squares an image</HelpString>  
 </General>
 
 <Inputs> 

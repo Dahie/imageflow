@@ -60,11 +60,15 @@ public class SourceUnitElement extends UnitElement {
 		
 		this.setLabel(getFile().getName());
 		// change bitdepth for all outputs
+		setOutputImateType(imageType);
+		
+		notifyModelListeners();
+	}
+
+	public void setOutputImateType(int imageType) {
 		for (Output output : outputs) {
 			output.setOutputBitDepth(imageType);
 		}
-		
-		notifyModelListeners();
 	}
 
 

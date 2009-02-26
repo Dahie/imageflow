@@ -59,6 +59,7 @@ public class UnitFactory {
 			unitElement = new UnitElement(new Point(origin), unitName, imageJSyntax);
 		
 		unitElement.setColor(color);
+		unitElement.setHelpString(unitDescription.helpString);
 		
 		// add an icon if there is one mentioned and found
 		File iconFile = new File(unitDescription.pathToIcon);
@@ -112,6 +113,12 @@ public class UnitFactory {
 			unitElement.addOutput(name, shortName, imageType, doDisplay); 
 			
 		}
+		
+		if(unitElement instanceof BackgroundUnitElement) {
+			String imageType = (String) unitElement.getParameter(2).getValue();
+			((BackgroundUnitElement)unitElement).setOutputImateType(imageType);	
+		}
+		
 		
 //		unitElement.updateUnitIcon();
 		if(ImageFlow.getApplication() != null) 

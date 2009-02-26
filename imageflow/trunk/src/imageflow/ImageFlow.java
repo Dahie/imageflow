@@ -9,6 +9,7 @@ import ij.plugin.PlugIn;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
@@ -69,9 +70,15 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
     }
 
 	public void run(String args) {
-		launch(ImageFlow.class, null);
+		
+		
 		if(IJ.getInstance() == null)
 			this.imageJ = new ImageJ();
+		
+		String oldPath = System.getProperty("user.dir");
+		System.setProperty("user.dir", oldPath + File.separator + "plugins" + File.separator + "Imageflow");
+		
+		launch(ImageFlow.class, null);
 	}
 
 	public ImageJ getImageJInstance() {

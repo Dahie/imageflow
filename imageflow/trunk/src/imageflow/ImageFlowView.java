@@ -227,7 +227,7 @@ public class ImageFlowView extends FrameView {
 		
 		graphPanel = new GraphPanel(delegatesArrayList, popup);
 		popup.setActivePanel(graphPanel);
-		graphPanel.setSize(400, 300);
+//		graphPanel.setSize(400, 300);
 		graphPanel.setGraphController(graphController);
 		graphPanel.setPreferredSize(new Dimension(400, 300));
 		graphPanel.setSelections(this.selections);

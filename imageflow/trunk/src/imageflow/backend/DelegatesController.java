@@ -1,6 +1,7 @@
 package imageflow.backend;
 
 import helper.Tools;
+import ij.IJ;
 import imageflow.ImageFlow;
 import imageflow.models.unit.UnitDelegate;
 import imageflow.models.unit.UnitDescription;
@@ -31,7 +32,6 @@ public class DelegatesController {
 	private static String unitFolder = "xml_units";
 	
 	private static DelegatesController controller;
-	//	private ArrayList<Delegate> unitDelegates;
 	HashMap<TreeNode, Delegate> delegates;
 	public DefaultTreeModel delegatesModel;
 
@@ -64,10 +64,10 @@ public class DelegatesController {
 		delegatesModel = new DefaultTreeModel(top);
 		JMenu insertMenu = new JMenu("Insert unit");
 
-//		String unitsFolder = System.getProperty("user.dir")+File.separator+unitFolder;
-		String unitsFolder = ""; 
+		String unitsFolder = System.getProperty("user.dir")+File.separator+unitFolder;
+		/*String unitsFolder = ""; 
 		try {
-			ProtectionDomain protectionDomain = ImageFlow.class.getProtectionDomain();
+			ProtectionDomain protectionDomain = DelegatesController.class.getProtectionDomain();
 			CodeSource codeSource = protectionDomain.getCodeSource();
 			URL location = codeSource.getLocation();
 			URI uri = location.toURI();
@@ -79,7 +79,7 @@ public class DelegatesController {
 			
 		} catch (URISyntaxException e) {
 //			e.printStackTrace();
-		} 
+		}*/ 
 		
 		
 		File folder = new File(unitsFolder);
@@ -90,7 +90,6 @@ public class DelegatesController {
 					"The folder "+unitFolder+" is missing. No units have been found.",
 					"No unit defintions found", 
 					JOptionPane.WARNING_MESSAGE);
-//			System.out.println("No units-folder found");
 	}
 
 	private void readDelegatesFromFolder(MutableTreeNode node, JMenu menu, File folder) {

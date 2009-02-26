@@ -35,13 +35,23 @@ public class BackgroundUnitElement extends UnitElement {
 		int imageType = getImageType();
 		
 		// change bitdepth for all outputs
-		for (Output output : outputs) {
-			output.setOutputBitDepth(imageType);
-		}
+		setOutputImateType(imageType);
 		
 		notifyModelListeners();
 	}
 	
+	public void setOutputImateType(String choice) {
+		int imageType = fromChoice(choice);
+		for (Output output : outputs) {
+			output.setOutputBitDepth(imageType);
+		}
+	}
+	
+	public void setOutputImateType(int imageType) {
+		for (Output output : outputs) {
+			output.setOutputBitDepth(imageType);
+		}
+	}
 
 	private int fromChoice(String choice) {
 

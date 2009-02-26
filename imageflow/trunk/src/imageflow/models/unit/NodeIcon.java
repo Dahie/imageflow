@@ -3,6 +3,8 @@
  */
 package imageflow.models.unit;
 
+import ij.IJ;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -80,7 +82,7 @@ public class NodeIcon {
 		this.unitID = unit.getUnitID();
 		
 		try {
-			this.displayIcon = ImageIO.read(Class.class.getResourceAsStream(displayIconFile));
+			this.displayIcon = ImageIO.read(this.getClass().getResourceAsStream(displayIconFile));
 //			this.displayIcon = ImageIO.read(new File(displayIconFile));
 		} catch (IOException e) {
 			e.printStackTrace();
