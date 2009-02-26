@@ -11,9 +11,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -82,7 +80,6 @@ public class NodeIcon {
 		this.unitID = unit.getUnitID();
 		
 		try {
-			System.out.println(new File(displayIconFile));
 			this.displayIcon = ImageIO.read(Class.class.getResourceAsStream(displayIconFile));
 //			this.displayIcon = ImageIO.read(new File(displayIconFile));
 		} catch (IOException e) {

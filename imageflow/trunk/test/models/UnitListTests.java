@@ -54,4 +54,58 @@ public class UnitListTests extends TestCase {
 		assertFalse("contains nodes, which are not connected", units.areAllInputsConnected());
 	}
 	
+
+	public void testHasDisplayUnit() {
+		// test output-only
+		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		
+		// test input/output case
+		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		
+		// adding to UnitList
+		
+		UnitList units = new UnitList();
+		units.add(sourceUnit);
+		units.add(filterUnit1);
+		units.add(filterUnit2);
+		
+		assertFalse(units.isEmpty());
+		assertFalse("has no displayunits", units.hasUnitAsDisplay());
+		
+		filterUnit1.setDisplayUnit(true);
+		
+		assertTrue("has displayunits", units.hasUnitAsDisplay());
+		
+	}
+	
+	public void testIsEmpty() {
+		UnitList units = new UnitList();
+		
+		assertTrue(units.isEmpty());
+		
+		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		
+		units.add(filterUnit1);
+		units.add(filterUnit2);
+		
+		assertFalse(units.isEmpty());
+		assertEquals("elements counts",2, units.size());
+		
+		units.remove(filterUnit1);
+		
+		assertFalse(units.isEmpty());
+		assertEquals("elements counts",1, units.size());
+		assertFalse(units.contains(filterUnit1));
+		assertTrue(units.contains(filterUnit2));
+		
+		units.remove(filterUnit2);
+		
+		assertTrue(units.isEmpty());
+		assertEquals("elements counts",0, units.size());
+		assertFalse(units.contains(filterUnit2));
+		
+	}
+	
 }

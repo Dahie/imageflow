@@ -9,6 +9,11 @@ import imageflow.models.unit.UnitFactory;
 
 import java.awt.Point;
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.HashMap;
 
 import javax.swing.JMenu;
@@ -59,7 +64,24 @@ public class DelegatesController {
 		delegatesModel = new DefaultTreeModel(top);
 		JMenu insertMenu = new JMenu("Insert unit");
 
-		String unitsFolder = System.getProperty("user.dir")+File.separator+unitFolder;
+//		String unitsFolder = System.getProperty("user.dir")+File.separator+unitFolder;
+		String unitsFolder = ""; 
+		try {
+			ProtectionDomain protectionDomain = ImageFlow.class.getProtectionDomain();
+			CodeSource codeSource = protectionDomain.getCodeSource();
+			URL location = codeSource.getLocation();
+			URI uri = location.toURI();
+			File jarFile = new File(uri);
+			if(jarFile.exists()) {
+				unitsFolder = jarFile.getParentFile().getAbsolutePath()+File.separator+unitFolder;	
+			} else
+				unitsFolder = System.getProperty("user.dir")+File.separator+unitFolder;	
+			
+		} catch (URISyntaxException e) {
+//			e.printStackTrace();
+		} 
+		
+		
 		File folder = new File(unitsFolder);
 		if(folder.exists()) 
 			readDelegatesFromFolder(top, insertMenu, folder);
@@ -76,13 +98,13 @@ public class DelegatesController {
 		
 		for (int i = 0; i < listOfFiles.length; i++) {
 			File file = listOfFiles[i];
-			if(file.isDirectory() && !file.isHidden()) {
+			if(file.isDirectory() && !file.isHidden() && !file.getName().startsWith(".")) {
 				DefaultMutableTreeNode subNode = new DefaultMutableTreeNode(file.getName());
 				JMenu subMenu = new JMenu(file.getName());
 				readDelegatesFromFolder(subNode, subMenu, file);
 				((DefaultMutableTreeNode) node).add(subNode);
 				menu.add(subMenu);
-			} else if (file.isFile() && isXML(file)) {
+			} else if (file.isFile() && isXML(file)  && !file.getName().startsWith(".")) {
 				final UnitDescription unitDescription = new UnitDescription(Tools.getXMLRoot(file));
 				final UnitDelegate unitDelegate = 
 					new UnitDelegate(unitDescription) {

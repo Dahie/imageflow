@@ -17,4 +17,6 @@ public class GraphControllerTests extends TestCase {
 		assertTrue("has removed sucessfully", controller.removeNode(merge));
 	}
 	
+	
+	
 }

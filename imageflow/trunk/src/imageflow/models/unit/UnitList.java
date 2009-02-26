@@ -549,6 +549,13 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		return this.connections.add(con);
 	}
 
+	public void addConnectionList(ConnectionList newConnList) {
+//		this.connections
+		for (Edge conn : newConnList) {
+			this.connections.add(conn);
+		}
+	}
+	
 	/**
 	 * Resets all marks to zero.
 	 * @param units

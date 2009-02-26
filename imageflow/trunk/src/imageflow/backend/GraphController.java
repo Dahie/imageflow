@@ -68,7 +68,7 @@ public class GraphController{
 		if(showLog)
 			IJ.log(macro);
 
-		imagej.setVisible(false);
+//		imagej.setVisible(false);
 		IJ.runMacro(macro, "");
 	}
 

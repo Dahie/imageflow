@@ -26,8 +26,12 @@ public class RunMacroTask extends Task {
 		
 		String macro = graphController.generateMacro();
 //		((ImageFlowView)ImageFlow.getApplication().getMainView()).
-		System.out.println(macro);
-		graphController.runImageJMacro(macro, false);
+		//TODO use exceptions 
+		if(macro != null) {
+			System.out.println(macro);
+			graphController.runImageJMacro(macro, false);	
+		}
+		
 		return null;
 	}
 	

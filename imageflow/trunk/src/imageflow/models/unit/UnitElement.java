@@ -332,7 +332,7 @@ public class UnitElement extends AbstractUnit {
 	 * @return 
 	 */
 	public boolean isDisplayUnit() {
-		return isDisplayUnit;
+		return this.isDisplayUnit;
 	}
 
 	/**

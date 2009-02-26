@@ -1,6 +1,7 @@
 package imageflow.backend;
 
 import graph.Node;
+import imageflow.ImageFlow;
 import imageflow.models.Connection;
 import imageflow.models.ConnectionList;
 import imageflow.models.Input;
@@ -14,6 +15,8 @@ import imageflow.models.unit.UnitElement.Type;
 
 import java.io.File;
 import java.util.Iterator;
+
+import javax.swing.JOptionPane;
 
 /**
  * MacroRunner takes the current workflow and processes it, so that a clean Macro can be 
@@ -29,6 +32,7 @@ public class MacroFlowRunner {
 	
 	public MacroFlowRunner(UnitList units) {
 		this.macroUnitList = sortList((UnitList) units.clone());
+		this.macroUnitList.addConnectionList(units.getConnections());
 	}
 	
 	/**
@@ -109,8 +113,23 @@ public class MacroFlowRunner {
 	 */
 	public boolean checkNetwork() {
 
+		if(macroUnitList.isEmpty()) {
+			System.err.println("The workflow has no displayable units, running it doesn't do anything.");
+			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+					"The workflow has no displayable units, running it doesn't do anything."
+					+'\n' + "The operation will not proceed.",
+					"Invalid workflow", 
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		
 		if(!macroUnitList.hasUnitAsDisplay()) {
-			System.err.println("The flow has no displayable units, running it doesn't do anything.");
+			System.err.println("The workflow has no displayable units, running it doesn't do anything.");
+			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+					"The workflow has no displayable units, running it doesn't do anything."
+					+'\n' + "The operation will not proceed.",
+					"Invalid workflow", 
+					JOptionPane.WARNING_MESSAGE);
 			return false; 
 		}
 
@@ -118,12 +137,14 @@ public class MacroFlowRunner {
 		// sources -> file exists
 		for (Node node : macroUnitList) {
 			if(node instanceof SourceUnitElement) {
-				UnitElement unit = (UnitElement) node;
-				for (Parameter parameter : unit.getParameters()) {
-					if(parameter instanceof StringParameter) {
-						File file = new File((String) parameter.getValue());
-						return file.exists();
-					}	
+				SourceUnitElement unit = (SourceUnitElement) node;
+				if(!unit.getFile().exists()) {
+					JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+							"The file "+unit.getFilePath()+" doesn't exist."
+							+'\n' + "The operation will not proceed.",
+							"Invalid workflow", 
+							JOptionPane.WARNING_MESSAGE);
+					return false;
 				}
 			}
 		}

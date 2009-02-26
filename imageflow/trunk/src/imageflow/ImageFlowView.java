@@ -187,7 +187,7 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(new JSeparator());
 		debugMenu.add(getAction("exampleFlow1"));
 		debugMenu.add(getAction("exampleFlow2"));
-		debugMenu.add(getAction("exampleFlowXML"));
+//		debugMenu.add(getAction("exampleFlowXML"));
 		
 		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates.values());
 		
@@ -266,8 +266,8 @@ public class ImageFlowView extends FrameView {
 		buttonPanel.setLayout(flowLayout);
 		JButton buttonRun = new JButton(getAction("generateMacro"));
 		buttonPanel.add(buttonRun);
-		JButton buttoncheck = new JButton(new CheckGraphAction(graphController));
-		buttonPanel.add(buttoncheck);
+//		JButton buttoncheck = new JButton(new CheckGraphAction(graphController));
+//		buttonPanel.add(buttoncheck);
 
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
@@ -278,12 +278,12 @@ public class ImageFlowView extends FrameView {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
 		splitPane.setLeftComponent(sidePane);
 		splitPane.setRightComponent(graphScrollpane);
+		splitPane.setEnabled(true);
 //		splitPane.setDividerLocation(200);
 		splitPane.setOneTouchExpandable(true);
 		
 		mainPanel.add(splitPane , BorderLayout.CENTER);
 		setComponent(mainPanel);
-//		fr.injectComponents(functionTabPane);
 	}
 
 	/**
@@ -658,8 +658,7 @@ public class ImageFlowView extends FrameView {
 		Selection<Node> selection = graphPanel.getSelection();
 		ArrayList<Node> copyList = graphController.getCopyNodesList();
 		
-		actionMap.put("checkGraph", 
-				new CheckGraphAction(graphController));
+//		actionMap.put("checkGraph",	new CheckGraphAction(graphController));
 	}
 
 

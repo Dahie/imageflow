@@ -45,6 +45,7 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
 import visualap.Delegate;
 import visualap.GPanel;
@@ -77,7 +78,7 @@ public class GraphPanel extends GPanel {
 
 	private BufferedImage iwIcon;
 
-	private final String iconFile = "bin/imageflow/resources/iw-logo.png";
+	private final String iconFile = "/imageflow/resources/iw-logo.png";
 
 	/**
 	 * @param beans
@@ -86,6 +87,7 @@ public class GraphPanel extends GPanel {
 	public GraphPanel(final ArrayList<Delegate> delegates, final GPanelListener parent) {
 		super(delegates, parent);
 
+    	JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 		this.setBorder(BorderFactory.createLoweredBevelBorder());
 		
 		final DropTargetListener dropTargetListener = new DropTargetListener() {
@@ -129,7 +131,8 @@ public class GraphPanel extends GPanel {
 		
 		
 		try {
-			this.iwIcon = ImageIO.read(new File(iconFile ));
+//			this.iwIcon = ImageIO.read(new File(iconFile ));
+			this.iwIcon = ImageIO.read(Class.class.getResourceAsStream(iconFile));
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

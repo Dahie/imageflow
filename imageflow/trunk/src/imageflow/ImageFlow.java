@@ -64,6 +64,7 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	private class MainFrameListener extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
         	exit(e);
+        	System.exit(0);
         }
     }
 
