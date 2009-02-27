@@ -3,6 +3,7 @@ package imageflow;
 import graph.Edge;
 import graph.Node;
 import graph.Selection;
+import ij.IJ;
 import imageflow.backend.DelegatesController;
 import imageflow.backend.GraphController;
 import imageflow.backend.MacroFlowRunner;
@@ -22,6 +23,7 @@ import imageflow.models.parameter.Parameter;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
 import imageflow.models.unit.UnitList;
+import imageflow.tasks.ExportMacroTask;
 import imageflow.tasks.ImportGraphTask;
 import imageflow.tasks.LoadFlowGraphTask;
 import imageflow.tasks.RunMacroTask;
@@ -86,6 +88,9 @@ public class ImageFlowView extends FrameView {
 
 	private boolean modified = false;
 	private boolean selected = false;
+	private boolean hasPaste = false;
+
+
 
 	private SelectionList selections;
 
@@ -166,11 +171,13 @@ public class ImageFlowView extends FrameView {
 		fileMenu.add(getAction("generateMacro"));
 		fileMenu.add(getAction("save"));
 		fileMenu.add(getAction("saveAs"));
+		fileMenu.add(new JSeparator());
 		fileMenu.add(getAction("importGraph"));
-//		if(!IJ.isMacintosh()) {
+		fileMenu.add(getAction("export"));
+		if(!IJ.isMacintosh()) {
 			fileMenu.add(new JSeparator());
 			fileMenu.add(getAction("quit"));
-//		}
+		}
 		
 		
 		JMenu editMenu = new JMenu("Edit");
@@ -333,6 +340,10 @@ public class ImageFlowView extends FrameView {
         return this.modified;
     }
     
+    /**
+     * Returns true if a {@link UnitElement} is selected in the workflow.
+     * @return
+     */
     public boolean isSelected() { 
         return this.selected;
     }
@@ -345,6 +356,10 @@ public class ImageFlowView extends FrameView {
     public void setModified(final boolean modified) {
         boolean oldValue = this.modified;
         this.modified = modified;
+//        String appId = getResourceMap().getString("Application.id");
+//        String changed = modified ? "*" : "";
+//    	getFrame().setTitle(file.getName() + changed +" - " + appId);
+        
         firePropertyChange("modified", oldValue, this.modified);
     }
 	
@@ -357,7 +372,20 @@ public class ImageFlowView extends FrameView {
         this.selected = selected;
         firePropertyChange("selected", oldValue, this.selected);
     }
-    
+
+	/**
+	 * @return the hasPaste
+	 */
+	public boolean isHasPaste() {
+		return hasPaste;
+	}
+
+	/**
+	 * @param hasPaste the hasPaste to set
+	 */
+	public void setHasPaste(boolean hasPaste) {
+		this.hasPaste = hasPaste;
+	}
     
 	/**
 	 * Returns the currently loaded workflow-file.
@@ -404,13 +432,7 @@ public class ImageFlowView extends FrameView {
 	    return new RunMacroTask(getApplication(), graphController);
 	}
 	
-	/**
-	 * Converts the current workflow into a macro and saves this to file.
-	 * @return
-	 */
-	@Action public Task exportMacro() {
-	    return new RunMacroTask(getApplication(), graphController);
-	}
+	
 	
     @Action
     public Task runMacro() {
@@ -539,6 +561,7 @@ public class ImageFlowView extends FrameView {
 //				activePanel.getEdgeL().remove(c);
 			}
 			selectedUnits.clear();
+			setHasPaste(true);
 		}
 	}
 	
@@ -554,15 +577,18 @@ public class ImageFlowView extends FrameView {
 					clone = t.clone();
 					clone.setLabel(t.getLabel());
 					copyUnitsList.add(clone);
+					
 				} catch (final CloneNotSupportedException e) {
 					e.printStackTrace();
 				}	
-				
+				setHasPaste(true);
 			}
+			
 		}
 	}
 	
-	@Action	public void paste() {
+	@Action	
+	public void paste() {
 		final Selection<Node> selectedUnits = graphPanel.getSelection();
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
 		if (!copyUnitsList.isEmpty()) {
@@ -597,6 +623,9 @@ public class ImageFlowView extends FrameView {
 	}
 
     
+    /**
+     * @return
+     */
     @Action(enabledProperty = "modified")
     public Task save() {
     	if(getFile().exists()) {
@@ -632,14 +661,44 @@ public class ImageFlowView extends FrameView {
         return task;
     }
     
+    /**
+	 * Converts the current workflow into a macro and saves this to file.
+	 * @return
+	 */
+	@Action public Task export() {
+		 JFileChooser fc = createFileChooser("saveAsFileChooser");
+	        String filesDesc = getResourceMap().getString("imageJMacroFileExtensionDescription");
+		    fc.setFileFilter(new ImageJMacroFilter(filesDesc));
+	        
+	        int option = fc.showSaveDialog(getFrame());
+	        Task task = null;
+	        if (JFileChooser.APPROVE_OPTION == option) {
+	        	File selectedFile = fc.getSelectedFile();
+	        	if(selectedFile.exists()) {
+					int response = JOptionPane.showConfirmDialog(this.getFrame(), 
+							"This file already exists. Do you want to overwrite it?",
+							"Overwrite existing file?", 
+							JOptionPane.OK_CANCEL_OPTION);
+					if (!(response == JOptionPane.OK_OPTION)) {
+						return null;
+					}
+	        	}
+	        	task = new ExportMacroTask(getApplication(), selectedFile, graphController);
+	            
+	        }
+		
+	    return task;
+	}
+    
     private JFileChooser createFileChooser(String name) {
         JFileChooser fc = new JFileChooser(this.file);
         fc.setDialogTitle(getResourceMap().getString(name + ".dialogTitle"));
-        String textFilesDesc = getResourceMap().getString("txtFileExtensionDescription");
-//        fc.setFileFilter(new TextFileFilter(textFilesDesc));
         return fc;
     }
 	
+    /**
+     * 
+     */
     @Action public void debugPrintNodes() {
     	final JDialog dialog = new JDialog();
 
@@ -766,5 +825,40 @@ public class ImageFlowView extends FrameView {
             return description;
         }
     }
+    
+
+    /** This is a substitute for FileNameExtensionFilter, which is
+     * only available on Java SE 6.
+     */
+    private static class ImageJMacroFilter extends FileFilter {
+
+        private final String description;
+
+        ImageJMacroFilter(String description) {
+            this.description = description;
+        }
+
+        @Override
+        public boolean accept(File f) {
+            if (f.isDirectory()) {
+                return true;
+            }
+            String fileName = f.getName();
+            int i = fileName.lastIndexOf('.');
+            if ((i > 0) && (i < (fileName.length() - 1))) {
+                String fileExt = fileName.substring(i + 1);
+                if ("xml".equalsIgnoreCase(fileExt)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public String getDescription() {
+            return description;
+        }
+    }
+
 
 }
