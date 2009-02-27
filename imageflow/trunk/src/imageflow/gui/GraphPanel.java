@@ -254,9 +254,13 @@ public class GraphPanel extends GPanel {
 		g2.drawImage(this.iwIcon, 25, 25, null);
 		
 		final String headline = "Create your workflow";
-		final String description1 = "Add new units to the graph by using the";
-		final String description2 = "context menu units on this canvas.";
+		final String description = "Add new units to the graph by using the" + '\n'
+			+"context menu units on this canvas." + '\n' + "   " + '\n'
+			+ "A workflow is constructed from a Source-Unit and requires a Display-Unit." + '\n'
+			+ "The Display-Unit is the image that will be displayed after running the workflow.";
 
+		final Vector<String> lines = tokenizeString(description, "\n");
+		
 		g2.setColor(Color.GRAY);
 		
 		// scale font on big lengths
@@ -270,8 +274,11 @@ public class GraphPanel extends GPanel {
 		// and if even now to small, then cut
 		g2.drawString(headline, x+5, y+15);
 		g2.setFont(new Font(font.getFamily(), Font.PLAIN, fontsizeOriginal));
-		g2.drawString(description1+"", x+5, y+45);
-		g2.drawString(description2+"", x+5, y+65);
+		int lineOffset = 45;
+		for (String line : lines) {
+			lineOffset +=20;
+			g2.drawString(line, x+5, y+lineOffset);	
+		}
 	}
 
 	/**
@@ -368,11 +375,7 @@ public class GraphPanel extends GPanel {
 
 	private void drawErrorMessage(final Graphics2D g2, String text, final Point origin) {
 		
-		StringTokenizer stringTokenizer = new StringTokenizer(text, "\n");
-		Vector<String> lines = new Vector<String>();
-		while(stringTokenizer.hasMoreTokens()) {
-			lines.add(stringTokenizer.nextToken());
-		}
+		Vector<String> lines = tokenizeString(text, "\n");
 		
 		g2.setColor(Color.RED);
 		final Ellipse2D.Double circle = 
@@ -415,6 +418,15 @@ public class GraphPanel extends GPanel {
 		
 		
 		
+	}
+
+	private Vector<String> tokenizeString(String text, String token) {
+		StringTokenizer stringTokenizer = new StringTokenizer(text, token);
+		Vector<String> lines = new Vector<String>();
+		while(stringTokenizer.hasMoreTokens()) {
+			lines.add(stringTokenizer.nextToken());
+		}
+		return lines;
 	}
 
 

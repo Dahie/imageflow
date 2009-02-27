@@ -98,7 +98,7 @@ public class DelegatesPanel extends JPanel {
 			}
 
 			public void mouseMoved(final MouseEvent e) {}
-		});
+		});*/
 
 		delegatesTree.addMouseListener(new MouseListener() {
 
@@ -124,7 +124,7 @@ public class DelegatesPanel extends JPanel {
 
 			public void mouseReleased(final MouseEvent arg0) {}
 
-		});*/
+		});
 		delegatesTree.setCellRenderer(new IFTreeCellRenderer());
 
 		final JScrollPane scrollPane = new JScrollPane(delegatesTree);
@@ -197,7 +197,7 @@ public class DelegatesPanel extends JPanel {
 		}
 
 		private BufferedImage drawIcon(final Color color, final int width, final int height) {
-			final BufferedImage icon = new BufferedImage(16, 16, BufferedImage.TYPE_4BYTE_ABGR);
+			final BufferedImage icon = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
 			final Graphics2D g2 = icon.createGraphics();
 
 			final int x=0, y=0;
@@ -215,21 +215,21 @@ public class DelegatesPanel extends JPanel {
 			cTop = new Color(
 					(r-delta) > 255 ? 255 : r-delta,
 					(g-delta) > 255 ? 255 : g-delta,
-					(b-delta) > 255 ? 255 : b-delta,
-					255);
+					(b-delta) > 255 ? 255 : b-delta);
 			cBottom = new Color(
 					(r+delta) > 255 ? 255 : r+delta,
 					(g+delta) > 255 ? 255 : g+delta,
-					(b+delta) > 255 ? 255 : b+delta,
-							255);
+					(b+delta) > 255 ? 255 : b+delta);
 
 			final GradientPaint gradient1 = new GradientPaint(x,y,cTop,x+10,y+10,cBottom);
 			g2.setPaint(gradient1);
-			g2.fillRoundRect(x+2, y+2, width-4, height-4, arc, arc);
+//			g2.fillRoundRect(x+2, y+2, width-4, height-4, arc, arc);
+			g2.fillRect(x+2, y+2, width-4, height-4);
 
 			g2.setStroke(new BasicStroke(1f));
 			g2.setColor(new Color(0,0,0,44));
-			g2.drawRoundRect(x+2, y+2, width-4, height-4, arc, arc); 
+//			g2.drawRoundRect(x+2, y+2, width-4, height-4, arc, arc);
+			g2.drawRect(x+2, y+2, width-4, height-4);
 
 			return icon;
 		}
