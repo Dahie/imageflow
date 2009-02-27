@@ -62,7 +62,6 @@ import org.jdesktop.application.Task;
 
 import visualap.Delegate;
 import visualap.ErrorPrinter;
-import actions.CheckGraphAction;
 
 
 /**
@@ -175,6 +174,7 @@ public class ImageFlowView extends FrameView {
 		editMenu.add(getAction("cut"));
 		editMenu.add(getAction("copy"));
 		editMenu.add(getAction("paste"));
+		editMenu.add(getAction("unbind"));
 		editMenu.add(getAction("delete"));
 		editMenu.add(getAction("clear"));
 		editMenu.add(new JSeparator());

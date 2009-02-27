@@ -3,6 +3,7 @@ package imageflow.models.unit;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.plugin.filter.PlugInFilter;
+import imageflow.ImageFlow;
 import imageflow.models.MacroElement;
 import imageflow.models.Output;
 import imageflow.models.parameter.StringParameter;
@@ -16,16 +17,32 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
+/**
+ * Specialized {@link UnitElement} for loading image files.
+ * @author danielsenff
+ *
+ */
 public class SourceUnitElement extends UnitElement {
 
-	public SourceUnitElement(Point origin, String unitName,
-			MacroElement macroElement) {
+	/**
+	 * @param origin
+	 * @param unitName
+	 * @param macroElement
+	 */
+	public SourceUnitElement(final Point origin, final String unitName,
+			final MacroElement macroElement) {
 		super(origin, unitName, macroElement);
 	}
 	
-	public SourceUnitElement(Point origin, String unitName,
-			String macroString) {
+	/**
+	 * @param origin
+	 * @param unitName
+	 * @param macroString
+	 */
+	public SourceUnitElement(final Point origin, final String unitName,
+			final String macroString) {
 		super(origin, unitName, macroString);
 	}
 
@@ -33,40 +50,62 @@ public class SourceUnitElement extends UnitElement {
 	public void showProperties() {
 		
 		// display filedialog
-	    JFileChooser fc = new JFileChooser();
-	    String filepath = (String)getParameter(0).getValue();
-	    fc.setSelectedFile(new File(filepath));
-	    
-	    int option = fc.showOpenDialog(null);
-	    if (option == JFileChooser.APPROVE_OPTION) {
-	    	filepath = fc.getSelectedFile().getAbsolutePath();
-	    	// backslashes need to be escaped
-	    	filepath = filepath.replace("\\", "\\\\"); // \ to \\
-	    	((StringParameter)getParameter(0)).setValue(filepath);
-	    }
+	    showFileChooser();
 		
 		
 		super.showProperties();
 		
 		
+		updateImageType();
+		
+		notifyModelListeners();
+	}
+
+	/**
+	 * The current imagetype is determined by the currently selected file.
+	 * The unit-icon and labels will be updated as well.
+	 * If no file is selected or the file doesn't exist, a message is displayed.
+	 */
+	public void updateImageType() {
 		int imageType = -1;
 		if(getFile().exists()) {
 			imageType = getImageType();
 			this.unitComponentIcon.setIcon(getImagePlus().getImage().getScaledInstance(48, 48, BufferedImage.SCALE_FAST));
 			
 		} else {
+			this.setIcon(null);
+			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+					"The file" +getFile()+ " you selected does not exist."+
+					'\n'+"An image type can not be determined, which can invalidate the current graph.",
+					"File doesn't exist", 
+					JOptionPane.WARNING_MESSAGE);
 			System.out.println("file doesn't exist");
 		}
 		
 		this.setLabel(getFile().getName());
 		// change bitdepth for all outputs
 		setOutputImateType(imageType);
-		
-		notifyModelListeners();
 	}
 
-	public void setOutputImateType(int imageType) {
-		for (Output output : outputs) {
+	/**
+	 * Opens a filechooser to select a new file.
+	 */
+	public void showFileChooser() {
+		final JFileChooser fc = new JFileChooser();
+	    String filepath = (String)getParameter(0).getValue();
+	    fc.setSelectedFile(new File(filepath));
+	    
+	    final int option = fc.showOpenDialog(null);
+	    if (option == JFileChooser.APPROVE_OPTION) {
+	    	filepath = fc.getSelectedFile().getAbsolutePath();
+	    	// backslashes need to be escaped
+	    	filepath = filepath.replace("\\", "\\\\"); // \ to \\
+	    	((StringParameter)getParameter(0)).setValue(filepath);
+	    }
+	}
+
+	public void setOutputImateType(final int imageType) {
+		for (final Output output : outputs) {
 			output.setOutputBitDepth(imageType);
 		}
 	}
@@ -129,7 +168,7 @@ public class SourceUnitElement extends UnitElement {
 	}
 
 	@Override
-	public Rectangle paint(Graphics g, ImageObserver io) {
+	public Rectangle paint(final Graphics g, final ImageObserver io) {
 		
 		if(!getFile().exists() && !selected) {
 			g.setColor(new Color(255,0,0,80));
@@ -137,7 +176,7 @@ public class SourceUnitElement extends UnitElement {
 		    		unitComponentIcon.arc, unitComponentIcon.arc);
 		}
 		
-		Rectangle paint = super.paint(g, io);
+		final Rectangle paint = super.paint(g, io);
 		
 		
 		

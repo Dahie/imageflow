@@ -42,9 +42,9 @@ public class UnitFactory {
 		
 		String unitName = unitDescription.unitName;
 		String imageJSyntax = unitDescription.imageJSyntax;
-		int numParas = unitDescription.numParas;
-		int numInputs = unitDescription.numInputs;
-		int numOutputs = unitDescription.numOutputs;
+		
+		
+		
 		Color color = unitDescription.color;
 		
 		// usual case, we deal with a UnitElement
@@ -73,7 +73,35 @@ public class UnitFactory {
 				e.printStackTrace();
 			}
 		}
+
+		// setup of the Parameters
+		addParameters(unitDescription, unitElement);
 		
+		// setup of the inputs
+		addInputs(unitDescription, unitElement);
+		
+		// setup of the output(s)
+		addOutputs(unitDescription,unitElement);
+		
+		
+		//special cases
+		if(unitElement instanceof BackgroundUnitElement) {
+			String imageType = (String) unitElement.getParameter(2).getValue();
+			((BackgroundUnitElement)unitElement).setOutputImateType(imageType);	
+		} else if(unitElement instanceof SourceUnitElement) {
+			((SourceUnitElement)unitElement).showFileChooser();
+			((SourceUnitElement)unitElement).updateImageType();
+		}
+		
+		if(ImageFlow.getApplication() != null) 
+			registerModelListener(unitElement);
+		
+		return unitElement;
+	}
+
+	private static void addParameters(final UnitDescription unitDescription,
+			UnitElement unitElement) {
+		int numParas = unitDescription.numParas;
 		for (int i = 1; i <= numParas; i++) {
 			Para para = unitDescription.para[i];
 			
@@ -84,19 +112,11 @@ public class UnitFactory {
 													para.trueString, 
 													para.choiceIndex));
 		}
-		
-		// setup of the inputs
-		for (int i = 1; i <= numInputs; i++) {
-			Input input = unitDescription.input[i];
-			String name = input.name;
-			String shortName = input.shortName;
-			int imageType = input.imageType;
-			boolean needToCopyInput = input.needToCopyInput;
-			
-			unitElement.addInput(name, shortName, imageType, needToCopyInput);
-		}
-		
-		// setup of the output(s)
+	}
+
+	private static void addOutputs(final UnitDescription unitDescription,
+			UnitElement unitElement) {
+		int numOutputs = unitDescription.numOutputs;
 		for (int i = 1; i <= numOutputs; i++) {
 			Output output = unitDescription.output[i];
 			String name = output.name;
@@ -113,18 +133,20 @@ public class UnitFactory {
 			unitElement.addOutput(name, shortName, imageType, doDisplay); 
 			
 		}
-		
-		if(unitElement instanceof BackgroundUnitElement) {
-			String imageType = (String) unitElement.getParameter(2).getValue();
-			((BackgroundUnitElement)unitElement).setOutputImateType(imageType);	
+	}
+
+	private static void addInputs(final UnitDescription unitDescription,
+			UnitElement unitElement) {
+		int numInputs = unitDescription.numInputs;
+		for (int i = 1; i <= numInputs; i++) {
+			Input input = unitDescription.input[i];
+			String name = input.name;
+			String shortName = input.shortName;
+			int imageType = input.imageType;
+			boolean needToCopyInput = input.needToCopyInput;
+			
+			unitElement.addInput(name, shortName, imageType, needToCopyInput);
 		}
-		
-		
-//		unitElement.updateUnitIcon();
-		if(ImageFlow.getApplication() != null) 
-			registerModelListener(unitElement);
-		
-		return unitElement;
 	}
 
 	/**
