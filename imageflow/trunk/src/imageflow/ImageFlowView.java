@@ -52,6 +52,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.TreeNode;
 
 import org.jdesktop.application.Action;
@@ -101,6 +102,8 @@ public class ImageFlowView extends FrameView {
 		this.unitDelegates = DelegatesController.getInstance().getUnitDelegates();
 		
 		initComponents();
+		
+		setFile(new File("new document"));
 	}
 
 
@@ -306,14 +309,16 @@ public class ImageFlowView extends FrameView {
 	
 	/**
 	 *  Set the bound file property and update the GUI.
+	 * @param file 
      */
     public void setFile(final File file) {
-        File oldValue = this.file;
-        this.file = file;
-        String appId = getResourceMap().getString("Application.id");
-        getFrame().setTitle(file.getName() + " - " + appId);
-        firePropertyChange("file", oldValue, this.file);
+    	File oldValue = this.file;
+    	this.file = file;
+    	String appId = getResourceMap().getString("Application.id");
+    	getFrame().setTitle(file.getName() + " - " + appId);
+    	firePropertyChange("file", oldValue, this.file);	
     }
+    
 
     /**
      * True if the file value has been modified but not saved.  The 
@@ -333,18 +338,31 @@ public class ImageFlowView extends FrameView {
     }
    
     
+    /**
+     * Sets the modified flag.
+     * @param modified
+     */
     public void setModified(final boolean modified) {
         boolean oldValue = this.modified;
         this.modified = modified;
         firePropertyChange("modified", oldValue, this.modified);
     }
 	
+    /**
+     * Returns true if a {@link UnitElement} is selected.
+     * @param selected
+     */
     public void setSelected(final boolean selected) {
         boolean oldValue = this.selected;
         this.selected = selected;
         firePropertyChange("selected", oldValue, this.selected);
     }
     
+    
+	/**
+	 * Returns the currently loaded workflow-file.
+	 * @return
+	 */
 	public File getFile() {
 		return file;
 	}
@@ -357,36 +375,62 @@ public class ImageFlowView extends FrameView {
 	
 	
 	
+	/**
+	 * convenient Example workflow
+	 */
 	@Action public void exampleFlow1() {
 		graphController.setupExample1();
 	}
 	
+	/**
+	 * convenient Example workflow
+	 */
 	@Action public void exampleFlow2() {
 		graphController.setupExample2();
 	}
 	
+	/**
+	 * convenient Example workflow
+	 */
 	@Action public void exampleFlowXML() {
 		graphController.setupExample0_XML();
 	}
 	
+	/**
+	 * Converts the current workflow into a macro and executes it in ImageJ.
+	 * @return
+	 */
 	@Action public Task generateMacro() {
 	    return new RunMacroTask(getApplication(), graphController);
 	}
 	
+	/**
+	 * Converts the current workflow into a macro and saves this to file.
+	 * @return
+	 */
 	@Action public Task exportMacro() {
 	    return new RunMacroTask(getApplication(), graphController);
 	}
 	
+    @Action
+    public Task runMacro() {
+        return new RunMacroTask(this.getApplication(), graphController);
+    }
 
 	
+	/**
+	 * Creates a new document and an empty workflow.
+	 */
 	@Action public void newDocument() {
 	    graphController.getUnitElements().clear();
-	    this.file = new File("new document");
+	    setFile(new File("new document"));
 	}
 	
 	@Action public Task open() {
 	    JFileChooser fc = new JFileChooser();
-
+	    String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
+	    fc.setFileFilter(new FlowXMLFilter(filesDesc));
+	    
 	    Task task = null;
 	    int option = fc.showOpenDialog(null);
 	    if (option == JFileChooser.APPROVE_OPTION) {
@@ -414,7 +458,9 @@ public class ImageFlowView extends FrameView {
 	
 	@Action public Task importGraph() {
 	    JFileChooser fc = new JFileChooser();
-
+	    String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
+	    fc.setFileFilter(new FlowXMLFilter(filesDesc));
+	    
 	    Task task = null;
 	    int option = fc.showOpenDialog(null);
 	    if (option == JFileChooser.APPROVE_OPTION) {
@@ -423,10 +469,13 @@ public class ImageFlowView extends FrameView {
 	    return task;
 	}
 	
+	/**
+	 * Action that toggles the display-status of a {@link UnitElement}
+	 */
 	@Action(enabledProperty = "selected")
 	public void setDisplayUnit() {
-		for (Iterator iterator = selections.iterator(); iterator.hasNext();) {
-			UnitElement unit = (UnitElement) iterator.next();
+		for (final Iterator iterator = selections.iterator(); iterator.hasNext();) {
+			final UnitElement unit = (UnitElement) iterator.next();
 			if(unit.isDisplayUnit()) {
 				// if it is a displayUnit, deactivate
 				unit.setDisplayUnit(false);
@@ -438,36 +487,45 @@ public class ImageFlowView extends FrameView {
 		graphPanel.repaint();
 	}
 	
+	/**
+	 * Removes all connections of the selected {@link UnitElement}
+	 */
 	@Action(enabledProperty = "selected")
 	public void unbind() {
-		Selection<Node> selection = graphPanel.getSelection();
-		for (Node unit : selection) {
+		final Selection<Node> selection = graphPanel.getSelection();
+		for (final Node unit : selection) {
 			units.unbindUnit((UnitElement)unit);	
 		}
 	}
 
+	/**
+	 * Deletes a selected {@link UnitElement}
+	 */
 	@Action(enabledProperty = "selected")
 	public void delete() {
-		Selection<Node> selection = graphPanel.getSelection();
-		for (Node unit : selection) {
+		final Selection<Node> selection = graphPanel.getSelection();
+		for (final Node unit : selection) {
 			graphController.removeNode(unit);
 		}
 		graphPanel.repaint();
 	}
 	
+	/**
+	 * Clears the workflow from all {@link UnitElement}s
+	 */
 	@Action	public void clear() {
 		this.units.clear();
 	}
 	
 	@Action(enabledProperty = "selected")
 	public void cut() {
-		Selection<Node> selectedUnits = graphPanel.getSelection();
-		ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
+		final Selection<Node> selectedUnits = graphPanel.getSelection();
+		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
 		if (selectedUnits.size() > 0) {
 			// il problema java.util.ConcurrentModificationException è stato risolto introducendo la lista garbage
-			HashSet<Edge> garbage = new HashSet<Edge>();
+			final HashSet<Edge> garbage = new HashSet<Edge>();
 			copyUnitsList.clear();
-			for (Node t : selectedUnits) {
+			for (final Node t : selectedUnits) {
 				/*for (Edge c : activePanel.getEdgeL())
 					if ((c.from.getParent() == t)||(t == c.to.getParent()))
 						garbage.add(c);
@@ -476,7 +534,7 @@ public class ImageFlowView extends FrameView {
 				copyUnitsList.add(t);
 				graphController.removeNode(t);
 			}
-			for (Edge c : garbage) {
+			for (final Edge c : garbage) {
 				graphController.getConnections().remove(c);
 //				activePanel.getEdgeL().remove(c);
 			}
@@ -486,17 +544,17 @@ public class ImageFlowView extends FrameView {
 	
 	@Action(enabledProperty = "selected")
 	public void copy() { 
-		Selection<Node> selectedNodes = graphPanel.getSelection();
-		ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
+		final Selection<Node> selectedNodes = graphPanel.getSelection();
+		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
 		if (!selectedNodes.isEmpty()) {
 			copyUnitsList.clear();
-			for (Node t : selectedNodes) {
+			for (final Node t : selectedNodes) {
 				Node clone;
 				try {
 					clone = t.clone();
 					clone.setLabel(t.getLabel());
 					copyUnitsList.add(clone);
-				} catch (CloneNotSupportedException e) {
+				} catch (final CloneNotSupportedException e) {
 					e.printStackTrace();
 				}	
 				
@@ -505,23 +563,23 @@ public class ImageFlowView extends FrameView {
 	}
 	
 	@Action	public void paste() {
-		Selection<Node> selectedUnits = graphPanel.getSelection();
-		ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
+		final Selection<Node> selectedUnits = graphPanel.getSelection();
+		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
 		if (!copyUnitsList.isEmpty()) {
 			selectedUnits.clear();
 			// this is added here so that the new pasted units are selected
 			selectedUnits.addAll(copyUnitsList);
 			copyUnitsList.clear();
-			for (Node t : selectedUnits) {
+			for (final Node t : selectedUnits) {
 //			for (Node t : copyUnitsList) {
 				try {
 					
 //					UnitElement clone = (UnitElement)t.clone();	
-					Node clone = t.clone();
+					final Node clone = t.clone();
 					clone.setLabel(t.getLabel());
 					graphPanel.getNodeL().add(t, t.getLabel());
 					copyUnitsList.add(clone);
-				} catch(CloneNotSupportedException ex) {
+				} catch(final CloneNotSupportedException ex) {
 					ErrorPrinter.printInfo("CloneNotSupportedException");
 				}
 			}
@@ -537,20 +595,24 @@ public class ImageFlowView extends FrameView {
 			unit.showProperties();
 		}
 	}
-	
-    @Action
-    public Task runMacro() {
-        return new RunMacroTask(this.getApplication(), graphController);
-    }
+
     
     @Action(enabledProperty = "modified")
     public Task save() {
-        return new SaveFlowGraphTask(getFile());
+    	if(getFile().exists()) {
+    		return new SaveFlowGraphTask(getFile());	
+    	} else 
+    		return saveAs();
+        
     }
     
     @Action(enabledProperty = "modified")
     public Task saveAs() {
         JFileChooser fc = createFileChooser("saveAsFileChooser");
+        String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
+	    fc.setFileFilter(new FlowXMLFilter(filesDesc));
+        
+        
         int option = fc.showSaveDialog(getFrame());
         Task task = null;
         if (JFileChooser.APPROVE_OPTION == option) {
@@ -579,42 +641,45 @@ public class ImageFlowView extends FrameView {
     }
 	
     @Action public void debugPrintNodes() {
-    	JDialog dialog = new JDialog();
+    	final JDialog dialog = new JDialog();
 
-    	DefaultListModel lm = new DefaultListModel();
-    	for (Node node : graphController.getUnitElements()) {
+    	final DefaultListModel lm = new DefaultListModel();
+    	for (final Node node : graphController.getUnitElements()) {
     		lm.addElement(node);	
     	}
-    	JList list = new JList(lm);
+    	final JList list = new JList(lm);
     	
 		dialog.add(list);
 		dialog.pack();
 		dialog.setVisible(true);
     }
     
+    /**
+     * 
+     */
     @Action(enabledProperty = "selected")
     public void debugPrintNodeDetails() {
-    	Selection<Node> selectedUnits = graphPanel.getSelection();
+    	final Selection<Node> selectedUnits = graphPanel.getSelection();
 		for (int i = 0; i < selectedUnits.size(); i++) {
-			UnitElement unit = (UnitElement)selectedUnits.get(i);
-    		JDialog dialog = new JDialog();
+			final UnitElement unit = (UnitElement)selectedUnits.get(i);
+    		final JDialog dialog = new JDialog();
 
     		// list parameters
-        	DefaultListModel lm = new DefaultListModel();
-        	for (Parameter parameter : unit.getParameters()) {
+        	final DefaultListModel lm = new DefaultListModel();
+        	for (final Parameter parameter : unit.getParameters()) {
         		lm.addElement(parameter);	
         	}
-        	for (Input input : unit.getInputs()) {
+        	for (final Input input : unit.getInputs()) {
         		lm.addElement(input);
         		lm.addElement("name:"+input.getName());
         		lm.addElement("imagetype:"+input.getImageBitDepth());
         	}
-        	for (Output output : unit.getOutputs()) {
+        	for (final Output output : unit.getOutputs()) {
         		lm.addElement(output);
         		lm.addElement("name:"+output.getName());
         		lm.addElement("imagetype:"+output.getImageBitDepth());
         	}
-        	JList list = new JList(lm);
+        	final JList list = new JList(lm);
         	
     		dialog.add(list);
     		dialog.pack();
@@ -666,5 +731,40 @@ public class ImageFlowView extends FrameView {
 	public GraphPanel getGraphPanel() {
 		return this.graphPanel;
 	}
+	
+	
+
+    /** This is a substitute for FileNameExtensionFilter, which is
+     * only available on Java SE 6.
+     */
+    private static class FlowXMLFilter extends FileFilter {
+
+        private final String description;
+
+        FlowXMLFilter(String description) {
+            this.description = description;
+        }
+
+        @Override
+        public boolean accept(File f) {
+            if (f.isDirectory()) {
+                return true;
+            }
+            String fileName = f.getName();
+            int i = fileName.lastIndexOf('.');
+            if ((i > 0) && (i < (fileName.length() - 1))) {
+                String fileExt = fileName.substring(i + 1);
+                if ("xml".equalsIgnoreCase(fileExt)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public String getDescription() {
+            return description;
+        }
+    }
 
 }

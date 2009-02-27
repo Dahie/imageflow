@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -64,7 +65,8 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 * @throws FileNotFoundException 
 	 */
 	public void read(File file) throws FileNotFoundException {
-		Vector<UnitElement> newNodes = new Vector<UnitElement>();
+//		Vector<UnitElement> newNodes = new Vector<UnitElement>();
+		HashMap<Integer, UnitElement> newNodes = new HashMap<Integer, UnitElement>();
 
 		if(!file.exists()) throw new FileNotFoundException("reading failed, the file as not found");
 
@@ -108,7 +110,8 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 						unitElement.setDisplayUnit(unitDescription.getIsDisplayUnit());
 						unitElement.setHelpString(unitDescription.helpString);
 						unitElement.setLabel(label);
-						newNodes.add(unitElement);
+//						newNodes.add(unitID, unitElement);
+						newNodes.put(unitID, unitElement);
 						add(unitElement);
 					} else {
 						CommentNode comment = new CommentNode(new Point(xPos, yPos), label);
@@ -132,8 +135,8 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 					int fromOutputNumber 	= Integer.parseInt(actualConnectionElement.getChild("FromOutputNumber").getValue());
 					int toUnitID 			= Integer.parseInt(actualConnectionElement.getChild("ToUnitID").getValue());
 					int toInputNumber 		= Integer.parseInt(actualConnectionElement.getChild("ToInputNumber").getValue());
-					Connection con 			= new Connection(newNodes.get(fromUnitID-1), fromOutputNumber, 
-							newNodes.get(toUnitID-1), toInputNumber);
+					Connection con 			= new Connection(newNodes.get(fromUnitID), fromOutputNumber, 
+												newNodes.get(toUnitID), toInputNumber);
 					addConnection(con);
 				}
 			}
@@ -223,7 +226,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 
 					Element value = new Element("Value");
 					value.addContent(parameter.getValue()+"");
-					parameterElement.addContent(value);
+					
 
 					Element helpStringP = new Element("HelpString");
 					helpStringP.addContent(parameter.getHelpString());
@@ -232,10 +235,17 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 					//special parameters
 					
 					if(parameter instanceof ChoiceParameter) {
+						
+						value = new Element("Value");
+						ChoiceParameter choiceParameter = (ChoiceParameter)parameter;
+						String choiceString =  choiceParameter.getChoicesString();
+						value.addContent(choiceString);
+						
 						Element choiceNumber = new Element("ChoiceNumber");
-						choiceNumber.addContent(((ChoiceParameter)parameter).getChoiceIndex()+"");
+						choiceNumber.addContent(choiceParameter.getChoiceIndex()+"");
 						parameterElement.addContent(choiceNumber);	
 					}
+					parameterElement.addContent(value);
 					
 					if(parameter instanceof BooleanParameter) {
 						Element trueString = new Element("TrueString");

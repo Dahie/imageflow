@@ -60,5 +60,14 @@ public class ChoiceParameter extends StringParameter {
 	public int getChoiceIndex() {
 		return this.choiceValues.indexOf(this.stringValue);
 	}
+
+
+	public String getChoicesString() {
+		String choiceString = "";
+		for (String choice : getChoices()) {
+			choiceString += choice+" ";
+		}
+		return choiceString;
+	}
 	
 }

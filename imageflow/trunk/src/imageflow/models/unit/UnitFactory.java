@@ -63,11 +63,13 @@ public class UnitFactory {
 		
 		// add an icon if there is one mentioned and found
 		File iconFile = new File(unitDescription.pathToIcon);
+		
 		if(iconFile.exists()) {
 			try {
-				if(unitElement instanceof SourceUnitElement) 
-					unitElement.setIcon(ImageIO.read(((SourceUnitElement) unitElement).getFile()));
-				else 
+				if(unitElement instanceof SourceUnitElement) {
+					SourceUnitElement sourceUnit = (SourceUnitElement)unitElement;
+					unitElement.setIcon(ImageIO.read(sourceUnit.getFile()));
+				} else 
 					unitElement.setIcon(ImageIO.read(iconFile));	
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -89,8 +91,11 @@ public class UnitFactory {
 			String imageType = (String) unitElement.getParameter(2).getValue();
 			((BackgroundUnitElement)unitElement).setOutputImateType(imageType);	
 		} else if(unitElement instanceof SourceUnitElement) {
-			((SourceUnitElement)unitElement).showFileChooser();
-			((SourceUnitElement)unitElement).updateImageType();
+			SourceUnitElement sourceUnit = (SourceUnitElement)unitElement;
+			if(!sourceUnit.hasFilePath()) {
+				sourceUnit.showFileChooser();	
+			}
+			sourceUnit.updateImageType();
 		}
 		
 		if(ImageFlow.getApplication() != null) 

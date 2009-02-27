@@ -52,9 +52,7 @@ public class SourceUnitElement extends UnitElement {
 		// display filedialog
 	    showFileChooser();
 		
-		
 		super.showProperties();
-		
 		
 		updateImageType();
 		
@@ -156,6 +154,11 @@ public class SourceUnitElement extends UnitElement {
 			return imp;
 		}
 		return null; 
+	}
+	
+	public boolean hasFilePath() {
+		StringParameter stringParameter = (StringParameter)parameters.get(0);
+		return (stringParameter.getValue().length() > 0);
 	}
 	
 	public String getFilePath() {
