@@ -239,31 +239,39 @@ public class GraphPanel extends GPanel {
 		} else {
 			//draw a nice message to promote creating a graph
 
-			final int x = 50;
-			final int y = 80;
-
-			g2.drawImage(this.iwIcon, 25, 25, null);
-			
-			final String headline = "Create your workflow";
-			final String description1 = "Add new units to the graph by using the";
-			final String description2 = "context menu or drag-n-drop units on the canvas.";
-
-			g2.setColor(Color.GRAY);
-			
-			// scale font on big lengths
-			final FontMetrics fm = g2.getFontMetrics();
-			final int stringWidth = fm.stringWidth(headline);
-			final int fontsize = 24;
-			final int fontsizeOriginal = 12;
-			final Font font = g2.getFont();
-			final Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
-			g2.setFont(newFont);
-			// and if even now to small, then cut
-			g2.drawString(headline, x+5, y+15);
-			g2.setFont(new Font(font.getFamily(), Font.PLAIN, fontsizeOriginal));
-			g2.drawString(description1+"", x+5, y+45);
-			g2.drawString(description2+"", x+5, y+65);
+			drawWelcome(g2);
 		}
+	}
+
+	/**
+	 * draw a nice message to promote creating a graph
+	 * @param g2
+	 */
+	private void drawWelcome(final Graphics2D g2) {
+		final int x = 50;
+		final int y = 80;
+
+		g2.drawImage(this.iwIcon, 25, 25, null);
+		
+		final String headline = "Create your workflow";
+		final String description1 = "Add new units to the graph by using the";
+		final String description2 = "context menu units on this canvas.";
+
+		g2.setColor(Color.GRAY);
+		
+		// scale font on big lengths
+		final FontMetrics fm = g2.getFontMetrics();
+		final int stringWidth = fm.stringWidth(headline);
+		final int fontsize = 24;
+		final int fontsizeOriginal = 12;
+		final Font font = g2.getFont();
+		final Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
+		g2.setFont(newFont);
+		// and if even now to small, then cut
+		g2.drawString(headline, x+5, y+15);
+		g2.setFont(new Font(font.getFamily(), Font.PLAIN, fontsizeOriginal));
+		g2.drawString(description1+"", x+5, y+45);
+		g2.drawString(description2+"", x+5, y+65);
 	}
 
 	/**

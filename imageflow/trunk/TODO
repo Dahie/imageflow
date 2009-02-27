@@ -1,6 +1,20 @@
 - filter images in filechooser
 - sidepane resize
 
+canvas text zentrieren
+
+cursor tasten
+key
+
+kommentar sel
+
+
+feste beispiele
+
+
+
+
+
 Functions:
 - as imageJ plugin / standalone
 - no other jars (jdom) -> buildscript

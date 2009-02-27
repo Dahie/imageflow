@@ -40,7 +40,7 @@ import java.util.ArrayList;
  */
 public class UnitElement extends AbstractUnit {
 
-	final private static int PIN_TOLERANCE = 12;
+	final private static int PIN_TOLERANCE = 18;
 	
 	/**
 	 * name of this unit, this is not display, Label is displayed

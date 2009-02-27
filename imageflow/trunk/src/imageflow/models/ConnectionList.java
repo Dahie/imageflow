@@ -127,18 +127,18 @@ public class ConnectionList extends Edges implements Model {
 
 	@Override
 	public Connection remove(final int index) {
-		final Connection connection = (Connection) this.get(index);
+		final Connection connection = (Connection) super.remove(index);
 		((Input)connection.to).disconnect();
 		((Output)connection.from).disconnect();
-		Connection remove = (Connection) super.remove(index);
 		notifyModelListeners();
-		return remove;
+		return connection;
 	}
 	
 	@Override
 	public boolean remove(final Object o) {
 		final Connection connection = (Connection) o;
 		((Input)connection.to).disconnect();
+		((Output)connection.from).disconnect();
 		notifyModelListeners();
 		return super.remove(o);
 	}

@@ -80,7 +80,6 @@ public class SourceUnitElement extends UnitElement {
 			System.out.println("file doesn't exist");
 		}
 		
-		this.setLabel(getFile().getName());
 		// change bitdepth for all outputs
 		setOutputImateType(imageType);
 	}
@@ -99,7 +98,10 @@ public class SourceUnitElement extends UnitElement {
 	    	// backslashes need to be escaped
 	    	filepath = filepath.replace("\\", "\\\\"); // \ to \\
 	    	((StringParameter)getParameter(0)).setValue(filepath);
+	    	String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
+	    	setLabel(filename);
 	    }
+	    
 	}
 
 	public void setOutputImateType(final int imageType) {

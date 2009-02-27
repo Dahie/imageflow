@@ -51,6 +51,7 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 
 	@Override
 	protected void startup() {
+		
 		if (IJ.isMacOSX()) {
 			System.setProperty("apple.laf.useScreenMenuBar", "true"); 
 			System.setProperty("apple.awt.brushMetalRounded", "true");

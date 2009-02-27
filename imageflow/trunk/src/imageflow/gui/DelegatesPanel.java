@@ -28,6 +28,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -63,7 +64,7 @@ public class DelegatesPanel extends JPanel {
 		final JTree delegatesTree = new JTree(delegatesModel);
 		delegatesTree.setRootVisible(false);
 		delegatesTree.setToggleClickCount(1);
-		delegatesTree.addMouseMotionListener(new MouseMotionListener() {
+		/*delegatesTree.addMouseMotionListener(new MouseMotionListener() {
 
 			public void mouseDragged(final MouseEvent e) {
 				final DragGestureListener dragGestureListener = new DragGestureListener() {
@@ -123,7 +124,7 @@ public class DelegatesPanel extends JPanel {
 
 			public void mouseReleased(final MouseEvent arg0) {}
 
-		});
+		});*/
 		delegatesTree.setCellRenderer(new IFTreeCellRenderer());
 
 		final JScrollPane scrollPane = new JScrollPane(delegatesTree);
@@ -161,7 +162,13 @@ public class DelegatesPanel extends JPanel {
 			}else{	
 				setBackground(SystemColor.text);
 			}
-			this.icon = drawIcon(Color.WHITE, 16, 16);
+//			this.icon = drawIcon(Color.WHITE, 16, 16);
+			try {
+				this.icon = ImageIO.read(this.getClass().getResourceAsStream("/imageflow/resources/folder.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			
 			if (value instanceof UnitDelegate && isLeaf) {

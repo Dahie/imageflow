@@ -36,6 +36,7 @@ import java.awt.ScrollPane;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -120,6 +121,7 @@ public class ImageFlowView extends FrameView {
 		
 		// register listeners
 		registerModelListeners();
+		getApplication().addExitListener(new ConfirmExit());
 	}
 	
 
@@ -168,12 +170,14 @@ public class ImageFlowView extends FrameView {
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.add(getAction("newDocument"));
 		fileMenu.add(getAction("open"));
-		fileMenu.add(getAction("generateMacro"));
+		
 		fileMenu.add(getAction("save"));
 		fileMenu.add(getAction("saveAs"));
 		fileMenu.add(new JSeparator());
 		fileMenu.add(getAction("importGraph"));
 		fileMenu.add(getAction("export"));
+		fileMenu.add(new JSeparator());
+		fileMenu.add(getAction("generateMacro"));
 		if(!IJ.isMacintosh()) {
 			fileMenu.add(new JSeparator());
 			fileMenu.add(getAction("quit"));
@@ -194,6 +198,7 @@ public class ImageFlowView extends FrameView {
 		JMenu debugMenu = new JMenu("Debug");
 		debugMenu.add(getAction("debugPrintNodes"));
 		debugMenu.add(getAction("debugPrintNodeDetails"));
+		debugMenu.add(getAction("debugPrintEdges"));
 		debugMenu.add(new JSeparator());
 		debugMenu.add(getAction("exampleFlow1"));
 		debugMenu.add(getAction("exampleFlow2"));
@@ -440,26 +445,6 @@ public class ImageFlowView extends FrameView {
     }
 
 	
-	/**
-	 * Creates a new document and an empty workflow.
-	 */
-	@Action public void newDocument() {
-	    graphController.getUnitElements().clear();
-	    setFile(new File("new document"));
-	}
-	
-	@Action public Task open() {
-	    JFileChooser fc = new JFileChooser();
-	    String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
-	    fc.setFileFilter(new FlowXMLFilter(filesDesc));
-	    
-	    Task task = null;
-	    int option = fc.showOpenDialog(null);
-	    if (option == JFileChooser.APPROVE_OPTION) {
-	    	task = new LoadFlowGraphTask(fc.getSelectedFile());
-	    }
-	    return task;
-	}
 	
 	@Action(enabledProperty = "selected")
 	public void preview() {
@@ -518,6 +503,7 @@ public class ImageFlowView extends FrameView {
 		for (final Node unit : selection) {
 			units.unbindUnit((UnitElement)unit);	
 		}
+		graphPanel.repaint();
 	}
 
 	/**
@@ -563,6 +549,7 @@ public class ImageFlowView extends FrameView {
 			selectedUnits.clear();
 			setHasPaste(true);
 		}
+		graphPanel.repaint();
 	}
 	
 	@Action(enabledProperty = "selected")
@@ -599,8 +586,9 @@ public class ImageFlowView extends FrameView {
 			for (final Node t : selectedUnits) {
 //			for (Node t : copyUnitsList) {
 				try {
-					
-//					UnitElement clone = (UnitElement)t.clone();	
+					t.setSelected(true);
+//					UnitElement clone = (UnitElement)t.clone();
+					// retain a copy, in case he pastes several times
 					final Node clone = t.clone();
 					clone.setLabel(t.getLabel());
 					graphPanel.getNodeL().add(t, t.getLabel());
@@ -622,6 +610,61 @@ public class ImageFlowView extends FrameView {
 		}
 	}
 
+
+	/**
+	 * Creates a new document and an empty workflow.
+	 */
+	@Action public void newDocument() {
+
+		if(isModified()) {
+			int optionSave = showSaveConfirmation();
+			
+			if(optionSave == JOptionPane.OK_OPTION) {
+				save().run();
+//				new SaveFlowGraphTask(getFile()).run();
+			}else if(optionSave == JOptionPane.CANCEL_OPTION) {
+				return;
+			}
+	    }
+		graphController.getUnitElements().clear();
+	    setFile(new File("new document"));
+	    this.setModified(false);
+	    graphPanel.repaint();
+	}
+	
+	@Action public Task open() {
+	    
+		if(isModified()) {
+			int optionSave = showSaveConfirmation();
+			if(optionSave == JOptionPane.OK_OPTION) {
+				save().run();
+//				new SaveFlowGraphTask(getFile()).run();
+			}else if(optionSave == JOptionPane.NO_OPTION) {
+				return null;
+			}
+		} 
+		JFileChooser fc = new JFileChooser();
+		String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
+		fc.setFileFilter(new FlowXMLFilter(filesDesc));
+
+		Task task = null;
+		int option = fc.showOpenDialog(null);
+		if (option == JFileChooser.APPROVE_OPTION) {
+			this.setModified(false);
+			task = new LoadFlowGraphTask(fc.getSelectedFile());
+		}
+		return task;			
+	}
+	
+	private int showSaveConfirmation() {
+		return JOptionPane.showConfirmDialog(ImageFlow.getApplication().getMainFrame(), 
+				"The workflow has modifications which were not yet saved."
+				+'\n'+"Save changes now?",
+				"Save changes?", 
+				JOptionPane.INFORMATION_MESSAGE);
+		
+	}
+	
     
     /**
      * @return
@@ -646,6 +689,9 @@ public class ImageFlowView extends FrameView {
         Task task = null;
         if (JFileChooser.APPROVE_OPTION == option) {
         	File selectedFile = fc.getSelectedFile();
+        	if(!file.getName().toLowerCase().endsWith(".xml")) 
+        		selectedFile = new File(selectedFile.getAbsoluteFile()+".xml");
+        	
         	if(selectedFile.exists()) {
 				int response = JOptionPane.showConfirmDialog(this.getFrame(), 
 						"This file already exists. Do you want to overwrite it?",
@@ -705,6 +751,23 @@ public class ImageFlowView extends FrameView {
     	final DefaultListModel lm = new DefaultListModel();
     	for (final Node node : graphController.getUnitElements()) {
     		lm.addElement(node);	
+    	}
+    	final JList list = new JList(lm);
+    	
+		dialog.add(list);
+		dialog.pack();
+		dialog.setVisible(true);
+    }
+    
+    /**
+     * 
+     */
+    @Action public void debugPrintEdges() {
+    	final JDialog dialog = new JDialog();
+
+    	final DefaultListModel lm = new DefaultListModel();
+    	for (final Edge edge : graphController.getUnitElements().getConnections()) {
+    		lm.addElement(edge);	
     	}
     	final JList list = new JList(lm);
     	
@@ -791,7 +854,28 @@ public class ImageFlowView extends FrameView {
 		return this.graphPanel;
 	}
 	
-	
+
+    private class ConfirmExit implements Application.ExitListener {
+        public boolean canExit(EventObject e) {
+            if (isModified()) {
+//                String confirmExitText = getResourceMap().getString("confirmTextExit", getFile());
+//                int option = JOptionPane.showConfirmDialog(getFrame(), confirmExitText);
+            	int option = showSaveConfirmation();
+                if(option == JOptionPane.YES_OPTION) {
+                	save().run();
+                } else if (option == JOptionPane.CANCEL_OPTION) {
+                	return false;
+                }  
+            }
+            return true;
+        }
+        public void willExit(EventObject e) { 
+        	System.exit(0);
+        }
+        
+        
+    }
+
 
     /** This is a substitute for FileNameExtensionFilter, which is
      * only available on Java SE 6.
