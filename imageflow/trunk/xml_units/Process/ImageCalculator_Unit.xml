@@ -5,7 +5,7 @@
 
 <General>
   <UnitName>Image Calculator</UnitName> 
-  <PathToIcon>xml_units/ImageCalculator_Unit.png</PathToIcon> 
+  <PathToIcon>ImageCalculator_Unit.png</PathToIcon> 
   <ImageJSyntax>run("Image Calculator...", "image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create PARA_BOOLEAN_1");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Performs a mathematical calculation of two images</HelpString>  

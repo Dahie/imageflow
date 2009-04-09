@@ -41,7 +41,10 @@ public class ConnectionTests extends TestCase {
 		Output output = source.getOutput(0);
 		Input input = blur.getInput(0);
 		assertEquals("source output parent", source, output.getParent());
-		assertEquals("source output to unit", blur, output.getToUnit());
+		for (Connection conn : output.getConnections()) {
+			assertEquals("source output to unit", blur, conn.getToUnit());	
+		}
+		
 		assertEquals("blur input parent", blur, input.getParent());
 		assertEquals("blur input from unit", source, input.getFromUnit());
 		

@@ -15,10 +15,12 @@ import org.jdesktop.application.Task;
 public class RunMacroTask extends Task {
 	
 	GraphController graphController;
+	private boolean showlog;
 	
-	public RunMacroTask(final Application app, GraphController graphController) {
+	public RunMacroTask(final Application app, GraphController graphController, boolean doShowLog) {
 		super(app);
 		this.graphController = graphController;
+		this.showlog = showlog;
 	}
 
 	@Override 
@@ -29,7 +31,7 @@ public class RunMacroTask extends Task {
 		//TODO use exceptions 
 		if(macro != null) {
 			System.out.println(macro);
-			graphController.runImageJMacro(macro, false);	
+			graphController.runImageJMacro(macro, this.showlog);	
 		}
 		
 		return null;

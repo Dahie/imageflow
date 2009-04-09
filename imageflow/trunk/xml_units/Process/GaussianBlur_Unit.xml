@@ -5,7 +5,7 @@
 
 <General>
   <UnitName>Gaussian Blur</UnitName> 
-  <PathToIcon>xml_units/GaussianBlur_Unit.png</PathToIcon> 
+  <PathToIcon>GaussianBlur_Unit.png</PathToIcon> 
   <ImageJSyntax>run("Gaussian Blur...", "sigma=PARA_DOUBLE_1");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Performs a gaussian blur</HelpString>

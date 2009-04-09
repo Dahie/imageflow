@@ -7,6 +7,7 @@
 	<property name="build.dir" location="${bin.dir}/build" />
 	<property name="units.dir" location="${bin.dir}/xml_units" />
 	<property name="doc.dir" location="${bin.dir}/doc" />
+	<property name="example.dir" location="${bin.dir}/examples" />
 	
 	 <target name="copy" description="Delete old build and dist directories">
 	    <delete dir="${build.dir}"/>
@@ -20,6 +21,11 @@
 	 	<mkdir dir="${build.dir}/doc" />
 	 	<copy todir="${build.dir}/doc">
 	 			<fileset dir="${doc.dir}" />
+	 	</copy>
+	 	
+	 	<mkdir dir="${build.dir}/examples" />
+	 	<copy todir="${build.dir}/examples">
+	 			<fileset dir="${example.dir}" />
 	 	</copy>
 	 	
 	  </target>

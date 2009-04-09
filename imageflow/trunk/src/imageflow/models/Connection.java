@@ -54,45 +54,42 @@ public class Connection extends Edge {
 			final int fromOutputNumber, 
 			final UnitElement toUnit, 
 			final int toInputNumber) {
-		this(fromUnit, fromUnit.getOutput(fromOutputNumber-1), 
-				toUnit, toUnit.getInput(toInputNumber-1));
-		
-		
-		
-		/*this.fromUnit = fromUnit;
-//		this.fromUnitNumber = fromUnit.getUnitID();
-//		this.fromOutputNumber = fromOutputNumber;
-		this.toUnit = toUnit;
-		this.toUnitNumber = toUnit.getUnitID();
-//		this.toInputNumber = toInputNumber;
-		
-		
-		
-		id = getID(fromUnitNumber, fromOutputNumber, toUnitNumber, toInputNumber);*/
-//		connect();
+		this(fromUnit.getOutput(fromOutputNumber-1), toUnit.getInput(toInputNumber-1));
 	}
 	
+//	/**
+//	 * @param fromUnit 
+//	 * @param fromOutput 
+//	 * @param toUnit 
+//	 * @param toInput 
+//	 * 
+//	 */
+//	public Connection(final UnitElement fromUnit, 
+//			final Pin fromOutput, 
+//			final UnitElement toUnit, 
+//			final Pin toInput) {
+//		super(fromOutput, toInput);
+//		this.fromUnit = fromUnit;
+////		this.fromUnitNumber = fromUnit.getUnitID();
+//		this.toUnit = toUnit;
+////		this.toUnitNumber = toUnit.getUnitID();
+//		
+//		id = getID(fromUnit.getUnitID(), fromOutput.getIndex(), 
+//				toUnit.getUnitID(), toInput.getIndex());
+//	}
+
 	/**
-	 * @param fromUnit 
-	 * @param fromOutput 
-	 * @param toUnit 
-	 * @param toInput 
-	 * 
+	 * @param fromOutput
+	 * @param toInput
 	 */
-	public Connection(final UnitElement fromUnit, 
-			final Pin fromOutput, 
-			final UnitElement toUnit, 
-			final Pin toInput) {
+	public Connection(final Pin fromOutput, final Pin toInput) {
 		super(fromOutput, toInput);
-		this.fromUnit = fromUnit;
-//		this.fromUnitNumber = fromUnit.getUnitID();
-		this.toUnit = toUnit;
-//		this.toUnitNumber = toUnit.getUnitID();
+		this.fromUnit = (UnitElement) fromOutput.getParent();
+		this.toUnit = (UnitElement) toInput.getParent();
 		
 		id = getID(fromUnit.getUnitID(), fromOutput.getIndex(), 
 				toUnit.getUnitID(), toInput.getIndex());
 	}
-
 
 
 	/**
@@ -100,8 +97,8 @@ public class Connection extends Edge {
 	 * @param unitElements
 	 */
 	public void connect() {
-		((Output)this.from).connectTo(toUnit, to);
-		((Input)this.to).connectTo(fromUnit, from);
+		((Output)this.from).connectTo(to);
+		((Input)this.to).connectTo(from);
 		
 //		this.toUnit.getInput(toInputNumber-1).connectTo(fromUnit, fromOutputNumber);
 //		this.fromUnit.getOutput(fromOutputNumber-1).connectTo(toUnit, toInputNumber);
@@ -254,10 +251,7 @@ public class Connection extends Edge {
 		
 		System.out.println(from +" and "+ to);
 		
-		if(from.isConnectedWith(to) && to.isConnectedWith(from)) 
-			return true;
-		else
-			return false;
+		return (from.isConnectedWith(to) && to.isConnectedWith(from)); 
 //		if(((Input)this.to).isConnected() 
 //				&& ((Output)this.from).isConnected()) return true;
 		// technically, if the connection isn true, this connection object is kinda zombie

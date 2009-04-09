@@ -71,11 +71,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
     }
 
 	public void run(String args) {
-		
-		
-		if(IJ.getInstance() == null)
-			this.imageJ = new ImageJ();
-		
 		String oldPath = System.getProperty("user.dir");
 		System.setProperty("user.dir", oldPath + File.separator + "plugins" + File.separator + "Imageflow");
 		
@@ -83,6 +78,9 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	}
 
 	public ImageJ getImageJInstance() {
+		if(IJ.getInstance() == null)
+			this.imageJ = new ImageJ();
+		
 		return this.imageJ;
 	}
 	

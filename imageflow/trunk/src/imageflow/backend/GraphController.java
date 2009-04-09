@@ -1,6 +1,5 @@
 package imageflow.backend;
 import graph.Node;
-import helper.Tools;
 import ij.IJ;
 import ij.ImageJ;
 import imageflow.ImageFlow;
@@ -11,7 +10,6 @@ import imageflow.models.unit.UnitDescription;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
 import imageflow.models.unit.UnitList;
-import imageflow.models.unit.UnitElement.Type;
 
 import java.awt.Point;
 import java.io.File;
@@ -25,6 +23,7 @@ import org.jdesktop.application.View;
 
 
 /**
+ * Controller for Workflows. 
  * @author danielsenff
  *
  */
@@ -38,29 +37,22 @@ public class GraphController{
 	 */
 	protected ArrayList<Node> copyNodesList;
 
-	protected View view;
-
-	public GraphController(View view) {
-		this();
-		this.view = view;
-	}
 
 	/**
 	 * 
 	 */
 	public GraphController() {
-
 		this.nodes = new UnitList();
 		this.copyNodesList = new ArrayList<Node>();
 	}
 
 
-	
-
-
-
-
-	public void runImageJMacro(final String macro, boolean showLog) {
+	/**
+	 * Starts an imagej instance and executes the macro.
+	 * @param macro
+	 * @param showLog
+	 */
+	public void runImageJMacro(final String macro, final boolean showLog) {
 		ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
 		if(imagej == null)
 			imagej = new ImageJ(null);
@@ -79,26 +71,31 @@ public class GraphController{
 	public UnitList getUnitElements() {
 		return this.nodes;
 	}
+//
+//	public static void main(final String[] args) {
+//		final GraphController controller = new GraphController();
+//		controller.setupExample1();
+//		controller.generateMacro();
+//	}
 
-	public static void main(final String[] args) {
-		final GraphController controller = new GraphController();
-		controller.setupExample1();
-		controller.generateMacro();
-	}
-
+	/**
+	 * Generates the executable Macro based on the current graph.
+	 * @return
+	 */
 	public String generateMacro() {
-		MacroFlowRunner macroFlowRunner = new MacroFlowRunner(this.nodes);
+		final MacroFlowRunner macroFlowRunner = new MacroFlowRunner(this.nodes);
 		return macroFlowRunner.generateMacro();
 	}
 
 	/**
+	 * Returns current the {@link ConnectionList}
 	 * @return
 	 */
 	public ConnectionList getConnections() {
 		return this.nodes.getConnections();
 	}
 
-
+/*
 	public static UnitList sortList(UnitList unitElements) {
 
 		// temporary list, discarded after this method call
@@ -113,7 +110,7 @@ public class GraphController{
 
 		try {
 			//loop over all units, selection sort, levelorder
-			// TODO I don't like this condition
+			// I don't like this condition
 			while(!unitElements.isEmpty()) {
 				index = i % unitElements.size();
 				Node node =  unitElements.get(index); 
@@ -162,7 +159,7 @@ public class GraphController{
 				i++;
 			}
 
-			// TODO replacing here causes deletion of none-used nodes 
+			//  replacing here causes deletion of none-used nodes 
 			for (Node node : orderedList) {
 				unitElements.add(node);
 			}
@@ -171,7 +168,7 @@ public class GraphController{
 		}
 
 		return unitElements;
-	}
+	}*/
 
 
 	/**
@@ -206,35 +203,16 @@ public class GraphController{
 		// setup of units
 		////////////////////////////////////////////////////////
 
-
-		//		unitElements.add(null);
-
-		//		final UnitElement sourceUnit = UnitFactory.createSourceUnit("/Users/barthel/Applications/ImageJ/_images/zange1.png");
-		//		
-		//		UnitDescription blurUnitDescription = new UnitDescription();
-		//		blurUnitDescription.setBlurValues();
-		//		blurUnitDescription.parseUnitValuesFromXmlFile("GaussianBlur_Unit.xml");
-		//		//final UnitElement blurUnit = UnitFactory.createGaussianBlurUnit(new Point(180, 50));
-		//		final UnitElement blurUnit = UnitFactory.createProcessingUnit(blurUnitDescription, new Point(180, 50));
-		//
-		//		UnitDescription mergeUnitDescription = new UnitDescription();
-		//		mergeUnitDescription.setImageCalculatorValues();
-		//		//final UnitElement mergeUnit = UnitFactory.createImageCalculatorUnit(new Point(320, 100));
-		//		final UnitElement mergeUnit = UnitFactory.createProcessingUnit(mergeUnitDescription,new Point(320, 100));
-		//		final UnitElement noiseUnit = UnitFactory.createAddNoiseUnit(new Point(450, 100));
-		//		noiseUnit.setDisplayUnit(true);
-
-
-		UnitDescription sourceUnitDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/ImageSource_Unit.xml")));
+		UnitDescription sourceUnitDescription = new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
 		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 
-		UnitDescription blurUnitDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/GaussianBlur_Unit.xml")));
+		UnitDescription blurUnitDescription = new UnitDescription(new File("xml_units/Process/GaussianBlur_Unit.xml"));
 		final UnitElement blurUnit = UnitFactory.createProcessingUnit(blurUnitDescription, new Point(180, 50));
 
-		UnitDescription mergeUnitDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/ImageCalculator_Unit.xml")));
+		UnitDescription mergeUnitDescription = new UnitDescription(new File("xml_units/Process/ImageCalculator_Unit.xml"));
 		final UnitElement mergeUnit = UnitFactory.createProcessingUnit(mergeUnitDescription,new Point(320, 100));
 
-		UnitDescription noiseUnitDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/AddNoise_Unit.xml")));
+		UnitDescription noiseUnitDescription = new UnitDescription(new File("xml_units/Process/AddNoise_Unit.xml"));
 		final UnitElement noiseUnit = UnitFactory.createProcessingUnit(noiseUnitDescription,new Point(450, 100));
 		noiseUnit.setDisplayUnit(true);
 		
@@ -291,22 +269,22 @@ public class GraphController{
 		////////////////////////////////////////////////////////
 
 
-		UnitDescription sourceUnitDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/ImageSource_Unit.xml")));
+		UnitDescription sourceUnitDescription = new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
 		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 
-		final UnitElement to8BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Image/8Bit_Unit.xml"))), new Point(150, 100));
-		final UnitElement to32BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Image/32Bit_Unit.xml"))), new Point(260, 100));
+		final UnitElement to8BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Image/8Bit_Unit.xml")), new Point(150, 100));
+		final UnitElement to32BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Image/32Bit_Unit.xml")), new Point(260, 100));
 
-		UnitDescription unitConvolveDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/Convolver_Unit.xml")));
+		UnitDescription unitConvolveDescription = new UnitDescription(new File("xml_units/Process/Convolver_Unit.xml"));
 		final UnitElement convUnit = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 50));
 		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 160));
 
-		UnitDescription unitSquareDescription = new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/Square_Unit.xml")));
+		UnitDescription unitSquareDescription = new UnitDescription(new File("xml_units/Process/Square_Unit.xml"));
 		final UnitElement squareUnit = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 50));
 		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 160));
 
-		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Process/Add_Unit.xml"))), new Point(650, 100));
-		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(Tools.getXMLRoot(new File("xml_units/Lookup Tables/Fire_Unit.xml"))), new Point(770, 100));
+		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Process/Add_Unit.xml")), new Point(650, 100));
+		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Lookup Tables/Fire_Unit.xml")), new Point(770, 100));
 
 		// some mixing, so they are not in order
 		nodes.add(sourceUnit);

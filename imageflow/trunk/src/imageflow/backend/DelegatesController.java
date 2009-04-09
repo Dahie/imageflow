@@ -104,7 +104,7 @@ public class DelegatesController {
 				((DefaultMutableTreeNode) node).add(subNode);
 				menu.add(subMenu);
 			} else if (file.isFile() && isXML(file)  && !file.getName().startsWith(".")) {
-				final UnitDescription unitDescription = new UnitDescription(Tools.getXMLRoot(file));
+				final UnitDescription unitDescription = new UnitDescription(file, Tools.getXMLRoot(file));
 				final UnitDelegate unitDelegate = 
 					new UnitDelegate(unitDescription) {
 

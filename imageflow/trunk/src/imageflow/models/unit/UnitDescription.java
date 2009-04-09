@@ -1,16 +1,18 @@
 package imageflow.models.unit;
 
+import helper.Tools;
 import imageflow.models.parameter.BooleanParameter;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jdom.Document;
+import javax.imageio.ImageIO;
+
 import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
 
 public class UnitDescription {
 
@@ -34,8 +36,14 @@ public class UnitDescription {
 	protected int numOutputs;
 	protected Output[] output;
 	protected boolean isDisplayUnit;
+	protected BufferedImage icon;
 	
-	public UnitDescription(Element root) {
+	public UnitDescription(File unitXML) {
+		this(unitXML, Tools.getXMLRoot(unitXML));
+	}
+	
+	
+	public UnitDescription(File unitXML, Element root) {
 		try {
 
 			// read general infos about this unit
@@ -54,6 +62,19 @@ public class UnitDescription {
 
 			imageJSyntax = elementGeneral.getChild("ImageJSyntax").getValue() + "\n";
 
+			
+			
+			
+			File iconFile;
+			if(pathToIcon.length() > 0) {
+				iconFile = new File(unitXML.getParent() +File.separator+ pathToIcon);	
+			} else {
+				// search for unitname.png
+				iconFile = new File(unitXML.getAbsolutePath().replace(".xml", ".png"));
+			}
+//			System.out.println(iconFile);
+			if(iconFile.exists())
+				this.icon = ImageIO.read(iconFile);
 			
 			// parameters
 			Element parametersElement = root.getChild("Parameters");

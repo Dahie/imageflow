@@ -41,6 +41,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -81,7 +82,6 @@ public class ImageFlowView extends FrameView {
 	private ConnectionList connections;
 	private GraphController graphController;
 
-	private JTextArea macroArea;
 	private GraphPanel graphPanel;
 	private HashMap<TreeNode,Delegate> unitDelegates;
 
@@ -91,21 +91,32 @@ public class ImageFlowView extends FrameView {
 	private boolean selected = false;
 	private boolean hasPaste = false;
 
-
+	private boolean showlog = true;
 
 	private SelectionList selections;
 
 	
+
 	
-	public ImageFlowView(Application app) {
+	
+	/**
+	 * @param app
+	 */
+	public ImageFlowView(final Application app) {
 		super(app);
 		
 		ResourceMap resourceMap = getResourceMap();
-		this.graphController = new GraphController(this);
+		this.graphController = new GraphController();
 		this.units = this.graphController.getUnitElements();
 		this.connections = this.graphController.getConnections();
 		this.selections = new SelectionList();
 		this.unitDelegates = DelegatesController.getInstance().getUnitDelegates();
+		
+		try {
+			this.getFrame().setIconImage(ImageIO.read(this.getClass().getResourceAsStream("/imageflow/resources/iw-logo.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		initComponents();
 		
@@ -177,7 +188,7 @@ public class ImageFlowView extends FrameView {
 		fileMenu.add(getAction("importGraph"));
 		fileMenu.add(getAction("export"));
 		fileMenu.add(new JSeparator());
-		fileMenu.add(getAction("generateMacro"));
+		fileMenu.add(getAction("runMacro"));
 		if(!IJ.isMacintosh()) {
 			fileMenu.add(new JSeparator());
 			fileMenu.add(getAction("quit"));
@@ -217,7 +228,7 @@ public class ImageFlowView extends FrameView {
 		menuBar.add(editMenu);
 		menuBar.add(insertMenu);
 		menuBar.add(debugMenu);
-		menuBar.add(windowMenu);
+//		menuBar.add(windowMenu);
 		menuBar.add(helpMenu);
 		
 		menuBar.setVisible(true);
@@ -279,7 +290,7 @@ public class ImageFlowView extends FrameView {
 		FlowLayout flowLayout = new FlowLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		buttonPanel.setLayout(flowLayout);
-		JButton buttonRun = new JButton(getAction("generateMacro"));
+		JButton buttonRun = new JButton(getAction("runMacro"));
 		buttonPanel.add(buttonRun);
 //		JButton buttoncheck = new JButton(new CheckGraphAction(graphController));
 //		buttonPanel.add(buttoncheck);
@@ -391,6 +402,23 @@ public class ImageFlowView extends FrameView {
 	public void setHasPaste(boolean hasPaste) {
 		this.hasPaste = hasPaste;
 	}
+	
+	/**
+	 * @return the showlog
+	 */
+	public boolean isShowlog() {
+		return showlog;
+	}
+
+
+
+	/**
+	 * @param showlog the showlog to set
+	 */
+	public void setShowlog(boolean showlog) {
+		this.showlog = showlog;
+	}
+	
     
 	/**
 	 * Returns the currently loaded workflow-file.
@@ -433,15 +461,17 @@ public class ImageFlowView extends FrameView {
 	 * Converts the current workflow into a macro and executes it in ImageJ.
 	 * @return
 	 */
-	@Action public Task generateMacro() {
-	    return new RunMacroTask(getApplication(), graphController);
-	}
+	/*@Action public Task generateMacro() {
+	    return new RunMacroTask(this.getApplication(), graphController);
+	}*/
 	
 	
-	
-    @Action
-    public Task runMacro() {
-        return new RunMacroTask(this.getApplication(), graphController);
+	/**
+	 * Converts the current workflow into a macro and executes it in ImageJ.
+	 * @return
+	 */
+    @Action    public Task runMacro() {
+        return new RunMacroTask(this.getApplication(), graphController, this.showlog);
     }
 
 	
@@ -639,7 +669,7 @@ public class ImageFlowView extends FrameView {
 			if(optionSave == JOptionPane.OK_OPTION) {
 				save().run();
 //				new SaveFlowGraphTask(getFile()).run();
-			}else if(optionSave == JOptionPane.NO_OPTION) {
+			}else if(optionSave == JOptionPane.CANCEL_OPTION) {
 				return null;
 			}
 		} 

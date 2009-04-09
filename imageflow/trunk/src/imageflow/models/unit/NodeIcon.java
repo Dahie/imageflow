@@ -140,6 +140,22 @@ public class NodeIcon {
 	 */
 	public Graphics2D paintBigIcon(final Graphics2D g2) {
 		
+		int widthBigIconBg = widthIconBg;
+		int heightBigIconBg = heightIconBg;
+		
+		drawElement(g2, widthBigIconBg, heightBigIconBg, unit.isDisplayUnit(), true, true);
+//		drawElement(g2, widthBigIconBg, 20, unit.isDisplayUnit(), false, false);
+	    
+		return g2;
+	}
+
+
+	private void drawElement(final Graphics2D g2, 
+			int widthBigIconBg,
+			int heightBigIconBg, 
+			boolean isDisplayUnit, 
+			boolean displayIcon, 
+			boolean displayIndex) {
 		// location and dimension
 		this.x = unit.getOrigin().x + padding;
 		this.y = unit.getOrigin().y + padding;
@@ -150,22 +166,21 @@ public class NodeIcon {
 
 	    
 	    //draw background
-	    drawBackground(g2, arc, widthIconBg, heightIconBg);
+		drawBackground(g2, arc, widthBigIconBg, heightBigIconBg);
 	    
 	    // draw icon
-	    drawIcon(g2, widthIconBg, heightIconBg);
+		if(displayIcon)
+			drawIcon(g2, widthBigIconBg, heightBigIconBg);
 	    
 	    // draw texts
-	    drawTexts(g2);
+	    drawTexts(g2, widthBigIconBg, heightBigIconBg, displayIndex);
 	    
 	    // draw icon for display
-	    if(unit.isDisplayUnit()) {
+	    if(isDisplayUnit) {
 			int xDisplay = this.x+(width/2)+16;
-			int yDisplay = this.y+8;
+			int yDisplay = this.y+5;
 			g2.drawImage(this.displayIcon, xDisplay, yDisplay, null);
 	    }
-	    
-		return g2;
 	}
 	
 	
@@ -184,7 +199,10 @@ public class NodeIcon {
 		 drawIcon(g2, 50, 50);
 	}
 
-	private void drawTexts(final Graphics2D g2) {
+	private void drawTexts(final Graphics2D g2, 
+			int widthIconBg, 
+			int heightIconBg, 
+			boolean displayIndex) {
 		//draw text, status
 	    g2.setColor(Color.WHITE);
 
@@ -204,9 +222,13 @@ public class NodeIcon {
 		}
 		
 		// and if even now to small, then cut
-		g2.drawString(unitName, x+5, y+85);
-		g2.setFont(new Font(font.getFamily(), font.getStyle(), fontsizeOriginal));
-		g2.drawString(unitID+"", x+5, y+15);
+		g2.drawString(unitName, x+5, y+heightIconBg-5);
+		
+		// if true display unitindex
+		if(displayIndex) {
+			g2.setFont(new Font(font.getFamily(), font.getStyle(), fontsizeOriginal));
+			g2.drawString(unitID+"", x+5, y+15);
+		}
 	}
 
 	/**
@@ -231,8 +253,15 @@ public class NodeIcon {
 		int g = color.getGreen();
 		int b = color.getBlue();
 
-		cTop = new Color(r-delta, g-delta, b-delta, 255);
-		cBottom = new Color(r+delta, g+delta, b+delta, 255);
+		
+		cTop = new Color(
+				(r-delta) > 255 ? 255 : r-delta,
+				(g-delta) > 255 ? 255 : g-delta,
+				(b-delta) > 255 ? 255 : b-delta);
+		cBottom = new Color(
+				(r+delta) > 255 ? 255 : r+delta,
+				(g+delta) > 255 ? 255 : g+delta,
+				(b+delta) > 255 ? 255 : b+delta);
 		
 		GradientPaint gradient1 = new GradientPaint(x+10,y+10,cTop,x+100,y+30,cBottom);
 	    g2.setPaint(gradient1);
@@ -274,6 +303,12 @@ public class NodeIcon {
 
 
 	public void setSelected(boolean b) {
+		
+	}
+
+
+	public void paintSmallIcon(Graphics2D g22) {
+		// TODO Auto-generated method stub
 		
 	}
 	

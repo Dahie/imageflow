@@ -24,7 +24,7 @@ public interface Connectable {
 	 * @param unit 
 	 * @param pin 
 	 */
-	public void connectTo(final UnitElement unit, final Pin pin);
+	public void connectTo(final Pin pin);
 	
 	/**
 	 * Returns whether or not this Input is connected.
@@ -44,6 +44,6 @@ public interface Connectable {
 	/**
 	 * Resets the this Input, so that it is unconnected.
 	 */
-	public void disconnect();
+	public void disconnectAll();
 	
 }

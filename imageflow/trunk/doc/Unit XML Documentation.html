@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Unit XML Documentation</title>
+
+<style>
+<!-- 
+h1 {
+	font-family:Helvetica, Arial;
+	color:#224488;
+	font-size:14pt;}
+	
+blockquote {
+	font-family: monospace;
+}
+-->
+</style>
+
+</head>
+<body>
+
+<h1>ImageFlow - Node-based Macro Editing</h1>
+
+
+<p>Imageflow comes with a selection of unit-elements that can be already used in the
+application to build your own workflows. Of course ImageJ has a much richer sortiment of
+Plugins and Commandos, that can be translated to Imageflow. This can be done quite easily
+by defining a XML-file, which serves as a description of the elements capabilities.</p>
+<p>Everyone is invited to add more units and to submit them, so they can be included in
+future versions.</p>
+
+
+<blockquote>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br />
+     
+&lt;UnitDescription&gt;<br />
+
+&lt;General&gt;<br />
+  &lt;UnitName&gt;Image Calculator&lt;/UnitName&gt; </blockquote>
+<p>Typename of the defined unit. This is also used as the default-label when the unit is inserted in
+the workflow.</p>
+	
+	<blockquote>&lt;PathToIcon&gt;ImageCalculator_Unit.png&lt;/PathToIcon&gt; </blockquote>
+<p>The Icon is not yet fully operational. You can add an icon to your unit, either simply laying an PNG with the same name as the unit-XML or by defining a name here.</p>
+  <blockquote>&lt;ImageJSyntax&gt;run(&quot;Image Calculator...&quot;, &quot;image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create PARA_BOOLEAN_1&quot;);&lt;/ImageJSyntax&gt; </blockquote>
+	
+<p>The syntax is the heart of the unit. This is an abstract form of the Macro-Command called in ImageJ.<br />The Variables define wildcards for the Parameters defined later in this XML.</p>
+
+	
+  &lt;Color&gt;0x6e91de&lt;/Color&gt;</blockquote>
+<p>The color is in Hex-format. The unit will be drawn in this color in the workflow.</p>
+  <blockquote>&lt;HelpString&gt;Performs a mathematical calculation of two images&lt;/HelpString&gt;</blockquote>
+<p>The HelpString describes what this unit does in roughly one sentence.</p>
+<blockquote>&lt;/General&gt;</blockquote>
+
+<p>Parameters are values, that influence the processing the unit does.</p>
+
+<blockquote>&lt;Parameters&gt;<br />
+  	&lt;Parameter&gt;<br />
+  		&lt;Name&gt;Math&lt;/Name&gt;</blockquote>
+<p>The name will be displayed in the titel of this unit's properties window.</p>
+  		<blockquote>&lt;DataType&gt;StringArray&lt;/DataType&gt;</blockquote>
+	<p>The DataType defines the Type of the Parameter. There are a few, which are used for
+	different purposes and have different requirements to the XML-syntax.<p>
+	
+	<table>
+	<thead>
+		<th>Parameter</th>
+		<th>Description</th>
+		<th>XML-Requirements</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>String</td>
+			<td>Stores a single String-Object</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>StringArray</td>
+			<td>Stores an Array of Strings seperated by spaces and the index of the selected item, beginning with 0.</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>boolean</td>
+			<td>Stores the boolean values and a String. ImageJ-Macros can have this string inserted into the command if true.</td>
+			<td><em>&lt;Value&gt;true&lt;/Value&gt;<br />&lt;TrueString&gt;32-bit&lt;/TrueString&gt;</em></td>
+		</tr>
+		<tr>
+			<td>integer</td>
+			<td>Stores a simple integer value.</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>double</td>
+			<td>Stores a simple double value.</td>
+			<td></td>
+		</tr>
+	</tbody>
+	</table>
+			
+  		<blockquote>&lt;Value&gt;Add Subtract Multiply Divide AND OR XOR&lt;/Value&gt;
+  		&lt;HelpString&gt;Defines what math should be used to merge both images&lt;/HelpString&gt;
+  		&lt;ChoiceNumber&gt;1&lt;/ChoiceNumber&gt;
+  	&lt;/Parameter&gt;<br />
+  	&lt;Parameter&gt;<br />
+  		&lt;Name&gt;32 bit result&lt;/Name&gt;<br />
+  		&lt;DataType&gt;boolean&lt;/DataType&gt;<br />
+  		&lt;Value&gt;true&lt;/Value&gt;<br />
+  		&lt;HelpString&gt;create 32 bit result?&lt;/HelpString&gt;<br />
+  		&lt;TrueString&gt;32-bit&lt;/TrueString&gt;<br />
+  	&lt;/Parameter&gt; 
+&lt;/Parameters&gt;
+</blockquote>
+
+<p>Inputs are pins, which return receive the data that will be processed in this unit.
+The unit can have multiple inputs.</p>
+
+<blockquote>&lt;Inputs&gt; <br />
+	&lt;Input&gt;<br />
+		&lt;Name&gt;Input1&lt;/Name&gt;<br />
+		&lt;ShortName&gt;I1&lt;/ShortName&gt;</blockquote>
+<p>Name and Shortname are currently not used in the interface, but exist as wildcards
+		for possible additions to the User interface later on.</p>
+		<blockquote>&lt;ImageType&gt;31&lt;/ImageType&gt;</blockquote>
+		
+	<p>An input can either have one ore more defined imagetypes.
+If you want to predefine the type, use the ImageType constants defined in Imagej:</p>
+<table>
+	<thead>
+	<tr>
+		<th>Image Type</th>
+		<th>Constant</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>8 bit greyscale</td>
+		<td>1</td>
+	</tr>
+	<tr>
+		<td>8 bit Color</td>
+		<td>2</td>
+	</tr>
+	<tr>
+		<td>16 bit greyscale</td>
+		<td>4</td>
+	</tr>
+	<tr>
+		<td>32 bit greyscale</td>
+		<td>8</td>
+	</tr>
+	<tr>
+		<td>RGB Color</td>
+		<td>16</td>
+	</tr>
+	<tr>
+		<td>All</td>
+		<td>31</td>
+	</tr>
+	</tbody>
+</table>
+<p>More constants are currently not supported. To combinate
+different imagetypes, add the constants.</p>
+		
+		<blockquote>&lt;NeedToCopyInput&gt;false&lt;/NeedToCopyInput&gt;</blockquote>
+		
+	<blockquote&lt;/Input&gt;<br />
+	&lt;Input&gt;<br />
+		&lt;Name&gt;Input2&lt;/Name&gt;
+		&lt;ShortName&gt;I2&lt;/ShortName&gt;	
+		&lt;ImageType&gt;31&lt;/ImageType&gt;
+		&lt;NeedToCopyInput&gt;false&lt;/NeedToCopyInput&gt;&lt;/Input&gt;
+&lt;/Inputs&gt;<br />
+</blockquote>
+
+<p>Outputs are pins, which return the result of the processing done by the unit.<br />
+Theoretically more than one output is supported, but not tested. Having not output is fine as well.</p>
+
+<blockquote>&lt;Outputs&gt; <br />
+	&lt;Output&gt;<br />
+		&lt;Name&gt;Output&lt;/Name&gt;<br />
+		&lt;ShortName&gt;O&lt;/ShortName&gt;</blockquote>
+		
+<p>Name and Shortname are currently not used in the interface, but exist as wildcards
+for possible additions to the User interface later on.</p>
+		
+		<blockquote>&lt;ImageType&gt;-1&lt;/ImageType&gt;</blockquote>
+
+<p>An output can either have one ore more defined imagetypes or allow any kind of type.
+If you want to predefine the type, use the ImageType constants defined in ImageJ as listed above.</p>
+
+<p>You don't have to specify an output type. In most cases the output type depends on the
+input type. In this case you define -1. This will return the imagetype it gets from
+the first input.</p>
+
+		<blockquote>&lt;DoDisplay&gt;false&lt;/DoDisplay&gt;</blockquote>
+<p>Defines this Output as Display. In the application, at the moment only a unit is set as display.
+This is because with one output there is no difference whether the option is attached
+to the unit or the output. Since there is the possibility of requiring multiple outputs
+in later versions and the option to display only selected outputs, this setting is defined
+here.</p>
+<blockquote>&lt;/Output&gt;<br />
+&lt;/Outputs&gt;<br />
+
+&lt;/UnitDescription&gt;	
+</blockquote>
+
+<p>Of course, feel free to use the existing Units as examples and as reference.</p>
+
+</body>
+</html>
+

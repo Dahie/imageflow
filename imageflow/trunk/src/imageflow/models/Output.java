@@ -6,6 +6,7 @@ import ij.plugin.filter.PlugInFilter;
 import imageflow.models.unit.UnitElement;
 
 import java.awt.Point;
+import java.util.Collection;
 import java.util.Vector;
 
 
@@ -54,15 +55,11 @@ public class Output extends Pin implements Connectable {
 	 */
 	protected boolean doDisplay;
 	/**
-	 * Unit to which this Output is connected. 
-	 * In contrast to the fromUnit in the {@link Input}, this unit 
-	 * is not relevant for the ImageTitle.
-	 */
-	protected UnitElement toUnit;
-	/**
 	 * Input to which this Output is connected
 	 */
 	protected Input to;
+	
+	Vector<Connection> connections;
 	
 	
 	/**
@@ -72,20 +69,9 @@ public class Output extends Pin implements Connectable {
 	public Output(final UnitElement nodeParent, 
 			final int outputNumber) {
 		super("output", outputNumber, nodeParent.getOutputsCount(), nodeParent);
+		this.connections = new Vector<Connection>();
 		generateID(((UnitElement)this.parent).getUnitID(), getIndex());
 	}
-	
-	/**
-	 * @param unitNumber
-	 * @param outputNumber
-	 * @param nodeParent
-	 */
-	/*public Output(final UnitElement toUnit, 
-			final int outputNumber,  
-			final UnitElement nodeParent) {
-		super("output", outputNumber, nodeParent.getOutputsCount(), nodeParent);
-		this.toUnit = toUnit;
-	}*/
 
 	/**
 	 * Sets the connection between this input and an output.
@@ -104,14 +90,23 @@ public class Output extends Pin implements Connectable {
 	 * @param toOutputNumber 
 	 */
 	public void connectTo(final UnitElement toUnit, final int toInputNumber) {
-		connectTo(toUnit, toUnit.getInput(toInputNumber-1));
+		connectTo(toUnit.getInput(toInputNumber-1));
 	}
 	
-	public void connectTo(final UnitElement toUnit, final Pin toInput) {
-		this.toUnit = toUnit;
+	public void connectTo(final Pin toInput) {
 		this.to = (Input)toInput;
+		Connection conn = new Connection(this, this.to);
+		addConnection(conn);
+	}
+	
+	public void addConnection(Connection conn) {
+		this.connections.add(conn);
 	}
 
+	public Collection<Connection> getConnections() {
+		return this.connections;
+	}
+	
 	/**
 	 * @param name
 	 * @param shortname
@@ -188,9 +183,7 @@ public class Output extends Pin implements Connectable {
 	 * @return 
 	 */
 	public boolean isConnected() {
-		return (this.toUnit != null) 
-//			&& (this.toUnitNumber > 0)
-			&& (this.to != null);
+		return !this.connections.isEmpty();
 	}
 	
 	/**
@@ -199,9 +192,14 @@ public class Output extends Pin implements Connectable {
 	 * @return
 	 */
 	public boolean isConnectedWith(Pin input) {
-		if(isConnected() && input instanceof Input) {
-			return this.to.equals(input);
+		
+		for (Connection connection : getConnections()) {
+			if(connection.getInput().equals(input))
+				return true;
 		}
+		/*if(isConnected() && input instanceof Input) {
+			return this.to.equals(input);
+		}*/
 		return false;
 	}
 
@@ -209,9 +207,9 @@ public class Output extends Pin implements Connectable {
 	 * Returns the {@link Input} to which this Output is connected.
 	 * @return
 	 */
-	public Input getToInput() {
+	/*public Input getToInput() {
 		return this.to;
-	}
+	}*/
 
 
 	
@@ -293,20 +291,16 @@ public class Output extends Pin implements Connectable {
 	 */
 	public boolean existsInInputSubgraph(final Node goal) {
 		// self reference is true
-		if(goal.equals(parent))
-			return true;
-		
 		return traverseInput(getParent(), goal);
-		
 		// if nothing helps, it's false
 	}
 
 	
-	private boolean traverseInput(UnitElement parent, Node goal) {
-		if(parent.equals(goal)) {
+	private boolean traverseInput(UnitElement element, Node goal) {
+		if(element.equals(goal)) {
 			return true;
-		} else if (parent.hasInputsConnected()) {
-			for (Input input : parent.getInputs()) {
+		} else if (element.hasInputsConnected()) {
+			for (Input input : element.getInputs()) {
 				if(input.isConnected()) {
 					return traverseInput(input.getFromUnit(), goal);
 				}
@@ -319,17 +313,23 @@ public class Output extends Pin implements Connectable {
 	/**
 	 * Resets the this Output, so that it is unconnected.
 	 */
-	public void disconnect() {
+	public void disconnectAll() {
 		generateID(0, 0); // reset connection
-		this.toUnit = null;
+		this.connections.clear();
 	}
-
-	/**
-	 * @return
-	 */
-	public UnitElement getToUnit() {
-		return this.toUnit;
+	
+	public Connection getConnectionTo(Pin toInput) {
+		for (Connection connection : getConnections()) {
+			if(connection.getInput().equals(toInput)) 
+				return connection;
+		}
+		return null;
 	}
-
-
+	
+	public void disconnectFrom(Pin input) {
+		Connection oldConnection = getConnectionTo(input);
+		this.connections.remove(oldConnection);
+	}
+	
+	
 }

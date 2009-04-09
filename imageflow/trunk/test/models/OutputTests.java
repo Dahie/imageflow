@@ -80,9 +80,8 @@ public class OutputTests extends TestCase {
 		
 		// test input/output case
 		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
-		
 		Input filter1Input = filterUnit1.getInput(0);
+		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
 		Input filter2Input = filterUnit2.getInput(0);
 		
 		// test beforehand
@@ -92,11 +91,13 @@ public class OutputTests extends TestCase {
 				source1Output.isConnectedWith(filter2Input));
 		
 		Connection conn = new Connection(source1Unit, 1, filterUnit1, 1);
-		ConnectionList connList = new ConnectionList();
-		connList.add(conn);
+//		ConnectionList connList = new ConnectionList();
+//		connList.add(conn);
+		conn.connect();
 		
 		
 		// test after connecting
+		assertTrue("Connection connected correctly", conn.isConnected());
 		assertTrue("output connected with filter1Input", 
 				source1Output.isConnectedWith(filter1Input));
 		assertFalse("output not connected with filter2Input", 
@@ -363,7 +364,9 @@ public class OutputTests extends TestCase {
 	public void testUnitConnectedInBranch() {
 		
 		UnitElement unit1 = UnitFactory.createAddNoiseUnit();
+		Output output1 = unit1.getOutput(0);
 		UnitElement unit2 = UnitFactory.createAddNoiseUnit();
+		Output output2 = unit2.getOutput(0);
 		UnitElement unit3 = UnitFactory.createAddNoiseUnit();
 		
 		Connection conn1 = new Connection(unit1, 1, unit2, 1);
@@ -371,22 +374,24 @@ public class OutputTests extends TestCase {
 		ConnectionList connList = new ConnectionList();
 		connList.add(conn1);
 		
-		Output output2 = unit2.getOutput(0);
-		assertFalse("output2 knows unit1", output2.existsInInputSubgraph(unit1));
+		
+		assertTrue("output2 knows unit1", output2.existsInInputSubgraph(unit1));
 		assertTrue("output2 knows unit2", output2.existsInInputSubgraph(unit2));
 		assertFalse("output2 knows unit3", output2.existsInInputSubgraph(unit3));
 		
 		Connection conn2 = new Connection(unit2, 1, unit3, 1);
-//		connList.add(conn2);
 		
 		
-		assertFalse("output2 knows unit1", output2.existsInInputSubgraph(unit1));
+		assertTrue("output2 knows unit1", output2.existsInInputSubgraph(unit1));
 		assertTrue("output2 knows unit2", output2.existsInInputSubgraph(unit2));
 		assertFalse("output2 knows unit3", output2.existsInInputSubgraph(unit3));
 		
-		Output output1 = unit1.getOutput(0);
+		/*
+		 * output 1 is on a source, so it has no input branch
+		 */
+		
 		assertTrue("output1 knows unit1", output1.existsInInputSubgraph(unit1));
-		assertTrue("output1 knows unit2", output2.existsInInputSubgraph(unit2));
+		assertFalse("output1 knows unit2", output1.existsInInputSubgraph(unit2));
 		assertFalse("output1 knows unit3", output2.existsInInputSubgraph(unit3));
 		
 		
@@ -394,8 +399,8 @@ public class OutputTests extends TestCase {
 		
 		
 		assertTrue("output1 knows unit1", output1.existsInInputSubgraph(unit1));
-		assertTrue("output1 knows unit2", output1.existsInInputSubgraph(unit2));
-		assertTrue("output1 knows unit3", output2.existsInInputSubgraph(unit3));
+		assertFalse("output1 knows unit2", output1.existsInInputSubgraph(unit2));
+		assertFalse("output1 knows unit3", output1.existsInInputSubgraph(unit3));
 		
 	}
 }

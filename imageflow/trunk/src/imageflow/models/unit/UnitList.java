@@ -102,8 +102,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 							actualUnitElement.getChild("UnitDescription") != null) {
 						
 						int unitID 	= Integer.parseInt(actualUnitElement.getChild("UnitID").getValue());
-						System.out.println(label);
-						UnitDescription unitDescription = new UnitDescription(actualUnitElement.getChild("UnitDescription"));
+						UnitDescription unitDescription = new UnitDescription(file, actualUnitElement.getChild("UnitDescription"));
 
 						// create unit
 						UnitElement unitElement = UnitFactory.createProcessingUnit(unitDescription, new Point(xPos, yPos));
@@ -198,7 +197,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 				Element pathToIcon = new Element("PathToIcon");
 				general.addContent(pathToIcon);
 				Element imageJSyntax = new Element("ImageJSyntax");
-				imageJSyntax.addContent(((MacroElement)unit.getObject()).getCommandSyntax());
+				imageJSyntax.addContent(((MacroElement)unit.getObject()).getImageJSyntax());
 				general.addContent(imageJSyntax);
 				Element color = new Element("Color");
 				String colorHex = Integer.toHexString( unit.getColor().getRGB() );
@@ -298,8 +297,8 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 					imageType.addContent(""+output.getImageBitDepth());
 					outputElement.addContent(imageType);
 
-					// FIXME does it make sense to hang this on the output?
-					// what if there are several outputs, everyone displays the same?
+					// In case of plugins with multiple outputs
+					// I want to leave the option to display only selected outputs
 					Element doDisplay = new Element("DoDisplay");
 					String boolIsDisplay = output.isDoDisplay() ? "true" : "false"; 
 					doDisplay.addContent(boolIsDisplay);
@@ -479,7 +478,12 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		for (int i = 0; i < numberConnectedOutputs; i++) {
 			Output output = unit.getOutput(i);
 			if(output.isConnected()) 
-				connectedInputs.add(output.getToInput()); 
+				for (Connection connection : output.getConnections()) {
+					Input toInput = connection.getInput();
+					connectedInputs.add(toInput);
+				}
+				
+				 
 		}
 
 		// now we create new connections based on the lists of 

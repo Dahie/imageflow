@@ -4,6 +4,7 @@
 package test;
 
 import imageflow.models.unit.NodeIcon;
+import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
 
 import java.awt.Color;
@@ -34,7 +35,9 @@ public class IconPreview extends JFrame {
 	public IconPreview() {
 
 		
-		icon = new NodeIcon(UnitFactory.createGaussianBlurUnit());
+		UnitElement createGaussianBlurUnit = UnitFactory.createGaussianBlurUnit();
+		createGaussianBlurUnit.setDisplayUnit(true);
+		icon = new NodeIcon(createGaussianBlurUnit);
 		
 		
 		
@@ -66,6 +69,9 @@ public class IconPreview extends JFrame {
 		
 		g2.translate(150, 0);
 		icon.paintMediumIcon(g2);
+		
+		g2.translate(150, 0);
+		icon.paintSmallIcon(g2);
   	
 	}
 	

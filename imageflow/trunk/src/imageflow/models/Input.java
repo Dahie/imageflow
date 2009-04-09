@@ -112,12 +112,12 @@ public class Input extends Pin implements Connectable {
 	 * @param fromOutputNumber
 	 */
 	public void connectTo(final UnitElement fromUnit, final int fromOutputNumber) {
-		connectTo(fromUnit, fromUnit.getOutput(fromOutputNumber-1));
+		connectTo(fromUnit.getOutput(fromOutputNumber-1));
 	}
 	
-	public void connectTo(final UnitElement fromUnit, final Pin fromOutput) {
-		this.fromUnit = fromUnit;
+	public void connectTo(final Pin fromOutput) {
 		this.from = (Output)fromOutput;
+		this.fromUnit = (UnitElement) fromOutput.getParent();
 		generateID(fromUnit.getUnitID(), fromOutput.getIndex());
 	}
 
@@ -276,7 +276,7 @@ public class Input extends Pin implements Connectable {
 	/**
 	 * Resets the this Input, so that it is unconnected.
 	 */
-	public void disconnect() {
+	public void disconnectAll() {
 		generateID(0, 0); // reset connection
 		this.fromUnit = null;
 		this.from = null;
@@ -326,7 +326,12 @@ public class Input extends Pin implements Connectable {
 		} else if (parent.hasOutputsConnected()) {
 			for (Output output : parent.getOutputs()) {
 				if(output.isConnected()) {
-					return traverseOutput(output.getToUnit(), goal);
+					for (Connection connection : output.getConnections()) {
+						if(traverseOutput(connection.getToUnit(), goal))
+							return true;
+					}
+					
+					
 				}
 			}
 		} 

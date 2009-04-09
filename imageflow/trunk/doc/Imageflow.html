@@ -27,32 +27,42 @@ h1 {
 <tr valign="top">
 	<td ><b>Author:</b></td>
 	<td >
-Daniel Senff (mail at danielsenff.de)<br />
+<p>Daniel Senff (mail at danielsenff.de)<br />
 Kai Uwe Barthel (k.barthel at fhtw-berlin.de)<br />
 Internationale Medieninformatik<br />
-Berlin, Germany
+Berlin, Germany</p>
+<p>Partially based on <a href="https://visualap.dev.java.net/" title="VisualAp">VisualAp</a> by Livio</p>
 </td></tr>
 
 <tr valign=top>
 	<td ><b>Source:</b></td>
-	<td >Contained in
-		<a href="download/jars/color_Inspector_3D.jar">Color_Inspector_3D.jar</a>
+	<td >Not yet available, to be released with the first stable version.
 </td></tr>
 
 <tr valign=top>
 	<td ><b>Installation:</b></td>
 	<td >
-Delete the previous version, download 
-<a href="download/jars/Color_Inspector_3D.jar" title="">Imageflow.zip</a>
-to the plugins folder, restart ImageJ, and there
-will be a new "Color Inspector 3D" command in the Plugins menu.
+<p>Delete the previous version, download 
+<a href="download/jars/Imageflow.zip" title="Download">Imageflow.zip</a>
+and extract somewhere on your harddrive. Start the jar to run the programm.</p>
+
+<p>To start Imageflow from ImageJ you have to create a "Imageflow"-folder in ImageJ's plugin
+directory and extract the Archive into this folder. After restarting ImageJ you
+will have find a menu-item in the Plugins-Menu to start the plugin.
 </td></tr>
 
 <tr valign=top>
 	<td ><b>Description:</b></td>
 	<td >
 <p>This plugin offers a node-based graphical user interface for Macro-creation and image editing. It allows to create macros by connecting nodes to form a workflow, which represents the way macro-commandos are called by ImageJ. These workflows can be saved and loaded. </p>
-<p>ImageFlow is also available as a stand-alone program that uses ImageJ as a library. To run it, download and extract the archive <a href="" title="">Imageflow.zip</a> and double click on the ImageFlow_.jar. <br/>Works on all plattforms, Java 5.0 or later must be installed.</p>
+<p>A workflow consists of Sources, which load or create images. They will be connected to
+other units to define the order of processing. A workflow requires at least one
+node to be defined as a display. The result of this unit will be opened after running the workflow.</p>
+<p>ImageFlow is also available as a stand-alone program that uses ImageJ as a library. To run it, download and extract the archive <a href="download/jars/Imageflow.zip" title="Download">Imageflow.zip</a> and double click on the ImageFlow_.jar. <br/>Works on all plattforms, Java 5.0 or later must be installed.</p>
+
+<p>This is the first beta-release and unstable. It works, but it is not yet thoughly tested.<br/>
+A number of unit-elements for building graphs are included, however the list is not very long yet. Documentation on how to create own units is included and can be used. I can incorporate more units in later releases. <br />
+Feedback of any kind is well appreciated.</p>
 </td></tr>
 
 <tr valign="top">
@@ -62,16 +72,13 @@ will be a new "Color Inspector 3D" command in the Plugins menu.
 </td></tr>
 
 <tr valign=top><td ><b>See Also:</b></td><td >
-<a href="surface-plot-3d.html">3D Surface Plot plugin</a><br />
-<a href="volume-viewer.html">Volume Viewer</a>
 </td></tr>
 
 </table>
 
 
-<p><img src="images/3d-inspector.jpg" width=920 height=676 alt="[Screen Shot]"><p>
+<p><img src="imageflow.png" alt="[Screen Shot]"><p>
 
-</blockquote>
 <p><b>|<a href="index.html">Plugins</a> | <a href="../index.html">Home</a> |</b>
 
 </body>

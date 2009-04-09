@@ -1,6 +1,7 @@
 package imageflow.models.unit;
 import helper.PaintUtil;
 import ij.gui.GenericDialog;
+import imageflow.models.Connection;
 import imageflow.models.Input;
 import imageflow.models.MacroElement;
 import imageflow.models.Output;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
 public class UnitElement extends AbstractUnit {
 
 	final private static int PIN_TOLERANCE = 18;
-	
+
 	/**
 	 * name of this unit, this is not display, Label is displayed
 	 */
@@ -322,8 +323,10 @@ public class UnitElement extends AbstractUnit {
 	 */
 	public void setDisplayUnit(final boolean isDisplayUnit) {
 		this.isDisplayUnit = isDisplayUnit;
-		if(outputs.size() > 1)
-			outputs.get(FIRST_ELEMENT ).setDoDisplay(isDisplayUnit);
+		for (Output output : getOutputs()) {
+			output.setDoDisplay(isDisplayUnit);
+		}
+
 		notifyModelListeners();
 	}
 
@@ -333,6 +336,12 @@ public class UnitElement extends AbstractUnit {
 	 */
 	public boolean isDisplayUnit() {
 		return this.isDisplayUnit;
+	}
+
+	@Override
+	public void drag(int dx, int dy) {
+		super.drag(dx, dy);
+		notifyModelListeners();
 	}
 
 	/**
@@ -467,11 +476,11 @@ public class UnitElement extends AbstractUnit {
 				/*g.setColor(Color.red);
 				g.drawRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4);*/
 				g.setColor(new Color(0,0,255,40));
-			    g.fillRoundRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4, 
-			    		unitComponentIcon.arc, unitComponentIcon.arc);
-			    g.setColor(new Color(0,0,0,44));
-			    g.drawRoundRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4, 
-			    		unitComponentIcon.arc, unitComponentIcon.arc);
+				g.fillRoundRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4, 
+						unitComponentIcon.arc, unitComponentIcon.arc);
+				g.setColor(new Color(0,0,0,44));
+				g.drawRoundRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4, 
+						unitComponentIcon.arc, unitComponentIcon.arc);
 			}
 			unitComponentIcon.paintBigIcon((Graphics2D) g);
 		}
@@ -508,13 +517,13 @@ public class UnitElement extends AbstractUnit {
 		if (dragging != null) {
 			/*g.setColor(Color.black);
 			g.drawRect(dragging.x, dragging.y, dragging.width-1, dragging.height-1);*/
-			
+
 			g.setColor(new Color(0,0,255, 40));
-		    g.fillRoundRect(dragging.x+5, dragging.y+5, getDimension().width-10, getDimension().height-10, 
-		    		unitComponentIcon.arc, unitComponentIcon.arc);
-		    g.setColor(new Color(0,0,0));
-		    g.drawRoundRect(dragging.x+5, dragging.y+5, getDimension().width-10, getDimension().height-10, 
-		    		unitComponentIcon.arc, unitComponentIcon.arc);
+			g.fillRoundRect(dragging.x+5, dragging.y+5, getDimension().width-10, getDimension().height-10, 
+					unitComponentIcon.arc, unitComponentIcon.arc);
+			g.setColor(new Color(0,0,0));
+			g.drawRoundRect(dragging.x+5, dragging.y+5, getDimension().width-10, getDimension().height-10, 
+					unitComponentIcon.arc, unitComponentIcon.arc);
 		}
 
 		return new Rectangle(origin, getDimension());
@@ -565,16 +574,16 @@ public class UnitElement extends AbstractUnit {
 			Parameter newParameter;
 			if(parameter instanceof ChoiceParameter) {
 				newParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
-								parameter.getValue(), parameter.getHelpString(), null, ((ChoiceParameter)parameter).getChoiceIndex());
+						parameter.getValue(), parameter.getHelpString(), null, ((ChoiceParameter)parameter).getChoiceIndex());
 			} else if (parameter instanceof BooleanParameter){
 				newParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
-								parameter.getValue(), parameter.getHelpString(), ((BooleanParameter)parameter).getTrueString(), 0);
+						parameter.getValue(), parameter.getHelpString(), ((BooleanParameter)parameter).getTrueString(), 0);
 			} else {
 				newParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
-								parameter.getValue(), parameter.getHelpString());	
+						parameter.getValue(), parameter.getHelpString());	
 			}
 			clone.addParameter(parameter);
-			
+
 		}
 		clone.setDisplayUnit(this.isDisplayUnit);
 		clone.setColor(this.color);
@@ -630,19 +639,18 @@ public class UnitElement extends AbstractUnit {
 	 * @return
 	 */
 	public boolean hasAllInputsMarked() {
-		boolean hasAllMarked = true;
 
-		if(getInputsCount() > 0) {
+		if(hasInputs()) {
 			// check each input, if it's parent has been registered
 			for (Input input : getInputs()) {
 				if(input.isConnected()) {
-					int mark = input.getFromUnit().getOutput(0).getMark();
+					int mark = input.getFromUnit().getMark();
 					// if mark is not set
 					if(mark == 0) {
 						// this connected output hasn't been registered and is missing a mark, 
 						// so the whole unit isn't ready set. 
 						return false;
-					} 
+					}  
 					// else mark is already set, so this output is fine
 				} else {
 					// since something must be missing, it is set to be false
@@ -650,13 +658,9 @@ public class UnitElement extends AbstractUnit {
 				}
 
 			}
-
-		} else {
-			// if there are no inputs, it's true
-			return true;
-		}
-
-		return hasAllMarked;
+		} 
+		// if there are no inputs, it's true
+		return true;
 	}
 
 
@@ -736,7 +740,7 @@ public class UnitElement extends AbstractUnit {
 							((ChoiceParameter)parameter).getChoicesArray(), 
 							((ChoiceParameter)parameter).getValue());
 				} else if(parameter instanceof StringParameter) {
-				    gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
+					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
 				}		
 			}
 
@@ -768,7 +772,7 @@ public class UnitElement extends AbstractUnit {
 				((StringParameter) parameter).setValue(newString);
 			}
 		}	
-		
+
 		notifyModelListeners();
 	}
 
@@ -807,6 +811,30 @@ public class UnitElement extends AbstractUnit {
 
 	public void setHelpString(String helpString) {
 		this.infoText = helpString;		
+	}
+
+	/**
+	 * Returns true if any ouput connects to a unit that is set as displayable.
+	 * @return
+	 */
+	public boolean hasDisplayBranch() {
+		if(isDisplayUnit())
+			return true;
+		
+		for (Output output : getOutputs()) {
+			if(output.isConnected()) {
+				for (Connection connection : output.getConnections()) {
+					UnitElement next = connection.getToUnit();
+					System.out.println(next +" tested by "+ this);
+					if(next.hasDisplayBranch()) {
+						return true;
+					}
+				}
+			}
+			
+		}
+
+		return false;
 	}
 
 

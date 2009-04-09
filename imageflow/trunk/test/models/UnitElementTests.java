@@ -9,6 +9,7 @@ import imageflow.models.Input;
 import imageflow.models.MacroElement;
 import imageflow.models.Output;
 import imageflow.models.parameter.ParameterFactory;
+import imageflow.models.unit.SourceUnitElement;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
 
@@ -94,10 +95,11 @@ public class UnitElementTests extends TestCase {
 
 		// test output-only
 		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit2 = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
 
 		// test input/output case
 		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactory.createImageCalculatorUnit();
 
 		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
 		ConnectionList connList = new ConnectionList();
@@ -108,13 +110,29 @@ public class UnitElementTests extends TestCase {
 		assertTrue("source has inputs marked", sourceUnit.hasAllInputsMarked());
 		// the source is not yet marked, so the first filter should give false
 		assertFalse("filter1 has no inputs marked yet", filterUnit1.hasAllInputsMarked());
-		assertFalse("filter2 has inputs marked", filterUnit2.hasAllInputsMarked());
+		assertFalse("filter2 has input connection", filterUnit2.hasAllInputsMarked());
+		assertFalse("filter2 is connected", filterUnit2.hasInputsConnected());
+		
+		Connection conn2 = new Connection(sourceUnit, 1, filterUnit2, 1);
+		connList.add(conn2);
+		
+		assertTrue("filter2 is connected", filterUnit2.hasInputsConnected());
+		assertFalse("filter2 has no inputs marked yet", filterUnit2.hasAllInputsMarked());
 
 		//set mark on the source, now the filter next connected should find this mark
 		sourceUnit.setMark(1);
 
-		assertEquals("filter1 has inputs marked", true, filterUnit1.hasAllInputsMarked());
+		assertTrue("filter1 has inputs marked", filterUnit1.hasAllInputsMarked());
+		assertFalse("filter2 has inputs marked", filterUnit2.hasAllInputsMarked());
+		
+		Connection conn3 = new Connection(sourceUnit2, 1, filterUnit2, 2);
+		connList.add(conn3);
 
+		assertFalse("filter2 has no inputs marked yet", filterUnit2.hasAllInputsMarked());
+		
+		sourceUnit2.setMark(2);
+		
+		assertTrue("filter2 has no inputs marked yet", filterUnit2.hasAllInputsMarked());
 	}
 
 
@@ -202,5 +220,53 @@ public class UnitElementTests extends TestCase {
 
 	}
 
+	
+	public void testHasDisplayBranch() {
+		
+		// test output-only
+		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit2 = UnitFactory.createSourceUnit();
+
+		// test input/output case
+		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+
+		ConnectionList connList = new ConnectionList();
+		Connection conn1 = new Connection(sourceUnit, 1, filterUnit1, 1);
+		connList.add(conn1);
+		Connection conn2 = new Connection(filterUnit1, 1, filterUnit2, 1);
+		connList.add(conn2);
+		
+		assertFalse(sourceUnit.hasDisplayBranch());
+		assertFalse(sourceUnit2.hasDisplayBranch());
+		assertFalse(filterUnit1.hasDisplayBranch());
+		assertFalse(filterUnit2.hasDisplayBranch());
+
+		filterUnit1.setDisplayUnit(true);
+		
+		assertFalse(sourceUnit.isDisplayUnit());
+		assertTrue(sourceUnit.hasDisplayBranch());
+		assertFalse(sourceUnit2.isDisplayUnit());
+		assertFalse(sourceUnit2.hasDisplayBranch());
+		assertTrue(filterUnit1.isDisplayUnit());
+		assertTrue(filterUnit1.hasDisplayBranch());
+		assertFalse(filterUnit2.isDisplayUnit());
+		assertFalse(filterUnit2.hasDisplayBranch());
+		
+		Connection conn1b = new Connection(sourceUnit2, 1, filterUnit1, 1);
+		
+		connList.add(conn1b);
+		
+		assertFalse(sourceUnit.hasDisplayBranch());
+		assertFalse(sourceUnit2.isDisplayUnit());
+		assertTrue(sourceUnit2.hasDisplayBranch());
+		assertTrue(filterUnit1.isDisplayUnit());
+		assertTrue(filterUnit1.hasDisplayBranch());
+		assertFalse(filterUnit2.isDisplayUnit());		
+		assertFalse(filterUnit2.hasDisplayBranch());
+	}
+	
+	
+	
 
 }

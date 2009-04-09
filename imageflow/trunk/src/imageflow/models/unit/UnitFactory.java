@@ -59,6 +59,8 @@ public class UnitFactory {
 			unitElement = new UnitElement(new Point(origin), unitName, imageJSyntax);
 		
 		unitElement.setColor(color);
+		if(unitDescription.icon != null)
+			unitElement.setIcon(unitDescription.icon);
 		unitElement.setHelpString(unitDescription.helpString);
 		
 		// add an icon if there is one mentioned and found
@@ -136,6 +138,7 @@ public class UnitFactory {
 			}
 			// imagetype -1 means output will be the same type as the input
 			unitElement.addOutput(name, shortName, imageType, doDisplay); 
+			unitElement.setDisplayUnit(doDisplay);
 			
 		}
 	}
@@ -341,7 +344,7 @@ public class UnitFactory {
 	 * @return 
 	 */
 	@Deprecated
-	public static UnitElement createSourceUnit() {
+	public static SourceUnitElement createSourceUnit() {
 		// load filechooser, get path
 		JFileChooser imageFileChooser = new JFileChooser();
 		
@@ -385,7 +388,7 @@ public class UnitFactory {
 	 * @return 
 	 */
 	@Deprecated
-	public static UnitElement createSourceUnit(String path) {
+	public static SourceUnitElement createSourceUnit(String path) {
 		return createSourceUnit(path, new Point(30,100));
 	}
 	
@@ -396,7 +399,7 @@ public class UnitFactory {
 	 * @return
 	 */
 	@Deprecated
-	public static UnitElement createSourceUnit(String path, Point origin) {
+	public static SourceUnitElement createSourceUnit(String path, Point origin) {
 
 		SourceUnitElement sourceUnit = new SourceUnitElement(origin, "Image Source", "open(\"PARA_STRING_1\");\n");
 		// setup of the first parameter

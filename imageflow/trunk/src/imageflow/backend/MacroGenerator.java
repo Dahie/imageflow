@@ -20,19 +20,7 @@ public class MacroGenerator {
 	
 //	GraphController 
 	
-	public String generateMacrofromUnitList(final UnitList unitElements) {
-		
-		/*final UnitElement[] units = new UnitElement[unitElements.size()+1];
-		for (int i = 0; i < unitElements.size(); i++) {
-			units[i+1] = (UnitElement) unitElements.get(i);
-		}
-		
-		return generateMacro(units);
-	}
-	*/
-	
-//	public String generateMacro(final UnitElement[] unitElement) {
-//	public String generateMacro(final UnitElement[] unitElement) {
+	public static String generateMacrofromUnitList(final UnitList unitElements) {
 		
 		String  macroText ="";
 
