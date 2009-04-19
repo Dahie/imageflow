@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Green</UnitName> 
+  <HelpString>Applies the fire LUT</HelpString>  
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Green");</ImageJSyntax> 
+  <Color>0xbe91de</Color>
+</General>
+
+<Inputs> 
+	<Input>
+		<Name>Input1</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>13</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>	
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>31</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

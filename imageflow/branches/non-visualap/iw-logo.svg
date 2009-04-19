@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="iw-logo.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="/Users/danielsenff/Programming/Java/workspace/imageflow/src/imageflow/resources/iw-logo.png"
+   inkscape:export-xdpi="70"
+   inkscape:export-ydpi="70">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.0343723"
+     inkscape:cx="305.54709"
+     inkscape:cy="344.37935"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1226"
+     inkscape:window-height="714"
+     inkscape:window-x="1280"
+     inkscape:window-y="314">
+    <sodipodi:guide
+       orientation="0,1"
+       position="307.43068,153.04991"
+       id="guide3161" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="284.80591,313.41959"
+       id="guide3171" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="263.86039,179.481"
+       id="guide3173" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#d5f6ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.35587189000000002;opacity:0.67375887"
+       d="M 228.58966,900.65872 C 419.00687,909.16922 422.08338,823.7516 421.0755,740.65867 C 408.75063,751.11198 390.71239,759.57722 390.466,776.97146 C 389.6725,832.98797 345.59306,869.14411 284.56059,875.19193 C 260.40291,877.58575 240.32832,884.80876 228.58966,900.65872 z"
+       id="path2389"
+       sodipodi:nodetypes="ccssc"
+       inkscape:export-filename="/Users/danielsenff/Programming/Java/workspace/imageflow/src/imageflow/resources/iw-logo.png"
+       inkscape:export-xdpi="29.869665"
+       inkscape:export-ydpi="29.869665" />
+    <path
+       style="fill:#aaeeff;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.35587189000000002;opacity:0.67375887"
+       d="M 134.93065,898.07647 C 320.56841,906.58699 323.5677,821.1694 322.58512,738.07647 C 310.5696,748.52978 292.98412,756.99502 292.74391,774.38926 C 291.97033,830.40577 248.99728,866.56191 189.49671,872.60973 C 165.94539,875.00355 146.37467,882.22656 134.93065,898.07647 z"
+       id="path2387"
+       sodipodi:nodetypes="ccssc"
+       inkscape:export-filename="/Users/danielsenff/Programming/Java/workspace/imageflow/src/imageflow/resources/iw-logo.png"
+       inkscape:export-xdpi="29.869665"
+       inkscape:export-ydpi="29.869665" />
+    <path
+       style="fill:#80b3ff;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.35587189000000002;opacity:0.67375887"
+       d="M 135.74861,899.31227 C 138.29942,891.22067 167.51289,883.9013 167.76315,869.79051 C 168.38905,834.50001 166.74668,839.8955 168.20155,775.21527 C 118.18445,778.95361 146.50964,855.09111 135.74861,899.31227 z"
+       id="path3167"
+       sodipodi:nodetypes="cscc"
+       inkscape:export-filename="/Users/danielsenff/Programming/Java/workspace/imageflow/src/imageflow/resources/iw-logo.png"
+       inkscape:export-xdpi="29.869665"
+       inkscape:export-ydpi="29.869665" />
+    <path
+       style="fill:#80b3ff;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.35587189000000002;opacity:0.67375887"
+       d="M 167.81342,774.01897 C 200.67055,773.42477 208.71289,780.97241 209.07035,740.08181 C 176.58299,739.73011 168.34756,735.86774 167.81342,774.01897 z"
+       id="path3169"
+       sodipodi:nodetypes="ccc"
+       inkscape:export-filename="/Users/danielsenff/Programming/Java/workspace/imageflow/src/imageflow/resources/iw-logo.png"
+       inkscape:export-xdpi="29.869665"
+       inkscape:export-ydpi="29.869665" />
+  </g>
+</svg>

@@ -1,0 +1,6 @@
+open("/Applications/ImageJ/images/bat-cochlea-volume.zip");
+run("Find Edges", "stack");
+run("Duplicate...", "title=bat-cochlea-volume-1.tif");
+close();
+run("Duplicate...", "title=bat-cochlea-volume-1.tif duplicate");
+run("Add Noise", "stack");

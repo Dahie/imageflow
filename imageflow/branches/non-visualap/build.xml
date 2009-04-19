@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="create_run_jar" name="Create Runnable Jar for ImageFlow">
+<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+<!--ANT 1.7 is required                                        -->
+	<property name="bin.dir" location="${basedir}" /> 
+	<property name="src.dir" location="${basedir}/src" /> 
+	<property name="build.dir" location="${bin.dir}/build" />
+	<property name="units.dir" location="${bin.dir}/xml_units" />
+	<property name="doc.dir" location="${bin.dir}/doc" />
+	<property name="example.dir" location="${bin.dir}/examples" />
+	
+	 <target name="copy" description="Delete old build and dist directories">
+	    <delete dir="${build.dir}"/>
+	 	<mkdir dir="${build.dir}" />
+	 	
+	 	<mkdir dir="${build.dir}/xml_units" />
+	 	<copy todir="${build.dir}/xml_units">
+	 		<fileset dir="${units.dir}" />
+	 	</copy>
+	 	
+	 	<mkdir dir="${build.dir}/doc" />
+	 	<copy todir="${build.dir}/doc">
+	 			<fileset dir="${doc.dir}" />
+	 	</copy>
+	 	
+	 	<mkdir dir="${build.dir}/examples" />
+	 	<copy todir="${build.dir}/examples">
+	 			<fileset dir="${example.dir}" />
+	 	</copy>
+	 	
+	  </target>
+	
+	<target name="create_run_jar" depends="copy">
+		<jar destfile="${build.dir}/Imageflow_.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}"/>
+				<attribute name="Main-Class" value="imageflow.ImageFlow"/>
+				<attribute name="Class-Path" value="."/>
+			</manifest>
+			<fileset dir="${basedir}/bin"/>
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/ij.jar"/>
+			<fileset dir="${basedir}/../visualap11branch/bin" excludes="**/test/**, *.wav, *.pdf" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/jdom.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/appframework-1.0.3.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-worker-1.1.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-layout-1.0.3.jar"/>
+		</jar>
+	</target>
+</project>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- UnitFile.xml -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Gaussian Blur</UnitName> 
+  <PathToIcon>GaussianBlur_Unit.png</PathToIcon> 
+  <ImageJSyntax>run("Gaussian Blur...", "sigma=PARA_DOUBLE_1");</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+  <HelpString>Performs a gaussian blur</HelpString>
+  	  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Radius</Name>
+  		<DataType>double</DataType>
+  		<Value>4</Value>
+  		<HelpString>Radius of the gaussian kernel</HelpString>
+  	</Parameter> 
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>31</ImageType>	
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

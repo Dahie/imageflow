@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Make Rectangle</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>makeRectangle(PARA_INTEGER_1, PARA_INTEGER_2, PARA_INTEGER_3, PARA_INTEGER_4);</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+  <HelpString>Defines a selection rectangle.</HelpString>
+</General>
+
+
+<Parameters>
+	<Parameter>
+  		<Name>x coordinate</Name>
+  		<DataType>integer</DataType>
+  		<Value>0</Value>
+  		<HelpString>Top left point's X coordinate</HelpString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>y coordinate</Name>
+  		<DataType>integer</DataType>
+  		<Value>0</Value>
+  		<HelpString>Top left point's Y coordinate</HelpString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Width</Name>
+  		<DataType>integer</DataType>
+  		<Value>24</Value>
+  		<HelpString>Width of the background</HelpString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Height</Name>
+  		<DataType>integer</DataType>
+  		<Value>24</Value>
+  		<HelpString>Height of the background</HelpString>
+  	</Parameter> 
+</Parameters>
+
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

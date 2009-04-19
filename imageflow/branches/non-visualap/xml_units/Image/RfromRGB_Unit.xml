@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>RfromRGB</UnitName> 
+  <HelpString>Extracts the red channel from an RGB image</HelpString>  
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>setRGBWeights(1,0,0);run('8-bit');</ImageJSyntax> 
+  <Color>0xdd2020</Color>
+</General>
+
+<Inputs> 
+	<Input>
+		<Name>Input1</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>16</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>	
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
