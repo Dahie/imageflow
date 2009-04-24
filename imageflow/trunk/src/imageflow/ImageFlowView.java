@@ -55,7 +55,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.TreeNode;
 
