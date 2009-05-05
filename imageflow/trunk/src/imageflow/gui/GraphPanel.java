@@ -145,10 +145,11 @@ public class GraphPanel extends GPanel {
 	 * paint things that eventually go on a printer
 	 * @param g
 	 */
+	@Override
 	public void paintPrintable(final Graphics g) {
 		rect = new Rectangle();
 		for (final Node t : nodeL) {
-			rect = rect.union(t.paint(g, this));	
+			rect = rect.union(t.paint(g, this));
 		}
 		setPreferredSize(rect.getSize());
 		Connection conn;

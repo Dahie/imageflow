@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Image Source</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>saveAs("PARA_STRING_1","PARA_STRING_2");</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Saves an image</HelpString>
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Imagetype</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>BMP Jpeg PNG TIFF</Value>
+  		<ChoiceNumber>1</ChoiceNumber>
+  		<HelpString>The source unit needs the path of an image file.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Filepath</Name>
+  		<DataType>File</DataType>
+  		<Value></Value>
+  		<HelpString>The save unit needs the path of the future image file.</HelpString>
+  	</Parameter>  
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+</UnitDescription>

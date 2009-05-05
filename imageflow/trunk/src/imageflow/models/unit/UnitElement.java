@@ -13,29 +13,34 @@ import imageflow.models.parameter.IntegerParameter;
 import imageflow.models.parameter.Parameter;
 import imageflow.models.parameter.ParameterFactory;
 import imageflow.models.parameter.StringParameter;
+import imageflow.models.unit.UnitModelComponent.Size;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 
 
 /**
  * Backend-unit logic of a single node-element.
+ * Model for an instance of a workflow-element.
+ * This model is a basic model for an element in the graph and 
+ * contains most of the graph logic.
+ * 
+ * Next to meta data, it basically it contains 3 major parts.
+ * 3 Lists with {@link Input}s, {@link Output}s and {@link Parameter}.
+ * 
+ * In the heart of the model is an Macro-Object, which
+ * contains the syntax, in which the parameters injected on runtime
+ * and which is executed by ImageJ.
  * @author danielsenff
  *
  */
@@ -44,7 +49,7 @@ public class UnitElement extends AbstractUnit {
 	final private static int PIN_TOLERANCE = 18;
 
 	/**
-	 * name of this unit, this is not display, Label is displayed
+	 * name of this unit, this is not displayed, Label is displayed
 	 */
 	protected String unitName;    
 	protected File iconfile;
@@ -63,12 +68,12 @@ public class UnitElement extends AbstractUnit {
 	protected BufferedImage unitIcon;
 	protected NodeIcon unitComponentIcon;
 	/**
-	 * function icon
+	 * function icon, illustrates the purpose of the element
 	 */
 	protected BufferedImage icon; 
 
 	/**
-	 * status of this unit
+	 * unused, status of this unit
 	 */
 	public enum Status {OK, ERROR, WAITING };
 	/**
@@ -81,8 +86,11 @@ public class UnitElement extends AbstractUnit {
 	 */
 	protected Status status;
 
-
-	private boolean isDisplayUnit = false;			// flag indicating if this unit is a display unit 
+	/**
+	 * boolean indicating if this unit is a display unit
+	 * The result of DisplayUnits will be shown after executing the workflow.  
+	 */
+	protected boolean isDisplayUnit = false;  
 
 	// all arrays start at 1, this will make it easy to detect unconnected inputs and outputs
 	/**
@@ -113,7 +121,10 @@ public class UnitElement extends AbstractUnit {
 
 	private int FIRST_ELEMENT = 0;
 
-
+	/**
+	 * Size the component will be displayed on the workspace.
+	 */
+	protected Size compontentSize;
 
 
 	/**
@@ -185,12 +196,8 @@ public class UnitElement extends AbstractUnit {
 
 		unitComponentIcon= new NodeIcon(this);
 		unitIcon = unitComponentIcon.getImage();
+		this.compontentSize = Size.BIG;
 	}
-
-
-
-
-
 
 
 	/**
@@ -223,7 +230,6 @@ public class UnitElement extends AbstractUnit {
 		return this.outputs.add(newOutput);
 	}
 
-
 	/**
 	 * Get one {@link Output} at the index. Indecies start with 0;
 	 * @param index
@@ -241,12 +247,13 @@ public class UnitElement extends AbstractUnit {
 		return this.outputs;
 	}
 
-
+	/**
+	 * Number of {@link Output}s.
+	 * @return
+	 */
 	public int getOutputsCount() {
 		return this.outputs.size();
 	}
-
-
 
 	/**
 	 * Returns the {@link Input} at the given index. Indecies start with 0.
@@ -279,16 +286,33 @@ public class UnitElement extends AbstractUnit {
 	 * @param shortDisplayName 
 	 * @param inputImageBitDepth 
 	 * @param needToCopyInput 
+	 * @param required This input needs to be connected for this unit to work. 
 	 * @return 
 	 */
 	public boolean addInput(String displayName, 
 			String shortDisplayName, 
 			int inputImageBitDepth, 
-			boolean needToCopyInput) {
+			boolean needToCopyInput, 
+			final boolean required) {
 		Input newInput = new Input(this, this.inputs.size()+1);
 		newInput.setupInput(displayName, shortDisplayName, inputImageBitDepth, needToCopyInput);
+		boolean add = this.inputs.add(newInput);
 		notifyModelListeners();
-		return this.inputs.add(newInput);
+		return add;
+	}
+	
+	/**
+	 * @param displayName
+	 * @param shortDisplayName
+	 * @param inputImageBitDepth
+	 * @param needToCopyInput
+	 * @return
+	 */
+	public boolean addInput(final String displayName, 
+			final String shortDisplayName, 
+			final int inputImageBitDepth, 
+			final boolean needToCopyInput) {
+		return this.addInput(displayName, shortDisplayName, inputImageBitDepth, needToCopyInput, true);
 	}
 
 	/**
@@ -374,7 +398,12 @@ public class UnitElement extends AbstractUnit {
 		return this.parameters;
 	}
 
-	public Parameter getParameter(int i) {
+	/**
+	 * Parameter on index i.
+	 * @param i
+	 * @return
+	 */
+	public Parameter getParameter(final int i) {
 		return this.parameters.get(i);
 	}
 
@@ -422,13 +451,16 @@ public class UnitElement extends AbstractUnit {
 		notifyModelListeners();
 	}
 
+	/**
+	 * Updates the units representational {@link NodeIcon} on the workspace.
+	 */
 	public void updateUnitIcon() {
 		this.unitIcon = new NodeIcon(this).getImage();
 	}
 
 
 	/**
-	 * Checks if there is an input or an output at this mouse coordinates. 
+	 * Checks if there is an {@link Input} or an {@link Output} at this mouse coordinates. 
 	 */
 	@Override
 	public Object contains(final int x, final int y) {
@@ -455,14 +487,18 @@ public class UnitElement extends AbstractUnit {
 		return super.contains(x,y);
 	}
 
+	
+	@Override
+	public Dimension getDimension() {
+		return unitComponentIcon.getDimension();
+	}
 
 	/* (non-Javadoc)
 	 * @see graph.Node#paint(java.awt.Graphics, java.awt.image.ImageObserver)
 	 */
 	@Override
 	public Rectangle paint(Graphics g, ImageObserver io) {
-		Color saveColor = g.getColor();
-		Font saveFont = g.getFont();
+		//TODO move from model to view
 		if (unitIcon == null) {
 			// obj != null, icon == null
 			g.setColor(selected ? Color.red : new Color(250, 220, 100));
@@ -482,7 +518,11 @@ public class UnitElement extends AbstractUnit {
 				g.drawRoundRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4, 
 						unitComponentIcon.arc, unitComponentIcon.arc);
 			}
-			unitComponentIcon.paintBigIcon((Graphics2D) g);
+			Image unitIcon = unitComponentIcon.getImage(this.compontentSize);
+			g.drawImage(unitIcon, this.origin.x, this.origin.y, null);
+//			unitComponentIcon.paintBigIcon((Graphics2D) g);
+//			unitComponentIcon.paintMediumIcon((Graphics2D) g);
+//			unitComponentIcon.paintSmallIcon((Graphics2D) g);
 		}
 
 
@@ -490,7 +530,7 @@ public class UnitElement extends AbstractUnit {
 		int numberInputs = getInputsCount();
 		for (int i = 0; i < numberInputs; i++) {
 			g.setColor(Color.BLACK);
-			int y =  PaintUtil.alignY(numberInputs, i, unitIcon.getHeight(null), NodeIcon.pinSize);
+			int y =  PaintUtil.alignY(numberInputs, i, unitComponentIcon.getHeight(), NodeIcon.pinSize);
 			g.fillRect(origin.x, origin.y+y, NodeIcon.pinSize, NodeIcon.pinSize);
 		}
 
@@ -499,11 +539,10 @@ public class UnitElement extends AbstractUnit {
 		for (int i = 0; i < numberOutputs; i++) {
 			g.setColor(Color.BLACK);
 
-			int x = (unitIcon.getWidth(null) - 8) + origin.x;
-			int y = PaintUtil.alignY(numberOutputs, i, unitIcon.getHeight(null), NodeIcon.pinSize)+origin.y;
+			int x = (unitComponentIcon.getWidth() - 8) + origin.x;
+			int y = PaintUtil.alignY(numberOutputs, i, unitComponentIcon.getHeight(), NodeIcon.pinSize)+origin.y;
 
 			Polygon po=new Polygon(); 
-			//			System.out.println(" x"+x+" y"+y);
 			po.addPoint(x, y); //top
 			po.addPoint(x + NodeIcon.pinSize, y + (NodeIcon.pinSize/2)); //pointy
 			po.addPoint(x, y+NodeIcon.pinSize); //bottom
@@ -534,6 +573,7 @@ public class UnitElement extends AbstractUnit {
 	/* (non-Javadoc)
 	 * @see graph.NodeAbstract#setObject(java.lang.Object)
 	 */
+	@Override
 	public void setObject(Object obj) {
 		this.obj = obj;
 	}
@@ -589,20 +629,6 @@ public class UnitElement extends AbstractUnit {
 		clone.setColor(this.color);
 		clone.setIcon(this.icon);
 		return clone;
-	}
-
-	private Object cloneNonClonableObject(Object obj) throws CloneNotSupportedException {
-		Object clobj;
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(bos);
-			oos.writeObject(obj);
-			oos.close();
-			clobj = (new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()))).readObject();
-		} catch (Exception ex) {
-			throw new CloneNotSupportedException(ex.getMessage());
-		}
-		return clobj;
 	}
 
 
@@ -806,15 +832,19 @@ public class UnitElement extends AbstractUnit {
 	 * @return the infoText
 	 */
 	public String getHelpString() {
-		return infoText;
+		return this.infoText;
 	}
 
-	public void setHelpString(String helpString) {
+	/**
+	 * Sets a new help descriptions message for this unit.
+	 * @param helpString
+	 */
+	public void setHelpString(final String helpString) {
 		this.infoText = helpString;		
 	}
 
 	/**
-	 * Returns true if any ouput connects to a unit that is set as displayable.
+	 * Returns true if any {@link Output} connects to a unit that is set as displayable.
 	 * @return
 	 */
 	public boolean hasDisplayBranch() {
@@ -825,16 +855,29 @@ public class UnitElement extends AbstractUnit {
 			if(output.isConnected()) {
 				for (Connection connection : output.getConnections()) {
 					UnitElement next = connection.getToUnit();
-					System.out.println(next +" tested by "+ this);
+//					System.out.println(next +" tested by "+ this);
 					if(next.hasDisplayBranch()) {
 						return true;
 					}
 				}
 			}
-			
 		}
-
 		return false;
+	}
+
+	/**
+	 * @return the compontentSize
+	 */
+	public Size getCompontentSize() {
+		return compontentSize;
+	}
+
+	/**
+	 * @param compontentSize the compontentSize to set
+	 */
+	public void setCompontentSize(Size compontentSize) {
+		this.compontentSize = compontentSize;
+		this.notifyModelListeners();
 	}
 
 

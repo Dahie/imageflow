@@ -3,10 +3,9 @@
  */
 package imageflow.models.unit;
 
-import ij.IJ;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GradientPaint;
@@ -26,19 +25,12 @@ import visualap.GPanel;
  * @author danielsenff
  *
  */
-public class NodeIcon {
+public class NodeIcon implements UnitModelComponent {
 	
-	public enum Size {BIG, MEDIUM, SMALL};
-	
-	//Dimensions
-	protected int height = 100;
-	protected int width = 100;
-    int x;
-    int y;
-    int padding = 5;
-    int widthIconBg = width - 10;
-    int heightIconBg = height - 10;
-    /**
+	public static Dimension largeComponentDimension = new Dimension(100,100);
+	public static Dimension smallComponentDimension = new Dimension(100,30);
+	public static int padding = 5;
+	/**
      * Size of the pins for In- and Outputs.
      */
     public static int pinSize = 8;
@@ -46,6 +38,17 @@ public class NodeIcon {
 	 * Size of the arc of the round corners
 	 */
 	protected int arc = 10;	
+	
+	
+	
+	
+	
+	//Dimensions
+	int x, y;
+    
+//    int widthIconBg = width - 10;
+//    int heightIconBg = height - 10;
+    
 	
 	protected Color color1;
 	protected Color color2;
@@ -71,6 +74,7 @@ public class NodeIcon {
 	 */
 	protected UnitElement unit;
 	private int unitID;
+	private Dimension dimension;
 	
 	
 	/**
@@ -80,6 +84,7 @@ public class NodeIcon {
 	public NodeIcon(final UnitElement unit) {
 		this.unit = unit;
 		this.unitID = unit.getUnitID();
+		this.dimension = largeComponentDimension;
 		
 		try {
 			this.displayIcon = ImageIO.read(this.getClass().getResourceAsStream(displayIconFile));
@@ -97,14 +102,14 @@ public class NodeIcon {
 	 * @return 
 	 */
 	public int getWidth() {
-		return this.width;
+		return (int) this.dimension.getWidth();
 	}
 	
 	/**
 	 * @return 
 	 */
 	public int getHeight() {
-		return this.height;
+		return (int) this.dimension.getHeight();
 	}
 	
 	/**
@@ -115,16 +120,23 @@ public class NodeIcon {
 	public BufferedImage getImage(final Size size) {
 		BufferedImage resultImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 	    Graphics2D g2 = resultImage.createGraphics();
-	    if(size == Size.BIG) {
+	    switch(size) {
+	    default:
+	    case BIG:
+	    	this.dimension = largeComponentDimension;
 	    	paintBigIcon(g2);
-	    } else if (size == Size.MEDIUM){
+	    	break;
+	    case MEDIUM:
 	    	paintMediumIcon(g2);
+	    	break;
+	    case SMALL:
+	    	this.dimension = smallComponentDimension;
+	    	paintSmallIcon(g2);
+	    	break;
 	    }
 	    
 	    return resultImage;
-		
 	}
-
 
 	/**
 	 * Returns the medium unit-icon.
@@ -140,25 +152,23 @@ public class NodeIcon {
 	 */
 	public Graphics2D paintBigIcon(final Graphics2D g2) {
 		
-		int widthBigIconBg = widthIconBg;
-		int heightBigIconBg = heightIconBg;
+		int width = largeComponentDimension.width-2*padding;
+		int height = largeComponentDimension.height-2*padding;
 		
-		drawElement(g2, widthBigIconBg, heightBigIconBg, unit.isDisplayUnit(), true, true);
-//		drawElement(g2, widthBigIconBg, 20, unit.isDisplayUnit(), false, false);
-	    
+		drawElement(g2, width, height, unit.isDisplayUnit(), true, true);
 		return g2;
 	}
 
 
 	private void drawElement(final Graphics2D g2, 
-			int widthBigIconBg,
-			int heightBigIconBg, 
+			int widthBg,
+			int heightBg, 
 			boolean isDisplayUnit, 
 			boolean displayIcon, 
 			boolean displayIndex) {
 		// location and dimension
-		this.x = unit.getOrigin().x + padding;
-		this.y = unit.getOrigin().y + padding;
+		this.x = 0 + padding;
+		this.y = 0 + padding;
 		
 	    g2.setRenderingHint(
 	    		RenderingHints.KEY_ANTIALIASING,
@@ -166,20 +176,21 @@ public class NodeIcon {
 
 	    
 	    //draw background
-		drawBackground(g2, arc, widthBigIconBg, heightBigIconBg);
+		drawBackground(g2, arc, widthBg, heightBg);
 	    
 	    // draw icon
 		if(displayIcon)
-			drawIcon(g2, widthBigIconBg, heightBigIconBg);
+			drawIcon(g2, widthBg, heightBg);
 	    
 	    // draw texts
-	    drawTexts(g2, widthBigIconBg, heightBigIconBg, displayIndex);
+	    drawTexts(g2, widthBg, heightBg, displayIndex);
 	    
 	    // draw icon for display
 	    if(isDisplayUnit) {
-			int xDisplay = this.x+(width/2)+16;
+	    	int xDisplay = this.x+(widthBg/2)+20;
 			int yDisplay = this.y+5;
-			g2.drawImage(this.displayIcon, xDisplay, yDisplay, null);
+//			g2.drawImage(this.displayIcon, xDisplay, yDisplay, null);
+			g2.drawImage(this.displayIcon, xDisplay, yDisplay, xDisplay+12,yDisplay+12, 0, 0, 18, 18, null);
 	    }
 	}
 	
@@ -187,7 +198,7 @@ public class NodeIcon {
 	/**
 	 * @param g22
 	 */
-	public void paintMediumIcon(Graphics2D g2) {
+	public Graphics2D paintMediumIcon(Graphics2D g2) {
 		 g2.setRenderingHint(
 		    		RenderingHints.KEY_ANTIALIASING,
 		            RenderingHints.VALUE_ANTIALIAS_ON);
@@ -197,6 +208,8 @@ public class NodeIcon {
 
 		 // draw icon
 		 drawIcon(g2, 50, 50);
+		 
+		 return g2;
 	}
 
 	private void drawTexts(final Graphics2D g2, 
@@ -301,16 +314,25 @@ public class NodeIcon {
 		this.icon = icon;
 	}
 
-
-	public void setSelected(boolean b) {
-		
+	public Graphics2D paintSmallIcon(Graphics2D g2) {
+		int width = smallComponentDimension.width-2*padding;
+		int height = smallComponentDimension.height-2*padding;
+		drawElement(g2, width, height, unit.isDisplayUnit(), false, false);
+		return g2;
 	}
 
 
-	public void paintSmallIcon(Graphics2D g22) {
-		// TODO Auto-generated method stub
-		
+	public Dimension getDimension() {
+		return this.dimension;
 	}
 	
-	
+	public static Dimension getDimensionFromSize(Size size) {
+		switch(size) {
+		default:
+		case BIG:
+			return largeComponentDimension;
+		case SMALL:
+			return smallComponentDimension;
+		}
+	}
 }

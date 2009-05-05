@@ -63,8 +63,7 @@ public class IconPreview extends JFrame {
 //        g.drawImage(bi, 0, 25, null);
 		icon.paintBigIcon(g2);
 		
-		icon.setSelected(true);
-		icon.paintBigIcon(g2);
+//		icon.setSelected(true);
 		
 		
 		g2.translate(150, 0);

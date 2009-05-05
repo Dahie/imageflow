@@ -87,7 +87,11 @@ public class MacroFlowRunner {
 		return subgraph;
 	}
 	
-	public MacroFlowRunner getSubMacroFlowRunner(UnitElement endUnit) {
+	/**
+	 * @param endUnit
+	 * @return
+	 */
+	public MacroFlowRunner getSubMacroFlowRunner(final UnitElement endUnit) {
 		return new MacroFlowRunner(getSubUnitList(endUnit));
 	}
 
@@ -241,7 +245,7 @@ public class MacroFlowRunner {
 				index = i % unitElements.size();
 				Node node =  unitElements.get(index); 
 
-//				System.out.println(node);
+				System.out.println(node);
 				
 				// find out what kind of node is stored
 				if(node instanceof CommentNode) {
@@ -292,6 +296,9 @@ public class MacroFlowRunner {
 				// is found the next loop over the element list is one element shorter.
 				// thereby having O(n^2) maybe this can be done better later
 				i++;
+				
+				//FIXME loops when single unit elements are in the graph
+				
 			}
 
 			// TODO replacing here causes deletion of none-used nodes 

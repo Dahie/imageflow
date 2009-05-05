@@ -16,6 +16,7 @@ import java.util.Collection;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
 
 import visualap.Delegate;
@@ -38,6 +39,7 @@ public class GPanelPopup implements GPanelListener {
 
 	/**
 	 * @param availableUnits
+	 * @param graphController 
 	 * @param copyL
 	 */
 	public GPanelPopup(final Collection<Delegate> availableUnits, 
@@ -67,8 +69,8 @@ public class GPanelPopup implements GPanelListener {
 			} else {
 				
 				if (selectedUnits.size() == 1) {
-					popup.add(getAction("setDisplayUnit"));
-					popup.add(getAction("showUnitParameters"));
+					popup.add(new JCheckBoxMenuItem(getAction("setDisplayUnit")));
+					popup.add(new JCheckBoxMenuItem(getAction("setUnitComponentSize")));
 //					popup.add(getAction("preview"));
 					popup.addSeparator();
 				}

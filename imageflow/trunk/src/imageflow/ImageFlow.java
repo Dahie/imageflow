@@ -7,12 +7,11 @@ import ij.IJ;
 import ij.ImageJ;
 import ij.plugin.PlugIn;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+
 
 /**
  * Main-method
@@ -63,12 +62,12 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	}
 
 	
-	private class MainFrameListener extends WindowAdapter {
+	/*private class MainFrameListener extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
         	exit(e);
         	System.exit(0);
         }
-    }
+    }*/
 
 	public void run(String args) {
 		String oldPath = System.getProperty("user.dir");
@@ -82,6 +81,12 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 			this.imageJ = new ImageJ();
 		
 		return this.imageJ;
+	}
+
+
+
+	public void handleQuit() throws IllegalStateException {
+    	System.exit(0);
 	}
 	
 }

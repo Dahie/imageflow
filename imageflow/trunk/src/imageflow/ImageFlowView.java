@@ -11,6 +11,7 @@ import imageflow.gui.DelegatesPanel;
 import imageflow.gui.GPanelPopup;
 import imageflow.gui.GraphPanel;
 import imageflow.gui.InsertUnitMenu;
+import imageflow.models.Connection;
 import imageflow.models.ConnectionList;
 import imageflow.models.Input;
 import imageflow.models.Model;
@@ -23,6 +24,7 @@ import imageflow.models.parameter.Parameter;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
 import imageflow.models.unit.UnitList;
+import imageflow.models.unit.UnitModelComponent.Size;
 import imageflow.tasks.ExportMacroTask;
 import imageflow.tasks.ImportGraphTask;
 import imageflow.tasks.LoadFlowGraphTask;
@@ -32,6 +34,7 @@ import imageflow.tasks.SaveFlowGraphTask;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.ScrollPane;
 import java.io.File;
 import java.io.IOException;
@@ -39,12 +42,12 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -191,6 +194,22 @@ public class ImageFlowView extends FrameView {
 		if(!IJ.isMacintosh()) {
 			fileMenu.add(new JSeparator());
 			fileMenu.add(getAction("quit"));
+		} else {
+			/*MRJApplicationUtils.registerQuitHandler(new MRJQuitHandler()
+			   {
+			      public void handleQuit()
+			      {
+			         SwingUtilities.invokeLater(new Runnable()
+			         {
+			            public void run()
+			            {
+			               if(promptTheUser())
+			                  System.exit(0);
+			            }
+			         });
+			         throw new IllegalStateException("Stop Pending User Confirmation");
+			      }
+			   });*/
 		}
 		
 		
@@ -202,7 +221,9 @@ public class ImageFlowView extends FrameView {
 		editMenu.add(getAction("delete"));
 		editMenu.add(getAction("clear"));
 		editMenu.add(new JSeparator());
-		editMenu.add(getAction("setDisplayUnit"));
+		editMenu.add(new JCheckBoxMenuItem(getAction("setDisplayUnit")));
+		editMenu.add(new JCheckBoxMenuItem(getAction("setUnitComponentSize")));
+		
 		editMenu.add(getAction("showUnitParameters"));
 		
 		JMenu debugMenu = new JMenu("Debug");
@@ -212,11 +233,11 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(new JSeparator());
 		debugMenu.add(getAction("exampleFlow1"));
 		debugMenu.add(getAction("exampleFlow2"));
-//		debugMenu.add(getAction("exampleFlowXML"));
 		
 		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates.values());
 		
 		JMenu windowMenu = new JMenu("Window");
+		windowMenu.add(getAction("minimize"));
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.add(getAction("openDevblogURL"));
 		helpMenu.add(getAction("openImageJURL"));
@@ -460,25 +481,20 @@ public class ImageFlowView extends FrameView {
 	 * Converts the current workflow into a macro and executes it in ImageJ.
 	 * @return
 	 */
-	/*@Action public Task generateMacro() {
-	    return new RunMacroTask(this.getApplication(), graphController);
-	}*/
-	
-	
-	/**
-	 * Converts the current workflow into a macro and executes it in ImageJ.
-	 * @return
-	 */
-    @Action    public Task runMacro() {
+    @Action public RunMacroTask runMacro() {
         return new RunMacroTask(this.getApplication(), graphController, this.showlog);
     }
 
 	
 	
+	/**
+	 * TODO
+	 * Live preview of data processing. Not yet fully implemented.
+	 */
 	@Action(enabledProperty = "selected")
 	public void preview() {
-		UnitElement unit = (UnitElement) graphPanel.getSelection().get(0);
-		MacroFlowRunner mfr = new MacroFlowRunner(this.units);
+		final UnitElement unit = (UnitElement) graphPanel.getSelection().get(0);
+		final MacroFlowRunner mfr = new MacroFlowRunner(this.units);
 		if(mfr.contains(unit)) {
 			unit.setDisplayUnit(true);
 			mfr.getSubMacroFlowRunner(unit).generateMacro();
@@ -492,13 +508,18 @@ public class ImageFlowView extends FrameView {
 //	    return task;
 	}
 	
-	@Action public Task importGraph() {
-	    JFileChooser fc = new JFileChooser();
-	    String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
+	/**
+	 * Import workflow from XML. 
+	 * The current workflow will remain and the second workflow will be added without replacement
+	 * @return
+	 */
+	@Action public ImportGraphTask importGraph() {
+	    final JFileChooser fc = new JFileChooser();
+	    final String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
 	    fc.setFileFilter(new FlowXMLFilter(filesDesc));
 	    
-	    Task task = null;
-	    int option = fc.showOpenDialog(null);
+	    ImportGraphTask task = null;
+	    final int option = fc.showOpenDialog(null);
 	    if (option == JFileChooser.APPROVE_OPTION) {
 	    	task = new ImportGraphTask(fc.getSelectedFile());
 	    }
@@ -510,14 +531,30 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void setDisplayUnit() {
-		for (final Iterator iterator = selections.iterator(); iterator.hasNext();) {
-			final UnitElement unit = (UnitElement) iterator.next();
+		for (Object selectedElement : selections) {
+			final UnitElement unit = (UnitElement) selectedElement;
 			if(unit.isDisplayUnit()) {
 				// if it is a displayUnit, deactivate
 				unit.setDisplayUnit(false);
 			} else {
 				// if it is a displayUnit, activate
 				unit.setDisplayUnit(true);
+			}
+		}
+		graphPanel.repaint();
+	}
+	
+	/**
+	 * Changes the icon size of a {@link UnitElement}. 
+	 */
+	@Action(enabledProperty = "selected")
+	public void setUnitComponentSize() {
+		for (Object selectedElement : selections) {
+			final UnitElement unit = (UnitElement) selectedElement;
+			if(unit.getCompontentSize() == Size.BIG) {
+				unit.setCompontentSize(Size.SMALL);
+			} else {
+				unit.setCompontentSize(Size.BIG);
 			}
 		}
 		graphPanel.repaint();
@@ -554,6 +591,9 @@ public class ImageFlowView extends FrameView {
 		this.units.clear();
 	}
 	
+	/**
+	 * Cut {@link UnitElement} from the workflow.
+	 */
 	@Action(enabledProperty = "selected")
 	public void cut() {
 		final Selection<Node> selectedUnits = graphPanel.getSelection();
@@ -581,6 +621,9 @@ public class ImageFlowView extends FrameView {
 		graphPanel.repaint();
 	}
 	
+	/**
+	 * Copy {@link UnitElement} from the workflow.
+	 */
 	@Action(enabledProperty = "selected")
 	public void copy() { 
 		final Selection<Node> selectedNodes = graphPanel.getSelection();
@@ -603,6 +646,9 @@ public class ImageFlowView extends FrameView {
 		}
 	}
 	
+	/**
+	 * Paste {@link UnitElement} into the workflow.
+	 */
 	@Action	
 	public void paste() {
 		final Selection<Node> selectedUnits = graphPanel.getSelection();
@@ -630,11 +676,14 @@ public class ImageFlowView extends FrameView {
 		}
 	}
 	
+	/**
+	 * Opens a dialog with the available {@link Parameter} for the selected {@link UnitElement}.
+	 */
 	@Action(enabledProperty = "selected")
 	public void showUnitParameters() {
-		Selection<Node> selectedUnits = graphPanel.getSelection();
+		final Selection<Node> selectedUnits = graphPanel.getSelection();
 		for (int i = 0; i < selectedUnits.size(); i++) {
-			UnitElement unit = (UnitElement)selectedUnits.get(i);
+			final UnitElement unit = (UnitElement)selectedUnits.get(i);
 			unit.showProperties();
 		}
 	}
@@ -662,9 +711,8 @@ public class ImageFlowView extends FrameView {
 	}
 	
 	@Action public Task open() {
-	    
 		if(isModified()) {
-			int optionSave = showSaveConfirmation();
+			final int optionSave = showSaveConfirmation();
 			if(optionSave == JOptionPane.OK_OPTION) {
 				save().run();
 //				new SaveFlowGraphTask(getFile()).run();
@@ -672,12 +720,12 @@ public class ImageFlowView extends FrameView {
 				return null;
 			}
 		} 
-		JFileChooser fc = new JFileChooser();
-		String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
+		final JFileChooser fc = new JFileChooser();
+		final String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
 		fc.setFileFilter(new FlowXMLFilter(filesDesc));
 
 		Task task = null;
-		int option = fc.showOpenDialog(null);
+		final int option = fc.showOpenDialog(null);
 		if (option == JFileChooser.APPROVE_OPTION) {
 			this.setModified(false);
 			task = new LoadFlowGraphTask(fc.getSelectedFile());
@@ -696,10 +744,11 @@ public class ImageFlowView extends FrameView {
 	
     
     /**
+     * Save the current workflow, either in existing file or in a new file.
      * @return
      */
     @Action(enabledProperty = "modified")
-    public Task save() {
+    public SaveFlowGraphTask save() {
     	if(getFile().exists()) {
     		return new SaveFlowGraphTask(getFile());	
     	} else 
@@ -707,22 +756,25 @@ public class ImageFlowView extends FrameView {
         
     }
     
+    /**
+     * @return
+     */
     @Action(enabledProperty = "modified")
-    public Task saveAs() {
-        JFileChooser fc = createFileChooser("saveAsFileChooser");
-        String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
+    public SaveFlowGraphTask saveAs() {
+        final JFileChooser fc = createFileChooser("saveAsFileChooser");
+        final String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
 	    fc.setFileFilter(new FlowXMLFilter(filesDesc));
         
         
-        int option = fc.showSaveDialog(getFrame());
-        Task task = null;
+        final int option = fc.showSaveDialog(getFrame());
+        SaveFlowGraphTask task = null;
         if (JFileChooser.APPROVE_OPTION == option) {
         	File selectedFile = fc.getSelectedFile();
         	if(!file.getName().toLowerCase().endsWith(".xml")) 
         		selectedFile = new File(selectedFile.getAbsoluteFile()+".xml");
         	
         	if(selectedFile.exists()) {
-				int response = JOptionPane.showConfirmDialog(this.getFrame(), 
+				final int response = JOptionPane.showConfirmDialog(this.getFrame(), 
 						"This file already exists. Do you want to overwrite it?",
 						"Overwrite existing file?", 
 						JOptionPane.OK_CANCEL_OPTION);
@@ -740,13 +792,13 @@ public class ImageFlowView extends FrameView {
 	 * Converts the current workflow into a macro and saves this to file.
 	 * @return
 	 */
-	@Action public Task export() {
+	@Action public ExportMacroTask export() {
 		 JFileChooser fc = createFileChooser("saveAsFileChooser");
 	        String filesDesc = getResourceMap().getString("imageJMacroFileExtensionDescription");
 		    fc.setFileFilter(new ImageJMacroFilter(filesDesc));
 	        
 	        int option = fc.showSaveDialog(getFrame());
-	        Task task = null;
+	        ExportMacroTask task = null;
 	        if (JFileChooser.APPROVE_OPTION == option) {
 	        	File selectedFile = fc.getSelectedFile();
 	        	if(selectedFile.exists()) {
@@ -772,7 +824,7 @@ public class ImageFlowView extends FrameView {
     }
 	
     /**
-     * 
+     * Opens a dialog with the list of {@link UnitElement}s in the workflow.
      */
     @Action public void debugPrintNodes() {
     	final JDialog dialog = new JDialog();
@@ -789,7 +841,7 @@ public class ImageFlowView extends FrameView {
     }
     
     /**
-     * 
+     * Opens a dialog with the list of {@link Connection} in the workflow.
      */
     @Action public void debugPrintEdges() {
     	final JDialog dialog = new JDialog();
@@ -806,7 +858,7 @@ public class ImageFlowView extends FrameView {
     }
     
     /**
-     * 
+     * Opens a dialog with debugging information about the selected {@link UnitElement}
      */
     @Action(enabledProperty = "selected")
     public void debugPrintNodeDetails() {
@@ -839,24 +891,41 @@ public class ImageFlowView extends FrameView {
     	
     }
     
+    /**
+     * Opens the URL to the development blog of the project.
+     */
     @Action 
     public void openDevblogURL() {
     	try {
 			ij.plugin.BrowserLauncher.openURL("http://imageflow.danielsenff.de");
-		} catch (IOException e) { e.printStackTrace(); }
+		} catch (final IOException e) { e.printStackTrace(); }
     }
+    
+    /**
+     * Opens the URL to the ImageJ-website.
+     */
     @Action 
     public void openImageJURL() {
     	try {
 			ij.plugin.BrowserLauncher.openURL("http://rsb.info.nih.gov/ij/");
-		} catch (IOException e) { e.printStackTrace(); }
+		} catch (final IOException e) { e.printStackTrace(); }
     }
     
+    /**
+     * Minimize this frame.
+     */
+    @Action
+    public void minimize() {
+    	this.getFrame().setState(Frame.ICONIFIED);
+    }
 
+    /**
+     * Displays the About-dialog
+     */
     @Action
     public void showAboutBox() {
         if (aboutBox == null) {
-            JFrame mainFrame = ImageFlow.getApplication().getMainFrame();
+            final JFrame mainFrame = ImageFlow.getApplication().getMainFrame();
             aboutBox = new ImageFlowAboutBox(mainFrame);
             aboutBox.setLocationRelativeTo(mainFrame);
         }
@@ -866,19 +935,13 @@ public class ImageFlowView extends FrameView {
 	private javax.swing.Action getAction(String actionName) {
 //		ActionMap actionMap = Application.getInstance(ImageFlow.class).getContext().getActionMap(ImageFlowView.class, this);
 		ActionMap actionMap = getContext().getActionMap(ImageFlowView.class, this);
-		initActions(actionMap);
 	    return actionMap.get(actionName);
 	}
 
-	private void initActions(ActionMap actionMap) {
-		Selection<Node> selection = graphPanel.getSelection();
-		ArrayList<Node> copyList = graphController.getCopyNodesList();
-		
-//		actionMap.put("checkGraph",	new CheckGraphAction(graphController));
-	}
-
-
-
+	/**
+	 * The GraphPanel of this View-instance.
+	 * @return
+	 */
 	public GraphPanel getGraphPanel() {
 		return this.graphPanel;
 	}

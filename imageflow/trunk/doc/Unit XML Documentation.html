@@ -45,16 +45,19 @@ future versions.</p>
 the workflow.</p>
 	
 	<blockquote>&lt;PathToIcon&gt;ImageCalculator_Unit.png&lt;/PathToIcon&gt; </blockquote>
+	
 <p>The Icon is not yet fully operational. You can add an icon to your unit, either simply laying an PNG with the same name as the unit-XML or by defining a name here.</p>
   <blockquote>&lt;ImageJSyntax&gt;run(&quot;Image Calculator...&quot;, &quot;image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create PARA_BOOLEAN_1&quot;);&lt;/ImageJSyntax&gt; </blockquote>
-	
 <p>The syntax is the heart of the unit. This is an abstract form of the Macro-Command called in ImageJ.<br />The Variables define wildcards for the Parameters defined later in this XML.</p>
 
-	
   &lt;Color&gt;0x6e91de&lt;/Color&gt;</blockquote>
 <p>The color is in Hex-format. The unit will be drawn in this color in the workflow.</p>
   <blockquote>&lt;HelpString&gt;Performs a mathematical calculation of two images&lt;/HelpString&gt;</blockquote>
 <p>The HelpString describes what this unit does in roughly one sentence.</p>
+<blockquote>&lt;IconSize&gt;big&lt;/IconSize&gt; </blockquote>
+<p>The representation icon on the workflow can be of different sizes. Possible are big, medium and small. 
+Only big and small are implemented right now. This is handy to save screen real estate.</p>
+
 <blockquote>&lt;/General&gt;</blockquote>
 
 <p>Parameters are values, that influence the processing the unit does.</p>

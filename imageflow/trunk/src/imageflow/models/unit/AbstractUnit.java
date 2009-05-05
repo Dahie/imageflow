@@ -5,6 +5,10 @@ import imageflow.models.Model;
 import imageflow.models.ModelListener;
 
 import java.awt.Point;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public abstract class AbstractUnit extends NodeAbstract implements Model {
@@ -41,6 +45,20 @@ public abstract class AbstractUnit extends NodeAbstract implements Model {
 		return this.unitID;
 	}
 
+	protected Object cloneNonClonableObject(Object obj) throws CloneNotSupportedException {
+		Object clobj;
+		try {
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(bos);
+			oos.writeObject(obj);
+			oos.close();
+			clobj = (new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()))).readObject();
+		} catch (Exception ex) {
+			throw new CloneNotSupportedException(ex.getMessage());
+		}
+		return clobj;
+	}
+	
 
 	/*
 	 * (non-Javadoc)
@@ -60,7 +78,7 @@ public abstract class AbstractUnit extends NodeAbstract implements Model {
 	public void notifyModelListener(ModelListener listener) {
 		listener.modelChanged(this);
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see backend.Model#notifyModelListeners()
