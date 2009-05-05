@@ -161,9 +161,9 @@ public class GraphPanel extends GPanel {
 			g.drawLine(from.x, from.y, to.x, to.y);
 			
 			if(!conn.areImageBitDepthCompatible()) {
-				int dX = Math.abs(from.x - to.x)/2 + Math.min(from.x, to.x);
-				int dY = Math.abs(from.y - to.y)/2 + Math.min(from.y, to.y);
-				Point origin = new Point(dX, dY);
+				final int dX = Math.abs(from.x - to.x)/2 + Math.min(from.x, to.x);
+				final int dY = Math.abs(from.y - to.y)/2 + Math.min(from.y, to.y);
+				final Point origin = new Point(dX, dY);
 				drawErrorMessage((Graphics2D) g, "incompatible image type", origin);
 			}
 			
@@ -276,7 +276,7 @@ public class GraphPanel extends GPanel {
 		g2.drawString(headline, x+5, y+15);
 		g2.setFont(new Font(font.getFamily(), Font.PLAIN, fontsizeOriginal));
 		int lineOffset = 45;
-		for (String line : lines) {
+		for (final String line : lines) {
 			lineOffset +=20;
 			g2.drawString(line, x+5, y+lineOffset);	
 		}
@@ -338,45 +338,51 @@ public class GraphPanel extends GPanel {
 			boolean isCompatible = false;
 			boolean isLoop = false;
 
-			// we don't know, if the connection is created 
-			// input first or output first
-			if(drawEdge instanceof Output
-					&& pin instanceof Input) {
-				isLoop = ((Input)pin).isConnectedInInputBranch(drawEdge.getParent());
-				isCompatible = ((Output)drawEdge).isImageBitDepthCompatible(
-						((Input)pin).getImageBitDepth());
-				
-			} else if (drawEdge instanceof Input
-					&& pin instanceof Output) {
-				isLoop = ((Output)pin).existsInInputSubgraph(drawEdge.getParent());
-				isCompatible = ((Input)drawEdge).isImageBitDepthCompatible(
-						((Output)pin).getImageBitDepth());
+			if( !(drawEdge instanceof Output && pin instanceof Output)
+					&& !(drawEdge instanceof Input && pin instanceof Input)) {
+
+
+				// we don't know, if the connection is created 
+				// input first or output first
+				if(drawEdge instanceof Output
+						&& pin instanceof Input) {
+					isLoop = ((Input)pin).isConnectedInInputBranch(drawEdge.getParent());
+					isCompatible = ((Output)drawEdge).isImageBitDepthCompatible(
+							((Input)pin).getImageBitDepth());
+
+				} else if (drawEdge instanceof Input
+						&& pin instanceof Output) {
+					isLoop = ((Output)pin).existsInInputSubgraph(drawEdge.getParent());
+					isCompatible = ((Input)drawEdge).isImageBitDepthCompatible(
+							((Output)pin).getImageBitDepth());
+				}
+
+				g2.setColor((isCompatible && !isLoop) ? Color.green : Color.red);
+				final Ellipse2D.Double circle = 
+					new Ellipse2D.Double(pinX, pinY, diameter, diameter);
+				g2.fill(circle);
+				g2.setColor(new Color(0,0,0,44));
+				g2.draw(circle);
+
+
+
+				String errorMessage = "";
+				if(!isCompatible)
+					errorMessage += "Incompatible bit depth \n";
+				if(isLoop) 
+					errorMessage += "Loops are not allowed\n";
+
+				if(errorMessage.length() != 0) 
+					drawErrorMessage(g2, errorMessage, pin.getLocation());
+
+
 			}
-
-			g2.setColor((isCompatible && !isLoop) ? Color.green : Color.red);
-			final Ellipse2D.Double circle = 
-				new Ellipse2D.Double(pinX, pinY, diameter, diameter);
-			g2.fill(circle);
-			g2.setColor(new Color(0,0,0,44));
-			g2.draw(circle);
-
-
-
-			String errorMessage = "";
-			if(!isCompatible)
-				errorMessage += "Incompatible bit depth \n";
-			if(isLoop) 
-				errorMessage += "Loops are not allowed\n";
-
-			if(errorMessage.length() != 0) 
-				drawErrorMessage(g2, errorMessage, pin.getLocation());
-
 		}
 	}
 
-	private void drawErrorMessage(final Graphics2D g2, String text, final Point origin) {
+	private void drawErrorMessage(final Graphics2D g2, final String text, final Point origin) {
 		
-		Vector<String> lines = tokenizeString(text, "\n");
+		final Vector<String> lines = tokenizeString(text, "\n");
 		
 		g2.setColor(Color.RED);
 		final Ellipse2D.Double circle = 
@@ -391,7 +397,7 @@ public class GraphPanel extends GPanel {
 		
 		final Dimension dimension = new Dimension();
 		String longestLine = "";
-		for (String line : lines) {
+		for (final String line : lines) {
 			if(line.length() > longestLine.length())
 				longestLine = line;
 		}
@@ -410,9 +416,9 @@ public class GraphPanel extends GPanel {
 		
 		g2.setColor(Color.BLACK);
 		
-		int lineheight = fm.getHeight() + 5;
+		final int lineheight = fm.getHeight() + 5;
 		int yT = (origin.y + padding) + fm.getAscent();
-		for (String line : lines) {
+		for (final String line : lines) {
 			g2.drawString(line, origin.x + 5, yT);
 			yT += lineheight;
 		}
@@ -421,9 +427,9 @@ public class GraphPanel extends GPanel {
 		
 	}
 
-	private Vector<String> tokenizeString(String text, String token) {
-		StringTokenizer stringTokenizer = new StringTokenizer(text, token);
-		Vector<String> lines = new Vector<String>();
+	private Vector<String> tokenizeString(final String text, final String token) {
+		final StringTokenizer stringTokenizer = new StringTokenizer(text, token);
+		final Vector<String> lines = new Vector<String>();
 		while(stringTokenizer.hasMoreTokens()) {
 			lines.add(stringTokenizer.nextToken());
 		}
