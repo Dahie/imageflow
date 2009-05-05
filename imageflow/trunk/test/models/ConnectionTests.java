@@ -25,7 +25,7 @@ public class ConnectionTests extends TestCase {
 	 * Test if an correctly initialized Connection returns the right status.
 	 */
 	public void testConnectionStatus() {
-		final UnitElement source = UnitFactory.createSourceUnit("/Users/danielsenff/zange1.png");
+		final UnitElement source = UnitFactory.createBackgroundUnit(new Dimension(12,12));
 		final UnitElement blur = UnitFactory.createGaussianBlurUnit(); 
 		
 		final Connection connection1 = new Connection(source, 1, blur, 1);
@@ -51,8 +51,6 @@ public class ConnectionTests extends TestCase {
 		assertEquals("check imageTitles generated on pins", 
 				output.getImageTitle(), 
 				input.getImageTitle());
-		
-		
 	}
 	
 
@@ -162,11 +160,12 @@ public class ConnectionTests extends TestCase {
 		// now test pins, which don't care
 		//TODO hm how should this react actually? needs an input set
 		Connection conn5 = new Connection(unit1,3,unit2, 2);
-		assertTrue("-1 to 16", conn5.areImageBitDepthCompatible());
+		//assertTrue("-1 to 16", conn5.areImageBitDepthCompatible());
 		
 		// now test pins, which don't care
+		// doesn't do much since -1 is undefined
 		Connection conn6 = new Connection(unit1,3,unit2, 3);
-		assertTrue("-1 to ALL", conn6.areImageBitDepthCompatible());
+		//assertTrue("-1 to ALL", conn6.areImageBitDepthCompatible());
 	}
 	
 }

@@ -403,8 +403,8 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 * @return
 	 */
 	public Node getUnit(final int id) {
-		for (Iterator<Node> node = this.iterator(); node.hasNext();) {
-			AbstractUnit unit = (AbstractUnit) node.next();
+		for (Node node : this) {
+			AbstractUnit unit = (AbstractUnit) node;
 			if(unit.getUnitID() == id) 
 				return unit;
 		}
@@ -589,6 +589,10 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		super.clear();
 		connections.clear();
 		notifyModelListeners();
+	}
+
+	public int getSize() {
+		return super.size();
 	}
 
 }

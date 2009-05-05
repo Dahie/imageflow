@@ -89,7 +89,7 @@ public class ConnectionListTests extends TestCase {
 		ConnectionList connectionList = new ConnectionList();
 		assertTrue("create conn f1 to f2", connectionList.add(filter1, 1, filter2, 1));
 		assertTrue("create conn f1 to f2", connectionList.add(filter1.getOutput(0), filter2.getInput(0)));
-		assertTrue("create conn f2 to f1", connectionList.add(filter2, 1, filter3, 1));
+		assertTrue("create conn f2 to f3", connectionList.add(filter2, 1, filter3, 1));
 		assertFalse("create conn f3 to f1",  connectionList.add(filter3, 1, filter1, 1));
 		assertFalse("create conn f3 to f1",  connectionList.add(filter3.getOutput(0), filter1.getInput(0)));
 	}

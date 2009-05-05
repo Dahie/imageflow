@@ -115,6 +115,9 @@ public class Input extends Pin implements Connectable {
 		connectTo(fromUnit.getOutput(fromOutputNumber-1));
 	}
 	
+	/**
+	 * Sets the connection between this input and an output.
+	 */
 	public void connectTo(final Pin fromOutput) {
 		this.from = (Output)fromOutput;
 		this.fromUnit = (UnitElement) fromOutput.getParent();
@@ -311,16 +314,33 @@ public class Input extends Pin implements Connectable {
 	 * @return
 	 */
 	public boolean isConnectedInInputBranch(Node goal) {
-		// self reference is true
-		if(goal.equals(parent))
-			return false;
+		// self reference
 		
-		// can only check inputs, which are connected
-		return traverseOutput((UnitElement)parent, goal);
+		
+		if(goal.equals(parent)) 
+//			 can only check inputs, which are connected
+//			return traverseInput(this, goal);
+			return false;
+		else
+			return traverseOutput((UnitElement) this.parent, goal);
+		 
+		
 	}
 
+	private static boolean traverseInput(Input start, Node goal) {
+		if(start.getParent().equals(goal)) {
+			return false;
+		} else if(start.isConnected()) {
+			for (Input input : start.getFromUnit().getInputs()) {
+				if(traverseInput(input, goal));
+					return true;
+			}
+		}
+		return false;
+	}
+	
 
-	private boolean traverseOutput(UnitElement parent, Node goal) {
+	private static boolean traverseOutput(UnitElement parent, Node goal) {
 		if(parent.equals(goal)) {
 			return true;
 		} else if (parent.hasOutputsConnected()) {
@@ -345,7 +365,7 @@ public class Input extends Pin implements Connectable {
 				//check if this input is connected to more
 				} else if(input.isConnected()) {
 					// if it is connected, maybe we have more luck here
-					return traverseInput(input.getFromUnit(), node);
+					return traverseOutput(input.getFromUnit(), goal);
 				}
 			}
 		}*/

@@ -267,6 +267,7 @@ public class UnitFactory {
 	 * display name, syntax: "run("Find Edges");", 1 input, 1 output, 1 parameter
 	 * @return
 	 */
+	@Deprecated
 	public static UnitElement createFindEdgesUnit() {
 		return createFindEdgesUnit(new Point(30,30));
 	}
@@ -359,7 +360,7 @@ public class UnitFactory {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * setup of a source (input) unit
 	 * display name, syntax: "open("path");", 0 inputs, 1 output, 1 parameter
@@ -401,7 +402,8 @@ public class UnitFactory {
 	@Deprecated
 	public static SourceUnitElement createSourceUnit(String path, Point origin) {
 
-		SourceUnitElement sourceUnit = new SourceUnitElement(origin, "Image Source", "open(\"PARA_STRING_1\");\n");
+		SourceUnitElement sourceUnit = 
+			new SourceUnitElement(origin, "Image Source", "open(\"PARA_STRING_1\");\n");
 		// setup of the first parameter
 		sourceUnit.addParameter(
 				ParameterFactory.createParameter("Input image file",	// parameter description

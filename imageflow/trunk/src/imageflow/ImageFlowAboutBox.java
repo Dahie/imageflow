@@ -35,11 +35,15 @@ package imageflow;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
-import org.jdesktop.application.ApplicationContext;
 
+/**
+ * About-dialog of the application.
+ * @author senff
+ *
+ */
 public class ImageFlowAboutBox extends javax.swing.JDialog {
 
-    public ImageFlowAboutBox(java.awt.Frame parent) {
+    public ImageFlowAboutBox(final java.awt.Frame parent) {
         super(parent);
         initComponents();
         getRootPane().setDefaultButton(closeButton);
@@ -58,26 +62,26 @@ public class ImageFlowAboutBox extends javax.swing.JDialog {
     private void initComponents() {
 
         closeButton = new javax.swing.JButton();
-        javax.swing.JLabel appTitleLabel = new javax.swing.JLabel();
-        javax.swing.JLabel versionLabel = new javax.swing.JLabel();
-        javax.swing.JLabel appVersionLabel = new javax.swing.JLabel();
-        javax.swing.JLabel vendorLabel = new javax.swing.JLabel();
-        javax.swing.JLabel appVendorLabel = new javax.swing.JLabel();
-        javax.swing.JLabel homepageLabel = new javax.swing.JLabel();
-        javax.swing.JLabel appHomepageLabel = new javax.swing.JLabel();
-        javax.swing.JLabel appDescLabel = new javax.swing.JLabel();
-        javax.swing.JLabel imageLabel = new javax.swing.JLabel();
+        final javax.swing.JLabel appTitleLabel = new javax.swing.JLabel();
+        final javax.swing.JLabel versionLabel = new javax.swing.JLabel();
+        final javax.swing.JLabel appVersionLabel = new javax.swing.JLabel();
+        final javax.swing.JLabel vendorLabel = new javax.swing.JLabel();
+        final javax.swing.JLabel appVendorLabel = new javax.swing.JLabel();
+        final javax.swing.JLabel homepageLabel = new javax.swing.JLabel();
+        final javax.swing.JLabel appHomepageLabel = new javax.swing.JLabel();
+        final javax.swing.JLabel appDescLabel = new javax.swing.JLabel();
+        final javax.swing.JLabel imageLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        Application instance = org.jdesktop.application.Application.getInstance(imageflow.ImageFlow.class);
-        org.jdesktop.application.ResourceMap resourceMap = instance.getContext().getResourceMap(ImageFlowAboutBox.class);
+        final Application instance = org.jdesktop.application.Application.getInstance(imageflow.ImageFlow.class);
+        final org.jdesktop.application.ResourceMap resourceMap = instance.getContext().getResourceMap(ImageFlowAboutBox.class);
         setTitle(resourceMap.getString("title")); // NOI18N
         setModal(true);
         setName("aboutBox"); // NOI18N
         setResizable(false);
 
         
-		javax.swing.ActionMap actionMap = 
+		final javax.swing.ActionMap actionMap = 
         	instance.getContext().getActionMap(ImageFlowAboutBox.class, this);
         closeButton.setAction(actionMap.get("closeAboutBox")); // NOI18N
 
@@ -103,7 +107,7 @@ public class ImageFlowAboutBox extends javax.swing.JDialog {
 
         imageLabel.setIcon(resourceMap.getIcon("imageLabel.icon")); // NOI18N
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
+        final org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)

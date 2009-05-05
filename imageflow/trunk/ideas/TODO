@@ -10,6 +10,7 @@ GUI:
 - filter images in filechooser
 - cursor keys -> move or select?
 - more keyshortcuts?
+- improved selections: shift, strg
 
 Functions:
 - as imageJ plugin / standalone
@@ -18,7 +19,7 @@ Functions:
 
 Graph:
 - optional Node-Alignment
-- ordner image source
+- read all images from folder and process them
 - stack-support
 
 

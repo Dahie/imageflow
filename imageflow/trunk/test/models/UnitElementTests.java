@@ -132,7 +132,7 @@ public class UnitElementTests extends TestCase {
 		
 		sourceUnit2.setMark(2);
 		
-		assertTrue("filter2 has no inputs marked yet", filterUnit2.hasAllInputsMarked());
+		assertTrue("filter2 has all inputs marked", filterUnit2.hasAllInputsMarked());
 	}
 
 
@@ -225,7 +225,7 @@ public class UnitElementTests extends TestCase {
 		
 		// test output-only
 		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
-		UnitElement sourceUnit2 = UnitFactory.createSourceUnit();
+		UnitElement sourceUnit2 = UnitFactory.createBackgroundUnit(new Dimension(12, 12));;
 
 		// test input/output case
 		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();

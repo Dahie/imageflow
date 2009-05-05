@@ -13,7 +13,7 @@ import junit.framework.TestCase;
 public class MacroElementTests extends TestCase {
 
 	/**
-	 * Tests, if the substituation of variables works.
+	 * Tests, if the substitution of variables works.
 	 */
 	public void testVariableSubstitution() {
 		final String syntaxExample = "some syntax with some variable";

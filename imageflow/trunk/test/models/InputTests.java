@@ -151,35 +151,6 @@ public class InputTests extends TestCase {
 		assertTrue("32 to all", input3.isImageBitDepthCompatible(output1.getImageBitDepth()));
 
 	}
-
-	void testForwardingImageBitDepth() {
-		// -1 requires to check the imagebitdepth of the input
-		
-		UnitElement unit1 = new UnitElement("unit1", "some syntax");
-		unit1.addInput("input1", "i", PlugInFilter.DOES_32, false);
-		unit1.addOutput("output1", "o", PlugInFilter.DOES_32, false);
-		unit1.addOutput("output2", "o", PlugInFilter.DOES_ALL, false);
-		unit1.addOutput("output2", "o", -1, false);
-		Output output1 = unit1.getOutput(0);
-		Output output2 = unit1.getOutput(1);
-		Output output3 = unit1.getOutput(2);
-		
-		UnitElement unit2 = new UnitElement("unit2", "some syntax");
-		unit2.addInput("input1", "i", PlugInFilter.DOES_32, false);
-		unit2.addInput("input2", "i", PlugInFilter.DOES_16, false);
-		unit2.addInput("input3", "i", PlugInFilter.DOES_ALL, false);
-		Input input1 = unit2.getInput(0);
-		Input input2 = unit2.getInput(1);
-		Input input3 = unit2.getInput(2);
-		
-		
-		// now test pins, which don't care
-		//TODO hm how should this react actually? needs an input set
-//		assertTrue("-1 to 16", input2.isImageBitDepthCompatible(output3.getImageBitDepth()));
-//		assertTrue("-1 to ALL", input3.isImageBitDepthCompatible(output3.getImageBitDepth()));
-		
-	}
-	
 	
 	public void testUnitConnectedInBranch() {
 		
@@ -190,7 +161,9 @@ public class InputTests extends TestCase {
 		Connection conn1 = new Connection(unit1, 1, unit2, 1);
 		
 		ConnectionList connList = new ConnectionList();
-		assertTrue(connList.add(conn1));
+//		assertTrue(connList.add(conn1));
+		conn1.connect();
+		assertTrue(conn1.isConnected());
 		
 		Input input2 = unit2.getInput(0);
 		assertTrue("input2 knows unit1", input2.isConnectedInInputBranch(unit1));
@@ -198,7 +171,7 @@ public class InputTests extends TestCase {
 		assertFalse("input2 knows unit3", input2.isConnectedInInputBranch(unit3));
 		
 		Connection conn2 = new Connection(unit2, 1, unit3, 1);
-		assertTrue(connList.add(conn2));
+		conn2.connect();
 		
 		Input input3 = unit3.getInput(0);
 		assertTrue("input3 knows unit1", input3.isConnectedInInputBranch(unit1));

@@ -62,8 +62,4 @@ public class ParameterFactoryTests extends TestCase {
 		assertTrue("is right class", classInstance);
 	}
 	
-	private void assertParameter(String text, AbstractParameter expectedParameter, AbstractParameter resultParameter) {
-		
-	}
-	
 }

@@ -5,6 +5,7 @@ package helper;
 
 
 /**
+ * Static utility methods for painting.
  * @author danielsenff
  *
  */

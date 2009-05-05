@@ -4,6 +4,9 @@ import imageflow.models.Connection;
 import imageflow.models.ConnectionList;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
+
+import java.awt.Dimension;
+
 import junit.framework.TestCase;
 
 public class MacroTests extends TestCase {
@@ -11,7 +14,7 @@ public class MacroTests extends TestCase {
 	
 	public void testMatchingImageTitles() {
 		
-		final UnitElement source = UnitFactory.createSourceUnit("/Users/danielsenff/zange1.png");
+		final UnitElement source = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
 		final UnitElement blur = UnitFactory.createGaussianBlurUnit();
 		final UnitElement noise = UnitFactory.createAddNoiseUnit();
 		

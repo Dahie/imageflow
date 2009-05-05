@@ -205,7 +205,6 @@ public class MacroFlowRunner {
 			return false;
 		}
 
-
 		//FIXME check if units got all the inputs they need
 		if (!macroUnitList.areAllInputsConnected()) {
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
@@ -242,15 +241,15 @@ public class MacroFlowRunner {
 			//loop over all units, selection sort, levelorder
 			// TODO I don't like this condition
 			while(!unitElements.isEmpty()) {
-				index = i % unitElements.size();
+				index = i % unitElements.getSize();
 				Node node =  unitElements.get(index); 
-
+				System.out.println(index + " at length "+ unitElements.getSize());
 				System.out.println(node);
 				
 				// find out what kind of node is stored
 				if(node instanceof CommentNode) {
 					//if comment then remove and ignore, we don't need it
-					unitElements.remove(index);
+					unitElements.remove(node);
 				} else if (node instanceof UnitElement) {
 					UnitElement unit = (UnitElement) node;
 					// check if all inputs of this node are marked
@@ -264,10 +263,12 @@ public class MacroFlowRunner {
 						// if it doesn't have any unit in its outputs that has
 						// then it can be removed without consequences
 						System.out.println("rm "+unit);
-						unitElements.remove(index);
+						unitElements.remove(node);
 					}
 					
-					if(unit.hasAllInputsMarked() && unit.hasDisplayBranch()) {
+					System.out.println(unit.hasAllInputsMarked());
+					
+					if(unit.hasAllInputsMarked()) {
 						// increment mark & mark outputs
 						mark++;	
 						unit.setMark(mark);
@@ -289,8 +290,9 @@ public class MacroFlowRunner {
 							&& !unit.isDisplayUnit()) {
 						// if source has no connected outputs and is not visible
 						unitElements.remove(index);
-					}
-				}
+					} 
+					//else throw new Exception("can't be handled");
+				} else throw new Exception("this is no node object");
 				// Selection Sort
 				// each time an element whose previous nodes have already been registered
 				// is found the next loop over the element list is one element shorter.
@@ -301,16 +303,11 @@ public class MacroFlowRunner {
 				
 			}
 
-			// TODO replacing here causes deletion of none-used nodes 
-			/*for (Node node : orderedList) {
-				unitElements.add(node);
-			}*/
 		} catch(Exception ex) {
 			// restore list, without damaging it
 			ex.printStackTrace();
 		}
 
-//		return unitElements;
 		return orderedList;
 	}
 	
