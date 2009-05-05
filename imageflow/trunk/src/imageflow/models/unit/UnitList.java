@@ -387,7 +387,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 						// is this input connected?
 						if (!input.isConnected() 
 								// is this input actually required?
-								&& input.isRequiredInput()) {
+								&& input.isRequired()) {
 							System.err.println(input + " is not connected");
 							return false;
 						}

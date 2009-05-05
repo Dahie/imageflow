@@ -193,7 +193,7 @@ public class Input extends Pin implements Connectable {
 	 * or if it is optional.
 	 * @return the requiredInput
 	 */
-	public boolean isRequiredInput() {
+	public boolean isRequired() {
 		return this.requiredInput;
 	}
 
@@ -371,6 +371,33 @@ public class Input extends Pin implements Connectable {
 		}*/
 		return false;
 	}
+
+	/**
+	 * Returns true, if the {@link UnitElement} connected to this Input
+	 * is marked. Obviously this requires, that this input is connected.
+	 */
+	public boolean isMarked() {
+		if(isConnected()) {
+			int mark = getFromUnit().getMark();
+			// if mark is not set
+			if(mark != 0) {
+				// this connected output hasn't been registered and is missing a mark, 
+				// so the whole unit isn't ready set. 
+				return true;
+			}  	
+		}
+		
+		return false;
+	}
 	
+	public boolean isUnmarked() {
+		if(isConnected()) {
+			int mark = getFromUnit().getMark();
+			if(mark == 0) {
+				return true;
+			}  	
+		}
+		return false;
+	}
 
 }

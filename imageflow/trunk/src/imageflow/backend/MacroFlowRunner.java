@@ -26,12 +26,12 @@ import javax.swing.JOptionPane;
 public class MacroFlowRunner {
 
 	UnitList macroUnitList;
-	
+
 	public MacroFlowRunner(UnitList units) {
 		this.macroUnitList = sortList((UnitList) units.clone());
 		this.macroUnitList.addConnectionList(units.getConnections());
 	}
-	
+
 	/**
 	 * verification and generation of the ImageJ macro for the full graph
 	 * @return 
@@ -48,7 +48,7 @@ public class MacroFlowRunner {
 		}
 
 		// unitElements has to be ordered according to the correct processing sequence
-		
+
 
 		////////////////////////////////////////////////////////
 		// generation of the ImageJ macro
@@ -58,7 +58,7 @@ public class MacroFlowRunner {
 
 		return macro;
 	}
-	
+
 	/**
 	 * Is true if a {@link UnitElement} exists in the {@link UnitList} that is cleaned for
 	 * running as a macro. If the unit exists, it means, that the subgraph up untill this 
@@ -69,8 +69,8 @@ public class MacroFlowRunner {
 	public boolean contains(UnitElement unit) {
 		return this.macroUnitList.contains(unit);
 	}
-	
-	
+
+
 	/**
 	 * Returns a subset of a workflow. It only includes all elements to 
 	 * calculate the final {@link UnitElement} specified.
@@ -78,15 +78,15 @@ public class MacroFlowRunner {
 	 * @return
 	 */
 	public UnitList getSubUnitList(UnitElement endUnit) {
-		
+
 		UnitList subgraph = new UnitList();
 		subgraph.add(endUnit);
-		
+
 		traverseGraph(endUnit, subgraph);
-		
+
 		return subgraph;
 	}
-	
+
 	/**
 	 * @param endUnit
 	 * @return
@@ -104,8 +104,8 @@ public class MacroFlowRunner {
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * check if all connections have in and output
 	 * @param connectionMap
@@ -122,7 +122,7 @@ public class MacroFlowRunner {
 					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
-		
+
 		if(!macroUnitList.hasUnitAsDisplay()) {
 			System.err.println("The workflow has no displayable units, running it doesn't do anything.");
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
@@ -133,12 +133,12 @@ public class MacroFlowRunner {
 			return false; 
 		}
 
-		
-		
+
+
 		for (Node node : macroUnitList) {
 			UnitElement unit = (UnitElement)node;
 			for (Input input : unit.getInputs()) {
-				if(input.isRequiredInput() && !input.isConnected()) {
+				if(input.isRequired() && !input.isConnected()) {
 					JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
 							"Some elements don't have all required input connections."
 							+'\n' + "The operation will not proceed.",
@@ -147,7 +147,7 @@ public class MacroFlowRunner {
 					return false;
 				}
 			}
-			
+
 			// sources -> file exists
 			if(node instanceof SourceUnitElement) {
 				SourceUnitElement sUnit = (SourceUnitElement) node;
@@ -173,17 +173,17 @@ public class MacroFlowRunner {
 				Connection connection = (Connection) iterator.next();
 
 				if (!connection.areImageBitDepthCompatible()) {
-					
+
 					JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
 							"The graph has conflicting imagetypes."
 							+'\n' + "The operation will not proceed.",
 							"Connection error", 
 							JOptionPane.WARNING_MESSAGE);
-					
+
 					System.err.println("Faulty connection, image type not compatible");
 					return false;
 				}
-					
+
 
 				switch(connection.checkConnection()) {
 				case MISSING_BOTH:
@@ -220,13 +220,13 @@ public class MacroFlowRunner {
 		//TODO check parameters
 		return true;
 	}
-	
+
 	/**
 	 * @param unitElements
 	 * @return
 	 */
 	public static UnitList sortList(final UnitList unitElements) {
-		
+
 		// temporary list, discarded after this method call
 		UnitList orderedList = new UnitList();
 
@@ -245,7 +245,7 @@ public class MacroFlowRunner {
 				Node node =  unitElements.get(index); 
 				System.out.println(index + " at length "+ unitElements.getSize());
 				System.out.println(node);
-				
+
 				// find out what kind of node is stored
 				if(node instanceof CommentNode) {
 					//if comment then remove and ignore, we don't need it
@@ -256,8 +256,8 @@ public class MacroFlowRunner {
 					// if so, this unit is moved from the old list to the new one
 
 					if(unit.hasMarkedOutput()) throw new Exception("Unit has Output marked, " +
-						"although the unit itself is not marked. This suggests an infinited loop.");
-					
+					"although the unit itself is not marked. This suggests an infinited loop.");
+
 					if(!unit.hasDisplayBranch()) {
 						// unit itself is not a display and
 						// if it doesn't have any unit in its outputs that has
@@ -265,9 +265,9 @@ public class MacroFlowRunner {
 						System.out.println("rm "+unit);
 						unitElements.remove(node);
 					}
-					
+
 					System.out.println(unit.hasAllInputsMarked());
-					
+
 					if(unit.hasAllInputsMarked()) {
 						// increment mark & mark outputs
 						mark++;	
@@ -277,7 +277,9 @@ public class MacroFlowRunner {
 						// move this to the new ordered list
 						Node remove = unitElements.remove(index);
 						orderedList.add(remove);
-
+					} else if( !unit.hasAllInputsMarked()
+								&& unit.hasRequiredInputsConnected()) {
+						System.err.println("doesn£t have all inputs connected, but those who are, are marked");
 					} else if (!unit.hasInputsConnected() 
 							&& unit.getUnitType() != Type.SOURCE) {
 						// if unit has no connections actually, it can be discarded right away
@@ -298,9 +300,9 @@ public class MacroFlowRunner {
 				// is found the next loop over the element list is one element shorter.
 				// thereby having O(n^2) maybe this can be done better later
 				i++;
-				
+
 				//FIXME loops when single unit elements are in the graph
-				
+
 			}
 
 		} catch(Exception ex) {
@@ -310,5 +312,5 @@ public class MacroFlowRunner {
 
 		return orderedList;
 	}
-	
+
 }

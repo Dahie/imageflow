@@ -300,7 +300,7 @@ public class UnitElement extends AbstractUnit {
 		notifyModelListeners();
 		return add;
 	}
-	
+
 	/**
 	 * @param displayName
 	 * @param shortDisplayName
@@ -487,7 +487,7 @@ public class UnitElement extends AbstractUnit {
 		return super.contains(x,y);
 	}
 
-	
+
 	@Override
 	public Dimension getDimension() {
 		return unitComponentIcon.getDimension();
@@ -520,9 +520,9 @@ public class UnitElement extends AbstractUnit {
 			}
 			Image unitIcon = unitComponentIcon.getImage(this.compontentSize);
 			g.drawImage(unitIcon, this.origin.x, this.origin.y, null);
-//			unitComponentIcon.paintBigIcon((Graphics2D) g);
-//			unitComponentIcon.paintMediumIcon((Graphics2D) g);
-//			unitComponentIcon.paintSmallIcon((Graphics2D) g);
+			//			unitComponentIcon.paintBigIcon((Graphics2D) g);
+			//			unitComponentIcon.paintMediumIcon((Graphics2D) g);
+			//			unitComponentIcon.paintSmallIcon((Graphics2D) g);
 		}
 
 
@@ -585,7 +585,6 @@ public class UnitElement extends AbstractUnit {
 	 */
 	@Override
 	public UnitElement clone() {
-		System.out.println(this.obj);
 		// clone the object
 		String imageJSyntax;
 		try {
@@ -661,6 +660,7 @@ public class UnitElement extends AbstractUnit {
 	/**
 	 * Checks a unit, if it's inputs have already been registered in the algorithm.
 	 * It's marked, when it's not 0. The int is conjecture to the order.
+	 * TODO: this method name may be confusing: it doesn£t check if all inputs of this unit are marked
 	 * @param unit
 	 * @return
 	 */
@@ -669,21 +669,15 @@ public class UnitElement extends AbstractUnit {
 		if(hasInputs()) {
 			// check each input, if it's parent has been registered
 			for (Input input : getInputs()) {
-				if(input.isConnected()) {
-					int mark = input.getFromUnit().getMark();
-					// if mark is not set
-					if(mark == 0) {
-						// this connected output hasn't been registered and is missing a mark, 
-						// so the whole unit isn't ready set. 
-						return false;
-					}  
-					// else mark is already set, so this output is fine
-				} else {
-					// since something must be missing, it is set to be false
+				if(input.isUnmarked()) {
+					// this connected output hasn't been registered and is missing a mark, 
+					// so the whole unit isn't ready set. 
 					return false;
-				}
-
+					// otherwise mark is already set, so this output is fine
+				} 
 			}
+
+			return false;
 		} 
 		// if there are no inputs, it's true
 		return true;
@@ -723,7 +717,29 @@ public class UnitElement extends AbstractUnit {
 	}
 
 	/**
-	 * Is true as soon as oneconnected {@link Output} is found.
+	 * Returns true if this unit has all required inputs connected.
+	 * @return
+	 */
+	public boolean hasRequiredInputsConnected() {
+		for (final Input input : inputs) {
+			if(input.isRequired() && !input.isConnected()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+
+	/**
+	 * Returns true, if this UnitElement has {@link Output}-Pins.
+	 * @return
+	 */
+	public boolean hasOutputs() {
+		return !this.outputs.isEmpty();
+	}
+
+	/**
+	 * Is true as soon as one connected {@link Output} is found.
 	 * @return
 	 */
 	public boolean hasOutputsConnected() {
@@ -812,7 +828,7 @@ public class UnitElement extends AbstractUnit {
 	}
 
 	/**
-	 * returns the color of the unit.
+	 * Returns the base color of the units representation.
 	 * @return
 	 */
 	public Color getColor() {
@@ -829,6 +845,7 @@ public class UnitElement extends AbstractUnit {
 	}
 
 	/**
+	 * HelpString is a short description for example to use in Tooltips.
 	 * @return the infoText
 	 */
 	public String getHelpString() {
@@ -850,12 +867,12 @@ public class UnitElement extends AbstractUnit {
 	public boolean hasDisplayBranch() {
 		if(isDisplayUnit())
 			return true;
-		
+
 		for (Output output : getOutputs()) {
 			if(output.isConnected()) {
 				for (Connection connection : output.getConnections()) {
 					UnitElement next = connection.getToUnit();
-//					System.out.println(next +" tested by "+ this);
+					//					System.out.println(next +" tested by "+ this);
 					if(next.hasDisplayBranch()) {
 						return true;
 					}
@@ -877,8 +894,9 @@ public class UnitElement extends AbstractUnit {
 	 */
 	public void setCompontentSize(Size compontentSize) {
 		this.compontentSize = compontentSize;
-		this.notifyModelListeners();
+		notifyModelListeners();
 	}
+
 
 
 }
