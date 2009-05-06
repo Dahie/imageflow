@@ -127,6 +127,41 @@ public class InputTests extends TestCase {
 		assertFalse("input disconnected", filterInput.isConnected());
 	}
 	
+	public void testIsRequiredInput() {
+		UnitElement source = UnitFactory.createBackgroundUnit(new Dimension(10,10));
+		UnitElement unit = UnitFactory.createImageCalculatorUnit();
+		
+		Input imageCalcInput1 = unit.getInput(0);
+		Input imageCalcInput2 = unit.getInput(1);
+		
+		assertTrue(imageCalcInput1.isRequired());
+		assertTrue(imageCalcInput2.isRequired());
+		
+		imageCalcInput2.setRequiredInput(false);
+		
+		assertFalse(imageCalcInput2.isRequired());
+		
+		// are connected?
+		
+		assertFalse(imageCalcInput1.isConnected());
+		assertFalse(imageCalcInput2.isConnected());
+		
+		Connection conn2 = new Connection(source, 1, unit, 2 );
+		conn2.connect();
+		
+		assertFalse(imageCalcInput1.isConnected());
+		assertTrue(imageCalcInput2.isConnected());
+		assertFalse("required inputs connected", unit.hasRequiredInputsConnected());
+		
+		Connection conn1 = new Connection(source, 1, unit, 1 );
+		conn1.connect();
+		
+		assertTrue(imageCalcInput1.isConnected());
+		assertTrue(imageCalcInput2.isConnected());
+		assertTrue("required inputs connected", unit.hasRequiredInputsConnected());
+		
+	}
+	
 	public void testImageBitDepthCompatible() {
 
 		UnitElement unit1 = new UnitElement("unit1", "some syntax");

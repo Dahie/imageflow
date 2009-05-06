@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- UnitFile.xml -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Unsharp Mask</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Unsharp Mask...", "radius=PARA_DOUBLE_1 mask=PARA_DOUBLE_2");</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+  <HelpString>Performs an Unsharp Mask</HelpString>
+  	  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Radius (Sigma)</Name>
+  		<DataType>double</DataType>
+  		<Value>1</Value>
+  		<HelpString>Radius of the unsharp kernel</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Mask Weight (0.1-0.9)</Name>
+  		<DataType>double</DataType>
+  		<Value>0.6</Value>
+  		<HelpString></HelpString>
+  	</Parameter>  
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>31</ImageType>	
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

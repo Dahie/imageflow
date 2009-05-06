@@ -377,27 +377,24 @@ public class Input extends Pin implements Connectable {
 	 * is marked. Obviously this requires, that this input is connected.
 	 */
 	public boolean isMarked() {
-		if(isConnected()) {
-			int mark = getFromUnit().getMark();
+//		if(isConnected()) {
+//			int mark = getFromUnit().getMark();
 			// if mark is not set
 			if(mark != 0) {
 				// this connected output hasn't been registered and is missing a mark, 
 				// so the whole unit isn't ready set. 
 				return true;
 			}  	
-		}
+//		}
 		
 		return false;
 	}
 	
 	public boolean isUnmarked() {
-		if(isConnected()) {
-			int mark = getFromUnit().getMark();
-			if(mark == 0) {
-				return true;
-			}  	
-		}
-		return false;
+		if(this.mark != 0) {
+			return false;
+		}  	
+		return true;
 	}
 
 }

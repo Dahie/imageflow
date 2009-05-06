@@ -12,6 +12,7 @@ import imageflow.models.parameter.ParameterFactory;
 import imageflow.models.unit.SourceUnitElement;
 import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
+import imageflow.models.unit.UnitElement.Type;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -66,12 +67,27 @@ public class UnitElementTests extends TestCase {
 	public void testHasInputs() {
 
 		// Sources have no inputs
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
-		assertFalse("source", sourceUnit.hasInputs());
+		UnitElement source = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		assertFalse("source", source.hasInputs());
+		assertFalse("source", source.hasInputsConnected());
+		assertTrue(source.hasRequiredInputsConnected());
 
 		UnitElement filter = UnitFactory.createAddNoiseUnit();
 		assertTrue("filter", filter.hasInputs());
+		assertFalse("filter", filter.hasInputsConnected());
+		assertFalse(filter.hasRequiredInputsConnected());
 
+		Connection conn1 = new Connection(source, 1, filter, 1);
+		conn1.connect();
+		assertTrue(conn1.isConnected());
+		assertTrue("filter", filter.hasInputsConnected());
+		
+		Input filter1Input1 = filter.getInput(0);
+		assertTrue(filter1Input1.isRequired());
+		assertTrue(filter.hasRequiredInputsConnected());
+		
+		
+		
 	}
 
 
@@ -90,6 +106,21 @@ public class UnitElementTests extends TestCase {
 	}
 
 
+	public void testHasOutputs() {
+		UnitElement sink = UnitFactory.createHistogramUnit(new Point(0,0));
+		assertTrue("is a sink", sink.getUnitType() == Type.SINK);
+		assertFalse(sink.hasOutputsConnected());
+		assertFalse(sink.hasOutputs());
+		assertEquals(0, sink.getOutputsCount());
+		
+		
+		UnitElement filter = UnitFactory.createFindEdgesUnit();
+		assertTrue("is a filter", filter.getUnitType() == Type.FILTER);
+		assertFalse(filter.hasOutputsConnected());
+		assertTrue(filter.hasOutputs());
+		assertEquals(1, filter.getOutputsCount());;
+		
+	}
 
 	public void testHasAllInputsMarked() {
 
@@ -109,19 +140,23 @@ public class UnitElementTests extends TestCase {
 
 		assertTrue("source has inputs marked", sourceUnit.hasAllInputsMarked());
 		// the source is not yet marked, so the first filter should give false
-		assertFalse("filter1 has no inputs marked yet", filterUnit1.hasAllInputsMarked());
+		assertFalse("filter1 has inputs marked yet", filterUnit1.hasAllInputsMarked());
+		assertTrue("filter1 is connected", filterUnit1.hasRequiredInputsConnected());
 		assertFalse("filter2 has input connection", filterUnit2.hasAllInputsMarked());
 		assertFalse("filter2 is connected", filterUnit2.hasInputsConnected());
 		
 		Connection conn2 = new Connection(sourceUnit, 1, filterUnit2, 1);
 		connList.add(conn2);
 		
+		assertTrue("input of filter2 connected", filterUnit2.getInput(0).isConnected());
 		assertTrue("filter2 is connected", filterUnit2.hasInputsConnected());
 		assertFalse("filter2 has no inputs marked yet", filterUnit2.hasAllInputsMarked());
+		assertFalse("filter2 is connected", filterUnit2.hasRequiredInputsConnected());
 
 		//set mark on the source, now the filter next connected should find this mark
 		sourceUnit.setMark(1);
 
+		assertTrue("input of filter1 connected", filterUnit1.getInput(0).isConnected());
 		assertTrue("filter1 has inputs marked", filterUnit1.hasAllInputsMarked());
 		assertFalse("filter2 has inputs marked", filterUnit2.hasAllInputsMarked());
 		
@@ -129,6 +164,7 @@ public class UnitElementTests extends TestCase {
 		connList.add(conn3);
 
 		assertFalse("filter2 has no inputs marked yet", filterUnit2.hasAllInputsMarked());
+		assertTrue("filter2 is connected", filterUnit2.hasRequiredInputsConnected());
 		
 		sourceUnit2.setMark(2);
 		
@@ -144,25 +180,31 @@ public class UnitElementTests extends TestCase {
 		// test input/output case
 		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
 
-		//		assertEquals("mark on source before setting", false, sourceUnit.hasAllInputsMarked());
-		//		assertEquals("mark on filter before setting", false, filterUnit1.hasAllInputsMarked());
+		assertTrue("mark on source before setting", sourceUnit.hasAllInputsMarked());
+		assertFalse("mark on filter before setting", filterUnit1.hasAllInputsMarked());
 
-		assertUnitMarks(sourceUnit, 0);
-		assertUnitMarks(filterUnit1, 0);
+		assertUnitMarks(sourceUnit, 0, true);
+		assertUnitMarks(filterUnit1, 0, false);
+		
 
 		//set marks
 		sourceUnit.setMark(1);
 		filterUnit1.setMark(1);
 
-		assertUnitMarks(sourceUnit, 1);
+		assertUnitMarks(sourceUnit, 1, true);
+		assertUnitMarks(filterUnit1, 1, true);
+		assertTrue(sourceUnit.hasAllInputsMarked());
+		assertTrue(filterUnit1.hasAllInputsMarked());
 	}
 
 	/**
 	 * @param sourceUnit
 	 */
-	private void assertUnitMarks(UnitElement sourceUnit, int expected) {
+	private void assertUnitMarks(UnitElement sourceUnit, int expected, boolean expectedMark) {
 		for (Input input : sourceUnit.getInputs()) {
 			assertEquals("mark set in "+sourceUnit+" for "+input, expected, input.getMark());
+			assertEquals(expectedMark, input.isMarked());
+			assertEquals(!expectedMark, input.isUnmarked());
 		}
 		for (Output output : sourceUnit.getOutputs()) {
 			assertEquals("mark set in "+sourceUnit+" for "+output, expected, output.getMark());

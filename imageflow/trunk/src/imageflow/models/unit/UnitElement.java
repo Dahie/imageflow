@@ -676,8 +676,6 @@ public class UnitElement extends AbstractUnit {
 					// otherwise mark is already set, so this output is fine
 				} 
 			}
-
-			return false;
 		} 
 		// if there are no inputs, it's true
 		return true;

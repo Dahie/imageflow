@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Save</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Save");</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Saves an image</HelpString>
+</General>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+</UnitDescription>
