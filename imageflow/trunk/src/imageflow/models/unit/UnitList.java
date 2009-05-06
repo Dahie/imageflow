@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -89,7 +88,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 //				node = new Node[numUnits];
 				
 
-				// loop Ÿber alle Units
+				// loop over alle Units
 				while (unitsIterator.hasNext()) { 
 					Element actualUnitElement = unitsIterator.next();
 					int xPos 		= Integer.parseInt(actualUnitElement.getChild("XPos").getValue());
@@ -203,6 +202,9 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 				String colorHex = Integer.toHexString( unit.getColor().getRGB() );
 				color.addContent("0x"+colorHex.substring(2));
 				general.addContent(color);
+				Element iconSize = new Element("IconSize");
+				iconSize.addContent(unit.getCompontentSize().toString());
+				general.addContent(color);
 				Element helpStringU = new Element("HelpString");
 				helpStringU.addContent(unit.getHelpString());
 				general.addContent(helpStringU);
@@ -304,10 +306,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 					doDisplay.addContent(boolIsDisplay);
 					outputElement.addContent(doDisplay);
 				}
-
-
 			}
-
 		}
 
 		
@@ -454,7 +453,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 
 
 	private void replaceConnection(final UnitElement unit) {
-		// replacing maks only sense, when it has inputs and outputs
+		// replacing makes only sense, when it has inputs and outputs
 		if(!unit.hasInputsConnected() || !unit.hasOutputsConnected()) {
 			return;
 		}
@@ -563,6 +562,11 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		return this.connections.add(con);
 	}
 
+	/**
+	 * Adds the {@link Connection}s of a {@link ConnectionList} to this ConnectionList.
+	 * They are added, the current ConnectionList is not replaced.
+	 * @param newConnList
+	 */
 	public void addConnectionList(ConnectionList newConnList) {
 //		this.connections
 		for (Edge conn : newConnList) {

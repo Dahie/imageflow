@@ -142,7 +142,7 @@ public class UnitElementTests extends TestCase {
 		// the source is not yet marked, so the first filter should give false
 		assertFalse("filter1 has inputs marked yet", filterUnit1.hasAllInputsMarked());
 		assertTrue("filter1 is connected", filterUnit1.hasRequiredInputsConnected());
-		assertFalse("filter2 has input connection", filterUnit2.hasAllInputsMarked());
+		assertFalse("filter2 has all input marled", filterUnit2.hasAllInputsMarked());
 		assertFalse("filter2 is connected", filterUnit2.hasInputsConnected());
 		
 		Connection conn2 = new Connection(sourceUnit, 1, filterUnit2, 1);
@@ -157,8 +157,8 @@ public class UnitElementTests extends TestCase {
 		sourceUnit.setMark(1);
 
 		assertTrue("input of filter1 connected", filterUnit1.getInput(0).isConnected());
-		assertTrue("filter1 has inputs marked", filterUnit1.hasAllInputsMarked());
-		assertFalse("filter2 has inputs marked", filterUnit2.hasAllInputsMarked());
+		assertTrue("filter1 has all inputs marked", filterUnit1.hasAllInputsMarked());
+		assertFalse("filter2 has all inputs marked", filterUnit2.hasAllInputsMarked());
 		
 		Connection conn3 = new Connection(sourceUnit2, 1, filterUnit2, 2);
 		connList.add(conn3);
@@ -193,8 +193,6 @@ public class UnitElementTests extends TestCase {
 
 		assertUnitMarks(sourceUnit, 1, true);
 		assertUnitMarks(filterUnit1, 1, true);
-		assertTrue(sourceUnit.hasAllInputsMarked());
-		assertTrue(filterUnit1.hasAllInputsMarked());
 	}
 
 	/**

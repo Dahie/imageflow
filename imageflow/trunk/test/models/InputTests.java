@@ -195,7 +195,6 @@ public class InputTests extends TestCase {
 		
 		Connection conn1 = new Connection(unit1, 1, unit2, 1);
 		
-		ConnectionList connList = new ConnectionList();
 //		assertTrue(connList.add(conn1));
 		conn1.connect();
 		assertTrue(conn1.isConnected());

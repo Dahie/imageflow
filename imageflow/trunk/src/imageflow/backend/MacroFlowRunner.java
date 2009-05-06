@@ -61,7 +61,7 @@ public class MacroFlowRunner {
 
 	/**
 	 * Is true if a {@link UnitElement} exists in the {@link UnitList} that is cleaned for
-	 * running as a macro. If the unit exists, it means, that the subgraph up untill this 
+	 * running as a macro. If the unit exists, it means, that the subgraph up until this 
 	 * unit is valid for running too.  
 	 * @param unit 
 	 * @return 
@@ -239,7 +239,7 @@ public class MacroFlowRunner {
 
 		try {
 			//loop over all units, selection sort, levelorder
-			// TODO I don't like this condition
+			// TODO I don't like this condition, daniel
 			while(!unitElements.isEmpty()) {
 				index = i % unitElements.getSize();
 				Node node =  unitElements.get(index); 
@@ -263,7 +263,7 @@ public class MacroFlowRunner {
 						// if it doesn't have any unit in its outputs that has
 						// then it can be removed without consequences
 						System.out.println("rm "+unit);
-						unitElements.remove(node);
+						unitElements.remove(index);
 					}
 
 					System.out.println(unit.hasAllInputsMarked());
@@ -283,6 +283,7 @@ public class MacroFlowRunner {
 					} else if (!unit.hasInputsConnected() 
 							&& unit.getUnitType() != Type.SOURCE) {
 						// if unit has no connections actually, it can be discarded right away
+						System.out.println(unitElements.getSize());
 						unitElements.remove(index);
 						// if there is a branch with two units connected, the first one will be discarded, 
 						// the second will still exist, but as the input is now missing, it will 
