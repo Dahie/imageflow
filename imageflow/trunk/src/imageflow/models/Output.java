@@ -204,14 +204,15 @@ public class Output extends Pin implements Connectable {
 	}
 
 	/**
-	 * Returns the {@link Input} to which this Output is connected.
+	 * Returns true, if this Output has been marked.
+	 * The Mark is not 0.
 	 * @return
 	 */
-	/*public Input getToInput() {
-		return this.to;
-	}*/
-
-
+	public boolean isMarked() {
+		return (this.mark == 0) ? false : true;
+	}
+	
+	
 	
 	/**
 	 * Gets the true Image type. This can be either the own imagetype of this output

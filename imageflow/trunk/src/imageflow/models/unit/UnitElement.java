@@ -669,7 +669,8 @@ public class UnitElement extends AbstractUnit {
 		if(hasInputs()) {
 			// check each input, if it's parent has been registered
 			for (Input input : getInputs()) {
-				if(input.isUnmarked()) {
+				if( (input.isConnected() && !input.getFromOutput().isMarked())
+						|| !input.isConnected() ) {
 					// this connected output hasn't been registered and is missing a mark, 
 					// so the whole unit isn't ready set. 
 					return false;

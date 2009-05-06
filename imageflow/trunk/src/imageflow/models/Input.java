@@ -376,7 +376,7 @@ public class Input extends Pin implements Connectable {
 	 * Returns true, if the {@link UnitElement} connected to this Input
 	 * is marked. Obviously this requires, that this input is connected.
 	 */
-	public boolean isMarked() {
+	/*public boolean isMarked() {
 //		if(isConnected()) {
 //			int mark = getFromUnit().getMark();
 			// if mark is not set
@@ -388,13 +388,14 @@ public class Input extends Pin implements Connectable {
 //		}
 		
 		return false;
+	}*/
+	
+	public boolean isMarked() {
+		return (this.mark == 0) ? false : true;
 	}
 	
 	public boolean isUnmarked() {
-		if(this.mark != 0) {
-			return false;
-		}  	
-		return true;
+		return (this.mark == 0) ? true : false;
 	}
 
 }
