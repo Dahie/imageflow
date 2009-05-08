@@ -221,7 +221,7 @@ public class UnitElement extends AbstractUnit {
 	 * @return
 	 */
 	public Output getOutput(final int index) {
-		return this.outputs.get(index);
+		return getOutputs().get(index);
 	}
 
 	/**

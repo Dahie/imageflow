@@ -58,7 +58,7 @@ public class MacroGenerator {
 			macroText += macroElement.getCommandSyntax();
 			
 			// funktioniert nur für einen Ausgang
-			for (int out = 0; out < unit.getParametersCount(); out++) {
+			for (int out = 0; out < unit.getOutputsCount(); out++) {
 				final String outputTitle = unit.getOutput(out).getImageTitle();
 				final String outputID = unit.getOutput(out).getImageID();
 				
