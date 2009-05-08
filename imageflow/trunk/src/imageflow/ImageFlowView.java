@@ -226,6 +226,10 @@ public class ImageFlowView extends FrameView {
 		
 		editMenu.add(getAction("showUnitParameters"));
 		
+		JMenu viewMenu = new JMenu("View");
+		viewMenu.add(getAction("alignElements"));
+		viewMenu.add(new JCheckBoxMenuItem(getAction("setDrawGrid")));
+		
 		JMenu debugMenu = new JMenu("Debug");
 		debugMenu.add(getAction("debugPrintNodes"));
 		debugMenu.add(getAction("debugPrintNodeDetails"));
@@ -246,9 +250,10 @@ public class ImageFlowView extends FrameView {
 		
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
+		menuBar.add(viewMenu);
 		menuBar.add(insertMenu);
 		menuBar.add(debugMenu);
-//		menuBar.add(windowMenu);
+		menuBar.add(windowMenu);
 		menuBar.add(helpMenu);
 		
 		menuBar.setVisible(true);
@@ -268,12 +273,10 @@ public class ImageFlowView extends FrameView {
 		ArrayList<Delegate> delegatesArrayList = new ArrayList<Delegate>();
 		delegatesArrayList.addAll(unitDelegates.values());
 		GPanelPopup popup = new GPanelPopup(unitDelegates.values(), graphController);
-//		GPanelPopup popup = new GPanelPopup(graphController);
 		
 		
 		graphPanel = new GraphPanel(delegatesArrayList, popup);
 		popup.setActivePanel(graphPanel);
-//		graphPanel.setSize(400, 300);
 		graphPanel.setGraphController(graphController);
 		graphPanel.setPreferredSize(new Dimension(400, 300));
 		graphPanel.setSelections(this.selections);
@@ -312,8 +315,6 @@ public class ImageFlowView extends FrameView {
 		buttonPanel.setLayout(flowLayout);
 		JButton buttonRun = new JButton(getAction("runMacro"));
 		buttonPanel.add(buttonRun);
-//		JButton buttoncheck = new JButton(new CheckGraphAction(graphController));
-//		buttonPanel.add(buttoncheck);
 
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
@@ -321,11 +322,8 @@ public class ImageFlowView extends FrameView {
 		sidePane.add(delegatesPanel, BorderLayout.CENTER);
 		sidePane.add(buttonPanel, BorderLayout.PAGE_END);
 		
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
-		splitPane.setLeftComponent(sidePane);
-		splitPane.setRightComponent(graphScrollpane);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidePane, graphScrollpane);
 		splitPane.setEnabled(true);
-//		splitPane.setDividerLocation(200);
 		splitPane.setOneTouchExpandable(true);
 		
 		mainPanel.add(splitPane , BorderLayout.CENTER);
@@ -392,9 +390,13 @@ public class ImageFlowView extends FrameView {
     public void setModified(final boolean modified) {
         boolean oldValue = this.modified;
         this.modified = modified;
-//        String appId = getResourceMap().getString("Application.id");
-//        String changed = modified ? "*" : "";
-//    	getFrame().setTitle(file.getName() + changed +" - " + appId);
+        // on programmstart, file may not be initialised
+        if(file != null){
+        	String appId = getResourceMap().getString("Application.id");
+            String changed = modified ? "*" : "";
+        	getFrame().setTitle(file.getName() + changed +" - " + appId);	
+        }
+        
         
         firePropertyChange("modified", oldValue, this.modified);
     }
@@ -533,13 +535,8 @@ public class ImageFlowView extends FrameView {
 	public void setDisplayUnit() {
 		for (Object selectedElement : selections) {
 			final UnitElement unit = (UnitElement) selectedElement;
-			if(unit.isDisplayUnit()) {
-				// if it is a displayUnit, deactivate
-				unit.setDisplayUnit(false);
-			} else {
-				// if it is a displayUnit, activate
-				unit.setDisplayUnit(true);
-			}
+			boolean newDisplayStatus = unit.isDisplayUnit() ? false : true;
+			unit.setDisplayUnit(newDisplayStatus);
 		}
 		graphPanel.repaint();
 	}
@@ -551,12 +548,23 @@ public class ImageFlowView extends FrameView {
 	public void setUnitComponentSize() {
 		for (Object selectedElement : selections) {
 			final UnitElement unit = (UnitElement) selectedElement;
-			if(unit.getCompontentSize() == Size.BIG) {
-				unit.setCompontentSize(Size.SMALL);
-			} else {
-				unit.setCompontentSize(Size.BIG);
-			}
+			
+			Size newSize = (unit.getCompontentSize() == Size.BIG) ? Size.SMALL : Size.BIG;
+			unit.setCompontentSize(newSize);
 		}
+		graphPanel.repaint();
+	}
+	
+	@Action
+	public void setDrawGrid() {
+		boolean drawGrid = graphPanel.isDrawGrid() ? false : true;
+		graphPanel.setDrawGrid(drawGrid);
+		graphPanel.repaint();
+	}
+	
+	@Action
+	public void alignElements() {
+		graphPanel.setAlign(true);
 		graphPanel.repaint();
 	}
 	

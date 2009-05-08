@@ -107,21 +107,6 @@ public class UnitElement extends AbstractUnit {
 	protected ArrayList<Parameter> parameters;
 
 	/**
-	 * Maximum number of Parameters, that can be added to this UnitElement.
-	 */
-	//	protected int numMaxParameters;
-	/**
-	 * Maximum number of {@link Input}s, that can be added to this UnitElement.
-	 */
-	//	protected int numMaxInputs;
-	/**
-	 * Maximum number of {@link Output}s, that can be added to this UnitElement.
-	 */
-	//	protected int numMaxOutputs;
-
-	private int FIRST_ELEMENT = 0;
-
-	/**
 	 * Size the component will be displayed on the workspace.
 	 */
 	protected Size compontentSize;
@@ -490,7 +475,7 @@ public class UnitElement extends AbstractUnit {
 
 	@Override
 	public Dimension getDimension() {
-		return unitComponentIcon.getDimension();
+		return NodeIcon.getDimensionFromSize(this.compontentSize);
 	}
 
 	/* (non-Javadoc)
@@ -577,7 +562,6 @@ public class UnitElement extends AbstractUnit {
 	public void setObject(Object obj) {
 		this.obj = obj;
 	}
-
 
 
 	/* (non-Javadoc)
@@ -870,7 +854,7 @@ public class UnitElement extends AbstractUnit {
 		for (Output output : getOutputs()) {
 			if(output.isConnected()) {
 				for (Connection connection : output.getConnections()) {
-					UnitElement next = connection.getToUnit();
+					UnitElement next = (UnitElement)connection.getToUnit();
 					//					System.out.println(next +" tested by "+ this);
 					if(next.hasDisplayBranch()) {
 						return true;
@@ -893,6 +877,7 @@ public class UnitElement extends AbstractUnit {
 	 */
 	public void setCompontentSize(Size compontentSize) {
 		this.compontentSize = compontentSize;
+		this.unitComponentIcon.setDimension(compontentSize);
 		notifyModelListeners();
 	}
 

@@ -4,6 +4,7 @@
 package imageflow.gui;
 
 import graph.Edge;
+import graph.GList;
 import graph.Node;
 import graph.Pin;
 import imageflow.backend.GraphController;
@@ -18,6 +19,7 @@ import imageflow.models.unit.UnitList;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -32,11 +34,13 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -60,12 +64,13 @@ public class GraphPanel extends GPanel {
 	/**
 	 * List of all {@link UnitElement} added to the Workflow.
 	 */
-	protected UnitList units;
+//	protected UnitList units;
 
 	/**
 	 * Draw a small grid on the {@link GraphPanel}
 	 */
 	protected boolean drawGrid = false;
+
 	/**
 	 * size of the grid
 	 */
@@ -146,8 +151,8 @@ public class GraphPanel extends GPanel {
 	@Override
 	public void paintPrintable(final Graphics g) {
 		rect = new Rectangle();
-		for (final Node t : nodeL) {
-			rect = rect.union(t.paint(g, this));
+		for (final Node node : getUnitList()) {
+			rect = rect.union(node.paint(g, this));
 		}
 		setPreferredSize(rect.getSize());
 		Connection conn;
@@ -184,11 +189,11 @@ public class GraphPanel extends GPanel {
 				RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
-		//paint grid
-		paintGrid(g2);
+		if(!getUnitList().isEmpty()) {
 
-		if(!nodeL.isEmpty()) {
-
+			//paint grid
+			paintGrid(g2);
+			
 			// paint printable items
 			paintPrintable(g2);
 
@@ -297,7 +302,43 @@ public class GraphPanel extends GPanel {
 		}
 	}
 
+	
+	/**
+	 * aligns the elements to the grid
+	 */
+	public void alignElements() {
+		
+		for (Node node : getUnitList()) {
+			alignElement(node);
+		}
+		
+	}
 
+	/**
+	 * @param node
+	 */
+	private void alignElement(Node node) {
+		Point origin = node.getOrigin();
+		int x = origin.x;
+		int y = origin.y;
+		
+		int row = y / GRIDSIZE;
+		int column = x / GRIDSIZE;
+		
+		
+		x = column * GRIDSIZE + 10;
+		y = row * GRIDSIZE + 10;
+		
+		origin.x = x;
+		origin.y = y;
+	}
+
+	/**
+	 * @return
+	 */
+	protected GList<Node> getUnitList() {
+		return this.nodeL;
+	}
 
 
 	/** 
@@ -315,14 +356,6 @@ public class GraphPanel extends GPanel {
 			}	
 		}
 	}
-
-	/**
-	 * TODO aligns the elements to the grid
-	 */
-	public void alignElements() {
-
-	}
-
 
 	private void drawCompatbilityIndicator(final Graphics2D g2, final int margin, final Pin pin) {
 		final int diameter = 15;
@@ -420,9 +453,6 @@ public class GraphPanel extends GPanel {
 			g2.drawString(line, origin.x + 5, yT);
 			yT += lineheight;
 		}
-		
-		
-		
 	}
 
 	private Vector<String> tokenizeString(final String text, final String token) {
@@ -464,9 +494,17 @@ public class GraphPanel extends GPanel {
 			final Dimension dimension, 
 			final int margin) {
 		return isWithinRange(currentPoint.x, origin.x-margin, 
-				origin.x+dimension.width+margin)
+					origin.x+dimension.width+margin)
 				&& isWithinRange(currentPoint.y, origin.y - margin, 
-						origin.y + dimension.height + margin);
+					origin.y + dimension.height + margin);
+	}
+		
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		super.mouseDragged(e);
+		if(align) 
+			alignElements();
 	}
 
 	/**
@@ -477,6 +515,14 @@ public class GraphPanel extends GPanel {
 		super.nodeL = units2;
 	}
 
+	public boolean isDrawGrid() {
+		return drawGrid;
+	}
+
+	public void setDrawGrid(boolean drawGrid) {
+		this.drawGrid = drawGrid;
+	}
+	
 	@Override
 	public void properties(final Node node) {
 		if (node instanceof CommentNode) {

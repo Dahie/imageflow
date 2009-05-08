@@ -347,7 +347,7 @@ public class Input extends Pin implements Connectable {
 			for (Output output : parent.getOutputs()) {
 				if(output.isConnected()) {
 					for (Connection connection : output.getConnections()) {
-						if(traverseOutput(connection.getToUnit(), goal))
+						if(traverseOutput((UnitElement)connection.getToUnit(), goal))
 							return true;
 					}
 					

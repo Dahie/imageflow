@@ -243,7 +243,6 @@ public class UnitElementTests extends TestCase {
 			assertFalse("input equals", cloneInput.equals(mergeInput));
 			assertFalse("input parents equals", 
 					cloneInput.getParent().equals(mergeInput.getParent()));
-
 		}
 
 
@@ -255,7 +254,6 @@ public class UnitElementTests extends TestCase {
 			assertFalse("output equals", cloneOutput.equals(mergeOutput));
 			assertFalse("output parents equals", 
 					cloneOutput.getParent().equals(mergeOutput.getParent()));
-
 		}
 
 	}

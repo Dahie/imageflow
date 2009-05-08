@@ -36,7 +36,7 @@ public class MacroElementTests extends TestCase {
 		String macroLog = "log \n";
 		
 		MacroElement macro = new MacroElement("some syntax");
-		macroLog = macro.output(macroLog);
+		macroLog += macro.getCommandSyntax();
 		
 		assertEquals("string with substituted variable", 
 				"log \nsome syntax", 

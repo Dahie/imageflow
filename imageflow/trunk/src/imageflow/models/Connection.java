@@ -1,6 +1,7 @@
 package imageflow.models;
 
 import graph.Edge;
+import graph.Node;
 import graph.Pin;
 import imageflow.models.unit.UnitElement;
 
@@ -11,32 +12,6 @@ import imageflow.models.unit.UnitElement;
  */
 public class Connection extends Edge {
 	public int id;		// the id of this connection
-	
-	/** 
-	 * From which {@link Output}
-	 */
-//	protected int fromOutputNumber;	
-	/**
-	 * From which {@link UnitElement}-number
-	 */
-//	protected int fromUnitNumber;
-	/**
-	 * From which {@link UnitElement} connected.
-	 */
-	protected UnitElement fromUnit;
-	
-	/**
-	 * Connected to this Input.
-	 */
-//	protected int toInputNumber;
-	/**
-	 * Connected to this {@link UnitElement}-number.
-	 */
-//	protected int toUnitNumber;	
-	/**
-	 * Connected to this {@link UnitElement}.
-	 */
-	protected UnitElement toUnit;
 	
 	/**
 	 * Connection-Status
@@ -57,35 +32,14 @@ public class Connection extends Edge {
 		this(fromUnit.getOutput(fromOutputNumber-1), toUnit.getInput(toInputNumber-1));
 	}
 	
-//	/**
-//	 * @param fromUnit 
-//	 * @param fromOutput 
-//	 * @param toUnit 
-//	 * @param toInput 
-//	 * 
-//	 */
-//	public Connection(final UnitElement fromUnit, 
-//			final Pin fromOutput, 
-//			final UnitElement toUnit, 
-//			final Pin toInput) {
-//		super(fromOutput, toInput);
-//		this.fromUnit = fromUnit;
-////		this.fromUnitNumber = fromUnit.getUnitID();
-//		this.toUnit = toUnit;
-////		this.toUnitNumber = toUnit.getUnitID();
-//		
-//		id = getID(fromUnit.getUnitID(), fromOutput.getIndex(), 
-//				toUnit.getUnitID(), toInput.getIndex());
-//	}
-
 	/**
 	 * @param fromOutput
 	 * @param toInput
 	 */
 	public Connection(final Pin fromOutput, final Pin toInput) {
 		super(fromOutput, toInput);
-		this.fromUnit = (UnitElement) fromOutput.getParent();
-		this.toUnit = (UnitElement) toInput.getParent();
+		UnitElement fromUnit = (UnitElement) fromOutput.getParent();
+		UnitElement toUnit = (UnitElement) toInput.getParent();
 		
 		id = getID(fromUnit.getUnitID(), fromOutput.getIndex(), 
 				toUnit.getUnitID(), toInput.getIndex());
@@ -99,11 +53,6 @@ public class Connection extends Edge {
 	public void connect() {
 		((Output)this.from).connectTo(to);
 		((Input)this.to).connectTo(from);
-		
-//		this.toUnit.getInput(toInputNumber-1).connectTo(fromUnit, fromOutputNumber);
-//		this.fromUnit.getOutput(fromOutputNumber-1).connectTo(toUnit, toInputNumber);
-//		super.to = toUnit.getInput(toInputNumber-1);
-//		((Input) super.to).setConnection(toUnit, fromOutputNumber);	
 	}
 	
 	/**
@@ -125,15 +74,16 @@ public class Connection extends Edge {
 	}
 	
 	/**
-	 * Returns the status of the connection, whether all ends are connected
+	 * Returns the status of the connection, whether all ends are connected.
+	 * Good for finding corrupt connections to non-existant units.
 	 * @return 
 	 */
 	public Status checkConnection() {
-		if(this.fromUnit != null && this.toUnit != null) {
+		if(getFromUnit() != null && getToUnit() != null) {
 			return Status.OK;
-		} else if (this.fromUnit == null || this.toUnit != null) {
+		} else if (getFromUnit() == null || getToUnit() != null) {
 			return Status.MISSING_FROM_UNIT;
-		} else if (this.fromUnit != null || this.toUnit == null) {
+		} else if (getFromUnit() != null || getToUnit() == null) {
 			return Status.MISSING_TO_UNIT;
 		}
 		return Status.MISSING_BOTH;
@@ -143,16 +93,16 @@ public class Connection extends Edge {
 	 * Returns the {@link UnitElement} from which this connection comes.
 	 * @return 
 	 */
-	public UnitElement getFromUnit() {
-		return this.fromUnit;
+	public Node getFromUnit() {
+		return this.from.getParent();
 	}
 
 	/**
 	 * Returns the {@link UnitElement} to which this connections leads.
 	 * @return
 	 */
-	public UnitElement getToUnit() {
-		return this.toUnit;
+	public Node getToUnit() {
+		return this.to.getParent();
 	}
 	
 	/**
@@ -176,8 +126,7 @@ public class Connection extends Edge {
 	 */
 	@Override
 	public String toString() {
-		final String string = super.toString() + " fromUnit: "+ this.fromUnit +" toUnit:" + toUnit;
-		return string;
+		return super.toString() + " fromUnit: "+ getFromUnit() +" toUnit:" + getToUnit();
 	}
 	
 	
@@ -189,6 +138,9 @@ public class Connection extends Edge {
 	 */
 	public boolean hasInputMarked() {
 		boolean hasMarked = true;
+		
+		UnitElement toUnit = (UnitElement) getToUnit();
+		UnitElement fromUnit = (UnitElement) getFromUnit();
 		
 		if(toUnit.getInputsCount() > 0) {
 			// check each input, if it's parent has been registered
@@ -223,7 +175,7 @@ public class Connection extends Edge {
 	 * @return
 	 */
 	public boolean isConnectedToUnit(final UnitElement unit) {
-		return (this.fromUnit.equals(unit)) || (this.toUnit.equals(unit));
+		return (getFromUnit().equals(unit)) || (getToUnit().equals(unit));
 	}
 	
 	/**
@@ -258,8 +210,8 @@ public class Connection extends Edge {
 	}
 	
 	public boolean causesLoop() {
-		if(((Input)this.to).isConnectedInInputBranch(this.fromUnit)) return true;
-		if(((Output)this.from).existsInInputSubgraph(this.toUnit)) return true;
+		if(((Input)this.to).isConnectedInInputBranch(getFromUnit())) return true;
+		if(((Output)this.from).existsInInputSubgraph(getToUnit())) return true;
 		return false;
 	}
 }

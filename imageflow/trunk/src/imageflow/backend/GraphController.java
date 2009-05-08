@@ -54,9 +54,6 @@ public class GraphController{
 	 */
 	public void runImageJMacro(final String macro, final boolean showLog) {
 		ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
-		if(imagej == null)
-			imagej = new ImageJ(null);
-
 		if(showLog)
 			IJ.log(macro);
 

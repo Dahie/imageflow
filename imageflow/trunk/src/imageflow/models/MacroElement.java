@@ -12,6 +12,8 @@ import imageflow.models.parameter.StringParameter;
 import imageflow.models.unit.UnitElement;
 
 /**
+ * MacroElement is a processor class. It contains the ImageJ-syntax template.
+ * Placeholders in this template will be replaced by concrete values during macro generation.
  * @author danielsenff
  *
  */
@@ -25,7 +27,6 @@ public class MacroElement {
 	 * syntax with replaced variables
 	 */
 	protected String commandSyntax;
-//	private String inputMacroLog;
 	
 	
 	/**
@@ -36,8 +37,6 @@ public class MacroElement {
 		this.imageJSyntax = unitsImageJSyntax;
 		this.commandSyntax = unitsImageJSyntax;
 	}
-	
-	
 	
 	/**
 	 * Returns the ImageJ-Macro syntax of this unit. 
@@ -58,79 +57,75 @@ public class MacroElement {
 		}
 	}
 	
-	
-	
 	/**
 	 * @param inputMacroLog 
 	 * @return 
 	 */
-	public String output(final String inputMacroLog) {
+	/*public String output(final String inputMacroLog) {
 		String outputMacroLog = inputMacroLog + this.commandSyntax;
 		
 		return outputMacroLog;
-	}
+	}*/
 
 	/**
 	 * @param unit
 	 * @param p
 	 */
-	public void parseParameters(final UnitElement unit, final int p) {
-		this.commandSyntax = parseParameters(unit, this.commandSyntax, p);
+	public void parseParameters(final UnitElement unit) {
+		this.commandSyntax = parseParameters(unit, this.commandSyntax);
 	}
 
-	private static String parseParameters(UnitElement unit, 
-			String command,
-			int numParas) {
-		int u = unit.getUnitID();
+	private static String parseParameters(UnitElement unit, String command) {
+		int unitID = unit.getUnitID();
 
-		int p = 0, pc = 0, pd = 0, ps = 0, pi = 0, pb = 0;
+		int parameterIndex = 0, pc = 0, pd = 0, ps = 0, pi = 0, pb = 0;
 
 		String searchString;
 
-		while (p < numParas) {
-			Parameter parameter = unit.getParameters().get(p);
+		while (parameterIndex < unit.getParametersCount()) {
+			Parameter parameter = unit.getParameters().get(parameterIndex);
 
 			searchString = "PARA_DOUBLE_" + (pd+1);
 			String paraType = parameter.getParaType().toLowerCase();
 			if(command.contains(searchString) && paraType.equals("double")) { 
 				String parameterString = "" + ((DoubleParameter)parameter).getValue();
-				System.out.println("Unit: " + u + " Parameter: " + p + " Double Parameter: " + parameterString);
+				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Double Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, parameterString);
 //				System.out.println(command);
 				pd++;
-				p++;
+				parameterIndex++;
 			}
 			searchString = "PARA_STRING_" + (ps+1);
 			if(command.contains(searchString) && (paraType.equals("string") || paraType.equals("stringarray"))) {
 				String parameterString = "" + ((StringParameter)parameter).getValue();
-				System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
+				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, parameterString);
 //				System.out.println(command);
 				ps++;
-				p++;
+				parameterIndex++;
 			}
 			searchString = "PARA_INTEGER_" + (pi+1);
 			if(command.contains(searchString) && paraType.equals("integer")) {
 				String parameterInteger = "" + ((IntegerParameter)parameter).getValue();
-				System.out.println("Unit: " + u + " Parameter: " + p + " Integer Parameter: " + parameterInteger);
+				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Integer Parameter: " + parameterInteger);
 				command = Tools.replace(command, searchString, parameterInteger);
 //				System.out.println(command);
 				pi++;
-				p++;
+				parameterIndex++;
 			}
 			searchString = "PARA_BOOLEAN_" + (pb+1);
 			if(command.contains(searchString) && paraType.equals("boolean")) {
 				boolean bool = ((BooleanParameter)parameter).getValue();
 				String parameterString =  (bool) ? ((BooleanParameter)parameter).getTrueString() : ""; 
 				//String parameterString = "" + ((BooleanParameter)parameter).getValue();
-				System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
+				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, parameterString);
 //				System.out.println(command);
 				pb++;
-				p++;
+				parameterIndex++;
 			}
 			pc++;
-			if (p != pc) {
+			if (parameterIndex != pc) {
 				System.err.println("Error in parameters or ImageJ-syntax");
 				return command;
 			}
@@ -140,50 +135,6 @@ public class MacroElement {
 		return command;
 	}
 
-//	private static String parseParameters(UnitElement unit, 
-//			String command,
-//			int p) {
-//		Parameter parameter = (Parameter) unit.getParameters().get(p);
-//		int u = unit.getUnitID();
-//
-//		String searchString;
-//		
-//		searchString = "PARA_DOUBLE_" + (p+1);
-//		if(command.contains(searchString)) { 
-//			String parameterString = "" + ((DoubleParameter)parameter).getValue();
-//			System.out.println("Unit: " + u + " Parameter: " + p + " Double Parameter: " + parameterString);
-//			command = Tools.replace(command, searchString, parameterString);
-//			System.out.println(command);
-//		}
-//		searchString = "PARA_STRING_" + (p+1);
-//		if(command.contains(searchString)) {
-//			String parameterString = "" + ((StringParameter)parameter).getValue();
-//			System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
-//			command = Tools.replace(command, searchString, parameterString);
-//			System.out.println(command);
-//		}
-//		searchString = "PARA_INTEGER_" + (p+1);
-//		if(command.contains(searchString)) {
-//			String parameterInteger = "" + ((IntegerParameter)parameter).getValue();
-//			System.out.println("Unit: " + u + " Parameter: " + p + " Integer Parameter: " + parameterInteger);
-//			command = Tools.replace(command, searchString, parameterInteger);
-//			System.out.println(command);
-//		}
-//		searchString = "PARA_BOOLEAN_" + (p+1);
-//		if(command.contains(searchString)) {
-//			boolean bool = ((BooleanParameter)parameter).getValue();
-//			String parameterString =  (bool == true) ? ((BooleanParameter)parameter).getTrueString():""; 
-//			//String parameterString = "" + ((BooleanParameter)parameter).getValue();
-//			System.out.println("Unit: " + u + " Parameter: " + p + " String Parameter: " + parameterString);
-//			command = Tools.replace(command, searchString, parameterString);
-//			System.out.println(command);
-//		}
-//		// choiceParameter uses the PARA_STRING_x
-//		return command;
-//	}
-
-
-
 	/**
 	 * Returns the command-syntax with substituted variables.
 	 * @return
@@ -192,13 +143,10 @@ public class MacroElement {
 		return this.commandSyntax;
 	}
 
-
-
 	/**
 	 * Resets the MacroElement. All parsed commands will be removed.
 	 */
 	public void reset() {
 		this.commandSyntax = this.imageJSyntax;
 	}
-	
 }

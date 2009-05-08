@@ -22,13 +22,10 @@ public class MacroGenerator {
 	
 	public static String generateMacrofromUnitList(final UnitList unitElements) {
 		
-		String  macroText ="";
-
-		macroText = "setBatchMode(true); \n";
+		String  macroText = "setBatchMode(true); \n";
 		
 		// loop over all units
 		// they have to be presorted so they are in the right order
-//		for (int unitIndex = 1; unitIndex < unitElement.length; unitIndex++) {
 		for (int unitIndex = 1; unitIndex < unitElements.size()+1; unitIndex++) {
 			macroText += " \n";
 			// read the ImageJ syntax for this unit
@@ -38,21 +35,16 @@ public class MacroGenerator {
 			final MacroElement macroElement = ((MacroElement)unit.getObject()); 
 			macroElement.reset();
 			
-			
-			final int numInputs = unit.getInputsCount();
-			final int numOutputs = unit.getOutputsCount();
-			final int numParas = unit.getParameters().size();
-
-			
 			// duplicate input images if necessary
-			macroText += duplicateImages(unit, numInputs);
+			// FIXME duplicates always
+			macroText += duplicateImages(unit);
 			
 			// parse the command string for parameter tags that need to be replaced
-			macroElement.parseParameters(unit, numParas);
+			macroElement.parseParameters(unit);
 			
 			
 			// parse the command string for TITLE tags that need to be replaced
-			for (int in = 0; in < numInputs; in++) {
+			for (int in = 0; in < unit.getInputsCount(); in++) {
 				final Input input = unit.getInput(in);
 				final String searchString = "TITLE_" + (in+1);
 				final String parameterString = "" + input.getImageTitle();
@@ -63,11 +55,10 @@ public class MacroGenerator {
 			
 			// andere Module brauchen manchmal die ID (dieser Teil fehlt noch)
 			
-//			macroText += command;
-			macroText = macroElement.output(macroText);
+			macroText += macroElement.getCommandSyntax();
 			
 			// funktioniert nur fŸr einen Ausgang
-			for (int out = 0; out < numOutputs; out++) {
+			for (int out = 0; out < unit.getParametersCount(); out++) {
 				final String outputTitle = unit.getOutput(out).getImageTitle();
 				final String outputID = unit.getOutput(out).getImageID();
 				
@@ -87,20 +78,15 @@ public class MacroGenerator {
 			macroText += deleteImages(unit);
 		}
 
-		
 		macroText += "\nsetBatchMode(\"exit and display\"); ";
 		
 		return macroText;
 	}
 
-
-	
-
 	private static String deleteImages(final UnitElement unit) {
 		String macroText = "";
-		final int numOutputs = unit.getOutputsCount();
 
-		for (int out = 0; out < numOutputs; out++) {
+		for (int out = 0; out < unit.getOutputsCount(); out++) {
 			if (!unit.isDisplayUnit()) {
 				final String outputID = unit.getOutput(out).getImageID();
 			
@@ -111,9 +97,9 @@ public class MacroGenerator {
 		return macroText;
 	}
 
-	private static String duplicateImages(final UnitElement unit,	final int numInputs) {
+	private static String duplicateImages(final UnitElement unit) {
 		String code = "";
-		for (int in = 0; in < numInputs; in++) {
+		for (int in = 0; in < unit.getInputsCount(); in++) {
 			final Input input = unit.getInput(in);
 			if(input.isNeedToCopyInput()) {
 				final String inputID = unit.getInput(in).getImageID();

@@ -321,7 +321,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 			connectionsElement.addContent(connectionElement);
 			
 			Element fromUnitID = new Element("FromUnitID");
-			fromUnitID.addContent(""+conn.getFromUnit().getUnitID());
+			fromUnitID.addContent(""+ ((UnitElement)conn.getFromUnit()).getUnitID());
 			connectionElement.addContent(fromUnitID);
 			
 			Element fromOutputNumber = new Element("FromOutputNumber");
@@ -329,7 +329,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 			connectionElement.addContent(fromOutputNumber);
 			
 			Element toUnitID = new Element("ToUnitID");
-			toUnitID.addContent(""+conn.getToUnit().getUnitID());
+			toUnitID.addContent(""+((UnitElement)conn.getToUnit()).getUnitID());
 			connectionElement.addContent(toUnitID);
 			
 			Element toInputNumber = new Element("ToInputNumber");

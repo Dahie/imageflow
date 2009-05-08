@@ -29,6 +29,8 @@ public class MacroFlowRunner {
 
 	public MacroFlowRunner(UnitList units) {
 		this.macroUnitList = sortList((UnitList) units.clone());
+		//FIXME why add all connections here? Doesn£t this also include connections to units
+		// which are already deleted by the algorithm? does this matter?
 		this.macroUnitList.addConnectionList(units.getConnections());
 	}
 
@@ -54,9 +56,7 @@ public class MacroFlowRunner {
 		// generation of the ImageJ macro
 		////////////////////////////////////////////////////////
 
-		final String macro = MacroGenerator.generateMacrofromUnitList(macroUnitList);
-
-		return macro;
+		return MacroGenerator.generateMacrofromUnitList(macroUnitList);
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class MacroFlowRunner {
 	public boolean checkNetwork() {
 
 		if(macroUnitList.isEmpty()) {
-			System.err.println("The workflow has no displayable units, running it doesn't do anything.");
+			System.err.println("The workflow is empty, running it doesn't do anything.");
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
 					"The workflow has no displayable units, running it doesn't do anything."
 					+'\n' + "The operation will not proceed.",
@@ -122,18 +122,6 @@ public class MacroFlowRunner {
 					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
-
-		if(!macroUnitList.hasUnitAsDisplay()) {
-			System.err.println("The workflow has no displayable units, running it doesn't do anything.");
-			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
-					"The workflow has no displayable units, running it doesn't do anything."
-					+'\n' + "The operation will not proceed.",
-					"Invalid workflow", 
-					JOptionPane.WARNING_MESSAGE);
-			return false; 
-		}
-
-
 
 		for (Node node : macroUnitList) {
 			UnitElement unit = (UnitElement)node;
@@ -167,8 +155,9 @@ public class MacroFlowRunner {
 
 
 		ConnectionList connections = macroUnitList.getConnections();
-		if(connections.size() > 0) {
-			System.out.println("Number of connections: "+ connections.size());
+		if(!connections.isEmpty()) {
+			// wrong number if units are discarded, number as you can see in the workflow, but not howmany are used internally
+			System.out.println("Number of connections: "+ connections.size()); 
 			for (Iterator iterator = connections.iterator(); iterator.hasNext();) {
 				Connection connection = (Connection) iterator.next();
 
@@ -184,7 +173,7 @@ public class MacroFlowRunner {
 					return false;
 				}
 
-
+				// TODO actually this is bullshit, a connection should always be valid and existing
 				switch(connection.checkConnection()) {
 				case MISSING_BOTH:
 				case MISSING_FROM_UNIT:
@@ -200,10 +189,7 @@ public class MacroFlowRunner {
 			// which are set to display.
 
 			//do nothing
-		} else {
-			System.err.println("no existing connections");
-			return false;
-		}
+		} 
 
 		//FIXME check if units got all the inputs they need
 		if (!macroUnitList.areAllInputsConnected()) {
@@ -256,8 +242,11 @@ public class MacroFlowRunner {
 					// if so, this unit is moved from the old list to the new one
 
 					if(unit.hasMarkedOutput()) throw new Exception("Unit has Output marked, " +
-					"although the unit itself is not marked. This suggests an infinited loop.");
+					"the output should be marked if this unit is already processed in this workflow, " +
+					"by which point it shouldn't be here anymore");
 
+					System.out.println(unit.hasAllInputsMarked());
+					
 					if(!unit.hasDisplayBranch()) {
 						// unit itself is not a display and
 						// if it doesn't have any unit in its outputs that has
@@ -265,10 +254,8 @@ public class MacroFlowRunner {
 						System.out.println("rm "+unit);
 						unitElements.remove(index);
 					}
-
-					System.out.println(unit.hasAllInputsMarked());
-
-					if(unit.hasAllInputsMarked()) {
+					else if(unit.hasAllInputsMarked()) {
+						// success
 						// increment mark & mark outputs
 						mark++;	
 						unit.setMark(mark);
@@ -277,10 +264,10 @@ public class MacroFlowRunner {
 						// move this to the new ordered list
 						Node remove = unitElements.remove(index);
 						orderedList.add(remove);
-					} else if( !unit.hasAllInputsMarked()
+					/*} else if( !unit.hasAllInputsMarked()
 								&& unit.hasRequiredInputsConnected()) {
-						System.err.println("doesn£t have all inputs connected, but those who are, are marked");
-					} else if (!unit.hasInputsConnected() 
+						System.err.println("doesn£t have all inputs connected, but those who are, are marked");*/
+					} else if (!unit.hasRequiredInputsConnected() 
 							&& unit.getUnitType() != Type.SOURCE) {
 						// if unit has no connections actually, it can be discarded right away
 						System.out.println(unitElements.getSize());

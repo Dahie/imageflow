@@ -75,8 +75,8 @@ public class ConnectionList extends Edges implements Model {
 	 * @return
 	 */
 	public boolean add(final Connection connection) {
-		final Input input = connection.getToUnit().getInput(connection.to.getIndex()-1);
-		final Output output = connection.getFromUnit().getOutput(connection.from.getIndex()-1);
+		final Input input = ((UnitElement)connection.getToUnit()).getInput(connection.to.getIndex()-1);
+		final Output output = ((UnitElement)connection.getFromUnit()).getOutput(connection.from.getIndex()-1);
 		
 		// check if connection produces loop
 		if(input.isConnectedInInputBranch(output.getParent())) {

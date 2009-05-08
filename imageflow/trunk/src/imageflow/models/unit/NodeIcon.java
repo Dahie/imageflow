@@ -326,6 +326,10 @@ public class NodeIcon implements UnitModelComponent {
 		return this.dimension;
 	}
 	
+	public void setDimension(Size size) {
+		this.dimension = size == Size.BIG ? largeComponentDimension : smallComponentDimension;
+	}
+	
 	public static Dimension getDimensionFromSize(Size size) {
 		switch(size) {
 		default:

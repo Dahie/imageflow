@@ -57,7 +57,6 @@ public class DelegatesPanel extends JPanel {
 	public DelegatesPanel(final UnitList unitList) {
 		final DelegatesController delegatesController = DelegatesController.getInstance();
 		this.delegates = delegatesController.getUnitDelegates();
-		setLayout(new BorderLayout());
 		final DefaultTreeModel delegatesModel = delegatesController.getDelegatesModel();
 
 
@@ -128,7 +127,7 @@ public class DelegatesPanel extends JPanel {
 		delegatesTree.setCellRenderer(new IFTreeCellRenderer());
 
 		final JScrollPane scrollPane = new JScrollPane(delegatesTree);
-		add(scrollPane, BorderLayout.CENTER);
+		add(scrollPane);
 
 	}
 
