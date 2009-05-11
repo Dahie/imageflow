@@ -117,7 +117,7 @@ public class ImageFlowView extends FrameView {
 		this.unitDelegates = DelegatesController.getInstance().getUnitDelegates();
 		
 		try {
-			this.getFrame().setIconImage(ImageIO.read(this.getClass().getResourceAsStream("/imageflow/resources/iw-logo.png")));
+			this.getFrame().setIconImage(ImageIO.read(this.getClass().getResourceAsStream("/imageflow/resources/iw-icon.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

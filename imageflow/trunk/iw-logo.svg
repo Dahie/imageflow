@@ -142,6 +142,52 @@
        fx="194.39456"
        fy="832.68732"
        r="16.22647" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4891"
+       id="radialGradient2418"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1772478,-0.1319053,9.549254e-2,0.8522657,-122.62073,156.45604)"
+       spreadMethod="reflect"
+       cx="261.91119"
+       cy="862.09955"
+       fx="261.91119"
+       fy="862.09955"
+       r="95.375366" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4747"
+       id="radialGradient2422"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.4310277,-0.9023387,1.049277,-0.501217,-263.17004,1607.4119)"
+       spreadMethod="reflect"
+       cx="407.44165"
+       cy="826.13873"
+       fx="407.44165"
+       fy="826.13873"
+       r="96.29229" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4891"
+       id="radialGradient2426"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,3.8239062,-11.47508,-2363.256)"
+       cx="139.39456"
+       cy="831.9176"
+       fx="139.39456"
+       fy="831.9176"
+       r="16.22647" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4973"
+       id="radialGradient2430"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(7.8115022,-0.3583078,6.9352964e-2,1.5119703,-1217.6149,-330.05154)"
+       cx="171.78912"
+       cy="766.85834"
+       fx="171.78912"
+       fy="766.85834"
+       r="21.628466" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -151,8 +197,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2"
-     inkscape:cx="244.10153"
-     inkscape:cy="278.50389"
+     inkscape:cx="257.05806"
+     inkscape:cy="238.50389"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -191,7 +237,23 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="opacity:1;fill:#d5f6ff;fill-opacity:1;fill-rule:evenodd;stroke:url(#radialGradient4753);stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.35587188"
+       style="opacity:1;fill:#1a1a1a;fill-rule:evenodd;stroke:url(#radialGradient2418);stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.35587188"
+       d="M 139.17277,899.39737 C 287.3777,906.19179 297.67406,840.6191 325.47111,789.15745 C 333.18598,774.87467 337.52536,759.6526 363.82723,743.89737 C 341.81172,743.35068 311.37638,746.12087 296.98602,775.71016 C 269.50187,832.2228 253.2394,867.88281 193.73883,873.93063 C 170.1875,876.32445 150.61678,883.54746 139.17277,899.39737 z"
+       id="path2416"
+       sodipodi:nodetypes="cscssc"
+       inkscape:export-filename="/Users/danielsenff/Programming/Java/workspace/imageflow/src/imageflow/resources/iw-logo.png"
+       inkscape:export-xdpi="29.869665"
+       inkscape:export-ydpi="29.869665" />
+    <path
+       style="opacity:1;fill:#1a1a1a;fill-opacity:1;fill-rule:evenodd;stroke:url(#radialGradient2422);stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.35587188"
+       d="M 249.20771,901.0684 C 439.62492,909.5789 442.70143,824.16128 441.69355,741.06835 C 429.36868,751.52166 411.33044,759.9869 411.08405,777.38114 C 410.29055,833.39765 366.21111,869.55379 305.17864,875.60161 C 281.02096,877.99543 260.94637,885.21844 249.20771,901.0684 z"
+       id="path2420"
+       sodipodi:nodetypes="ccssc"
+       inkscape:export-filename="/Users/danielsenff/Programming/Java/workspace/imageflow/src/imageflow/resources/iw-logo.png"
+       inkscape:export-xdpi="29.869665"
+       inkscape:export-ydpi="29.869665" />
+    <path
+       style="opacity:1;fill:#80b3ff;fill-opacity:1;fill-rule:evenodd;stroke:url(#radialGradient4753);stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.35587187999999997"
        d="M 243.08966,898.65872 C 433.50687,907.16922 436.58338,821.7516 435.5755,738.65867 C 423.25063,749.11198 405.21239,757.57722 404.966,774.97146 C 404.1725,830.98797 360.09306,867.14411 299.06059,873.19193 C 274.90291,875.58575 254.82832,882.80876 243.08966,898.65872 z"
        id="path2389"
        sodipodi:nodetypes="ccssc"
@@ -199,7 +261,7 @@
        inkscape:export-xdpi="29.869665"
        inkscape:export-ydpi="29.869665" />
     <path
-       style="opacity:1;fill:#aaeeff;fill-rule:evenodd;stroke:url(#radialGradient4901);stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.35587188"
+       style="opacity:1;fill:#5599ff;fill-rule:evenodd;stroke:url(#radialGradient4901);stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.35587187999999997;fill-opacity:1"
        d="M 129.93065,898.07647 C 278.13559,904.87089 288.43195,839.2982 316.229,787.83655 C 323.94386,773.55377 328.28325,758.3317 354.58512,742.57647 C 332.5696,742.02978 302.13426,744.79997 287.74391,774.38926 C 260.25975,830.9019 243.99728,866.56191 184.49671,872.60973 C 160.94539,875.00355 141.37467,882.22656 129.93065,898.07647 z"
        id="path2387"
        sodipodi:nodetypes="cscssc"
@@ -207,7 +269,15 @@
        inkscape:export-xdpi="29.869665"
        inkscape:export-ydpi="29.869665" />
     <path
-       style="opacity:1;fill:#80b3ff;fill-rule:evenodd;stroke:url(#radialGradient4897)"
+       style="opacity:1;fill:#000000;fill-rule:evenodd;stroke:url(#radialGradient2426)"
+       d="M 124.27353,900.41068 C 126.82434,892.31908 156.03781,884.99971 156.28807,870.88892 C 156.91397,835.59842 155.2716,840.99391 156.72647,776.31368 C 106.70937,780.05202 135.03456,856.18952 124.27353,900.41068 z"
+       id="path2424"
+       sodipodi:nodetypes="cscc"
+       inkscape:export-filename="/Users/danielsenff/Programming/Java/workspace/imageflow/src/imageflow/resources/iw-logo.png"
+       inkscape:export-xdpi="29.869665"
+       inkscape:export-ydpi="29.869665" />
+    <path
+       style="opacity:1;fill:#2a7fff;fill-rule:evenodd;stroke:url(#radialGradient4897)"
        d="M 119.24861,899.31227 C 121.79942,891.22067 151.01289,883.9013 151.26315,869.79051 C 151.88905,834.50001 150.24668,839.8955 151.70155,775.21527 C 101.68445,778.95361 130.00964,855.09111 119.24861,899.31227 z"
        id="path3167"
        sodipodi:nodetypes="cscc"
@@ -215,7 +285,15 @@
        inkscape:export-xdpi="29.869665"
        inkscape:export-ydpi="29.869665" />
     <path
-       style="opacity:1;fill:#80b3ff;fill-rule:evenodd;stroke:url(#radialGradient4983);stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.35587187999999997;stroke-miterlimit:4;stroke-dasharray:none"
+       style="opacity:1;fill:#1a1a1a;fill-rule:evenodd;stroke:url(#radialGradient2430);stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.35587188"
+       d="M 154.37153,778.36644 C 187.22866,777.77224 195.271,785.31988 195.62846,744.42928 C 163.14111,744.07758 154.90567,740.21521 154.37153,778.36644 z"
+       id="path2428"
+       sodipodi:nodetypes="ccc"
+       inkscape:export-filename="/Users/danielsenff/Programming/Java/workspace/imageflow/src/imageflow/resources/iw-logo.png"
+       inkscape:export-xdpi="29.869665"
+       inkscape:export-ydpi="29.869665" />
+    <path
+       style="opacity:1;fill:#2a7fff;fill-rule:evenodd;stroke:url(#radialGradient4983);stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.35587187999999997;stroke-miterlimit:4;stroke-dasharray:none"
        d="M 150.81342,774.01897 C 183.67055,773.42477 191.71289,780.97241 192.07035,740.08181 C 159.58299,739.73011 151.34756,735.86774 150.81342,774.01897 z"
        id="path3169"
        sodipodi:nodetypes="ccc"
