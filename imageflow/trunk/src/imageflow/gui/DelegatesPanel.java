@@ -125,9 +125,10 @@ public class DelegatesPanel extends JPanel {
 
 		});
 		delegatesTree.setCellRenderer(new IFTreeCellRenderer());
-
+		// makes delegatesPanel as big as the sidePane when resized
+		this.setLayout(new BorderLayout());
 		final JScrollPane scrollPane = new JScrollPane(delegatesTree);
-		add(scrollPane);
+		add(scrollPane, BorderLayout.CENTER);
 
 	}
 
