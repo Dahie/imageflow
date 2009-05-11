@@ -204,7 +204,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 				general.addContent(color);
 				Element iconSize = new Element("IconSize");
 				iconSize.addContent(unit.getCompontentSize().toString());
-				general.addContent(color);
+				general.addContent(iconSize);
 				Element helpStringU = new Element("HelpString");
 				helpStringU.addContent(unit.getHelpString());
 				general.addContent(helpStringU);
