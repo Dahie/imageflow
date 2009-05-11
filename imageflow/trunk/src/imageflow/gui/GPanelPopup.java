@@ -8,6 +8,7 @@ import graph.Selection;
 import imageflow.ImageFlow;
 import imageflow.ImageFlowView;
 import imageflow.backend.GraphController;
+import imageflow.models.unit.UnitElement;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -33,7 +34,6 @@ public class GPanelPopup implements GPanelListener {
 	protected Point savedPoint = new Point(0,0);
 	protected ArrayList<Node> copyL;
 	protected Collection<Delegate> availableUnits;
-	private GraphController graphController;
 
 
 
@@ -45,7 +45,6 @@ public class GPanelPopup implements GPanelListener {
 	public GPanelPopup(final Collection<Delegate> availableUnits, 
 			final GraphController graphController) {
 		this.availableUnits = availableUnits;
-		this.graphController = graphController;
 		this.copyL = graphController.getCopyNodesList();
 	}
 
@@ -66,11 +65,17 @@ public class GPanelPopup implements GPanelListener {
 			Selection<Node> selectedUnits = activePanel.getSelection();
 			if (selectedUnits.isEmpty()) { 
 				popup.add(new InsertUnitMenu("Insert unit", activePanel, availableUnits, savedPoint));
+				if (!copyL.isEmpty()) 
+					popup.add(getAction("paste"));
 			} else {
 				
-				if (selectedUnits.size() == 1) {
+				if (selectedUnits.size() == 1 
+						&& selectedUnits.get(0) instanceof UnitElement) {
 					popup.add(new JCheckBoxMenuItem(getAction("setDisplayUnit")));
-					popup.add(new JCheckBoxMenuItem(getAction("setUnitComponentSize")));
+					JCheckBoxMenuItem chkBoxDisplayUnit = new JCheckBoxMenuItem(getAction("setUnitComponentSize"));
+					boolean isDisplayUnit = ((UnitElement)selectedUnits.get(0)).isDisplayUnit();
+					chkBoxDisplayUnit.setSelected(isDisplayUnit);
+					popup.add(chkBoxDisplayUnit);
 //					popup.add(getAction("preview"));
 					popup.addSeparator();
 				}
@@ -80,8 +85,7 @@ public class GPanelPopup implements GPanelListener {
 				popup.add(getAction("unbind"));
 				popup.add(getAction("delete"));
 			}
-			if (!copyL.isEmpty()) 
-				popup.add(getAction("paste"));
+			
 			popup.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}

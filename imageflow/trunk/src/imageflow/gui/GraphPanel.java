@@ -74,7 +74,7 @@ public class GraphPanel extends GPanel {
 	/**
 	 * size of the grid
 	 */
-	public static int GRIDSIZE = 120; 
+	public static int GRIDSIZE = 60; 
 	/**
 	 * Auto align nodes
 	 */
@@ -307,24 +307,21 @@ public class GraphPanel extends GPanel {
 	 * aligns the elements to the grid
 	 */
 	public void alignElements() {
-		
-		for (Node node : getUnitList()) {
+		for (final Node node : getUnitList()) {
 			alignElement(node);
 		}
-		
 	}
 
 	/**
 	 * @param node
 	 */
-	private void alignElement(Node node) {
-		Point origin = node.getOrigin();
+	private void alignElement(final Node node) {
+		final Point origin = node.getOrigin();
 		int x = origin.x;
 		int y = origin.y;
 		
-		int row = y / GRIDSIZE;
-		int column = x / GRIDSIZE;
-		
+		final int row = y / GRIDSIZE;
+		final int column = x / GRIDSIZE;
 		
 		x = column * GRIDSIZE + 10;
 		y = row * GRIDSIZE + 10;
@@ -498,12 +495,11 @@ public class GraphPanel extends GPanel {
 				&& isWithinRange(currentPoint.y, origin.y - margin, 
 					origin.y + dimension.height + margin);
 	}
-		
 	
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		super.mouseDragged(e);
-		if(align) 
+	public void mouseReleased(final MouseEvent e) {
+		super.mouseReleased(e);
+		if(align)
 			alignElements();
 	}
 
@@ -519,7 +515,7 @@ public class GraphPanel extends GPanel {
 		return drawGrid;
 	}
 
-	public void setDrawGrid(boolean drawGrid) {
+	public void setDrawGrid(final boolean drawGrid) {
 		this.drawGrid = drawGrid;
 	}
 	

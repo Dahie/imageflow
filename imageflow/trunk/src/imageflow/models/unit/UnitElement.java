@@ -1,4 +1,5 @@
 package imageflow.models.unit;
+import graph.Node;
 import helper.PaintUtil;
 import ij.gui.GenericDialog;
 import imageflow.models.Connection;
@@ -881,7 +882,42 @@ public class UnitElement extends AbstractUnit {
 		notifyModelListeners();
 	}
 
+	/**
+	 * Returns true, if the unit in question is positioned north of this unit.
+	 * @param node
+	 * @return
+	 */
+	public boolean isNorthOfUnit(Node node) {
+		return (node.getOrigin().y > this.getOrigin().y) ? true : false;
+	}
+	
+	/**
+	 * Returns true, if the unit in question is positioned north of this unit.
+	 * @param node
+	 * @return
+	 */
+	public boolean isEastOfUnit(Node node) {
+		return (node.getOrigin().x < this.getOrigin().x) ? true : false;
+	}
+	
+	/**
+	 * Returns true, if the unit in question is positioned north of this unit.
+	 * @param node
+	 * @return
+	 */
+	public boolean isSouthOfUnit(Node node) {
+		return (node.getOrigin().y < this.getOrigin().y) ? true : false;
+	}
+	
+	/**
+	 * Returns true, if the unit in question is positioned north of this unit.
+	 * @param node
+	 * @return
+	 */
+	public boolean isWestOfUnit(Node node) {
+		return (node.getOrigin().x > this.getOrigin().x) ? true : false;
+	}
 
-
+	
 }
 

@@ -3,6 +3,7 @@ package imageflow;
 import graph.Edge;
 import graph.Node;
 import graph.Selection;
+import helper.FileDrop;
 import ij.IJ;
 import imageflow.backend.DelegatesController;
 import imageflow.backend.GraphController;
@@ -35,6 +36,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.Point;
 import java.awt.ScrollPane;
 import java.io.File;
 import java.io.IOException;
@@ -219,15 +221,14 @@ public class ImageFlowView extends FrameView {
 		editMenu.add(getAction("paste"));
 		editMenu.add(getAction("unbind"));
 		editMenu.add(getAction("delete"));
-		editMenu.add(getAction("clear"));
+//		editMenu.add(getAction("clear"));
 		editMenu.add(new JSeparator());
 		editMenu.add(new JCheckBoxMenuItem(getAction("setDisplayUnit")));
 		editMenu.add(new JCheckBoxMenuItem(getAction("setUnitComponentSize")));
-		
 		editMenu.add(getAction("showUnitParameters"));
 		
 		JMenu viewMenu = new JMenu("View");
-		viewMenu.add(getAction("alignElements"));
+		viewMenu.add(new JCheckBoxMenuItem(getAction("alignElements")));
 		viewMenu.add(new JCheckBoxMenuItem(getAction("setDrawGrid")));
 		
 		JMenu debugMenu = new JMenu("Debug");
@@ -289,7 +290,7 @@ public class ImageFlowView extends FrameView {
 		/*
 		new FileDrop( null, graphPanel,  new FileDrop.Listener()
 	        {   
-				Point coordinates =new Point(75, 75);
+				Point coordinates = new Point(75, 75);
 				
 				public void filesDropped( java.io.File[] files )
 	            {   
@@ -305,7 +306,6 @@ public class ImageFlowView extends FrameView {
 	            }   // end filesDropped
 	        }); // end FileDrop.Listener
 		*/
-		
 		
 		
 		
@@ -657,7 +657,7 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * Paste {@link UnitElement} into the workflow.
 	 */
-	@Action	
+	@Action(enabledProperty = "hasPaste")
 	public void paste() {
 		final Selection<Node> selectedUnits = graphPanel.getSelection();
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
@@ -718,6 +718,10 @@ public class ImageFlowView extends FrameView {
 	    graphPanel.repaint();
 	}
 	
+	/**
+	 * Open a workflow file from hard drive.
+	 * @return
+	 */
 	@Action public Task open() {
 		if(isModified()) {
 			final int optionSave = showSaveConfirmation();

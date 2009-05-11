@@ -1,7 +1,6 @@
 package imageflow.backend;
 
 import helper.Tools;
-import ij.IJ;
 import imageflow.ImageFlow;
 import imageflow.models.unit.UnitDelegate;
 import imageflow.models.unit.UnitDescription;
@@ -10,11 +9,6 @@ import imageflow.models.unit.UnitFactory;
 
 import java.awt.Point;
 import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
 import java.util.HashMap;
 
 import javax.swing.JMenu;
@@ -27,6 +21,11 @@ import javax.swing.tree.TreeNode;
 
 import visualap.Delegate;
 
+/**
+ * Controller for reading and managing {@link UnitDelegate}s.
+ * @author senff
+ *
+ */
 public class DelegatesController {
 
 	private static String unitFolder = "xml_units";
@@ -36,7 +35,7 @@ public class DelegatesController {
 	public DefaultTreeModel delegatesModel;
 
 	public DelegatesController(String unitFolderPath) {
-		this.unitFolder = unitFolderPath;
+		this.setUnitFolder(unitFolderPath);
 	}
 	
 	/**
@@ -64,7 +63,7 @@ public class DelegatesController {
 		delegatesModel = new DefaultTreeModel(top);
 		JMenu insertMenu = new JMenu("Insert unit");
 
-		String unitsFolder = System.getProperty("user.dir")+File.separator+unitFolder;
+		String unitsFolder = System.getProperty("user.dir")+File.separator+getUnitFolder();
 		/*String unitsFolder = ""; 
 		try {
 			ProtectionDomain protectionDomain = DelegatesController.class.getProtectionDomain();
@@ -87,7 +86,7 @@ public class DelegatesController {
 			readDelegatesFromFolder(top, insertMenu, folder);
 		else 
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
-					"The folder "+unitFolder+" is missing. No units have been found.",
+					"The folder "+getUnitFolder()+" is missing. No units have been found.",
 					"No unit defintions found", 
 					JOptionPane.WARNING_MESSAGE);
 	}
@@ -139,5 +138,13 @@ public class DelegatesController {
 			controller = new DelegatesController();
 		}
 		return controller;
+	}
+
+	public static void setUnitFolder(String unitFolder) {
+		DelegatesController.unitFolder = unitFolder;
+	}
+
+	public static String getUnitFolder() {
+		return unitFolder;
 	}
 }
