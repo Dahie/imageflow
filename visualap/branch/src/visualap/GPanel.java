@@ -268,7 +268,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
     public void paintPrintable(Graphics g) {
         rect = new Rectangle();
 		for (Node t : nodeL) {
-			rect = rect.union(t.paint(g, this));	
+			rect = rect.union(t.paint(g, this));
 		}
         setPreferredSize(rect.getSize());
 		for (Edge aEdge : EdgeL) {
@@ -349,11 +349,10 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				return;
 			} 
 			// change
-			else {
+			/*else {
 				selection.clear();
-			}
+			}*/
 			
-			//change
 			
 		}
 		parent.showFloatingMenu(e);	
