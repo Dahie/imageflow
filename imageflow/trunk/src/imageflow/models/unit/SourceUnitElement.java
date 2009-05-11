@@ -182,10 +182,6 @@ public class SourceUnitElement extends UnitElement {
 		}
 		
 		final Rectangle paint = super.paint(g, io);
-		
-		
-		
-		
 		return paint;
 	}
 	

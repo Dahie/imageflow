@@ -180,9 +180,9 @@ public class UnitElement extends AbstractUnit {
 		this.outputs = new ArrayList<Output>();
 		this.parameters = new ArrayList<Parameter>();
 
-		unitComponentIcon= new NodeIcon(this);
-		unitIcon = unitComponentIcon.getImage();
-		this.compontentSize = Size.BIG;
+		this.unitComponentIcon= new NodeIcon(this);
+		this.unitIcon = unitComponentIcon.getImage();
+		setCompontentSize(Size.BIG);
 	}
 
 

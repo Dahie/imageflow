@@ -254,8 +254,8 @@ public class ImageFlowView extends FrameView {
 		
 		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates.values());
 		
-		JMenu windowMenu = new JMenu("Window");
-		windowMenu.add(getAction("minimize"));
+		/*JMenu windowMenu = new JMenu("Window");
+		windowMenu.add(getAction("minimize"));*/
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.add(getAction("openDevblogURL"));
 		helpMenu.add(getAction("openImageJURL"));
@@ -267,7 +267,7 @@ public class ImageFlowView extends FrameView {
 		menuBar.add(viewMenu);
 		menuBar.add(insertMenu);
 		menuBar.add(debugMenu);
-		menuBar.add(windowMenu);
+//		menuBar.add(windowMenu);
 		menuBar.add(helpMenu);
 		
 		menuBar.setVisible(true);

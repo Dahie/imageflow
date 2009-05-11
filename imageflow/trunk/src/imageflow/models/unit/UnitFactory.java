@@ -42,9 +42,6 @@ public class UnitFactory {
 		
 		String unitName = unitDescription.unitName;
 		String imageJSyntax = unitDescription.imageJSyntax;
-		
-		
-		
 		Color color = unitDescription.color;
 		
 		// usual case, we deal with a UnitElement
@@ -58,16 +55,9 @@ public class UnitFactory {
 		} else 
 			unitElement = new UnitElement(new Point(origin), unitName, imageJSyntax);
 		
-		unitElement.setColor(color);
-		if(unitDescription.icon != null)
-			unitElement.setIcon(unitDescription.icon);
-		if(unitElement.compontentSize != null)
-			unitElement.setCompontentSize(unitDescription.componentSize);
-		unitElement.setHelpString(unitDescription.helpString);
 		
 		// add an icon if there is one mentioned and found
 		File iconFile = new File(unitDescription.pathToIcon);
-		
 		if(iconFile.exists()) {
 			try {
 				if(unitElement instanceof SourceUnitElement) {
@@ -80,6 +70,13 @@ public class UnitFactory {
 			}
 		}
 
+		unitElement.setColor(color);
+		if(unitDescription.icon != null)
+			unitElement.setIcon(unitDescription.icon);
+		if(unitDescription.componentSize != null)
+			unitElement.setCompontentSize(unitDescription.componentSize);
+		unitElement.setHelpString(unitDescription.helpString);
+		
 		// setup of the Parameters
 		addParameters(unitDescription, unitElement);
 		
@@ -102,6 +99,8 @@ public class UnitFactory {
 			sourceUnit.updateImageType();
 		}
 		
+		// in case we want to create a unit without an running application
+		// eg for testing
 		if(ImageFlow.getApplication() != null) 
 			registerModelListener(unitElement);
 		

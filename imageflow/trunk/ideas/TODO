@@ -18,7 +18,6 @@ Functions:
 - no other jars (jdom) -> buildscript
 
 Graph:
-- optional Node-Alignment
 - read all images from folder and process them
 - stack-support
 
