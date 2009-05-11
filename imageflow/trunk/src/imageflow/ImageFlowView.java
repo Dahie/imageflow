@@ -99,6 +99,10 @@ public class ImageFlowView extends FrameView {
 
 	private SelectionList selections;
 
+	private JCheckBoxMenuItem chkBoxDisplayUnit;
+
+	private JCheckBoxMenuItem chkBoxCollapseIcon;
+
 	
 
 	
@@ -222,10 +226,19 @@ public class ImageFlowView extends FrameView {
 		editMenu.add(getAction("unbind"));
 		editMenu.add(getAction("delete"));
 //		editMenu.add(getAction("clear"));
+		
 		editMenu.add(new JSeparator());
-		editMenu.add(new JCheckBoxMenuItem(getAction("setDisplayUnit")));
-		editMenu.add(new JCheckBoxMenuItem(getAction("setUnitComponentSize")));
+
+		this.chkBoxDisplayUnit = new JCheckBoxMenuItem(getAction("setDisplayUnit")); 
+		editMenu.add(chkBoxDisplayUnit);
+
+		this.chkBoxCollapseIcon = new JCheckBoxMenuItem(getAction("setUnitComponentSize"));
+		editMenu.add(chkBoxCollapseIcon);
+
 		editMenu.add(getAction("showUnitParameters"));
+
+		
+		
 		
 		JMenu viewMenu = new JMenu("View");
 		viewMenu.add(new JCheckBoxMenuItem(getAction("alignElements")));
@@ -261,6 +274,26 @@ public class ImageFlowView extends FrameView {
 		setMenuBar(menuBar);
 	}
 
+	private void updateMenu() {
+		if(!selections.isEmpty() 
+				&& selections.size() == 1 
+				&& selections.get(0) instanceof UnitElement) {
+			boolean isCollapsedIcon = 
+				((UnitElement)selections.get(0)).getCompontentSize() == Size.SMALL 
+				? true : false;
+			this.chkBoxCollapseIcon.setSelected(isCollapsedIcon);
+			
+			boolean isDisplayUnit = ((UnitElement)selections.get(0)).isDisplayUnit();
+			this.chkBoxDisplayUnit.setSelected(isDisplayUnit);	
+		} else {
+			this.chkBoxCollapseIcon.setSelected(false);
+			this.chkBoxDisplayUnit.setSelected(false);
+		}
+		
+	}
+
+	
+	
 	/**
 	 * Adds all components to the Jframe
 	 */
@@ -408,8 +441,11 @@ public class ImageFlowView extends FrameView {
     public void setSelected(final boolean selected) {
         boolean oldValue = this.selected;
         this.selected = selected;
+        updateMenu();
+        
         firePropertyChange("selected", oldValue, this.selected);
     }
+
 
 	/**
 	 * @return the hasPaste
@@ -534,9 +570,11 @@ public class ImageFlowView extends FrameView {
 	@Action(enabledProperty = "selected")
 	public void setDisplayUnit() {
 		for (Object selectedElement : selections) {
-			final UnitElement unit = (UnitElement) selectedElement;
-			boolean newDisplayStatus = unit.isDisplayUnit() ? false : true;
-			unit.setDisplayUnit(newDisplayStatus);
+			if(selectedElement instanceof UnitElement) {
+				final UnitElement unit = (UnitElement) selectedElement;
+				boolean newDisplayStatus = unit.isDisplayUnit() ? false : true;
+				unit.setDisplayUnit(newDisplayStatus);	
+			}
 		}
 		graphPanel.repaint();
 	}
@@ -547,14 +585,19 @@ public class ImageFlowView extends FrameView {
 	@Action(enabledProperty = "selected")
 	public void setUnitComponentSize() {
 		for (Object selectedElement : selections) {
-			final UnitElement unit = (UnitElement) selectedElement;
-			
-			Size newSize = (unit.getCompontentSize() == Size.BIG) ? Size.SMALL : Size.BIG;
-			unit.setCompontentSize(newSize);
+			if(selectedElement instanceof UnitElement) {
+				final UnitElement unit = (UnitElement) selectedElement;
+				
+				Size newSize = (unit.getCompontentSize() == Size.BIG) ? Size.SMALL : Size.BIG;
+				unit.setCompontentSize(newSize);				
+			}
 		}
 		graphPanel.repaint();
 	}
 	
+	/**
+	 * Activates to draw a grid on the workspace.
+	 */
 	@Action
 	public void setDrawGrid() {
 		boolean drawGrid = graphPanel.isDrawGrid() ? false : true;
@@ -562,6 +605,9 @@ public class ImageFlowView extends FrameView {
 		graphPanel.repaint();
 	}
 	
+	/**
+	 * Activates element alignment on the workspace.
+	 */
 	@Action
 	public void alignElements() {
 		graphPanel.setAlign(true);

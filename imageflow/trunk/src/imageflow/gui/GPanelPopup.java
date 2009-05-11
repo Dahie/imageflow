@@ -9,6 +9,7 @@ import imageflow.ImageFlow;
 import imageflow.ImageFlowView;
 import imageflow.backend.GraphController;
 import imageflow.models.unit.UnitElement;
+import imageflow.models.unit.UnitModelComponent.Size;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -18,6 +19,7 @@ import java.util.Collection;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import visualap.Delegate;
@@ -69,16 +71,7 @@ public class GPanelPopup implements GPanelListener {
 					popup.add(getAction("paste"));
 			} else {
 				
-				if (selectedUnits.size() == 1 
-						&& selectedUnits.get(0) instanceof UnitElement) {
-					popup.add(new JCheckBoxMenuItem(getAction("setDisplayUnit")));
-					JCheckBoxMenuItem chkBoxDisplayUnit = new JCheckBoxMenuItem(getAction("setUnitComponentSize"));
-					boolean isDisplayUnit = ((UnitElement)selectedUnits.get(0)).isDisplayUnit();
-					chkBoxDisplayUnit.setSelected(isDisplayUnit);
-					popup.add(chkBoxDisplayUnit);
-//					popup.add(getAction("preview"));
-					popup.addSeparator();
-				}
+				showSingleUnitActions(popup, selectedUnits);
 				popup.add(getAction("cut"));
 				popup.add(getAction("copy"));
 				popup.add(getAction("paste"));
@@ -87,6 +80,31 @@ public class GPanelPopup implements GPanelListener {
 			}
 			
 			popup.show(e.getComponent(), e.getX(), e.getY());
+		}
+	}
+
+	/**
+	 * @param popup
+	 * @param selectedUnits
+	 */
+	private void showSingleUnitActions(JPopupMenu popup,
+			Selection<Node> selectedUnits) {
+		if (selectedUnits.size() == 1 
+				&& selectedUnits.get(0) instanceof UnitElement) {
+			
+			JCheckBoxMenuItem chkBoxDisplayUnit = new JCheckBoxMenuItem(getAction("setDisplayUnit")); 
+			boolean isDisplayUnit = ((UnitElement)selectedUnits.get(0)).isDisplayUnit();
+			chkBoxDisplayUnit.setSelected(isDisplayUnit);
+			popup.add(chkBoxDisplayUnit);
+			
+			JCheckBoxMenuItem chkBoxCollapseIcon = new JCheckBoxMenuItem(getAction("setUnitComponentSize"));
+			boolean isCollapsedIcon = ((UnitElement)selectedUnits.get(0)).getCompontentSize() == Size.SMALL ? true : false;
+			chkBoxCollapseIcon.setSelected(isCollapsedIcon);
+			popup.add(chkBoxCollapseIcon);
+//					popup.add(getAction("preview"));
+			
+			popup.add(getAction("showUnitParameters"));
+			popup.addSeparator();
 		}
 	}
 
