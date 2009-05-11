@@ -355,9 +355,14 @@ public class ImageFlowView extends FrameView {
 		sidePane.add(delegatesPanel, BorderLayout.CENTER);
 		sidePane.add(buttonPanel, BorderLayout.PAGE_END);
 		
+		// setting of MinimumSize is required for drag-ability of JSplitPane
+		sidePane.setMinimumSize(new Dimension((int)buttonRun.getPreferredSize().getWidth()+10, 100));
+		graphScrollpane.setMinimumSize(new Dimension(100, 100));
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidePane, graphScrollpane);
 		splitPane.setEnabled(true);
 		splitPane.setOneTouchExpandable(true);
+		// enables continuous redrawing while moving the JSplitPane-Divider
+		splitPane.setContinuousLayout(true);
 		
 		mainPanel.add(splitPane , BorderLayout.CENTER);
 		setComponent(mainPanel);
