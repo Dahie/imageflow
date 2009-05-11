@@ -11,19 +11,28 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+ * Background specialisation of the {@link UnitElement}.
+ * @author danielsenff
+ *
+ */
 public class BackgroundUnitElement extends UnitElement {
 
-	public BackgroundUnitElement(String unitName, String unitsImageJSyntax) {
+	/**
+	 * @param unitName
+	 * @param unitsImageJSyntax
+	 */
+	public BackgroundUnitElement(final String unitName, final String unitsImageJSyntax) {
 		super(unitName, unitsImageJSyntax);
 	}
 
-	public BackgroundUnitElement(Point origin, String unitName,
-			String unitsImageJSyntax) {
+	public BackgroundUnitElement(final Point origin, final String unitName,
+			final String unitsImageJSyntax) {
 		super(origin, unitName, unitsImageJSyntax);
 	}
 
-	public BackgroundUnitElement(Point origin, String unitName,
-			MacroElement macroElement) {
+	public BackgroundUnitElement(final Point origin, final String unitName,
+			final MacroElement macroElement) {
 		super(origin, unitName, macroElement);
 	}
 
@@ -32,28 +41,32 @@ public class BackgroundUnitElement extends UnitElement {
 	public void showProperties() {
 		super.showProperties();
 		
-		int imageType = getImageType();
+		final int imageType = getImageType();
 		
 		// change bitdepth for all outputs
-		setOutputImateType(imageType);
+		setOutputImageType(imageType);
 		
 		notifyModelListeners();
 	}
 	
-	public void setOutputImateType(String choice) {
-		int imageType = fromChoice(choice);
-		for (Output output : outputs) {
-			output.setOutputBitDepth(imageType);
-		}
+	/**
+	 * @param choice
+	 */
+	public void setOutputImageType(final String choice) {
+		final int imageType = fromChoice(choice);
+		setOutputImageType(imageType);
 	}
 	
-	public void setOutputImateType(int imageType) {
-		for (Output output : outputs) {
+	/**
+	 * @param imageType
+	 */
+	public void setOutputImageType(final int imageType) {
+		for (final Output output : outputs) {
 			output.setOutputBitDepth(imageType);
 		}
 	}
 
-	private int fromChoice(String choice) {
+	private int fromChoice(final String choice) {
 
 		if(choice.equalsIgnoreCase("32-bit")) {
 			return PlugInFilter.DOES_32;

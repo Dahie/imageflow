@@ -90,11 +90,11 @@ public class UnitFactory {
 		//special cases
 		if(unitElement instanceof BackgroundUnitElement) {
 			String imageType = (String) unitElement.getParameter(2).getValue();
-			((BackgroundUnitElement)unitElement).setOutputImateType(imageType);	
+			((BackgroundUnitElement)unitElement).setOutputImageType(imageType);	
 		} else if(unitElement instanceof SourceUnitElement) {
 			SourceUnitElement sourceUnit = (SourceUnitElement)unitElement;
 			if(!sourceUnit.hasFilePath()) {
-				sourceUnit.showFileChooser();	
+				sourceUnit.showOpenFileChooser();	
 			}
 			sourceUnit.updateImageType();
 		}

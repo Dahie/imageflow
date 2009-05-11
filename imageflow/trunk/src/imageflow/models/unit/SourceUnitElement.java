@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 
 /**
  * Specialized {@link UnitElement} for loading image files.
+ * This supports the file formats ImageJ does natively.
  * @author danielsenff
  *
  */
@@ -31,8 +32,10 @@ public class SourceUnitElement extends UnitElement {
 	 * @param unitName
 	 * @param macroElement
 	 */
-	public SourceUnitElement(final Point origin, final String unitName,
-			final MacroElement macroElement) {
+	public SourceUnitElement(final Point origin, 
+			final String unitName,
+			final MacroElement macroElement) 
+	{
 		super(origin, unitName, macroElement);
 	}
 	
@@ -41,8 +44,10 @@ public class SourceUnitElement extends UnitElement {
 	 * @param unitName
 	 * @param macroString
 	 */
-	public SourceUnitElement(final Point origin, final String unitName,
-			final String macroString) {
+	public SourceUnitElement(final Point origin, 
+			final String unitName,
+			final String macroString) 
+	{
 		super(origin, unitName, macroString);
 	}
 
@@ -50,7 +55,7 @@ public class SourceUnitElement extends UnitElement {
 	public void showProperties() {
 		
 		// display filedialog
-	    showFileChooser();
+	    showOpenFileChooser();
 		
 		super.showProperties();
 		
@@ -60,7 +65,7 @@ public class SourceUnitElement extends UnitElement {
 	}
 
 	/**
-	 * The current imagetype is determined by the currently selected file.
+	 * The current ImageType is determined by the currently selected file.
 	 * The unit-icon and labels will be updated as well.
 	 * If no file is selected or the file doesn't exist, a message is displayed.
 	 */
@@ -68,7 +73,8 @@ public class SourceUnitElement extends UnitElement {
 		int imageType = -1;
 		if(getFile().exists()) {
 			imageType = getImageType();
-			this.unitComponentIcon.setIcon(getImagePlus().getImage().getScaledInstance(48, 48, BufferedImage.SCALE_FAST));
+			this.unitComponentIcon.setIcon(
+					getImagePlus().getImage().getScaledInstance(48, 48, BufferedImage.SCALE_FAST));
 			
 		} else {
 			this.setIcon(null);
@@ -77,17 +83,16 @@ public class SourceUnitElement extends UnitElement {
 					'\n'+"An image type can not be determined, which can invalidate the current graph.",
 					"File doesn't exist", 
 					JOptionPane.WARNING_MESSAGE);
-			System.out.println("file doesn't exist");
 		}
 		
 		// change bitdepth for all outputs
-		setOutputImateType(imageType);
+		setOutputImageType(imageType);
 	}
 
 	/**
-	 * Opens a filechooser to select a new file.
+	 * Opens a {@link JFileChooser} to select a new file.
 	 */
-	public void showFileChooser() {
+	public void showOpenFileChooser() {
 		final JFileChooser fc = new JFileChooser();
 	    String filepath = (String)getParameter(0).getValue();
 	    fc.setSelectedFile(new File(filepath));
@@ -104,7 +109,12 @@ public class SourceUnitElement extends UnitElement {
 	    
 	}
 
-	public void setOutputImateType(final int imageType) {
+	/**
+	 * The ImageType on the output depends on the current image.
+	 * This function updates all {@link Output}s to the specified imageType.
+	 * @param imageType
+	 */
+	public void setOutputImageType(final int imageType) {
 		for (final Output output : outputs) {
 			output.setOutputBitDepth(imageType);
 		}
@@ -112,6 +122,7 @@ public class SourceUnitElement extends UnitElement {
 
 
 	/**
+	 * Bitdepth of the file behind the specified FilePath
 	 * @return
 	 */
 	public int getBitDepth() {
@@ -125,6 +136,10 @@ public class SourceUnitElement extends UnitElement {
 		return -1;
 	}
 	
+	/**
+	 * Returns the ImageType of the file speciefied in the FilePath.
+	 * @return
+	 */
 	public int getImageType() {
 		final String path = getFilePath();
 		if(new File(path).exists()) {
@@ -149,6 +164,10 @@ public class SourceUnitElement extends UnitElement {
 	}
 	
 
+	/**
+	 * {@link ImagePlus} based on the path saved in the first parameter of this UnitElement.
+	 * @return
+	 */
 	public ImagePlus getImagePlus() {
 		final String path = getFilePath();
 		if(new File(path).exists()) {
@@ -158,15 +177,29 @@ public class SourceUnitElement extends UnitElement {
 		return null; 
 	}
 	
+	/**
+	 * Returns true if the first parameter has a path.
+	 * This doesn't check if the path is valid.
+	 * @return
+	 */
 	public boolean hasFilePath() {
-		StringParameter stringParameter = (StringParameter)parameters.get(0);
+		final StringParameter stringParameter = (StringParameter)parameters.get(0);
 		return (stringParameter.getValue().length() > 0);
 	}
 	
+	/**
+	 * Returns the path of the file from the first parameter.
+	 * @return
+	 */
 	public String getFilePath() {
 		return ((StringParameter)parameters.get(0)).getValue();
 	}
 	
+	/**
+	 * The path of the current file.
+	 * This is taken from the first parameter of the {@link UnitElement}.
+	 * @return
+	 */
 	public File getFile() {
 		final String path = ((StringParameter)parameters.get(0)).getValue();
 		return new File(path);
