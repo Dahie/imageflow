@@ -61,6 +61,8 @@ public class UnitFactory {
 		unitElement.setColor(color);
 		if(unitDescription.icon != null)
 			unitElement.setIcon(unitDescription.icon);
+		if(unitElement.compontentSize != null)
+			unitElement.setCompontentSize(unitDescription.componentSize);
 		unitElement.setHelpString(unitDescription.helpString);
 		
 		// add an icon if there is one mentioned and found

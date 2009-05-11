@@ -3,6 +3,8 @@
  */
 package imageflow.models.unit;
 
+import imageflow.models.unit.UnitModelComponent.Size;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -338,5 +340,17 @@ public class NodeIcon implements UnitModelComponent {
 		case SMALL:
 			return smallComponentDimension;
 		}
+	}
+
+
+	public static Size getSizeFromString(String sizeString) {
+		if(sizeString.toLowerCase().equals(Size.BIG.toString().toLowerCase())) {
+			return Size.BIG;
+		} else if (sizeString.toLowerCase().equals(Size.MEDIUM.toString().toLowerCase())){
+			return Size.MEDIUM;
+		} else if (sizeString.toLowerCase().equals(Size.SMALL.toString().toLowerCase())){
+			return Size.SMALL;
+		} else
+			return null;
 	}
 }

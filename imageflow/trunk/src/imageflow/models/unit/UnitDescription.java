@@ -2,6 +2,7 @@ package imageflow.models.unit;
 
 import helper.Tools;
 import imageflow.models.parameter.BooleanParameter;
+import imageflow.models.unit.UnitModelComponent.Size;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -23,6 +24,8 @@ public class UnitDescription {
 	protected String helpString;
 	protected String pathToIcon;
 	protected String colorString;
+	protected String componentSizeString;
+	protected Size componentSize;
 	protected Color color;
 	protected String imageJSyntax;
 	protected int    argbDefault =  (0xFF<<24)|(128<<16)|(128<<8)|128;
@@ -52,6 +55,7 @@ public class UnitDescription {
 			pathToIcon = elementGeneral.getChild("PathToIcon").getValue();
 			helpString = elementGeneral.getChild("HelpString").getValue();
 			colorString = elementGeneral.getChild("Color").getValue();
+			
 			try {
 				color = Color.decode(colorString);
 		    } catch (NumberFormatException e) {
@@ -60,6 +64,12 @@ public class UnitDescription {
 		    if (color == null)
 		    	color = new Color(argbDefault);
 
+		    if(elementGeneral.getChild("IconSize") != null) {
+		    	componentSizeString = elementGeneral.getChild("IconSize").getValue();
+			    componentSize = NodeIcon.getSizeFromString(componentSizeString);
+		    }
+		    	
+		    
 			imageJSyntax = elementGeneral.getChild("ImageJSyntax").getValue() + "\n";
 
 			

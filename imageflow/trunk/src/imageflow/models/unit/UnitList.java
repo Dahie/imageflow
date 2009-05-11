@@ -84,7 +84,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 			if (unitsElement != null) {  
 				List<Element> unitsList = unitsElement.getChildren();
 				Iterator<Element> unitsIterator = unitsList.iterator();
-				int numUnits = unitsList.size() + 1;
+				final int numUnits = unitsList.size() + 1;
 //				node = new Node[numUnits];
 				
 
