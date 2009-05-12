@@ -3,10 +3,10 @@
 <UnitDescription>
 
 <General>
-  <UnitName>Fire</UnitName> 
-  <HelpString>Applies the fire LUT</HelpString>  
+  <UnitName>Blue</UnitName> 
+  <HelpString>Applies the Blue LUT</HelpString>  
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Fire");</ImageJSyntax> 
+  <ImageJSyntax>run("Blue");</ImageJSyntax> 
   <Color>0xbe91de</Color>
 </General>
 
