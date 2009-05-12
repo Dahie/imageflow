@@ -1,6 +1,8 @@
 package imageflow.models.unit;
 
 import helper.Tools;
+import ij.IJ;
+import imageflow.ImageFlow;
 import imageflow.models.parameter.BooleanParameter;
 import imageflow.models.unit.UnitModelComponent.Size;
 
@@ -12,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 import org.jdom.Element;
 
@@ -151,6 +154,13 @@ public class UnitDescription {
 
 		catch (Exception e) {
 			System.err.println("Invalid XML-File!");
+			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+					"There has been a problem loading a XML unit description." +'\n' 
+					+ "The error ocures in " + unitXML.getName() + "." + '\n'
+					+ "The programm start will continue without this unit."
+					,
+					"Missing connections", 
+					JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 		}
 	}

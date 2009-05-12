@@ -27,9 +27,12 @@ public class MacroFlowRunner {
 
 	UnitList macroUnitList;
 
-	public MacroFlowRunner(UnitList units) {
+	/**
+	 * @param units
+	 */
+	public MacroFlowRunner(final UnitList units) {
 		this.macroUnitList = sortList((UnitList) units.clone());
-		//FIXME why add all connections here? Doesn£t this also include connections to units
+		//FIXME why add all connections here? Doesn't this also include connections to units
 		// which are already deleted by the algorithm? does this matter?
 		this.macroUnitList.addConnectionList(units.getConnections());
 	}
@@ -56,7 +59,7 @@ public class MacroFlowRunner {
 		// generation of the ImageJ macro
 		////////////////////////////////////////////////////////
 
-		return MacroGenerator.generateMacrofromUnitList(macroUnitList);
+		return MacroGenerator.generateMacro(macroUnitList);
 	}
 
 	/**

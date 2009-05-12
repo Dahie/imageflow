@@ -13,14 +13,18 @@ import imageflow.models.unit.UnitList;
  */
 public class MacroGenerator {
 
-	//TODO leave nodes out, which:
+	// leave nodes out, which:
 	// have no input connected
 	// have no input marked
 	// which are source, but no output and no display
 	
 //	GraphController 
 	
-	public static String generateMacrofromUnitList(final UnitList unitElements) {
+	/**
+	 * @param unitElements
+	 * @return
+	 */
+	public static String generateMacro(final UnitList unitElements) {
 		
 		String  macroText = "setBatchMode(true); \n";
 		

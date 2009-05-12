@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This is the unit to add noise to an image. (No parameters to be set.)-->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Histogram</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Histogram");</ImageJSyntax>
+   
+  <Color>0x6e91de</Color>
+  <HelpString>Displays the Histogram of the image</HelpString>
+</General>
+
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+
+</UnitDescription>
