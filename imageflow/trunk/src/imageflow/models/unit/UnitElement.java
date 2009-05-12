@@ -320,7 +320,8 @@ public class UnitElement extends AbstractUnit {
 
 
 	/**
-	 * Returns the typename of this unit.
+	 * Returns the typename of this unit. This is different to the
+	 * name displayed in the workflow.
 	 * @return the unitName
 	 */
 	public String getUnitName() {
@@ -329,6 +330,9 @@ public class UnitElement extends AbstractUnit {
 
 	/**
 	 * If activated, the unit will display the current image.
+	 * This setting is actually attached to the {@link Output}. 
+	 * This is a convenience method for changing all outputs of this
+	 * unit at once.
 	 * @param isDisplayUnit
 	 */
 	public void setDisplayUnit(final boolean isDisplayUnit) {
@@ -336,7 +340,6 @@ public class UnitElement extends AbstractUnit {
 		for (Output output : getOutputs()) {
 			output.setDoDisplay(isDisplayUnit);
 		}
-
 		notifyModelListeners();
 	}
 
@@ -645,7 +648,7 @@ public class UnitElement extends AbstractUnit {
 	/**
 	 * Checks a unit, if it's inputs have already been registered in the algorithm.
 	 * It's marked, when it's not 0. The int is conjecture to the order.
-	 * TODO: this method name may be confusing: it doesn£t check if all inputs of this unit are marked
+	 * TODO: this method name may be confusing: it doesn't check if all inputs of this unit are marked
 	 * @param unit
 	 * @return
 	 */
