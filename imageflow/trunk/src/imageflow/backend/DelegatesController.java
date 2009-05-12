@@ -107,15 +107,7 @@ public class DelegatesController {
 			} else if (file.isFile() && isXML(file)  && !file.getName().startsWith(".")) {
 
 				final UnitDescription unitDescription = new UnitDescription(file, Tools.getXMLRoot(file));
-				final UnitDelegate unitDelegate = 
-					new UnitDelegate(unitDescription) {
-
-					@Override
-					public UnitElement createUnit(final Point origin) {
-						return UnitFactory.createProcessingUnit(unitDescription, origin);
-					}
-
-				};
+				final UnitDelegate unitDelegate = new UnitDelegate(unitDescription);
 				//				unitDelegates.add(unitDelegate);
 				DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(unitDelegate.getName());
 				delegates.put(treeNode, unitDelegate);

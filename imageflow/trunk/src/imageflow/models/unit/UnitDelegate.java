@@ -21,7 +21,7 @@ import visualap.Delegate;
  * @author danielsenff
  *
  */
-public abstract class UnitDelegate extends Delegate implements MutableTreeNode {
+public class UnitDelegate extends Delegate implements MutableTreeNode {
 
 	/**
 	 * default startpoint of nodes
@@ -49,7 +49,9 @@ public abstract class UnitDelegate extends Delegate implements MutableTreeNode {
 	 * @param origin 
 	 * @return 
 	 */
-	public abstract UnitElement createUnit(Point origin);
+	public UnitElement createUnit(final Point origin) {
+		return UnitFactory.createProcessingUnit(unitDescription, origin);
+	}
 	
 
 	/**
