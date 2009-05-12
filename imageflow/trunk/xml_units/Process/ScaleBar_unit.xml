@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Scalebar by Daniel Senff -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Add ScaleBar</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Scale Bar...", "width=PARA_INTEGER_1 height=PARA_INTEGER_2 font=PARA_INTEGER_3 color=PARA_STRING_1 background=PARA_STRING_2 location=[PARA_STRING_3] PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3");</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <IconSize>BIG</IconSize>
+  <HelpString>Adds a Scalebar on a specified position.</HelpString>  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Width in pixels</Name>
+  		<DataType>integer</DataType>
+  		<Value>80</Value>
+  		<HelpString>Width of the Scalebar.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Height in pixels</Name>
+  		<DataType>integer</DataType>
+  		<Value>4</Value>
+  		<HelpString>Height of the Scalebar.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Font Size</Name>
+  		<DataType>integer</DataType>
+  		<Value>14</Value>
+  		<HelpString>Font size of the Scalebar label.</HelpString>
+  	</Parameter>
+  	
+  	<Parameter>
+  		<Name>Color</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>White;Black;Light Gray;Gray;Dark Gray;Red;Green;Blue;Yellow</Value>
+  		<HelpString>The color of the Scalebar.</HelpString>
+  		<ChoiceNumber>1</ChoiceNumber>
+  	</Parameter>
+  	
+  	<Parameter>
+  		<Name>Background</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>None;White;Black;Light Gray;Gray;Dark Gray;Red;Green;Blue;Yellow</Value>
+  		<HelpString>Defines the Background color of the added Scalebar</HelpString>
+  		<ChoiceNumber>1</ChoiceNumber>
+  	</Parameter>
+  	
+  	<Parameter>
+  		<Name>Background</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>Upper Right;Lower Right;Lower Left;Upper Left;At Selection</Value>
+  		<!-- not sure if At selection makes sense -->
+  		<HelpString>Defines the Background color of the added Scalebar</HelpString>
+  		<ChoiceNumber>1</ChoiceNumber>
+  	</Parameter>
+  	 
+  	<Parameter>
+  		<Name>Bold Text</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString>Interpolate for scaling</HelpString>
+  		<TrueString>bold</TrueString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Hide Text</Name>
+  		<DataType>boolean</DataType>
+  		<Value>false</Value>
+  		<HelpString>Display the label below the Scalebar.</HelpString>
+  		<TrueString>hide</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Serif Font</Name>
+  		<DataType>boolean</DataType>
+  		<Value>false</Value>
+  		<HelpString>Use a serif font for the label.</HelpString>
+  		<TrueString>serif</TrueString>
+  	</Parameter>
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
+

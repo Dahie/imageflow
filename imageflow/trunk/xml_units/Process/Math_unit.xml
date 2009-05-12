@@ -16,7 +16,7 @@
   	<Parameter>
   		<Name>Math</Name>
   		<DataType>StringArray</DataType>
-  		<Value>Add... Subtract... Multiply... Divide... AND... OR... XOR... Min... Max... Gamma... Log Exp Square Square_Root Reciprocal NAN_Background Abs</Value>
+  		<Value>Add...;Subtract...;Multiply...;Divide...;AND...;OR...;XOR...;Min...;Max...;Gamma...;Log;Exp;Square;Square_Root;Reciprocal;NAN_Background;Abs</Value>
   		<HelpString>Defines what math operation will be performed</HelpString>
   		<ChoiceNumber>0</ChoiceNumber>
   	</Parameter>

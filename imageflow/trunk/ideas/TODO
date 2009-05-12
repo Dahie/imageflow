@@ -11,6 +11,7 @@ GUI:
 - cursor keys -> move or select?
 - more keyshortcuts?
 - improved selections: shift, strg
+- drag copy CTRL
 
 Functions:
 - as imageJ plugin / standalone

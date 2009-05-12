@@ -14,7 +14,7 @@
   	<Parameter>
   		<Name>Imagetype</Name>
   		<DataType>StringArray</DataType>
-  		<Value>BMP Jpeg PNG TIFF</Value>
+  		<Value>BMP;Jpeg;PNG;TIFF</Value>
   		<ChoiceNumber>1</ChoiceNumber>
   		<HelpString>The source unit needs the path of an image file.</HelpString>
   	</Parameter>
