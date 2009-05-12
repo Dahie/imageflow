@@ -19,6 +19,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import org.xml.sax.SAXParseException;
+
 import visualap.Delegate;
 
 /**
@@ -103,6 +105,7 @@ public class DelegatesController {
 				((DefaultMutableTreeNode) node).add(subNode);
 				menu.add(subMenu);
 			} else if (file.isFile() && isXML(file)  && !file.getName().startsWith(".")) {
+
 				final UnitDescription unitDescription = new UnitDescription(file, Tools.getXMLRoot(file));
 				final UnitDelegate unitDelegate = 
 					new UnitDelegate(unitDescription) {
@@ -120,6 +123,7 @@ public class DelegatesController {
 				((DefaultMutableTreeNode) node).add(unitDelegate);
 				JMenuItem item = new JMenuItem(unitDelegate.getName());
 				menu.add(item);
+
 			}
 		}
 	}

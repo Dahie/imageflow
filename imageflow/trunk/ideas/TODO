@@ -16,6 +16,8 @@ Functions:
 - as imageJ plugin / standalone
 - macro optimierung, cleanup, no duplicates?
 - no other jars (jdom) -> buildscript
+- quicksearch of filter units in left sidepane
+
 
 Graph:
 - read all images from folder and process them

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Enhance contrast by Daniel Senff -->
+<UnitDescription>
+
+<General>
+  <UnitName>Enhance Contrast</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Enhance Contrast", "saturated=PARA_DOUBLE_1 PARA_BOOLEAN_1");</ImageJSyntax>
+  <IconSize>BIG</IconSize>
+  <Color>0x6e91de</Color>
+  <HelpString>Enhances the contrast of an image.</HelpString>
+</General>
+
+<Parameters>
+	<Parameter>
+  		<Name>Saturated Pixels in %</Name>
+  		<DataType>double</DataType>
+  		<Value>0.5</Value>
+  		<HelpString>Defines the percentage of saturated Pixels</HelpString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Equalize Histogram</Name>
+  		<DataType>boolean</DataType>
+  		<Value>false</Value>
+  		<HelpString>Equalize Histogram</HelpString>
+  		<TrueString>equalize</TrueString>
+  	</Parameter> 
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
