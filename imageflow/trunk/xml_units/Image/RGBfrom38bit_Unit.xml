@@ -8,7 +8,7 @@
   <PathToIcon></PathToIcon> 
   <!-- <ImageJSyntax>run("Merge Channels...", "red=[TITLE_1] green=[TITLE_2] blue=[TITLE_3] gray=*None* PARA_BOOLEAN_1");
 ;</ImageJSyntax> -->
-<ImageJSyntax>run("RGB Merge...", "red=[TITLE_1] green=[TITLE_2] blue=[TITLE_3] gray=*None*");</ImageJSyntax>
+<ImageJSyntax>run("RGB Merge...", "red=TITLE_1 green=TITLE_2 blue=TITLE_3 gray=*None*");</ImageJSyntax>
   <Color>0x6e91de</Color>
 </General>
 

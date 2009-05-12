@@ -2,6 +2,7 @@ package imageflow.models.unit;
 
 import ij.IJ;
 import ij.ImagePlus;
+import ij.io.OpenDialog;
 import ij.plugin.filter.PlugInFilter;
 import imageflow.ImageFlow;
 import imageflow.models.MacroElement;
@@ -55,7 +56,8 @@ public class SourceUnitElement extends UnitElement {
 	public void showProperties() {
 		
 		// display filedialog
-	    showOpenFileChooser();
+//	    showOpenFileChooser();
+		showIJOpenDialog();
 		
 		super.showProperties();
 		
@@ -106,7 +108,25 @@ public class SourceUnitElement extends UnitElement {
 	    	String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
 	    	setLabel(filename);
 	    }
-	    
+	}
+	
+	/**
+	 * Opens an ImageJ {@link OpenDialog} for selecting an image file.
+	 */
+	public void showIJOpenDialog() {
+		OpenDialog openDialog;
+		if(hasFilePath()) 
+			openDialog = new OpenDialog("Select image", getFilePath());
+		else
+			openDialog = new OpenDialog("Select image", "");
+		
+		String filepath = openDialog.getDirectory() + openDialog.getFileName();
+		if(openDialog.getFileName() != null) {
+			((StringParameter)getParameter(0)).setValue(filepath);
+	    	String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
+	    	setLabel(filename);
+		}
+		
 	}
 
 	/**
@@ -137,7 +157,7 @@ public class SourceUnitElement extends UnitElement {
 	}
 	
 	/**
-	 * Returns the ImageType of the file speciefied in the FilePath.
+	 * Returns the ImageType of the file specified in the FilePath.
 	 * @return
 	 */
 	public int getImageType() {

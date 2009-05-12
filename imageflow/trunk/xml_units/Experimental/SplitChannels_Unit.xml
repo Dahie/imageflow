@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Split RGB</UnitName> 
+  <HelpString>Split an RGB-Image into its color channels.</HelpString>  
+  <PathToIcon></PathToIcon>
+  <ImageJSyntax>run("Split Channels");</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <IconSize>BIG</IconSize>
+</General>
+
+<!-- <Parameters>
+  	<Parameter>
+  		<Name>Create Composite</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString>create a composite</HelpString>
+  		<TrueString>create</TrueString>
+  	</Parameter> 
+</Parameters>-->
+
+
+<Inputs> 
+	<Input>
+		<Name>RGB Image</Name>
+		<ShortName>R</ShortName>	
+		<ImageType>16</ImageType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+		<Required>True</Required>
+	</Input>		
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Red Channel</Name>
+		<ShortName>R</ShortName>	
+		<ImageType>1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+	<Output>
+		<Name>Green Channel</Name>
+		<ShortName>G</ShortName>	
+		<ImageType>1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+	<Output>
+		<Name>Blue Channel</Name>
+		<ShortName>B</ShortName>	
+		<ImageType>1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
