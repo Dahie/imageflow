@@ -152,8 +152,8 @@ public class DelegatesPanel extends JPanel {
 						for (int i = 0; i < selRows.length; i++) {
 							if(selRows[i] != -1 && selPaths[i].getLastPathComponent() instanceof UnitDelegate) {
 								final UnitDelegate ud = ((UnitDelegate)selPaths[i].getLastPathComponent());
-								unitList.add(ud.createUnit(new Point(insertPoint.x + realUnitCount * 15,
-										insertPoint.y + realUnitCount * 15)));
+								unitList.add(ud.createUnit(new Point(insertPoint.x + realUnitCount * GraphPanel.GRIDSIZE,
+										insertPoint.y + realUnitCount * GraphPanel.GRIDSIZE)));
 								realUnitCount++;
 							}
 						}
