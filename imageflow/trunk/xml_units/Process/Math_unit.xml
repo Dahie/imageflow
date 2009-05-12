@@ -40,7 +40,7 @@
 		<Name>Input1</Name>
 		<ShortName>I1</ShortName>	
 		<ImageType>31</ImageType>
-		<NeedToCopyInput>false</NeedToCopyInput>
+		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
 </Inputs>
 
