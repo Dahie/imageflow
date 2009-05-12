@@ -19,7 +19,6 @@ import imageflow.models.unit.UnitList;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -40,7 +39,6 @@ import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -74,7 +72,7 @@ public class GraphPanel extends GPanel {
 	/**
 	 * size of the grid
 	 */
-	public static int GRIDSIZE = 60; 
+	public static int GRIDSIZE = 30; 
 	/**
 	 * Auto align nodes
 	 */
