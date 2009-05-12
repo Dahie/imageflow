@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.SystemColor;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -24,6 +25,8 @@ import java.awt.dnd.DragSource;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -124,6 +127,46 @@ public class DelegatesPanel extends JPanel {
 			public void mouseReleased(final MouseEvent arg0) {}
 
 		});
+		
+		
+		delegatesTree.addKeyListener(new KeyListener() {
+
+			public void keyPressed(final KeyEvent e) {
+				
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					final JTree tree = (JTree) e.getSource();
+					
+					if (tree.getSelectionRows() != null && tree.getSelectionRows().length > 0) {
+						// with 'Enter' all selected Units were inserted, therefore used an array
+						final int[] selRows = tree.getSelectionRows();
+						
+						final TreePath[] selPaths = new TreePath[selRows.length];
+						for (int i = 0; i < selRows.length; i++) {
+							selPaths[i] = tree.getPathForRow(selRows[i]);
+						}
+						
+						final Point insertPoint = UnitDelegate.POINT;
+						// counts only Units, not Folders
+						int realUnitCount = 0;
+						
+						for (int i = 0; i < selRows.length; i++) {
+							if(selRows[i] != -1 && selPaths[i].getLastPathComponent() instanceof UnitDelegate) {
+								final UnitDelegate ud = ((UnitDelegate)selPaths[i].getLastPathComponent());
+								unitList.add(ud.createUnit(new Point(insertPoint.x + realUnitCount * 15,
+										insertPoint.y + realUnitCount * 15)));
+								realUnitCount++;
+							}
+						}
+					}
+				}
+			}
+
+			public void keyTyped(final KeyEvent e) {}
+			
+			public void keyReleased(final KeyEvent e) {}
+
+		});
+		
 		delegatesTree.setCellRenderer(new IFTreeCellRenderer());
 		// makes delegatesPanel as big as the sidePane when resized
 		this.setLayout(new BorderLayout());
