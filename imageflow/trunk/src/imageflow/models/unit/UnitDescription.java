@@ -85,70 +85,25 @@ public class UnitDescription {
 				// search for unitname.png
 				iconFile = new File(unitXML.getAbsolutePath().replace(".xml", ".png"));
 			}
-//			System.out.println(iconFile);
 			if(iconFile.exists())
 				this.icon = ImageIO.read(iconFile);
 			
 			// parameters
 			Element parametersElement = root.getChild("Parameters");
 			if (parametersElement != null) {	
-				List<Element> parametersList = parametersElement.getChildren();
-				Iterator<Element> parametersIterator = parametersList.iterator();
-				
-				numParas = parametersList.size();
-				para = new Para[numParas + 1];
-
-				// loop Ÿber alle Parameter
-				int num = 1;
-				while (parametersIterator.hasNext()) {
-					Element actualParameterElement = (Element) parametersIterator.next();
-					
-					processParameters(num, actualParameterElement);
-					num++;
-				}
+				processParameter(parametersElement);
 			}
 
 			// Inputs
 			Element inputsElement = root.getChild("Inputs");
 			if (inputsElement != null) {
-				List<Element> inputsList = inputsElement.getChildren();
-				Iterator<Element> inputsIterator = inputsList.iterator();
-				
-				numInputs = inputsList.size();
-				input = new Input[numInputs+1];
-				// loop Ÿber alle Inputs
-				int num = 1;
-				while (inputsIterator.hasNext()) {
-					Element actualInputElement = (Element) inputsIterator.next();
-					
-					Input actInput = input[num] = new Input();
-					actInput.name = actualInputElement.getChild("Name").getValue();
-					actInput.shortName = actualInputElement.getChild("ShortName").getValue();
-					actInput.imageType = Integer.valueOf(actualInputElement.getChild("ImageType").getValue());
-					actInput.needToCopyInput = actualInputElement.getChild("NeedToCopyInput").getValue().equals("true") ? true : false;
-					num++;
-				}
+				processInputs(inputsElement);
 			}
 
 			// Outputs
 			Element outputsElement = root.getChild("Outputs");
 			if (outputsElement != null) {
-				List<Element> outputsList = outputsElement.getChildren();
-				Iterator<Element> outputIterator = outputsList.iterator();
-				numOutputs = outputsList.size();
-				output = new Output[outputsList.size()+1];
-				// loop Ÿber alle Inputs
-				int num = 1;
-				while (outputIterator.hasNext()) {
-					Element actualOutputElement = (Element) outputIterator.next();
-					Output actOutput = output[num] = new Output();
-					actOutput.name = actualOutputElement.getChild("Name").getValue();
-					actOutput.shortName = actualOutputElement.getChild("ShortName").getValue();
-					actOutput.imageType = Integer.valueOf(actualOutputElement.getChild("ImageType").getValue());
-					actOutput.doDisplay = actualOutputElement.getChild("DoDisplay").getValue().equals("true")?true:false;
-					isDisplayUnit = actOutput.doDisplay;
-					num++;
-				}
+				processOutputs(outputsElement);
 			}
 		}
 
@@ -162,6 +117,75 @@ public class UnitDescription {
 					"Missing connections", 
 					JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
+		}
+	}
+
+
+	/**
+	 * @param parametersElement
+	 * @throws Exception
+	 */
+	private void processParameter(Element parametersElement) throws Exception {
+		List<Element> parametersList = parametersElement.getChildren();
+		Iterator<Element> parametersIterator = parametersList.iterator();
+		
+		numParas = parametersList.size();
+		para = new Para[numParas + 1];
+
+		// loop Ÿber alle Parameter
+		int num = 1;
+		while (parametersIterator.hasNext()) {
+			Element actualParameterElement = (Element) parametersIterator.next();
+			
+			processParameters(num, actualParameterElement);
+			num++;
+		}
+	}
+
+
+	/**
+	 * @param inputsElement
+	 */
+	private void processInputs(Element inputsElement) {
+		List<Element> inputsList = inputsElement.getChildren();
+		Iterator<Element> inputsIterator = inputsList.iterator();
+		
+		numInputs = inputsList.size();
+		input = new Input[numInputs+1];
+		// loop Ÿber alle Inputs
+		int num = 1;
+		while (inputsIterator.hasNext()) {
+			Element actualInputElement = (Element) inputsIterator.next();
+			
+			Input actInput = input[num] = new Input();
+			actInput.name = actualInputElement.getChild("Name").getValue();
+			actInput.shortName = actualInputElement.getChild("ShortName").getValue();
+			actInput.imageType = Integer.valueOf(actualInputElement.getChild("ImageType").getValue());
+			actInput.needToCopyInput = actualInputElement.getChild("NeedToCopyInput").getValue().equals("true") ? true : false;
+			num++;
+		}
+	}
+
+
+	/**
+	 * @param outputsElement
+	 */
+	private void processOutputs(Element outputsElement) {
+		List<Element> outputsList = outputsElement.getChildren();
+		Iterator<Element> outputIterator = outputsList.iterator();
+		numOutputs = outputsList.size();
+		output = new Output[outputsList.size()+1];
+		// loop Ÿber alle Inputs
+		int num = 1;
+		while (outputIterator.hasNext()) {
+			Element actualOutputElement = (Element) outputIterator.next();
+			Output actOutput = output[num] = new Output();
+			actOutput.name = actualOutputElement.getChild("Name").getValue();
+			actOutput.shortName = actualOutputElement.getChild("ShortName").getValue();
+			actOutput.imageType = Integer.valueOf(actualOutputElement.getChild("ImageType").getValue());
+			actOutput.doDisplay = actualOutputElement.getChild("DoDisplay").getValue().equals("true")?true:false;
+			isDisplayUnit = actOutput.doDisplay;
+			num++;
 		}
 	}
 
@@ -185,7 +209,7 @@ public class UnitDescription {
 			actPara.value = Integer.valueOf(valueString);
 		else if (dataTypeString.toLowerCase().equals("stringarray")) { 
 			int choiceNumber = Integer.valueOf(actualParameterElement.getChild("ChoiceNumber").getValue());
-			String[] strings = valueString.split(" ");
+			String[] strings = valueString.split(";");
 			ArrayList<String> choicesList = new ArrayList<String>(strings.length);
 			for (int i = 0; i < strings.length; i++) {
 				choicesList.add(strings[i]);

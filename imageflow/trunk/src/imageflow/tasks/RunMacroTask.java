@@ -1,5 +1,6 @@
 package imageflow.tasks;
 
+import ij.IJ;
 import imageflow.ImageFlow;
 import imageflow.ImageFlowView;
 import imageflow.backend.GraphController;
@@ -33,6 +34,7 @@ public class RunMacroTask extends Task {
 			System.out.println(macro);
 			graphController.runImageJMacro(macro, this.showlog);	
 		}
+		
 		
 		return null;
 	}

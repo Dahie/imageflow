@@ -3,7 +3,6 @@ package imageflow;
 import graph.Edge;
 import graph.Node;
 import graph.Selection;
-import helper.FileDrop;
 import ij.IJ;
 import imageflow.backend.DelegatesController;
 import imageflow.backend.GraphController;
@@ -36,7 +35,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.Point;
 import java.awt.ScrollPane;
 import java.io.File;
 import java.io.IOException;
@@ -356,7 +354,7 @@ public class ImageFlowView extends FrameView {
 		sidePane.add(buttonPanel, BorderLayout.PAGE_END);
 		
 		// setting of MinimumSize is required for drag-ability of JSplitPane
-		sidePane.setMinimumSize(new Dimension((int)buttonRun.getPreferredSize().getWidth()+10, 100));
+		sidePane.setMinimumSize(new Dimension((int)buttonRun.getPreferredSize().getWidth()+40, 100));
 		graphScrollpane.setMinimumSize(new Dimension(100, 100));
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidePane, graphScrollpane);
 		splitPane.setEnabled(true);

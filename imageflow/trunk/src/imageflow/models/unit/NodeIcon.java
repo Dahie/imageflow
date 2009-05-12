@@ -189,7 +189,7 @@ public class NodeIcon implements UnitModelComponent {
 	    
 	    // draw icon for display
 	    if(isDisplayUnit) {
-	    	int xDisplay = this.x+(widthBg/2)+20;
+	    	int xDisplay = this.x+(widthBg/2)+30;
 			int yDisplay = this.y+5;
 //			g2.drawImage(this.displayIcon, xDisplay, yDisplay, null);
 			g2.drawImage(this.displayIcon, xDisplay, yDisplay, xDisplay+12,yDisplay+12, 0, 0, 18, 18, null);
