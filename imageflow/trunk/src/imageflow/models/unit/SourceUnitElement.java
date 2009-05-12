@@ -122,6 +122,8 @@ public class SourceUnitElement extends UnitElement {
 		
 		String filepath = openDialog.getDirectory() + openDialog.getFileName();
 		if(openDialog.getFileName() != null) {
+	    	// backslashes need to be escaped
+	    	filepath = filepath.replace("\\", "\\\\"); // \ to \\
 			((StringParameter)getParameter(0)).setValue(filepath);
 	    	String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
 	    	setLabel(filename);
