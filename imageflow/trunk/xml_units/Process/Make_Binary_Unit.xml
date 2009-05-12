@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- UnitFile.xml -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Make Binary</UnitName> 
+  <HelpString>Converts an image in a binary black-and-white image</HelpString>  
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Make Binary");</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+</General>
+
+<Inputs> 
+	<Input>
+		<Name>Input1</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>	
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
