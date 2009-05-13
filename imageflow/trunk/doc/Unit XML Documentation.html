@@ -180,10 +180,13 @@ If you want to predefine the type, use the ImageType constants defined in Imagej
 	</tr>
 	</tbody>
 </table>
-<p>More constants are currently not supported. To combinate
-different imagetypes, add the constants.</p>
+<p>More constants are currently not supported. To combine 
+different ImageTypes, add the constants.</p>
 		
 		<blockquote>&lt;NeedToCopyInput&gt;false&lt;/NeedToCopyInput&gt;</blockquote>
+		<p>Certain macro commands in ImageJ require this option to work. This creates a copy of the 
+		image which is processed in the following units. This is required when you get
+		the error message "Image -xx not found or no image open."</p>
 		
 	<blockquote>&lt;/Input&gt;<br />
 	&lt;Input&gt;<br />
@@ -228,9 +231,16 @@ here.</p>
 
 <p>Of course, feel free to use the existing Units as examples and as reference.</p>
 
+<hr />
+
+<h2>Troubleshooting</h2>
+
+<p>I build an unit-xml and when I execute it in the graph ImageJ 
+  returns the error message "Image -xx not found or no images open."</p>
+<p>Your unit's input requires the setting &lt;NeedToCopyInput&gt; set to true. Read above why.</p>
 
 <hr />
-<h3>Document History</h3>
+<h2>Document History</h2>
 <p>Current Version 13/05/2009</p>
 <table>
 <thead>
@@ -247,6 +257,8 @@ here.</p>
 <ul>
 <li>StringArray elements seperated by Semicolon in Version 1.0, not by Space anymore</li>
 <li>Added paragraph about parameter-wildcards</li>
+<li>Added short paragraph about the input's NeedToCopyInput-field</li>
+<li>Added troubleshooting section</li>
 <li>Fixed various format issues in the document</li>
 </ul>
 

@@ -51,7 +51,7 @@ public class MacroGenerator {
 			for (int in = 0; in < unit.getInputsCount(); in++) {
 				final Input input = unit.getInput(in);
 				final String searchString = "TITLE_" + (in+1);
-				final String parameterString = "" + input.getImageTitle();
+				final String parameterString = input.isNeedToCopyInput() ? getNeedCopyTitle(input.getImageID()) :input.getImageTitle();
 				System.out.println(input.getImageTitle());
 				System.out.println("Unit: " + unitIndex + " Input: " + in + " Title: " + parameterString);
 				macroElement.replace(searchString, parameterString);
@@ -109,9 +109,14 @@ public class MacroGenerator {
 				final String inputID = unit.getInput(in).getImageID();
 
 				code += "selectImage(" + inputID + "); \n";
-				code += "run(\"Duplicate...\", \"title=Title_Temp\"); \n";
+				
+				code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +"\"); \n";
 			}
 		}
 		return code;
+	}
+	
+	private static String getNeedCopyTitle(String inputID) {
+		return "Title_Temp_"+ inputID;
 	}
 }

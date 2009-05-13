@@ -28,21 +28,21 @@
 		<Name>Red Channel</Name>
 		<ShortName>R</ShortName>	
 		<ImageType>1</ImageType>
-		<NeedToCopyInput>false</NeedToCopyInput>
+		<NeedToCopyInput>true</NeedToCopyInput>
 		<Required>True</Required>
 	</Input>
 	<Input>
 		<Name>Green Channel</Name>
 		<ShortName>G</ShortName>	
 		<ImageType>1</ImageType>
-		<NeedToCopyInput>false</NeedToCopyInput>
+		<NeedToCopyInput>true</NeedToCopyInput>
 		<Required>True</Required>
 	</Input>	
 	<Input>
 		<Name>Blue Channel</Name>
 		<ShortName>B</ShortName>	
 		<ImageType>1</ImageType>
-		<NeedToCopyInput>false</NeedToCopyInput>
+		<NeedToCopyInput>true</NeedToCopyInput>
 		<Required>True</Required>
 	</Input>		
 </Inputs>
