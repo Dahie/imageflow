@@ -6,7 +6,9 @@
   <UnitName>Split RGB</UnitName> 
   <HelpString>Split an RGB-Image into its color channels.</HelpString>  
   <PathToIcon></PathToIcon>
-  <ImageJSyntax>run("Split Channels");</ImageJSyntax>
+  <!--<ImageJSyntax>run("Split Channels");</ImageJSyntax>
+  SplitChannel is in ImageJ 1.42 -->
+  <ImageJSyntax>run("RGB Split");</ImageJSyntax>
   <Color>0x6e91de</Color>
   <IconSize>BIG</IconSize>
 </General>
@@ -27,7 +29,7 @@
 		<Name>RGB Image</Name>
 		<ShortName>R</ShortName>	
 		<ImageType>16</ImageType>
-		<NeedToCopyInput>false</NeedToCopyInput>
+		<NeedToCopyInput>true</NeedToCopyInput>
 		<Required>True</Required>
 	</Input>		
 </Inputs>
@@ -37,19 +39,19 @@
 		<Name>Red Channel</Name>
 		<ShortName>R</ShortName>	
 		<ImageType>1</ImageType>
-		<DoDisplay>false</DoDisplay>
+		<DoDisplay>true</DoDisplay>
 	</Output>
 	<Output>
 		<Name>Green Channel</Name>
 		<ShortName>G</ShortName>	
 		<ImageType>1</ImageType>
-		<DoDisplay>false</DoDisplay>
+		<DoDisplay>true</DoDisplay>
 	</Output>
 	<Output>
 		<Name>Blue Channel</Name>
 		<ShortName>B</ShortName>	
 		<ImageType>1</ImageType>
-		<DoDisplay>false</DoDisplay>
+		<DoDisplay>true</DoDisplay>
 	</Output>
 </Outputs>
 

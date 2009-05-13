@@ -166,21 +166,24 @@ public class SourceUnitElement extends UnitElement {
 		final String path = getFilePath();
 		if(new File(path).exists()) {
 			final ImagePlus imp = IJ.openImage(path);
-			imp.close();
-			final int type = imp.getType();
-			
-			switch (type) {
-			case ImagePlus.GRAY8:
-				return PlugInFilter.DOES_8G;
-			case ImagePlus.COLOR_256:
-				return PlugInFilter.DOES_8C;
-			case ImagePlus.GRAY16:
-				return PlugInFilter.DOES_16;
-			case ImagePlus.GRAY32:
-				return PlugInFilter.DOES_32;
-			case ImagePlus.COLOR_RGB:
-				return PlugInFilter.DOES_RGB;
+			if(imp != null) {
+				final int type = imp.getType();
+				imp.close();
+				switch (type) {
+				case ImagePlus.GRAY8:
+					return PlugInFilter.DOES_8G;
+				case ImagePlus.COLOR_256:
+					return PlugInFilter.DOES_8C;
+				case ImagePlus.GRAY16:
+					return PlugInFilter.DOES_16;
+				case ImagePlus.GRAY32:
+					return PlugInFilter.DOES_32;
+				case ImagePlus.COLOR_RGB:
+					return PlugInFilter.DOES_RGB;
+				}
 			}
+			
+			
 		}
 		return -1; 
 	}

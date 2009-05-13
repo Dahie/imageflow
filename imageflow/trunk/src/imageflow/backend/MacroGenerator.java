@@ -26,7 +26,8 @@ public class MacroGenerator {
 	 */
 	public static String generateMacro(final UnitList unitElements) {
 		
-		String  macroText = "setBatchMode(true); \n";
+		String  macroText = "";
+		macroText += "setBatchMode(true); \n";
 		
 		// loop over all units
 		// they have to be presorted so they are in the right order
@@ -68,10 +69,13 @@ public class MacroGenerator {
 				
 				macroText +=  "ID_temp = getImageID(); \n" +
 					"run(\"Duplicate...\", \"title=" + outputTitle  + "\"); \n" +
-					outputID + " = getImageID(); \n" +
-					"selectImage(ID_temp); \n" +
-					"close(); \n";
+					outputID + " = getImageID(); \n"+
+					"selectImage(ID_temp); \n";
+					
 			}
+			// close ID_temp after going through the outputs
+			// otherwise the other outputs can't read it.
+			macroText += "close(); \n";
 		}
 
 		

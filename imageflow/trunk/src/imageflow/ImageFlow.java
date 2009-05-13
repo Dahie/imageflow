@@ -55,6 +55,7 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 			System.setProperty("apple.laf.useScreenMenuBar", "true"); 
 			System.setProperty("apple.awt.brushMetalRounded", "true");
 		}
+//		getImageJInstance();
 		ImageFlowView imageFlowView = new ImageFlowView(this);
 		
 		show(imageFlowView);
