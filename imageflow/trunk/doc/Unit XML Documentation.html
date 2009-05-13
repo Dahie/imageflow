@@ -45,10 +45,20 @@ future versions.</p>
 the workflow.</p>
 	
 	<blockquote>&lt;PathToIcon&gt;ImageCalculator_Unit.png&lt;/PathToIcon&gt; </blockquote>
-	
 <p>The Icon is not yet fully operational. You can add an icon to your unit, either simply laying an PNG with the same name as the unit-XML or by defining a name here.</p>
+  
   <blockquote>&lt;ImageJSyntax&gt;run(&quot;Image Calculator...&quot;, &quot;image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create PARA_BOOLEAN_1&quot;);&lt;/ImageJSyntax&gt; </blockquote>
 <p>The syntax is the heart of the unit. This is an abstract form of the Macro-Command called in ImageJ.<br />The Variables define wildcards for the Parameters defined later in this XML.</p>
+<p>The wildcards for the placeholders have a certain structure. 
+<blockquote>PARA_&lt;datatype&gt;_&lt;number_of_datatype&gt;</blockquote>
+<p>The number denotes the number of Parameter-wildcards of this datatype. This counting index starts with 1.
+The different wildcards are:<p>
+<ul>
+<li>PARA_INTEGER_x</li>
+<li>PARA_DOUBLE_x</li>
+<li>PARA_STRING_x</li>
+<li>PARA_BOOLEAN_x</li>
+</ul>
 
   &lt;Color&gt;0x6e91de&lt;/Color&gt;</blockquote>
 <p>The color is in Hex-format. The unit will be drawn in this color in the workflow.</p>
@@ -84,8 +94,11 @@ Only big and small are implemented right now. This is handy to save screen real 
 		</tr>
 		<tr>
 			<td>StringArray</td>
-			<td>Stores an Array of Strings seperated by spaces and the index of the selected item, beginning with 0.</td>
-			<td></td>
+			<td>Stores an Array of Strings seperated by semicolons 
+			  and the index of the selected item, beginning with 0.<br />
+			  The wildcard for a StringArray is also "PARA_STRING_x"</td>
+			<td><em>&lt;Value&gt;Red;Black;Blue;Green;Yellow&lt;/Value&gt;<br />
+				&lt;ChoiceNumber&gt;0&lt;/ChoiceNumber&gt;</em></td>
 		</tr>
 		<tr>
 			<td>boolean</td>
@@ -106,7 +119,7 @@ Only big and small are implemented right now. This is handy to save screen real 
 	</tbody>
 	</table>
 			
-  		<blockquote>&lt;Value&gt;Add Subtract Multiply Divide AND OR XOR&lt;/Value&gt;<br />
+  		<blockquote>&lt;Value&gt;Add;Subtract;Multiply;Divide;AND;OR;XOR&lt;/Value&gt;<br />
   		&lt;HelpString&gt;Defines what math should be used to merge both images&lt;/HelpString&gt;<br />
   		&lt;ChoiceNumber&gt;1&lt;/ChoiceNumber&gt;<br />
   	&lt;/Parameter&gt;<br />
@@ -172,7 +185,7 @@ different imagetypes, add the constants.</p>
 		
 		<blockquote>&lt;NeedToCopyInput&gt;false&lt;/NeedToCopyInput&gt;</blockquote>
 		
-	<blockquote&lt;/Input&gt;<br />
+	<blockquote>&lt;/Input&gt;<br />
 	&lt;Input&gt;<br />
 		&lt;Name&gt;Input2&lt;/Name&gt;<br />
 		&lt;ShortName&gt;I2&lt;/ShortName&gt;	<br />
@@ -215,6 +228,35 @@ here.</p>
 
 <p>Of course, feel free to use the existing Units as examples and as reference.</p>
 
+
+<hr />
+<h3>Document History</h3>
+<p>Current Version 13/05/2009</p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Message</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>13/05/09</td>
+<td>
+<ul>
+<li>StringArray elements seperated by Semicolon in Version 1.0, not by Space anymore</li>
+<li>Added paragraph about parameter-wildcards</li>
+<li>Fixed various format issues in the document</li>
+</ul>
+
+</tr>
+<tr>
+<td>01/03/09</td>
+<td>
+<ul><li>Initial Document</li></ul></td>
+</tr>
+</tbody>
 </body>
 </html>
 
