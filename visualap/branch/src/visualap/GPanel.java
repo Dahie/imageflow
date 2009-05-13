@@ -329,9 +329,14 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			if (sel instanceof Node) {
 				pick = new Point(x,y);
 				if (!selection.contains(aNode)) {
-					selection.clear();
+					if(!e.isControlDown()) {
+						selection.clear();
+					}
 					selection.add(aNode);
-				}
+				} else {
+					if(e.isControlDown())
+						selection.remove(aNode);
+				} 
 				for (Node iNode : selection)
 					iNode.drag(true);
 				repaint();
