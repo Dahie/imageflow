@@ -342,7 +342,7 @@ public class GraphPanel extends GPanel {
 	 */
 	private void paintGrid(final Graphics g) {
 		if(drawGrid) {
-			g.setColor(new Color(220, 220, 220));
+			g.setColor(new Color(240, 240, 240));
 			for (int x = 0; x < this.getWidth(); x+=GRIDSIZE) {
 				g.drawLine(x, 0, x, getHeight());
 			}

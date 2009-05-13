@@ -12,26 +12,27 @@
 	 <target name="copy" description="Delete old build and dist directories">
 	    <delete dir="${build.dir}"/>
 	 	<mkdir dir="${build.dir}" />
+	 	<mkdir dir="${build.dir}/Imageflow" />
 	 	
-	 	<mkdir dir="${build.dir}/xml_units" />
-	 	<copy todir="${build.dir}/xml_units">
+	 	<mkdir dir="${build.dir}/Imageflow/xml_units" />
+	 	<copy todir="${build.dir}/Imageflow/xml_units">
 	 		<fileset dir="${units.dir}" />
 	 	</copy>
 	 	
-	 	<mkdir dir="${build.dir}/doc" />
-	 	<copy todir="${build.dir}/doc">
+	 	<mkdir dir="${build.dir}/Imageflow/doc" />
+	 	<copy todir="${build.dir}/Imageflow/doc">
 	 			<fileset dir="${doc.dir}" />
 	 	</copy>
 	 	
-	 	<mkdir dir="${build.dir}/examples" />
-	 	<copy todir="${build.dir}/examples">
+	 	<mkdir dir="${build.dir}/Imageflow/examples" />
+	 	<copy todir="${build.dir}/Imageflow/examples">
 	 			<fileset dir="${example.dir}" />
 	 	</copy>
 	 	
 	  </target>
 	
 	<target name="create_run_jar" depends="copy">
-		<jar destfile="${build.dir}/Imageflow_.jar" filesetmanifest="mergewithoutmain">
+		<jar destfile="${build.dir}/Imageflow/Imageflow_.jar" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}"/>
 				<attribute name="Main-Class" value="imageflow.ImageFlow"/>

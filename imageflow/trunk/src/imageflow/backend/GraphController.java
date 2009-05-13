@@ -2,6 +2,7 @@ package imageflow.backend;
 import graph.Node;
 import ij.IJ;
 import ij.ImageJ;
+import ij.WindowManager;
 import imageflow.ImageFlow;
 import imageflow.models.Connection;
 import imageflow.models.ConnectionList;
@@ -57,6 +58,14 @@ public class GraphController{
 
 //		imagej.setVisible(false);
 		IJ.runMacro(macro, "");
+		
+		/* beginning for new functions, but not today, daniel
+		 * int[] imageIDs = WindowManager.getIDList();
+		for (int i = 0; i < imageIDs.length; i++) {
+			System.out.println(WindowManager.getImage(imageIDs[i]).getImage());
+			for()
+		}*/
+		
 	}
 
 
