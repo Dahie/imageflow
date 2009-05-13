@@ -3,10 +3,10 @@
 <UnitDescription>
 
 <General>
-  <UnitName>Green</UnitName> 
-  <HelpString>Applies the fire LUT</HelpString>  
+  <UnitName>Ice</UnitName> 
+  <HelpString>Applies the Ice LUT</HelpString>  
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Green");</ImageJSyntax> 
+  <ImageJSyntax>run("Ice");</ImageJSyntax> 
   <Color>0xbe91de</Color>
 </General>
 
@@ -23,7 +23,7 @@
 	<Output>
 		<Name>Output</Name>
 		<ShortName>O</ShortName>	
-		<ImageType>31</ImageType>
+		<ImageType>-1</ImageType>
 		<DoDisplay>false</DoDisplay>
 	</Output>
 </Outputs>
