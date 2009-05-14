@@ -398,6 +398,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	}
 
 	/**
+	 * Iterates over all units in the list to find the given ID.
 	 * @param id
 	 * @return
 	 */

@@ -21,7 +21,7 @@ public class RunMacroTask extends Task {
 	public RunMacroTask(final Application app, GraphController graphController, boolean doShowLog) {
 		super(app);
 		this.graphController = graphController;
-		this.showlog = showlog;
+		this.showlog = doShowLog;
 	}
 
 	@Override 

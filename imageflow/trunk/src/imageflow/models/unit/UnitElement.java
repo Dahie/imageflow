@@ -66,12 +66,12 @@ public class UnitElement extends AbstractUnit {
 	/**
 	 * unitIcon on the graphpanel
 	 */
-	protected BufferedImage unitIcon;
+	protected Image unitIcon;
 	protected NodeIcon unitComponentIcon;
 	/**
 	 * function icon, illustrates the purpose of the element
 	 */
-	protected BufferedImage icon; 
+	protected Image icon; 
 
 	/**
 	 * unused, status of this unit
@@ -93,7 +93,6 @@ public class UnitElement extends AbstractUnit {
 	 */
 	protected boolean isDisplayUnit = false;  
 
-	// all arrays start at 1, this will make it easy to detect unconnected inputs and outputs
 	/**
 	 * input array
 	 */
@@ -432,11 +431,11 @@ public class UnitElement extends AbstractUnit {
 	}
 
 	/**
-	 * @param bufferedImage the icon to set
+	 * @param image the icon to set
 	 */
-	public void setIcon(BufferedImage bufferedImage) {
-		this.icon = bufferedImage;
-		this.unitComponentIcon.setIcon(bufferedImage);
+	public void setIcon(Image image) {
+		this.icon = image;
+		this.unitComponentIcon.setIcon(image);
 		notifyModelListeners();
 	}
 

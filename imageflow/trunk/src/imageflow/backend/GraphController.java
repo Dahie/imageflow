@@ -2,6 +2,7 @@ package imageflow.backend;
 import graph.Node;
 import ij.IJ;
 import ij.ImageJ;
+import ij.ImagePlus;
 import ij.WindowManager;
 import imageflow.ImageFlow;
 import imageflow.models.Connection;
@@ -12,6 +13,7 @@ import imageflow.models.unit.UnitElement;
 import imageflow.models.unit.UnitFactory;
 import imageflow.models.unit.UnitList;
 
+import java.awt.Image;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,7 +38,10 @@ public class GraphController{
 	 */
 	protected ArrayList<Node> copyNodesList;
 
-
+	// TODO the graphcontroller should hold the list of selections
+	
+	
+	
 	/**
 	 * 
 	 */
@@ -59,12 +64,27 @@ public class GraphController{
 //		imagej.setVisible(false);
 		IJ.runMacro(macro, "");
 		
-		/* beginning for new functions, but not today, daniel
-		 * int[] imageIDs = WindowManager.getIDList();
+		/* beginning for new functions, but not today, daniel */
+		int[] imageIDs = WindowManager.getIDList();
 		for (int i = 0; i < imageIDs.length; i++) {
-			System.out.println(WindowManager.getImage(imageIDs[i]).getImage());
-			for()
-		}*/
+			ImagePlus image = WindowManager.getImage(imageIDs[i]);
+			String imagetitle = image.getTitle(); 
+			System.out.println(imagetitle);
+			
+			if(imagetitle.contains("-"))
+				imagetitle.substring(0, imagetitle.indexOf('-'));
+				
+			String[] titleStrings = imagetitle.split("_");
+			int unitID = Integer.valueOf(titleStrings[1]);
+			int outputID = Integer.valueOf(titleStrings[3]);;			
+			
+			if(nodes.getUnit(unitID) instanceof UnitElement) {
+				UnitElement unit = (UnitElement) nodes.getUnit(unitID);
+				unit.setIcon(image.getImage().getScaledInstance(48, 48, Image.SCALE_FAST));
+			}
+			
+			System.out.println("unit "+unitID+ " and output "+ outputID);
+		}
 		
 	}
 

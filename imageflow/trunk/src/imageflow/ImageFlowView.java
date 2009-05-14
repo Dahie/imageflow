@@ -93,7 +93,7 @@ public class ImageFlowView extends FrameView {
 	private boolean selected = false;
 	private boolean hasPaste = false;
 
-	private boolean showlog = true;
+	private boolean showlog = false;
 
 	private SelectionList selections;
 
