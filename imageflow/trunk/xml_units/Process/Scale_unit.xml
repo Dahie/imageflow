@@ -11,7 +11,7 @@
   <ImageJSyntax>run("Scale...", "x=PARA_DOUBLE_1 y=PARA_DOUBLE_2 width=PARA_INTEGER_1 height=PARA_INTEGER_2 PARA_BOOLEAN_1 PARA_BOOLEAN_2  title=TITLE_1");</ImageJSyntax>
   <Color>0x6e91de</Color>
   <IconSize>BIG</IconSize>
-  <HelpString>Scales the image to the specified dimensions.</HelpString>  
+  <HelpString>Transforms the image to the specified dimensions without changing the size of the image.</HelpString>  
 </General>
 
 <Parameters>

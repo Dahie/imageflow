@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sharpen by Daniel Senff-->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Smooth</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Smooth");</ImageJSyntax>
+   
+  <Color>0x6e91de</Color>
+  <HelpString>Blurs the image.</HelpString>
+</General>
+
+<!--<Parameters>
+  	<Parameter>
+  		<Name>Stack</Name>
+  		<DataType>boolean</DataType>
+  		<Value>false</Value>
+  		<HelpString>Stack support</HelpString>
+  		<TrueString>, "stack"</TrueString>
+  	</Parameter> 
+</Parameters>-->
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Image Calculator by Daniel Senff -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Resize</UnitName> 
+  <PathToIcon></PathToIcon> 
+  
+  <ImageJSyntax>run("Size...", "width=PARA_INTEGER_1 height=PARA_INTEGER_2 PARA_BOOLEAN_1 PARA_BOOLEAN_2");</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <IconSize>BIG</IconSize>
+  <HelpString>Resizes the image to the specified dimensions.</HelpString>  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Width in pixels</Name>
+  		<DataType>integer</DataType>
+  		<Value>500</Value>
+  		<HelpString>Specified width in pixels.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Height in pixels</Name>
+  		<DataType>integer</DataType>
+  		<Value>500</Value>
+  		<HelpString>Specified height in pixels.</HelpString>
+  	</Parameter>
+  	 
+  	 
+ 	<Parameter>
+  		<Name>Constrain Aspect Ratio</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString>Ensures that the resulting image has the same aspect ratio based on the width.</HelpString>
+  		<TrueString>constrain</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Interpolate</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString>Interpolate for scaling</HelpString>
+  		<TrueString>interpolate</TrueString>
+  	</Parameter> 
+
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
+

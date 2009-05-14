@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This is the unit to add noise to an image. (No parameters to be set.)-->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Add Specified Noise</UnitName> 
+  <PathToIcon>AddNoise_Unit.png</PathToIcon> 
+  <ImageJSyntax>run("Remove Outliers...", "radius=PARA_DOUBLE_1 threshold=PARA_INTEGER_1 which=PARA_STRING_1");</ImageJSyntax>
+   
+  <Color>0x6e91de</Color>
+  <HelpString>Removes outlines from an image.</HelpString>
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Radius in pixels</Name>
+  		<DataType>double</DataType>
+  		<Value>55</Value>
+  		<HelpString>Defines the radius in pixels in which the filter is applied.</HelpString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Threshold</Name>
+  		<DataType>integer</DataType>
+  		<Value>50</Value>
+  		<HelpString>Defines the threshold.</HelpString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Which Outliers</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>Bright;Dark</Value>
+  		<HelpString>Defines which outlier is removed.</HelpString>
+  		<ChoiceNumber>0</ChoiceNumber>
+  	</Parameter> 
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
