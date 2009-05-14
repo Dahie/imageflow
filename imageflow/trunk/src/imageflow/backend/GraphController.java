@@ -230,13 +230,13 @@ public class GraphController{
 		UnitDescription sourceUnitDescription = new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
 		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 
-		UnitDescription blurUnitDescription = new UnitDescription(new File("xml_units/Process/GaussianBlur_Unit.xml"));
+		UnitDescription blurUnitDescription = new UnitDescription(new File("xml_units/Process/Filters/GaussianBlur_Unit.xml"));
 		final UnitElement blurUnit = UnitFactory.createProcessingUnit(blurUnitDescription, new Point(180, 50));
 
 		UnitDescription mergeUnitDescription = new UnitDescription(new File("xml_units/Process/ImageCalculator_Unit.xml"));
 		final UnitElement mergeUnit = UnitFactory.createProcessingUnit(mergeUnitDescription,new Point(320, 100));
 
-		UnitDescription noiseUnitDescription = new UnitDescription(new File("xml_units/Process/AddNoise_Unit.xml"));
+		UnitDescription noiseUnitDescription = new UnitDescription(new File("xml_units/Process/Noise/AddNoise_Unit.xml"));
 		final UnitElement noiseUnit = UnitFactory.createProcessingUnit(noiseUnitDescription,new Point(450, 100));
 		noiseUnit.setDisplayUnit(true);
 		
@@ -299,11 +299,11 @@ public class GraphController{
 		final UnitElement to8BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Image/8Bit_Unit.xml")), new Point(150, 100));
 		final UnitElement to32BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Image/32Bit_Unit.xml")), new Point(260, 100));
 
-		UnitDescription unitConvolveDescription = new UnitDescription(new File("xml_units/Process/Convolver_Unit.xml"));
+		UnitDescription unitConvolveDescription = new UnitDescription(new File("xml_units/Process/Filters/Convolver_Unit.xml"));
 		final UnitElement convUnit = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 50));
 		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 160));
 
-		UnitDescription unitSquareDescription = new UnitDescription(new File("xml_units/Process/Square_Unit.xml"));
+		UnitDescription unitSquareDescription = new UnitDescription(new File("xml_units/Process/Math_Unit.xml"));
 		final UnitElement squareUnit = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 50));
 		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 160));
 
