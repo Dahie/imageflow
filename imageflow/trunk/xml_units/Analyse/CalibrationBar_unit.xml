@@ -5,7 +5,7 @@
 
 <General>
   <UnitName>Calibration bar</UnitName> 
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>CalibrationBar_Unit.png</PathToIcon> 
   <ImageJSyntax>run("Calibration Bar...", "location=[PARA_STRING_1] fill=PARA_STRING_2 label=PARA_STRING_3 number=PARA_INTEGER_1 decimal=PARA_INTEGER_2 font=PARA_INTEGER_3 zoom=PARA_DOUBLE_1 PARA_BOOLEAN_1");</ImageJSyntax>
   <Color>0x6e91de</Color>
   <IconSize>BIG</IconSize>
@@ -80,7 +80,7 @@
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
 		<ImageType>15</ImageType>
-		<NeedToCopyInput>true</NeedToCopyInput>
+		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
 </Inputs>
 

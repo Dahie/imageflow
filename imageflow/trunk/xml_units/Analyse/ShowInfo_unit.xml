@@ -5,7 +5,7 @@
 
 <General>
   <UnitName>Show Info</UnitName> 
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>ShowInfo_Unit.png</PathToIcon> 
   <ImageJSyntax>run("Show Info...");</ImageJSyntax>
    
   <Color>0x6e91de</Color>

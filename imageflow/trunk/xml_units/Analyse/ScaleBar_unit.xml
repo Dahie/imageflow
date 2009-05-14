@@ -5,7 +5,7 @@
 
 <General>
   <UnitName>ScaleBar</UnitName> 
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>ScaleBar_Unit.png</PathToIcon> 
   <ImageJSyntax>run("Scale Bar...", "width=PARA_INTEGER_1 height=PARA_INTEGER_2 font=PARA_INTEGER_3 color=PARA_STRING_1 background=PARA_STRING_2 location=[PARA_STRING_3] PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3");</ImageJSyntax>
   <Color>0x6e91de</Color>
   <IconSize>BIG</IconSize>

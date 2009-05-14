@@ -5,7 +5,7 @@
 
 <General>
   <UnitName>Histogram</UnitName> 
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>Histogram_Unit.png</PathToIcon> 
   <ImageJSyntax>run("Histogram");</ImageJSyntax>
    
   <Color>0x6e91de</Color>
