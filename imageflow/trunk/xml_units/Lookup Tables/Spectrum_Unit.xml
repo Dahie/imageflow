@@ -5,7 +5,7 @@
 <General>
   <UnitName>Spectrum</UnitName> 
   <HelpString>Applies the Spectrum LUT</HelpString>  
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>LookupTable_Unit.png</PathToIcon> 
   <ImageJSyntax>run("Spectrum");</ImageJSyntax> 
   <Color>0xbe91de</Color>
 </General>

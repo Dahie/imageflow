@@ -5,7 +5,7 @@
 <General>
   <UnitName>Red</UnitName> 
   <HelpString>Applies the Red LUT</HelpString>  
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>LookupTable_Unit.png</PathToIcon> 
   <ImageJSyntax>run("Red");</ImageJSyntax> 
   <Color>0xbe91de</Color>
 </General>

@@ -5,7 +5,7 @@
 <General>
   <UnitName>Cyan</UnitName> 
   <HelpString>Applies the Cyan LUT</HelpString>  
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>LookupTable_Unit.png</PathToIcon> 
   <ImageJSyntax>run("Cyan");</ImageJSyntax> 
   <Color>0xbe91de</Color>
 </General>

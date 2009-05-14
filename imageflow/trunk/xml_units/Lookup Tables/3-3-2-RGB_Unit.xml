@@ -5,7 +5,7 @@
 <General>
   <UnitName>3-3-2 RGB</UnitName> 
   <HelpString>Applies the 3-3-2 RGB LUT</HelpString>  
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>LookupTable_Unit.png</PathToIcon> 
   <ImageJSyntax>run("3-3-2 RGB");</ImageJSyntax> 
   <Color>0xbe91de</Color>
 </General>
