@@ -5,16 +5,45 @@
 <General>
   <UnitName>Crop</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Crop");</ImageJSyntax> 
+  <ImageJSyntax>makeRectangle(PARA_INTEGER_1, PARA_INTEGER_2, PARA_INTEGER_3, PARA_INTEGER_4);</ImageJSyntax> 
   <Color>0x6e91de</Color>
-  <HelpString>Crops an image, requires a selection.</HelpString>
+  <HelpString>Defines a selection rectangle and crops the image</HelpString>
 </General>
+
+
+<Parameters>
+	<Parameter>
+  		<Name>x coordinate</Name>
+  		<DataType>integer</DataType>
+  		<Value>0</Value>
+  		<HelpString>Top left point's X coordinate</HelpString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>y coordinate</Name>
+  		<DataType>integer</DataType>
+  		<Value>0</Value>
+  		<HelpString>Top left point's Y coordinate</HelpString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Width</Name>
+  		<DataType>integer</DataType>
+  		<Value>24</Value>
+  		<HelpString>Width of the background</HelpString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Height</Name>
+  		<DataType>integer</DataType>
+  		<Value>24</Value>
+  		<HelpString>Height of the background</HelpString>
+  	</Parameter> 
+</Parameters>
+
 
 <Inputs> 
 	<Input>
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
-		<ImageType>1055</ImageType>
+		<ImageType>31</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
 </Inputs>
