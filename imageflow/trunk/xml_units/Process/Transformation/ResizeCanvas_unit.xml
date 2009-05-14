@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Image Calculator by Daniel Senff -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Resize Canvas</UnitName> 
+  <PathToIcon></PathToIcon> 
+  
+  <ImageJSyntax>run("Canvas Size...", "width=PARA_INTEGER_1 height=PARA_INTEGER_2 position=PARA_STRING_1 PARA_BOOLEAN_1");</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <IconSize>BIG</IconSize>
+  <HelpString>Resizes the image to the specified dimensions.</HelpString>  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Width in pixels</Name>
+  		<DataType>integer</DataType>
+  		<Value>500</Value>
+  		<HelpString>Specified width in pixels.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Height in pixels</Name>
+  		<DataType>integer</DataType>
+  		<Value>500</Value>
+  		<HelpString>Specified height in pixels.</HelpString>
+  	</Parameter>
+  	 
+  	 
+ 	<Parameter>
+  		<Name>Position</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>Top-Left;Top-Center;Top-Right;Center-Left;Center;Center-Right;Bottom-Left;Bottom-Center;Bottom-Right</Value>
+  		<HelpString>Defines the position along which the current image is aligned on the rescaled canvas.</HelpString>
+  		<ChoiceNumber>4</ChoiceNumber>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Zero Fill</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString></HelpString>
+  		<TrueString>zero</TrueString>
+  	</Parameter> 
+
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
+
