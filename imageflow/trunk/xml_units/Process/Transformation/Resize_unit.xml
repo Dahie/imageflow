@@ -5,7 +5,7 @@
 
 <General>
   <UnitName>Resize</UnitName> 
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>Resize_Unit.png</PathToIcon> 
   
   <ImageJSyntax>run("Size...", "width=PARA_INTEGER_1 height=PARA_INTEGER_2 PARA_BOOLEAN_1 PARA_BOOLEAN_2");</ImageJSyntax>
   <Color>0x6e91de</Color>

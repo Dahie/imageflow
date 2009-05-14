@@ -5,7 +5,7 @@
 
 <General>
   <UnitName>Flip</UnitName> 
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>Flip_Unit.png</PathToIcon> 
   
   <ImageJSyntax>run("Flip PARA_STRING_1");</ImageJSyntax>
   <Color>0x6e91de</Color>
