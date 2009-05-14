@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Image Calculator by Daniel Senff -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Flip</UnitName> 
+  <PathToIcon></PathToIcon> 
+  
+  <ImageJSyntax>run("Flip PARA_STRING_1");</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <IconSize>BIG</IconSize>
+  <HelpString>Resizes the image to the specified dimensions.</HelpString>  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Direction</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>Horizontally;Vertically</Value>
+  		<HelpString>Defines along which axis the images is flipped.</HelpString>
+  		<ChoiceNumber>0</ChoiceNumber>
+  	</Parameter>
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
+

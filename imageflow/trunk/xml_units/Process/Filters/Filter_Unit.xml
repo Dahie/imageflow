@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Variance by Daniel Senff -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Filter</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("PARA_STRING_1...", "radius=PARA_DOUBLE_1");</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+  <HelpString>Performs a selected Filter</HelpString>
+  	  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Filter</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>Maximum;Median;Mean;Minimum;Variance</Value>
+  		<HelpString>Radius of this filter.</HelpString>
+  		<ChoiceNumber>0</ChoiceNumber>
+  	</Parameter> 
+
+  	<Parameter>
+  		<Name>Radius in pixels</Name>
+  		<DataType>double</DataType>
+  		<Value>5</Value>
+  		<HelpString>Radius of this filter.</HelpString>
+  	</Parameter> 
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>	
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

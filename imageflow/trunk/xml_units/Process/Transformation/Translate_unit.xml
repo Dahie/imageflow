@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Image Calculator by Daniel Senff -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Translate</UnitName> 
+  <PathToIcon></PathToIcon> 
+  
+  <ImageJSyntax>run("Translate...", "x=PARA_INTEGER_1 y=PARA_INTEGER_2");</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <IconSize>BIG</IconSize>
+  <HelpString>Resizes the image to the specified dimensions.</HelpString>  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>X-Offset in pixels</Name>
+  		<DataType>integer</DataType>
+  		<Value>15</Value>
+  		<HelpString>Specifies how many pixels the current image is moved along the x-axis.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Y-Offset in pixels</Name>
+  		<DataType>integer</DataType>
+  		<Value>15</Value>
+  		<HelpString>Specifies how many pixels the current image is moved along the y-axis.</HelpString>
+  	</Parameter>
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
+

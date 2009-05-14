@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Image Calculator by Daniel Senff -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Rotation</UnitName> 
+  <PathToIcon></PathToIcon> 
+  
+  <ImageJSyntax>run("Arbitrarily...", "angle=PARA_DOUBLE_1 grid=PARA_INTEGER_1 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3");</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <IconSize>BIG</IconSize>
+  <HelpString>Rotates the image around a specified angle.</HelpString>  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Angle in degrees</Name>
+  		<DataType>double</DataType>
+  		<Value>15.00</Value>
+  		<HelpString>Specified angle for the rotation.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Grid Lines</Name>
+  		<DataType>integer</DataType>
+  		<Value>1</Value>
+  		<HelpString>Gridlines for the rotation.</HelpString>
+  	</Parameter>
+  	 
+  	<Parameter>
+  		<Name>Interpolate</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString>Interpolate for scaling</HelpString>
+  		<TrueString>interpolate</TrueString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Fill with Background Color</Name>
+  		<DataType>boolean</DataType>
+  		<Value>false</Value>
+  		<HelpString>If the scaled image is bigger than before the difference space is filled with the Background Color.</HelpString>
+  		<TrueString>fill</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Enlarge Image to Fit Result</Name>
+  		<DataType>boolean</DataType>
+  		<Value>false</Value>
+  		<HelpString>Rotation of the image will result in cut corners. This resizes the canvas to fit the wider dimensions required.</HelpString>
+  		<TrueString>enlarge</TrueString>
+  	</Parameter>
+
+
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
+
