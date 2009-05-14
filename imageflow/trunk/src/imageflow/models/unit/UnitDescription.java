@@ -4,6 +4,7 @@ import helper.Tools;
 import ij.IJ;
 import imageflow.ImageFlow;
 import imageflow.models.parameter.BooleanParameter;
+import imageflow.models.parameter.ChoiceParameter;
 import imageflow.models.unit.UnitModelComponent.Size;
 
 import java.awt.Color;
@@ -209,7 +210,7 @@ public class UnitDescription {
 			actPara.value = Integer.valueOf(valueString);
 		else if (dataTypeString.toLowerCase().equals("stringarray")) { 
 			int choiceNumber = Integer.valueOf(actualParameterElement.getChild("ChoiceNumber").getValue());
-			String[] strings = valueString.split(";");
+			String[] strings = valueString.split(ChoiceParameter.DELIMITER);
 			ArrayList<String> choicesList = new ArrayList<String>(strings.length);
 			for (int i = 0; i < strings.length; i++) {
 				choicesList.add(strings[i]);

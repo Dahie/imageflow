@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 public class ChoiceParameter extends StringParameter {
 
+	public static final String DELIMITER = ";";
 	private final ArrayList<String> choiceValues;
 	
 	/**
@@ -65,7 +66,7 @@ public class ChoiceParameter extends StringParameter {
 	public String getChoicesString() {
 		String choiceString = "";
 		for (String choice : getChoices()) {
-			choiceString += choice+" ";
+			choiceString += choice+DELIMITER;
 		}
 		return choiceString;
 	}
