@@ -5,7 +5,7 @@
 
 <General>
   <UnitName>Translate</UnitName> 
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>Translate_Unit.png</PathToIcon> 
   
   <ImageJSyntax>run("Translate...", "x=PARA_INTEGER_1 y=PARA_INTEGER_2");</ImageJSyntax>
   <Color>0x6e91de</Color>

@@ -5,7 +5,7 @@
 
 <General>
   <UnitName>Rotation</UnitName> 
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>Rotation_Unit.png</PathToIcon> 
   
   <ImageJSyntax>run("Arbitrarily...", "angle=PARA_DOUBLE_1 grid=PARA_INTEGER_1 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3");</ImageJSyntax>
   <Color>0x6e91de</Color>
