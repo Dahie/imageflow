@@ -831,8 +831,9 @@ public class ImageFlowView extends FrameView {
         SaveFlowGraphTask task = null;
         if (JFileChooser.APPROVE_OPTION == option) {
         	File selectedFile = fc.getSelectedFile();
-        	if(!file.getName().toLowerCase().endsWith(".xml")) 
+        	if(!selectedFile.getName().toLowerCase().endsWith(".xml")) {
         		selectedFile = new File(selectedFile.getAbsoluteFile()+".xml");
+        	}
         	
         	if(selectedFile.exists()) {
 				final int response = JOptionPane.showConfirmDialog(this.getFrame(), 
