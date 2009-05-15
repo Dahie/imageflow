@@ -71,8 +71,12 @@ public class UnitFactory {
 		}
 
 		unitElement.setColor(color);
-		if(unitDescription.icon != null)
+		if(unitDescription.icon != null) {
 			unitElement.setIcon(unitDescription.icon);
+			unitElement.setIconFile(unitDescription.iconFile);
+			unitElement.setIconPath(unitDescription.pathToIcon);
+		}
+			
 		if(unitDescription.componentSize != null)
 			unitElement.setCompontentSize(unitDescription.componentSize);
 		unitElement.setHelpString(unitDescription.helpString);

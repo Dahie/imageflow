@@ -4,8 +4,8 @@
 <UnitDescription>
 
 <General>
-  <UnitName>Add Noise</UnitName> 
-  <PathToIcon>AddNoise_Unit.png</PathToIcon> 
+  <UnitName>Despeckle</UnitName> 
+  <PathToIcon></PathToIcon> 
   <ImageJSyntax>run("Despeckle");</ImageJSyntax>
    
   <Color>0x6e91de</Color>

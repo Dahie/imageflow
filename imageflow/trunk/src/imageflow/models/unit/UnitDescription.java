@@ -3,6 +3,7 @@ package imageflow.models.unit;
 import helper.Tools;
 import ij.IJ;
 import imageflow.ImageFlow;
+import imageflow.backend.DelegatesController;
 import imageflow.models.parameter.BooleanParameter;
 import imageflow.models.parameter.ChoiceParameter;
 import imageflow.models.unit.UnitModelComponent.Size;
@@ -44,6 +45,7 @@ public class UnitDescription {
 	protected Output[] output;
 	protected boolean isDisplayUnit;
 	protected BufferedImage icon;
+	protected File iconFile;
 	
 	public UnitDescription(File unitXML) {
 		this(unitXML, Tools.getXMLRoot(unitXML));
@@ -79,11 +81,11 @@ public class UnitDescription {
 			
 			
 			
-			File iconFile;
 			if(pathToIcon.length() > 0) {
-				iconFile = new File(unitXML.getParent() +File.separator+ pathToIcon);	
+				String path = DelegatesController.getUnitIconFolder() + File.separator+ pathToIcon;
+				iconFile = new File(path);	
 			} else {
-				// search for unitname.png
+				// search for unitname.png in same directory as xml
 				iconFile = new File(unitXML.getAbsolutePath().replace(".xml", ".png"));
 			}
 			if(iconFile.exists())
@@ -211,10 +213,22 @@ public class UnitDescription {
 		else if (dataTypeString.toLowerCase().equals("stringarray")) { 
 			int choiceNumber = Integer.valueOf(actualParameterElement.getChild("ChoiceNumber").getValue());
 			String[] strings = valueString.split(ChoiceParameter.DELIMITER);
-			ArrayList<String> choicesList = new ArrayList<String>(strings.length);
-			for (int i = 0; i < strings.length; i++) {
-				choicesList.add(strings[i]);
+			ArrayList<String> choicesList;
+			if(strings.length > 1) {
+				choicesList = new ArrayList<String>(strings.length);
+				for (int i = 0; i < strings.length; i++) {
+					choicesList.add(strings[i]);
+				}	
+			} else {
+				// in the first beta the delimiter was a space, 
+				// so to be able to read old workflows, this construct exists
+				strings = valueString.split(" ");
+				choicesList = new ArrayList<String>(strings.length);
+				for (int i = 0; i < strings.length; i++) {
+					choicesList.add(strings[i]);
+				}
 			}
+			
 			actPara.value = choicesList;
 			actPara.choiceIndex = Integer.valueOf(choiceNumber);
 		}

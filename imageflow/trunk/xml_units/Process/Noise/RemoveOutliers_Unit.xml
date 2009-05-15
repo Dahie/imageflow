@@ -4,8 +4,8 @@
 <UnitDescription>
 
 <General>
-  <UnitName>Add Specified Noise</UnitName> 
-  <PathToIcon>AddNoise_Unit.png</PathToIcon> 
+  <UnitName>Remove Outliers</UnitName> 
+  <PathToIcon></PathToIcon> 
   <ImageJSyntax>run("Remove Outliers...", "radius=PARA_DOUBLE_1 threshold=PARA_INTEGER_1 which=PARA_STRING_1");</ImageJSyntax>
    
   <Color>0x6e91de</Color>

@@ -194,6 +194,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 				unitName.addContent(unit.getUnitName());
 				general.addContent(unitName);
 				Element pathToIcon = new Element("PathToIcon");
+				pathToIcon.addContent(unit.getIconPath());
 				general.addContent(pathToIcon);
 				Element imageJSyntax = new Element("ImageJSyntax");
 				imageJSyntax.addContent(((MacroElement)unit.getObject()).getImageJSyntax());

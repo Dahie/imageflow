@@ -26,7 +26,10 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 
 
@@ -53,7 +56,7 @@ public class UnitElement extends AbstractUnit {
 	 * name of this unit, this is not displayed, Label is displayed
 	 */
 	protected String unitName;    
-	protected File iconfile;
+	protected File iconFile;
 	/**
 	 * unit color
 	 */
@@ -110,6 +113,8 @@ public class UnitElement extends AbstractUnit {
 	 * Size the component will be displayed on the workspace.
 	 */
 	protected Size compontentSize;
+
+	private String iconPath;
 
 
 	/**
@@ -428,6 +433,35 @@ public class UnitElement extends AbstractUnit {
 	 */
 	public Image getIcon() {
 		return this.icon;
+	}
+
+	/**
+	 * Returns the path to the icon.
+	 * @return
+	 */
+	public String getIconPath() {
+		if(this.iconPath !=null)
+			return this.iconPath;
+		else 
+			return "";
+	}
+
+	/**
+	 * Returns the {@link File} of this unit's icon.
+	 * @return
+	 */
+	public File getIconFile() {
+		return this.iconFile;
+	}
+	
+
+	public void setIconFile(File iconFile) {
+		this.iconFile = iconFile; 
+		
+	}
+
+	public void setIconPath(String pathToIcon) {
+		this.iconPath = pathToIcon;
 	}
 
 	/**
@@ -919,6 +953,7 @@ public class UnitElement extends AbstractUnit {
 	public boolean isWestOfUnit(Node node) {
 		return (node.getOrigin().x > this.getOrigin().x) ? true : false;
 	}
+
 
 	
 }

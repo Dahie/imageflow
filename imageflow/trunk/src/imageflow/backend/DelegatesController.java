@@ -30,7 +30,8 @@ import visualap.Delegate;
  */
 public class DelegatesController {
 
-	private static String unitFolder = "xml_units";
+	public static String unitFolder = "xml_units";
+	public static String unitIconFolder = "xml_icons";
 	
 	private static DelegatesController controller;
 	HashMap<TreeNode, Delegate> delegates;
@@ -142,5 +143,9 @@ public class DelegatesController {
 
 	public static String getUnitFolder() {
 		return unitFolder;
+	}
+	
+	public static String getUnitIconFolder() {
+		return unitIconFolder;
 	}
 }
