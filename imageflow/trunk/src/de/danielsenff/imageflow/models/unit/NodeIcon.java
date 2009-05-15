@@ -70,7 +70,7 @@ public class NodeIcon implements UnitModelComponent {
 	 * icon for the display indicator
 	 */
 	protected Image displayIcon;
-	String displayIconFile = "/imageflow/resources/display16.png";
+	String displayIconFile = "/de/danielsenff/imageflow/resources/display16.png";
 
 	/**
 	 * Associated unit of to this icon
