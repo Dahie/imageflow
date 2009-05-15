@@ -6,6 +6,7 @@
 	<property name="src.dir" location="${basedir}/src" /> 
 	<property name="build.dir" location="${bin.dir}/build" />
 	<property name="units.dir" location="${bin.dir}/xml_units" />
+	<property name="icons.dir" location="${bin.dir}/xml_icons" />
 	<property name="doc.dir" location="${bin.dir}/doc" />
 	<property name="example.dir" location="${bin.dir}/examples" />
 	
@@ -18,6 +19,11 @@
 	 	<copy todir="${build.dir}/Imageflow/xml_units">
 	 		<fileset dir="${units.dir}" />
 	 	</copy>
+	 	
+	 	<mkdir dir="${build.dir}/Imageflow/xml_icons" />
+	 		 	<copy todir="${build.dir}/Imageflow/xml_icons">
+	 		 		<fileset dir="${icons.dir}" />
+	 		 	</copy>
 	 	
 	 	<mkdir dir="${build.dir}/Imageflow/doc" />
 	 	<copy todir="${build.dir}/Imageflow/doc">
