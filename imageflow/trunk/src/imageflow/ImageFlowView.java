@@ -820,7 +820,7 @@ public class ImageFlowView extends FrameView {
     /**
      * @return
      */
-    @Action(enabledProperty = "modified")
+    @Action
     public SaveFlowGraphTask saveAs() {
         final JFileChooser fc = createFileChooser("saveAsFileChooser");
         final String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
