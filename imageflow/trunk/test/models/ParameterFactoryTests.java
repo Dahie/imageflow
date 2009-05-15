@@ -3,12 +3,12 @@
  */
 package models;
 
-import imageflow.models.parameter.AbstractParameter;
-import imageflow.models.parameter.BooleanParameter;
-import imageflow.models.parameter.DoubleParameter;
-import imageflow.models.parameter.Parameter;
-import imageflow.models.parameter.ParameterFactory;
-import imageflow.models.parameter.StringParameter;
+import de.danielsenff.imageflow.models.parameter.AbstractParameter;
+import de.danielsenff.imageflow.models.parameter.BooleanParameter;
+import de.danielsenff.imageflow.models.parameter.DoubleParameter;
+import de.danielsenff.imageflow.models.parameter.Parameter;
+import de.danielsenff.imageflow.models.parameter.ParameterFactory;
+import de.danielsenff.imageflow.models.parameter.StringParameter;
 import junit.framework.TestCase;
 
 

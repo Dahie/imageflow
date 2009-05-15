@@ -3,9 +3,6 @@
  */
 package test;
 
-import imageflow.models.unit.NodeIcon;
-import imageflow.models.unit.UnitElement;
-import imageflow.models.unit.UnitFactory;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,6 +11,10 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
+
+import de.danielsenff.imageflow.models.unit.NodeIcon;
+import de.danielsenff.imageflow.models.unit.UnitElement;
+import de.danielsenff.imageflow.models.unit.UnitFactory;
 
 
 

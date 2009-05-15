@@ -3,19 +3,20 @@
  */
 package models;
 
-import imageflow.models.Connection;
-import imageflow.models.ConnectionList;
-import imageflow.models.Input;
-import imageflow.models.MacroElement;
-import imageflow.models.Output;
-import imageflow.models.parameter.ParameterFactory;
-import imageflow.models.unit.SourceUnitElement;
-import imageflow.models.unit.UnitElement;
-import imageflow.models.unit.UnitFactory;
-import imageflow.models.unit.UnitElement.Type;
 
 import java.awt.Dimension;
 import java.awt.Point;
+
+import de.danielsenff.imageflow.models.Connection;
+import de.danielsenff.imageflow.models.ConnectionList;
+import de.danielsenff.imageflow.models.Input;
+import de.danielsenff.imageflow.models.MacroElement;
+import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.parameter.ParameterFactory;
+import de.danielsenff.imageflow.models.unit.SourceUnitElement;
+import de.danielsenff.imageflow.models.unit.UnitElement;
+import de.danielsenff.imageflow.models.unit.UnitFactory;
+import de.danielsenff.imageflow.models.unit.UnitElement.Type;
 
 import junit.framework.TestCase;
 

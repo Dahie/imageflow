@@ -3,7 +3,7 @@
  */
 package models;
 
-import imageflow.models.MacroElement;
+import de.danielsenff.imageflow.models.MacroElement;
 import junit.framework.TestCase;
 
 /**
