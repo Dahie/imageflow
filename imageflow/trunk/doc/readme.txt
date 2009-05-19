@@ -1,6 +1,6 @@
 =================================================================================
 
-ImageFlow 1.0, May 2009, 
+ImageFlow 1.0, 19 May 2009, 
 authors: 
 Daniel Senff (mail@danielsenff.de)
 Kai-Uwe Barthel (k.barthel@fhtw-berlin.de)
