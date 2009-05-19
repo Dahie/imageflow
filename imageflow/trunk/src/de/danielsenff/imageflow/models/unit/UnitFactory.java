@@ -481,11 +481,6 @@ public class UnitFactory {
 	public static UnitElement createGaussianBlurUnit(Point origin) {
 		// 
 		UnitElement blurUnit = new UnitElement(origin, "Gaussian Blur", "run(\"Gaussian Blur...\", \"sigma=PARA_DOUBLE_1\");\n");
-		try {
-			blurUnit.setIcon(ImageIO.read(new File("bin/imageflow/resources/blur.png")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		// setup of the parameter
 		blurUnit.addParameter(
 				ParameterFactory.createParameter("Radius", 4.0, "Radius of the gaussian kernel"));
