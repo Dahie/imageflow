@@ -1,4 +1,4 @@
-package de.danielsenff.imageflow.controller.gui;
+package de.danielsenff.imageflow.gui;
 /*
  * Baba XP - Extreme Programming Projects Manager
  * Copyright (c) 2004 babaxp 

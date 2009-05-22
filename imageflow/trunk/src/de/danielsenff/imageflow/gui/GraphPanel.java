@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.danielsenff.imageflow.controller.gui;
+package de.danielsenff.imageflow.gui;
 
 import graph.Edge;
 import graph.GList;
@@ -101,7 +101,7 @@ public class GraphPanel extends GPanel {
 			// Die Komponente wird verlassen 
 			public void dragExit(final DropTargetEvent e) {}
 
-			// Die Maus bewegt sich Ÿber die Komponente
+			// Die Maus bewegt sich ï¿½ber die Komponente
 			public void dragOver(final DropTargetDragEvent e) {}
 
 			public void drop(final DropTargetDropEvent e) {
@@ -110,7 +110,7 @@ public class GraphPanel extends GPanel {
 					final DataFlavor[] flavors = tr.getTransferDataFlavors();
 					for (int i = 0; i < flavors.length; i++)
 						if (flavors[i].isFlavorJavaFileListType()) {
-							// ZunŠchst annehmen
+							// Zunï¿½chst annehmen
 							e.acceptDrop (e.getDropAction());
 							final List files = (List) tr.getTransferData(flavors[i]);
 							// Wir setzen in das Label den Namen der ersten 
@@ -125,7 +125,7 @@ public class GraphPanel extends GPanel {
 			}
 
 			// Jemand hat die Art des Drops (Move, Copy, Link)
-			// geŠndert
+			// geï¿½ndert
 			public void dropActionChanged(final DropTargetDragEvent e) {}
 
 		};

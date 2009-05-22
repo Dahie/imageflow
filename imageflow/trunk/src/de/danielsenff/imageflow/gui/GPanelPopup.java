@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.danielsenff.imageflow.controller.gui;
+package de.danielsenff.imageflow.gui;
 
 import graph.Node;
 import graph.Selection;

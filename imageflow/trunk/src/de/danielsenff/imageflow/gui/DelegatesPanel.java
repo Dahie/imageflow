@@ -1,4 +1,4 @@
-package de.danielsenff.imageflow.controller.gui;
+package de.danielsenff.imageflow.gui;
 
 
 import java.awt.BasicStroke;
@@ -73,7 +73,7 @@ public class DelegatesPanel extends JPanel {
 				final DragGestureListener dragGestureListener = new DragGestureListener() {
 					public void dragGestureRecognized(final DragGestureEvent e) {
 						// Der Text des Label soll
-						// JVM-intern Ÿbertragen werden
+						// JVM-intern ï¿½bertragen werden
 						//						StringSelection selection = new StringSelection("test");
 						final Transferable trans = new Transferable() {
 

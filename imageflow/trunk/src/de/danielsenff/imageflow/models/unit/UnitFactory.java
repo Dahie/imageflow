@@ -17,7 +17,7 @@ import javax.swing.JFileChooser;
 
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
-import de.danielsenff.imageflow.controller.gui.GraphPanel;
+import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;

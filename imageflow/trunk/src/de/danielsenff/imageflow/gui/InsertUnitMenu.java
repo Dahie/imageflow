@@ -1,4 +1,4 @@
-package de.danielsenff.imageflow.controller.gui;
+package de.danielsenff.imageflow.gui;
 
 
 import java.awt.Point;

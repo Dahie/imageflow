@@ -44,10 +44,10 @@ import org.jdesktop.application.Task;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.controller.MacroFlowRunner;
-import de.danielsenff.imageflow.controller.gui.DelegatesPanel;
-import de.danielsenff.imageflow.controller.gui.GPanelPopup;
-import de.danielsenff.imageflow.controller.gui.GraphPanel;
-import de.danielsenff.imageflow.controller.gui.InsertUnitMenu;
+import de.danielsenff.imageflow.gui.DelegatesPanel;
+import de.danielsenff.imageflow.gui.GPanelPopup;
+import de.danielsenff.imageflow.gui.GraphPanel;
+import de.danielsenff.imageflow.gui.InsertUnitMenu;
 import de.danielsenff.imageflow.models.Connection;
 import de.danielsenff.imageflow.models.ConnectionList;
 import de.danielsenff.imageflow.models.Input;
@@ -657,7 +657,7 @@ public class ImageFlowView extends FrameView {
 		final Selection<Node> selectedUnits = graphPanel.getSelection();
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
 		if (selectedUnits.size() > 0) {
-			// il problema java.util.ConcurrentModificationException è stato risolto introducendo la lista garbage
+			// il problema java.util.ConcurrentModificationException ï¿½ stato risolto introducendo la lista garbage
 			final HashSet<Edge> garbage = new HashSet<Edge>();
 			copyUnitsList.clear();
 			for (final Node t : selectedUnits) {
