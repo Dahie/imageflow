@@ -41,7 +41,7 @@
 		<jar destfile="${build.dir}/Imageflow/Imageflow_.jar" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}"/>
-				<attribute name="Main-Class" value="imageflow.ImageFlow"/>
+				<attribute name="Main-Class" value="de.danielsenff.imageflow.ImageFlow"/>
 				<attribute name="Class-Path" value="."/>
 			</manifest>
 			<fileset dir="${basedir}/bin"/>
