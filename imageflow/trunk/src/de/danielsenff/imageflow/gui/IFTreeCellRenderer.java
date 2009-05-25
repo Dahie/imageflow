@@ -28,7 +28,6 @@ public class IFTreeCellRenderer extends DefaultTreeCellRenderer {
 			final UnitDelegate unitDelegate = (UnitDelegate)value;
 			icon = new ImageIcon(drawIcon(unitDelegate.getColor(), 16, 16));
 			this.setLeafIcon(icon);
-			System.out.println(icon);
 		}
 		
 		return super.getTreeCellRendererComponent(tree, value, sel, expanded, isLeaf,
