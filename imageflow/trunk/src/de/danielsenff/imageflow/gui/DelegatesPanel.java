@@ -176,7 +176,7 @@ public class DelegatesPanel extends JPanel {
 
 	}
 
-
+/*
 	class IFTreeCellRenderer extends JPanel implements TreeCellRenderer {
 		JLabel filename = new JLabel();
 		private JLabel fileicon;
@@ -188,7 +188,6 @@ public class DelegatesPanel extends JPanel {
 				final boolean hasFocus) {
 
 			init(value, isSelected, isLeaf);
-
 			return this;//return component used to render
 		}
 
@@ -198,14 +197,17 @@ public class DelegatesPanel extends JPanel {
 			
 			setLayout(new BorderLayout());
 			fileicon = new JLabel();
+			if(isSelected) {	
+//				setBackground(SystemColor.textHighlight);
+//				filename.setForeground(SystemColor.textHighlightText);
+			}else{	
+//				setBackground(SystemColor.text);
+//				filename.setForeground(SystemColor.textText);
+			}
 			filename.setText(theLabel);
 			filename.setToolTipText(tooltip);
 			filename.setAlignmentX(Component.LEFT_ALIGNMENT);
-			if(isSelected) {	
-				setBackground(SystemColor.textHighlight);
-			}else{	
-				setBackground(SystemColor.text);
-			}
+			
 //			this.icon = drawIcon(Color.WHITE, 16, 16);
 			try {
 				this.icon = ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/imageflow/resources/folder.png"));
@@ -277,6 +279,6 @@ public class DelegatesPanel extends JPanel {
 
 			return icon;
 		}
-	}
+	} */
 
 }
