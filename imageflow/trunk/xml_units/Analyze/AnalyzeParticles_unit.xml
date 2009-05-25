@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Analyze Particles by Daniel Senff -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Resize</UnitName> 
+  <PathToIcon>Resize_Unit.png</PathToIcon> 
+  
+  <ImageJSyntax>
+  run("Analyze Particles...", "size=PARA_STRING_1 circularity=PARA_STRING_2 show=PARA_STRING_3 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3 PARA_BOOLEAN_4 PARA_BOOLEAN_4 PARA_BOOLEAN_5 PARA_BOOLEAN_6");</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <IconSize>BIG</IconSize>
+  <HelpString>Resizes the image to the specified dimensions.</HelpString>  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Size in pixels²</Name>
+  		<DataType>String</DataType>
+  		<Value>0-infinity</Value>
+  		<HelpString></HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Circularity</Name>
+  		<DataType>String</DataType>
+  		<Value>0.00-1.00</Value>
+  		<HelpString>Specified height in pixels.</HelpString>
+  	</Parameter>
+  	 
+ 	<Parameter>
+  		<Name>Show</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>Nothing;Outlines;Masks;Ellipses;Count Masks</Value>
+  		<HelpString></HelpString>
+  		<ChoiceNumber>0</ChoiceNumber>
+  	</Parameter>
+  	
+  	
+  	
+  	<Parameter>
+  		<Name>Display Results</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString></HelpString>
+  		<TrueString>display</TrueString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Clear Results</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString></HelpString>
+  		<TrueString>clear</TrueString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Exclude on Edge</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString></HelpString>
+  		<TrueString>exclude</TrueString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Include Holes</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString></HelpString>
+  		<TrueString>include</TrueString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Summarize</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString></HelpString>
+  		<TrueString>summarize</TrueString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Record starts</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString></HelpString>
+  		<TrueString>record</TrueString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Add to Manager</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString></HelpString>
+  		<TrueString>add</TrueString>
+  	</Parameter> 
+
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>1</ImageType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
+
