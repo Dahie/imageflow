@@ -3,7 +3,7 @@ Quick jobs:
 - comment selection painting
 
 Bugs:
-
+- linux: right click on unit, you get context menu, left klick in workspace, the unit is moved to this spot 
 
 GUI:
 - sidepane resize
@@ -23,6 +23,7 @@ Functions:
 Graph:
 - read all images from folder and process them
 - stack-support
+- MeasurementUnits -> erzeugen Tabellen, Dialoge, Histogram, Daten etc, nur keine Bilder
 
 
 Nice-to-have:

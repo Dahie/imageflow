@@ -225,8 +225,7 @@ public class Input extends Pin implements Connectable {
 		int nump = ((UnitElement) parent).getInputsCount();
 		this.nump = nump;
 		int y =  (i*height / super.nump ) - (height/(2*super.nump)) + parent.getOrigin().y;
-		Point point = new Point(parent.getOrigin().x, y);
-		return point;
+		return new Point(parent.getOrigin().x, y);
 	}
 	
 	/* (non-Javadoc)

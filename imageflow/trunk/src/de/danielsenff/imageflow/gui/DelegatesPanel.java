@@ -114,7 +114,8 @@ public class DelegatesPanel extends JPanel {
 					if(selRow != -1 && selPath.getLastPathComponent() instanceof UnitDelegate) {
 						//			        	 myDoubleClick(selRow, selPath);
 						final UnitDelegate ud = ((UnitDelegate)selPath.getLastPathComponent());
-						unitList.add(ud.createUnit(UnitDelegate.POINT));
+						Point insertPoint = UnitDelegate.POINT;
+						unitList.add(ud.createUnit(insertPoint));
 					}
 				}
 			}

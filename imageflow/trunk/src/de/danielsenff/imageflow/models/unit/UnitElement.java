@@ -458,7 +458,6 @@ public class UnitElement extends AbstractUnit {
 
 	public void setIconFile(File iconFile) {
 		this.iconFile = iconFile; 
-		
 	}
 
 	public void setIconPath(String pathToIcon) {

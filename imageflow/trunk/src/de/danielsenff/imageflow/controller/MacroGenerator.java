@@ -42,6 +42,7 @@ public class MacroGenerator {
 			
 			// duplicate input images if necessary
 			// FIXME duplicates always
+			// maybe use rename(name)
 			macroText += duplicateImages(unit);
 			
 			// parse the command string for parameter tags that need to be replaced
@@ -62,7 +63,7 @@ public class MacroGenerator {
 			
 			macroText += macroElement.getCommandSyntax();
 			
-			// funktioniert nur fŸr einen Ausgang
+			// funktioniert nur fï¿½r einen Ausgang
 			for (int out = 0; out < unit.getOutputsCount(); out++) {
 				final String outputTitle = unit.getOutput(out).getImageTitle();
 				final String outputID = unit.getOutput(out).getImageID();

@@ -304,11 +304,11 @@ public class GraphController{
 		final UnitElement convUnit = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 50));
 		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 160));
 
-		UnitDescription unitSquareDescription = new UnitDescription(new File("xml_units/Process/Math_Unit.xml"));
+		UnitDescription unitSquareDescription = new UnitDescription(new File("xml_units/Process/Math_unit.xml"));
 		final UnitElement squareUnit = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 50));
 		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 160));
 
-		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Process/Add_Unit.xml")), new Point(650, 100));
+		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Process/Add_unit.xml")), new Point(650, 100));
 		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Lookup Tables/Fire_Unit.xml")), new Point(770, 100));
 
 		// some mixing, so they are not in order

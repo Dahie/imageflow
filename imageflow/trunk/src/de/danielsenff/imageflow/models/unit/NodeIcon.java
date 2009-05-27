@@ -259,8 +259,8 @@ public class NodeIcon implements UnitModelComponent {
 	 */
 	private void drawBackground(Graphics2D g2, int arc, int width, int height) {
 		// 
-		Color cTop = new Color(84, 121, 203, 255);
-		Color cBottom = new Color(136, 169, 242, 255);
+		Color cTop = new Color(84, 121, 203, 200);
+		Color cBottom = new Color(136, 169, 242, 200);
 
 		int delta = 20;
 		Color color = unit.getColor();
@@ -269,15 +269,17 @@ public class NodeIcon implements UnitModelComponent {
 		int g = color.getGreen();
 		int b = color.getBlue();
 
-		
+		int alpha = unit.hasDisplayBranch() ? 255 : 160;
 		cTop = new Color(
 				(r-delta) > 255 ? 255 : r-delta,
 				(g-delta) > 255 ? 255 : g-delta,
-				(b-delta) > 255 ? 255 : b-delta);
+				(b-delta) > 255 ? 255 : b-delta,
+						alpha);
 		cBottom = new Color(
 				(r+delta) > 255 ? 255 : r+delta,
 				(g+delta) > 255 ? 255 : g+delta,
-				(b+delta) > 255 ? 255 : b+delta);
+				(b+delta) > 255 ? 255 : b+delta, 
+						alpha);
 		
 		GradientPaint gradient1 = new GradientPaint(x+10,y+10,cTop,x+100,y+30,cBottom);
 	    g2.setPaint(gradient1);
