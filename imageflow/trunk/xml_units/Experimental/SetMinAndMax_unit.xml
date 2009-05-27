@@ -23,7 +23,7 @@
   		<Name>Maximum</Name>
   		<DataType>integer</DataType>
   		<Value>255</Value>
-  		<HelpString>Specified Minimum value.</HelpString>
+  		<HelpString>Specified Maximum value.</HelpString>
   	</Parameter>
 </Parameters>
 

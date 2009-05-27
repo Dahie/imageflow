@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Image Calculator by Daniel Senff -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Threshold</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>setThreshold(PARA_INTEGER_1, PARA_INTEGER_2);</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <IconSize>BIG</IconSize>
+  <HelpString>Sets the boundaries of a threshold.</HelpString>  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Minimum</Name>
+  		<DataType>integer</DataType>
+  		<Value>0</Value>
+  		<HelpString>Specified Minimum value.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Maximum</Name>
+  		<DataType>integer</DataType>
+  		<Value>255</Value>
+  		<HelpString>Specified Maximum value.</HelpString>
+  	</Parameter>
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
+
