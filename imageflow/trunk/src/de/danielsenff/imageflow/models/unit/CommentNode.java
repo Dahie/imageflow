@@ -42,6 +42,7 @@ public class CommentNode extends AbstractUnit {
 
 	public void setText(String text) {
 		this.text = text;
+		setLabel(text);
 	}
 
 	
