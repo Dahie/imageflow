@@ -127,7 +127,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 				List<Element> connectionsList = connectionsElement.getChildren();
 				Iterator<Element> connectionsIterator = connectionsList.iterator();
 
-				// loop Ÿber alle connections
+				// loop ï¿½ber alle connections
 				while (connectionsIterator.hasNext()) { 
 					Element actualConnectionElement = connectionsIterator.next();
 					int fromUnitID 			= Integer.parseInt(actualConnectionElement.getChild("FromUnitID").getValue());
@@ -342,9 +342,9 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 
 
 		// output
-		new XMLOutputter(Format.getPrettyFormat()).output(flowGraph, System.out);
+//		new XMLOutputter(Format.getPrettyFormat()).output(flowGraph, System.out);
 		FileOutputStream fos = new FileOutputStream(file);
-		System.out.println(file);
+//		System.out.println(file);
 		new XMLOutputter(Format.getPrettyFormat()).output(flowGraph, fos);
 	}
 
