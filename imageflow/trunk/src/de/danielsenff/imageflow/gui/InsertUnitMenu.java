@@ -11,27 +11,45 @@ import javax.swing.JMenuItem;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 
+import visualap.Delegate;
+import visualap.ErrorPrinter;
+import visualap.GPanel;
 import de.danielsenff.imageflow.controller.DelegatesController;
-import de.danielsenff.imageflow.models.Model;
-import de.danielsenff.imageflow.models.ModelListener;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
-import visualap.Delegate;
-import visualap.ErrorPrinter;
-import visualap.GPanel;
-
+/**
+ * ContextMenü of the {@link GraphPanel}.
+ * @author senff
+ *
+ */
 public class InsertUnitMenu extends JMenu {
 
-	private GPanel activePanel;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final GPanel activePanel;
 	private final Collection<Delegate> availableUnits;
 	private static Point savedPoint = new Point(75, 75);
 
+	/**
+	 * 
+	 * @param gpanel
+	 * @param availableUnits
+	 */
 	public InsertUnitMenu(final GPanel gpanel, final Collection<Delegate> availableUnits) {
 		this("Insert", gpanel, availableUnits, savedPoint);
 	}
 
+	/**
+	 * 
+	 * @param name
+	 * @param gpanel
+	 * @param availableUnits
+	 * @param savedPoint
+	 */
 	public InsertUnitMenu(final String name, 
 			final GPanel gpanel, 
 			final Collection<Delegate> availableUnits, 
@@ -40,14 +58,13 @@ public class InsertUnitMenu extends JMenu {
 		this.setText(name);
 		this.activePanel = gpanel;
 		this.availableUnits = availableUnits;
-		ActionListener newAction = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JMenuItem source = (JMenuItem)(e.getSource());
-				String action = source.getText();
+		final ActionListener newAction = new ActionListener() {
+			public void actionPerformed(final ActionEvent e) {
+				final JMenuItem source = (JMenuItem)(e.getSource());
+				final String action = source.getText();
 				if (action.equals("Comment")) {	
-					CommentNode n = new CommentNode(savedPoint, "text"); 
+					final CommentNode n = new CommentNode(savedPoint, "text"); 
 					savedPoint.translate(4, 4);
-					System.out.println(n);
 					activePanel.getNodeL().add(n, "Comment");
 					activePanel.getSelection().clear();
 					activePanel.getSelection().add(n);
@@ -56,18 +73,18 @@ public class InsertUnitMenu extends JMenu {
 				}
 
 				// add selected node
-				for (Delegate delegate : availableUnits) {
+				for (final Delegate delegate : availableUnits) {
 					if(delegate instanceof UnitDelegate) {
-						UnitDelegate unitDelegate = (UnitDelegate) delegate;
+						final UnitDelegate unitDelegate = (UnitDelegate) delegate;
 						if (unitDelegate.getName().equals(action)) {
 							try {
-								UnitElement n = unitDelegate.createUnit(savedPoint);
+								final UnitElement n = unitDelegate.createUnit(savedPoint);
 								n.setContext(activePanel.getGlobalVars());
 								activePanel.getNodeL().add(n, activePanel.shortName(action));
 								activePanel.getSelection().clear();
 								activePanel.getSelection().add(n);
 								activePanel.repaint();
-							} catch (Exception ex) {
+							} catch (final Exception ex) {
 								ErrorPrinter.printInfo("instantiation of a new bean failed"+ ex);
 							}
 							return;
@@ -75,31 +92,35 @@ public class InsertUnitMenu extends JMenu {
 					}
 				}
 			}}; 
-			JMenuItem mi = new JMenuItem("Comment");
+			final JMenuItem mi = new JMenuItem("Comment");
 			mi.setToolTipText("Insert Notes or Comments to the graph.");
 			add(mi).addActionListener(newAction);		
 
-			TreeModel tree = DelegatesController.getInstance().delegatesModel;
+			final TreeModel tree = DelegatesController.getInstance().delegatesModel;
 			
-			MutableTreeNode root =  (MutableTreeNode) tree.getRoot();
+			final MutableTreeNode root =  (MutableTreeNode) tree.getRoot();
 			createMenu(this, newAction, root);
 	}
 
-	private void createMenu(JMenu menu, ActionListener newAction, MutableTreeNode root) {
+	private void createMenu(final JMenu menu, final ActionListener newAction, final MutableTreeNode root) {
 		JMenuItem mi;
 		for (int i = 0; i < root.getChildCount(); i++) {
-			MutableTreeNode node = (MutableTreeNode) root.getChildAt(i);
+			final MutableTreeNode node = (MutableTreeNode) root.getChildAt(i);
 			if(node instanceof UnitDelegate) {
-				UnitDelegate unitDelegate = (UnitDelegate)node;
+				final UnitDelegate unitDelegate = (UnitDelegate)node;
 				mi = new JMenuItem(unitDelegate.getName());
 				mi.setToolTipText(unitDelegate.getToolTipText());
 				menu.add(mi).addActionListener(newAction);
 			} else {
-				JMenu subMenu = new JMenu(node.toString());
+				final JMenu subMenu = new JMenu(node.toString());
 				createMenu(subMenu, newAction, node);
 				menu.add(subMenu);
 			}
 		}
+	}
+
+	public Collection<Delegate> getAvailableUnits() {
+		return availableUnits;
 	}
 
 }
