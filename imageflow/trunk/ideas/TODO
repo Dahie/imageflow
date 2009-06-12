@@ -1,4 +1,9 @@
 
+
+- add sample images to the example workflows
+- check for bugs concerning the image retrieving after a workflow was executed (exception because of names with -1)
+
+
 Quick jobs:
 - comment selection painting
 
@@ -6,7 +11,6 @@ Bugs:
 - linux: right click on unit, you get context menu, left klick in workspace, the unit is moved to this spot 
 
 GUI:
-- sidepane resize
 - filter images in filechooser
 - cursor keys -> move or select?
 - more keyshortcuts?
@@ -14,8 +18,6 @@ GUI:
 - drag copy CTRL
 
 Functions:
-- as imageJ plugin / standalone
-- macro optimierung, cleanup, no duplicates?
 - no other jars (jdom) -> buildscript
 - quicksearch of filter units in left sidepane
 
