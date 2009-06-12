@@ -52,11 +52,6 @@ public class InsertUnitMenu extends JMenu {
 					activePanel.getSelection().clear();
 					activePanel.getSelection().add(n);
 					activePanel.repaint();
-					n.addModelListener(new ModelListener() {
-						public void modelChanged(Model model) {
-							activePanel.repaint();
-						}
-					});
 					return;
 				}
 
@@ -72,12 +67,6 @@ public class InsertUnitMenu extends JMenu {
 								activePanel.getSelection().clear();
 								activePanel.getSelection().add(n);
 								activePanel.repaint();
-								n.addModelListener(new ModelListener() {
-									public void modelChanged(Model model) {
-										activePanel.invalidate();
-										//TODO setModiefied
-									}
-								});
 							} catch (Exception ex) {
 								ErrorPrinter.printInfo("instantiation of a new bean failed"+ ex);
 							}
@@ -94,18 +83,6 @@ public class InsertUnitMenu extends JMenu {
 			
 			MutableTreeNode root =  (MutableTreeNode) tree.getRoot();
 			createMenu(this, newAction, root);
-			
-			
-			//list over all available units
-			/*for (Delegate delegate : availableUnits) {
-				if(delegate instanceof UnitDelegate) {
-					UnitDelegate unitDelegate = (UnitDelegate) delegate;
-
-					mi = new JMenuItem(unitDelegate.getName());
-					mi.setToolTipText(unitDelegate.getToolTipText());
-					add(mi).addActionListener(newAction);
-				}
-			}*/
 	}
 
 	private void createMenu(JMenu menu, ActionListener newAction, MutableTreeNode root) {
