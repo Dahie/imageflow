@@ -1,11 +1,9 @@
 package de.danielsenff.imageflow.models;
 
-import graph.Node;
-import graph.Pin;
-
-
 import java.awt.Point;
 
+import visualap.Node;
+import visualap.Pin;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 

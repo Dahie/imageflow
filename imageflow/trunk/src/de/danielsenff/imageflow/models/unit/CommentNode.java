@@ -1,7 +1,5 @@
 package de.danielsenff.imageflow.models.unit;
 
-import graph.Node;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -11,9 +9,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
-import java.util.ArrayList;
 
-import de.danielsenff.imageflow.models.ModelListener;
+import visualap.Node;
 
 
 /**
@@ -31,7 +28,7 @@ public class CommentNode extends AbstractUnit {
 	 */
 	public CommentNode(final Point point, final String string) {
 		super(point, string);
-		this.label = string;
+		setLabel(string);
 		setText(string);
 	}
 	

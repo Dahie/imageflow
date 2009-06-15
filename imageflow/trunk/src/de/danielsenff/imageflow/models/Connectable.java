@@ -1,7 +1,7 @@
 package de.danielsenff.imageflow.models;
 
+import visualap.Pin;
 import de.danielsenff.imageflow.models.unit.UnitElement;
-import graph.Pin;
 
 /**
  * Interface for {@link Pin} to connect to other pins

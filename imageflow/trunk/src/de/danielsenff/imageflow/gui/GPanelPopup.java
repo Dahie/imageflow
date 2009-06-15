@@ -3,9 +3,6 @@
  */
 package de.danielsenff.imageflow.gui;
 
-import graph.Node;
-import graph.Selection;
-
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -14,18 +11,18 @@ import java.util.Collection;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
+import visualap.GPanel;
+import visualap.GPanelListener;
+import visualap.Node;
+import visualap.Selection;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
-
-import visualap.Delegate;
-import visualap.GPanel;
-import visualap.GPanelListener;
 
 /**
  * @author danielsenff

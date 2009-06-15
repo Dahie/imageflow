@@ -33,7 +33,7 @@ public class ParameterFactory {
 	 * @param value
 	 * @param chosenValue 
 	 * @param helpString
-	 * @param boolTrueString	This can be any other type that maybe required for certain paramemters, like TrueString or chosenValue
+	 * @param boolTrueString	This can be any other type that maybe required for certain parameters, like TrueString or chosenValue
 	 * @param choiceIndex	Selected index from the list of choices. 
 	 * @return
 	 */

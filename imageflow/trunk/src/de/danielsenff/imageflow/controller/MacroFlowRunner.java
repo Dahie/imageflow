@@ -1,11 +1,10 @@
 package de.danielsenff.imageflow.controller;
 
-import graph.Node;
-
 import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 
+import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.Connection;
 import de.danielsenff.imageflow.models.ConnectionList;
@@ -270,7 +269,7 @@ public class MacroFlowRunner {
 						orderedList.add(remove);
 					/*} else if( !unit.hasAllInputsMarked()
 								&& unit.hasRequiredInputsConnected()) {
-						System.err.println("doesn£t have all inputs connected, but those who are, are marked");*/
+						System.err.println("doesnï¿½t have all inputs connected, but those who are, are marked");*/
 					} else if (!unit.hasRequiredInputsConnected() 
 							&& unit.getUnitType() != Type.SOURCE) {
 						// if unit has no connections actually, it can be discarded right away
@@ -292,8 +291,6 @@ public class MacroFlowRunner {
 				// is found the next loop over the element list is one element shorter.
 				// thereby having O(n^2) maybe this can be done better later
 				i++;
-
-				//FIXME loops when single unit elements are in the graph
 
 			}
 

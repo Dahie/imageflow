@@ -3,17 +3,20 @@
  */
 package de.danielsenff.imageflow.models;
 
-import graph.Node;
-import graph.Selection;
+import visualap.Selection;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import visualap.Node;
 
 /**
  * @author danielsenff
  *
  */
-public class SelectionList extends Selection<Node> implements Selectable {
+public class SelectionList extends Selection<Node> 
+	implements Selectable 
+{
 
 	private final ArrayList<SelectionListener> listeners;
 	
@@ -96,7 +99,11 @@ public class SelectionList extends Selection<Node> implements Selectable {
 	}
 
 	public boolean isSelected() {
-		return !isEmpty();
+		return !this.isEmpty();
+	}
+
+	public void setSelected(boolean sel) {
+		// FIXME empty, actually senseless
 	}
 
 }

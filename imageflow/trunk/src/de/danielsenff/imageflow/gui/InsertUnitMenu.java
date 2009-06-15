@@ -11,10 +11,9 @@ import javax.swing.JMenuItem;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 
-import visualap.Delegate;
-import visualap.ErrorPrinter;
 import visualap.GPanel;
 import de.danielsenff.imageflow.controller.DelegatesController;
+import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -79,13 +78,11 @@ public class InsertUnitMenu extends JMenu {
 						if (unitDelegate.getName().equals(action)) {
 							try {
 								final UnitElement n = unitDelegate.createUnit(savedPoint);
-								n.setContext(activePanel.getGlobalVars());
 								activePanel.getNodeL().add(n, activePanel.shortName(action));
 								activePanel.getSelection().clear();
 								activePanel.getSelection().add(n);
 								activePanel.repaint();
 							} catch (final Exception ex) {
-								ErrorPrinter.printInfo("instantiation of a new bean failed"+ ex);
 							}
 							return;
 						}	

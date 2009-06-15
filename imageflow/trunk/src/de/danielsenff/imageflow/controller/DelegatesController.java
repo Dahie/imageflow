@@ -17,12 +17,12 @@ import org.xml.sax.SAXParseException;
 
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.helper.Tools;
+import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 
-import visualap.Delegate;
 
 /**
  * Controller for reading and managing {@link UnitDelegate}s.

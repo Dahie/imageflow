@@ -11,7 +11,8 @@ import java.util.Vector;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import visualap.Delegate;
+import de.danielsenff.imageflow.models.Delegate;
+
 
 /**
  * This class is a Meta-Class for the {@link UnitElement}.

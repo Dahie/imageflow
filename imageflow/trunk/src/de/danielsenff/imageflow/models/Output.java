@@ -1,13 +1,13 @@
 package de.danielsenff.imageflow.models;
 
-import graph.Node;
-import graph.Pin;
 import ij.plugin.filter.PlugInFilter;
 
 import java.awt.Point;
 import java.util.Collection;
 import java.util.Vector;
 
+import visualap.Node;
+import visualap.Pin;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 

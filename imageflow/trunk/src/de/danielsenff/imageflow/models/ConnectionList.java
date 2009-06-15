@@ -3,14 +3,12 @@
  */
 package de.danielsenff.imageflow.models;
 
-import graph.Edges;
-import graph.Pin;
-
-
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import visualap.Edges;
+import visualap.Pin;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 

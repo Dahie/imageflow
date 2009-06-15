@@ -41,10 +41,10 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.danielsenff.imageflow.controller.DelegatesController;
+import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
-import visualap.Delegate;
 
 /**
  * Panel which displays the units that can be inserted into the workflow.

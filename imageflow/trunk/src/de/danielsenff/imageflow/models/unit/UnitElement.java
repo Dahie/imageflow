@@ -1,5 +1,4 @@
 package de.danielsenff.imageflow.models.unit;
-import graph.Node;
 import ij.gui.GenericDialog;
 
 import java.awt.Color;
@@ -9,14 +8,11 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
+import visualap.Node;
 import de.danielsenff.imageflow.helper.PaintUtil;
 import de.danielsenff.imageflow.models.Connection;
 import de.danielsenff.imageflow.models.Input;
@@ -190,6 +186,15 @@ public class UnitElement extends AbstractUnit {
 		setCompontentSize(Size.BIG);
 	}
 
+	
+	
+	
+	/*
+	 * Outputs
+	 */
+	
+	
+	
 
 	/**
 	 * Adds an Output to the unit
@@ -246,6 +251,53 @@ public class UnitElement extends AbstractUnit {
 		return this.outputs.size();
 	}
 
+	/**
+	 * Returns true if an output is marked.
+	 * @return
+	 */
+	public boolean hasMarkedOutput() {
+		for (Output output : this.outputs) {
+
+			// output is actually connected
+			if(output.isConnected()) {
+
+				int mark = ((UnitElement)output.getParent()).getMark();
+				// if mark is set to anything
+				if(mark != 0) { 
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns true, if this UnitElement has {@link Output}-Pins.
+	 * @return
+	 */
+	public boolean hasOutputs() {
+		return !this.outputs.isEmpty();
+	}
+
+	/**
+	 * Is true as soon as one connected {@link Output} is found.
+	 * @return
+	 */
+	public boolean hasOutputsConnected() {
+		for (final Output output : outputs) {
+			if(output.isConnected())
+				return true;
+		}
+		return false;
+	}
+	
+	
+	
+	
+	/*
+	 * Inputs
+	 */
+	
 	/**
 	 * Returns the {@link Input} at the given index. Indecies start with 0.
 	 * @param index
@@ -322,6 +374,40 @@ public class UnitElement extends AbstractUnit {
 	public int getInputsCount() {
 		return this.inputs.size();
 	}
+	
+	/**
+	 * Is true as soon as one connected {@link Input} is found.
+	 * @return
+	 */
+	public boolean hasInputsConnected() {
+		for (final Input input : inputs) {
+			if(input.isConnected())
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns true if this unit has all required inputs connected.
+	 * @return
+	 */
+	public boolean hasRequiredInputsConnected() {
+		for (final Input input : inputs) {
+			if(input.isRequired() && !input.isConnected()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 	/**
@@ -333,28 +419,8 @@ public class UnitElement extends AbstractUnit {
 		return this.unitName;
 	}
 
-	/**
-	 * If activated, the unit will display the current image.
-	 * This setting is actually attached to the {@link Output}. 
-	 * This is a convenience method for changing all outputs of this
-	 * unit at once.
-	 * @param isDisplayUnit
-	 */
-	public void setDisplayUnit(final boolean isDisplayUnit) {
-		this.isDisplayUnit = isDisplayUnit;
-		for (Output output : getOutputs()) {
-			output.setDoDisplay(isDisplayUnit);
-		}
-		notifyModelListeners();
-	}
 
-	/**
-	 * Returns whether or not this unit should display the current state of the image.
-	 * @return 
-	 */
-	public boolean isDisplayUnit() {
-		return this.isDisplayUnit;
-	}
+
 
 	@Override
 	public void drag(int dx, int dy) {
@@ -362,6 +428,14 @@ public class UnitElement extends AbstractUnit {
 		notifyModelListeners();
 	}
 
+	
+	
+	
+	/*
+	 * Parameters
+	 */
+	
+	
 	/**
 	 * Add a Parameter to the unit
 	 * @param parameter
@@ -401,6 +475,145 @@ public class UnitElement extends AbstractUnit {
 		return this.parameters.get(i);
 	}
 
+	/**
+	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
+	 */
+	public void showProperties() {
+		final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters") ;
+		gd.addMessage(getHelpString());
+		gd.addMessage(" ");
+
+
+		// label field 
+		gd.addStringField("Unit label", this.getLabel(),40);
+		gd.addCheckbox("Display", this.isDisplayUnit);
+
+		final ArrayList<Parameter> parameterList = getParameters();
+
+		if (parameterList.isEmpty()) {
+			gd.addMessage("No parameters that can be set");
+		} else {
+			for (final Parameter parameter : parameterList) {
+
+				if(parameter instanceof DoubleParameter) {
+					gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
+				} else if(parameter instanceof IntegerParameter) {
+					gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
+				} else if(parameter instanceof BooleanParameter) {
+					gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
+				} else if(parameter instanceof ChoiceParameter) {
+					gd.addChoice(parameter.getDisplayName(), 
+							((ChoiceParameter)parameter).getChoicesArray(), 
+							((ChoiceParameter)parameter).getValue());
+				} else if(parameter instanceof StringParameter) {
+					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
+//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
+				} 			
+			}
+
+		}
+
+		// show properties window
+		gd.showDialog();
+
+		if( gd.wasCanceled())
+			return;
+
+		String newLabel = (String) (gd.getNextString()).trim();
+		setLabel(newLabel);
+		boolean isNewDisplay = gd.getNextBoolean();
+		setDisplayUnit(isNewDisplay);
+
+		for (final Parameter parameter : parameterList) {
+			if(parameter instanceof DoubleParameter) {
+				((DoubleParameter) parameter).setValue((double) (gd.getNextNumber()));
+			} else if (parameter instanceof IntegerParameter) {
+				((IntegerParameter) parameter).setValue((int) (gd.getNextNumber()));
+			} else if (parameter instanceof BooleanParameter) {
+				((BooleanParameter) parameter).setValue((boolean) (gd.getNextBoolean()));
+			} else if (parameter instanceof ChoiceParameter) {
+				((ChoiceParameter) parameter).setValue((String) (gd.getNextChoice()));
+				// set the ChoiceNumber to be able to save it
+			} else if (parameter instanceof StringParameter) {
+				String newString = (String) (gd.getNextString()).trim();
+				((StringParameter) parameter).setValue(newString);
+			} 
+		}	
+
+		notifyModelListeners();
+	}
+
+	/**
+	 * Returns whether this unit has parameters or not.
+	 * This doesn't concern the unitlabel.
+	 * @return
+	 */
+	public boolean hasParameters() {
+		return !parameters.isEmpty();
+	}
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * Displayable
+	 */
+	
+	/**
+	 * Returns whether or not this unit should display the current state of the image.
+	 * @return 
+	 */
+	public boolean isDisplayUnit() {
+		return this.isDisplayUnit;
+	}
+	
+	/**
+	 * If activated, the unit will display the current image.
+	 * This setting is actually attached to the {@link Output}. 
+	 * This is a convenience method for changing all outputs of this
+	 * unit at once.
+	 * @param isDisplayUnit
+	 */
+	public void setDisplayUnit(final boolean isDisplayUnit) {
+		this.isDisplayUnit = isDisplayUnit;
+		for (Output output : getOutputs()) {
+			output.setDoDisplay(isDisplayUnit);
+		}
+		notifyModelListeners();
+	}
+	
+	/**
+	 * Returns true if any {@link Output} connects to a unit that is set as displayable.
+	 * @return
+	 */
+	public boolean hasDisplayBranch() {
+		if(isDisplayUnit())
+			return true;
+
+		for (Output output : getOutputs()) {
+			if(output.isConnected()) {
+				for (Connection connection : output.getConnections()) {
+					UnitElement next = (UnitElement)connection.getToUnit();
+					//					System.out.println(next +" tested by "+ this);
+					if(next.hasDisplayBranch()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * Returns the what type this is. 
@@ -591,6 +804,11 @@ public class UnitElement extends AbstractUnit {
 	}
 
 
+	/*
+	 * Object
+	 */
+	
+	
 
 	/* (non-Javadoc)
 	 * @see graph.NodeAbstract#setObject(java.lang.Object)
@@ -652,6 +870,11 @@ public class UnitElement extends AbstractUnit {
 	}
 
 
+	
+	/*
+	 * Marking
+	 */
+	
 	/**
 	 * Mark this unit by marking its {@link Input}s and {@link Output}s.
 	 * @param mark
@@ -704,148 +927,10 @@ public class UnitElement extends AbstractUnit {
 	}
 
 
-	/**
-	 * Returns true if an output is marked.
-	 * @return
-	 */
-	public boolean hasMarkedOutput() {
-		for (Output output : this.outputs) {
-
-			// output is actually connected
-			if(output.isConnected()) {
-
-				int mark = ((UnitElement)output.getParent()).getMark();
-				// if mark is set to anything
-				if(mark != 0) { 
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Is true as soon as one connected {@link Input} is found.
-	 * @return
-	 */
-	public boolean hasInputsConnected() {
-		for (final Input input : inputs) {
-			if(input.isConnected())
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Returns true if this unit has all required inputs connected.
-	 * @return
-	 */
-	public boolean hasRequiredInputsConnected() {
-		for (final Input input : inputs) {
-			if(input.isRequired() && !input.isConnected()) {
-				return false;
-			}
-		}
-		return true;
-	}
+	
 
 
-	/**
-	 * Returns true, if this UnitElement has {@link Output}-Pins.
-	 * @return
-	 */
-	public boolean hasOutputs() {
-		return !this.outputs.isEmpty();
-	}
-
-	/**
-	 * Is true as soon as one connected {@link Output} is found.
-	 * @return
-	 */
-	public boolean hasOutputsConnected() {
-		for (final Output output : outputs) {
-			if(output.isConnected())
-				return true;
-		}
-		return false;
-	}
-
-
-	/**
-	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
-	 */
-	public void showProperties() {
-		final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters");
-		gd.addMessage(getHelpString());
-		gd.addMessage(" ");
-
-
-		// label field 
-		gd.addStringField("Unit label", this.getLabel(),40);
-		gd.addCheckbox("Display", this.isDisplayUnit);
-
-		final ArrayList<Parameter> parameterList = getParameters();
-
-		if (parameterList.isEmpty()) {
-			gd.addMessage("No parameters that can be set");
-		} else {
-			for (final Parameter parameter : parameterList) {
-
-				if(parameter instanceof DoubleParameter) {
-					gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
-				} else if(parameter instanceof IntegerParameter) {
-					gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
-				} else if(parameter instanceof BooleanParameter) {
-					gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
-				} else if(parameter instanceof ChoiceParameter) {
-					gd.addChoice(parameter.getDisplayName(), 
-							((ChoiceParameter)parameter).getChoicesArray(), 
-							((ChoiceParameter)parameter).getValue());
-				} else if(parameter instanceof StringParameter) {
-					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
-				}		
-			}
-
-		}
-
-		// show properties window
-		gd.showDialog();
-
-		if( gd.wasCanceled())
-			return;
-
-		String newLabel = (String) (gd.getNextString()).trim();
-		setLabel(newLabel);
-		boolean isNewDisplay = gd.getNextBoolean();
-		setDisplayUnit(isNewDisplay);
-
-		for (final Parameter parameter : parameterList) {
-			if(parameter instanceof DoubleParameter) {
-				((DoubleParameter) parameter).setValue((double) (gd.getNextNumber()));
-			} else if (parameter instanceof IntegerParameter) {
-				((IntegerParameter) parameter).setValue((int) (gd.getNextNumber()));
-			} else if (parameter instanceof BooleanParameter) {
-				((BooleanParameter) parameter).setValue((boolean) (gd.getNextBoolean()));
-			} else if (parameter instanceof ChoiceParameter) {
-				((ChoiceParameter) parameter).setValue((String) (gd.getNextChoice()));
-				// TODO set the ChoiceNumber to be able to save it
-			} else if (parameter instanceof StringParameter) {
-				String newString = (String) (gd.getNextString()).trim();
-				((StringParameter) parameter).setValue(newString);
-			}
-		}	
-
-		notifyModelListeners();
-	}
-
-	/**
-	 * Returns whether this unit has parameters or not.
-	 * This doesn't concern the unitlabel.
-	 * @return
-	 */
-	public boolean hasParameters() {
-		return !parameters.isEmpty();
-	}
+	
 
 	/**
 	 * Returns the base color of the units representation.
@@ -880,27 +965,7 @@ public class UnitElement extends AbstractUnit {
 		this.infoText = helpString;		
 	}
 
-	/**
-	 * Returns true if any {@link Output} connects to a unit that is set as displayable.
-	 * @return
-	 */
-	public boolean hasDisplayBranch() {
-		if(isDisplayUnit())
-			return true;
 
-		for (Output output : getOutputs()) {
-			if(output.isConnected()) {
-				for (Connection connection : output.getConnections()) {
-					UnitElement next = (UnitElement)connection.getToUnit();
-					//					System.out.println(next +" tested by "+ this);
-					if(next.hasDisplayBranch()) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
 
 	/**
 	 * @return the compontentSize

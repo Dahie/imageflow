@@ -3,19 +3,14 @@
  */
 package models;
 
-import graph.Node;
-
-
 import java.awt.Dimension;
 
-import de.danielsenff.imageflow.controller.GraphController;
+import junit.framework.TestCase;
 import de.danielsenff.imageflow.models.Connection;
 import de.danielsenff.imageflow.models.ConnectionList;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
-
-import junit.framework.TestCase;
 
 /**
  * @author danielsenff

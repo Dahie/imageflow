@@ -3,8 +3,6 @@
  */
 package de.danielsenff.imageflow.models.unit;
 
-import graph.Node;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -15,6 +13,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
+import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.gui.GraphPanel;

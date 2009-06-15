@@ -1,9 +1,9 @@
 package de.danielsenff.imageflow.models;
 
+import visualap.Edge;
+import visualap.Node;
+import visualap.Pin;
 import de.danielsenff.imageflow.models.unit.UnitElement;
-import graph.Edge;
-import graph.Node;
-import graph.Pin;
 
 /**
  * Connection between two {@link Pin}s, {@link Input} and {@link Output}.

@@ -3,11 +3,6 @@
  */
 package de.danielsenff.imageflow.gui;
 
-import graph.Edge;
-import graph.GList;
-import graph.Node;
-import graph.Pin;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -40,18 +35,21 @@ import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
+import visualap.Edge;
+import visualap.GList;
+import visualap.GPanel;
+import visualap.GPanelListener;
+import visualap.Node;
+import visualap.Pin;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.Connection;
+import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.Input;
 import de.danielsenff.imageflow.models.Output;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
-
-import visualap.Delegate;
-import visualap.GPanel;
-import visualap.GPanelListener;
 
 /**
  * Graphical workspace on which the units are drawn and which handles the mouse actions.
@@ -374,8 +372,7 @@ public class GraphPanel extends GPanel {
 				if(drawEdge instanceof Output
 						&& pin instanceof Input) {
 					isLoop = ((Input)pin).isConnectedInInputBranch(drawEdge.getParent());
-					isCompatible = ((Output)drawEdge).isImageBitDepthCompatible(
-							((Input)pin).getImageBitDepth());
+					isCompatible = ((Output)drawEdge).isImageBitDepthCompatible(((Input)pin).getImageBitDepth());
 
 				} else if (drawEdge instanceof Input
 						&& pin instanceof Output) {

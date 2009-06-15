@@ -1,8 +1,8 @@
 package de.danielsenff.imageflow;
 
-import graph.Edge;
-import graph.Node;
-import graph.Selection;
+import visualap.Edge;
+import visualap.Node;
+import visualap.Selection;
 import ij.IJ;
 
 import java.awt.BorderLayout;
@@ -48,8 +48,10 @@ import de.danielsenff.imageflow.gui.DelegatesPanel;
 import de.danielsenff.imageflow.gui.GPanelPopup;
 import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.gui.InsertUnitMenu;
+import de.danielsenff.imageflow.gui.WorkspacePanel;
 import de.danielsenff.imageflow.models.Connection;
 import de.danielsenff.imageflow.models.ConnectionList;
+import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.Input;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
@@ -67,9 +69,8 @@ import de.danielsenff.imageflow.tasks.ImportGraphTask;
 import de.danielsenff.imageflow.tasks.LoadFlowGraphTask;
 import de.danielsenff.imageflow.tasks.RunMacroTask;
 import de.danielsenff.imageflow.tasks.SaveFlowGraphTask;
+import de.danielsenff.imageflow.view.UnitProcessingComponent;
 
-import visualap.Delegate;
-import visualap.ErrorPrinter;
 
 
 /**
@@ -314,6 +315,10 @@ public class ImageFlowView extends FrameView {
 		graphPanel.setPreferredSize(new Dimension(400, 300));
 		graphPanel.setSelections(this.selections);
 
+		
+		WorkspacePanel workspacePanel = new WorkspacePanel();
+		workspacePanel.setPreferredSize(new Dimension(400, 300));
+		workspacePanel.add(new UnitProcessingComponent(UnitFactory.createAddNoiseUnit()));
 		
 		
 		ScrollPane graphScrollpane = new ScrollPane();
@@ -727,7 +732,7 @@ public class ImageFlowView extends FrameView {
 					graphPanel.getNodeL().add(t, t.getLabel());
 					copyUnitsList.add(clone);
 				} catch(final CloneNotSupportedException ex) {
-					ErrorPrinter.printInfo("CloneNotSupportedException");
+//					ErrorPrinter.printInfo("CloneNotSupportedException");
 				}
 			}
 			graphPanel.repaint();

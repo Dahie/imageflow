@@ -1,5 +1,4 @@
 package de.danielsenff.imageflow.controller;
-import graph.Node;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
@@ -12,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.Connection;
 import de.danielsenff.imageflow.models.ConnectionList;
@@ -214,7 +214,7 @@ public class GraphController{
 	}
 
 	public void write(File file) throws IOException {
-			nodes.write(file);
+		nodes.write(file);
 	}
 
 

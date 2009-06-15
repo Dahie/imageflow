@@ -3,10 +3,6 @@
  */
 package de.danielsenff.imageflow.models.unit;
 
-import graph.Edge;
-import graph.GList;
-import graph.Node;
-
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +19,9 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import visualap.Edge;
+import visualap.GList;
+import visualap.Node;
 import de.danielsenff.imageflow.models.Connection;
 import de.danielsenff.imageflow.models.ConnectionList;
 import de.danielsenff.imageflow.models.Input;
