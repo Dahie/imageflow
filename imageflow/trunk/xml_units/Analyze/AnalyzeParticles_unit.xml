@@ -4,13 +4,13 @@
 <UnitDescription>
 
 <General>
-  <UnitName>Resize</UnitName> 
-  <PathToIcon>Resize_Unit.png</PathToIcon> 
+  <UnitName>Analyze Particles</UnitName> 
+  <PathToIcon></PathToIcon> 
   
   <ImageJSyntax>run("Analyze Particles...", "size=PARA_STRING_1 circularity=PARA_STRING_2 show=PARA_STRING_3 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3 PARA_BOOLEAN_4 PARA_BOOLEAN_4 PARA_BOOLEAN_5 PARA_BOOLEAN_6");</ImageJSyntax>
   <Color>0x6e91de</Color>
   <IconSize>BIG</IconSize>
-  <HelpString>Resizes the image to the specified dimensions.</HelpString>  
+  <HelpString>Analyzes the particles in a binary image.</HelpString>  
 </General>
 
 <Parameters>
