@@ -1,6 +1,5 @@
 package de.danielsenff.imageflow;
 
-import visualap.Edge;
 import visualap.Node;
 import visualap.Selection;
 import ij.IJ;
@@ -72,6 +71,8 @@ import de.danielsenff.imageflow.tasks.SaveFlowGraphTask;
 
 
 /**
+ * Controller of one workspace. Contains all necessary data of an opened 
+ * graph.
  * @author danielsenff
  *
  */
@@ -115,7 +116,7 @@ public class ImageFlowView extends FrameView {
 		this.graphController = new GraphController();
 		this.units = this.graphController.getUnitElements();
 		this.connections = this.graphController.getConnections();
-		this.selections = new SelectionList();
+		this.selections = this.graphController.getSelections();
 		this.unitDelegates = DelegatesController.getInstance().getUnitDelegates();
 		
 		try {
@@ -143,7 +144,7 @@ public class ImageFlowView extends FrameView {
 	
 
 	/**
-	 * Register the Modellisteners.
+	 * Register the ModelListeners.
 	 */
 	private void registerModelListeners() {
 		// usually on startup this is empty
@@ -293,7 +294,7 @@ public class ImageFlowView extends FrameView {
 	
 	
 	/**
-	 * Adds all components to the Jframe
+	 * Adds all components to the JFrame
 	 */
 	private void addComponents() {
 		
@@ -384,6 +385,7 @@ public class ImageFlowView extends FrameView {
 		this.graphController = graphController;
 		this.units = this.graphController.getUnitElements();
 		this.connections = this.graphController.getConnections();
+		this.selections = this.graphController.getSelections();
 		graphPanel.setGraphController(this.graphController);
 		graphPanel.repaint();
 	}
@@ -430,7 +432,7 @@ public class ImageFlowView extends FrameView {
     public void setModified(final boolean modified) {
         boolean oldValue = this.modified;
         this.modified = modified;
-        // on programmstart, file may not be initialised
+        // on program start, file may not be initialised
         if(file != null){
         	String appId = getResourceMap().getString("Application.id");
             String changed = modified ? "*" : "";
@@ -661,7 +663,7 @@ public class ImageFlowView extends FrameView {
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
 		if (selectedUnits.size() > 0) {
 			// il problema java.util.ConcurrentModificationException � stato risolto introducendo la lista garbage
-			final HashSet<Edge> garbage = new HashSet<Edge>();
+			final HashSet<Connection> garbage = new HashSet<Connection>();
 			copyUnitsList.clear();
 			for (final Node t : selectedUnits) {
 				/*for (Edge c : activePanel.getEdgeL())
@@ -672,7 +674,7 @@ public class ImageFlowView extends FrameView {
 				copyUnitsList.add(t);
 				graphController.removeNode(t);
 			}
-			for (final Edge c : garbage) {
+			for (final Connection c : garbage) {
 				graphController.getConnections().remove(c);
 //				activePanel.getEdgeL().remove(c);
 			}
@@ -913,8 +915,8 @@ public class ImageFlowView extends FrameView {
     	final JDialog dialog = new JDialog();
 
     	final DefaultListModel lm = new DefaultListModel();
-    	for (final Edge edge : graphController.getUnitElements().getConnections()) {
-    		lm.addElement(edge);	
+    	for (final Connection connection : graphController.getUnitElements().getConnections()) {
+    		lm.addElement(connection);	
     	}
     	final JList list = new JList(lm);
     	

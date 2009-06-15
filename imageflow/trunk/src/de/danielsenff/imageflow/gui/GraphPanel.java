@@ -35,7 +35,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
-import visualap.Edge;
 import visualap.GList;
 import visualap.GPanel;
 import visualap.GPanelListener;
@@ -141,36 +140,21 @@ public class GraphPanel extends GPanel {
 		
 	}
 
-	/**
-	 * paint things that eventually go on a printer
-	 * @param g
-	 */
 	@Override
-	public void paintPrintable(final Graphics g) {
-		rect = new Rectangle();
-		for (final Node node : getUnitList()) {
-			rect = rect.union(node.paint(g, this));
+	protected void paintPrintableConnection(Graphics g, Connection connection) {
+		final Point from = connection.getInput().getLocation();
+		final Point to = connection.getOutput().getLocation();
+		g.setColor(  (connection.areImageBitDepthCompatible()) ? Color.BLACK : Color.RED );
+		g.drawLine(from.x, from.y, to.x, to.y);
+		
+		if(!connection.areImageBitDepthCompatible()) {
+			final int dX = Math.abs(from.x - to.x)/2 + Math.min(from.x, to.x);
+			final int dY = Math.abs(from.y - to.y)/2 + Math.min(from.y, to.y);
+			final Point origin = new Point(dX, dY);
+			drawErrorMessage((Graphics2D) g, "incompatible image type", origin);
 		}
-		setPreferredSize(rect.getSize());
-		Connection conn;
-		for (final Edge aEdge : EdgeL) {
-			conn = (Connection)aEdge; 
-			final Point from = aEdge.from.getLocation();
-			final Point to = aEdge.to.getLocation();
-			g.setColor(  (conn.areImageBitDepthCompatible()) ? Color.BLACK : Color.RED );
-			g.drawLine(from.x, from.y, to.x, to.y);
-			
-			if(!conn.areImageBitDepthCompatible()) {
-				final int dX = Math.abs(from.x - to.x)/2 + Math.min(from.x, to.x);
-				final int dY = Math.abs(from.y - to.y)/2 + Math.min(from.y, to.y);
-				final Point origin = new Point(dX, dY);
-				drawErrorMessage((Graphics2D) g, "incompatible image type", origin);
-			}
-			
-		}
-		revalidate();
 	}
-
+	
 
 	/* (non-Javadoc)
 	 * @see visualap.GPanel#paintComponent(java.awt.Graphics)
@@ -515,7 +499,6 @@ public class GraphPanel extends GPanel {
 		this.drawGrid = drawGrid;
 	}
 	
-	@Override
 	public void properties(final Node node) {
 		if (node instanceof CommentNode) {
 			//			propertySheet.setVisible(false);
@@ -536,7 +519,7 @@ public class GraphPanel extends GPanel {
 	public void setGraphController(final GraphController graphController) {
 		this.selection.clear();
 		this.nodeL = graphController.getUnitElements();
-		this.EdgeL = graphController.getConnections();
+		this.connectionList = graphController.getConnections();
 
 	}
 

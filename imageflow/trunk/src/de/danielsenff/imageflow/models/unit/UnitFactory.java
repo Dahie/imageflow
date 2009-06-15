@@ -98,8 +98,8 @@ public class UnitFactory {
 		} else if(unitElement instanceof SourceUnitElement) {
 			SourceUnitElement sourceUnit = (SourceUnitElement)unitElement;
 			if(!sourceUnit.hasFilePath()) {
-				sourceUnit.showIJOpenDialog();
-//				sourceUnit.showOpenFileChooser();	
+//				sourceUnit.showIJOpenDialog();
+				sourceUnit.showOpenFileChooser();	
 			}
 			sourceUnit.updateImageType();
 		}

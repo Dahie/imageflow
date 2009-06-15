@@ -19,7 +19,6 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import visualap.Edge;
 import visualap.GList;
 import visualap.Node;
 import de.danielsenff.imageflow.models.Connection;
@@ -315,7 +314,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		Element connectionsElement = new Element("Connections");
 		root.addContent(connectionsElement);
 		
-		for (Edge edge : connections) {
+		for (Connection edge : connections) {
 			Connection conn = (Connection) edge;
 			
 			Element connectionElement = new Element("Connection");
@@ -571,7 +570,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 */
 	public void addConnectionList(ConnectionList newConnList) {
 //		this.connections
-		for (Edge conn : newConnList) {
+		for (Connection conn : newConnList) {
 			this.connections.add(conn);
 		}
 	}

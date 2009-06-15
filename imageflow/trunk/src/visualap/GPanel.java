@@ -43,9 +43,10 @@ import java.util.ListIterator;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import de.danielsenff.imageflow.models.Connection;
+import de.danielsenff.imageflow.models.ConnectionList;
 import de.danielsenff.imageflow.models.Delegate;
 
 public class GPanel extends JPanel implements Printable, MouseListener, MouseMotionListener  {
@@ -57,7 +58,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	protected Selection<Node> selection = new Selection<Node>();
 	protected GList<Node> nodeL = new GList<Node>();
 	protected Pin drawEdge;
-	protected Edges EdgeL = new Edges();
+	protected ConnectionList connectionList = new ConnectionList();
 	protected Point mouse;
 
 	
@@ -91,7 +92,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 
 	public void clear() {
 		nodeL.clear();
-		EdgeL.clear();
+		connectionList.clear();
 		nodeL.setChanged(false);
 		selection.clear();
 		repaint();
@@ -101,17 +102,6 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		frame.setTitle(title);
 	}
 
-	public void properties(Node aNode) {
-		if (aNode instanceof NodeText) {
-			String inputValue = JOptionPane.showInputDialog("Edit text:",((NodeText)aNode).getText()); 
-			if ((inputValue != null)&&(inputValue.length() != 0)) {
-				((NodeText)aNode).setText(inputValue);
-				repaint();
-			}
-		}
-	}
-
-	
 
 	/**
 	 * paint things that eventually go on a printer
@@ -119,17 +109,23 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	 */
     public void paintPrintable(Graphics g) {
         rect = new Rectangle();
-		for (Node t : nodeL) {
+		for (Node t : getNodeL()) {
 			rect = rect.union(t.paint(g, this));
 		}
         setPreferredSize(rect.getSize());
-		for (Edge aEdge : EdgeL) {
-			Point from = aEdge.from.getLocation();
-			Point to = aEdge.to.getLocation();
-			g.drawLine(from.x, from.y, to.x, to.y);
+		for (Connection aEdge : connectionList) {
+			paintPrintableConnection(g, aEdge);
 		}
 		revalidate();
     }
+
+
+
+	protected void paintPrintableConnection(Graphics g, Connection aEdge) {
+		Point from = aEdge.getInput().getLocation();
+		Point to = aEdge.getOutput().getLocation();
+		g.drawLine(from.x, from.y, to.x, to.y);
+	}
 
 	
 	public void paintComponent(Graphics g) {
@@ -159,6 +155,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	}
 
 	
+	
 	public void mouseClicked(MouseEvent e) {
 // generato quando il mouse viene premuto e subito rilasciato (click)
 		if (e.getClickCount() > 1)
@@ -168,7 +165,14 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			else selection.clear(); //zz to be handled in more completed way
     }
 
-    public void mousePressed(MouseEvent e) {
+    protected void properties(Node node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	public void mousePressed(MouseEvent e) {
     	
 // generato nell'istante in cui il mouse viene premuto
 		int x = e.getX();
@@ -244,8 +248,8 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				Node aNode = it.previous();
 				Object sel = aNode.contains(x,y);
 				if ((sel instanceof Pin)&&(!drawEdge.equals(sel))) {
-					if (!EdgeL.contains(drawEdge, (Pin) sel)) {
-						EdgeL.add(drawEdge, (Pin) sel);
+					if (!connectionList.contains(drawEdge, (Pin) sel)) {
+						connectionList.add(drawEdge, (Pin) sel);
 					}
 				}
 					
@@ -435,15 +439,15 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	/**
 	 * @return the edgeL
 	 */
-	public Edges getEdgeL() {
-		return this.EdgeL;
+	public ConnectionList getEdgeL() {
+		return this.connectionList;
 	}
 
 	/**
 	 * @param edgeL the edgeL to set
 	 */
-	public void setEdgeL(Edges edgeL) {
-		this.EdgeL = edgeL;
+	public void setEdgeL(ConnectionList edgeL) {
+		this.connectionList = edgeL;
 	}
 
 };

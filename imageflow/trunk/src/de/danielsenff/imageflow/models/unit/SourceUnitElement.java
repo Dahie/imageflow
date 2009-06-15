@@ -57,8 +57,8 @@ public class SourceUnitElement extends UnitElement {
 	public void showProperties() {
 		
 		// display filedialog
-//	    showOpenFileChooser();
-		showIJOpenDialog();
+	    showOpenFileChooser();
+//		showIJOpenDialog();
 		
 		super.showProperties();
 		

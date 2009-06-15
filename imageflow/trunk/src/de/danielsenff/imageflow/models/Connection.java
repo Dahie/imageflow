@@ -1,6 +1,5 @@
 package de.danielsenff.imageflow.models;
 
-import visualap.Edge;
 import visualap.Node;
 import visualap.Pin;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -10,8 +9,10 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  * @author danielsenff
  *
  */
-public class Connection extends Edge {
+public class Connection {
 	public int id;		// the id of this connection
+	
+	protected Pin from, to;
 	
 	/**
 	 * Connection-Status
@@ -37,7 +38,8 @@ public class Connection extends Edge {
 	 * @param toInput
 	 */
 	public Connection(final Pin fromOutput, final Pin toInput) {
-		super(fromOutput, toInput);
+		this.from = fromOutput;
+		this.to = toInput;
 		UnitElement fromUnit = (UnitElement) fromOutput.getParent();
 		UnitElement toUnit = (UnitElement) toInput.getParent();
 		
@@ -110,7 +112,7 @@ public class Connection extends Edge {
 	 * @return
 	 */
 	public Input getInput() {
-		return (Input)super.to;
+		return (Input)this.to;
 	}
 	
 	/**
@@ -118,7 +120,7 @@ public class Connection extends Edge {
 	 * @return
 	 */
 	public Output getOutput() {
-		return (Output)super.from;
+		return (Output)this.from;
 	}
 	
 	/* (non-Javadoc)

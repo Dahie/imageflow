@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import visualap.Edges;
 import visualap.Pin;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -18,7 +17,7 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  * @author danielsenff
  *
  */
-public class ConnectionList extends Edges implements Model {
+public class ConnectionList extends ArrayList<Connection> implements Model {
 	
 	private final ArrayList<ModelListener> listeners;
 	
@@ -33,8 +32,6 @@ public class ConnectionList extends Edges implements Model {
 		
 		// check if both pins are on the same node
 		if(from.getParent().equals(to.getParent())) return false;
-		
-		System.out.println("add connection");
 
 		// check if connection is between input and output, not 2 outputs or two inputs
 		if((from instanceof Output && to instanceof Input) ) {
@@ -51,6 +48,21 @@ public class ConnectionList extends Edges implements Model {
 		
 		return false;
 	}
+	
+
+
+	public boolean contains(Pin from, Pin to) {
+		for (Connection connection : this) {
+			if (connection.getInput().equals(from) 
+					&& connection.getOutput().equals(to))
+				return true;
+			if (connection.getInput().equals(to) 
+					&& connection.getOutput().equals(from))
+				return true;
+		}
+		return false;
+	}
+	
 	
 	/**
 	 * Creates a new Connection and adds it to the ConnectionList

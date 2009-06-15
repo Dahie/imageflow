@@ -15,6 +15,7 @@ import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.Connection;
 import de.danielsenff.imageflow.models.ConnectionList;
+import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -31,17 +32,18 @@ import de.danielsenff.imageflow.models.unit.UnitList;
  */
 public class GraphController{
 
-	//	private ApplicationController controller;
-
 	private UnitList nodes;
 	/**
 	 * List which stores copied Nodes.
 	 */
 	protected ArrayList<Node> copyNodesList;
 
-	// TODO the graphcontroller should hold the list of selections
-	
-	
+	/**
+	 * List of selected units
+	 */
+	private SelectionList selections;
+
+
 	
 	/**
 	 * 
@@ -49,6 +51,7 @@ public class GraphController{
 	public GraphController() {
 		this.nodes = new UnitList();
 		this.copyNodesList = new ArrayList<Node>();
+		this.selections = new SelectionList();
 	}
 
 
@@ -119,82 +122,6 @@ public class GraphController{
 	public ConnectionList getConnections() {
 		return this.nodes.getConnections();
 	}
-
-/*
-	public static UnitList sortList(UnitList unitElements) {
-
-		// temporary list, discarded after this method call
-		UnitList orderedList = new UnitList();
-
-		// reset all marks
-		unitElements.unmarkUnits();
-
-		int mark = 0;	// nth element, that has been sorted
-		int i = 0; 		// nth lap in the loop
-		int index = 0; 	// index 0 < i < unitElements.size()
-
-		try {
-			//loop over all units, selection sort, levelorder
-			// I don't like this condition
-			while(!unitElements.isEmpty()) {
-				index = i % unitElements.size();
-				Node node =  unitElements.get(index); 
-
-				// find out what kind of node is stored
-				if(node instanceof CommentNode) {
-					//if comment then remove and ignore, we don't need it
-					unitElements.remove(index);
-				} else if (node instanceof UnitElement) {
-					UnitElement unit =(UnitElement) node;
-					// check if all inputs of this node are marked
-					// if so, this unit is moved from the old list to the new one
-
-					if(unit.hasMarkedOutput()) throw new Exception("Unit has Output marked, " +
-					"although the unit itself is not marked. This suggests an infinited loop.");
-					if(unit.hasAllInputsMarked()) {
-						mark++;	
-
-						// increment mark
-						// mark outputs
-						unit.setMark(mark);
-
-						// remove from the old list and
-						// move this to the new ordered list
-						Node remove = unitElements.remove(index);
-						orderedList.add(remove);
-
-					} else if (!unit.hasInputsConnected() 
-							&& unit.getUnitType() != Type.SOURCE) {
-						// if unit has no connections actually, it can be discarded right away
-						unitElements.remove(index);
-						// if there is a branch with two units connected, the first one will be discarded, 
-						// the second will still exist, but as the input is now missing, it will 
-						// be deleted in the next lap
-					} else if (!unit.hasOutputsConnected() 
-							&& unit.getUnitType() == Type.SOURCE 
-							&& !unit.isDisplayUnit()) {
-						// if source has no connected outputs and is not visible
-						unitElements.remove(index);
-					}
-				}
-				// Selection Sort
-				// each time an element whose previous nodes have already been registered
-				// is found the next loop over the element list is one element shorter.
-				// thereby having O(n^2) maybe this can be done better later
-				i++;
-			}
-
-			//  replacing here causes deletion of none-used nodes 
-			for (Node node : orderedList) {
-				unitElements.add(node);
-			}
-		} catch(Exception ex) {
-			// restore list, without damaging it
-		}
-
-		return unitElements;
-	}*/
-
 
 	/**
 	 * Get the List of copied {@link Node};
@@ -343,8 +270,10 @@ public class GraphController{
 
 	}
 
-	
-	
+
+	public SelectionList getSelections() {
+		return this.selections;
+	}
 
 }
 
