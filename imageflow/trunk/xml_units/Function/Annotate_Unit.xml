@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Annotation</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>// PARA_STRING_1</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+  <HelpString>Annotations are comments, which are written into the macro code.</HelpString>
+  	  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Kernel</Name>
+  		<DataType>String</DataType>
+  		<Value>Annotation in Macro code</Value>
+  		<HelpString>Annotation that is written into the macro</HelpString>
+  	</Parameter> 
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
