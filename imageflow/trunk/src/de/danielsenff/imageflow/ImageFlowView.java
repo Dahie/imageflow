@@ -48,7 +48,6 @@ import de.danielsenff.imageflow.gui.DelegatesPanel;
 import de.danielsenff.imageflow.gui.GPanelPopup;
 import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.gui.InsertUnitMenu;
-import de.danielsenff.imageflow.gui.WorkspacePanel;
 import de.danielsenff.imageflow.models.Connection;
 import de.danielsenff.imageflow.models.ConnectionList;
 import de.danielsenff.imageflow.models.Delegate;
@@ -69,7 +68,6 @@ import de.danielsenff.imageflow.tasks.ImportGraphTask;
 import de.danielsenff.imageflow.tasks.LoadFlowGraphTask;
 import de.danielsenff.imageflow.tasks.RunMacroTask;
 import de.danielsenff.imageflow.tasks.SaveFlowGraphTask;
-import de.danielsenff.imageflow.view.UnitProcessingComponent;
 
 
 
@@ -316,9 +314,9 @@ public class ImageFlowView extends FrameView {
 		graphPanel.setSelections(this.selections);
 
 		
-		WorkspacePanel workspacePanel = new WorkspacePanel();
+		/*WorkspacePanel workspacePanel = new WorkspacePanel();
 		workspacePanel.setPreferredSize(new Dimension(400, 300));
-		workspacePanel.add(new UnitProcessingComponent(UnitFactory.createAddNoiseUnit()));
+		workspacePanel.add(new UnitProcessingComponent(UnitFactory.createAddNoiseUnit()));*/
 		
 		
 		ScrollPane graphScrollpane = new ScrollPane();
