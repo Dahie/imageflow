@@ -22,12 +22,18 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 	private final ArrayList<ModelListener> listeners;
 	
 	/**
-	 * 
+	 * Constructs a ConnectionList 
 	 */
 	public ConnectionList() {
 		this.listeners = new ArrayList<ModelListener>();
 	}
 	
+	/**
+	 * Creates a new Connection between two pins and adds it to the list. 
+	 * @param from
+	 * @param to
+	 * @return
+	 */
 	public boolean add(final Pin from, final Pin to) {
 		
 		// check if both pins are on the same node
@@ -50,13 +56,18 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 	}
 	
 
-
-	public boolean contains(Pin from, Pin to) {
+	/**
+	 * Sees, if a connection between the given Pins exists.
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public boolean containsConnection(Pin from, Pin to) {
 		for (Connection connection : this) {
 			if (connection.getInput().equals(from) 
 					&& connection.getOutput().equals(to))
 				return true;
-			if (connection.getInput().equals(to) 
+			else if (connection.getInput().equals(to) 
 					&& connection.getOutput().equals(from))
 				return true;
 		}
@@ -101,7 +112,7 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 			}
 		
 		// check the bit depth
-		if(!connection.areImageBitDepthCompatible()) {
+		if(!connection.isImageBitDepthCompatible()) {
 			System.out.println("Connection disallowed: Incombatible bit depth");
 //			return false;
 			}
@@ -126,7 +137,11 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 		return add;
 	}
 	
-	
+	/**
+	 * Adds the connection to the list without any security checking.
+	 * @param connection
+	 * @return
+	 */
 	public boolean addUnchecked(final Connection connection) {
 		connection.connect();
 		boolean add = super.add(connection);

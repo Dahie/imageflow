@@ -364,6 +364,7 @@ public class UnitElement extends AbstractUnit {
 	 * @return
 	 */
 	public boolean addInput(final Input input) {
+		notifyModelListeners();
 		return this.inputs.add(input);
 	}
 

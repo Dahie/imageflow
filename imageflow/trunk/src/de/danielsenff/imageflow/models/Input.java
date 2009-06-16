@@ -8,6 +8,7 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
 /**
+ * Input Pins
  * @author danielsenff
  *
  */
@@ -51,21 +52,12 @@ public class Input extends Pin implements Connectable {
 	 */
 	protected boolean needToCopyInput;
 	/**
-	 * Placeholder for the flag to set inputs not required. Default is required.
+	 * flag to set inputs not required. Default is required.
 	 */
 	protected boolean requiredInput = true;
 	
 	
 
-	// connected to this input:
-	/**
-	 * Connected from this {@link UnitElement}-number.
-	 */
-//	protected int fromUnitNumber;
-	/**
-	 * Connected from this {@link Output}
-	 */
-//	protected int fromOutputNumber;
 	/**
 	 * Connected from this {@link UnitElement}
 	 */
@@ -79,10 +71,19 @@ public class Input extends Pin implements Connectable {
 	/**
 	 * @param fromUnit
 	 * @param inputNumber
-	 * @param nodeParent
 	 */
-	public Input(final UnitElement nodeParent, int inputNumber) {
+	public Input(final UnitElement parentNode, int inputNumber) {
+		this(parentNode, inputNumber, true);
+	}
+	
+	/**
+	 * @param nodeParent
+	 * @param inputNumber
+	 * @param requiredInput
+	 */
+	public Input(final UnitElement nodeParent, int inputNumber, boolean requiredInput) {
 		super("input", inputNumber, nodeParent.getInputsCount(), nodeParent);
+		setRequiredInput(requiredInput);
 	}
 	
 	

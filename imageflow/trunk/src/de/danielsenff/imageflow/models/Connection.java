@@ -77,7 +77,7 @@ public class Connection {
 	
 	/**
 	 * Returns the status of the connection, whether all ends are connected.
-	 * Good for finding corrupt connections to non-existant units.
+	 * Good for finding corrupt connections to non-existent units.
 	 * @return 
 	 */
 	public Status checkConnection() {
@@ -185,14 +185,11 @@ public class Connection {
 	 * supported by this Input.
 	 * @return
 	 */
-	public boolean areImageBitDepthCompatible() {
+	public boolean isImageBitDepthCompatible() {
 		Input input = ((Input)this.to);
 		Output output = ((Output)this.from);
 		
-//		boolean areCompatible = (input.getImageBitDepth()&output.getImageBitDepth()) != 0;
-//		boolean areCompatible = input.isImageBitDepthCompatible(output.getImageBitDepth());
-		boolean areCompatible = output.isImageBitDepthCompatible(input.getImageBitDepth());
-		return areCompatible;
+		return output.isImageBitDepthCompatible(input.getImageBitDepth());
 	}
 
 	/**
@@ -203,11 +200,7 @@ public class Connection {
 		Output from = (Output)this.from;
 		Input to = (Input)this.to;
 		
-		System.out.println(from +" and "+ to);
-		
 		return (from.isConnectedWith(to) && to.isConnectedWith(from)); 
-//		if(((Input)this.to).isConnected() 
-//				&& ((Output)this.from).isConnected()) return true;
 		// technically, if the connection isn true, this connection object is kinda zombie
 	}
 	
