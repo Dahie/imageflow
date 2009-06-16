@@ -203,11 +203,11 @@ public class OutputTests extends TestCase {
 		Connection conn1 = new Connection(unit1, 1, unit2, 1); // 32 to 32
 		conn1.connect();
 		assertEquals("Conn1: "+verboseBitDepth(unit1Obitdepth)+" to "+ verboseBitDepth(unit2Ibitdepth), 
-				expFirstConn, conn1.areImageBitDepthCompatible());
+				expFirstConn, conn1.isImageBitDepthCompatible());
 		Connection conn2 = new Connection(unit2, 1, unit3, 1); // 32 to 32
 		conn2.connect();
 		assertEquals("Conn2: "+verboseBitDepth(unit2Obitdepth)+" to "+ verboseBitDepth(unit3Ibitdepth), 
-				expScndConn, conn2.areImageBitDepthCompatible());
+				expScndConn, conn2.isImageBitDepthCompatible());
 	}
 	
 	public void testImageBitDepthTraversing() {

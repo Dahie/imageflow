@@ -81,6 +81,39 @@ public class ConnectionListTests extends TestCase {
 				filter1Input.isConnectedWith(source2Output));
 	}
 	
+	public void testContains() {
+		
+		// test output-only
+		UnitElement source1Unit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		Output source1Output = source1Unit.getOutput(0);
+		UnitElement source2Unit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		Output source2Output = source2Unit.getOutput(0);
+		
+		// test input/output case
+		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
+		Input filter1Input = filterUnit1.getInput(0); 
+		Output filter1Output = filterUnit1.getOutput(0);
+		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		Input filter2Input = filterUnit2.getInput(0); 
+		Output filter2Output = filterUnit2.getOutput(0);
+		
+		ConnectionList connectionList = new ConnectionList();
+		
+		Connection conn2 = new Connection(source1Output, filter1Input);
+		assertFalse(connectionList.contains(conn2));
+		assertFalse(connectionList.containsConnection(source1Output, filter1Input));
+		assertFalse(connectionList.containsConnection(filter1Input, source1Output));
+		assertFalse(connectionList.containsConnection(source1Output, filter2Input));
+		
+		
+		assertTrue("add conn2", connectionList.add(conn2));
+		assertTrue(connectionList.contains(conn2));
+		assertTrue(connectionList.containsConnection(source1Output, filter1Input));
+		assertFalse(connectionList.containsConnection(source1Output, filter2Input));
+
+	}
+	
+	
 	public void testLoopConnection() {
 	
 		UnitElement filter1 = UnitFactory.createAddNoiseUnit();

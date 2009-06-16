@@ -99,13 +99,35 @@ public class UnitElementTests extends TestCase {
 		//test usual adding
 		boolean addFirst = unit.addInput("input", "i", 4, false);
 		assertTrue("add first", addFirst);
+		assertEquals(1, unit.getInputsCount());
 
-
-		//add one more than actually allowed
-		boolean addSecond = unit.addInput("input", "i", 4, false);
+		//add one more
+		Input scndInput = new Input(unit, 1);
+		boolean addSecond = unit.addInput(scndInput);
 		assertTrue("add second", addSecond);
+		assertEquals(2, unit.getInputsCount());
+	}
+	
+	public void testAddOutput() {
+		//unit with one allowed parameter
+		UnitElement unit = new UnitElement("name", "");
+
+		//test usual adding
+		boolean addFirst = unit.addOutput("Output", "i", 4, false);
+		assertTrue("add first", addFirst);
+		assertEquals(1, unit.getOutputsCount());
+
+		//add one more
+		Output scndOutput = new Output(unit, 1);
+		boolean addSecond = unit.addOutput(scndOutput);
+		assertTrue("add second", addSecond);
+		assertEquals(2, unit.getOutputsCount());
 	}
 
+	public void testRequiredInputs() {
+		//TODO
+	}
+	
 
 	public void testHasOutputs() {
 		UnitElement sink = UnitFactory.createHistogramUnit(new Point(0,0));

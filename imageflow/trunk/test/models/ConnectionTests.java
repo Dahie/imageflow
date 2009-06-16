@@ -143,20 +143,20 @@ public class ConnectionTests extends TestCase {
 		
 		// conn1 32 to 16		
 		Connection conn1 = new Connection(unit1,1,unit2,1);
-		assertTrue("both do 32", conn1.areImageBitDepthCompatible());
+		assertTrue("both do 32", conn1.isImageBitDepthCompatible());
 		
 		// conn2 32 to 16		
 		Connection conn2 = new Connection(unit1,1,unit2,2);
-		assertFalse("both do 32", conn2.areImageBitDepthCompatible());
+		assertFalse("both do 32", conn2.isImageBitDepthCompatible());
 
 		// conn3 ALL to 32
 		Connection conn3 = new Connection(unit1,2,unit2, 1);
 		// technically compatable, but we expect something explicit and no guesses
-		assertFalse("all to 32", conn3.areImageBitDepthCompatible());
+		assertFalse("all to 32", conn3.isImageBitDepthCompatible());
 		
 		// conn4 32 to all
 		Connection conn4 = new Connection(unit1,1,unit2, 3);
-		assertTrue("32 to all", conn4.areImageBitDepthCompatible());
+		assertTrue("32 to all", conn4.isImageBitDepthCompatible());
 		
 		// now test pins, which don't care
 		//TODO hm how should this react actually? needs an input set
