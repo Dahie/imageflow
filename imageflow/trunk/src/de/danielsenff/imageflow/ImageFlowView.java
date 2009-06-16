@@ -1,7 +1,5 @@
 package de.danielsenff.imageflow;
 
-import visualap.Node;
-import visualap.Selection;
 import ij.IJ;
 
 import java.awt.BorderLayout;
@@ -20,6 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -31,6 +30,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.TreeNode;
 
@@ -40,6 +41,8 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
 
+import visualap.Node;
+import visualap.Selection;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.controller.MacroFlowRunner;
@@ -112,7 +115,7 @@ public class ImageFlowView extends FrameView {
 	public ImageFlowView(final Application app) {
 		super(app);
 		
-		ResourceMap resourceMap = getResourceMap();
+		
 		this.graphController = new GraphController();
 		this.units = this.graphController.getUnitElements();
 		this.connections = this.graphController.getConnections();
@@ -298,6 +301,8 @@ public class ImageFlowView extends FrameView {
 	 */
 	private void addComponents() {
 		
+		ResourceMap resourceMap = getResourceMap();
+		
 		JPanel mainPanel = new JPanel();
 		
 		mainPanel.setLayout(new BorderLayout());
@@ -349,8 +354,19 @@ public class ImageFlowView extends FrameView {
 		FlowLayout flowLayout = new FlowLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		buttonPanel.setLayout(flowLayout);
+		
 		JButton buttonRun = new JButton(getAction("runMacro"));
 		buttonPanel.add(buttonRun);
+		JCheckBox chkShowLog = new JCheckBox(resourceMap.getString("showLog"));
+		resourceMap.injectComponent(chkShowLog);
+		chkShowLog.addChangeListener(new ChangeListener() {
+
+			public void stateChanged(ChangeEvent e) {
+				boolean selected = ((JCheckBox)e.getSource()).isSelected();
+				showlog = selected;
+			}});
+		buttonPanel.add(chkShowLog);
+		
 
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
