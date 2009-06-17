@@ -37,6 +37,7 @@
 	<Output>
 		<Name>Output</Name>
 		<ShortName>O</ShortName>
+		<DataType>Image</DataType>
 		<ImageType>-1</ImageType>
 		<DoDisplay>false</DoDisplay>
 	</Output>

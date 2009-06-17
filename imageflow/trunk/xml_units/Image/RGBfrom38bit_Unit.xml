@@ -26,7 +26,8 @@
 <Inputs> 
 	<Input>
 		<Name>Red Channel</Name>
-		<ShortName>R</ShortName>	
+		<ShortName>R</ShortName>
+		<DataType>Image</DataType>	
 		<ImageType>1</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 		<Required>True</Required>
@@ -34,6 +35,7 @@
 	<Input>
 		<Name>Green Channel</Name>
 		<ShortName>G</ShortName>	
+		<DataType>Image</DataType>
 		<ImageType>1</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 		<Required>True</Required>
@@ -41,6 +43,7 @@
 	<Input>
 		<Name>Blue Channel</Name>
 		<ShortName>B</ShortName>	
+		<DataType>Image</DataType>
 		<ImageType>1</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 		<Required>True</Required>
@@ -51,6 +54,7 @@
 	<Output>
 		<Name>RGB Color</Name>
 		<ShortName>O</ShortName>	
+		<DataType>Image</DataType>
 		<ImageType>16</ImageType>
 		<DoDisplay>false</DoDisplay>
 	</Output>

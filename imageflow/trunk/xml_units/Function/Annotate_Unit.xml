@@ -6,7 +6,7 @@
   <UnitName>Annotation</UnitName> 
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>// PARA_STRING_1</ImageJSyntax> 
-  <Color>0x6e91de</Color>
+  <Color>0xad8946</Color>
   <HelpString>Annotations are comments, which are written into the macro code.</HelpString>
   	  
 </General>
@@ -24,6 +24,7 @@
 	<Input>
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
+		<DataType>Image</DataType>
 		<ImageType>31</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
@@ -33,6 +34,7 @@
 	<Output>
 		<Name>Output</Name>
 		<ShortName>O</ShortName>	
+		<DataType>Image</DataType>
 		<ImageType>-1</ImageType>
 		<DoDisplay>false</DoDisplay>
 	</Output>

@@ -38,7 +38,8 @@
 <Inputs> 
 	<Input>
 		<Name>Input1</Name>
-		<ShortName>I1</ShortName>	
+		<ShortName>I1</ShortName>
+		<DataType>Image</DataType>	
 		<ImageType>31</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
@@ -47,7 +48,8 @@
 <Outputs> 
 	<Output>
 		<Name>Output</Name>
-		<ShortName>O</ShortName>	
+		<ShortName>O</ShortName>
+		<DataType>Image</DataType>	
 		<ImageType>-1</ImageType>
 		<DoDisplay>false</DoDisplay>
 	</Output>

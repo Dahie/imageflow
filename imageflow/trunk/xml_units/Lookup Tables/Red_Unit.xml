@@ -14,6 +14,7 @@
 	<Input>
 		<Name>Input1</Name>
 		<ShortName>I</ShortName>	
+		<DataType>Image</DataType>
 		<ImageType>13</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>	
@@ -23,6 +24,7 @@
 	<Output>
 		<Name>Output</Name>
 		<ShortName>O</ShortName>	
+		<DataType>Image</DataType>
 		<ImageType>31</ImageType>
 		<DoDisplay>false</DoDisplay>
 	</Output>
