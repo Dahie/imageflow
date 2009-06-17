@@ -164,7 +164,7 @@ public class MacroFlowRunner {
 			for (Iterator iterator = connections.iterator(); iterator.hasNext();) {
 				Connection connection = (Connection) iterator.next();
 
-				if (!connection.areImageBitDepthCompatible()) {
+				if (!connection.isImageBitDepthCompatible()) {
 
 					JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
 							"The graph has conflicting imagetypes."

@@ -144,10 +144,10 @@ public class GraphPanel extends GPanel {
 	protected void paintPrintableConnection(Graphics g, Connection connection) {
 		final Point from = connection.getInput().getLocation();
 		final Point to = connection.getOutput().getLocation();
-		g.setColor(  (connection.areImageBitDepthCompatible()) ? Color.BLACK : Color.RED );
+		g.setColor(  (connection.isImageBitDepthCompatible()) ? Color.BLACK : Color.RED );
 		g.drawLine(from.x, from.y, to.x, to.y);
 		
-		if(!connection.areImageBitDepthCompatible()) {
+		if(!connection.isImageBitDepthCompatible()) {
 			final int dX = Math.abs(from.x - to.x)/2 + Math.min(from.x, to.x);
 			final int dY = Math.abs(from.y - to.y)/2 + Math.min(from.y, to.y);
 			final Point origin = new Point(dX, dY);

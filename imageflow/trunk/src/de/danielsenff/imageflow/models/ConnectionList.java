@@ -190,7 +190,5 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 	public void removeModelListener(final ModelListener listener) {
 		this.listeners.remove(listener);
 	}
-
-	
 	
 }

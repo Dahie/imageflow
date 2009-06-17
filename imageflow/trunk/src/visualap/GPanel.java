@@ -248,7 +248,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				Node aNode = it.previous();
 				Object sel = aNode.contains(x,y);
 				if ((sel instanceof Pin)&&(!drawEdge.equals(sel))) {
-					if (!connectionList.contains(drawEdge, (Pin) sel)) {
+					if (!connectionList.containsConnection(drawEdge, (Pin) sel)) {
 						connectionList.add(drawEdge, (Pin) sel);
 					}
 				}

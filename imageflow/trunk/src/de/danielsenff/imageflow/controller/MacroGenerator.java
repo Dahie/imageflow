@@ -46,7 +46,7 @@ public class MacroGenerator {
 			macroText += duplicateImages(unit);
 			
 			// parse the command string for parameter tags that need to be replaced
-			macroElement.parseParameters(unit);
+			macroElement.parseParameters(unit.getParameters());
 			
 			
 			// parse the command string for TITLE tags that need to be replaced
