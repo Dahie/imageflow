@@ -39,7 +39,7 @@ public class DelegatesController {
 	public DefaultTreeModel delegatesModel;
 
 	public DelegatesController(String unitFolderPath) {
-		this.setUnitFolder(unitFolderPath);
+		DelegatesController.setUnitFolder(unitFolderPath);
 	}
 	
 	/**
@@ -149,4 +149,24 @@ public class DelegatesController {
 	public static String getUnitIconFolder() {
 		return unitIconFolder;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public UnitDelegate getDelegate(String unitName) {
+		UnitDelegate unitDelegate = null; 
+		for (final Delegate delegate : getUnitDelegates().values()) {
+			if(delegate instanceof UnitDelegate) {
+				unitDelegate = (UnitDelegate) delegate;
+			}
+			
+			if (unitDelegate != null && unitDelegate.getName().equals(unitName)) {
+				return unitDelegate;		
+			}
+		}
+		return null;
+		
+	}
+	
 }

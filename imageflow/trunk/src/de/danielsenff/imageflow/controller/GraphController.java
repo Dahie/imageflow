@@ -99,12 +99,7 @@ public class GraphController{
 	public UnitList getUnitElements() {
 		return this.nodes;
 	}
-//
-//	public static void main(final String[] args) {
-//		final GraphController controller = new GraphController();
-//		controller.setupExample1();
-//		controller.generateMacro();
-//	}
+
 
 	/**
 	 * Generates the executable Macro based on the current graph.
@@ -123,6 +118,15 @@ public class GraphController{
 		return this.nodes.getConnections();
 	}
 
+
+	/**
+	 * Selections
+	 * @return
+	 */
+	public SelectionList getSelections() {
+		return this.selections;
+	}
+	
 	/**
 	 * Get the List of copied {@link Node};
 	 * @return
@@ -140,32 +144,39 @@ public class GraphController{
 		return nodes.remove(node);
 	}
 
+	/**
+	 * Convenience method for calling ConnectionList.write() to save the workflow
+	 * into a XML-file.
+	 * @param file
+	 * @throws IOException
+	 */
 	public void write(File file) throws IOException {
 		nodes.write(file);
 	}
 
 
 	public void setupExample1() {
-
-		/*
-		 * Wurzelbaum
-		 */
-
 		////////////////////////////////////////////////////////
 		// setup of units
 		////////////////////////////////////////////////////////
+		DelegatesController delegatesController = DelegatesController.getInstance();
 
-		UnitDescription sourceUnitDescription = new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
-		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
-
-		UnitDescription blurUnitDescription = new UnitDescription(new File("xml_units/Process/Filters/GaussianBlur_Unit.xml"));
-		final UnitElement blurUnit = UnitFactory.createProcessingUnit(blurUnitDescription, new Point(180, 50));
-
-		UnitDescription mergeUnitDescription = new UnitDescription(new File("xml_units/Process/ImageCalculator_Unit.xml"));
-		final UnitElement mergeUnit = UnitFactory.createProcessingUnit(mergeUnitDescription,new Point(320, 100));
-
-		UnitDescription noiseUnitDescription = new UnitDescription(new File("xml_units/Process/Noise/AddNoise_Unit.xml"));
-		final UnitElement noiseUnit = UnitFactory.createProcessingUnit(noiseUnitDescription,new Point(450, 100));
+//		UnitDescription sourceUnitDescription = new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
+//		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
+		final UnitElement sourceUnit = delegatesController.getDelegate("Image Source").createUnit(new Point(30, 100));
+		
+		
+//		UnitDescription blurUnitDescription = new UnitDescription(new File("xml_units/Process/Filters/GaussianBlur_Unit.xml"));
+//		final UnitElement blurUnit = UnitFactory.createProcessingUnit(blurUnitDescription, new Point(180, 50));
+		final UnitElement blurUnit = delegatesController.getDelegate("Gaussian Blur").createUnit(new Point(180, 50));
+		
+//		UnitDescription mergeUnitDescription = new UnitDescription(new File("xml_units/Process/ImageCalculator_Unit.xml"));
+//		final UnitElement mergeUnit = UnitFactory.createProcessingUnit(mergeUnitDescription,new Point(320, 100));
+		final UnitElement mergeUnit = delegatesController.getDelegate("Image Calculator").createUnit(new Point(320, 100));
+		
+//		UnitDescription noiseUnitDescription = new UnitDescription(new File("xml_units/Process/Noise/AddNoise_Unit.xml"));
+//		final UnitElement noiseUnit = UnitFactory.createProcessingUnit(noiseUnitDescription,new Point(450, 100));
+		final UnitElement noiseUnit = delegatesController.getDelegate("Add Noise").createUnit(new Point(450, 100));
 		noiseUnit.setDisplayUnit(true);
 		
 		CommentNode comment = UnitFactory.createComment("my usual example", new Point(30, 40));
@@ -196,11 +207,6 @@ public class GraphController{
 		nodes.addConnection(con);
 		con = new Connection(mergeUnit,1,noiseUnit,1);
 		nodes.addConnection(con);
-
-		// remove one connection
-		//connectionMap.remove( Connection.getID(2,1,5,1) );
-
-
 	}
 
 	public void setupExample0_XML() {
@@ -270,10 +276,6 @@ public class GraphController{
 
 	}
 
-
-	public SelectionList getSelections() {
-		return this.selections;
-	}
 
 }
 

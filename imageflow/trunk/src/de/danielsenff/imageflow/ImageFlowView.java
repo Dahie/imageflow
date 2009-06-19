@@ -60,6 +60,7 @@ import de.danielsenff.imageflow.models.Output;
 import de.danielsenff.imageflow.models.Selectable;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.SelectionListener;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
@@ -327,6 +328,8 @@ public class ImageFlowView extends FrameView {
 		
 		ScrollPane graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
+		
+//		graphScrollpane.add(workspacePanel);
 
 		/*
 		new FileDrop( null, graphPanel,  new FileDrop.Listener()
@@ -959,12 +962,16 @@ public class ImageFlowView extends FrameView {
         	for (final Input input : unit.getInputs()) {
         		lm.addElement(input);
         		lm.addElement("name:"+input.getName());
-        		lm.addElement("imagetype:"+input.getImageBitDepth());
+        		lm.addElement("datatype: "+input.getDataType());
+        		if(input.getDataType() instanceof DataTypeFactory.Image);
+        			lm.addElement("imagetype:"+((DataTypeFactory.Image)input.getDataType()).getImageBitDepth());
         	}
         	for (final Output output : unit.getOutputs()) {
         		lm.addElement(output);
         		lm.addElement("name:"+output.getName());
-        		lm.addElement("imagetype:"+output.getImageBitDepth());
+        		lm.addElement("datatype:"+output.getDataType());
+        		if(output.getDataType() instanceof DataTypeFactory.Image)
+        			lm.addElement("imagetype:"+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
         	}
         	final JList list = new JList(lm);
         	

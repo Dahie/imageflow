@@ -10,6 +10,7 @@ import java.io.File;
 
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 
 /**
@@ -63,7 +64,7 @@ public class BackgroundUnitElement extends UnitElement {
 	 */
 	public void setOutputImageType(final int imageType) {
 		for (final Output output : outputs) {
-			output.setOutputBitDepth(imageType);
+			((DataTypeFactory.Image)output.getDataType()).setImageBitDepth(imageType);
 		}
 	}
 

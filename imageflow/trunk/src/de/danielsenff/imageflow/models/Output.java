@@ -8,6 +8,9 @@ import java.util.Vector;
 
 import visualap.Node;
 import visualap.Pin;
+import de.danielsenff.imageflow.models.datatype.DataType;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory.Image;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
@@ -15,17 +18,8 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  * @author danielsenff
  *
  */
-public class Output extends Pin implements Connectable {
+public class Output extends Pin {
 	
-
-	/**
-	 * the number of this unit
-	 */
-//	protected int unitNumber;
-	/**
-	 * the number of this output (mostly there is only one output)
-	 */
-//	protected int outputNumber;
 
 	/**
 	 * the name to be displayed in the context help
@@ -41,7 +35,7 @@ public class Output extends Pin implements Connectable {
 	/**
 	 * the int value indicates the type of the generated image
 	 */
-	protected int imageType; 
+//	protected int imageType; 
 
 	/**
 	 * the title of the image generated from this output
@@ -67,10 +61,14 @@ public class Output extends Pin implements Connectable {
 	 * @param nodeParent
 	 * @param outputNumber
 	 */
-	public Output(final UnitElement nodeParent, 
+	public Output(final DataType dataType, 
+			final UnitElement nodeParent, 
 			final int outputNumber) {
-		super("output", outputNumber, nodeParent.getOutputsCount(), nodeParent);
+		super(dataType, outputNumber, nodeParent);
 		this.connections = new Vector<Connection>();
+		if(getDataType() instanceof DataTypeFactory.Image) {
+			((Image)getDataType()).setParentUnitElement((UnitElement) getParent());
+		}
 		generateID(((UnitElement)this.parent).getUnitID(), getIndex());
 	}
 
@@ -116,9 +114,18 @@ public class Output extends Pin implements Connectable {
 	public void setupOutput(final String name, final String shortname, final int outputBitDepth) {
 		this.name = name;
 		this.shortDisplayName = shortname;
-		this.imageType = outputBitDepth;
+//		this.imageType = outputBitDepth;
 	}
 
+	/**
+	 * @param name
+	 * @param shortname
+	 */
+	public void setupOutput(final String name, final String shortname) {
+		this.name = name;
+		this.shortDisplayName = shortname;
+	}
+	
 
 	/**
 	 * Activates to display the image at this output.
@@ -167,12 +174,10 @@ public class Output extends Pin implements Connectable {
 	/* (non-Javadoc)
 	 * @see graph.Pin#getLocation()
 	 */
-	@Override
 	public Point getLocation() {
 		int height = parent.getDimension().height;
 		int nump = ((UnitElement) parent).getOutputsCount();
-		this.nump = nump;
-		int y =  (i*height / super.nump ) - (height/(2*super.nump)) + parent.getOrigin().y;
+		int y =  (index*height / nump ) - (height/(2*nump)) + parent.getOrigin().y;
 		Point point = new Point(parent.getOrigin().x+parent.getDimension().width, y);
 		return point;
 	}
@@ -198,29 +203,15 @@ public class Output extends Pin implements Connectable {
 			if(connection.getInput().equals(input))
 				return true;
 		}
-		/*if(isConnected() && input instanceof Input) {
-			return this.to.equals(input);
-		}*/
 		return false;
 	}
 
-	/**
-	 * Returns true, if this Output has been marked.
-	 * The Mark is not 0.
-	 * @return
-	 */
-	public boolean isMarked() {
-		return (this.mark == 0) ? false : true;
-	}
-	
-	
-	
 	/**
 	 * Gets the true Image type. This can be either the own imagetype of this output
 	 * or by traversing along the graph until it gets it's initial type.
 	 * @return
 	 */
-	public int getImageBitDepth() {
+	/*public int getImageBitDepth() {
 		
 		if(this.imageType != -1 && this.imageType != PlugInFilter.DOES_ALL) {
 			return this.imageType; 
@@ -246,30 +237,28 @@ public class Output extends Pin implements Connectable {
 			}
 			
 		}
-	}
+	}*/
 	
 	/**
 	 * @return the outputBitDepth
 	 */
-	public int getOutputBitDepth() {
-		return imageType;
-	}
+//	public int getOutputBitDepth() {
+//		return imageType;
+//	}
 
 	/**
 	 * @param outputBitDepth the outputBitDepth to set
 	 */
-	public void setOutputBitDepth(int outputBitDepth) {
+	/*public void setOutputBitDepth(int outputBitDepth) {
 		this.imageType = outputBitDepth;
-	}
+	}*/
 	
 	/**
 	 * Returns true, if the imageBitDepth in question is supported by this Input.
 	 * @param imageBitDepth
 	 * @return
 	 */
-	public boolean isImageBitDepthCompatible(final int imageBitDepth) {
-//		System.out.println(getImageBitDepth()+" "+imageBitDepth);
-//		System.out.println(getImageBitDepth()&imageBitDepth);
+	/*public boolean isImageBitDepthCompatible(final int imageBitDepth) {
 		// -1 doesn't specify so ignore for now
 		
 		int myImageBitDepth = getImageBitDepth();
@@ -279,7 +268,7 @@ public class Output extends Pin implements Connectable {
 //			System.err.println("couldn't find type");
 		}
 		return false;
-	}
+	}*/
 
 	@Override
 	public UnitElement getParent() {

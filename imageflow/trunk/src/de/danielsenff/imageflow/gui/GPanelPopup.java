@@ -64,7 +64,7 @@ public class GPanelPopup implements GPanelListener {
 			JPopupMenu popup = new JPopupMenu();
 			Selection<Node> selectedUnits = activePanel.getSelection();
 			if (selectedUnits.isEmpty()) { 
-				popup.add(new InsertUnitMenu("Insert unit", activePanel, availableUnits, savedPoint));
+				popup.add(new InsertUnitMenu("Insert unit", activePanel, savedPoint));
 				if (!copyL.isEmpty()) 
 					popup.add(getAction("paste"));
 			} else {

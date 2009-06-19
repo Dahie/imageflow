@@ -30,7 +30,6 @@ public class InsertUnitMenu extends JMenu {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final GPanel activePanel;
-	private final Collection<Delegate> availableUnits;
 	private static Point savedPoint = new Point(75, 75);
 
 	/**
@@ -39,7 +38,7 @@ public class InsertUnitMenu extends JMenu {
 	 * @param availableUnits
 	 */
 	public InsertUnitMenu(final GPanel gpanel, final Collection<Delegate> availableUnits) {
-		this("Insert", gpanel, availableUnits, savedPoint);
+		this("Insert", gpanel, savedPoint);
 	}
 
 	/**
@@ -51,12 +50,11 @@ public class InsertUnitMenu extends JMenu {
 	 */
 	public InsertUnitMenu(final String name, 
 			final GPanel gpanel, 
-			final Collection<Delegate> availableUnits, 
 			final Point savedPoint) {
 		this.setName(name);
 		this.setText(name);
 		this.activePanel = gpanel;
-		this.availableUnits = availableUnits;
+		final Collection<Delegate> availableUnits = DelegatesController.getInstance().getUnitDelegates().values();
 		final ActionListener newAction = new ActionListener() {
 			public void actionPerformed(final ActionEvent e) {
 				final JMenuItem source = (JMenuItem)(e.getSource());
@@ -71,30 +69,27 @@ public class InsertUnitMenu extends JMenu {
 					return;
 				}
 
-				// add selected node
-				for (final Delegate delegate : availableUnits) {
-					if(delegate instanceof UnitDelegate) {
-						final UnitDelegate unitDelegate = (UnitDelegate) delegate;
-						if (unitDelegate.getName().equals(action)) {
-							try {
-								final UnitElement n = unitDelegate.createUnit(savedPoint);
-								activePanel.getNodeL().add(n, activePanel.shortName(action));
-								activePanel.getSelection().clear();
-								activePanel.getSelection().add(n);
-								activePanel.repaint();
-							} catch (final Exception ex) {
-							}
-							return;
-						}	
+
+				UnitDelegate unitDelegate = DelegatesController.getInstance().getDelegate(action);
+				if(unitDelegate != null) {
+					try {
+						final UnitElement n = unitDelegate.createUnit(savedPoint);
+						activePanel.getNodeL().add(n, activePanel.shortName(action));
+						activePanel.getSelection().clear();
+						activePanel.getSelection().add(n);
+						activePanel.repaint();
+					} catch (final Exception ex) {
 					}
 				}
+
+				return;
 			}}; 
 			final JMenuItem mi = new JMenuItem("Comment");
 			mi.setToolTipText("Insert Notes or Comments to the graph.");
 			add(mi).addActionListener(newAction);		
 
 			final TreeModel tree = DelegatesController.getInstance().delegatesModel;
-			
+
 			final MutableTreeNode root =  (MutableTreeNode) tree.getRoot();
 			createMenu(this, newAction, root);
 	}
@@ -114,10 +109,6 @@ public class InsertUnitMenu extends JMenu {
 				menu.add(subMenu);
 			}
 		}
-	}
-
-	public Collection<Delegate> getAvailableUnits() {
-		return availableUnits;
 	}
 
 }

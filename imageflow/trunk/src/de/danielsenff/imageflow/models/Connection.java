@@ -189,7 +189,10 @@ public class Connection {
 		Input input = ((Input)this.to);
 		Output output = ((Output)this.from);
 		
-		return output.isImageBitDepthCompatible(input.getImageBitDepth());
+//		boolean isCompatible = output.isImageBitDepthCompatible(input.getImageBitDepth());
+		boolean isCompatible = input.getDataType().isCompatible(output.getDataType());
+		
+		return isCompatible;
 	}
 
 	/**

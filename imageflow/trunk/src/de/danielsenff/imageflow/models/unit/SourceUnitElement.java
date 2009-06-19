@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
 
 /**
@@ -139,7 +140,7 @@ public class SourceUnitElement extends UnitElement {
 	 */
 	public void setOutputImageType(final int imageType) {
 		for (final Output output : outputs) {
-			output.setOutputBitDepth(imageType);
+			((DataTypeFactory.Image)output.getDataType()).setImageBitDepth(imageType);
 		}
 	}
 

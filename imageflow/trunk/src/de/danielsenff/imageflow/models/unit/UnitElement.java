@@ -11,6 +11,7 @@ import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import visualap.Node;
 import de.danielsenff.imageflow.helper.PaintUtil;
@@ -204,7 +205,7 @@ public class UnitElement extends AbstractUnit {
 	 * @param doDisplay 
 	 * @return 
 	 */
-	public boolean addOutput(String name, 
+	/*public boolean addOutput(String name, 
 			final String shortname, 
 			int outputBitDepth,
 			boolean doDisplay) 
@@ -214,7 +215,7 @@ public class UnitElement extends AbstractUnit {
 		newOutput.setDoDisplay(doDisplay);
 		notifyModelListeners();
 		return this.outputs.add(newOutput);
-	}
+	}*/
 
 	/**
 	 * Adds an Output-Object to the unit.
@@ -332,7 +333,7 @@ public class UnitElement extends AbstractUnit {
 	 * @param required This input needs to be connected for this unit to work. 
 	 * @return 
 	 */
-	public boolean addInput(String displayName, 
+	/*public boolean addInput(String displayName, 
 			String shortDisplayName, 
 			int inputImageBitDepth, 
 			boolean needToCopyInput, 
@@ -342,7 +343,7 @@ public class UnitElement extends AbstractUnit {
 		boolean add = this.inputs.add(newInput);
 		notifyModelListeners();
 		return add;
-	}
+	}*/
 
 	/**
 	 * @param displayName
@@ -351,12 +352,12 @@ public class UnitElement extends AbstractUnit {
 	 * @param needToCopyInput
 	 * @return
 	 */
-	public boolean addInput(final String displayName, 
+	/*public boolean addInput(final String displayName, 
 			final String shortDisplayName, 
 			final int inputImageBitDepth, 
 			final boolean needToCopyInput) {
 		return this.addInput(displayName, shortDisplayName, inputImageBitDepth, needToCopyInput, true);
-	}
+	}*/
 
 	/**
 	 * Add new Input by Object.
@@ -837,17 +838,27 @@ public class UnitElement extends AbstractUnit {
 		UnitElement clone = new UnitElement(new Point(origin.x+15, origin.y+15), 
 				this.label, 
 				imageJSyntax);
-		for (Input input : inputs) {
-			clone.addInput(input.getName(), 
+		for (int j = 0; j < getInputsCount(); j++) {
+			Input input = getInput(j);
+			Input clonedInput = new Input(input.getDataType(), clone, j, input.isRequired());
+			clonedInput.setupInput(input.getName(), input.getShortDisplayName(), input.isNeedToCopyInput());
+			clone.addInput(clonedInput);
+			/*clone.addInput(input.getName(), 
 					input.getShortDisplayName(), 
 					input.getImageBitDepth(), 
-					input.isNeedToCopyInput());
+					input.isNeedToCopyInput());*/
 		}
-		for (Output output : outputs) {
-			clone.addOutput(output.getName(), 
+//		for (Output output : outputs) {
+		for (int i = 0; i < getOutputsCount(); i++) {
+			Output output = getOutput(i);
+			Output clonedOutput = new Output(output.getDataType(), clone, i);
+			clonedOutput.setupOutput(output.getName(), output.getShortDisplayName());
+			clone.addOutput(clonedOutput);
+			
+			/*clone.addOutput(output.getName(), 
 					output.getShortDisplayName(), 
 					output.getImageBitDepth(),
-					output.isDoDisplay());
+					output.isDoDisplay());*/
 		}
 		for (Parameter parameter : parameters) {
 			Parameter newParameter;

@@ -28,6 +28,8 @@ import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
 import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.datatype.DataType;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 import de.danielsenff.imageflow.models.parameter.Parameter;
@@ -83,8 +85,6 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 			if (unitsElement != null) {  
 				List<Element> unitsList = unitsElement.getChildren();
 				Iterator<Element> unitsIterator = unitsList.iterator();
-				final int numUnits = unitsList.size() + 1;
-//				node = new Node[numUnits];
 				
 
 				// loop over alle Units
@@ -149,7 +149,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 * @throws IOException
 	 */
 	public void write(final File file) throws IOException {
-		final SAXBuilder sb = new SAXBuilder();
+//		final SAXBuilder sb = new SAXBuilder();
 		Element root = new Element("FlowDescription");
 		Document flowGraph = new Document(root);
 
@@ -270,9 +270,18 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 					shortName.addContent(input.getShortDisplayName());
 					inputElement.addContent(shortName);
 
-					Element imageType = new Element("ImageType");
-					imageType.addContent(""+input.getImageBitDepth());
-					inputElement.addContent(imageType);
+					
+					Element dataTypeElement = new Element("DataType");
+					DataType dataType = input.getDataType();
+					dataTypeElement.addContent(dataType.getClass().getName());
+					inputElement.addContent(dataTypeElement);
+					
+					if(dataType instanceof DataTypeFactory.Image) {
+						Element imageType = new Element("ImageType");
+						imageType.addContent(""+((DataTypeFactory.Image)dataType).getImageBitDepth());
+						inputElement.addContent(imageType);	
+					}
+					
 
 					Element needToCopyInput = new Element("NeedToCopyInput");
 					String boolNeedCopy = input.isNeedToCopyInput() ? "true" : "false"; 
@@ -295,9 +304,17 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 					shortName.addContent(output.getShortDisplayName());
 					outputElement.addContent(shortName);
 
-					Element imageType = new Element("ImageType");
-					imageType.addContent(""+output.getImageBitDepth());
-					outputElement.addContent(imageType);
+					Element dataType = new Element("DataType");
+					dataType.addContent(output.getDataType().getClass().getName());
+					outputElement.addContent(dataType);
+					
+					if(output.getDataType() instanceof DataTypeFactory.Image) {
+						Element imageType = new Element("ImageType");
+						imageType.addContent(""+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
+						outputElement.addContent(imageType);	
+					}
+					
+					
 
 					// In case of plugins with multiple outputs
 					// I want to leave the option to display only selected outputs

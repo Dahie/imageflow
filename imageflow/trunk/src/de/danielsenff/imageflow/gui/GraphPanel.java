@@ -58,11 +58,6 @@ import de.danielsenff.imageflow.models.unit.UnitList;
 public class GraphPanel extends GPanel {
 
 	/**
-	 * List of all {@link UnitElement} added to the Workflow.
-	 */
-//	protected UnitList units;
-
-	/**
 	 * Draw a small grid on the {@link GraphPanel}
 	 */
 	protected boolean drawGrid = false;
@@ -350,19 +345,18 @@ public class GraphPanel extends GPanel {
 			if( !(drawEdge instanceof Output && pin instanceof Output)
 					&& !(drawEdge instanceof Input && pin instanceof Input)) {
 
-
 				// we don't know, if the connection is created 
 				// input first or output first
+				isCompatible = drawEdge.isCompatible(pin);
 				if(drawEdge instanceof Output
 						&& pin instanceof Input) {
 					isLoop = ((Input)pin).isConnectedInInputBranch(drawEdge.getParent());
-					isCompatible = ((Output)drawEdge).isImageBitDepthCompatible(((Input)pin).getImageBitDepth());
+//					isCompatible = ((Output)drawEdge).isImageBitDepthCompatible(((Input)pin).getImageBitDepth());
 
 				} else if (drawEdge instanceof Input
 						&& pin instanceof Output) {
 					isLoop = ((Output)pin).existsInInputSubgraph(drawEdge.getParent());
-					isCompatible = ((Input)drawEdge).isImageBitDepthCompatible(
-							((Output)pin).getImageBitDepth());
+//					isCompatible = ((Input)drawEdge).isImageBitDepthCompatible(((Output)pin).getImageBitDepth());
 				}
 
 				g2.setColor((isCompatible && !isLoop) ? Color.green : Color.red);

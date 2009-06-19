@@ -21,23 +21,33 @@ javalc6
 package visualap;
 import java.awt.Point;
 
-public class Pin {
+import de.danielsenff.imageflow.models.Connectable;
+import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.datatype.DataType;
+import de.danielsenff.imageflow.models.unit.UnitElement;
+
+public abstract class Pin implements Connectable {
 	protected Node parent; // node that contains this Pin
-	protected int i, nump;
-	protected String type;
+	protected int index;
 	transient protected int mark; // used only for analysis of graph
 
 	/**
+	 * Type of data expected from the connected {@link Output}.
+	 */
+	protected DataType dataType;
+	protected String type = "Image";
+	
+	/**
 	 *  type can be "input" or "output"
 	 * @param type 
-	 * @param i Pin ID
+	 * @param index Pin ID
 	 * @param nump Number of Pins on this node
 	 * @param parent Parent Node
 	 */
-	public Pin (String type, int i, int nump, Node parent) {
-		this.type = type;
-		this.i = i;
-		this.nump = nump;
+	public Pin (DataType type, int index, Node parent) {
+//		this.type = type;
+		this.dataType = type;
+		this.index = index;
 		
 		this.parent = parent;
 	}
@@ -52,27 +62,24 @@ public class Pin {
 	 * @return
 	 */
 	public int getIndex () {
-		return i;
-	}
-
-	public Point getLocation () {
-		if (type.equals("input")) {
-			Point point = new Point(parent.origin.x, 
-					parent.origin.y + (parent.getDimension().height*i+parent.getDimension().height/2)/nump);
-			return point;
-		} else {
-			// type.equals("output")
-			Point point = new Point(parent.origin.x+parent.getDimension().width, 
-					parent.origin.y + (parent.getDimension().height*i+parent.getDimension().height/2)/nump);
-			return point;
-		}
-				
+		return index;
 	}
 
 	public String getName () {
-		return parent.getLabel()+"."+type+i;
+		return parent.getLabel()+"."+type+index;
 	}
 
+	public DataType getDataType() {
+		return dataType;
+	}
+
+
+	
+	
+	/*
+	 * Markable :)
+	 */
+	
 	public int getMark () {
 		return mark;
 	}
@@ -80,5 +87,35 @@ public class Pin {
 	public void setMark (int mark) {
 		this.mark = mark;
 	}
+	
+	/**
+	 * Returns true, if this Output has been marked.
+	 * The Mark is not 0.
+	 * @return
+	 */
+	public boolean isMarked() {
+		return (this.mark == 0) ? false : true;
+	}
 
+	/**
+	 * Returns true, if this Output has not been marked.
+	 * The Mark is not 0.
+	 * @return
+	 */
+	public boolean isUnmarked() {
+		return (this.mark == 0) ? true : false;
+	}
+
+
+	public abstract Point getLocation();
+
+	/**
+	 * Convenience for calling DataType.isCompatible(DataType);
+	 * @param pin
+	 * @return
+	 */
+	public boolean isCompatible(Pin pin) {
+		return getDataType().isCompatible(pin.getDataType());
+	}
+	
 }

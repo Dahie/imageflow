@@ -4,6 +4,9 @@ import java.awt.Point;
 
 import visualap.Node;
 import visualap.Pin;
+import de.danielsenff.imageflow.models.datatype.DataType;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory.Image;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
@@ -12,17 +15,8 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  * @author danielsenff
  *
  */
-public class Input extends Pin implements Connectable {
-	/**
-	 * the number of this unit
-	 */
-//	protected int unitNumber;
-//	protected Node unit;
-//	protected int i;	// the number of this input 
-
-
-
-
+public class Input extends Pin {
+	
 	/**
 	 * the name to be displayed in the context help
 	 */
@@ -40,6 +34,12 @@ public class Input extends Pin implements Connectable {
 	 * the title of the image connected this output
 	 */
 	protected String imageTitle;  
+	
+	/**
+	 * Type of data expected from the connected {@link Output}.
+	 */
+	protected String inputDataType = "Image";
+	protected DataType dataType;
 	
 	/**
 	 * the int value indicates the acceptable image types
@@ -72,8 +72,10 @@ public class Input extends Pin implements Connectable {
 	 * @param fromUnit
 	 * @param inputNumber
 	 */
-	public Input(final UnitElement parentNode, int inputNumber) {
-		this(parentNode, inputNumber, true);
+	public Input(final DataType dataType, 
+			final UnitElement parentNode, 
+			int inputNumber) {
+		this(dataType, parentNode, inputNumber, true);
 	}
 	
 	/**
@@ -81,20 +83,17 @@ public class Input extends Pin implements Connectable {
 	 * @param inputNumber
 	 * @param requiredInput
 	 */
-	public Input(final UnitElement nodeParent, int inputNumber, boolean requiredInput) {
-		super("input", inputNumber, nodeParent.getInputsCount(), nodeParent);
+	public Input(DataType dataType, 
+			final UnitElement nodeParent, 
+			int inputNumber, 
+			boolean requiredInput) {
+		super(dataType, inputNumber, nodeParent);
 		setRequiredInput(requiredInput);
+		if(getDataType() instanceof DataTypeFactory.Image) {
+			((Image)getDataType()).setParentUnitElement((UnitElement) getParent());
+		}
 	}
-	
-	
-	/**
-	 * @param fromUnit
-	 * @param inputNumber
-	 * @param nodeParent
-	 */
-	/*public Input(final UnitElement fromUnit, final int inputNumber, final UnitElement nodeParent) {
-		super("input", inputNumber, nodeParent.getInputsCount(), nodeParent);
-	}*/
+
 	
 	/**
 	 * Sets the connection between this input and an output.
@@ -104,15 +103,6 @@ public class Input extends Pin implements Connectable {
 	private void generateID(final int fromUnitNumber, final int fromOutputNumber) {
 		this.imageTitle = "Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
 		this.imageID = "ID_Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
-	}
-	
-	/**
-	 * Sets the connection between this input and an output.
-	 * @param fromUnit
-	 * @param fromOutputNumber
-	 */
-	public void connectTo(final UnitElement fromUnit, final int fromOutputNumber) {
-		connectTo(fromUnit.getOutput(fromOutputNumber-1));
 	}
 	
 	/**
@@ -137,7 +127,15 @@ public class Input extends Pin implements Connectable {
 			final boolean needToCopyInput) {
 		this.displayName = displayName;
 		this.shortDisplayName = shortDisplayName;
-		this.inputImageBitDepth = inputImageBitDepth;
+		this.dataType = DataTypeFactory.createImage(inputImageBitDepth);
+		this.setNeedToCopyInput(needToCopyInput);
+	}
+	
+	public void setupInput(final String displayName, 
+			final String shortDisplayName, 
+			final boolean needToCopyInput) {
+		this.displayName = displayName;
+		this.shortDisplayName = shortDisplayName;
 		this.setNeedToCopyInput(needToCopyInput);
 	}
 
@@ -165,13 +163,6 @@ public class Input extends Pin implements Connectable {
 	}
 	
 
-	/**
-	 * Gets the Images bitdepth.
-	 * @return
-	 */
-	public int getImageBitDepth() {
-		return inputImageBitDepth;
-	}
 
 	/**
 	 * Get the abbreviated DisplayName
@@ -218,12 +209,10 @@ public class Input extends Pin implements Connectable {
 	/* (non-Javadoc)
 	 * @see graph.Pin#getLocation()
 	 */
-	@Override
 	public Point getLocation() {
 		int height = parent.getDimension().height;
 		int nump = ((UnitElement) parent).getInputsCount();
-		this.nump = nump;
-		int y =  (i*height / super.nump ) - (height/(2*super.nump)) + parent.getOrigin().y;
+		int y =  (index*height / nump ) - (height/(2*nump)) + parent.getOrigin().y;
 		return new Point(parent.getOrigin().x, y);
 	}
 	
@@ -256,9 +245,7 @@ public class Input extends Pin implements Connectable {
 	 * @return 
 	 */
 	public boolean isConnected() {
-		return (fromUnit != null) 
-//			&& (fromUnitNumber > 0)
-			&& (this.from != null);
+		return (fromUnit != null) && (this.from != null);
 	}
 	
 	
@@ -284,19 +271,15 @@ public class Input extends Pin implements Connectable {
 		this.from = null;
 	}
 
-
 	/**
-	 * Returns true, if the imageBitDepth in question is supported
-	 * by this Input.
-	 * @param imageBitDepth
-	 * @return
+	 * Sets the connection between this input and an output.
+	 * @param fromUnit
+	 * @param fromOutputNumber
 	 */
-	public boolean isImageBitDepthCompatible(final int imageBitDepth) {
-		if(getImageBitDepth() != -1 && imageBitDepth != -1) {
-			return (getImageBitDepth()&imageBitDepth) != 0;	
-		}
-		return false;
+	public void connectTo(final UnitElement fromUnit, final int fromOutputNumber) {
+		connectTo(fromUnit.getOutput(fromOutputNumber-1));
 	}
+
 
 
 	/**
@@ -314,8 +297,6 @@ public class Input extends Pin implements Connectable {
 	 */
 	public boolean isConnectedInInputBranch(Node goal) {
 		// self reference
-		
-		
 		if(goal.equals(parent)) 
 //			 can only check inputs, which are connected
 //			return traverseInput(this, goal);
@@ -326,7 +307,7 @@ public class Input extends Pin implements Connectable {
 		
 	}
 
-	private static boolean traverseInput(Input start, Node goal) {
+	private static boolean traverseInput(final Input start, final Node goal) {
 		if(start.getParent().equals(goal)) {
 			return false;
 		} else if(start.isConnected()) {
@@ -349,52 +330,12 @@ public class Input extends Pin implements Connectable {
 						if(traverseOutput((UnitElement)connection.getToUnit(), goal))
 							return true;
 					}
-					
-					
 				}
 			}
 		} 
-		
-		
-		/*if(parent.hasInputsConnected()) {
-			for (Input input : parent.getInputs()) {
-				// check if this parent is already what we are looking for
-				if(input.getParent().equals(goal)) { 
-					return true;
-				//check if this input is connected to more
-				} else if(input.isConnected()) {
-					// if it is connected, maybe we have more luck here
-					return traverseOutput(input.getFromUnit(), goal);
-				}
-			}
-		}*/
-		return false;
-	}
 
-	/**
-	 * Returns true, if the {@link UnitElement} connected to this Input
-	 * is marked. Obviously this requires, that this input is connected.
-	 */
-	/*public boolean isMarked() {
-//		if(isConnected()) {
-//			int mark = getFromUnit().getMark();
-			// if mark is not set
-			if(mark != 0) {
-				// this connected output hasn't been registered and is missing a mark, 
-				// so the whole unit isn't ready set. 
-				return true;
-			}  	
-//		}
-		
 		return false;
-	}*/
-	
-	public boolean isMarked() {
-		return (this.mark == 0) ? false : true;
 	}
 	
-	public boolean isUnmarked() {
-		return (this.mark == 0) ? true : false;
-	}
 
 }

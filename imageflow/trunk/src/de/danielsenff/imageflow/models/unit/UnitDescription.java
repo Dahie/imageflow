@@ -1,7 +1,5 @@
 package de.danielsenff.imageflow.models.unit;
 
-import ij.IJ;
-
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,10 +15,19 @@ import org.jdom.Element;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.helper.Tools;
+import de.danielsenff.imageflow.models.datatype.DataType;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 
+/**
+ * UnitDescription reads the single pieces a UnitElement is made of from an
+ * XML-file. The {@link UnitFactory} can construct an {@link UnitElement}-Instance based
+ * on this description.
+ * @author senff
+ *
+ */
 public class UnitDescription {
 
 	public UnitDescription() {
@@ -136,7 +143,7 @@ public class UnitDescription {
 		numParas = parametersList.size();
 		para = new Para[numParas + 1];
 
-		// loop Ÿber alle Parameter
+		// loop ï¿½ber alle Parameter
 		int num = 1;
 		while (parametersIterator.hasNext()) {
 			Element actualParameterElement = (Element) parametersIterator.next();
@@ -148,6 +155,7 @@ public class UnitDescription {
 
 
 	/**
+	 * process a single input
 	 * @param inputsElement
 	 */
 	private void processInputs(Element inputsElement) {
@@ -156,16 +164,31 @@ public class UnitDescription {
 		
 		numInputs = inputsList.size();
 		input = new Input[numInputs+1];
-		// loop Ÿber alle Inputs
+		// loop over all Inputs
 		int num = 1;
 		while (inputsIterator.hasNext()) {
-			Element actualInputElement = (Element) inputsIterator.next();
+			Element inputElement = (Element) inputsIterator.next();
 			
 			Input actInput = input[num] = new Input();
-			actInput.name = actualInputElement.getChild("Name").getValue();
-			actInput.shortName = actualInputElement.getChild("ShortName").getValue();
-			actInput.imageType = Integer.valueOf(actualInputElement.getChild("ImageType").getValue());
-			actInput.needToCopyInput = actualInputElement.getChild("NeedToCopyInput").getValue().equals("true") ? true : false;
+			actInput.name = inputElement.getChild("Name").getValue();
+			if(inputElement.getChild("Required") != null)
+				actInput.required = inputElement.getChild("Required").getValue().equals("true") ? true : false;
+			actInput.shortName = inputElement.getChild("ShortName").getValue();
+			
+			// legacy: in case no type is given, assume DataTypeFactory.Image
+			if(inputElement.getChild("DataType") != null) {
+				actInput.dataType = DataTypeFactory.createDataType(inputElement.getChild("DataType").getValue());	
+			} else 
+				actInput.dataType = DataTypeFactory.createDataType("Image");
+			
+			actInput.needToCopyInput = inputElement.getChild("NeedToCopyInput").getValue().equals("true") ? true : false;
+			
+			if(actInput.dataType instanceof DataTypeFactory.Image) {
+				int imageType = Integer.valueOf(inputElement.getChild("ImageType").getValue());
+				actInput.imageType = imageType;
+				((DataTypeFactory.Image)actInput.dataType).setImageBitDepth(imageType);
+			}
+					
 			num++;
 		}
 	}
@@ -179,15 +202,29 @@ public class UnitDescription {
 		Iterator<Element> outputIterator = outputsList.iterator();
 		numOutputs = outputsList.size();
 		output = new Output[outputsList.size()+1];
-		// loop Ÿber alle Inputs
+		// loop over all Inputs
 		int num = 1;
 		while (outputIterator.hasNext()) {
-			Element actualOutputElement = (Element) outputIterator.next();
+			Element outputElement = (Element) outputIterator.next();
 			Output actOutput = output[num] = new Output();
-			actOutput.name = actualOutputElement.getChild("Name").getValue();
-			actOutput.shortName = actualOutputElement.getChild("ShortName").getValue();
-			actOutput.imageType = Integer.valueOf(actualOutputElement.getChild("ImageType").getValue());
-			actOutput.doDisplay = actualOutputElement.getChild("DoDisplay").getValue().equals("true")?true:false;
+			actOutput.name = outputElement.getChild("Name").getValue();
+			actOutput.shortName = outputElement.getChild("ShortName").getValue();
+			
+			// legacy: in case no type is given, assume DataTypeFactory.Image
+			if(outputElement.getChild("DataType") != null) {
+				actOutput.dataType = DataTypeFactory.createDataType(outputElement.getChild("DataType").getValue());
+			} else {
+				actOutput.dataType = DataTypeFactory.createDataType("Image");
+			}
+			
+			if(actOutput.dataType instanceof DataTypeFactory.Image) {
+				int imageType = Integer.valueOf(outputElement.getChild("ImageType").getValue());
+				actOutput.imageType = imageType;
+				((DataTypeFactory.Image)actOutput.dataType).setImageBitDepth(imageType);
+			}
+			
+			
+			actOutput.doDisplay = outputElement.getChild("DoDisplay").getValue().equals("true")?true:false;
 			isDisplayUnit = actOutput.doDisplay;
 			num++;
 		}
@@ -253,53 +290,58 @@ public class UnitDescription {
 	public boolean getIsDisplayUnit() {
 		return isDisplayUnit;
 	}
-}
 
-class Para {
-	String name;
 
-	String dataTypeString;
-	/*double doubleValue;
+	public class Para {
+		String name;
+
+		String dataTypeString;
+		/*double doubleValue;
 	int integerValue;
 	String stringValue;
 	String[] comboStringValues;
 	int choiceNumber;
 	boolean booleanValue;*/
-	
-	/**
-	 * can be
-	 * ArrayList
-	 * Integer
-	 * Double
-	 * String
-	 * Boolean
-	 */
-	Object value;
-	
-	/**
-	 * Enumeration of possible values, the actual value has to be 
-	 * element in this list.
-	 */
-	int choiceIndex;
-	
-	/**
-	 * String used when value true for {@link BooleanParameter}
-	 */
-	public String trueString;
 
-	String helpString;
-}
+		/**
+		 * can be
+		 * ArrayList
+		 * Integer
+		 * Double
+		 * String
+		 * Boolean
+		 */
+		Object value;
 
-class Input {
-	String name;
-	String shortName;
-	int imageType;
-	boolean needToCopyInput;
-}
+		/**
+		 * Enumeration of possible values, the actual value has to be 
+		 * element in this list.
+		 */
+		int choiceIndex;
 
-class Output {
-	String name;
-	String shortName;
-	int imageType;
-	boolean doDisplay;
+		/**
+		 * String used when value true for {@link BooleanParameter}
+		 */
+		public String trueString;
+
+		String helpString;
+	}
+
+	public class Input {
+		String name;
+		String shortName;
+		DataType dataType;
+		boolean required;
+		int imageType;
+		boolean needToCopyInput;
+	}
+
+	public class Output {
+		String name;
+		String shortName;
+		DataType dataType;
+		int imageType;
+		boolean doDisplay;
+	}
+
 }
