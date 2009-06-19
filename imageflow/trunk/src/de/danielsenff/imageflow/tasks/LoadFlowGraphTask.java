@@ -8,6 +8,11 @@ import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
 
+/**
+ * Task to load a workflow xml.
+ * @author danielsenff
+ *
+ */
 public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
 
 
@@ -17,7 +22,7 @@ public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
      *
      * @param file the file to load from.
      */
-	public LoadFlowGraphTask(File file) {
+	public LoadFlowGraphTask(final File file) {
 		super(file);
 	}
 
@@ -29,8 +34,8 @@ public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
      */
     @Override
     protected GraphController doInBackground() throws IOException {
-        GraphController graphController = new GraphController();
-        UnitList unitList = graphController.getUnitElements();
+        final GraphController graphController = new GraphController();
+        final UnitList unitList = graphController.getUnitElements();
         unitList.clear();
         unitList.read(file);
     	

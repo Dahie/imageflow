@@ -10,6 +10,11 @@ import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
 
+/**
+ * Task to import an workflow xml into the existing workflow.
+ * @author danielsenff
+ *
+ */
 public class ImportGraphTask extends LoadFileTask<GraphController, Void> {
 
 	
@@ -18,7 +23,7 @@ public class ImportGraphTask extends LoadFileTask<GraphController, Void> {
      *
      * @param file the file to load from.
      */
-	public ImportGraphTask(File file) {
+	public ImportGraphTask(final File file) {
 		super(file);
 	}
 
@@ -33,10 +38,10 @@ public class ImportGraphTask extends LoadFileTask<GraphController, Void> {
      */
     @Override
     protected GraphController doInBackground() throws IOException {
-        GraphController graphController = 
+        final GraphController graphController = 
         	((ImageFlowView)ImageFlow.getApplication()
         			.getMainView()).getGraphController();
-        UnitList unitList = graphController.getUnitElements();
+        final UnitList unitList = graphController.getUnitElements();
         unitList.read(file);
         
         if (!isCancelled()) {

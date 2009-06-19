@@ -1,25 +1,29 @@
 package de.danielsenff.imageflow.tasks;
 
-import ij.IJ;
-
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 
-import de.danielsenff.imageflow.ImageFlow;
-import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
 
 
 /**
+ * Task to Run the current workflow.
  * @author danielsenff
  *
  */
-public class RunMacroTask extends Task {
+public class RunMacroTask extends Task<Object, Void> {
 	
 	GraphController graphController;
 	private boolean showlog;
 	
-	public RunMacroTask(final Application app, GraphController graphController, boolean doShowLog) {
+	/**
+	 * @param app
+	 * @param graphController
+	 * @param doShowLog
+	 */
+	public RunMacroTask(final Application app, 
+			final GraphController graphController, 
+			final boolean doShowLog) {
 		super(app);
 		this.graphController = graphController;
 		this.showlog = doShowLog;
@@ -29,7 +33,6 @@ public class RunMacroTask extends Task {
 	protected Void doInBackground() throws InterruptedException {
 		
 		String macro = graphController.generateMacro();
-//		((ImageFlowView)ImageFlow.getApplication().getMainView()).
 		//TODO use exceptions 
 		if(macro != null) {
 			System.out.println(macro);

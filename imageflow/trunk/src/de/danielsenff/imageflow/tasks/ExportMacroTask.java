@@ -3,7 +3,6 @@ package de.danielsenff.imageflow.tasks;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -11,35 +10,36 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
-import org.jdesktop.application.Application;
-import org.jdesktop.application.Task;
-
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
 
 
 /**
+ * Task for saving a macro as txt file.
  * @author danielsenff
  *
  */
-public class ExportMacroTask extends Task {
+public class ExportMacroTask extends SaveFileTask {
 
 	GraphController graphController;
-	private File file;
 	private static final Logger logger = Logger.getLogger(ImageFlowView.class.getName());
 
-	public ExportMacroTask(final Application app, File file, GraphController graphController) {
-		super(app);
+	/**
+	 * @param app
+	 * @param file
+	 * @param graphController
+	 */
+	public ExportMacroTask(final File file, 
+			final GraphController graphController) {
+		super(file);
 		this.graphController = graphController;
-		this.file = file;
 	}
 
 	@Override 
 	protected Void doInBackground() throws InterruptedException {
 
 		String macro = graphController.generateMacro();
-		//		((ImageFlowView)ImageFlow.getApplication().getMainView()).
 		if(macro != null) {
 			System.out.println(macro);
 			//		graphController.runImageJMacro(macro, false);
@@ -55,10 +55,6 @@ public class ExportMacroTask extends Task {
 			}
 		}
 		return null;
-	}
-
-	public File getFile() {
-		return file;
 	}
 
 	/*@Override protected void done() {

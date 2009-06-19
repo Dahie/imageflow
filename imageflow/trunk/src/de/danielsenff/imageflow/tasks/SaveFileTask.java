@@ -14,6 +14,13 @@ import de.danielsenff.imageflow.ImageFlowView;
 
 
 
+/**
+ * Abstract Task for saving files.
+ * @author danielsenff
+ *
+ * @param <T>
+ * @param <V>
+ */
 public abstract class SaveFileTask<T, V> extends Task<T, V> {
 	
 	protected boolean modified = false;
@@ -21,14 +28,15 @@ public abstract class SaveFileTask<T, V> extends Task<T, V> {
     protected ImageFlowView view;
     private static final Logger logger = Logger.getLogger(ImageFlowView.class.getName());
 	
-    /* Construct the LoadFileTask object.  The constructor
+    /** Construct the LoadFileTask object.  The constructor
      * will run on the EDT, so we capture a reference to the 
      * File to be loaded here.  To keep things simple, the 
      * resources for this Task are specified to be in the same 
      * ResourceMap as the DocumentEditorView class's resources.
-     * They're defined in resources/DocumentEditorView.properties.
+     * They're defined in resources/ImageFlowView.properties.
+     * @param file 
      */
-    public SaveFileTask(File file) {
+    public SaveFileTask(final File file) {
     	super(ImageFlow.getApplication());
 		this.file = file;
 		this.view = (ImageFlowView) ImageFlow.getApplication().getMainView();
@@ -44,13 +52,18 @@ public abstract class SaveFileTask<T, V> extends Task<T, V> {
      * GUI as well as the file and modified properties here.
      * @param fileContents
      */
-    protected void succeeded(T fileContents) {
+    @Override
+	protected void succeeded(final T fileContents) {
         view.setFile(getFile());
         
 //        textArea.setText(fileContents);
         view.setModified(false);
     }
 
+    /**
+     * File handled, by this Task.
+     * @return
+     */
     public File getFile() {
 		return file;
 	}
@@ -61,11 +74,11 @@ public abstract class SaveFileTask<T, V> extends Task<T, V> {
      * loaded from this Tasks's ResourceMap.
      */
     @Override 
-    protected void failed(Throwable e) {
+    protected void failed(final Throwable e) {
         logger.log(Level.WARNING, "couldn't save " + getFile(), e);
-        String msg = getResourceMap().getString("loadFailedMessage", getFile());
-        String title = getResourceMap().getString("loadFailedTitle");
-        int type = JOptionPane.ERROR_MESSAGE;
+        final String msg = getResourceMap().getString("loadFailedMessage", getFile());
+        final String title = getResourceMap().getString("loadFailedTitle");
+        final int type = JOptionPane.ERROR_MESSAGE;
         JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), msg, title, type);
     }
 

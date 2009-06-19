@@ -6,6 +6,11 @@ import java.io.IOException;
 
 import de.danielsenff.imageflow.controller.GraphController;
 
+/**
+ * Task to save a workflow in a XML-file.
+ * @author danielsenff
+ *
+ */
 public class SaveFlowGraphTask extends SaveFileTask<GraphController, Void> {
 
 	/**
@@ -13,7 +18,7 @@ public class SaveFlowGraphTask extends SaveFileTask<GraphController, Void> {
      *
      * @param file the file to load from.
      */
-	public SaveFlowGraphTask( File file) {
+	public SaveFlowGraphTask( final File file) {
 		super(file);
 	}
 
@@ -25,9 +30,8 @@ public class SaveFlowGraphTask extends SaveFileTask<GraphController, Void> {
      */
     @Override
     protected GraphController doInBackground() throws IOException {
-//        GraphController graphController = new GraphController();
     	// get current graphcontroller
-    	GraphController graphController = view.getGraphController();
+    	final GraphController graphController = view.getGraphController();
         graphController.write(file);
     	
         if (!isCancelled()) {

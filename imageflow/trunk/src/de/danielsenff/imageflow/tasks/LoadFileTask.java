@@ -15,10 +15,20 @@ import de.danielsenff.imageflow.controller.GraphController;
 
 
 
+/**
+ * Abstract Task for loading files.
+ * @author danielsenff
+ *
+ * @param <T>
+ * @param <V>
+ */
 public abstract class LoadFileTask<T, V> extends Task<T, V> {
 	
 	protected boolean modified = false;
 	private static final Logger logger = Logger.getLogger(ImageFlowView.class.getName());
+    /**
+     * File that is loaded.
+     */
     protected final File file;
     protected ImageFlowView view;
 	
@@ -29,7 +39,7 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
      * ResourceMap as the DocumentEditorView class's resources.
      * They're defined in resources/DocumentEditorView.properties.
      */
-    public LoadFileTask(File file) {
+    public LoadFileTask(final File file) {
     	super(ImageFlow.getApplication());
 		this.file = file;
 		this.view = (ImageFlowView) ImageFlow.getApplication().getMainView();
@@ -45,7 +55,8 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
      * GUI as well as the file and modified properties here.
      * @param fileContents
      */
-    protected void succeeded(T fileContents) {
+    @Override
+	protected void succeeded(final T fileContents) {
         view.setFile(getFile());
         view.setGraphController((GraphController)fileContents);
         
@@ -53,6 +64,10 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
         view.setModified(false);
     }
 
+    /**
+     * File this task is handling.
+     * @return
+     */
     public File getFile() {
 		return file;
 	}
@@ -63,11 +78,11 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
      * loaded from this Tasks's ResourceMap.
      */
     @Override 
-    protected void failed(Throwable e) {
+    protected void failed(final Throwable e) {
         logger.log(Level.WARNING, "couldn't load " + getFile(), e);
-        String msg = getResourceMap().getString("loadFailedMessage", getFile());
-        String title = getResourceMap().getString("loadFailedTitle");
-        int type = JOptionPane.ERROR_MESSAGE;
+        final String msg = getResourceMap().getString("loadFailedMessage", getFile());
+        final String title = getResourceMap().getString("loadFailedTitle");
+        final int type = JOptionPane.ERROR_MESSAGE;
         JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), msg, title, type);
     }
 
