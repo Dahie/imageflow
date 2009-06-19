@@ -897,7 +897,7 @@ public class ImageFlowView extends FrameView {
 						return null;
 					}
 	        	}
-	        	task = new ExportMacroTask(getApplication(), selectedFile, graphController);
+	        	task = new ExportMacroTask(selectedFile, graphController);
 	            
 	        }
 		
