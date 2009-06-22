@@ -23,12 +23,12 @@ public class MacroGenerator {
 	// which are source, but no output and no display
 	
 	private UnitList unitList;
-	private ArrayList<Output> openedImages;
+	private ArrayList<ImageJImage> openedImages;
 	private String  macroText;
 
 	public MacroGenerator(final UnitList unitElements) {
 		this.unitList = unitElements;
-		this.openedImages = new ArrayList<Output>();
+		this.openedImages = new ArrayList<ImageJImage>();
 		this.macroText = "";
 	}
 	
@@ -120,7 +120,7 @@ public class MacroGenerator {
 	private String renameImages() {
 		String macroText = "";
 
-		for (Output	output : this.openedImages) {
+		for (ImageJImage	output : this.openedImages) {
 
 			final String outputID = output.getOutputID();
 
@@ -136,7 +136,7 @@ public class MacroGenerator {
 
 		ArrayList<Output> removeAfterwards = new ArrayList<Output>();
 		
-		for (Output	output : this.openedImages) {
+		for (ImageJImage	output : this.openedImages) {
 			if (!output.isDoDisplay()) {
 				final String outputID = output.getOutputID();
 
@@ -170,5 +170,12 @@ public class MacroGenerator {
 	
 	private static String getNeedCopyTitle(String inputID) {
 		return "Title_Temp_"+ inputID;
+	}
+	
+	
+	public class ImageJImage {
+		private String id;
+		private String title;
+		private Output parentOutput;
 	}
 }
