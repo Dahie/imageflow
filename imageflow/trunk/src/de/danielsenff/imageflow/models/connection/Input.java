@@ -29,16 +29,15 @@ public class Input extends Pin {
 	/**
 	 * the id of the image connected to this input
 	 */
-	protected String imageID;
+	protected String inputID;
 	/**
-	 * the title of the image connected this output
+	 * the title of the image connected this input
 	 */
-	protected String imageTitle;  
+	protected String inputTitle;  
 	
 	/**
 	 * Type of data expected from the connected {@link Output}.
 	 */
-	protected String inputDataType = "Image";
 	protected DataType dataType;
 	
 	/**
@@ -101,8 +100,8 @@ public class Input extends Pin {
 	 * @param fromOutputNumber
 	 */
 	private void generateID(final int fromUnitNumber, final int fromOutputNumber) {
-		this.imageTitle = "Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
-		this.imageID = "ID_Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
+		this.inputTitle = "Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
+		this.inputID = "ID_Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
 	}
 	
 	/**
@@ -145,7 +144,7 @@ public class Input extends Pin {
 	 * @return
 	 */
 	public String getImageTitle() {
-		return imageTitle;
+		return inputTitle;
 	}
 
 	/**
@@ -156,6 +155,7 @@ public class Input extends Pin {
 	}
 
 	/**
+	 * Returns true, if this Input requires it's input to be copied.
 	 * @return
 	 */
 	public boolean isNeedToCopyInput() {
@@ -176,7 +176,7 @@ public class Input extends Pin {
 	 * @return the imageID
 	 */
 	public String getImageID() {
-		return this.imageID;
+		return this.inputID;
 	}
 	
 	/**

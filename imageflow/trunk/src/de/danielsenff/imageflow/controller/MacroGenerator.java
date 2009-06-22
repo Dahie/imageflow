@@ -103,38 +103,56 @@ public class MacroGenerator {
 		
 		// delete all images that are not to be displayed
 		macroText +=  "// delete unwanted images \n";
-//		for (int u = 1; u < unitElements.size()+1; u++) {
-//			final UnitElement unit = (UnitElement) unitElements.get(u-1);
-			macroText += deleteImages();
-//		}
-
+		macroText += deleteImages();
+		macroText +=  "// human understandable names \n";
+		macroText += renameImages();
+		
 		macroText += "\nsetBatchMode(\"exit and display\"); ";
 		
 		return macroText;
 	}
 
+	/**
+	 * Rename the remaining displayed images, so they don't have the crypting
+	 * identifier-string, but a humand-readable title.
+	 * @return
+	 */
+	private String renameImages() {
+		String macroText = "";
+
+		for (Output	output : this.openedImages) {
+
+			final String outputID = output.getOutputID();
+
+			macroText += "selectImage("+outputID+"); \n" 
+				+ "rename(\"" + output.getName()  + "\"); \n";
+		}
+		return macroText;
+	}
+
+
 	private String deleteImages() {
 		String macroText = "";
 
-//		for (int out = 1; out == unit.getOutputsCount(); out++) {
-//			macroText += deleteImages(unit.getOutput(out));
+		ArrayList<Output> removeAfterwards = new ArrayList<Output>();
+		
 		for (Output	output : this.openedImages) {
-			macroText += deleteImages(output);
+			if (!output.isDoDisplay()) {
+				final String outputID = output.getOutputID();
+
+				macroText += "selectImage("+outputID+"); \n" 
+					+ "close(); \n";
+				removeAfterwards.add(output);
+			} 
 		}
+		for (Output output : removeAfterwards) {
+			this.openedImages.remove(output);
+		}
+		
 		return macroText;
 	}
 	
-	private static String deleteImages(final Output output) {
-		String macroText = "";
-
-		if (!output.isDoDisplay()) {
-			final String outputID = output.getOutputID();
-
-			macroText += "selectImage("+outputID+"); \n" +
-			"close(); \n";
-		}
-		return macroText;
-	}
+	
 
 	private static String duplicateImages(final UnitElement unit) {
 		String code = "";

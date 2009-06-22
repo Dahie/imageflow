@@ -1,7 +1,5 @@
 package de.danielsenff.imageflow.models.connection;
 
-import ij.plugin.filter.PlugInFilter;
-
 import java.awt.Point;
 import java.util.Collection;
 import java.util.Vector;
@@ -15,6 +13,8 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
 /**
+ * Outputs are Pins that pass data to other units.
+ * An Output can be connected to an arbitrary number of inputs.
  * @author danielsenff
  *
  */
@@ -198,77 +198,12 @@ public class Output extends Pin {
 	 * @return
 	 */
 	public boolean isConnectedWith(Pin input) {
-		
 		for (Connection connection : getConnections()) {
 			if(connection.getInput().equals(input))
 				return true;
 		}
 		return false;
 	}
-
-	/**
-	 * Gets the true Image type. This can be either the own imagetype of this output
-	 * or by traversing along the graph until it gets it's initial type.
-	 * @return
-	 */
-	/*public int getImageBitDepth() {
-		
-		if(this.imageType != -1 && this.imageType != PlugInFilter.DOES_ALL) {
-			return this.imageType; 
-		} else {
-			
-			// return type of parents input connected output
-			UnitElement unitElement = (UnitElement)parent;
-			
-			//TODO this could be nicer, how to handle multiple inputs?
-			if(unitElement.hasInputsConnected()) {
-				for (Input input : unitElement.getInputs()) {
-					if(input.isConnected())
-						return input.getFromOutput().getImageBitDepth();
-				}
-				
-				return -1;
-				
-			} else {
-				// this means our output doesn't know his own capabilities
-				// and because it has no inputs, it can't get them anywhere
-				// this sucks
-				return -1;
-			}
-			
-		}
-	}*/
-	
-	/**
-	 * @return the outputBitDepth
-	 */
-//	public int getOutputBitDepth() {
-//		return imageType;
-//	}
-
-	/**
-	 * @param outputBitDepth the outputBitDepth to set
-	 */
-	/*public void setOutputBitDepth(int outputBitDepth) {
-		this.imageType = outputBitDepth;
-	}*/
-	
-	/**
-	 * Returns true, if the imageBitDepth in question is supported by this Input.
-	 * @param imageBitDepth
-	 * @return
-	 */
-	/*public boolean isImageBitDepthCompatible(final int imageBitDepth) {
-		// -1 doesn't specify so ignore for now
-		
-		int myImageBitDepth = getImageBitDepth();
-		if(myImageBitDepth != -1 && imageBitDepth != -1) {
-			return (myImageBitDepth&imageBitDepth) != 0;
-		} else if (myImageBitDepth == -1 && imageBitDepth != -1) {
-//			System.err.println("couldn't find type");
-		}
-		return false;
-	}*/
 
 	@Override
 	public UnitElement getParent() {
