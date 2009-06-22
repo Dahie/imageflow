@@ -45,9 +45,9 @@ import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.ConnectionList;
 import de.danielsenff.imageflow.models.Delegate;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
 
 public class GPanel extends JPanel implements Printable, MouseListener, MouseMotionListener  {
 

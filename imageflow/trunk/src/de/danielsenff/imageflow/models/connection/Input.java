@@ -1,4 +1,4 @@
-package de.danielsenff.imageflow.models;
+package de.danielsenff.imageflow.models.connection;
 
 import java.awt.Point;
 

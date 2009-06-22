@@ -11,14 +11,13 @@ import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import visualap.Node;
 import de.danielsenff.imageflow.helper.PaintUtil;
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.Input;
 import de.danielsenff.imageflow.models.MacroElement;
-import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.parameter.AbstractParameter;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
@@ -38,7 +37,7 @@ import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
  * contains most of the graph logic.
  * 
  * Next to meta data, it basically it contains 3 major parts.
- * 3 Lists with {@link Input}s, {@link Output}s and {@link Parameter}.
+ * 3 Lists with {@link Input}s, {@link Output}s and {@link Input}.
  * 
  * In the heart of the model is an Macro-Object, which
  * contains the syntax, in which the parameters injected on runtime

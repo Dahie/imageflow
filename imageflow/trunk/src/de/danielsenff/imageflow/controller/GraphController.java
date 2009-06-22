@@ -13,9 +13,9 @@ import java.util.ArrayList;
 
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.ConnectionList;
 import de.danielsenff.imageflow.models.SelectionList;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -70,7 +70,7 @@ public class GraphController{
 		
 		/* beginning for new functions, but not today, daniel */
 		int[] imageIDs = WindowManager.getIDList();
-		for (int i = 0; i < imageIDs.length; i++) {
+		for (int i = 0; i < WindowManager.getImageCount(); i++) {
 			ImagePlus image = WindowManager.getImage(imageIDs[i]);
 			String imagetitle = image.getTitle(); 
 			System.out.println(imagetitle);

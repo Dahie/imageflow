@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import de.danielsenff.imageflow.models.MacroElement;
-import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 

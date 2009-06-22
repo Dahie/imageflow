@@ -1,4 +1,4 @@
-package de.danielsenff.imageflow.models;
+package de.danielsenff.imageflow.models.connection;
 
 import ij.plugin.filter.PlugInFilter;
 
@@ -40,11 +40,11 @@ public class Output extends Pin {
 	/**
 	 * the title of the image generated from this output
 	 */
-	protected String imageTitle; 
+	protected String outputTitle; 
 	/**
 	 * the id of the image generated from this output
 	 */
-	protected String imageID; 
+	protected String outputID; 
 	/**
 	 * indicates that this output should be shown
 	 */
@@ -78,8 +78,8 @@ public class Output extends Pin {
 	 * @param fromOutputNumber
 	 */
 	private void generateID(final int unitNumber, final int outputNumber) {
-		this.imageTitle = "Unit_" + unitNumber + "_Output_" + outputNumber;
-		this.imageID = "ID_Unit_" + unitNumber + "_Output_" + outputNumber;
+		this.outputTitle = "Unit_" + unitNumber + "_Output_" + outputNumber;
+		this.outputID = "ID_Unit_" + unitNumber + "_Output_" + outputNumber;
 	}
 
 	
@@ -145,11 +145,11 @@ public class Output extends Pin {
 	}
 
 	/**
-	 * Title of the image in the macro.
+	 * Title with which the ouput is referred to in the macro. Like a variable-name.
 	 * @return
 	 */
-	public String getImageTitle() {
-		return this.imageTitle;
+	public String getOutputTitle() {
+		return this.outputTitle;
 	}
 	
 
@@ -167,8 +167,8 @@ public class Output extends Pin {
 	 * 
 	 * @return the imageID
 	 */
-	public String getImageID() {
-		return this.imageID;
+	public String getOutputID() {
+		return this.outputID;
 	}
 
 	/* (non-Javadoc)

@@ -1,4 +1,4 @@
-package de.danielsenff.imageflow.models;
+package de.danielsenff.imageflow.models.connection;
 
 import visualap.Node;
 import visualap.Pin;
@@ -185,12 +185,12 @@ public class Connection {
 	 * supported by this Input.
 	 * @return
 	 */
-	public boolean isImageBitDepthCompatible() {
+	public boolean isCompatible() {
 		Input input = ((Input)this.to);
 		Output output = ((Output)this.from);
 		
 //		boolean isCompatible = output.isImageBitDepthCompatible(input.getImageBitDepth());
-		boolean isCompatible = input.getDataType().isCompatible(output.getDataType());
+		boolean isCompatible = input.isCompatible(output);
 		
 		return isCompatible;
 	}

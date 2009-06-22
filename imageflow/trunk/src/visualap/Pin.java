@@ -21,11 +21,15 @@ javalc6
 package visualap;
 import java.awt.Point;
 
-import de.danielsenff.imageflow.models.Connectable;
-import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.connection.Connectable;
+import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
-import de.danielsenff.imageflow.models.unit.UnitElement;
 
+/**
+ * Pin is the connecting point on a UnitElement between Connections.
+ * @author senff
+ *
+ */
 public abstract class Pin implements Connectable {
 	protected Node parent; // node that contains this Pin
 	protected int index;

@@ -6,12 +6,14 @@ package de.danielsenff.imageflow.models;
 import java.util.ArrayList;
 
 import de.danielsenff.imageflow.helper.Tools;
+import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.DoubleParameter;
 import de.danielsenff.imageflow.models.parameter.IntegerParameter;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
-import de.danielsenff.imageflow.models.unit.UnitElement;
 
 /**
  * MacroElement is a processor class. It contains the ImageJ-syntax template.
@@ -139,6 +141,95 @@ public class MacroElement {
 		// choiceParameter uses the PARA_STRING_x
 		return command;
 	}
+	
+	/**
+	 * Writes values of input-DataTypes into the command-string.
+	 * @param inputs
+	 */
+	public void parseInputs(ArrayList<Input> inputs) {
+		this.commandSyntax = parseInputs(inputs, this.commandSyntax);
+	}
+	
 
+	/**
+	 * Writes values of output-DataTypes into the command-string.
+	 * @param inputs
+	 */
+	public void parseOutputs(ArrayList<Output> outputs) {
+		this.commandSyntax = parseOutputs(outputs, this.commandSyntax);
+	}
 
+	private static String parseOutputs(ArrayList<Output> outputs, String command) {
+		int index = 0, oCount = 0, oDbl = 0, oInt = 0;
+		String searchString;
+
+		while (index < outputs.size()) {
+			
+			Output output = outputs.get(index);
+
+			searchString = "OUTPUT_DOUBLE_" + (oDbl+1);
+			/*String paraType = input.getParaType().toLowerCase();
+			if(command.contains(searchString) && paraType.equals("double")) { 
+				String parameterString = "" + ((DoubleParameter)input).getValue();
+//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Double Parameter: " + parameterString);
+				command = Tools.replace(command, searchString, parameterString);
+				oDbl++;
+				inputIndex++;
+			}*/
+			searchString = "OUTPUT_INTEGER_" + (oInt+1);
+			if(command.contains(searchString) 
+					&& output.getDataType() instanceof DataTypeFactory.Integer ) {
+				String uniqueOutputName = output.getOutputTitle();
+//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
+				command = Tools.replace(command, searchString, uniqueOutputName);
+				oInt++;
+				index++;
+			}
+			oCount++;
+			if (index != oCount) {
+				System.err.println("Error in Outputs or ImageJ-syntax");
+				return command;
+			}
+				
+		}
+		return command;
+	}
+	
+
+	private static String parseInputs(ArrayList<Input> inputs, String command) {
+		int index = 0, pc = 0, oDbl = 0, oInt = 0;
+		String searchString;
+
+		while (index < inputs.size()) {
+			
+			Input input = inputs.get(index);
+
+			searchString = "INPUT_DOUBLE_" + (oDbl+1);
+			/*String paraType = input.getParaType().toLowerCase();
+			if(command.contains(searchString) && paraType.equals("double")) { 
+				String parameterString = "" + ((DoubleParameter)input).getValue();
+//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Double Parameter: " + parameterString);
+				command = Tools.replace(command, searchString, parameterString);
+				oDbl++;
+				inputIndex++;
+			}*/
+			searchString = "INPUT_INTEGER_" + (oInt+1);
+			if(command.contains(searchString) 
+					&& input.getDataType() instanceof DataTypeFactory.Integer ) {
+				String uniqueOutputName = input.getFromOutput().getOutputTitle();
+//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
+				command = Tools.replace(command, searchString, uniqueOutputName);
+				oInt++;
+				index++;
+			}
+			pc++;
+			if (index != pc) {
+				System.err.println("Error in Inputs or ImageJ-syntax");
+				return command;
+			}
+				
+		}
+		return command;
+	}
+	
 }

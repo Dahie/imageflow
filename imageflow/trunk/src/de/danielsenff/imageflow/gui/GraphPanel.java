@@ -41,11 +41,11 @@ import visualap.GPanelListener;
 import visualap.Node;
 import visualap.Pin;
 import de.danielsenff.imageflow.controller.GraphController;
-import de.danielsenff.imageflow.models.Connection;
 import de.danielsenff.imageflow.models.Delegate;
-import de.danielsenff.imageflow.models.Input;
-import de.danielsenff.imageflow.models.Output;
 import de.danielsenff.imageflow.models.SelectionList;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
@@ -139,10 +139,10 @@ public class GraphPanel extends GPanel {
 	protected void paintPrintableConnection(Graphics g, Connection connection) {
 		final Point from = connection.getInput().getLocation();
 		final Point to = connection.getOutput().getLocation();
-		g.setColor(  (connection.isImageBitDepthCompatible()) ? Color.BLACK : Color.RED );
+		g.setColor(  (connection.isCompatible()) ? Color.BLACK : Color.RED );
 		g.drawLine(from.x, from.y, to.x, to.y);
 		
-		if(!connection.isImageBitDepthCompatible()) {
+		if(!connection.isCompatible()) {
 			final int dX = Math.abs(from.x - to.x)/2 + Math.min(from.x, to.x);
 			final int dY = Math.abs(from.y - to.y)/2 + Math.min(from.y, to.y);
 			final Point origin = new Point(dX, dY);

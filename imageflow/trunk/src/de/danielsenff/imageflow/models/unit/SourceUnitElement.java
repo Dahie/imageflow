@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.MacroElement;
-import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
 

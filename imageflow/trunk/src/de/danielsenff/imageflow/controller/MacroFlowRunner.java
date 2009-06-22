@@ -6,9 +6,9 @@ import javax.swing.JOptionPane;
 
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.ConnectionList;
-import de.danielsenff.imageflow.models.Input;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
+import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.SourceUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -59,7 +59,8 @@ public class MacroFlowRunner {
 		// generation of the ImageJ macro
 		////////////////////////////////////////////////////////
 
-		return MacroGenerator.generateMacro(macroUnitList);
+		MacroGenerator macGen = new MacroGenerator(macroUnitList);
+		return macGen.generateMacro();
 	}
 
 	/**
@@ -164,7 +165,7 @@ public class MacroFlowRunner {
 			for (Iterator iterator = connections.iterator(); iterator.hasNext();) {
 				Connection connection = (Connection) iterator.next();
 
-				if (!connection.isImageBitDepthCompatible()) {
+				if (!connection.isCompatible()) {
 
 					JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
 							"The graph has conflicting imagetypes."

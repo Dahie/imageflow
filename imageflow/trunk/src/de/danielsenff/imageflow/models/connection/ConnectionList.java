@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.danielsenff.imageflow.models;
+package de.danielsenff.imageflow.models.connection;
 
 import java.util.ArrayList;
 
@@ -9,6 +9,8 @@ import javax.swing.JOptionPane;
 
 import visualap.Pin;
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.models.Model;
+import de.danielsenff.imageflow.models.ModelListener;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
@@ -112,7 +114,7 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 			}
 		
 		// check the bit depth
-		if(!connection.isImageBitDepthCompatible()) {
+		if(!connection.isCompatible()) {
 			System.out.println("Connection disallowed: Incombatible bit depth");
 //			return false;
 			}

@@ -1,7 +1,7 @@
 package de.danielsenff.imageflow.models.datatype;
 
 import ij.plugin.filter.PlugInFilter;
-import de.danielsenff.imageflow.models.Input;
+import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 public class DataTypeFactory {

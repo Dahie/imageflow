@@ -50,16 +50,16 @@ import de.danielsenff.imageflow.gui.DelegatesPanel;
 import de.danielsenff.imageflow.gui.GPanelPopup;
 import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.gui.InsertUnitMenu;
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.ConnectionList;
 import de.danielsenff.imageflow.models.Delegate;
-import de.danielsenff.imageflow.models.Input;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
-import de.danielsenff.imageflow.models.Output;
 import de.danielsenff.imageflow.models.Selectable;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.SelectionListener;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
+import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -759,7 +759,7 @@ public class ImageFlowView extends FrameView {
 	}
 	
 	/**
-	 * Opens a dialog with the available {@link Parameter} for the selected {@link UnitElement}.
+	 * Opens a dialog with the available {@link Input} for the selected {@link UnitElement}.
 	 */
 	@Action(enabledProperty = "selected")
 	public void showUnitParameters() {
@@ -963,7 +963,7 @@ public class ImageFlowView extends FrameView {
         		lm.addElement(input);
         		lm.addElement("name:"+input.getName());
         		lm.addElement("datatype: "+input.getDataType());
-        		if(input.getDataType() instanceof DataTypeFactory.Image);
+        		if(input.getDataType() instanceof DataTypeFactory.Image)
         			lm.addElement("imagetype:"+((DataTypeFactory.Image)input.getDataType()).getImageBitDepth());
         	}
         	for (final Output output : unit.getOutputs()) {

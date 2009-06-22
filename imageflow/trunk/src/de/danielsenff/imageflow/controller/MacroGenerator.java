@@ -1,7 +1,11 @@
 package de.danielsenff.imageflow.controller;
 
-import de.danielsenff.imageflow.models.Input;
+import java.util.ArrayList;
+
 import de.danielsenff.imageflow.models.MacroElement;
+import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
@@ -18,23 +22,32 @@ public class MacroGenerator {
 	// have no input marked
 	// which are source, but no output and no display
 	
-//	GraphController 
+	private UnitList unitList;
+	private ArrayList<Output> openedImages;
+	private String  macroText;
+
+	public MacroGenerator(final UnitList unitElements) {
+		this.unitList = unitElements;
+		this.openedImages = new ArrayList<Output>();
+		this.macroText = "";
+	}
+	
 	
 	/**
-	 * @param unitElements
+	 * Generates a macro.
 	 * @return
 	 */
-	public static String generateMacro(final UnitList unitElements) {
-		
-		String  macroText = "";
+	public String generateMacro() {
+		// reset in case someody has the mad idea to run this twice
+		this.macroText = ""; 
 		macroText += "setBatchMode(true); \n";
 		
 		// loop over all units
 		// they have to be presorted so they are in the right order
-		for (int unitIndex = 1; unitIndex < unitElements.size()+1; unitIndex++) {
+		for (int unitIndex = 1; unitIndex < unitList.size()+1; unitIndex++) {
 			macroText += " \n";
 			// read the ImageJ syntax for this unit
-			final UnitElement unit = (UnitElement) unitElements.get(unitIndex-1);
+			final UnitElement unit = (UnitElement) unitList.get(unitIndex-1);
 			
 //			String command = unit.getImageJSyntax();
 			final MacroElement macroElement = ((MacroElement)unit.getObject()); 
@@ -45,17 +58,20 @@ public class MacroGenerator {
 			// maybe use rename(name)
 			macroText += duplicateImages(unit);
 			
-			// parse the command string for parameter tags that need to be replaced
+			// parse the command string for wildcards, that need to be replaced
 			macroElement.parseParameters(unit.getParameters());
+			macroElement.parseInputs(unit.getInputs());
+			macroElement.parseOutputs(unit.getOutputs());
 			
 			
 			// parse the command string for TITLE tags that need to be replaced
 			for (int in = 0; in < unit.getInputsCount(); in++) {
 				final Input input = unit.getInput(in);
 				final String searchString = "TITLE_" + (in+1);
-				final String parameterString = input.isNeedToCopyInput() ? getNeedCopyTitle(input.getImageID()) :input.getImageTitle();
-				System.out.println(input.getImageTitle());
-				System.out.println("Unit: " + unitIndex + " Input: " + in + " Title: " + parameterString);
+				final String parameterString = 
+					input.isNeedToCopyInput() ? getNeedCopyTitle(input.getImageID()) : input.getImageTitle();
+//				System.out.println(input.getImageTitle());
+//				System.out.println("Unit: " + unitIndex + " Input: " + in + " Title: " + parameterString);
 				macroElement.replace(searchString, parameterString);
 			}
 			
@@ -63,45 +79,57 @@ public class MacroGenerator {
 			
 			macroText += macroElement.getCommandSyntax();
 			
-			// funktioniert nur f�r einen Ausgang
+			// only works for one output
 			for (int out = 0; out < unit.getOutputsCount(); out++) {
-				final String outputTitle = unit.getOutput(out).getImageTitle();
-				final String outputID = unit.getOutput(out).getImageID();
+				Output output = unit.getOutput(out);
+				final String outputTitle = output.getOutputTitle();
+				final String outputID = output.getOutputID();
 				
-				macroText +=  "ID_temp = getImageID(); \n" +
-					"run(\"Duplicate...\", \"title=" + outputTitle  + "\"); \n" +
-					outputID + " = getImageID(); \n"+
-					"selectImage(ID_temp); \n";
-					
+				if(output.getDataType() instanceof DataTypeFactory.Image) {
+					macroText +=  "ID_temp = getImageID(); \n"
+						+ "run(\"Duplicate...\", \"title=" + outputTitle  + "\"); \n"
+						+ outputID + " = getImageID(); \n"
+						+ "selectImage(ID_temp); \n";
+					openedImages.add(output);
+				}
 			}
 			// close ID_temp after going through the outputs
 			// otherwise the other outputs can't read it.
-			macroText += "close(); \n";
+//			macroText += "close(); \n";
 		}
 
 		
 		// delete all images that are not to be displayed
 		macroText +=  "// delete unwanted images \n";
-		for (int u = 1; u < unitElements.size()+1; u++) {
-			final UnitElement unit = (UnitElement) unitElements.get(u-1);
-			macroText += deleteImages(unit);
-		}
+//		for (int u = 1; u < unitElements.size()+1; u++) {
+//			final UnitElement unit = (UnitElement) unitElements.get(u-1);
+			macroText += deleteImages();
+//		}
 
 		macroText += "\nsetBatchMode(\"exit and display\"); ";
 		
 		return macroText;
 	}
 
-	private static String deleteImages(final UnitElement unit) {
+	private String deleteImages() {
 		String macroText = "";
 
-		for (int out = 0; out < unit.getOutputsCount(); out++) {
-			if (!unit.isDisplayUnit()) {
-				final String outputID = unit.getOutput(out).getImageID();
-			
-				macroText += "selectImage("+outputID+"); \n" +
-							 "close(); \n";
-			}
+//		for (int out = 1; out == unit.getOutputsCount(); out++) {
+//			macroText += deleteImages(unit.getOutput(out));
+		for (Output	output : this.openedImages) {
+			macroText += deleteImages(output);
+		}
+		return macroText;
+	}
+	
+	private static String deleteImages(final Output output) {
+		String macroText = "";
+
+		if (!output.isDoDisplay()) {
+			final String outputID = output.getOutputID();
+
+			macroText += "selectImage("+outputID+"); \n" +
+			"close(); \n";
 		}
 		return macroText;
 	}

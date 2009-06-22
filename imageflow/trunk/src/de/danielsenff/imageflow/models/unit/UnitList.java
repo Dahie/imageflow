@@ -21,13 +21,13 @@ import org.jdom.output.XMLOutputter;
 
 import visualap.GList;
 import visualap.Node;
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.ConnectionList;
-import de.danielsenff.imageflow.models.Input;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
-import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
+import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
@@ -65,7 +65,6 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 * @throws FileNotFoundException 
 	 */
 	public void read(File file) throws FileNotFoundException {
-//		Vector<UnitElement> newNodes = new Vector<UnitElement>();
 		HashMap<Integer, UnitElement> newNodes = new HashMap<Integer, UnitElement>();
 
 		if(!file.exists()) throw new FileNotFoundException("reading failed, the file as not found");
@@ -125,7 +124,6 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 				List<Element> connectionsList = connectionsElement.getChildren();
 				Iterator<Element> connectionsIterator = connectionsList.iterator();
 
-				// loop �ber alle connections
 				while (connectionsIterator.hasNext()) { 
 					Element actualConnectionElement = connectionsIterator.next();
 					int fromUnitID 			= Integer.parseInt(actualConnectionElement.getChild("FromUnitID").getValue());
@@ -273,7 +271,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 					
 					Element dataTypeElement = new Element("DataType");
 					DataType dataType = input.getDataType();
-					dataTypeElement.addContent(dataType.getClass().getName());
+					dataTypeElement.addContent(dataType.getClass().getSimpleName());
 					inputElement.addContent(dataTypeElement);
 					
 					if(dataType instanceof DataTypeFactory.Image) {
@@ -305,7 +303,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 					outputElement.addContent(shortName);
 
 					Element dataType = new Element("DataType");
-					dataType.addContent(output.getDataType().getClass().getName());
+					dataType.addContent(output.getDataType().getClass().getSimpleName());
 					outputElement.addContent(dataType);
 					
 					if(output.getDataType() instanceof DataTypeFactory.Image) {
@@ -586,7 +584,6 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 * @param newConnList
 	 */
 	public void addConnectionList(ConnectionList newConnList) {
-//		this.connections
 		for (Connection conn : newConnList) {
 			this.connections.add(conn);
 		}
