@@ -140,7 +140,8 @@ public class SourceUnitElement extends UnitElement {
 	 */
 	public void setOutputImageType(final int imageType) {
 		for (final Output output : outputs) {
-			((DataTypeFactory.Image)output.getDataType()).setImageBitDepth(imageType);
+			if(output.getDataType() instanceof DataTypeFactory.Image)
+				((DataTypeFactory.Image)output.getDataType()).setImageBitDepth(imageType);
 		}
 	}
 
@@ -184,8 +185,6 @@ public class SourceUnitElement extends UnitElement {
 					return PlugInFilter.DOES_RGB;
 				}
 			}
-			
-			
 		}
 		return -1; 
 	}

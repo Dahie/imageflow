@@ -139,7 +139,8 @@ public class UnitFactory {
 			boolean doDisplay = outputDescription.doDisplay;
 			DataType dataType = outputDescription.dataType;
 			
-			if(unitElement instanceof SourceUnitElement) {
+			if(unitElement instanceof SourceUnitElement
+					&& dataType instanceof DataTypeFactory.Image) {
 				int imageType = ((SourceUnitElement)unitElement).getImageType();
 				((DataTypeFactory.Image)dataType).setImageBitDepth(imageType);
 			} 

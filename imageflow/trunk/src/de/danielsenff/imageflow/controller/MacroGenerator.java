@@ -54,8 +54,6 @@ public class MacroGenerator {
 			macroElement.reset();
 			
 			// duplicate input images if necessary
-			// FIXME duplicates always
-			// maybe use rename(name)
 			macroText += duplicateImages(unit);
 			
 			// parse the command string for wildcards, that need to be replaced
@@ -79,6 +77,8 @@ public class MacroGenerator {
 			
 			macroText += macroElement.getCommandSyntax();
 			
+			// FIXME duplicates always
+			// maybe use rename(name)
 			// only works for one output
 			for (int out = 0; out < unit.getOutputsCount(); out++) {
 				Output output = unit.getOutput(out);
@@ -86,10 +86,12 @@ public class MacroGenerator {
 				final String outputID = output.getOutputID();
 				
 				if(output.getDataType() instanceof DataTypeFactory.Image) {
-					macroText +=  "ID_temp = getImageID(); \n"
-						+ "run(\"Duplicate...\", \"title=" + outputTitle  + "\"); \n"
+					macroText +=  
+//						"ID_temp = getImageID(); \n"
+//						+ "run(\"Duplicate...\", \"title=" + outputTitle  + "\"); \n"
+						"rename(\"" + outputTitle  + "\"); \n"
 						+ outputID + " = getImageID(); \n"
-						+ "selectImage(ID_temp); \n";
+						+ "selectImage("+outputID+"); \n";
 					openedImages.add(output);
 				}
 			}
@@ -142,7 +144,6 @@ public class MacroGenerator {
 				final String inputID = unit.getInput(in).getImageID();
 
 				code += "selectImage(" + inputID + "); \n";
-				
 				code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +"\"); \n";
 			}
 		}
