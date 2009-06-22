@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Simple Equation</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>OUTPUT_INTEGER_1 = INPUT_INTEGER_1 PARA_STRING_1 INPUT_INTEGER_2</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Equation</HelpString>
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Value</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>+;-;*;/;%</Value>
+  		<ChoiceNumber>0</ChoiceNumber>
+  		<HelpString>Operation performed.</HelpString>
+  	</Parameter> 
+</Parameters>
+
+<Inputs>
+<Input>
+		<Name>Input</Name>
+		<ShortName>A</ShortName>	
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+</Input>
+<Input>
+		<Name>Input</Name>
+		<ShortName>B</ShortName>	
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+</Input>
+</Inputs>
+
+<Outputs> 
+<Output>
+		<Name>Output</Name>
+		<ShortName>C</ShortName>	
+		<DataType>Integer</DataType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

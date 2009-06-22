@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Print</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>print(INPUT_INTEGER_1);</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Print</HelpString>
+</General>
+
+<Inputs>
+<Input>
+		<Name>Input</Name>
+		<ShortName>A</ShortName>	
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+</Input>
+</Inputs>
+
+</UnitDescription>
