@@ -481,8 +481,9 @@ public class UnitElement extends AbstractUnit {
 	 */
 	public void showProperties() {
 		final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters") ;
+		System.out.println(getHelpString());
 		gd.addMessage(getHelpString());
-		gd.addMessage(" ");
+//		gd.addMessage(" ");
 
 
 		// label field 
@@ -546,7 +547,7 @@ public class UnitElement extends AbstractUnit {
 
 	/**
 	 * Returns whether this unit has parameters or not.
-	 * This doesn't concern the unitlabel.
+	 * This doesn't concern the unit label.
 	 * @return
 	 */
 	public boolean hasParameters() {
@@ -862,23 +863,23 @@ public class UnitElement extends AbstractUnit {
 					output.isDoDisplay());*/
 		}
 		for (Parameter parameter : parameters) {
-			Parameter newParameter;
+			Parameter clonedParameter;
 			if(parameter instanceof ChoiceParameter) {
-				newParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
 						parameter.getValue(), parameter.getHelpString(), null, ((ChoiceParameter)parameter).getChoiceIndex());
 			} else if (parameter instanceof BooleanParameter){
-				newParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
 						parameter.getValue(), parameter.getHelpString(), ((BooleanParameter)parameter).getTrueString(), 0);
 			} else {
-				newParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
 						parameter.getValue(), parameter.getHelpString());	
 			}
 			clone.addParameter(parameter);
-
 		}
 		clone.setDisplayUnit(this.isDisplayUnit);
 		clone.setColor(this.color);
 		clone.setIcon(this.icon);
+		clone.setHelpString(this.infoText);
 		return clone;
 	}
 
