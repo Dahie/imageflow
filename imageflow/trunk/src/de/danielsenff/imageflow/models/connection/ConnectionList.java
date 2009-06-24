@@ -153,14 +153,14 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 	
 	
 
-	@Override
+	/*@Override
 	public Connection remove(final int index) {
 		final Connection connection = (Connection) super.remove(index);
 		((Input)connection.to).disconnectAll();
 		((Output)connection.from).disconnectAll();
 		notifyModelListeners();
 		return connection;
-	}
+	}*/
 	
 	@Override
 	public boolean remove(final Object o) {

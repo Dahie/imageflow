@@ -78,6 +78,7 @@ public class NodeIcon implements UnitModelComponent {
 	protected UnitElement unit;
 	private int unitID;
 	private Dimension dimension;
+	private BufferedImage bufferedIcon;
 	
 	
 	/**
@@ -99,7 +100,7 @@ public class NodeIcon implements UnitModelComponent {
 			this.icon = unit.getIcon();
 		}
 	}
-	
+
 
 	/**
 	 * @return 
@@ -121,8 +122,8 @@ public class NodeIcon implements UnitModelComponent {
 	 * @return
 	 */
 	public BufferedImage getImage(final Size size) {
-		BufferedImage resultImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-	    Graphics2D g2 = resultImage.createGraphics();
+		this.bufferedIcon = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+	    Graphics2D g2 = bufferedIcon.createGraphics();
 	    switch(size) {
 	    default:
 	    case BIG:
@@ -138,7 +139,7 @@ public class NodeIcon implements UnitModelComponent {
 	    	break;
 	    }
 	    
-	    return resultImage;
+	    return bufferedIcon;
 	}
 
 	/**

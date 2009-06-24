@@ -11,7 +11,7 @@ Note that this software is freeware and it is not designed, licensed or intended
 for use in mission critical, life support and military purposes.
 
 The use of this software is at the risk of the user.
-*/
+ */
 
 /* used by VisualAp.java
 
@@ -20,7 +20,7 @@ javalc6
 todo:
 - migliorare gestione delle exception interne: ExceptionListener in XMLDecoder
 - estendere <selection> ad altri oggetti per esempio: Edge
-*/
+ */
 package visualap;
 
 
@@ -61,23 +61,21 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	protected ConnectionList connectionList = new ConnectionList();
 	protected Point mouse;
 
-	
+
 	boolean cursor=true; // cursor is under control?
 	protected Rectangle rect;
-	String insertBeanName;
-	Class insertBean = null;
 	JMenu newMenu;
 
 	// handling of selection rectange
 	protected Rectangle currentRect = null;
 	protected Rectangle rectToDraw = null;
 	protected Rectangle previousRectDrawn = new Rectangle();
-    final static float dash1[] = {5.0f};
+	final static float dash1[] = {5.0f};
 	protected final static BasicStroke dashed = new BasicStroke(1.0f, 
-                                                      BasicStroke.CAP_BUTT, 
-                                                      BasicStroke.JOIN_MITER, 
-                                                      10.0f, dash1, 0.0f);
-// MDI Support 
+			BasicStroke.CAP_BUTT, 
+			BasicStroke.JOIN_MITER, 
+			10.0f, dash1, 0.0f);
+	// MDI Support 
 	JInternalFrame frame;
 
 	public GPanel(ArrayList<Delegate> beans, GPanelListener parent) {
@@ -88,7 +86,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		setBackground(Color.white);
 	}
 
-	
+
 
 	public void clear() {
 		nodeL.clear();
@@ -107,17 +105,16 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	 * paint things that eventually go on a printer
 	 * @param g
 	 */
-    public void paintPrintable(Graphics g) {
-        rect = new Rectangle();
+	public void paintPrintable(Graphics g) {
+		rect = new Rectangle();
 		for (Node t : getNodeL()) {
 			rect = rect.union(t.paint(g, this));
 		}
-        setPreferredSize(rect.getSize());
+		setPreferredSize(rect.getSize());
 		for (Connection aEdge : connectionList) {
 			paintPrintableConnection(g, aEdge);
 		}
-		revalidate();
-    }
+	}
 
 
 
@@ -127,7 +124,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		g.drawLine(from.x, from.y, to.x, to.y);
 	}
 
-	
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// paint printable items
@@ -138,9 +135,9 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 
 			Graphics2D g2 = (Graphics2D) g;
 			float lineWidth = 1.0f;
-		    g2.setStroke(new BasicStroke(lineWidth));
-		    g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
-		    g2.draw(new Line2D.Double(origin.x, origin.y, mouse.x, mouse.y));
+			g2.setStroke(new BasicStroke(lineWidth));
+			g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
+			g2.draw(new Line2D.Double(origin.x, origin.y, mouse.x, mouse.y));
 		}
 		//If currentRect exists, paint a box on top.
 		if (currentRect != null) {
@@ -154,34 +151,28 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		}
 	}
 
-	
-	
+
+
 	public void mouseClicked(MouseEvent e) {
-// generato quando il mouse viene premuto e subito rilasciato (click)
-		if (e.getClickCount() > 1)
-// > 1 se doppio click
-//			if ((selection.size() == 1)&&(selection.get(0).edit())) repaint();
+		if (e.getClickCount() > 1) {
 			if (selection.size() == 1) properties(selection.get(0));
 			else selection.clear(); //zz to be handled in more completed way
-    }
-
-    protected void properties(Node node) {
-		// TODO Auto-generated method stub
-		
+		}
 	}
+
+	protected void properties(Node node) {}
 
 
 
 	public void mousePressed(MouseEvent e) {
-    	
-// generato nell'istante in cui il mouse viene premuto
+		// generato nell'istante in cui il mouse viene premuto
 		int x = e.getX();
 		int y = e.getY();
-// qui � obbligatorio un iteratore che scandisce la lista al contrario!
+		// qui � obbligatorio un iteratore che scandisce la lista al contrario!
 		for (ListIterator<Node> it = nodeL.listIterator(nodeL.size()); it.hasPrevious(); ) {
 			Node aNode = it.previous();
 			Object sel = aNode.contains(x,y);
-// check selected element, is it a Node?
+			// 	check selected element, is it a Node?
 			if (sel instanceof Node) {
 				pick = new Point(x,y);
 				if (!selection.contains(aNode)) {
@@ -210,29 +201,29 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				return;
 			} 
 			// change
-			/*else {
+			else {
 				selection.clear();
-			}*/
-			
-			
+			}
+
+
 		}
 		parent.showFloatingMenu(e);	
-		
-		selection.clear();
-		
-	//	e.consume();
 
-	// handling of selection rectange 
+		selection.clear();
+
+		//	e.consume();
+
+		// handling of selection rectange 
 		currentRect = new Rectangle(x, y, 0, 0);
 		updateDrawableRect(getWidth(), getHeight());
 		repaint();
 	}
 
-    public void mouseReleased(MouseEvent e) {
-// generato quando il mouse viene rilasciato, anche a seguito di click
+	public void mouseReleased(MouseEvent e) {
+		// generato quando il mouse viene rilasciato, anche a seguito di click
 		int x = e.getX();
 		int y = e.getY();
-        if (pick != null) {
+		if (pick != null) {
 			for (Node iNode : selection) {
 				if (cursor) iNode.translate(x-pick.x, y-pick.y);
 				iNode.drag(false);
@@ -252,15 +243,15 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 						connectionList.add(drawEdge, (Pin) sel);
 					}
 				}
-					
+
 			}
 			drawEdge = null;
 			changeCursor(Cursor.DEFAULT_CURSOR);
 			repaint();
 		}
-// handling of selection rectange
+		// handling of selection rectangle
 		else if (currentRect != null) {
-			normaliseRect();
+			normalizeRect();
 			for (Node aNode : nodeL)
 				if (aNode.contained(currentRect)) {
 					selection.add(aNode);
@@ -268,28 +259,13 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			currentRect = null;
 			repaint();
 		}
-// insert a bean if pending...
-		if (insertBean != null) {
-			try {
-//				NodeBean newItem = new NodeBean(new Point(x,y),insertBean.newInstance());
-				System.out.println("bean object created");
-//				nodeL.add(newItem,insertBeanName);
-				selection.clear();
-//				selection.add(newItem);
-				insertBean = null;
-				repaint();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			e.consume();
-			changeCursor(Cursor.DEFAULT_CURSOR);
-		}
+		
 		parent.showFloatingMenu(e);
-//	e.consume();
+		//	e.consume();
 	}
 
-    public void mouseDragged(MouseEvent e) {
-// generato quando il mouse premuto viene spostato, vari eventi sono generati durante il trascinamento
+	public void mouseDragged(MouseEvent e) {
+		// generato quando il mouse premuto viene spostato, vari eventi sono generati durante il trascinamento
 		if (pick!= null) {
 			for (Node iNode : selection)
 				iNode.drag(e.getX()-pick.x, e.getY()-pick.y);
@@ -301,25 +277,25 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			repaint();
 			e.consume();
 		}
-// handling of selection rectange
+		// handling of selection rectange
 		else if (currentRect != null) updateSize(e);
 	}
 
-    public void mouseMoved(MouseEvent e) {
-// generato quando il mouse viene spostato senza essere premuto
-    }
-    public void mouseEntered(MouseEvent e) {
-// generato quando il mouse entra nella finestra
+	public void mouseMoved(MouseEvent e) {
+		// generato quando il mouse viene spostato senza essere premuto
+	}
+	public void mouseEntered(MouseEvent e) {
+		// generato quando il mouse entra nella finestra
 		cursor = true;
-    }
-    public void mouseExited(MouseEvent e) {
-// generato quando il mouse esce dalla finestra
+	}
+	public void mouseExited(MouseEvent e) {
+		// generato quando il mouse esce dalla finestra
 		cursor = false;
-    }
+	}
 
-    protected void changeCursor(int cursor) {
+	protected void changeCursor(int cursor) {
 		setCursor(Cursor.getPredefinedCursor(cursor));
-    }
+	}
 
 	void updateSize(MouseEvent e) {
 		int x = e.getX();
@@ -361,19 +337,19 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		if ((y + height) > compHeight) {
 			height = compHeight - y;
 		}
-	  
+
 		//Update rectToDraw after saving old value.
 		if (rectToDraw != null) {
 			previousRectDrawn.setBounds(
-						rectToDraw.x, rectToDraw.y, 
-						rectToDraw.width, rectToDraw.height);
+					rectToDraw.x, rectToDraw.y, 
+					rectToDraw.width, rectToDraw.height);
 			rectToDraw.setBounds(x, y, width, height);
 		} else {
 			rectToDraw = new Rectangle(x, y, width, height);
 		}
 	}
 
-	private void normaliseRect() {
+	private void normalizeRect() {
 		int x = currentRect.x;
 		int y = currentRect.y;
 		int width = currentRect.width;

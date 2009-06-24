@@ -171,6 +171,11 @@ public class Output extends Pin {
 		return this.outputID;
 	}
 
+	@Override
+	public String toString() {
+		return super.toString()+"."+index;
+	}
+	
 	/* (non-Javadoc)
 	 * @see graph.Pin#getLocation()
 	 */

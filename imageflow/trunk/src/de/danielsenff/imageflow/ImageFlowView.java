@@ -972,6 +972,11 @@ public class ImageFlowView extends FrameView {
         		lm.addElement("datatype:"+output.getDataType());
         		if(output.getDataType() instanceof DataTypeFactory.Image)
         			lm.addElement("imagetype:"+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
+        		lm.addElement("connected to:");
+        		for (Connection conn : output.getConnections()) {
+        			lm.addElement(conn);
+				}
+        		
         	}
         	final JList list = new JList(lm);
         	
@@ -1024,7 +1029,6 @@ public class ImageFlowView extends FrameView {
     }
     
 	private javax.swing.Action getAction(String actionName) {
-//		ActionMap actionMap = Application.getInstance(ImageFlow.class).getContext().getActionMap(ImageFlowView.class, this);
 		ActionMap actionMap = getContext().getActionMap(ImageFlowView.class, this);
 	    return actionMap.get(actionName);
 	}

@@ -156,7 +156,7 @@ public class GraphPanel extends GPanel {
 	 */
 	@Override
 	public void paintComponent(final Graphics g) {
-		//		super.paintComponent(g);
+//		super.paint(g);
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 

@@ -195,27 +195,6 @@ public class UnitElement extends AbstractUnit {
 	
 	
 	
-
-	/**
-	 * Adds an Output to the unit
-	 * @param name 
-	 * @param shortname 
-	 * @param outputBitDepth 
-	 * @param doDisplay 
-	 * @return 
-	 */
-	/*public boolean addOutput(String name, 
-			final String shortname, 
-			int outputBitDepth,
-			boolean doDisplay) 
-	{
-		Output newOutput = new Output(this,this.outputs.size()+1);
-		newOutput.setupOutput(name, shortname, outputBitDepth);
-		newOutput.setDoDisplay(doDisplay);
-		notifyModelListeners();
-		return this.outputs.add(newOutput);
-	}*/
-
 	/**
 	 * Adds an Output-Object to the unit.
 	 * @param newOutput
@@ -322,41 +301,6 @@ public class UnitElement extends AbstractUnit {
 	public boolean hasInputs() {
 		return (this.inputs.size() > 0);
 	}
-
-	/**
-	 * Add new Input by setup.
-	 * @param displayName 
-	 * @param shortDisplayName 
-	 * @param inputImageBitDepth 
-	 * @param needToCopyInput 
-	 * @param required This input needs to be connected for this unit to work. 
-	 * @return 
-	 */
-	/*public boolean addInput(String displayName, 
-			String shortDisplayName, 
-			int inputImageBitDepth, 
-			boolean needToCopyInput, 
-			final boolean required) {
-		Input newInput = new Input(this, this.inputs.size()+1);
-		newInput.setupInput(displayName, shortDisplayName, inputImageBitDepth, needToCopyInput);
-		boolean add = this.inputs.add(newInput);
-		notifyModelListeners();
-		return add;
-	}*/
-
-	/**
-	 * @param displayName
-	 * @param shortDisplayName
-	 * @param inputImageBitDepth
-	 * @param needToCopyInput
-	 * @return
-	 */
-	/*public boolean addInput(final String displayName, 
-			final String shortDisplayName, 
-			final int inputImageBitDepth, 
-			final boolean needToCopyInput) {
-		return this.addInput(displayName, shortDisplayName, inputImageBitDepth, needToCopyInput, true);
-	}*/
 
 	/**
 	 * Add new Input by Object.
@@ -836,31 +780,21 @@ public class UnitElement extends AbstractUnit {
 			imageJSyntax = ((MacroElement)this.obj).getImageJSyntax();
 		}
 
-
 		UnitElement clone = new UnitElement(new Point(origin.x+15, origin.y+15), 
 				this.label, 
 				imageJSyntax);
 		for (int j = 0; j < getInputsCount(); j++) {
 			Input input = getInput(j);
-			Input clonedInput = new Input(input.getDataType(), clone, j, input.isRequired());
+			Input clonedInput = new Input(input.getDataType(), clone, j+1, input.isRequired());
 			clonedInput.setupInput(input.getName(), input.getShortDisplayName(), input.isNeedToCopyInput());
 			clone.addInput(clonedInput);
-			/*clone.addInput(input.getName(), 
-					input.getShortDisplayName(), 
-					input.getImageBitDepth(), 
-					input.isNeedToCopyInput());*/
 		}
 //		for (Output output : outputs) {
 		for (int i = 0; i < getOutputsCount(); i++) {
 			Output output = getOutput(i);
-			Output clonedOutput = new Output(output.getDataType(), clone, i);
+			Output clonedOutput = new Output(output.getDataType(), clone, i+1);
 			clonedOutput.setupOutput(output.getName(), output.getShortDisplayName());
 			clone.addOutput(clonedOutput);
-			
-			/*clone.addOutput(output.getName(), 
-					output.getShortDisplayName(), 
-					output.getImageBitDepth(),
-					output.isDoDisplay());*/
 		}
 		for (Parameter parameter : parameters) {
 			Parameter clonedParameter;
