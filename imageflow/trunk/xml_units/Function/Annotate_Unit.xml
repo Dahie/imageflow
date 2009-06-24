@@ -24,6 +24,7 @@
 	<Input>
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
+		<Required>false</Required>
 		<DataType>Image</DataType>
 		<ImageType>31</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>

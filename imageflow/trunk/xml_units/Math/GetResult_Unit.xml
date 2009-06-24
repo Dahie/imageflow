@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Get Result</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>OUTPUT_INTEGER_1 = getResult(PARA_STRING_1, PARA_INTEGER_1);</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Get the value from a results table.</HelpString>
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Column</Name>
+  		<DataType>String</DataType>
+  		<Value>Column</Value>
+  		<HelpString>Column name of the value.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Row</Name>
+  		<DataType>Integer</DataType>
+  		<Value>0</Value>
+  		<HelpString>Row of the results.</HelpString>
+  	</Parameter>  
+</Parameters>
+
+<Inputs>
+<Input>
+		<Name>Image</Name>
+		<ShortName>I</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Value</Name>
+		<ShortName>V</ShortName>	
+		<DataType>Double</DataType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Get Pixel</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>OUTPUT_INTEGER_1 = getPixel(PARA_INTEGER_1, PARA_INTEGER_2);</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Get the Pixelvalue at the specified coordinates of an input image.</HelpString>
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>X-coordinate</Name>
+  		<DataType>Integer</DataType>
+  		<Value>0</Value>
+  		<HelpString>Coordinate along the x-axis.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Y-coordinate</Name>
+  		<DataType>Integer</DataType>
+  		<Value>0</Value>
+  		<HelpString>Coordinate along the y-axis.</HelpString>
+  	</Parameter>  
+</Parameters>
+
+<Inputs>
+<Input>
+		<Name>Image</Name>
+		<ShortName>I</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Pixel value</Name>
+		<ShortName>P</ShortName>	
+		<DataType>Integer</DataType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
