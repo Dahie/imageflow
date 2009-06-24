@@ -351,12 +351,10 @@ public class GraphPanel extends GPanel {
 				if(drawEdge instanceof Output
 						&& pin instanceof Input) {
 					isLoop = ((Input)pin).isConnectedInInputBranch(drawEdge.getParent());
-//					isCompatible = ((Output)drawEdge).isImageBitDepthCompatible(((Input)pin).getImageBitDepth());
 
 				} else if (drawEdge instanceof Input
 						&& pin instanceof Output) {
 					isLoop = ((Output)pin).existsInInputSubgraph(drawEdge.getParent());
-//					isCompatible = ((Input)drawEdge).isImageBitDepthCompatible(((Output)pin).getImageBitDepth());
 				}
 
 				g2.setColor((isCompatible && !isLoop) ? Color.green : Color.red);
@@ -495,20 +493,17 @@ public class GraphPanel extends GPanel {
 	
 	public void properties(final Node node) {
 		if (node instanceof CommentNode) {
-			//			propertySheet.setVisible(false);
 			final String inputValue = JOptionPane.showInputDialog("Edit text:",((CommentNode)node).getText()); 
-			if ((inputValue != null)&&(inputValue.length() != 0)) {
+			if ((inputValue != null) && (inputValue.length() != 0)) {
 				((CommentNode)node).setText(inputValue);
 				repaint();
 			}
 		}
-		else { // aNode instanceof NodeBean
+		else { 
 			final UnitElement unit = (UnitElement) node;
 			unit.showProperties();
 		}
-		//		super.properties(node);
 	}
-
 
 	public void setGraphController(final GraphController graphController) {
 		this.selection.clear();

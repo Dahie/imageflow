@@ -49,7 +49,6 @@ public class MacroGenerator {
 			// read the ImageJ syntax for this unit
 			final UnitElement unit = (UnitElement) unitList.get(unitIndex-1);
 			
-//			String command = unit.getImageJSyntax();
 			final MacroElement macroElement = ((MacroElement)unit.getObject()); 
 			macroElement.reset();
 			

@@ -175,6 +175,10 @@ public class UnitDescription {
 				actInput.required = inputElement.getChild("Required").getValue().equals("true") ? true : false;
 			actInput.shortName = inputElement.getChild("ShortName").getValue();
 			
+			if(inputElement.getChild("Required") != null)
+				actInput.required = inputElement.getChild("Required").getValue().equals("true") ? true : false;
+			
+			
 			// legacy: in case no type is given, assume DataTypeFactory.Image
 			if(inputElement.getChild("DataType") != null) {
 				actInput.dataType = DataTypeFactory.createDataType(inputElement.getChild("DataType").getValue());	
@@ -331,7 +335,7 @@ public class UnitDescription {
 		String name;
 		String shortName;
 		DataType dataType;
-		boolean required;
+		boolean required = true;
 		int imageType;
 		boolean needToCopyInput;
 	}

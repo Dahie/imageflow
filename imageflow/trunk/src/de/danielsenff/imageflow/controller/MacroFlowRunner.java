@@ -245,12 +245,10 @@ public class MacroFlowRunner {
 					// check if all inputs of this node are marked
 					// if so, this unit is moved from the old list to the new one
 
-					if(unit.hasMarkedOutput()) throw new Exception("Unit has Output marked, " +
-					"the output should be marked if this unit is already processed in this workflow, " +
-					"by which point it shouldn't be here anymore");
+					if(unit.hasMarkedOutput()) throw new Exception("Unit has Output marked, "
+							+ "the output should be marked if this unit is already processed in this workflow, "
+							+ "by which point it shouldn't be here anymore");
 
-					System.out.println(unit.hasAllInputsMarked());
-					
 					if(!unit.hasDisplayBranch()) {
 						// unit itself is not a display and
 						// if it doesn't have any unit in its outputs that has

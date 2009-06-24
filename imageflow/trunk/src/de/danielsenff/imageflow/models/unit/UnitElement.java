@@ -743,10 +743,7 @@ public class UnitElement extends AbstractUnit {
 			g.drawRect(origin.x, origin.y, getDimension().width-1, getDimension().height-1);
 		} else {
 
-			// obj != null
 			if (selected) {
-				/*g.setColor(Color.red);
-				g.drawRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4);*/
 				g.setColor(new Color(0,0,255,40));
 				g.fillRoundRect(origin.x-2, origin.y-2, getDimension().width+4, getDimension().height+4, 
 						unitComponentIcon.arc, unitComponentIcon.arc);
@@ -765,7 +762,12 @@ public class UnitElement extends AbstractUnit {
 		//draw inputs
 		int numberInputs = getInputsCount();
 		for (int i = 0; i < numberInputs; i++) {
-			g.setColor(Color.BLACK);
+			
+			if(getInput(i).isRequired())
+				g.setColor(Color.BLACK);
+			else
+				g.setColor(new Color(0,0,0,60));
+			
 			int y =  PaintUtil.alignY(numberInputs, i, unitComponentIcon.getHeight(), NodeIcon.pinSize);
 			g.fillRect(origin.x, origin.y+y, NodeIcon.pinSize, NodeIcon.pinSize);
 		}
@@ -924,8 +926,9 @@ public class UnitElement extends AbstractUnit {
 		if(hasInputs()) {
 			// check each input, if it's parent has been registered
 			for (Input input : getInputs()) {
-				if( (input.isConnected() && !input.getFromOutput().isMarked())
-						|| !input.isConnected() ) {
+				if( (input.isConnected() 
+						&& !input.getFromOutput().isMarked())
+						|| !input.isConnected() && input.isRequired() ) {
 					// this connected output hasn't been registered and is missing a mark, 
 					// so the whole unit isn't ready set. 
 					return false;
