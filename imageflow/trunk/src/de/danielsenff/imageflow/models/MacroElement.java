@@ -160,13 +160,17 @@ public class MacroElement {
 	}
 
 	private static String parseOutputs(ArrayList<Output> outputs, String command) {
-		int index = 0, oCount = 0, oDbl = 0, oInt = 0;
+		int index = 0, oDbl = 0, oInt = 0;
 		String searchString;
 
 		while (index < outputs.size()) {
 			
 			Output output = outputs.get(index);
 
+			System.out.println(output.getParent());
+			System.out.println(outputs.size());
+			System.out.println(output.getDataType());
+			
 			searchString = "OUTPUT_DOUBLE_" + (oDbl+1);
 			/*String paraType = input.getParaType().toLowerCase();
 			if(command.contains(searchString) && paraType.equals("double")) { 
@@ -183,21 +187,17 @@ public class MacroElement {
 //				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, uniqueOutputName);
 				oInt++;
-				index++;
+//				index++;
 			}
-			oCount++;
-			if (index != oCount) {
-				System.err.println("Error in Outputs or ImageJ-syntax");
-				return command;
-			}
-				
+			index++;
+	
 		}
 		return command;
 	}
 	
 
 	private static String parseInputs(ArrayList<Input> inputs, String command) {
-		int index = 0, pc = 0, oDbl = 0, oInt = 0;
+		int index = 0, oDbl = 0, oInt = 0;
 		String searchString;
 
 		while (index < inputs.size()) {
@@ -220,13 +220,8 @@ public class MacroElement {
 //				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, uniqueOutputName);
 				oInt++;
-				index++;
 			}
-			pc++;
-			if (index != pc) {
-				System.err.println("Error in Inputs or ImageJ-syntax");
-				return command;
-			}
+			index++;
 				
 		}
 		return command;
