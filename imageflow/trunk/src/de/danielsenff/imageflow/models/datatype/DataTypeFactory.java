@@ -20,18 +20,24 @@ public class DataTypeFactory {
 		return new Integer();
 	}
 	
+	public static Double createDouble() {
+		return new Double();
+	}
+	
 	public static Image createImage(int imageBitDepth) {
 		return new Image(imageBitDepth);
 	}
 	
-	
-	
-	
-	
-	
 	public static class Integer implements DataType {
 		public boolean isCompatible(DataType compareType) {
 			boolean compatible = compareType instanceof Integer;
+			return compatible;
+		}
+	}
+	
+	public static class Double implements DataType {
+		public boolean isCompatible(DataType compareType) {
+			boolean compatible = compareType instanceof Integer || compareType instanceof Double;
 			return compatible;
 		}
 	}
