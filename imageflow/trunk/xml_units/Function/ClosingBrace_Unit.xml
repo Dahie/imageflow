@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Closing Brace</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>}</ImageJSyntax> 
+  <Color>0xad8946</Color>
+  <HelpString>Closing Brace for closing loops</HelpString>
+  	  
+</General>
+
+<Parameters> 
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

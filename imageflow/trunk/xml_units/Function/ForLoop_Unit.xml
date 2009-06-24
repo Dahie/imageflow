@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>For-Loop</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>for (i=0; i&lt;PARA_INTEGER_1; i++) {</ImageJSyntax> 
+  <Color>0xad8946</Color>
+  <HelpString>For-Loop</HelpString>
+  	  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Number of Loops</Name>
+  		<DataType>Integer</DataType>
+  		<Value>1</Value>
+  		<HelpString>Number of iterations performed by the For-Loop</HelpString>
+  	</Parameter> 
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
