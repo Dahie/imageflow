@@ -92,7 +92,7 @@ public class MacroGenerator {
 						"rename(\"" + outputTitle  + "\"); \n"
 						+ outputID + " = getImageID(); \n"
 						+ "selectImage("+outputID+"); \n";
-					openedImages.add(output);
+					openedImages.add(new ImageJImage(output));
 				}
 			}
 			// close ID_temp after going through the outputs
@@ -120,12 +120,12 @@ public class MacroGenerator {
 	private String renameImages() {
 		String macroText = "";
 
-		for (ImageJImage	output : this.openedImages) {
+		for (ImageJImage image : this.openedImages) {
 
-			final String outputID = output.getOutputID();
+			final String outputID = image.id;
 
 			macroText += "selectImage("+outputID+"); \n" 
-				+ "rename(\"" + output.getName()  + "\"); \n";
+				+ "rename(\"" + image.parentOutput.getName()  + "\"); \n";
 		}
 		return macroText;
 	}
@@ -134,19 +134,19 @@ public class MacroGenerator {
 	private String deleteImages() {
 		String macroText = "";
 
-		ArrayList<Output> removeAfterwards = new ArrayList<Output>();
+		ArrayList<ImageJImage> removeAfterwards = new ArrayList<ImageJImage>();
 		
-		for (ImageJImage	output : this.openedImages) {
-			if (!output.isDoDisplay()) {
-				final String outputID = output.getOutputID();
+		for (ImageJImage image : this.openedImages) {
+			if (!image.display) {
+				final String outputID = image.id;
 
 				macroText += "selectImage("+outputID+"); \n" 
 					+ "close(); \n";
-				removeAfterwards.add(output);
+				removeAfterwards.add(image);
 			} 
 		}
-		for (Output output : removeAfterwards) {
-			this.openedImages.remove(output);
+		for (ImageJImage image : removeAfterwards) {
+			this.openedImages.remove(image);
 		}
 		
 		return macroText;
@@ -174,8 +174,16 @@ public class MacroGenerator {
 	
 	
 	public class ImageJImage {
-		private String id;
-		private String title;
-		private Output parentOutput;
+		String id;
+		String title;
+		Output parentOutput;
+		boolean display;
+		
+		public ImageJImage(Output output) {
+			this.id 	= output.getOutputID();
+			this.title 	= output.getOutputTitle();
+			this.parentOutput = output;
+			this.display = output.isDoDisplay();
+		}
 	}
 }
