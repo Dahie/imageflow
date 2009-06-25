@@ -7,11 +7,11 @@ package models;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.ConnectionList;
-import de.danielsenff.imageflow.models.Input;
 import de.danielsenff.imageflow.models.MacroElement;
-import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
+import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.parameter.ParameterFactory;
 import de.danielsenff.imageflow.models.unit.SourceUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -29,20 +29,20 @@ public class UnitElementTests extends TestCase {
 
 	public void testInputsActualCount() {
 
-		UnitElement unit = UnitFactory.createAddNoiseUnit();
+		UnitElement unit = UnitFactoryExt.createAddNoiseUnit();
 
 		assertEquals("number outputs",1, unit.getOutputsCount());
 		assertEquals("number inputs",1, unit.getInputsCount());
 
-		UnitElement source = UnitFactory.createBackgroundUnit(new Dimension(100,100));
+		UnitElement source = UnitFactoryExt.createBackgroundUnit(new Dimension(100,100));
 		assertEquals("number outputs",1, source.getOutputsCount());
 		assertEquals("number inputs",0, source.getInputsCount());
 
-		UnitElement merge = UnitFactory.createImageCalculatorUnit();
+		UnitElement merge = UnitFactoryExt.createImageCalculatorUnit();
 		assertEquals("number outputs",1, merge.getOutputsCount());
 		assertEquals("number inputs",2, merge.getInputsCount());
 
-		UnitElement sink = UnitFactory.createHistogramUnit(new Point(0,0));
+		UnitElement sink = UnitFactoryExt.createHistogramUnit(new Point(0,0));
 		assertEquals("number outputs",0, sink.getOutputsCount());
 		assertEquals("number inputs",1, sink.getInputsCount());
 	}
@@ -68,12 +68,12 @@ public class UnitElementTests extends TestCase {
 	public void testHasInputs() {
 
 		// Sources have no inputs
-		UnitElement source = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement source = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		assertFalse("source", source.hasInputs());
 		assertFalse("source", source.hasInputsConnected());
 		assertTrue(source.hasRequiredInputsConnected());
 
-		UnitElement filter = UnitFactory.createAddNoiseUnit();
+		UnitElement filter = UnitFactoryExt.createAddNoiseUnit();
 		assertTrue("filter", filter.hasInputs());
 		assertFalse("filter", filter.hasInputsConnected());
 		assertFalse(filter.hasRequiredInputsConnected());
@@ -137,7 +137,7 @@ public class UnitElementTests extends TestCase {
 		assertEquals(0, sink.getOutputsCount());
 		
 		
-		UnitElement filter = UnitFactory.createFindEdgesUnit();
+		UnitElement filter = UnitFactoryExt.createFindEdgesUnit();
 		assertTrue("is a filter", filter.getUnitType() == Type.FILTER);
 		assertFalse(filter.hasOutputsConnected());
 		assertTrue(filter.hasOutputs());
@@ -148,12 +148,12 @@ public class UnitElementTests extends TestCase {
 	public void testHasAllInputsMarked() {
 
 		// test output-only
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
-		UnitElement sourceUnit2 = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit2 = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createImageCalculatorUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createImageCalculatorUnit();
 
 		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
 		ConnectionList connList = new ConnectionList();
@@ -201,7 +201,7 @@ public class UnitElementTests extends TestCase {
 		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
 
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
 
 		assertTrue("mark on source before setting", sourceUnit.hasAllInputsMarked());
 		assertFalse("mark on filter before setting", filterUnit1.hasAllInputsMarked());
@@ -233,7 +233,7 @@ public class UnitElementTests extends TestCase {
 	}
 
 	public void testClone() {
-		UnitElement mergeUnit = UnitFactory.createImageCalculatorUnit();
+		UnitElement mergeUnit = UnitFactoryExt.createImageCalculatorUnit();
 
 
 		UnitElement clone = mergeUnit.clone();
@@ -285,12 +285,12 @@ public class UnitElementTests extends TestCase {
 	public void testHasDisplayBranch() {
 		
 		// test output-only
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
-		UnitElement sourceUnit2 = UnitFactory.createBackgroundUnit(new Dimension(12, 12));;
+		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit2 = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));;
 
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 
 		ConnectionList connList = new ConnectionList();
 		Connection conn1 = new Connection(sourceUnit, 1, filterUnit1, 1);

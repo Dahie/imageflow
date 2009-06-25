@@ -6,8 +6,8 @@ package models;
 import java.awt.Dimension;
 
 import junit.framework.TestCase;
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.ConnectionList;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;

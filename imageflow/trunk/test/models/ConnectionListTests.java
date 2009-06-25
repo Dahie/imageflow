@@ -3,14 +3,12 @@ package models;
 
 import java.awt.Dimension;
 
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.ConnectionList;
-import de.danielsenff.imageflow.models.Input;
-import de.danielsenff.imageflow.models.Output;
-import de.danielsenff.imageflow.models.unit.UnitElement;
-import de.danielsenff.imageflow.models.unit.UnitFactory;
-
 import junit.framework.TestCase;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
+import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.unit.UnitElement;
 
 public class ConnectionListTests extends TestCase {
 
@@ -20,16 +18,16 @@ public class ConnectionListTests extends TestCase {
 		
 
 		// test output-only
-		UnitElement source1Unit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement source1Unit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		Output source1Output = source1Unit.getOutput(0);
-		UnitElement source2Unit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement source2Unit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		Output source2Output = source2Unit.getOutput(0);
 		
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
 		Input filter1Input = filterUnit1.getInput(0); 
 		Output filter1Output = filterUnit1.getOutput(0);
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		Input filter2Input = filterUnit2.getInput(0); 
 		Output filter2Output = filterUnit2.getOutput(0);
 		
@@ -84,16 +82,16 @@ public class ConnectionListTests extends TestCase {
 	public void testContains() {
 		
 		// test output-only
-		UnitElement source1Unit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement source1Unit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		Output source1Output = source1Unit.getOutput(0);
-		UnitElement source2Unit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement source2Unit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		Output source2Output = source2Unit.getOutput(0);
 		
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
 		Input filter1Input = filterUnit1.getInput(0); 
 		Output filter1Output = filterUnit1.getOutput(0);
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		Input filter2Input = filterUnit2.getInput(0); 
 		Output filter2Output = filterUnit2.getOutput(0);
 		
@@ -116,9 +114,9 @@ public class ConnectionListTests extends TestCase {
 	
 	public void testLoopConnection() {
 	
-		UnitElement filter1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filter2 = UnitFactory.createAddNoiseUnit();
-		UnitElement filter3 = UnitFactory.createAddNoiseUnit();
+		UnitElement filter1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filter2 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filter3 = UnitFactoryExt.createAddNoiseUnit();
 		
 		ConnectionList connectionList = new ConnectionList();
 		assertTrue("create conn f1 to f2", connectionList.add(filter1, 1, filter2, 1));
@@ -129,9 +127,9 @@ public class ConnectionListTests extends TestCase {
 	}
 	
 	public void testRemoveConnection() {
-		UnitElement filter1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filter2 = UnitFactory.createAddNoiseUnit();
-		UnitElement filter3 = UnitFactory.createAddNoiseUnit();
+		UnitElement filter1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filter2 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filter3 = UnitFactoryExt.createAddNoiseUnit();
 		
 		ConnectionList connectionList = new ConnectionList();
 		assertTrue("add conn1", connectionList.add(filter1, 1, filter2, 1));

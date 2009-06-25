@@ -5,9 +5,9 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.ConnectionList;
 import de.danielsenff.imageflow.models.MacroElement;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.ParameterFactory;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -18,9 +18,9 @@ public class MacroTests extends TestCase {
 	
 	public void testMatchingImageTitles() {
 		
-		final UnitElement source = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
-		final UnitElement blur = UnitFactory.createGaussianBlurUnit();
-		final UnitElement noise = UnitFactory.createAddNoiseUnit();
+		final UnitElement source = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
+		final UnitElement blur = UnitFactoryExt.createGaussianBlurUnit();
+		final UnitElement noise = UnitFactoryExt.createAddNoiseUnit();
 		
 		final Connection connection1 = new Connection(source, 1, blur, 1);
 		final Connection connection2 = new Connection(blur, 1, noise, 1);
@@ -32,7 +32,7 @@ public class MacroTests extends TestCase {
 		assertTrue("is conn2 connected", connection2.isConnected());
 		
 		assertTrue("status check 1", (connection1.checkConnection() == Connection.Status.OK) );
-		String outputImageTitleSource = source.getOutput(0).getImageTitle();
+		String outputImageTitleSource = source.getOutput(0).getOutputTitle();
 		System.out.println(outputImageTitleSource);
 		String inputImageTitleBlur = blur.getInput(0).getImageTitle();
 //		System.out.println(inputImageTitleBlur);
@@ -42,7 +42,7 @@ public class MacroTests extends TestCase {
 		
 		
 		assertTrue("status check 2", (connection2.checkConnection() == Connection.Status.OK) );
-		String outputimageTitleBlur = blur.getOutput(0).getImageTitle();
+		String outputimageTitleBlur = blur.getOutput(0).getOutputTitle();
 		System.out.println(outputimageTitleBlur);
 		String InputImageTitleNoise = noise.getInput(0).getImageTitle();
 		System.out.println(InputImageTitleNoise);

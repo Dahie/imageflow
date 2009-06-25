@@ -7,10 +7,10 @@ import ij.plugin.filter.PlugInFilter;
 
 import java.awt.Dimension;
 
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.ConnectionList;
-import de.danielsenff.imageflow.models.Input;
-import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
+import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 
@@ -26,11 +26,11 @@ public class InputTests extends TestCase {
 	
 		// image title of style "Unit_1_Output_1"
 		// test output-only
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		
 		Input filter1Input = filterUnit1.getInput(0);
 		Input filter2Input = filterUnit2.getInput(0);
@@ -54,11 +54,11 @@ public class InputTests extends TestCase {
 	public void testIsConnected() {
 		
 		// test output-only
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		
 		Input filterInput = filterUnit1.getInput(0);
 		
@@ -76,14 +76,14 @@ public class InputTests extends TestCase {
 	
 	public void testIsConnectedWith() {
 		// test output-only
-		UnitElement source1Unit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement source1Unit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		Output source1Output = source1Unit.getOutput(0);
-		UnitElement source2Unit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement source2Unit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		Output source2Output = source2Unit.getOutput(0);
 		
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		
 		Input filterInput = filterUnit1.getInput(0);
 		
@@ -108,11 +108,11 @@ public class InputTests extends TestCase {
 	public void testIsDisconnected() {
 
 		// test output-only
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		
 		Input filterInput = filterUnit1.getInput(0);
 		
@@ -129,8 +129,8 @@ public class InputTests extends TestCase {
 	}
 	
 	public void testIsRequiredInput() {
-		UnitElement source = UnitFactory.createBackgroundUnit(new Dimension(10,10));
-		UnitElement unit = UnitFactory.createImageCalculatorUnit();
+		UnitElement source = UnitFactoryExt.createBackgroundUnit(new Dimension(10,10));
+		UnitElement unit = UnitFactoryExt.createImageCalculatorUnit();
 		
 		Input imageCalcInput1 = unit.getInput(0);
 		Input imageCalcInput2 = unit.getInput(1);
@@ -163,36 +163,11 @@ public class InputTests extends TestCase {
 		
 	}
 	
-	public void testImageBitDepthCompatible() {
-
-		UnitElement unit1 = new UnitElement("unit1", "some syntax");
-		unit1.addOutput("output1", "o", PlugInFilter.DOES_32, false);
-		unit1.addOutput("output2", "o", PlugInFilter.DOES_ALL, false);
-		unit1.addOutput("output2", "o", -1, false);
-		Output output1 = unit1.getOutput(0);
-		Output output2 = unit1.getOutput(1);
-		Output output3 = unit1.getOutput(2);
-		
-		UnitElement unit2 = new UnitElement("unit2", "some syntax");
-		unit2.addInput("input1", "i", PlugInFilter.DOES_32, false);
-		unit2.addInput("input2", "i", PlugInFilter.DOES_16, false);
-		unit2.addInput("input3", "i", PlugInFilter.DOES_ALL, false);
-		Input input1 = unit2.getInput(0);
-		Input input2 = unit2.getInput(1);
-		Input input3 = unit2.getInput(2);
-
-		assertTrue("both do 32", input1.isImageBitDepthCompatible(output1.getImageBitDepth()));
-		assertFalse("32 to 16", input2.isImageBitDepthCompatible(output1.getImageBitDepth()));
-		assertFalse("all to 32", input1.isImageBitDepthCompatible(output2.getImageBitDepth()));
-		assertTrue("32 to all", input3.isImageBitDepthCompatible(output1.getImageBitDepth()));
-
-	}
-	
 	public void testUnitConnectedInBranch() {
 		
-		UnitElement unit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement unit2 = UnitFactory.createAddNoiseUnit();
-		UnitElement unit3 = UnitFactory.createAddNoiseUnit();
+		UnitElement unit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement unit2 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement unit3 = UnitFactoryExt.createAddNoiseUnit();
 		
 		Connection conn1 = new Connection(unit1, 1, unit2, 1);
 		

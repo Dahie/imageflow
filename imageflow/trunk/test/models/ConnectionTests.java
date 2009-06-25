@@ -7,9 +7,10 @@ import ij.plugin.filter.PlugInFilter;
 
 import java.awt.Dimension;
 
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.Input;
-import de.danielsenff.imageflow.models.Output;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 
@@ -26,8 +27,8 @@ public class ConnectionTests extends TestCase {
 	 * Test if an correctly initialized Connection returns the right status.
 	 */
 	public void testConnectionStatus() {
-		final UnitElement source = UnitFactory.createBackgroundUnit(new Dimension(12,12));
-		final UnitElement blur = UnitFactory.createGaussianBlurUnit(); 
+		final UnitElement source = UnitFactoryExt.createBackgroundUnit(new Dimension(12,12));
+		final UnitElement blur = UnitFactoryExt.createGaussianBlurUnit(); 
 		
 		final Connection connection1 = new Connection(source, 1, blur, 1);
 		connection1.connect();
@@ -50,7 +51,7 @@ public class ConnectionTests extends TestCase {
 		assertEquals("blur input from unit", source, input.getFromUnit());
 		
 		assertEquals("check imageTitles generated on pins", 
-				output.getImageTitle(), 
+				output.getOutputTitle(), 
 				input.getImageTitle());
 	}
 	
@@ -58,11 +59,11 @@ public class ConnectionTests extends TestCase {
 	public void testHasAllInputsMarked() {
 		
 		// test output-only
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		
 		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
 		
@@ -82,15 +83,15 @@ public class ConnectionTests extends TestCase {
 	public void testIsConnectedPin() {
 
 		// test output-only
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		Output sourceOutput = sourceUnit.getOutput(0);
 		
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
 		Input filter1Input = filterUnit1.getInput(0); 
 		Output filter1Output = filterUnit1.getOutput(0);
 		
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		Input filter2Input = filterUnit2.getInput(0); 
 		Output filter2Output = filterUnit2.getOutput(0);
 		
@@ -108,11 +109,11 @@ public class ConnectionTests extends TestCase {
 	public void testIsConnectedWithUnit() {
 
 		// test output-only
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		
 		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
 		
@@ -133,30 +134,42 @@ public class ConnectionTests extends TestCase {
 	public void testAreImageDepthCompatible() {
 		
 		UnitElement unit1 = new UnitElement("unit1", "some syntax");
-		unit1.addOutput("output1", "o", PlugInFilter.DOES_32, false);
-		unit1.addOutput("output2", "o", PlugInFilter.DOES_ALL, false);
-		unit1.addOutput("output2", "o", -1, false);
+		unit1.addOutput(
+				new Output("Output", "o", 
+						DataTypeFactory.createImage(PlugInFilter.DOES_ALL), unit1, 1));
+		unit1.addOutput(
+				new Output("Output", "o", 
+						DataTypeFactory.createImage(-1), unit1, 2));
 		UnitElement unit2 = new UnitElement("unit2", "some syntax");
-		unit2.addInput("input1", "i", PlugInFilter.DOES_32, false);
-		unit2.addInput("input2", "i", PlugInFilter.DOES_16, false);
-		unit2.addInput("input3", "i", PlugInFilter.DOES_ALL, false);
+		unit2.addInput(
+				new Input("input1", "i", 
+						DataTypeFactory.createImage(PlugInFilter.DOES_32), 
+						unit2, 1, true, false));
+		unit2.addInput(
+				new Input("input2", "i", 
+						DataTypeFactory.createImage(PlugInFilter.DOES_16), 
+						unit2, 2, true, false));
+		unit2.addInput(
+				new Input("input3", "i", 
+						DataTypeFactory.createImage(PlugInFilter.DOES_ALL), 
+						unit2, 3, true, false));
 		
 		// conn1 32 to 16		
 		Connection conn1 = new Connection(unit1,1,unit2,1);
-		assertTrue("both do 32", conn1.isImageBitDepthCompatible());
+		assertTrue("both do 32", conn1.isCompatible());
 		
 		// conn2 32 to 16		
 		Connection conn2 = new Connection(unit1,1,unit2,2);
-		assertFalse("both do 32", conn2.isImageBitDepthCompatible());
+		assertFalse("both do 32", conn2.isCompatible());
 
 		// conn3 ALL to 32
 		Connection conn3 = new Connection(unit1,2,unit2, 1);
 		// technically compatable, but we expect something explicit and no guesses
-		assertFalse("all to 32", conn3.isImageBitDepthCompatible());
+		assertFalse("all to 32", conn3.isCompatible());
 		
 		// conn4 32 to all
 		Connection conn4 = new Connection(unit1,1,unit2, 3);
-		assertTrue("32 to all", conn4.isImageBitDepthCompatible());
+		assertTrue("32 to all", conn4.isCompatible());
 		
 		// now test pins, which don't care
 		//TODO hm how should this react actually? needs an input set

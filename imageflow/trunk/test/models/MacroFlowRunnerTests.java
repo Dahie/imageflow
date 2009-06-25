@@ -4,8 +4,8 @@ package models;
 import java.awt.Dimension;
 
 import de.danielsenff.imageflow.controller.MacroFlowRunner;
-import de.danielsenff.imageflow.models.Connection;
-import de.danielsenff.imageflow.models.ConnectionList;
+import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.unit.AbstractUnit;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
@@ -40,12 +40,12 @@ public class MacroFlowRunnerTests extends TestCase {
 	private UnitList buildSampleWorkflow() {
 		UnitList unitList = new UnitList();
 		
-		UnitElement source1 = UnitFactory.createBackgroundUnit(new Dimension(10, 10));
-		UnitElement filter1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filter2 = UnitFactory.createFindEdgesUnit();
-		UnitElement filter3 = UnitFactory.createGaussianBlurUnit();
+		UnitElement source1 = UnitFactoryExt.createBackgroundUnit(new Dimension(10, 10));
+		UnitElement filter1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filter2 = UnitFactoryExt.createFindEdgesUnit();
+		UnitElement filter3 = UnitFactoryExt.createGaussianBlurUnit();
 		
-		UnitElement source2 = UnitFactory.createBackgroundUnit(new Dimension(10,0));
+		UnitElement source2 = UnitFactoryExt.createBackgroundUnit(new Dimension(10,0));
 		
 		unitList.add(source1);
 		unitList.add(source2);
