@@ -4,6 +4,9 @@ package de.danielsenff.imageflow.tasks;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
+import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
@@ -37,7 +40,16 @@ public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
         final GraphController graphController = new GraphController();
         final UnitList unitList = graphController.getUnitElements();
         unitList.clear();
-        unitList.read(file);
+        try {
+        	unitList.read(file);	
+        } catch(OutOfMemoryError ex) {
+        	ex.printStackTrace();
+        	JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+    				"The images are too large."	+'\n'+"I'm out of memory.",
+    				"Of of memory", 
+    				JOptionPane.ERROR_MESSAGE);
+        }
+        
     	
         if (!isCancelled()) {
             return graphController;

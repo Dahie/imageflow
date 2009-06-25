@@ -130,7 +130,6 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 						unitElement.setDisplayUnit(unitDescription.getIsDisplayUnit());
 						unitElement.setHelpString(unitDescription.helpString);
 						unitElement.setLabel(label);
-//						newNodes.add(unitID, unitElement);
 						newNodes.put(unitID, unitElement);
 						add(unitElement);
 					} else {

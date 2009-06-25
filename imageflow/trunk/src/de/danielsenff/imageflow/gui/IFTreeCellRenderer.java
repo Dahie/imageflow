@@ -30,8 +30,8 @@ public class IFTreeCellRenderer extends DefaultTreeCellRenderer {
 			this.setLeafIcon(icon);
 		}
 		
-		return super.getTreeCellRendererComponent(tree, value, sel, expanded, isLeaf,
-				row, hasFocus);
+		return super.getTreeCellRendererComponent(tree, 
+				value, sel, expanded, isLeaf, row, hasFocus);
 	}
 	
 	private BufferedImage drawIcon(final Color color, final int width, final int height) {

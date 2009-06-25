@@ -91,6 +91,7 @@ public class SourceUnitElement extends UnitElement {
 		
 		// change bitdepth for all outputs
 		setOutputImageType(imageType);
+		System.gc();
 	}
 
 	/**
@@ -153,10 +154,9 @@ public class SourceUnitElement extends UnitElement {
 	public int getBitDepth() {
 		final String path = getFilePath();
 		if(new File(path).exists()) {
-			final ImagePlus imp = IJ.openImage(path);
+			ImagePlus imp = IJ.openImage(path);
 			imp.close();
-			final int bitDepth = imp.getBitDepth();
-			return bitDepth;
+			return imp.getBitDepth();
 		}
 		return -1;
 	}
@@ -168,10 +168,12 @@ public class SourceUnitElement extends UnitElement {
 	public int getImageType() {
 		final String path = getFilePath();
 		if(new File(path).exists()) {
-			final ImagePlus imp = IJ.openImage(path);
+			System.out.println("hey, ho letzs get type: " + this);
+			ImagePlus imp = IJ.openImage(path);
 			if(imp != null) {
 				final int type = imp.getType();
 				imp.close();
+				imp = null;
 				switch (type) {
 				case ImagePlus.GRAY8:
 					return PlugInFilter.DOES_8G;
@@ -197,8 +199,7 @@ public class SourceUnitElement extends UnitElement {
 	public ImagePlus getImagePlus() {
 		final String path = getFilePath();
 		if(new File(path).exists()) {
-			final ImagePlus imp = IJ.openImage(path);
-			return imp;
+			return IJ.openImage(path);
 		}
 		return null; 
 	}
