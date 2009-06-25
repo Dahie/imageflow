@@ -184,8 +184,10 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 					if(e.isControlDown())
 						selection.remove(aNode);
 				} 
+				
 				for (Node iNode : selection)
-					iNode.drag(true);
+					if(!e.isPopupTrigger())
+						iNode.drag(true);
 				repaint();
 				parent.showFloatingMenu(e);
 				e.consume();
