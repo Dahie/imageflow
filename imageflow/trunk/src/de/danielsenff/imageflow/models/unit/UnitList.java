@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -58,7 +59,30 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		this.listeners = new ArrayList<ModelListener>();
 		this.connections = new ConnectionList();
 	}
+	
+	
+	@Override
+	public UnitList clone() {
+		/*UnitList clone = new UnitList();
+		
+		for (Node node : this) {
+			try {
+				clone.add(node.clone());
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+		}*/
+		
+            return (UnitList) super.clone();
 
+		
+//		ConnectionList connList = new ConnectionList();
+//		for (Connection connection : this.getConnections()) {
+//			connList.add(connection.clone());
+//		}
+		
+	}
+	
 	/**
 	 * Reads the contents of a flow-XML-file.
 	 * @param file

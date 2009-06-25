@@ -47,7 +47,6 @@ public class Connection {
 				toUnit.getUnitID(), toInput.getIndex());
 	}
 
-
 	/**
 	 * connect the inputs and outputs of the units
 	 * @param unitElements

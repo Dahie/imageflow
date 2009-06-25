@@ -1,5 +1,9 @@
 package de.danielsenff.imageflow.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Iterator;
 
 import javax.swing.JOptionPane;
@@ -25,18 +29,20 @@ import de.danielsenff.imageflow.models.unit.UnitElement.Type;
  */
 public class MacroFlowRunner {
 
-	UnitList macroUnitList;
+	private UnitList macroUnitList;
 
 	/**
 	 * @param units
 	 */
 	public MacroFlowRunner(final UnitList units) {
-		this.macroUnitList = sortList((UnitList) units.clone());
+			this.macroUnitList = (UnitList)(units.clone());
+		this.macroUnitList = sortList(this.macroUnitList);
 		//FIXME why add all connections here? Doesn't this also include connections to units
 		// which are already deleted by the algorithm? does this matter?
 		this.macroUnitList.addConnectionList(units.getConnections());
 	}
 
+	
 	/**
 	 * verification and generation of the ImageJ macro for the full graph
 	 * @return 
@@ -266,9 +272,6 @@ public class MacroFlowRunner {
 						// move this to the new ordered list
 						Node remove = unitElements.remove(index);
 						orderedList.add(remove);
-					/*} else if( !unit.hasAllInputsMarked()
-								&& unit.hasRequiredInputsConnected()) {
-						System.err.println("doesn�t have all inputs connected, but those who are, are marked");*/
 					} else if (!unit.hasRequiredInputsConnected() 
 							&& unit.getUnitType() != Type.SOURCE) {
 						// if unit has no connections actually, it can be discarded right away

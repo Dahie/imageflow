@@ -33,17 +33,13 @@ public class RunMacroTask extends Task<Object, Void> {
 	protected Void doInBackground() throws InterruptedException {
 		
 		String macro = graphController.generateMacro();
+//		String macro = "// hey";
 		//TODO use exceptions 
 		if(macro != null) {
 			System.out.println(macro);
 			graphController.runImageJMacro(macro, this.showlog);	
 		}
 		
-		
 		return null;
 	}
-	
-	/*@Override protected void done() {
-		setMessage(isCancelled() ? "Canceled." : "Done.");
-	}*/
 }

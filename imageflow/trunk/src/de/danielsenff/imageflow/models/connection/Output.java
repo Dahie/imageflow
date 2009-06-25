@@ -57,6 +57,16 @@ public class Output extends Pin {
 	Vector<Connection> connections;
 	
 	
+	public Output(
+			final String name,
+			final String shortName,
+			final DataType dataType, 
+			final UnitElement nodeParent, 
+			final int outputNumber) {
+		this(dataType, nodeParent, outputNumber);
+		this.setupOutput(name, shortName);
+	}
+	
 	/**
 	 * @param nodeParent
 	 * @param outputNumber
@@ -189,26 +199,6 @@ public class Output extends Pin {
 
 
 
-	/**
-	 * Returns whether or not this Input is connected.
-	 * @return 
-	 */
-	public boolean isConnected() {
-		return !this.connections.isEmpty();
-	}
-	
-	/**
-	 * Checks if this Input is connected with the given {@link Output}
-	 * @param input 
-	 * @return
-	 */
-	public boolean isConnectedWith(Pin input) {
-		for (Connection connection : getConnections()) {
-			if(connection.getInput().equals(input))
-				return true;
-		}
-		return false;
-	}
 
 	@Override
 	public UnitElement getParent() {
@@ -245,7 +235,6 @@ public class Output extends Pin {
 	 * Resets the this Output, so that it is unconnected.
 	 */
 	public void disconnectAll() {
-		generateID(0, 0); // reset connection
 		this.connections.clear();
 	}
 	
@@ -262,5 +251,26 @@ public class Output extends Pin {
 		this.connections.remove(oldConnection);
 	}
 	
+
+	/**
+	 * Returns whether or not this Input is connected.
+	 * @return 
+	 */
+	public boolean isConnected() {
+		return !this.connections.isEmpty();
+	}
+	
+	/**
+	 * Checks if this Input is connected with the given {@link Output}
+	 * @param input 
+	 * @return
+	 */
+	public boolean isConnectedWith(Pin input) {
+		for (Connection connection : getConnections()) {
+			if(connection.getInput().equals(input))
+				return true;
+		}
+		return false;
+	}
 	
 }

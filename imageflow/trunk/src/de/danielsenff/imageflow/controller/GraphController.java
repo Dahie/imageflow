@@ -69,7 +69,7 @@ public class GraphController{
 		IJ.runMacro(macro, "");
 		
 		/* beginning for new functions, but not today, daniel */
-		int[] imageIDs = WindowManager.getIDList();
+		/*int[] imageIDs = WindowManager.getIDList();
 		for (int i = 0; i < WindowManager.getImageCount(); i++) {
 			ImagePlus image = WindowManager.getImage(imageIDs[i]);
 			String imagetitle = image.getTitle(); 
@@ -88,7 +88,7 @@ public class GraphController{
 			}
 			
 			System.out.println("unit "+unitID+ " and output "+ outputID);
-		}
+		}*/
 		
 	}
 

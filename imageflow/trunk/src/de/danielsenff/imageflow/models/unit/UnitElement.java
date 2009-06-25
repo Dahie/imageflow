@@ -789,11 +789,11 @@ public class UnitElement extends AbstractUnit {
 			clonedInput.setupInput(input.getName(), input.getShortDisplayName(), input.isNeedToCopyInput());
 			clone.addInput(clonedInput);
 		}
-//		for (Output output : outputs) {
 		for (int i = 0; i < getOutputsCount(); i++) {
 			Output output = getOutput(i);
 			Output clonedOutput = new Output(output.getDataType(), clone, i+1);
 			clonedOutput.setupOutput(output.getName(), output.getShortDisplayName());
+			clonedOutput.setDoDisplay(output.isDoDisplay());
 			clone.addOutput(clonedOutput);
 		}
 		for (Parameter parameter : parameters) {

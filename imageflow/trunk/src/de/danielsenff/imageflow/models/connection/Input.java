@@ -71,6 +71,23 @@ public class Input extends Pin {
 	 * @param fromUnit
 	 * @param inputNumber
 	 */
+	public Input(
+			final String displayName,
+			final String shortDisplayName,
+			final DataType dataType, 
+			final UnitElement parentNode, 
+			int inputNumber,
+			boolean required,
+			boolean needToCopyInput) {
+		this(dataType, parentNode, inputNumber, required);
+		this.setupInput(displayName, shortDisplayName, needToCopyInput);
+	}
+	
+	
+	/**
+	 * @param fromUnit
+	 * @param inputNumber
+	 */
 	public Input(final DataType dataType, 
 			final UnitElement parentNode, 
 			int inputNumber) {

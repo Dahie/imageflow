@@ -1,7 +1,9 @@
 package de.danielsenff.imageflow.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
+import visualap.Node;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
@@ -22,11 +24,11 @@ public class MacroGenerator {
 	// have no input marked
 	// which are source, but no output and no display
 	
-	private UnitList unitList;
+	private Collection<Node> unitList;
 	private ArrayList<ImageJImage> openedImages;
 	private String  macroText;
 
-	public MacroGenerator(final UnitList unitElements) {
+	public MacroGenerator(final Collection unitElements) {
 		this.unitList = unitElements;
 		this.openedImages = new ArrayList<ImageJImage>();
 		this.macroText = "";
@@ -44,12 +46,14 @@ public class MacroGenerator {
 		
 		// loop over all units
 		// they have to be presorted so they are in the right order
-		for (int unitIndex = 0; unitIndex < unitList.size(); unitIndex++) {
+//		for (int unitIndex = 0; unitIndex < unitList.size(); unitIndex++) {
+		for (Node node : this.unitList) {
+		
 			macroText += " \n";
 			
 			// read the ImageJ syntax for this unit
-			final UnitElement unit = (UnitElement) unitList.get(unitIndex);
-			
+//			final UnitElement unit = (UnitElement) unitList.get(unitIndex);
+			final UnitElement unit = (UnitElement) node;
 			
 			addProcessingUnit(unit);
 		}

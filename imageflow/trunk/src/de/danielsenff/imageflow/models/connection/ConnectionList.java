@@ -132,7 +132,8 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 			}
 		}
 		
-		connection.connect();
+		if(!output.isConnectedWith(input))
+			connection.connect();
 		
 		boolean add = super.add(connection);
 		notifyModelListeners();
