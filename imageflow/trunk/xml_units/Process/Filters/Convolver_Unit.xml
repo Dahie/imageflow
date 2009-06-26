@@ -14,7 +14,7 @@
 <Parameters>
   	<Parameter>
   		<Name>Kernel</Name>
-  		<DataType>String</DataType>
+  		<DataType>Text</DataType>
   		<Value>-1 -1 -1   -1  8 -1    -1 -1 -1</Value>
   		<HelpString>Kernel to be used for the convolution</HelpString>
   	</Parameter> 

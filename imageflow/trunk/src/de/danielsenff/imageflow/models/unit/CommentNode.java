@@ -82,5 +82,5 @@ public class CommentNode extends AbstractUnit {
 		g2.setColor(saveColor);
         return new Rectangle(origin, getDimension());
 	}
-	
+
 }

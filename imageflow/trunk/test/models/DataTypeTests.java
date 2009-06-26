@@ -20,7 +20,6 @@ public class DataTypeTests extends TestCase {
 		
 		assertTrue("int on int", integer1.isCompatible(integer2));
 		assertFalse("int on img", integer1.isCompatible(image1));
-		
 	}
 	
 	

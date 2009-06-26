@@ -117,7 +117,6 @@ public class ImageFlowView extends FrameView {
 	public ImageFlowView(final Application app) {
 		super(app);
 		
-		
 		this.graphController = new GraphController();
 		this.units = this.graphController.getUnitElements();
 		this.connections = this.graphController.getConnections();
@@ -253,6 +252,7 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(getAction("debugPrintNodes"));
 		debugMenu.add(getAction("debugPrintNodeDetails"));
 		debugMenu.add(getAction("debugPrintEdges"));
+		debugMenu.add(getAction("group"));
 		debugMenu.add(new JSeparator());
 		debugMenu.add(getAction("exampleFlow1"));
 		debugMenu.add(getAction("exampleFlow2"));
@@ -581,6 +581,15 @@ public class ImageFlowView extends FrameView {
 	    	task = new LoadFlowGraphTask(fc.getSelectedFile());
 	    }*/
 //	    return task;
+	}
+	
+	@Action(enabledProperty = "selected")
+	public void group() {
+		if(selections.size() > 1) {
+			for (Node node : selections) {
+				System.out.println(node);
+			}
+		}
 	}
 	
 	/**
@@ -1034,7 +1043,8 @@ public class ImageFlowView extends FrameView {
             aboutBox = new ImageFlowAboutBox(mainFrame);
             aboutBox.setLocationRelativeTo(mainFrame);
         }
-        ImageFlow.getApplication().show(aboutBox);
+//        ImageFlow.getApplication().show(aboutBox);
+        aboutBox.setVisible(true);
     }
     
 	private javax.swing.Action getAction(String actionName) {

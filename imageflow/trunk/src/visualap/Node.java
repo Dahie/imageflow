@@ -22,10 +22,21 @@ This class provides support for several features: blabla....
 javalc6
 */
 package visualap;
-import java.awt.*;
-import java.awt.image.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.image.ImageObserver;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
-public abstract class Node implements Selectable, Changeable, Labelable, Cloneable, Clearable {
+import de.danielsenff.imageflow.models.Model;
+import de.danielsenff.imageflow.models.ModelListener;
+
+public abstract class Node implements Selectable, Changeable, Labelable, Cloneable {
 	protected Rectangle dragging=null;
 	protected Point origin = new Point(0, 0);
 	private Dimension dimension = new Dimension(0, 0);
@@ -102,9 +113,6 @@ public abstract class Node implements Selectable, Changeable, Labelable, Cloneab
 		else dragging = null;
 	}
 
-	public abstract  void clear();
-
-
 	public void setDimension(Dimension dimension) {
 		this.dimension = dimension;
 	}
@@ -113,5 +121,21 @@ public abstract class Node implements Selectable, Changeable, Labelable, Cloneab
 	public Dimension getDimension() {
 		return dimension;
 	}
+
+	protected Object cloneNonClonableObject(Object obj) throws CloneNotSupportedException {
+		Object clobj;
+		try {
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(bos);
+			oos.writeObject(obj);
+			oos.close();
+			clobj = (new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()))).readObject();
+		} catch (Exception ex) {
+			throw new CloneNotSupportedException(ex.getMessage());
+		}
+		return clobj;
+	}
+	
+
 
 }

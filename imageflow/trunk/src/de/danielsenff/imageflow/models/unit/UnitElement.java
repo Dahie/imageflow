@@ -1,5 +1,5 @@
 package de.danielsenff.imageflow.models.unit;
-import ij.gui.GenericDialog;
+import imagej.GenericDialog;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import visualap.Node;
+import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.helper.PaintUtil;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -26,6 +27,7 @@ import de.danielsenff.imageflow.models.parameter.IntegerParameter;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.ParameterFactory;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
+import de.danielsenff.imageflow.models.parameter.TextParameter;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 
 
@@ -424,7 +426,7 @@ public class UnitElement extends AbstractUnit {
 	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
 	 */
 	public void showProperties() {
-		final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters") ;
+		final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters", ImageFlow.getApplication().getMainFrame()) ;
 		System.out.println(getHelpString());
 		gd.addMessage(getHelpString());
 //		gd.addMessage(" ");
@@ -454,7 +456,10 @@ public class UnitElement extends AbstractUnit {
 				} else if(parameter instanceof StringParameter) {
 					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
 //					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
-				} 			
+				} else if(parameter instanceof TextParameter) {
+					gd.addTextField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
+//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
+				} 				
 			}
 
 		}
@@ -799,13 +804,13 @@ public class UnitElement extends AbstractUnit {
 		for (Parameter parameter : parameters) {
 			Parameter clonedParameter;
 			if(parameter instanceof ChoiceParameter) {
-				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), parameter.getParaType(),
 						parameter.getValue(), parameter.getHelpString(), null, ((ChoiceParameter)parameter).getChoiceIndex());
 			} else if (parameter instanceof BooleanParameter){
-				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), parameter.getParaType(),
 						parameter.getValue(), parameter.getHelpString(), ((BooleanParameter)parameter).getTrueString(), 0);
 			} else {
-				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), parameter.getParaType(),
 						parameter.getValue(), parameter.getHelpString());	
 			}
 			clone.addParameter(parameter);

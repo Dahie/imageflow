@@ -48,10 +48,6 @@ public class NodeIcon implements UnitModelComponent {
 	
 	//Dimensions
 	int x, y;
-    
-//    int widthIconBg = width - 10;
-//    int heightIconBg = height - 10;
-    
 	
 	protected Color color1;
 	protected Color color2;

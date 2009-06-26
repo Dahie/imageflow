@@ -19,9 +19,10 @@ public class ParameterFactory {
 	 * @return 
 	 */
 	public static Parameter createParameter(final String displayName, 
+			final String dataTypeName,
 			Object value, 
 			String helpString) {
-		return createParameter(displayName, value, helpString, null, 0);
+		return createParameter(displayName, dataTypeName, value, helpString, null, 0);
 	}
 	
 	/**
@@ -38,6 +39,7 @@ public class ParameterFactory {
 	 * @return
 	 */
 	public static Parameter createParameter(final String displayName, 
+			final String dataTypeName,
 			final Object value,
 			final String helpString, 
 			final String boolTrueString,
@@ -46,9 +48,11 @@ public class ParameterFactory {
 		// see what parameter instance has to be created
 		if(value instanceof String) {
 			return new StringParameter(displayName, (String) value, helpString);
+		} else if(value instanceof String && dataTypeName.toLowerCase().equals("text")) {
+			return new TextParameter(displayName, (String) value, helpString);
 		} else if (value instanceof Double ) {
 			return new DoubleParameter(displayName, (Double) value, helpString);
-		} else if ( value instanceof Integer) {
+		} else if (value instanceof Integer) {
 			return new IntegerParameter(displayName, (Integer) value, helpString);
 		} else if (value instanceof Boolean && boolTrueString != null) {
 			return new BooleanParameter(displayName, (Boolean) value, boolTrueString, helpString);

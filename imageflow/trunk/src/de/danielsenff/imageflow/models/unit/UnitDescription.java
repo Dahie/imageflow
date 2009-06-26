@@ -250,6 +250,8 @@ public class UnitDescription {
 			actPara.value = valueString;
 		else if (dataTypeString.toLowerCase().equals("string")) 
 			actPara.value = valueString;
+		else if (dataTypeString.toLowerCase().equals("text")) 
+			actPara.value = valueString;
 		else if (dataTypeString.toLowerCase().equals("integer")) 
 			actPara.value = Integer.valueOf(valueString);
 		else if (dataTypeString.toLowerCase().equals("stringarray")) { 

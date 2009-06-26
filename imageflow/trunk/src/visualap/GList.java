@@ -35,7 +35,7 @@ interface Clearable {
 	public void clear();
 }
 
-public class GList<E extends Changeable&Labelable&Clearable> extends ArrayList<E> {
+public class GList<E extends Changeable&Labelable> extends ArrayList<E> {
 	private transient boolean changed=false;
     private transient HashMap<String, Object> labels = new HashMap<String, Object>();
 
@@ -60,15 +60,15 @@ public class GList<E extends Changeable&Labelable&Clearable> extends ArrayList<E
 	}
 
 	public void clear() {
-		for (E aNode : this)
-			aNode.clear();
+//		for (E aNode : this)
+//			aNode.clear();
 		super.clear();
 		labels.clear();
 		changed=true;
 	}	
 
 	public boolean remove(E aNode) {
-		aNode.clear();
+//		aNode.clear();
 		boolean result = super.remove(aNode);
 		labels.remove(aNode.getLabel());
 		if (result) changed = true;

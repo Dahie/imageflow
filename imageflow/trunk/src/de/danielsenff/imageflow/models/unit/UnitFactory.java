@@ -122,6 +122,7 @@ public class UnitFactory {
 			
 			unitElement.addParameter(
 					ParameterFactory.createParameter(para.name, 
+													para.dataTypeString,
 													para.value, 
 													para.helpString, 
 													para.trueString, 
@@ -165,8 +166,7 @@ public class UnitFactory {
 			boolean required = inputDescription.required;
 			DataType dataType = inputDescription.dataType;
 			if(dataType instanceof DataTypeFactory.Image) {
-				int imageType = inputDescription.imageType;
-				((DataTypeFactory.Image)dataType).setImageBitDepth(imageType);
+				((DataTypeFactory.Image)dataType).setImageBitDepth(inputDescription.imageType);
 			}
 			
 			Input input = new Input(dataType, unitElement, i, required);
