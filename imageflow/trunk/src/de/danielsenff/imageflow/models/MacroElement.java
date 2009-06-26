@@ -167,10 +167,6 @@ public class MacroElement {
 			
 			Output output = outputs.get(index);
 
-			System.out.println(output.getParent());
-			System.out.println(outputs.size());
-			System.out.println(output.getDataType());
-			
 			searchString = "OUTPUT_DOUBLE_" + (oDbl+1);
 			/*String paraType = input.getParaType().toLowerCase();
 			if(command.contains(searchString) && paraType.equals("double")) { 

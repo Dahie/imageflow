@@ -67,6 +67,7 @@ import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 import de.danielsenff.imageflow.tasks.ExportMacroTask;
+import de.danielsenff.imageflow.tasks.GenerateMacroTask;
 import de.danielsenff.imageflow.tasks.ImportGraphTask;
 import de.danielsenff.imageflow.tasks.LoadFlowGraphTask;
 import de.danielsenff.imageflow.tasks.RunMacroTask;
@@ -199,6 +200,7 @@ public class ImageFlowView extends FrameView {
 		fileMenu.add(getAction("importGraph"));
 		fileMenu.add(getAction("export"));
 		fileMenu.add(new JSeparator());
+		fileMenu.add(getAction("generateMacro"));
 		fileMenu.add(getAction("runMacro"));
 		if(!IJ.isMacintosh()) {
 			fileMenu.add(new JSeparator());
@@ -551,6 +553,13 @@ public class ImageFlowView extends FrameView {
         return new RunMacroTask(this.getApplication(), graphController, this.showlog);
     }
 
+    /**
+	 * Converts the current workflow into a macro and displays it.
+	 * @return
+	 */
+    @Action public GenerateMacroTask generateMacro() {
+        return new GenerateMacroTask(this.getApplication(), graphController);
+    }
 	
 	
 	/**

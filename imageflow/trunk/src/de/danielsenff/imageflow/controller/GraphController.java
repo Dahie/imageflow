@@ -54,45 +54,6 @@ public class GraphController{
 		this.selections = new SelectionList();
 	}
 
-
-	/**
-	 * Starts an imagej instance and executes the macro.
-	 * @param macro
-	 * @param showLog
-	 */
-	public void runImageJMacro(final String macro, final boolean showLog) {
-		ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
-		if(showLog)
-			IJ.log(macro);
-
-//		imagej.setVisible(false);
-		IJ.runMacro(macro, "");
-		
-		/* beginning for new functions, but not today, daniel */
-		/*int[] imageIDs = WindowManager.getIDList();
-		for (int i = 0; i < WindowManager.getImageCount(); i++) {
-			ImagePlus image = WindowManager.getImage(imageIDs[i]);
-			String imagetitle = image.getTitle(); 
-			System.out.println(imagetitle);
-			
-			if(imagetitle.contains("-"))
-				imagetitle.substring(0, imagetitle.indexOf('-'));
-				
-			String[] titleStrings = imagetitle.split("_");
-			int unitID = Integer.valueOf(titleStrings[1]);
-			int outputID = Integer.valueOf(titleStrings[3]);;			
-			
-			if(nodes.getUnit(unitID) instanceof UnitElement) {
-				UnitElement unit = (UnitElement) nodes.getUnit(unitID);
-				unit.setIcon(image.getImage().getScaledInstance(48, 48, Image.SCALE_FAST));
-			}
-			
-			System.out.println("unit "+unitID+ " and output "+ outputID);
-		}*/
-		
-	}
-
-
 	/**
 	 * @return the unitElements
 	 */

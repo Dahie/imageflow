@@ -159,11 +159,7 @@ public class MacroFlowRunner {
 				}
 			}
 		}
-
-
-
-
-
+		
 		ConnectionList connections = macroUnitList.getConnections();
 		if(!connections.isEmpty()) {
 			// wrong number if units are discarded, number as you can see in the workflow, but not howmany are used internally

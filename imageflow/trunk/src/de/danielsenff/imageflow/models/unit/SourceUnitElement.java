@@ -168,7 +168,6 @@ public class SourceUnitElement extends UnitElement {
 	public int getImageType() {
 		final String path = getFilePath();
 		if(new File(path).exists()) {
-			System.out.println("hey, ho letzs get type: " + this);
 			ImagePlus imp = IJ.openImage(path);
 			if(imp != null) {
 				final int type = imp.getType();
