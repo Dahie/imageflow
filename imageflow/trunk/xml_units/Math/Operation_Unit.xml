@@ -5,7 +5,7 @@
 <General>
   <UnitName>Simple Equation</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>OUTPUT_INTEGER_1 = INPUT_INTEGER_1 PARA_STRING_1 INPUT_INTEGER_2</ImageJSyntax> 
+  <ImageJSyntax>OUTPUT_INTEGER_1 = INPUT_INTEGER_1 PARA_STRING_1 INPUT_INTEGER_2;</ImageJSyntax> 
   <Color>0x9cba92</Color>
   <HelpString>Equation</HelpString>
 </General>
