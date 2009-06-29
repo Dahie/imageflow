@@ -58,7 +58,7 @@ public class MacroTests extends TestCase {
 		MacroElement macroElement = new MacroElement(exampleIntSyntax);
 		
 		ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-		parameters.add(ParameterFactory.createParameter("Integer", new Integer(11), "testinteger"));
+		parameters.add(ParameterFactory.createParameter("Integer","Integer", new Integer(11), "testinteger"));
 		
 		assertTrue(macroElement.getImageJSyntax().equals(exampleIntSyntax));
 		assertTrue(macroElement.getCommandSyntax().equals(exampleIntSyntax));
@@ -81,7 +81,7 @@ public class MacroTests extends TestCase {
 		MacroElement macroElement = new MacroElement(exampleIntSyntax);
 		
 		ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-		parameters.add(ParameterFactory.createParameter("String", new String("Hallo"), "test"));
+		parameters.add(ParameterFactory.createParameter("String", "String", new String("Hallo"), "test"));
 		
 		assertTrue(macroElement.getImageJSyntax().equals(exampleIntSyntax));
 		assertTrue(macroElement.getCommandSyntax().equals(exampleIntSyntax));
@@ -104,7 +104,7 @@ public class MacroTests extends TestCase {
 		MacroElement macroElement = new MacroElement(exampleIntSyntax);
 		
 		ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-		parameters.add(ParameterFactory.createParameter("Double", new Double("3.141596"), "test"));
+		parameters.add(ParameterFactory.createParameter("Double", "Double", new Double("3.141596"), "test"));
 		
 		assertTrue(macroElement.getImageJSyntax().equals(exampleIntSyntax));
 		assertTrue(macroElement.getCommandSyntax().equals(exampleIntSyntax));

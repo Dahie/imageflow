@@ -253,6 +253,7 @@ public class UnitFactoryExt extends UnitFactory {
 		// setup of the first parameter
 		unit.addParameter(
 				ParameterFactory.createParameter("Input image file",	// parameter description
+					"String",
 					path, // parameter value
 					"The source unit needs the path of an image file." // help text for this parameter
 					));
@@ -290,9 +291,12 @@ public class UnitFactoryExt extends UnitFactory {
 				"newImage(\"Background\", \"8-bit White\", PARA_INTEGER_1, PARA_INTEGER_2, 1);\n"); 
 		// setup of the first parameter
 		unit.addParameter(
-				ParameterFactory.createParameter("Background width", dimension.width, "Width of the background image"));
+				ParameterFactory.createParameter("Background width", 
+						"Integer",
+						dimension.width, "Width of the background image"));
 		unit.addParameter(
-				ParameterFactory.createParameter("Background height", dimension.height, "Height of the background image"));
+				ParameterFactory.createParameter("Background height", 
+						"Integer", dimension.height, "Height of the background image"));
 		
 		// setup of the output of the (source) unit 0
 		Output output = new Output(DataTypeFactory.createImage(-1), unit, 1);
@@ -326,7 +330,9 @@ public class UnitFactoryExt extends UnitFactory {
 		UnitElement unit = new UnitElement(origin, "Gaussian Blur", "run(\"Gaussian Blur...\", \"sigma=PARA_DOUBLE_1\");\n");
 		// setup of the parameter
 		unit.addParameter(
-				ParameterFactory.createParameter("Radius", 4.0, "Radius of the gaussian kernel"));
+				ParameterFactory.createParameter("Radius", 
+						"Double",
+						4.0, "Radius of the gaussian kernel"));
 		// attention, 4.0 as value 4 will be cast as integer and will lead to ClassCastExceptions
 		
 		// setup of the first input of unit 2

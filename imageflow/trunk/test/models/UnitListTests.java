@@ -23,11 +23,11 @@ public class UnitListTests extends TestCase {
 	public void testAreAllInputsConnected() {
 
 		// test output-only
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		
 		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
 		ConnectionList connList = new ConnectionList();
@@ -53,11 +53,11 @@ public class UnitListTests extends TestCase {
 
 	public void testHasDisplayUnit() {
 		// test output-only
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		
 		// test input/output case
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		
 		// adding to UnitList
 		
@@ -80,8 +80,8 @@ public class UnitListTests extends TestCase {
 		
 		assertTrue(units.isEmpty());
 		
-		UnitElement filterUnit1 = UnitFactory.createAddNoiseUnit();
-		UnitElement filterUnit2 = UnitFactory.createAddNoiseUnit();
+		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement filterUnit2 = UnitFactoryExt.createAddNoiseUnit();
 		
 		units.add(filterUnit1);
 		units.add(filterUnit2);

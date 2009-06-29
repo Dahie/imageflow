@@ -79,7 +79,7 @@ public class DataTypeTests extends TestCase {
 		assertTrue("all to 32", input1.isImageBitDepthCompatible(output2.getImageBitDepth()));
 		assertTrue("32 to all", input3.isImageBitDepthCompatible(output1.getImageBitDepth()));*/
 		
-		assertTrue("both do 32", output1.isImageBitDepthCompatible(input1.getImageBitDepth()));
+		assertTrue("both do 32", output1.isCompatible(input1));
 		// ok, technically ALL to 32 does work, but since the input tests for a concrete type, 
 		// and not for a could-be, this is false
 		assertFalse("All to 32", output2.isCompatible(input1));

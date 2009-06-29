@@ -12,6 +12,7 @@ import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.ParameterFactory;
 import de.danielsenff.imageflow.models.unit.SourceUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -56,12 +57,12 @@ public class UnitElementTests extends TestCase {
 		UnitElement unit = new UnitElement("name", "");
 
 		//test usual adding
-		boolean addFirst = unit.addParameter(ParameterFactory.createParameter("integer", 1, "ein int"));
+		boolean addFirst = unit.addParameter(ParameterFactory.createParameter("integer", "integer",1, "ein int"));
 		assertTrue("add first", addFirst);
 
 
 		//add one more than actually allowed
-		boolean addSecond = unit.addParameter(ParameterFactory.createParameter("integer", 1, "ein int"));
+		boolean addSecond = unit.addParameter(ParameterFactory.createParameter("integer", "integer",1, "ein int"));
 		assertTrue("add second", addSecond);
 	}
 
@@ -97,12 +98,13 @@ public class UnitElementTests extends TestCase {
 		UnitElement unit = new UnitElement("name", "");
 
 		//test usual adding
-		boolean addFirst = unit.addInput("input", "i", 4, false);
+		Input input = new Input("input", "i", DataTypeFactory.createInteger(), unit, 4, true, false);
+		boolean addFirst = unit.addInput(input);
 		assertTrue("add first", addFirst);
 		assertEquals(1, unit.getInputsCount());
 
 		//add one more
-		Input scndInput = new Input(unit, 1);
+		Input scndInput = new Input(DataTypeFactory.createInteger(), unit, 1);
 		boolean addSecond = unit.addInput(scndInput);
 		assertTrue("add second", addSecond);
 		assertEquals(2, unit.getInputsCount());
@@ -113,12 +115,13 @@ public class UnitElementTests extends TestCase {
 		UnitElement unit = new UnitElement("name", "");
 
 		//test usual adding
-		boolean addFirst = unit.addOutput("Output", "i", 4, false);
+		Output output = new Output("Output", "i", DataTypeFactory.createInteger(),unit, 4);
+		boolean addFirst = unit.addOutput(output);
 		assertTrue("add first", addFirst);
 		assertEquals(1, unit.getOutputsCount());
 
 		//add one more
-		Output scndOutput = new Output(unit, 1);
+		Output scndOutput = new Output(DataTypeFactory.createInteger(), unit, 1);
 		boolean addSecond = unit.addOutput(scndOutput);
 		assertTrue("add second", addSecond);
 		assertEquals(2, unit.getOutputsCount());
@@ -130,7 +133,7 @@ public class UnitElementTests extends TestCase {
 	
 
 	public void testHasOutputs() {
-		UnitElement sink = UnitFactory.createHistogramUnit(new Point(0,0));
+		UnitElement sink = UnitFactoryExt.createHistogramUnit(new Point(0,0));
 		assertTrue("is a sink", sink.getUnitType() == Type.SINK);
 		assertFalse(sink.hasOutputsConnected());
 		assertFalse(sink.hasOutputs());
@@ -198,7 +201,7 @@ public class UnitElementTests extends TestCase {
 	public void testSetMark() {
 
 		// test output-only
-		UnitElement sourceUnit = UnitFactory.createBackgroundUnit(new Dimension(12, 12));
+		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 
 		// test input/output case
 		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
