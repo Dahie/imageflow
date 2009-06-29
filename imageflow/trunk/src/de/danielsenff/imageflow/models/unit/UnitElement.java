@@ -49,7 +49,10 @@ import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
  */
 public class UnitElement extends AbstractUnit {
 
-	final private static int PIN_TOLERANCE = 18;
+	/**
+	 * Pixel radius of tolerance round the pins  
+	 */
+	private int pinTolerance = 18;
 
 	/**
 	 * name of this unit, this is not displayed, Label is displayed
@@ -119,9 +122,6 @@ public class UnitElement extends AbstractUnit {
 	/**
 	 * @param unitName
 	 * @param unitsImageJSyntax
-	 * @param numInputs
-	 * @param numOutputs
-	 * @param numParameters
 	 */
 	public UnitElement  (
 			final String unitName,
@@ -136,9 +136,6 @@ public class UnitElement extends AbstractUnit {
 	 * @param origin
 	 * @param unitName
 	 * @param unitsImageJSyntax
-	 * @param numInputs
-	 * @param numOutputs
-	 * @param numParameters
 	 */
 	public UnitElement  (
 			final Point origin,
@@ -154,9 +151,6 @@ public class UnitElement extends AbstractUnit {
 	 * @param origin
 	 * @param unitName
 	 * @param macroElement
-	 * @param numInputs
-	 * @param numOutputs
-	 * @param numParameters
 	 */
 	public UnitElement  (
 			final Point origin,
@@ -170,9 +164,6 @@ public class UnitElement extends AbstractUnit {
 
 	/**
 	 * @param unitName
-	 * @param numInputs
-	 * @param numOutputs
-	 * @param numParameters
 	 */
 	private void init(final String unitName) {
 
@@ -185,17 +176,28 @@ public class UnitElement extends AbstractUnit {
 
 		this.unitComponentIcon= new NodeIcon(this);
 		this.unitIcon = unitComponentIcon.getImage();
+
 		setCompontentSize(Size.BIG);
 	}
-
-	
-	
 	
 	/*
 	 * Outputs
 	 */
 	
-	
+	/**
+	 * Gets the pinTolerance of this {@link UnitElement}
+	 */
+	public int getPinTolerance() {
+		return pinTolerance;
+	}
+
+	/**
+	 * Sets the pinTolerance of this {@link UnitElement}
+	 * @param pinTolerance Pixel radius of PinTolerance
+	 */
+	public void setPinTolerance(int pinTolerance) {
+		this.pinTolerance = pinTolerance;
+	}
 	
 	/**
 	 * Adds an Output-Object to the unit.
@@ -503,12 +505,7 @@ public class UnitElement extends AbstractUnit {
 		return !parameters.isEmpty();
 	}
 	
-	
-	
-	
-	
-	
-	
+		
 	/*
 	 * Displayable
 	 */
@@ -559,13 +556,6 @@ public class UnitElement extends AbstractUnit {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-
 	/**
 	 * Returns the what type this is. 
 	 * SOURCE - only {@link Output}
@@ -650,22 +640,22 @@ public class UnitElement extends AbstractUnit {
 	 */
 	@Override
 	public Object contains(final int x, final int y) {
-		if ((x >= origin.x - PIN_TOLERANCE)
-				&&(x < origin.x + PIN_TOLERANCE))	{
+		if ((x >= origin.x - pinTolerance)
+				&&(x < origin.x + pinTolerance))	{
 			int inputsMaxCount = getInputsCount();
 			for (int i = 0; i < inputsMaxCount; i++) {
 				int lower_y = PaintUtil.alignY(inputsMaxCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
-				if ((y >= lower_y)&&(y <= lower_y + PIN_TOLERANCE*2)) {
+				if ((y >= lower_y)&&(y <= lower_y + pinTolerance*2)) {
 					return getInput(i);
 				}
 			}
 		}
-		if ((x >= origin.x + getDimension().width - PIN_TOLERANCE)
-				&&(x < origin.x + getDimension().width + PIN_TOLERANCE)) {
+		if ((x >= origin.x + getDimension().width - pinTolerance)
+				&&(x < origin.x + getDimension().width + pinTolerance)) {
 			int outputsCount = getOutputsCount();
 			for (int i = 0; i < outputsCount; i++) {
 				int lower_y = PaintUtil.alignY(outputsCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
-				if ((y >= lower_y)&&(y <= lower_y + PIN_TOLERANCE*2)) {
+				if ((y >= lower_y)&&(y <= lower_y + pinTolerance*2)) {
 					return getOutput(i);
 				}
 			}
@@ -880,11 +870,6 @@ public class UnitElement extends AbstractUnit {
 		return true;
 	}
 
-
-	
-
-
-	
 
 	/**
 	 * Returns the base color of the units representation.

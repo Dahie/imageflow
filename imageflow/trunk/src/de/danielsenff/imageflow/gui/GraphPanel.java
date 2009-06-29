@@ -178,7 +178,11 @@ public class GraphPanel extends GPanel {
 				final Point origin = drawEdge.getLocation();
 				//			g2.setStroke(new BasicStroke(1f));
 				for (final Node node : nodeL) {
-					final int margin = 15;
+					int margin = 18;
+					// get units margin, could be lesser than 18 if unit has many pins
+					if (node instanceof UnitElement) {
+						margin = ((UnitElement) node).getPinTolerance();
+					}
 					// check if mouse is within this dimensions of a node
 					if(isWithin2DRange(mouse, node.getOrigin(), node.getDimension(), margin)) {
 

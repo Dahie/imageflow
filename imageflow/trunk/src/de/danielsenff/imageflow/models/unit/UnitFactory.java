@@ -92,6 +92,8 @@ public class UnitFactory {
 		// setup of the output(s)
 		addOutputs(unitDescription,unitElement);
 		
+		// setup the PinTolerance
+		setPinTolerance(unitElement);
 		
 		//special cases
 		if(unitElement instanceof BackgroundUnitElement) {
@@ -114,6 +116,19 @@ public class UnitFactory {
 		return unitElement;
 	}
 
+	/**
+	 * sets pinTolerance accordings to number of inputs and outputs
+	 * @param unitElement current {@link UnitElement}, which contains the number of inputs and outputs
+	 */
+	private static void setPinTolerance(UnitElement unitElement) {
+		// get maxiumum of pins and adjust PIN_TOLERANCE to number of pins
+		int maxPins = Math.max(unitElement.inputs.size(), unitElement.outputs.size()); 
+		if (maxPins > 3) {
+			int pinTolerance = (100 / (2*maxPins)) - 2;
+			unitElement.setPinTolerance(pinTolerance);
+		}
+	}
+	
 	private static void addParameters(final UnitDescription unitDescription,
 			UnitElement unitElement) {
 		int numParas = unitDescription.numParas;
