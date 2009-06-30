@@ -10,13 +10,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
 
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
+import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.connection.ProxyInput;
+import de.danielsenff.imageflow.models.connection.ProxyOutput;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.CommentNode;
+import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
@@ -104,6 +112,60 @@ public class GraphController{
 	public boolean removeNode(final Node node) {
 		return nodes.remove(node);
 	}
+	
+	/**
+	 * Ungroup the contents of a GroupUnit
+	 * @param group
+	 */
+	public void ungroup(final GroupUnitElement group) {
+		getUnitElements().addAll(group.getUnits());
+		
+		/*
+		 * reconnect inputs
+		 */
+		for (Input input : group.getInputs()) {
+			ProxyInput pInput = (ProxyInput)input;
+			Output connectedOutput = pInput.getFromOutput();
+			Input originalInput = pInput.getEmbeddedInput();
+			
+			Connection connection = new Connection(connectedOutput, originalInput);
+			getConnections().add(connection);
+		}
+		
+		/*
+		 *  reconnect outputs
+		 */
+		Collection<Connection> tmpConn = new Vector<Connection>();
+		for (Output output : group.getOutputs()) {
+			ProxyOutput pOutput = (ProxyOutput)output;
+			Output originalOutput = pOutput.getEmbeddedOutput();
+			if(originalOutput.getDataType() instanceof DataTypeFactory.Image) {
+				((DataTypeFactory.Image)originalOutput.getDataType()).setParentUnitElement(originalOutput.getParent());
+			}
+			
+			
+			for (Connection	connection : pOutput.getConnections()) {
+				Connection newConn = new Connection(originalOutput, connection.getInput());
+				tmpConn.add(newConn);
+			}
+		}
+		// write connections into actual connectionlist
+		for (Connection connection : tmpConn) {
+			getConnections().add(connection);	
+		}
+		
+		/*
+		 * reconnect connection within the group
+		 */
+		
+		for (Connection connection : group.getInternalConnections()) {
+			getConnections().add(connection);
+		}
+		
+		
+		removeNode(group);
+	}
+	
 
 	/**
 	 * Convenience method for calling ConnectionList.write() to save the workflow

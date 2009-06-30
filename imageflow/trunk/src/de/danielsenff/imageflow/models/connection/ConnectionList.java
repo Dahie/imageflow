@@ -99,8 +99,6 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 	 * @return
 	 */
 	public boolean add(final Connection connection) {
-//		final Input input = ((UnitElement)connection.getToUnit()).getInput(connection.to.getIndex()-1);
-//		final Output output = ((UnitElement)connection.getFromUnit()).getOutput(connection.from.getIndex()-1);
 		final Input input = connection.getInput();
 		final Output output = connection.getOutput();
 		
@@ -130,7 +128,6 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 			// edges is connected with this input?
 			if(conn.isConnected(input)) {
 				remove(conn);
-				System.out.println("old connection removed");
 			}
 		}
 		

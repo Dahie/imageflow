@@ -246,7 +246,7 @@ public class ImageFlowView extends FrameView {
 		editMenu.add(chkBoxCollapseIcon);
 
 		editMenu.add(getAction("showUnitParameters"));
-
+		editMenu.add(getAction("group"));
 		
 		
 		
@@ -258,8 +258,6 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(getAction("debugPrintNodes"));
 		debugMenu.add(getAction("debugPrintNodeDetails"));
 		debugMenu.add(getAction("debugPrintEdges"));
-		debugMenu.add(getAction("group"));
-		debugMenu.add(getAction("degroup"));
 		debugMenu.add(new JSeparator());
 		debugMenu.add(getAction("exampleFlow1"));
 		debugMenu.add(getAction("exampleFlow2"));
@@ -595,10 +593,17 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void group() {
-		UnitElement group = new GroupUnitElement(new Point(34, 250), "Group", selections, graphController.getUnitElements());
-		graphController.getUnitElements().add(group);
-		selections.clear();
-		selections.add(group);
+		
+		if(selections.size() == 1
+				&& selections.get(0) instanceof GroupUnitElement) {
+			GroupUnitElement group = (GroupUnitElement) selections.get(0);
+			graphController.ungroup(group);
+		} else {
+			UnitElement group = new GroupUnitElement(new Point(34, 250), "Group", selections, graphController.getUnitElements());
+			graphController.getUnitElements().add(group);
+			selections.clear();
+			selections.add(group);	
+		}
 	}
 	
 	/**
@@ -609,52 +614,7 @@ public class ImageFlowView extends FrameView {
 		if(selections.size() == 1
 				&& selections.get(0) instanceof GroupUnitElement) {
 			GroupUnitElement group = (GroupUnitElement) selections.get(0);
-			graphController.getUnitElements().addAll(group.getUnits());
-			
-			/*
-			 * reconnect inputs
-			 */
-			for (Input input : group.getInputs()) {
-				ProxyInput pInput = (ProxyInput)input;
-				Output connectedOutput = pInput.getFromOutput();
-				Input originalInput = pInput.getEmbeddedInput();
-				
-				Connection connection = new Connection(connectedOutput, originalInput);
-				graphController.getConnections().add(connection);
-			}
-			
-			/*
-			 *  reconnect outputs
-			 */
-			Collection<Connection> tmpConn = new Vector<Connection>();
-			for (Output output : group.getOutputs()) {
-				ProxyOutput pOutput = (ProxyOutput)output;
-				Output originalOutput = pOutput.getEmbeddedOutput();
-				if(originalOutput.getDataType() instanceof DataTypeFactory.Image) {
-					((DataTypeFactory.Image)originalOutput.getDataType()).setParentUnitElement(originalOutput.getParent());
-				}
-				
-				
-				for (Connection	connection : pOutput.getConnections()) {
-					Connection newConn = new Connection(originalOutput, connection.getInput());
-					tmpConn.add(newConn);
-				}
-			}
-			// write connections into actual connectionlist
-			for (Connection connection : tmpConn) {
-				graphController.getConnections().add(connection);	
-			}
-			
-			/*
-			 * reconnect connection within the group
-			 */
-			
-			for (Connection connection : group.getInternalConnections()) {
-				graphController.getConnections().add(connection);
-			}
-			
-			
-			graphController.removeNode(group);
+			graphController.ungroup(group);
 		}
 	}
 	
