@@ -14,6 +14,8 @@ public class ParameterFactory {
 	/**
 	 * Creates the right UnitElement based on the given parameters.
 	 * @param displayName 
+	 * @param dataTypeName 
+	 * @param value 
 	 * @param parameter 
 	 * @param helpString 
 	 * @return 

@@ -10,7 +10,10 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  *
  */
 public class Connection {
-	public int id;		// the id of this connection
+	/**
+	 * the id of this connection
+	 */
+	public int id; 
 	
 	protected Pin from, to;
 	
@@ -52,7 +55,7 @@ public class Connection {
 	 * @param unitElements
 	 */
 	public void connect() {
-		((Output)this.from).connectTo(to);
+		((Output)this.from).addConnection(this);
 		((Input)this.to).connectTo(from);
 	}
 	
@@ -175,7 +178,7 @@ public class Connection {
 	 * @param unit
 	 * @return
 	 */
-	public boolean isConnectedToUnit(final UnitElement unit) {
+	public boolean isConnectedToUnit(final Node unit) {
 		return (getFromUnit().equals(unit)) || (getToUnit().equals(unit));
 	}
 	
@@ -192,7 +195,8 @@ public class Connection {
 	}
 
 	/**
-	 * 
+	 * Checks if this Connection is connected to a from- and a to-pin.
+	 * Technically, if the connection isn't true, this connection object is kinda zombie
 	 * @return
 	 */
 	public boolean isConnected() {
@@ -200,7 +204,6 @@ public class Connection {
 		Input to = (Input)this.to;
 		
 		return (from.isConnectedWith(to) && to.isConnectedWith(from)); 
-		// technically, if the connection isn true, this connection object is kinda zombie
 	}
 	
 	public boolean causesLoop() {

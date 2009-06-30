@@ -487,6 +487,10 @@ public class GraphPanel extends GPanel {
 		super.nodeL = units2;
 	}
 
+	/**
+	 * If true, a grid is drawn on the workspace
+	 * @return
+	 */
 	public boolean isDrawGrid() {
 		return drawGrid;
 	}
@@ -495,6 +499,7 @@ public class GraphPanel extends GPanel {
 		this.drawGrid = drawGrid;
 	}
 	
+	@Override
 	public void properties(final Node node) {
 		if (node instanceof CommentNode) {
 			final String inputValue = JOptionPane.showInputDialog("Edit text:",((CommentNode)node).getText()); 

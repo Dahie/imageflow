@@ -57,7 +57,11 @@ public abstract class Pin implements Connectable {
 	}
 
 
-	public Node getParent () {
+	/**
+	 * Node to which this Pin is attached.
+	 * @return
+	 */
+	public Node getParent() {
 		return parent;
 	}
 
@@ -69,10 +73,18 @@ public abstract class Pin implements Connectable {
 		return index;
 	}
 
+	/**
+	 * Name of this Pin.
+	 * @return
+	 */
 	public String getName () {
 		return parent.getLabel()+"."+type+index;
 	}
 
+	/**
+	 * {@link DataType} this Pin is permitting.
+	 * @return
+	 */
 	public DataType getDataType() {
 		return dataType;
 	}
@@ -84,6 +96,9 @@ public abstract class Pin implements Connectable {
 	 * Markable :)
 	 */
 	
+	/**
+	 * @return
+	 */
 	public int getMark () {
 		return mark;
 	}
@@ -102,7 +117,7 @@ public abstract class Pin implements Connectable {
 	}
 
 	/**
-	 * Returns true, if this Output has not been marked.
+	 * Returns true, if this Pin has not been marked.
 	 * The Mark is not 0.
 	 * @return
 	 */
@@ -111,6 +126,10 @@ public abstract class Pin implements Connectable {
 	}
 
 
+	/**
+	 * Coordinates of this pin on the Panel.
+	 * @return
+	 */
 	public abstract Point getLocation();
 
 	/**

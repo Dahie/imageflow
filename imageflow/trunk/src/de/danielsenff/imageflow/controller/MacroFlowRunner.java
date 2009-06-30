@@ -1,10 +1,8 @@
 package de.danielsenff.imageflow.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
@@ -14,6 +12,7 @@ import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.unit.CommentNode;
+import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.SourceUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
@@ -222,6 +221,26 @@ public class MacroFlowRunner {
 		// temporary list, discarded after this method call
 		UnitList orderedList = new UnitList();
 
+		// the unitElements can contain grouped units
+		// those need to be destroyed and reintergrated into 
+		// the regular workflow
+		
+		/*Collection<Node> tmpColU = new Vector<Node>();
+		Collection<Connection> tmpColC = new Vector<Connection>();
+		for (Node node : unitElements) {
+			if(node instanceof GroupUnitElement) {
+				GroupUnitElement group = (GroupUnitElement) node;
+				tmpColU.addAll(group.getUnits());
+				tmpColC.addAll(group.getOriginalConnections());
+				unitElements.unbindUnit(group);
+			}
+		}
+		unitElements.addAll(tmpColU);
+		unitElements.getConnections().addAll(tmpColC);
+		*/
+		
+		
+		
 		// reset all marks
 		unitElements.unmarkUnits();
 

@@ -32,34 +32,38 @@ public class RunMacroTask extends GenerateMacroTask {
 	protected String doInBackground() throws InterruptedException {
 		
 		String macro = super.doInBackground(); 
+		// if the graph checks turn out false, the resulting macro will be just a null-pointer
+		if(macro != null) {
 		
-		ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
-		if(this.showlog)
-			IJ.log(macro);
+			ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
+			if(this.showlog)
+				IJ.log(macro);
 
-		IJ.runMacro(macro, "");
-		
-		/* beginning for new functions, but not today, daniel */
-		/*int[] imageIDs = WindowManager.getIDList();
-		for (int i = 0; i < WindowManager.getImageCount(); i++) {
-			ImagePlus image = WindowManager.getImage(imageIDs[i]);
-			String imagetitle = image.getTitle(); 
-			System.out.println(imagetitle);
+			IJ.runMacro(macro, "");
 			
-			if(imagetitle.contains("-"))
-				imagetitle.substring(0, imagetitle.indexOf('-'));
+			/* beginning for new functions, but not today, daniel */
+			/*int[] imageIDs = WindowManager.getIDList();
+			for (int i = 0; i < WindowManager.getImageCount(); i++) {
+				ImagePlus image = WindowManager.getImage(imageIDs[i]);
+				String imagetitle = image.getTitle(); 
+				System.out.println(imagetitle);
 				
-			String[] titleStrings = imagetitle.split("_");
-			int unitID = Integer.valueOf(titleStrings[1]);
-			int outputID = Integer.valueOf(titleStrings[3]);;			
-			
-			if(nodes.getUnit(unitID) instanceof UnitElement) {
-				UnitElement unit = (UnitElement) nodes.getUnit(unitID);
-				unit.setIcon(image.getImage().getScaledInstance(48, 48, Image.SCALE_FAST));
-			}
-			
-			System.out.println("unit "+unitID+ " and output "+ outputID);
-		}*/
+				if(imagetitle.contains("-"))
+					imagetitle.substring(0, imagetitle.indexOf('-'));
+					
+				String[] titleStrings = imagetitle.split("_");
+				int unitID = Integer.valueOf(titleStrings[1]);
+				int outputID = Integer.valueOf(titleStrings[3]);;			
+				
+				if(nodes.getUnit(unitID) instanceof UnitElement) {
+					UnitElement unit = (UnitElement) nodes.getUnit(unitID);
+					unit.setIcon(image.getImage().getScaledInstance(48, 48, Image.SCALE_FAST));
+				}
+				
+				System.out.println("unit "+unitID+ " and output "+ outputID);
+			}*/
+		}
+		
 		
 		return macro;
 	}

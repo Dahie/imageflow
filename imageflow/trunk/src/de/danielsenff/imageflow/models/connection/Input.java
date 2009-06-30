@@ -66,6 +66,7 @@ public class Input extends Pin {
 	 */
 	protected Output from;
 	
+	protected Connection connection;
 	
 	/**
 	 * @param fromUnit
@@ -128,6 +129,10 @@ public class Input extends Pin {
 		this.from = (Output)fromOutput;
 		this.fromUnit = (UnitElement) fromOutput.getParent();
 		generateID(fromUnit.getUnitID(), fromOutput.getIndex());
+	}
+	
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 
 	/**

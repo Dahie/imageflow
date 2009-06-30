@@ -24,6 +24,8 @@ todo:
 package visualap;
 
 
+import ij.IJ;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -176,12 +178,14 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			if (sel instanceof Node) {
 				pick = new Point(x,y);
 				if (!selection.contains(aNode)) {
-					if(!e.isControlDown()) {
+					if(!e.isControlDown()
+							|| e.isMetaDown() && IJ.isMacintosh()) {
 						selection.clear();
 					}
 					selection.add(aNode);
 				} else {
-					if(e.isControlDown())
+					if(e.isControlDown()
+							|| e.isMetaDown() && IJ.isMacintosh())
 						selection.remove(aNode);
 				} 
 				

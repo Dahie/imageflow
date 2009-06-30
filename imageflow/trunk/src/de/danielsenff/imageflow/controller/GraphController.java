@@ -98,7 +98,7 @@ public class GraphController{
 
 	/**
 	 * Removes the {@link UnitElement} from the unitList and its Connections.
-	 * @param unit
+	 * @param node 
 	 * @return
 	 */
 	public boolean removeNode(final Node node) {

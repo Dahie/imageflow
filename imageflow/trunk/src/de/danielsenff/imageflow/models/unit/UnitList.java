@@ -396,7 +396,12 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		return super.add(o);
 	}
 
-
+	@Override
+	public boolean addAll(java.util.Collection<? extends Node> c) {
+		notifyModelListeners();
+		return super.addAll(c);
+	};
+	
 	@Override
 	public Node remove(int index) {
 		notifyModelListeners();
@@ -633,6 +638,10 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		notifyModelListeners();
 	}
 
+	/**
+	 * Number of units in this List.
+	 * @return
+	 */
 	public int getSize() {
 		return super.size();
 	}

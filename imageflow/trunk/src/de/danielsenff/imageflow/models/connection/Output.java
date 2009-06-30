@@ -33,11 +33,6 @@ public class Output extends Pin {
 	protected String shortDisplayName = "O";
 
 	/**
-	 * the int value indicates the type of the generated image
-	 */
-//	protected int imageType; 
-
-	/**
 	 * the title of the image generated from this output
 	 */
 	protected String outputTitle; 
@@ -49,14 +44,17 @@ public class Output extends Pin {
 	 * indicates that this output should be shown
 	 */
 	protected boolean doDisplay;
-	/**
-	 * Input to which this Output is connected
-	 */
-	protected Input to;
 	
 	Vector<Connection> connections;
 	
 	
+	/**
+	 * @param name
+	 * @param shortName
+	 * @param dataType
+	 * @param nodeParent
+	 * @param outputNumber
+	 */
 	public Output(
 			final String name,
 			final String shortName,
@@ -68,6 +66,7 @@ public class Output extends Pin {
 	}
 	
 	/**
+	 * @param dataType 
 	 * @param nodeParent
 	 * @param outputNumber
 	 */
@@ -98,7 +97,7 @@ public class Output extends Pin {
 	 * @param toUnit
 	 * @param toOutputNumber 
 	 */
-	public void connectTo(final UnitElement toUnit, final int toInputNumber) {
+	/*public void connectTo(final UnitElement toUnit, final int toInputNumber) {
 		connectTo(toUnit.getInput(toInputNumber-1));
 	}
 	
@@ -106,12 +105,20 @@ public class Output extends Pin {
 		this.to = (Input)toInput;
 		Connection conn = new Connection(this, this.to);
 		addConnection(conn);
-	}
+	}*/
 	
-	public void addConnection(Connection conn) {
+	/**
+	 * Adds a new {@link Connection} to this Output. 
+	 * @param conn 
+	 */
+	public void addConnection(final Connection conn) {
 		this.connections.add(conn);
 	}
 
+	/**
+	 * Returns the {@link Connection} of this output.
+	 * @return
+	 */
 	public Collection<Connection> getConnections() {
 		return this.connections;
 	}
@@ -183,12 +190,13 @@ public class Output extends Pin {
 
 	@Override
 	public String toString() {
-		return super.toString()+"."+index;
+		return super.toString()+" Unit:"+getParent()+"."+index;
 	}
 	
 	/* (non-Javadoc)
 	 * @see graph.Pin#getLocation()
 	 */
+	@Override
 	public Point getLocation() {
 		int height = parent.getDimension().height;
 		int nump = ((UnitElement) parent).getOutputsCount();

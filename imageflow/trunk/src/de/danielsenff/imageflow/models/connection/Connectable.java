@@ -17,14 +17,14 @@ public interface Connectable {
 	 * @param unit 
 	 * @param pinNumber 
 	 */
-	public void connectTo(final UnitElement unit, final int pinNumber);
+//	public void connectTo(final UnitElement unit, final int pinNumber);
 	
 	/**
 	 * Connects to this {@link UnitElement} and the given {@link Pin}.
 	 * @param unit 
 	 * @param pin 
 	 */
-	public void connectTo(final Pin pin);
+//	public void connectTo(final Pin pin);
 	
 	/**
 	 * Returns whether or not this Input is connected.

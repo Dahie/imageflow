@@ -6,13 +6,16 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.Point;
 import java.awt.ScrollPane;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
@@ -60,8 +63,11 @@ import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.connection.ProxyInput;
+import de.danielsenff.imageflow.models.connection.ProxyOutput;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.Parameter;
+import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
@@ -253,6 +259,7 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(getAction("debugPrintNodeDetails"));
 		debugMenu.add(getAction("debugPrintEdges"));
 		debugMenu.add(getAction("group"));
+		debugMenu.add(getAction("degroup"));
 		debugMenu.add(new JSeparator());
 		debugMenu.add(getAction("exampleFlow1"));
 		debugMenu.add(getAction("exampleFlow2"));
@@ -583,14 +590,74 @@ public class ImageFlowView extends FrameView {
 //	    return task;
 	}
 	
+	/**
+	 * A number of units are collapsed into one group-unit.
+	 */
 	@Action(enabledProperty = "selected")
 	public void group() {
-		if(selections.size() > 1) {
-			for (Node node : selections) {
-				System.out.println(node);
+		UnitElement group = new GroupUnitElement(new Point(34, 250), "Group", selections, graphController.getUnitElements());
+		graphController.getUnitElements().add(group);
+		selections.clear();
+		selections.add(group);
+	}
+	
+	/**
+	 * A selected {@link GroupUnitElement} is exploded into it's original contents.
+	 */
+	@Action(enabledProperty = "selected")
+	public void degroup() {
+		if(selections.size() == 1
+				&& selections.get(0) instanceof GroupUnitElement) {
+			GroupUnitElement group = (GroupUnitElement) selections.get(0);
+			graphController.getUnitElements().addAll(group.getUnits());
+			
+			/*
+			 * reconnect inputs
+			 */
+			for (Input input : group.getInputs()) {
+				ProxyInput pInput = (ProxyInput)input;
+				Output connectedOutput = pInput.getFromOutput();
+				Input originalInput = pInput.getEmbeddedInput();
+				
+				Connection connection = new Connection(connectedOutput, originalInput);
+				graphController.getConnections().add(connection);
 			}
+			
+			/*
+			 *  reconnect outputs
+			 */
+			Collection<Connection> tmpConn = new Vector<Connection>();
+			for (Output output : group.getOutputs()) {
+				ProxyOutput pOutput = (ProxyOutput)output;
+				Output originalOutput = pOutput.getEmbeddedOutput();
+				if(originalOutput.getDataType() instanceof DataTypeFactory.Image) {
+					((DataTypeFactory.Image)originalOutput.getDataType()).setParentUnitElement(originalOutput.getParent());
+				}
+				
+				
+				for (Connection	connection : pOutput.getConnections()) {
+					Connection newConn = new Connection(originalOutput, connection.getInput());
+					tmpConn.add(newConn);
+				}
+			}
+			// write connections into actual connectionlist
+			for (Connection connection : tmpConn) {
+				graphController.getConnections().add(connection);	
+			}
+			
+			/*
+			 * reconnect connection within the group
+			 */
+			
+			for (Connection connection : group.getInternalConnections()) {
+				graphController.getConnections().add(connection);
+			}
+			
+			
+			graphController.removeNode(group);
 		}
 	}
+	
 	
 	/**
 	 * Import workflow from XML. 
@@ -982,7 +1049,7 @@ public class ImageFlowView extends FrameView {
         		lm.addElement("name:"+input.getName());
         		lm.addElement("datatype: "+input.getDataType());
         		if(input.getDataType() instanceof DataTypeFactory.Image)
-        			lm.addElement("imagetype:"+((DataTypeFactory.Image)input.getDataType()).getImageBitDepth());
+        			lm.addElement("imagetype def:"+((DataTypeFactory.Image)input.getDataType()).getImageBitDepth());
         	}
         	for (final Output output : unit.getOutputs()) {
         		lm.addElement(output);

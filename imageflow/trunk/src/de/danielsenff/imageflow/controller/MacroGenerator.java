@@ -8,8 +8,8 @@ import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
-import de.danielsenff.imageflow.models.unit.UnitList;
 
 
 
@@ -46,16 +46,23 @@ public class MacroGenerator {
 		
 		// loop over all units
 		// they have to be presorted so they are in the right order
-//		for (int unitIndex = 0; unitIndex < unitList.size(); unitIndex++) {
 		for (Node node : this.unitList) {
 		
+			System.out.println(node);
+			
 			macroText += " \n";
 			
 			// read the ImageJ syntax for this unit
 //			final UnitElement unit = (UnitElement) unitList.get(unitIndex);
-			final UnitElement unit = (UnitElement) node;
 			
-			addProcessingUnit(unit);
+			if(node instanceof UnitElement) {
+				final UnitElement unit = (UnitElement) node;
+				addProcessingUnit(unit);	
+			} else if (node instanceof GroupUnitElement) {
+				final GroupUnitElement unit = (GroupUnitElement) node;
+				addGroupUnit(unit);
+			} 
+			
 		}
 
 		
@@ -69,6 +76,11 @@ public class MacroGenerator {
 		
 		return macroText;
 	}
+
+	private void addGroupUnit(GroupUnitElement unit) {
+//		for
+	}
+
 
 	private void addFunctionUnit(UnitElement unit) {
 		final MacroElement macroElement = ((MacroElement)unit.getObject()); 
