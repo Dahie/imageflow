@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
+import javax.swing.ToolTipManager;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
@@ -23,12 +24,19 @@ public class IFTreeCellRenderer extends DefaultTreeCellRenderer {
 			boolean sel, boolean expanded, boolean isLeaf, int row,
 			boolean hasFocus) {
 
+		ToolTipManager.sharedInstance().registerComponent(tree);
+		
 		if (value instanceof UnitDelegate && isLeaf) {
 			
 			final UnitDelegate unitDelegate = (UnitDelegate)value;
 			icon = new ImageIcon(drawIcon(unitDelegate.getColor(), 16, 16));
 			this.setLeafIcon(icon);
+			this.setToolTipText(unitDelegate.getToolTipText());
 		}
+		else {
+			this.setToolTipText(null);
+		}
+		
 		
 		return super.getTreeCellRendererComponent(tree, 
 				value, sel, expanded, isLeaf, row, hasFocus);
