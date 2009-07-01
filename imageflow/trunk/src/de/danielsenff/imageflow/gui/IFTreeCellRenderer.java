@@ -24,8 +24,11 @@ public class IFTreeCellRenderer extends DefaultTreeCellRenderer {
 			boolean sel, boolean expanded, boolean isLeaf, int row,
 			boolean hasFocus) {
 
+		// register ToolTips
 		ToolTipManager.sharedInstance().registerComponent(tree);
-		
+		// make them complete visible even on heavyweight components
+		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
+
 		if (value instanceof UnitDelegate && isLeaf) {
 			
 			final UnitDelegate unitDelegate = (UnitDelegate)value;
