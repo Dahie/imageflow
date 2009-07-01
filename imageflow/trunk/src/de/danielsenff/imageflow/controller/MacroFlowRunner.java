@@ -1,7 +1,6 @@
 package de.danielsenff.imageflow.controller;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
@@ -22,7 +21,7 @@ import de.danielsenff.imageflow.models.unit.UnitElement.Type;
  * MacroRunner takes the current workflow and processes it, so that a clean Macro can be 
  * created. Since for example unconnected units shall be discarded by the {@link MacroGenerator}
  * but not deleted, this creates a temporary {@link UnitList} with only the 
- * units and connections valid and usefull without destroying the original workflow.
+ * units and connections valid and useful without destroying the original workflow.
  * @author danielsenff
  *
  */
@@ -34,11 +33,12 @@ public class MacroFlowRunner {
 	 * @param units
 	 */
 	public MacroFlowRunner(final UnitList units) {
-			this.macroUnitList = (UnitList)(units.clone());
-		this.macroUnitList = sortList(this.macroUnitList);
+		this.macroUnitList = units.clone();
 		//FIXME why add all connections here? Doesn't this also include connections to units
 		// which are already deleted by the algorithm? does this matter?
-		this.macroUnitList.addConnectionList(units.getConnections());
+//		this.macroUnitList.setConnectionList(units.getConnections().clone());
+		this.macroUnitList.setConnectionList(units.getConnections());
+		this.macroUnitList = sortList(this.macroUnitList);
 	}
 
 	
@@ -47,10 +47,9 @@ public class MacroFlowRunner {
 	 * @return 
 	 */
 	public String generateMacro() {
-		////////////////////////////////////////////////////////
-		// analysis and 
-		// verification of the connection network
-		////////////////////////////////////////////////////////
+		/*
+		 *  analysis and verification of the connection network 
+		 */
 
 		if (!checkNetwork()) {
 			System.out.println("Error in node network.");
@@ -60,9 +59,9 @@ public class MacroFlowRunner {
 		// unitElements has to be ordered according to the correct processing sequence
 
 
-		////////////////////////////////////////////////////////
-		// generation of the ImageJ macro
-		////////////////////////////////////////////////////////
+		/*
+		 *  generation of the ImageJ macro
+		 */
 
 		MacroGenerator macGen = new MacroGenerator(macroUnitList);
 		return macGen.generateMacro();
@@ -163,11 +162,9 @@ public class MacroFlowRunner {
 		if(!connections.isEmpty()) {
 			// wrong number if units are discarded, number as you can see in the workflow, but not howmany are used internally
 			System.out.println("Number of connections: "+ connections.size()); 
-			for (Iterator iterator = connections.iterator(); iterator.hasNext();) {
-				Connection connection = (Connection) iterator.next();
+			for (Connection connection : connections) {
 
 				if (!connection.isCompatible()) {
-
 					JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
 							"The graph has conflicting imagetypes."
 							+'\n' + "The operation will not proceed.",
@@ -225,19 +222,17 @@ public class MacroFlowRunner {
 		// those need to be destroyed and reintergrated into 
 		// the regular workflow
 		
-		/*Collection<Node> tmpColU = new Vector<Node>();
-		Collection<Connection> tmpColC = new Vector<Connection>();
+		Collection<GroupUnitElement> foundGroups = new Vector<GroupUnitElement>();
 		for (Node node : unitElements) {
 			if(node instanceof GroupUnitElement) {
 				GroupUnitElement group = (GroupUnitElement) node;
-				tmpColU.addAll(group.getUnits());
-				tmpColC.addAll(group.getOriginalConnections());
-				unitElements.unbindUnit(group);
+				foundGroups.add(group);
 			}
 		}
-		unitElements.addAll(tmpColU);
-		unitElements.getConnections().addAll(tmpColC);
-		*/
+		
+		for (GroupUnitElement group : foundGroups) {
+			GraphController.ungroup(group, unitElements);	
+		}
 		
 		
 		
@@ -254,8 +249,8 @@ public class MacroFlowRunner {
 			while(!unitElements.isEmpty()) {
 				index = i % unitElements.getSize();
 				Node node =  unitElements.get(index); 
-				System.out.println(index + " at length "+ unitElements.getSize());
-				System.out.println(node);
+//				System.out.println(index + " at length "+ unitElements.getSize());
+//				System.out.println(node);
 
 				// find out what kind of node is stored
 				if(node instanceof CommentNode) {

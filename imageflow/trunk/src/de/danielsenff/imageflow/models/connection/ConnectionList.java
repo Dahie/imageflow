@@ -19,7 +19,7 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  * @author danielsenff
  *
  */
-public class ConnectionList extends ArrayList<Connection> implements Model {
+public class ConnectionList extends ArrayList<Connection> implements Model, Cloneable {
 	
 	private final ArrayList<ModelListener> listeners;
 	
@@ -64,8 +64,8 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 	 * @param to
 	 * @return
 	 */
-	public boolean containsConnection(Pin from, Pin to) {
-		for (Connection connection : this) {
+	public boolean containsConnection(final Pin from, final Pin to) {
+		for (final Connection connection : this) {
 			if (connection.getInput().equals(from) 
 					&& connection.getOutput().equals(to))
 				return true;
@@ -116,8 +116,8 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 		// check the bit depth
 		if(!connection.isCompatible()) {
 			System.out.println("Connection disallowed: Incombatible bit depth");
-//			return false;
-			}
+			//			return false;
+		}
 		
 
 		
@@ -134,7 +134,7 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 		if(!output.isConnectedWith(input))
 			connection.connect();
 		
-		boolean add = super.add(connection);
+		final boolean add = super.add(connection);
 		notifyModelListeners();
 		return add;
 	}
@@ -146,7 +146,7 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 	 */
 	public boolean addUnchecked(final Connection connection) {
 		connection.connect();
-		boolean add = super.add(connection);
+		final boolean add = super.add(connection);
 		notifyModelListeners();
 		return add;
 	}
@@ -191,6 +191,24 @@ public class ConnectionList extends ArrayList<Connection> implements Model {
 
 	public void removeModelListener(final ModelListener listener) {
 		this.listeners.remove(listener);
+	}
+	
+	@Override
+	public ConnectionList clone() {
+		final ConnectionList cloneList = new ConnectionList();
+		for (final Connection connection : this) {
+			final Connection clonConn = new Connection(connection.getOutput(), connection.getInput());
+			cloneList.add(clonConn);
+		}
+		return cloneList;
+	}
+	
+	public Connection getConnectionByID(int id) {
+		for (Connection connection : this) {
+			if(connection.id == id)
+				return connection;
+		}
+		return null;
 	}
 	
 }

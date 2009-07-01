@@ -1,10 +1,4 @@
 package de.danielsenff.imageflow.controller;
-import ij.IJ;
-import ij.ImageJ;
-import ij.ImagePlus;
-import ij.WindowManager;
-
-import java.awt.Image;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,7 +8,6 @@ import java.util.Collection;
 import java.util.Vector;
 
 import visualap.Node;
-import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
@@ -118,7 +111,12 @@ public class GraphController{
 	 * @param group
 	 */
 	public void ungroup(final GroupUnitElement group) {
-		getUnitElements().addAll(group.getUnits());
+		ungroup(group, getUnitElements());
+	}
+	
+	public static void ungroup(final GroupUnitElement group, UnitList units) {
+		units.addAll(group.getUnits());
+		ConnectionList connections = units.getConnections();
 		
 		/*
 		 * reconnect inputs
@@ -129,7 +127,7 @@ public class GraphController{
 			Input originalInput = pInput.getEmbeddedInput();
 			
 			Connection connection = new Connection(connectedOutput, originalInput);
-			getConnections().add(connection);
+			connections.add(connection);
 		}
 		
 		/*
@@ -143,7 +141,6 @@ public class GraphController{
 				((DataTypeFactory.Image)originalOutput.getDataType()).setParentUnitElement(originalOutput.getParent());
 			}
 			
-			
 			for (Connection	connection : pOutput.getConnections()) {
 				Connection newConn = new Connection(originalOutput, connection.getInput());
 				tmpConn.add(newConn);
@@ -151,7 +148,7 @@ public class GraphController{
 		}
 		// write connections into actual connectionlist
 		for (Connection connection : tmpConn) {
-			getConnections().add(connection);	
+			connections.add(connection);	
 		}
 		
 		/*
@@ -159,11 +156,17 @@ public class GraphController{
 		 */
 		
 		for (Connection connection : group.getInternalConnections()) {
-			getConnections().add(connection);
+			connections.add(connection);
 		}
 		
-		
-		removeNode(group);
+		units.remove(group);
+	}
+
+	public void group(SelectionList selections2) {
+		UnitElement group = new GroupUnitElement(new Point(34, 250), "Group", selections, getUnitElements());
+		getUnitElements().add(group);
+		selections.clear();
+		selections.add(group);	
 	}
 	
 
@@ -184,21 +187,9 @@ public class GraphController{
 		////////////////////////////////////////////////////////
 		DelegatesController delegatesController = DelegatesController.getInstance();
 
-//		UnitDescription sourceUnitDescription = new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
-//		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 		final UnitElement sourceUnit = delegatesController.getDelegate("Image Source").createUnit(new Point(30, 100));
-		
-		
-//		UnitDescription blurUnitDescription = new UnitDescription(new File("xml_units/Process/Filters/GaussianBlur_Unit.xml"));
-//		final UnitElement blurUnit = UnitFactory.createProcessingUnit(blurUnitDescription, new Point(180, 50));
 		final UnitElement blurUnit = delegatesController.getDelegate("Gaussian Blur").createUnit(new Point(180, 50));
-		
-//		UnitDescription mergeUnitDescription = new UnitDescription(new File("xml_units/Process/ImageCalculator_Unit.xml"));
-//		final UnitElement mergeUnit = UnitFactory.createProcessingUnit(mergeUnitDescription,new Point(320, 100));
 		final UnitElement mergeUnit = delegatesController.getDelegate("Image Calculator").createUnit(new Point(320, 100));
-		
-//		UnitDescription noiseUnitDescription = new UnitDescription(new File("xml_units/Process/Noise/AddNoise_Unit.xml"));
-//		final UnitElement noiseUnit = UnitFactory.createProcessingUnit(noiseUnitDescription,new Point(450, 100));
 		final UnitElement noiseUnit = delegatesController.getDelegate("Add Noise").createUnit(new Point(450, 100));
 		noiseUnit.setDisplayUnit(true);
 		
@@ -298,7 +289,6 @@ public class GraphController{
 		nodes.addConnection(new Connection(addUnit,1,fireUnit,1));
 
 	}
-
 
 }
 

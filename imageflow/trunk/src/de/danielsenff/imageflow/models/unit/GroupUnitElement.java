@@ -27,11 +27,13 @@ public class GroupUnitElement extends UnitElement {
 	protected UnitList units;
 	private Vector<Connection> originalConnections;
 	private Collection<Connection> internalConnections;
+	private Collection<Connection> externalConnections;
 
 	
 	private GroupUnitElement(Point point, String name) {
 		super(point, "name", "");
 		setLabel(name);
+		init();
 	}
 	
 	/**
@@ -44,29 +46,32 @@ public class GroupUnitElement extends UnitElement {
 	public GroupUnitElement(Point origin, String unitName,
 			final Collection<Node> selections, final UnitList allUnits) {
 		super(origin, unitName, "");
-		init(selections, allUnits);
+		init();
+		includeUnits(selections, allUnits);
 	}
 
 
-
-	private void init(final Collection<Node> selections, final UnitList allUnits) {
-		
+	private void init() {
 		this.units = new UnitList();
+		internalConnections = new Vector<Connection>();
+		this.externalConnections = new Vector<Connection>();
+		this.originalConnections = new Vector<Connection>();
+	}
+	
+
+	private void includeUnits(final Collection<Node> selections, final UnitList allUnits) {
+		
 		for (Node node : selections) {
 			this.units.add(node);
 		}
-		
-		
 		
 		/*
 		 * determine position
 		 */
 		
 		int x, y;
-//		for (Node node : this.units) {
-			x = (int) getUnit(0).getOrigin().getX();
-			y = (int) getUnit(0).getOrigin().getY();
-//		}
+		x = (int) getUnit(0).getOrigin().getX();
+		y = (int) getUnit(0).getOrigin().getY();
 		setOrigin(new Point(x, y));
 			
 
@@ -75,8 +80,7 @@ public class GroupUnitElement extends UnitElement {
 		 */
 		// get all connections
 		ConnectionList allConnections = allUnits.getConnections();
-		// see which are connected to the units in the future group
-		Collection<Connection> externalConnections = new Vector<Connection>();
+		
 		for (Connection connection : allConnections) {
 			for (Node node : selections) {
 				if (connection.isConnectedToUnit(node) 
@@ -84,7 +88,7 @@ public class GroupUnitElement extends UnitElement {
 					externalConnections.add(connection);
 			}
 		}
-		internalConnections = new Vector<Connection>();
+		
 		for (Connection connection : externalConnections) {
 			for (Node node : selections) {
 				for (Node node2 : selections) {
@@ -100,14 +104,9 @@ public class GroupUnitElement extends UnitElement {
 			externalConnections.remove(connection);
 		}
 		
-		this.originalConnections = new Vector<Connection>();
 		for (Connection connection : externalConnections) {
 			this.originalConnections.add(connection);
 		}
-		
-		System.out.println(externalConnections.size());
-		System.out.println(internalConnections.size());
-		
 		
 		/*
 		 * create inputs and outputs based on external connections
@@ -138,10 +137,6 @@ public class GroupUnitElement extends UnitElement {
 			}
 		}
 		
-		// determine the order of nodes
-		
-		
-		
 		
 		/*
 		 * remove old stuff
@@ -150,8 +145,6 @@ public class GroupUnitElement extends UnitElement {
 		for (Node node : this.units) {
 			allUnits.remove(node);
 		}
-		
-		
 	}
 
 	/**

@@ -179,11 +179,11 @@ public class UnitElement extends AbstractUnit {
 
 		setCompontentSize(Size.BIG);
 	}
-	
+
 	/*
 	 * Outputs
 	 */
-	
+
 	/**
 	 * Gets the pinTolerance of this {@link UnitElement}
 	 */
@@ -198,7 +198,7 @@ public class UnitElement extends AbstractUnit {
 	public void setPinTolerance(int pinTolerance) {
 		this.pinTolerance = pinTolerance;
 	}
-	
+
 	/**
 	 * Adds an Output-Object to the unit.
 	 * @param newOutput
@@ -273,14 +273,14 @@ public class UnitElement extends AbstractUnit {
 		}
 		return false;
 	}
-	
-	
-	
-	
+
+
+
+
 	/*
 	 * Inputs
 	 */
-	
+
 	/**
 	 * Returns the {@link Input} at the given index. Indecies start with 0.
 	 * @param index
@@ -323,7 +323,7 @@ public class UnitElement extends AbstractUnit {
 	public int getInputsCount() {
 		return this.inputs.size();
 	}
-	
+
 	/**
 	 * Is true as soon as one connected {@link Input} is found.
 	 * @return
@@ -348,15 +348,15 @@ public class UnitElement extends AbstractUnit {
 		}
 		return true;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
 
 
 	/**
@@ -377,14 +377,14 @@ public class UnitElement extends AbstractUnit {
 		notifyModelListeners();
 	}
 
-	
-	
-	
+
+
+
 	/*
 	 * Parameters
 	 */
-	
-	
+
+
 	/**
 	 * Add a Parameter to the unit
 	 * @param parameter
@@ -431,7 +431,7 @@ public class UnitElement extends AbstractUnit {
 		final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters", ImageFlow.getApplication().getMainFrame()) ;
 		System.out.println(getHelpString());
 		gd.addMessage(getHelpString());
-//		gd.addMessage(" ");
+		//		gd.addMessage(" ");
 
 
 		// label field 
@@ -457,10 +457,10 @@ public class UnitElement extends AbstractUnit {
 							((ChoiceParameter)parameter).getValue());
 				} else if(parameter instanceof StringParameter) {
 					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
-//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
+					//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
 				} else if(parameter instanceof TextParameter) {
 					gd.addTextField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
-//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
+					//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
 				} 				
 			}
 
@@ -504,12 +504,12 @@ public class UnitElement extends AbstractUnit {
 	public boolean hasParameters() {
 		return !parameters.isEmpty();
 	}
-	
-		
+
+
 	/*
 	 * Displayable
 	 */
-	
+
 	/**
 	 * Returns whether or not this unit should display the current state of the image.
 	 * @return 
@@ -517,7 +517,7 @@ public class UnitElement extends AbstractUnit {
 	public boolean isDisplayUnit() {
 		return this.isDisplayUnit;
 	}
-	
+
 	/**
 	 * If activated, the unit will display the current image.
 	 * This setting is actually attached to the {@link Output}. 
@@ -532,7 +532,7 @@ public class UnitElement extends AbstractUnit {
 		}
 		notifyModelListeners();
 	}
-	
+
 	/**
 	 * Returns true if any {@link Output} connects to a unit that is set as displayable.
 	 * @return
@@ -554,8 +554,8 @@ public class UnitElement extends AbstractUnit {
 		}
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Returns the what type this is. 
 	 * SOURCE - only {@link Output}
@@ -608,7 +608,7 @@ public class UnitElement extends AbstractUnit {
 	public File getIconFile() {
 		return this.iconFile;
 	}
-	
+
 
 	public void setIconFile(File iconFile) {
 		this.iconFile = iconFile; 
@@ -702,12 +702,12 @@ public class UnitElement extends AbstractUnit {
 		//draw inputs
 		int numberInputs = getInputsCount();
 		for (int i = 0; i < numberInputs; i++) {
-			
+
 			if(getInput(i).isRequired())
 				g.setColor(Color.BLACK);
 			else
 				g.setColor(new Color(0,0,0,60));
-			
+
 			int y =  PaintUtil.alignY(numberInputs, i, unitComponentIcon.getHeight(), NodeIcon.pinSize);
 			g.fillRect(origin.x, origin.y+y, NodeIcon.pinSize, NodeIcon.pinSize);
 		}
@@ -750,8 +750,8 @@ public class UnitElement extends AbstractUnit {
 	/*
 	 * Object
 	 */
-	
-	
+
+
 
 	/* (non-Javadoc)
 	 * @see graph.NodeAbstract#setObject(java.lang.Object)
@@ -813,11 +813,11 @@ public class UnitElement extends AbstractUnit {
 	}
 
 
-	
+
 	/*
 	 * Marking
 	 */
-	
+
 	/**
 	 * Mark this unit by marking its {@link Input}s and {@link Output}s.
 	 * @param mark
@@ -930,7 +930,7 @@ public class UnitElement extends AbstractUnit {
 	public boolean isNorthOfUnit(Node node) {
 		return (node.getOrigin().y > this.getOrigin().y) ? true : false;
 	}
-	
+
 	/**
 	 * Returns true, if the unit in question is positioned north of this unit.
 	 * @param node
@@ -939,7 +939,7 @@ public class UnitElement extends AbstractUnit {
 	public boolean isEastOfUnit(Node node) {
 		return (node.getOrigin().x < this.getOrigin().x) ? true : false;
 	}
-	
+
 	/**
 	 * Returns true, if the unit in question is positioned north of this unit.
 	 * @param node
@@ -948,7 +948,7 @@ public class UnitElement extends AbstractUnit {
 	public boolean isSouthOfUnit(Node node) {
 		return (node.getOrigin().y < this.getOrigin().y) ? true : false;
 	}
-	
+
 	/**
 	 * Returns true, if the unit in question is positioned north of this unit.
 	 * @param node
@@ -959,6 +959,6 @@ public class UnitElement extends AbstractUnit {
 	}
 
 
-	
+
 }
 

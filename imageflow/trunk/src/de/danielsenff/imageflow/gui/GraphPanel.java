@@ -75,6 +75,11 @@ public class GraphPanel extends GPanel {
 
 	private final String iconFile = "/de/danielsenff/imageflow/resources/iw-logo.png";
 
+	
+	public GraphPanel(final GPanelListener panel) {
+		this(new ArrayList<Delegate>(), panel);
+	}
+	
 	/**
 	 * @param beans
 	 * @param parent

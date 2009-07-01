@@ -28,7 +28,7 @@ public class ProxyInput extends Input {
 		
 		// redirect connection from embeddedInput to this
 		
-		this.connectTo(this.embeddedInput.getFromOutput());
+//		this.connectTo(this.embeddedInput.getFromOutput());
 		
 	}
 	

@@ -7,6 +7,7 @@ import visualap.Pin;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory.Image;
+import de.danielsenff.imageflow.models.unit.AbstractUnit;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
@@ -39,12 +40,6 @@ public class Input extends Pin {
 	 * Type of data expected from the connected {@link Output}.
 	 */
 	protected DataType dataType;
-	
-	/**
-	 * the int value indicates the acceptable image types
-	 */
-	protected int inputImageBitDepth; 
-	
 
 	/**
 	 * flag indicating if the image at this input needs to be duplicated
@@ -60,11 +55,11 @@ public class Input extends Pin {
 	/**
 	 * Connected from this {@link UnitElement}
 	 */
-	protected UnitElement fromUnit;
+//	protected UnitElement fromUnit;
 	/**
 	 * Output from which this Input is connected
 	 */
-	protected Output from;
+//	protected Output from;
 	
 	protected Connection connection;
 	
@@ -125,14 +120,16 @@ public class Input extends Pin {
 	/**
 	 * Sets the connection between this input and an output.
 	 */
-	public void connectTo(final Pin fromOutput) {
+	/*public void connectTo(final Pin fromOutput) {
 		this.from = (Output)fromOutput;
 		this.fromUnit = (UnitElement) fromOutput.getParent();
 		generateID(fromUnit.getUnitID(), fromOutput.getIndex());
-	}
+	}*/
 	
 	public void setConnection(Connection connection) {
 		this.connection = connection;
+		generateID(connection.getOutput().getParent().getUnitID(), 
+				connection.getOutput().getIndex());
 	}
 
 	/**
@@ -223,7 +220,7 @@ public class Input extends Pin {
 	 */
 	@Override
 	public String toString() {
-		return super.toString()+" fromUnit: " + this.fromUnit + " fromOutput: "+ this.from;
+		return super.toString()+" Connection: " + this.connection;
 	}
 
 	
@@ -252,22 +249,31 @@ public class Input extends Pin {
 	 * @return the fromUnit
 	 */
 	public UnitElement getFromUnit() {
-		return this.fromUnit;
+		return (UnitElement) this.connection.getFromUnit();
 	}
 
 	/**
 	 * @return
 	 */
 	public int getFromUnitNumber() {
-		return fromUnit.getUnitID();
+		return ((AbstractUnit) this.connection.getFromUnit()).getUnitID();
 	}
 
+	/**
+	 * Returns the current {@link Connection} or null, if this pin is not connected.
+	 * @return
+	 */
+	public Connection getConnection() {
+		return this.connection;
+	}
+	
 	/**
 	 * Returns whether or not this Input is connected.
 	 * @return 
 	 */
 	public boolean isConnected() {
-		return (fromUnit != null) && (this.from != null);
+//		return (fromUnit != null) && (this.from != null);
+		return connection != null;
 	}
 	
 	
@@ -278,7 +284,8 @@ public class Input extends Pin {
 	 */
 	public boolean isConnectedWith(Pin output) {
 		if(output instanceof Output && isConnected()) {
-			return this.from.equals(output);
+//			return this.from.equals(output);
+			return this.connection.getOutput().equals(output);
 		}
 		return false;
 	}
@@ -289,8 +296,9 @@ public class Input extends Pin {
 	 */
 	public void disconnectAll() {
 		generateID(0, 0); // reset connection
-		this.fromUnit = null;
-		this.from = null;
+//		this.fromUnit = null;
+//		this.from = null;
+		this.connection = null;
 	}
 
 	/**
@@ -298,9 +306,9 @@ public class Input extends Pin {
 	 * @param fromUnit
 	 * @param fromOutputNumber
 	 */
-	public void connectTo(final UnitElement fromUnit, final int fromOutputNumber) {
+	/*public void connectTo(final UnitElement fromUnit, final int fromOutputNumber) {
 		connectTo(fromUnit.getOutput(fromOutputNumber-1));
-	}
+	}*/
 
 
 
@@ -309,7 +317,8 @@ public class Input extends Pin {
 	 * @return
 	 */
 	public Output getFromOutput() {
-		return from;
+//		return from;
+		return connection.getOutput();
 	}
 
 	/**

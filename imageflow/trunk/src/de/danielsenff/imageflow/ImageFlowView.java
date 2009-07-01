@@ -258,6 +258,7 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(getAction("debugPrintNodes"));
 		debugMenu.add(getAction("debugPrintNodeDetails"));
 		debugMenu.add(getAction("debugPrintEdges"));
+		debugMenu.add(getAction("debugDrawClonedWorkflow"));
 		debugMenu.add(new JSeparator());
 		debugMenu.add(getAction("exampleFlow1"));
 		debugMenu.add(getAction("exampleFlow2"));
@@ -599,10 +600,7 @@ public class ImageFlowView extends FrameView {
 			GroupUnitElement group = (GroupUnitElement) selections.get(0);
 			graphController.ungroup(group);
 		} else {
-			UnitElement group = new GroupUnitElement(new Point(34, 250), "Group", selections, graphController.getUnitElements());
-			graphController.getUnitElements().add(group);
-			selections.clear();
-			selections.add(group);	
+			graphController.group(selections);
 		}
 	}
 	
@@ -989,6 +987,21 @@ public class ImageFlowView extends FrameView {
 		dialog.setVisible(true);
     }
     
+    @Action public void debugDrawClonedWorkflow() {
+    	final JDialog dialog = new JDialog();
+    	
+    	GPanelPopup popup = new GPanelPopup(unitDelegates.values(), graphController);
+    	GraphPanel gpanel = new GraphPanel(popup);
+    	UnitList cloneUnitList = graphController.getUnitElements().clone();
+		gpanel.setNodeL(cloneUnitList);
+    	gpanel.setEdgeL(cloneUnitList.getConnections());
+    	
+    	dialog.add(gpanel);
+//		dialog.pack();
+    	dialog.setSize(400, 300);
+		dialog.setVisible(true);
+    }
+    
     /**
      * Opens a dialog with debugging information about the selected {@link UnitElement}
      */
@@ -998,6 +1011,7 @@ public class ImageFlowView extends FrameView {
 		for (int i = 0; i < selectedUnits.size(); i++) {
 			final UnitElement unit = (UnitElement)selectedUnits.get(i);
     		final JDialog dialog = new JDialog();
+    		dialog.setTitle(unit.getLabel());
 
     		// list parameters
         	final DefaultListModel lm = new DefaultListModel();
@@ -1010,6 +1024,8 @@ public class ImageFlowView extends FrameView {
         		lm.addElement("datatype: "+input.getDataType());
         		if(input.getDataType() instanceof DataTypeFactory.Image)
         			lm.addElement("imagetype def:"+((DataTypeFactory.Image)input.getDataType()).getImageBitDepth());
+        		lm.addElement("connected to:");
+        		lm.addElement(input.getConnection());
         	}
         	for (final Output output : unit.getOutputs()) {
         		lm.addElement(output);

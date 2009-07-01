@@ -37,17 +37,27 @@ public class Connection {
 	}
 	
 	/**
+	 * Creates a Connection between the two defined pins.
+	 * The order for Input and Output is irrelevant.
 	 * @param fromOutput
 	 * @param toInput
 	 */
-	public Connection(final Pin fromOutput, final Pin toInput) {
-		this.from = fromOutput;
-		this.to = toInput;
-		UnitElement fromUnit = (UnitElement) fromOutput.getParent();
-		UnitElement toUnit = (UnitElement) toInput.getParent();
+	public Connection(final Pin pin1, final Pin pin2) {
 		
-		id = getID(fromUnit.getUnitID(), fromOutput.getIndex(), 
-				toUnit.getUnitID(), toInput.getIndex());
+		if(pin1 instanceof Input && pin2 instanceof Output) {
+			this.from = pin2;
+			this.to = pin1;
+		} else {
+			this.from = pin1;
+			this.to = pin2;
+		}
+			
+		
+		UnitElement fromUnit = (UnitElement) getOutput().getParent();
+		UnitElement toUnit = (UnitElement) getInput().getParent();
+		
+		id = getID(fromUnit.getUnitID(), getOutput().getIndex(), 
+				toUnit.getUnitID(), getInput().getIndex());
 	}
 
 	/**
@@ -56,7 +66,7 @@ public class Connection {
 	 */
 	public void connect() {
 		((Output)this.from).addConnection(this);
-		((Input)this.to).connectTo(from);
+		((Input)this.to).setConnection(this);
 	}
 	
 	/**

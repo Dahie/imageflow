@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -22,6 +23,7 @@ import org.jdom.output.XMLOutputter;
 
 import visualap.GList;
 import visualap.Node;
+import visualap.Pin;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
@@ -63,24 +65,83 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	
 	@Override
 	public UnitList clone() {
-		/*UnitList clone = new UnitList();
+		UnitList clone = new UnitList();
 		
+		Collection<Connection> tmpConn = new Vector<Connection>();
+		HashMap<Pin, Pin> correspondingPins = new HashMap<Pin, Pin>();
 		for (Node node : this) {
 			try {
-				clone.add(node.clone());
+				Node nodeClone = node.clone();
+				clone.add(nodeClone);
+				if(node instanceof UnitElement) {
+					UnitElement unit = (UnitElement) node;
+					UnitElement unitClone = (UnitElement) nodeClone;
+					
+					/*
+					 * clone inputs
+					 */
+					
+					for (int i = 0; i < unit.getInputsCount(); i++) {
+						Input input = unit.getInput(i);
+						correspondingPins.put(input, unitClone.getInput(i));
+						
+						Connection connection;
+						// we visit each connection
+						if(input.isConnected()) {
+							connection = input.getConnection();
+							cloneConnection(clone, tmpConn, correspondingPins, connection);
+						}
+					}
+					
+					/* 
+					 * clone outputs
+					 */
+					
+					for (int o = 0; o < unit.getOutputsCount(); o++) {
+						Output output = unit.getOutput(o);
+						correspondingPins.put(output, unitClone.getOutput(o));
+						
+						// we visit each connection
+						if(output.isConnected()) {
+							for (Connection connection : output.getConnections()) {
+								cloneConnection(clone, tmpConn, correspondingPins, connection);
+							}
+						}
+						
+					}
+					
+				}
+				
+				
+				
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
 			}
-		}*/
+		}
 		
-            return (UnitList) super.clone();
+		
+//		clone.setConnectionList(getConnections().clone());
+		
+		return clone;
+	}
 
-		
-//		ConnectionList connList = new ConnectionList();
-//		for (Connection connection : this.getConnections()) {
-//			connList.add(connection.clone());
-//		}
-		
+
+	private void cloneConnection(UnitList clone,
+			Collection<Connection> tmpConn,
+			HashMap<Pin, Pin> correspondingPins, Connection conn) {
+		if(tmpConn.contains(conn)) {
+			// if this connection is already in the list
+			// the corresponding unit on the other end has already been cloned
+			// so we can create a new connection to this clone
+			Output output = (Output) correspondingPins.get(conn.getOutput());
+			Input input = (Input) correspondingPins.get(conn.getInput());
+			
+			Connection newConn = new Connection(output, input);
+			clone.getConnections().add(newConn);
+		} else {
+			// we are on the first end of this connection
+			tmpConn.add(conn);
+		}
 	}
 	
 	/**
@@ -644,6 +705,11 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 */
 	public int getSize() {
 		return super.size();
+	}
+
+
+	public void setConnectionList(ConnectionList connList) {
+		this.connections = connList;
 	}
 
 }

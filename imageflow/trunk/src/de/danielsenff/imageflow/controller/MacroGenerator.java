@@ -10,10 +10,13 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
+import de.danielsenff.imageflow.models.unit.UnitList;
 
 
 
 /**
+ * Based on a cleaned {@link UnitList} the MacroGenerator creates 
+ * the Macro-Code for ImageJ.
  * @author danielsenff
  *
  */
@@ -28,7 +31,7 @@ public class MacroGenerator {
 	private ArrayList<ImageJImage> openedImages;
 	private String  macroText;
 
-	public MacroGenerator(final Collection unitElements) {
+	public MacroGenerator(final Collection<Node> unitElements) {
 		this.unitList = unitElements;
 		this.openedImages = new ArrayList<ImageJImage>();
 		this.macroText = "";
@@ -51,16 +54,14 @@ public class MacroGenerator {
 			System.out.println(node);
 			
 			macroText += " \n";
-			
-			// read the ImageJ syntax for this unit
-//			final UnitElement unit = (UnitElement) unitList.get(unitIndex);
+			macroText += "// " + node.getLabel() + "\n";
+			macroText += " \n";
 			
 			if(node instanceof UnitElement) {
 				final UnitElement unit = (UnitElement) node;
 				addProcessingUnit(unit);	
 			} else if (node instanceof GroupUnitElement) {
 				final GroupUnitElement unit = (GroupUnitElement) node;
-				addGroupUnit(unit);
 			} 
 			
 		}
@@ -75,10 +76,6 @@ public class MacroGenerator {
 		macroText += "\nsetBatchMode(\"exit and display\"); ";
 		
 		return macroText;
-	}
-
-	private void addGroupUnit(GroupUnitElement unit) {
-//		for
 	}
 
 
@@ -98,6 +95,8 @@ public class MacroGenerator {
 		// parse the command string for TITLE tags that need to be replaced
 		for (int in = 0; in < unit.getInputsCount(); in++) {
 			final Input input = unit.getInput(in);
+			System.out.println(input.isConnected());
+			System.out.println(input.getConnection());
 			final String searchString = "TITLE_" + (in+1);
 			final String parameterString = 
 				input.isNeedToCopyInput() ? getNeedCopyTitle(input.getImageID()) : input.getImageTitle();
@@ -122,15 +121,12 @@ public class MacroGenerator {
 		// FIXME duplicates always
 		// maybe use rename(name)
 		// only works for one output
-		for (int out = 0; out < unit.getOutputsCount(); out++) {
-			Output output = unit.getOutput(out);
+		for (Output output : unit.getOutputs()) {
 			final String outputTitle = output.getOutputTitle();
 			final String outputID = output.getOutputID();
 			
 			if(output.getDataType() instanceof DataTypeFactory.Image) {
 				macroText +=  
-//					"ID_temp = getImageID(); \n"
-//					+ "run(\"Duplicate...\", \"title=" + outputTitle  + "\"); \n"
 					"rename(\"" + outputTitle  + "\"); \n"
 					+ outputID + " = getImageID(); \n"
 					+ "selectImage("+outputID+"); \n";
@@ -141,8 +137,8 @@ public class MacroGenerator {
 
 
 	/**
-	 * Rename the remaining displayed images, so they don't have the crypting
-	 * identifier-string, but a humand-readable title.
+	 * Rename the remaining displayed images, so they don't have the crypty
+	 * identifier-string, but a human-readable title.
 	 * @return
 	 */
 	private String renameImages() {
@@ -179,10 +175,9 @@ public class MacroGenerator {
 
 	private static String duplicateImages(final UnitElement unit) {
 		String code = "";
-		for (int in = 0; in < unit.getInputsCount(); in++) {
-			final Input input = unit.getInput(in);
+		for (final Input input : unit.getInputs()) {
 			if(input.isNeedToCopyInput()) {
-				final String inputID = unit.getInput(in).getImageID();
+				final String inputID = input.getImageID();
 
 				code += "selectImage(" + inputID + "); \n";
 				code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +"\"); \n";
