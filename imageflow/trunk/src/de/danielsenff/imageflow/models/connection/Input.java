@@ -53,14 +53,8 @@ public class Input extends Pin {
 	
 
 	/**
-	 * Connected from this {@link UnitElement}
+	 * Connection
 	 */
-//	protected UnitElement fromUnit;
-	/**
-	 * Output from which this Input is connected
-	 */
-//	protected Output from;
-	
 	protected Connection connection;
 	
 	/**
@@ -368,5 +362,4 @@ public class Input extends Pin {
 		return false;
 	}
 	
-
 }

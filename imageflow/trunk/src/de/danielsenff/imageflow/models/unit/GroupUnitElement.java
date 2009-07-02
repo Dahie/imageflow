@@ -9,8 +9,10 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import visualap.Node;
+import visualap.Pin;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
+import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.ProxyInput;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
@@ -47,7 +49,7 @@ public class GroupUnitElement extends UnitElement {
 			final Collection<Node> selections, final UnitList allUnits) {
 		super(origin, unitName, "");
 		init();
-		includeUnits(selections, allUnits);
+		putUnits(selections, allUnits);
 	}
 
 
@@ -59,9 +61,9 @@ public class GroupUnitElement extends UnitElement {
 	}
 	
 
-	private void includeUnits(final Collection<Node> selections, final UnitList allUnits) {
+	public void putUnits(final Collection<Node> unitsToAdd, final UnitList allUnits) {
 		
-		for (Node node : selections) {
+		for (Node node : unitsToAdd) {
 			this.units.add(node);
 		}
 		
@@ -75,14 +77,27 @@ public class GroupUnitElement extends UnitElement {
 		setOrigin(new Point(x, y));
 			
 
+		dealWithConnections(allUnits.getConnections());
+		
+		
+		/*
+		 * remove original units from workflow
+		 */
+		
+		for (Node node : this.units) {
+			allUnits.remove(node);
+		}
+	}
+
+	private void dealWithConnections(final ConnectionList allConnections) {
 		/*
 		 * determine which connections "leave" the group
 		 */
-		// get all connections
-		ConnectionList allConnections = allUnits.getConnections();
+		
+		UnitList groupedUnits = this.units;
 		
 		for (Connection connection : allConnections) {
-			for (Node node : selections) {
+			for (Node node : groupedUnits) {
 				if (connection.isConnectedToUnit(node) 
 						&& !externalConnections.contains(connection))
 					externalConnections.add(connection);
@@ -90,8 +105,8 @@ public class GroupUnitElement extends UnitElement {
 		}
 		
 		for (Connection connection : externalConnections) {
-			for (Node node : selections) {
-				for (Node node2 : selections) {
+			for (Node node : groupedUnits) {
+				for (Node node2 : groupedUnits) {
 					if(connection.getFromUnit().equals(node)
 							&& connection.getToUnit().equals(node2)) {
 						internalConnections.add(connection);
@@ -118,7 +133,7 @@ public class GroupUnitElement extends UnitElement {
 				ProxyInput pInput = new ProxyInput(connection.getInput(), this, getInputsCount()+1);
 				addInput(pInput);
 				Connection newconn = new Connection(connection.getOutput(), pInput);
-				allUnits.getConnections().add(newconn);
+				allConnections.add(newconn);
 			}
 			if(contains(connection.getFromUnit())) 
 			{
@@ -133,17 +148,8 @@ public class GroupUnitElement extends UnitElement {
 					externalOutputs.put(connection.getOutput(), pOutput);
 				}
 				Connection newconn = new Connection(pOutput, connection.getInput());
-				allUnits.getConnections().add(newconn);
+				allConnections.add(newconn);
 			}
-		}
-		
-		
-		/*
-		 * remove old stuff
-		 */
-		
-		for (Node node : this.units) {
-			allUnits.remove(node);
 		}
 	}
 
@@ -200,14 +206,65 @@ public class GroupUnitElement extends UnitElement {
 	public GroupUnitElement clone() {
 		
 		GroupUnitElement groupClone = new GroupUnitElement(getOrigin(), getLabel());
+		
+		/*
+		 * clone included units
+		 */
+		HashMap<Pin, Pin> correspondingPins = new HashMap<Pin, Pin>();
+		
 		for (Node node : getUnits()) {
 			Node c;
 			try {
 				c = node.clone();
 				groupClone.getUnits().add(c);
+				
+				if(node instanceof UnitElement) {
+					UnitElement unit = (UnitElement) node;
+					UnitElement unitClone = (UnitElement) c;
+					for (int i = 0; i < unit.getInputsCount(); i++) {
+						correspondingPins.put(unit.getInput(i), unitClone.getInput(i));
+					}
+					for (int i = 0; i < unit.getOutputsCount(); i++) {
+						correspondingPins.put(unit.getOutput(i), unitClone.getOutput(i));
+					}
+				}
+				
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
 			}
+		}
+		
+		/*
+		 * reconnect internal connections
+		 * the internal connections have the original pins
+		 * we have to create new connections with the respective pins 
+		 */
+		
+		for (Connection originalConnection : getInternalConnections()) {
+			
+			Input cloneInput = (Input) correspondingPins.get(originalConnection.getInput());
+			Output cloneOutput = (Output) correspondingPins.get(originalConnection.getOutput());
+			Connection newConnection = new Connection(cloneInput, cloneOutput);
+			groupClone.getInternalConnections().add(newConnection);
+		}
+		
+		
+		
+		/*
+		 * clone pins
+		 */
+		
+		for (int i = 0; i < getInputsCount(); i++) {
+			Input input = ((ProxyInput)getInput(i)).getEmbeddedInput();
+			Input embeddedInputClone = (Input) correspondingPins.get(input); 
+			ProxyInput pInput = new ProxyInput(embeddedInputClone, groupClone, i+1);
+			groupClone.addInput(pInput);
+		}
+		for (int i = 0; i < getOutputsCount(); i++) {
+			Output output = ((ProxyOutput)getOutput(i)).getEmbeddedOutput();
+			Output embeddedOutputClone = (Output) correspondingPins.get(output); 
+			ProxyOutput pOutput = new ProxyOutput(embeddedOutputClone, groupClone, i+1);
+			groupClone.addOutput(pOutput);
 		}
 		
 		return groupClone;

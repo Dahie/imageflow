@@ -30,7 +30,7 @@ import de.danielsenff.imageflow.models.datatype.DataType;
  * @author senff
  *
  */
-public abstract class Pin implements Connectable {
+public abstract class Pin implements Connectable, Cloneable {
 	protected Node parent; // node that contains this Pin
 	protected int index;
 	transient protected int mark; // used only for analysis of graph
@@ -49,7 +49,6 @@ public abstract class Pin implements Connectable {
 	 * @param parent Parent Node
 	 */
 	public Pin (DataType type, int index, Node parent) {
-//		this.type = type;
 		this.dataType = type;
 		this.index = index;
 		

@@ -36,33 +36,28 @@ public class MacroFlowRunner {
 		this.macroUnitList = units.clone();
 		//FIXME why add all connections here? Doesn't this also include connections to units
 		// which are already deleted by the algorithm? does this matter?
-//		this.macroUnitList.setConnectionList(units.getConnections().clone());
-		this.macroUnitList.setConnectionList(units.getConnections());
 		this.macroUnitList = sortList(this.macroUnitList);
 	}
 
 	
 	/**
-	 * verification and generation of the ImageJ macro for the full graph
+	 * Verification and generation of the ImageJ macro for the full graph.
+	 * UnitElements has to be ordered according to the correct processing sequence
 	 * @return 
 	 */
 	public String generateMacro() {
 		/*
 		 *  analysis and verification of the connection network 
 		 */
-
 		if (!checkNetwork()) {
 			System.out.println("Error in node network.");
 			return null;
 		}
 
-		// unitElements has to be ordered according to the correct processing sequence
-
-
+		
 		/*
 		 *  generation of the ImageJ macro
 		 */
-
 		MacroGenerator macGen = new MacroGenerator(macroUnitList);
 		return macGen.generateMacro();
 	}
