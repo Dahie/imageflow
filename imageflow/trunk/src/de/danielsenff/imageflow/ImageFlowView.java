@@ -681,7 +681,8 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action
 	public void alignElements() {
-		graphPanel.setAlign(true);
+		boolean align = graphPanel.isAlign() ? false : true;
+		graphPanel.setAlign(align);
 		graphPanel.repaint();
 	}
 	
