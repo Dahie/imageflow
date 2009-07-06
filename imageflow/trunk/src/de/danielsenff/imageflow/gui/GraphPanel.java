@@ -482,6 +482,7 @@ public class GraphPanel extends GPanel {
 		super.mouseReleased(e);
 		if(align)
 			alignElements();
+		this.requestFocusInWindow(true);
 	}
 
 	/**
