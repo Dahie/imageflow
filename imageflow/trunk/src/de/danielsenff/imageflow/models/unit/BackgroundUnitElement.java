@@ -1,39 +1,37 @@
 package de.danielsenff.imageflow.models.unit;
 
-import ij.IJ;
-import ij.ImagePlus;
 import ij.plugin.filter.PlugInFilter;
 
 import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.io.File;
 
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
-import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 
 /**
- * Background specialisation of the {@link UnitElement}.
+ * Background specialization of the {@link UnitElement}.
  * @author danielsenff
  *
  */
-public class BackgroundUnitElement extends UnitElement {
+public class BackgroundUnitElement extends UnitElement implements ImageSourceUnit {
 
 	/**
 	 * @param unitName
 	 * @param unitsImageJSyntax
 	 */
-	public BackgroundUnitElement(final String unitName, final String unitsImageJSyntax) {
+	public BackgroundUnitElement(final String unitName, 
+			final String unitsImageJSyntax) {
 		super(unitName, unitsImageJSyntax);
 	}
 
-	public BackgroundUnitElement(final Point origin, final String unitName,
+	public BackgroundUnitElement(final Point origin, 
+			final String unitName,
 			final String unitsImageJSyntax) {
 		super(origin, unitName, unitsImageJSyntax);
 	}
 
-	public BackgroundUnitElement(final Point origin, final String unitName,
+	public BackgroundUnitElement(final Point origin, 
+			final String unitName,
 			final MacroElement macroElement) {
 		super(origin, unitName, macroElement);
 	}
@@ -55,8 +53,7 @@ public class BackgroundUnitElement extends UnitElement {
 	 * @param choice
 	 */
 	public void setOutputImageType(final String choice) {
-		final int imageType = fromChoice(choice);
-		setOutputImageType(imageType);
+		setOutputImageType(fromChoice(choice));
 	}
 	
 	/**
@@ -85,6 +82,10 @@ public class BackgroundUnitElement extends UnitElement {
 
 	public int getImageType() {
 		return fromChoice((String)getParameter(2).getValue()); 
+	}
+
+	public int getBitDepth() {
+		return 0;
 	}
 	
 }

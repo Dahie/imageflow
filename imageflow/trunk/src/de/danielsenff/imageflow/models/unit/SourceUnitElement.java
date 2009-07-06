@@ -28,7 +28,7 @@ import de.danielsenff.imageflow.models.parameter.StringParameter;
  * @author danielsenff
  *
  */
-public class SourceUnitElement extends UnitElement {
+public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 
 	/**
 	 * @param origin
@@ -156,6 +156,7 @@ public class SourceUnitElement extends UnitElement {
 		if(new File(path).exists()) {
 			ImagePlus imp = IJ.openImage(path);
 			imp.close();
+			System.out.println(imp.getBitDepth());
 			return imp.getBitDepth();
 		}
 		return -1;
@@ -173,6 +174,7 @@ public class SourceUnitElement extends UnitElement {
 				final int type = imp.getType();
 				imp.close();
 				imp = null;
+				System.out.println(type);
 				switch (type) {
 				case ImagePlus.GRAY8:
 					return PlugInFilter.DOES_8G;

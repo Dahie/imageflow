@@ -11,6 +11,7 @@ import visualap.Pin;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
@@ -115,7 +116,12 @@ public class ConnectionList extends ArrayList<Connection> implements Model, Clon
 		
 		// check the bit depth
 		if(!connection.isCompatible()) {
-			System.out.println("Connection disallowed: Incombatible bit depth");
+			String dataTypeI = connection.getInput().getDataType().toString();
+			String dataTypeO = connection.getOutput().getDataType().toString();
+			System.out.println(((DataTypeFactory.Image)connection.getOutput().getDataType()).getImageBitDepth());
+			System.out.println(((DataTypeFactory.Image)connection.getInput().getDataType()).getImageBitDepth());
+			System.out.println("Connection disallowed: " +
+					"Incompatible dataTypes " + dataTypeO + " to " + dataTypeI);
 			//			return false;
 		}
 		
@@ -124,7 +130,6 @@ public class ConnectionList extends ArrayList<Connection> implements Model, Clon
 		//check if input already got a connection, if yes, delete that one
 		for (int i = 0; i < this.size(); i++) {
 			final Connection conn = (Connection) this.get(i);
-			
 			// edges is connected with this input?
 			if(conn.isConnected(input)) {
 				remove(conn);

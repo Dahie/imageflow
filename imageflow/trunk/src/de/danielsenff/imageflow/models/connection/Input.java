@@ -18,14 +18,6 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  */
 public class Input extends Pin {
 	
-	/**
-	 * the name to be displayed in the context help
-	 */
-	protected String displayName;
-	/**
-	 * the short name to be displayed on the unit's icon
-	 */
-	protected String shortDisplayName = "I";
 	
 	/**
 	 * the id of the image connected to this input
@@ -97,6 +89,7 @@ public class Input extends Pin {
 		setRequiredInput(requiredInput);
 		if(getDataType() instanceof DataTypeFactory.Image) {
 			((Image)getDataType()).setParentUnitElement((UnitElement) getParent());
+			((Image)getDataType()).setParentPin(this);
 		}
 	}
 
@@ -177,14 +170,6 @@ public class Input extends Pin {
 	
 
 
-	/**
-	 * Get the abbreviated DisplayName
-	 * @return
-	 */
-	public String getShortDisplayName() {
-		return shortDisplayName;
-	}
-	
 	/**
 	 * @return the imageID
 	 */

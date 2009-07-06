@@ -36,10 +36,21 @@ public abstract class Pin implements Connectable, Cloneable {
 	transient protected int mark; // used only for analysis of graph
 
 	/**
+	 * the name to be displayed in the context help
+	 */
+	protected String displayName;
+	
+
+	/**
+	 * the short name to be displayed on the unit's icon
+	 */
+	protected String shortDisplayName = "I";
+	
+	
+	/**
 	 * Type of data expected from the connected {@link Output}.
 	 */
 	protected DataType dataType;
-	protected String type = "Image";
 	
 	/**
 	 *  type can be "input" or "output"
@@ -77,9 +88,22 @@ public abstract class Pin implements Connectable, Cloneable {
 	 * @return
 	 */
 	public String getName () {
-		return parent.getLabel()+"."+type+index;
+		return parent.getLabel()+"." + dataType.getClass().getSimpleName() + index;
 	}
 
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	/**
+	 * Get the abbreviated DisplayName
+	 * @return
+	 */
+	public String getShortDisplayName() {
+		return shortDisplayName;
+	}
+	
+	
 	/**
 	 * {@link DataType} this Pin is permitting.
 	 * @return

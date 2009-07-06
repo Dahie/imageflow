@@ -545,15 +545,18 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 */
 	public void unbindUnit(final UnitElement unit) {
 		// find connections which are attached to this unit
-		ConnectionList connections = getConnections();
-		for (int i = 0; i < connections.size(); i++) {
-			Connection connection = (Connection) connections.get(i);
+		Collection<Connection> tmpConn = new Vector<Connection>();
+		for (Connection connection : getConnections()) {
 			if(connection.isConnectedToUnit(unit)) {
-				// delete connections
-				connections.remove(connection);
-				i--;
+				// put in list to delete
+				tmpConn.add(connection);
 			}
 		}
+		for (Connection connection : tmpConn) {
+			// delete connections
+			connections.remove(connection);
+		}
+		
 	}
 
 

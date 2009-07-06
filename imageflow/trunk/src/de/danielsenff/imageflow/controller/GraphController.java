@@ -139,6 +139,7 @@ public class GraphController{
 			Output originalOutput = pOutput.getEmbeddedOutput();
 			if(originalOutput.getDataType() instanceof DataTypeFactory.Image) {
 				((DataTypeFactory.Image)originalOutput.getDataType()).setParentUnitElement(originalOutput.getParent());
+				((DataTypeFactory.Image)originalOutput.getDataType()).setParentPin(originalOutput);
 			}
 			
 			for (Connection	connection : pOutput.getConnections()) {

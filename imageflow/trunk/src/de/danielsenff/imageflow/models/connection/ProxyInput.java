@@ -25,11 +25,6 @@ public class ProxyInput extends Input {
 		super(embeddedInput.getDataType(), unit, i, true);
 		setupInput(embeddedInput.getName(), embeddedInput.getShortDisplayName(), embeddedInput.isNeedToCopyInput());
 		this.embeddedInput = embeddedInput;
-		
-		// redirect connection from embeddedInput to this
-		
-//		this.connectTo(this.embeddedInput.getFromOutput());
-		
 	}
 	
 	/**

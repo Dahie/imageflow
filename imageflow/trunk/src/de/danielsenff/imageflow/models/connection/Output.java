@@ -20,18 +20,6 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  */
 public class Output extends Pin {
 	
-
-	/**
-	 * the name to be displayed in the context help
-	 */
-	protected String name;
-
-
-	/**
-	 * the short name to be displayed on the unit's icon
-	 */
-	protected String shortDisplayName = "O";
-
 	/**
 	 * the title of the image generated from this output
 	 */
@@ -77,6 +65,7 @@ public class Output extends Pin {
 		this.connections = new Vector<Connection>();
 		if(getDataType() instanceof DataTypeFactory.Image) {
 			((Image)getDataType()).setParentUnitElement((UnitElement) getParent());
+			((Image)getDataType()).setParentPin(this);
 		}
 		generateID(((UnitElement)this.parent).getUnitID(), getIndex());
 	}
@@ -129,7 +118,7 @@ public class Output extends Pin {
 	 * @param outputBitDepth
 	 */
 	public void setupOutput(final String name, final String shortname, final int outputBitDepth) {
-		this.name = name;
+		this.displayName = name;
 		this.shortDisplayName = shortname;
 //		this.imageType = outputBitDepth;
 	}
@@ -139,7 +128,7 @@ public class Output extends Pin {
 	 * @param shortname
 	 */
 	public void setupOutput(final String name, final String shortname) {
-		this.name = name;
+		this.displayName = name;
 		this.shortDisplayName = shortname;
 	}
 	
@@ -170,16 +159,6 @@ public class Output extends Pin {
 	}
 	
 
-
-
-	/**
-	 * Get the abbreviated DisplayName
-	 * @return
-	 */
-	public String getShortDisplayName() {
-		return this.shortDisplayName;
-	}
-	
 	/**
 	 * 
 	 * @return the imageID

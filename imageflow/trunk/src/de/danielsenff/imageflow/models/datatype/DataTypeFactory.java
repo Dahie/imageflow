@@ -1,8 +1,13 @@
 package de.danielsenff.imageflow.models.datatype;
 
-import visualap.Pin;
 import ij.plugin.filter.PlugInFilter;
+import visualap.Pin;
+import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.connection.ProxyInput;
+import de.danielsenff.imageflow.models.connection.ProxyOutput;
+import de.danielsenff.imageflow.models.unit.ImageSourceUnit;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 /**
@@ -94,6 +99,7 @@ public class DataTypeFactory {
 		 * Unit to which this DataType belongs
 		 */
 		protected UnitElement parent;
+		protected Pin parentPin;
 
 		/**
 		 * @param imageBitDepth
@@ -114,9 +120,32 @@ public class DataTypeFactory {
 		 * @return
 		 */
 		public int getImageBitDepth() {
+			/*System.out.println(this);
+			System.out.println(parent);
+			System.out.println(imageBitDepth);*/
 			if(this.imageBitDepth != -1 && this.imageBitDepth != PlugInFilter.DOES_ALL) {
 				return this.imageBitDepth; 
-			} else if(parent != null) {
+//			} else if(parentPin instanceof ProxyInput) {
+//
+			} else if(parentPin instanceof ProxyOutput) {
+				
+				// instead of looking at our own parent to get a valid image type from an input
+				// we look at the parent of the embedded pin, thereby bubbling through
+				// the internal list of the group
+				UnitElement parent = ((ProxyOutput)parentPin).getEmbeddedOutput().getParent();
+				
+				//TODO this could be nicer, how to handle multiple inputs?
+				if(parent.hasInputsConnected()) {
+					for (Input input : parent.getInputs()) {
+						if(input.isConnected() && input.getDataType() instanceof Image) {
+							return ((Image)input.getFromOutput().getDataType()).getImageBitDepth();
+						}
+					}
+
+					return -1;
+				}
+				
+			} else if(parentPin instanceof Output) {
 
 				//TODO this could be nicer, how to handle multiple inputs?
 				if(parent.hasInputsConnected()) {
@@ -127,7 +156,15 @@ public class DataTypeFactory {
 
 					return -1;
 				} 
+			} else if(parentPin instanceof Input) {
+
+				Input parentInput = (Input) parentPin;
+				if(parentInput.isConnected()) {
+					Connection conn = parentInput.getConnection();
+					return ((Image)conn.getOutput().getDataType()).getImageBitDepth();
+				}
 			}
+
 			// this means our output doesn't know his own capabilities
 			// and because it has no inputs, it can't get them anywhere
 			// this sucks
@@ -141,6 +178,33 @@ public class DataTypeFactory {
 			return false;
 		}
 
+		/*	public int getImageBitDepth() {
+
+			if(this.imageBitDepth != -1 && this.imageBitDepth != PlugInFilter.DOES_ALL) {
+				return this.imageBitDepth; 
+			} else if(parentPin instanceof ProxyInput) {
+
+
+			} else if(parent != null) {
+
+				//TODO this could be nicer, how to handle multiple inputs?
+				if(parent.hasInputsConnected()) {
+					for (Input input : parent.getInputs()) {
+						if(input.isConnected() && input.getDataType() instanceof Image)
+							return ((Image)input.getFromOutput().getDataType()).getImageBitDepth();
+					}
+
+					return -1;
+				} else if(parent instanceof ImageSourceUnit) {
+					return ((ImageSourceUnit)parent).getImageType();
+				} 
+			}
+			// this means our output doesn't know his own capabilities
+			// and because it has no inputs, it can't get them anywhere
+			// this sucks
+			return this.imageBitDepth;
+		}*/
+
 		/**
 		 * Returns true, if the imageBitDepth in question is supported
 		 * by this Input.
@@ -149,8 +213,16 @@ public class DataTypeFactory {
 		 */
 		public boolean isImageBitDepthCompatible(final int foreignImageBitDepth) {
 			int ownImageBitDepth = getImageBitDepth();
+					
 			if(ownImageBitDepth != -1 && foreignImageBitDepth != -1) {
-				return (ownImageBitDepth&foreignImageBitDepth) != 0;	
+				/*System.out.println(this);
+				System.out.println(ownImageBitDepth + " vs " + foreignImageBitDepth);*/
+				int remain = ownImageBitDepth&foreignImageBitDepth;
+				
+				// if 0 -> it doesn'T fit
+				// if value, we got a match
+				
+				return remain != 0;	
 			}
 			return false;
 		}
@@ -164,7 +236,11 @@ public class DataTypeFactory {
 
 		@Override
 		public String toString() {
-			return super.toString() + " Parent:"+parent.getLabel();
+			return super.toString() + " ParentPin: "+parentPin.getDisplayName();
+		}
+
+		public void setParentPin(Pin pin) {
+			this.parentPin = pin;
 		}
 
 	}

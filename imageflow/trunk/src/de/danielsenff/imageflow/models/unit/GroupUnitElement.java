@@ -87,6 +87,16 @@ public class GroupUnitElement extends UnitElement {
 		for (Node node : this.units) {
 			allUnits.remove(node);
 		}
+		
+		for (Connection connection : internalConnections) {
+			connection.connect();
+		}
+		for (Connection connection : externalConnections) {
+			if(this.units.contains(connection.getToUnit())) {
+				connection.connect();
+			}
+		}
+		
 	}
 
 	private void dealWithConnections(final ConnectionList allConnections) {

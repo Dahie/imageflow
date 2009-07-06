@@ -24,7 +24,10 @@ public class ProxyOutput extends Output {
 	public ProxyOutput(final Output embeddedOutput, 
 			final UnitElement parentNode, 
 			final int i) {
-		super(embeddedOutput.getName(), embeddedOutput.getShortDisplayName(), embeddedOutput.getDataType(), parentNode, i);
+		super(embeddedOutput.getName(), 
+				embeddedOutput.getShortDisplayName(), 
+				embeddedOutput.getDataType(), 
+				parentNode, i);
 		setDoDisplay(embeddedOutput.isDoDisplay());
 		this.embeddedOutput = embeddedOutput;
 	}

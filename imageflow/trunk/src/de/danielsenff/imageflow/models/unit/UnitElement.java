@@ -429,7 +429,6 @@ public class UnitElement extends AbstractUnit {
 	 */
 	public void showProperties() {
 		final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters", ImageFlow.getApplication().getMainFrame()) ;
-		System.out.println(getHelpString());
 		gd.addMessage(getHelpString());
 		//		gd.addMessage(" ");
 

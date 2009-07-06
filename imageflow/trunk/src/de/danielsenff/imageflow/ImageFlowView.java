@@ -181,6 +181,8 @@ public class ImageFlowView extends FrameView {
 				setSelected(selections.isSelected());
 			}
 		});
+		
+		
 		setModified(false);
 	}
 
