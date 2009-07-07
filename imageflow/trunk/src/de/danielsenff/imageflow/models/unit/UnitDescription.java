@@ -55,6 +55,7 @@ public class UnitDescription {
 	protected BufferedImage icon;
 	protected File iconFile;
 	
+	
 	public UnitDescription(File unitXML) {
 		this(unitXML, Tools.getXMLRoot(unitXML));
 	}
@@ -82,12 +83,8 @@ public class UnitDescription {
 		    	componentSizeString = elementGeneral.getChild("IconSize").getValue();
 			    componentSize = NodeIcon.getSizeFromString(componentSizeString);
 		    }
-		    	
 		    
 			imageJSyntax = elementGeneral.getChild("ImageJSyntax").getValue() + "\n";
-
-			
-			
 			
 			if(pathToIcon.length() > 0) {
 				String path = DelegatesController.getUnitIconFolder() + File.separator+ pathToIcon;
@@ -101,7 +98,7 @@ public class UnitDescription {
 			
 			// parameters
 			Element parametersElement = root.getChild("Parameters");
-			if (parametersElement != null) {	
+			if (parametersElement != null) {
 				processParameter(parametersElement);
 			}
 
@@ -116,6 +113,13 @@ public class UnitDescription {
 			if (outputsElement != null) {
 				processOutputs(outputsElement);
 			}
+			
+			if(root.getChild("Units") != null) {
+				
+				
+				
+			}
+			
 		}
 
 		catch (Exception e) {
@@ -228,7 +232,7 @@ public class UnitDescription {
 			}
 			
 			
-			actOutput.doDisplay = outputElement.getChild("DoDisplay").getValue().equals("true")?true:false;
+			actOutput.doDisplay = outputElement.getChild("DoDisplay").getValue().equals("true")? true : false;
 			isDisplayUnit = actOutput.doDisplay;
 			num++;
 		}

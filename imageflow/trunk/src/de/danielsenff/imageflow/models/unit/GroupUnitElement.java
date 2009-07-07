@@ -31,13 +31,13 @@ public class GroupUnitElement extends UnitElement {
 	private Collection<Connection> internalConnections;
 	private Collection<Connection> externalConnections;
 
-	
-	private GroupUnitElement(Point point, String name) {
+
+	public GroupUnitElement(Point point, String name) {
 		super(point, "name", "");
 		setLabel(name);
 		init();
 	}
-	
+
 	/**
 	 * @param origin
 	 * @param unitName
@@ -49,7 +49,11 @@ public class GroupUnitElement extends UnitElement {
 			final Collection<Node> selections, final UnitList allUnits) {
 		super(origin, unitName, "");
 		init();
-		putUnits(selections, allUnits);
+		try {
+			putUnits(selections, allUnits);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 
@@ -59,53 +63,99 @@ public class GroupUnitElement extends UnitElement {
 		this.externalConnections = new Vector<Connection>();
 		this.originalConnections = new Vector<Connection>();
 	}
-	
 
-	public void putUnits(final Collection<Node> unitsToAdd, final UnitList allUnits) {
-		
-		for (Node node : unitsToAdd) {
-			this.units.add(node);
-		}
-		
-		/*
-		 * determine position
-		 */
-		
-		int x, y;
-		x = (int) getUnit(0).getOrigin().getX();
-		y = (int) getUnit(0).getOrigin().getY();
-		setOrigin(new Point(x, y));
-			
 
-		dealWithConnections(allUnits.getConnections());
-		
-		
+	public void putUnits(final Collection<Node> unitsToAdd, final UnitList allUnits) throws Exception {
+
+		if(selectedUnitsConsistentGroup(unitsToAdd, allUnits)) {
+
+			for (Node node : unitsToAdd) {
+				this.units.add(node);
+			}
+
+			/*
+			 * determine position
+			 */
+
+			int x, y;
+			x = (int) getUnit(0).getOrigin().getX();
+			y = (int) getUnit(0).getOrigin().getY();
+			setOrigin(new Point(x, y));
+
+			dealWithConnections(allUnits.getConnections());
+		} else throw new Exception("group not albe");
+
 		/*
 		 * remove original units from workflow
 		 */
-		
+
 		for (Node node : this.units) {
 			allUnits.remove(node);
 		}
-		
+
 		for (Connection connection : internalConnections) {
 			connection.connect();
 		}
+
 		for (Connection connection : externalConnections) {
 			if(this.units.contains(connection.getToUnit())) {
 				connection.connect();
 			}
 		}
-		
+
+	}
+
+	/**
+	 * True if the selected Units result in a consistent group.
+	 * @param allUnits 
+	 * @param unitsToAdd 
+	 * @return
+	 */
+	private boolean selectedUnitsConsistentGroup(Collection<Node> unitsToAdd, UnitList allUnits) {
+
+		/*
+		 * for each input we test, if every unit in input graph is 
+		 */
+
+		/*for (Node node : allUnits) {
+			if(node instanceof UnitElement) {
+				UnitElement unit = (UnitElement) node;
+				for (Input input : unit.getInputs()) {
+					if(input.isConnected() && !testUnit(unitsToAdd, input.getConnection()))
+						return false;
+				}
+			}
+		}*/
+
+		return true;
+	}
+
+	private boolean testUnit(Collection<Node> unitsToAdd, Connection connection) {
+
+		UnitElement unit = (UnitElement)connection.getFromUnit();
+		if(unitsToAdd.contains(unit)
+				&& unitsToAdd.contains(connection.getToUnit())) {
+			// unit is in selection
+			// check if the preceding unit is also in selection
+			return true;
+
+		} else {
+			for (Input input : unit.getInputs()) {
+				if(input.isConnected() ) {
+					return testUnit(unitsToAdd, input.getConnection());
+				}	
+			}
+		}
+		return false;
 	}
 
 	private void dealWithConnections(final ConnectionList allConnections) {
 		/*
 		 * determine which connections "leave" the group
 		 */
-		
+
 		UnitList groupedUnits = this.units;
-		
+
 		for (Connection connection : allConnections) {
 			for (Node node : groupedUnits) {
 				if (connection.isConnectedToUnit(node) 
@@ -113,7 +163,7 @@ public class GroupUnitElement extends UnitElement {
 					externalConnections.add(connection);
 			}
 		}
-		
+
 		for (Connection connection : externalConnections) {
 			for (Node node : groupedUnits) {
 				for (Node node2 : groupedUnits) {
@@ -128,11 +178,11 @@ public class GroupUnitElement extends UnitElement {
 		for (Connection connection : internalConnections) {
 			externalConnections.remove(connection);
 		}
-		
+
 		for (Connection connection : externalConnections) {
 			this.originalConnections.add(connection);
 		}
-		
+
 		/*
 		 * create inputs and outputs based on external connections
 		 */
@@ -179,7 +229,7 @@ public class GroupUnitElement extends UnitElement {
 	public int getGroupSize() {
 		return this.units.getSize();
 	}
-	
+
 	/**
 	 * 
 	 * @param i
@@ -203,8 +253,8 @@ public class GroupUnitElement extends UnitElement {
 	public Vector<Connection> getOriginalConnections() {
 		return originalConnections;
 	}
-	
-	
+
+
 	/**
 	 * @return the internalConnections
 	 */
@@ -214,20 +264,20 @@ public class GroupUnitElement extends UnitElement {
 
 	@Override
 	public GroupUnitElement clone() {
-		
+
 		GroupUnitElement groupClone = new GroupUnitElement(getOrigin(), getLabel());
-		
+
 		/*
 		 * clone included units
 		 */
 		HashMap<Pin, Pin> correspondingPins = new HashMap<Pin, Pin>();
-		
+
 		for (Node node : getUnits()) {
 			Node c;
 			try {
 				c = node.clone();
 				groupClone.getUnits().add(c);
-				
+
 				if(node instanceof UnitElement) {
 					UnitElement unit = (UnitElement) node;
 					UnitElement unitClone = (UnitElement) c;
@@ -238,32 +288,32 @@ public class GroupUnitElement extends UnitElement {
 						correspondingPins.put(unit.getOutput(i), unitClone.getOutput(i));
 					}
 				}
-				
+
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		/*
 		 * reconnect internal connections
 		 * the internal connections have the original pins
 		 * we have to create new connections with the respective pins 
 		 */
-		
+
 		for (Connection originalConnection : getInternalConnections()) {
-			
+
 			Input cloneInput = (Input) correspondingPins.get(originalConnection.getInput());
 			Output cloneOutput = (Output) correspondingPins.get(originalConnection.getOutput());
 			Connection newConnection = new Connection(cloneInput, cloneOutput);
 			groupClone.getInternalConnections().add(newConnection);
 		}
-		
-		
-		
+
+
+
 		/*
 		 * clone pins
 		 */
-		
+
 		for (int i = 0; i < getInputsCount(); i++) {
 			Input input = ((ProxyInput)getInput(i)).getEmbeddedInput();
 			Input embeddedInputClone = (Input) correspondingPins.get(input); 
@@ -276,8 +326,17 @@ public class GroupUnitElement extends UnitElement {
 			ProxyOutput pOutput = new ProxyOutput(embeddedOutputClone, groupClone, i+1);
 			groupClone.addOutput(pOutput);
 		}
-		
+
 		return groupClone;
 	}
 	
+	@Override
+	public String getHelpString() {
+		String string = "Grouped units: \n";
+		for (Node node : getUnits()) {
+			string += node.getLabel() + " \n ";
+		}
+		return string;
+	}
+
 }

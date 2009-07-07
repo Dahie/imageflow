@@ -69,6 +69,10 @@ public class DataTypeFactory {
 			boolean compatible = compareType instanceof Integer;
 			return compatible;
 		}
+		@Override
+		public Integer clone() {
+			return new Integer();
+		}
 	}
 
 	/**
@@ -80,6 +84,11 @@ public class DataTypeFactory {
 		public boolean isCompatible(DataType compareType) {
 			boolean compatible = compareType instanceof Integer || compareType instanceof Double;
 			return compatible;
+		}
+		
+		@Override
+		public Double clone() {
+			return new Double();
 		}
 	}
 
@@ -241,6 +250,13 @@ public class DataTypeFactory {
 
 		public void setParentPin(Pin pin) {
 			this.parentPin = pin;
+		}
+		
+		@Override
+		public Image clone()  {
+		
+			Image image = new Image(this.imageBitDepth);
+			return image;
 		}
 
 	}

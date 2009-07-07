@@ -8,7 +8,7 @@ import visualap.Pin;
  * @author danielsenff
  *
  */
-public interface DataType {
+public interface DataType extends Cloneable {
 
 	/**
 	 * Compares two DataTypes to see if they are compatible.
@@ -16,5 +16,6 @@ public interface DataType {
 	 * @return
 	 */
 	public boolean isCompatible(DataType compareType);
+	public DataType clone();
 	
 }

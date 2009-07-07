@@ -12,6 +12,8 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.xml.datatype.DatatypeFactory;
+
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.helper.PaintUtil;
@@ -19,6 +21,8 @@ import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.datatype.DataType;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.AbstractParameter;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
@@ -429,8 +433,8 @@ public class UnitElement extends AbstractUnit {
 	 */
 	public void showProperties() {
 		final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters", ImageFlow.getApplication().getMainFrame()) ;
-		gd.addMessage(getHelpString());
-		//		gd.addMessage(" ");
+		if(getHelpString() != null)
+			gd.addMessage(getHelpString());
 
 
 		// label field 
@@ -778,14 +782,14 @@ public class UnitElement extends AbstractUnit {
 				this.label, 
 				imageJSyntax);
 		for (int j = 0; j < getInputsCount(); j++) {
-			Input input = getInput(j);
-			Input clonedInput = new Input(input.getDataType(), clone, j+1, input.isRequired());
+			Input input = getInput(j);				
+			Input clonedInput = new Input(input.getDataType().clone(), clone, j+1, input.isRequired());
 			clonedInput.setupInput(input.getName(), input.getShortDisplayName(), input.isNeedToCopyInput());
 			clone.addInput(clonedInput);
 		}
 		for (int i = 0; i < getOutputsCount(); i++) {
 			Output output = getOutput(i);
-			Output clonedOutput = new Output(output.getDataType(), clone, i+1);
+			Output clonedOutput = new Output(output.getDataType().clone(), clone, i+1);
 			clonedOutput.setupOutput(output.getName(), output.getShortDisplayName());
 			clonedOutput.setDoDisplay(output.isDoDisplay());
 			clone.addOutput(clonedOutput);
@@ -793,14 +797,22 @@ public class UnitElement extends AbstractUnit {
 		for (Parameter parameter : parameters) {
 			Parameter clonedParameter;
 			if(parameter instanceof ChoiceParameter) {
-				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), parameter.getParaType(),
-						parameter.getValue(), parameter.getHelpString(), null, ((ChoiceParameter)parameter).getChoiceIndex());
+				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+						parameter.getParaType(),
+						parameter.getValue(), 
+						parameter.getHelpString(), null, 
+						((ChoiceParameter)parameter).getChoiceIndex());
 			} else if (parameter instanceof BooleanParameter){
-				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), parameter.getParaType(),
-						parameter.getValue(), parameter.getHelpString(), ((BooleanParameter)parameter).getTrueString(), 0);
+				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+						parameter.getParaType(),
+						parameter.getValue(), 
+						parameter.getHelpString(), 
+						((BooleanParameter)parameter).getTrueString(), 0);
 			} else {
-				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), parameter.getParaType(),
-						parameter.getValue(), parameter.getHelpString());	
+				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+						parameter.getParaType(),
+						parameter.getValue(), 
+						parameter.getHelpString());	
 			}
 			clone.addParameter(parameter);
 		}
