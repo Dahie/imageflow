@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
@@ -38,6 +39,7 @@ public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
     @Override
     protected GraphController doInBackground() throws IOException {
         final GraphController graphController = new GraphController();
+    	
         final UnitList unitList = graphController.getUnitElements();
         unitList.clear();
         try {
@@ -56,6 +58,13 @@ public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
         } else {
             return null;
         }
+    }
+    
+    @Override
+    protected void succeeded(GraphController graphController) {
+    	this.view.setGraphController(graphController);
+    	System.out.println("replace graphcontroller");
+    	super.succeeded(graphController);
     }
     
 }

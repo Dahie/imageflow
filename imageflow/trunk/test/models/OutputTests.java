@@ -265,7 +265,7 @@ public class OutputTests {
 		Input inputU4 = unit4.getInput(0);
 		
 		assertFalse(outputU2.existsInInputSubgraph(unit4));
-		assertFalse(inputU4.isConnectedInInputBranch(unit2));
+		assertFalse(inputU4.isConnectedInOutputBranch(unit2));
 		
 		// now we create a loop
 		
@@ -274,7 +274,7 @@ public class OutputTests {
 		assertTrue(conn3.isConnected());
 		
 		assertTrue(outputU2.existsInInputSubgraph(unit4));
-		assertTrue(inputU4.isConnectedInInputBranch(unit2));
+		assertTrue(inputU4.isConnectedInOutputBranch(unit2));
 	}
 	
 
@@ -294,7 +294,7 @@ public class OutputTests {
 		Input inputU4 = unit4.getInput(0);
 		
 		assertFalse(outputU2.existsInInputSubgraph(unit4));
-		assertFalse(inputU4.isConnectedInInputBranch(unit2));
+		assertFalse(inputU4.isConnectedInOutputBranch(unit2));
 		
 		// now we create a loop
 		
@@ -303,7 +303,7 @@ public class OutputTests {
 		assertTrue(conn3.isConnected());
 		
 		assertTrue(outputU2.existsInInputSubgraph(unit4));
-		assertTrue(inputU4.isConnectedInInputBranch(unit2));
+		assertTrue(inputU4.isConnectedInOutputBranch(unit2));
 	}
 	
 	@Test public void testLoopScenario3() {
@@ -314,7 +314,7 @@ public class OutputTests {
 		Input inputU4 = unit4.getInput(0);
 		
 		assertFalse(outputU1.existsInInputSubgraph(unit4));
-		assertFalse(inputU4.isConnectedInInputBranch(unit1));
+		assertFalse(inputU4.isConnectedInOutputBranch(unit1));
 		
 		//connecting first time
 		
@@ -323,7 +323,7 @@ public class OutputTests {
 		assertTrue(conn1.isConnected());
 		
 		assertFalse(outputU1.existsInInputSubgraph(unit4));
-		assertFalse(inputU4.isConnectedInInputBranch(unit1));
+		assertFalse(inputU4.isConnectedInOutputBranch(unit1));
 		
 		// creating the same connection a second time
 		

@@ -103,7 +103,7 @@ public class ImageFlowView extends FrameView {
 
 	private boolean modified = false;
 	private boolean selected = false;
-	private boolean hasPaste = false;
+	private boolean paste = false;
 
 	private boolean showlog = false;
 
@@ -123,14 +123,16 @@ public class ImageFlowView extends FrameView {
 	public ImageFlowView(final Application app) {
 		super(app);
 		
-		this.graphController = new GraphController();
-		this.units = this.graphController.getUnitElements();
-		this.connections = this.graphController.getConnections();
-		this.selections = this.graphController.getSelections();
+		this.graphController = new GraphController(); 
+		this.units 			= graphController.getUnitElements();
+		this.connections 	= graphController.getConnections();
+		this.selections 	= graphController.getSelections();
 		this.unitDelegates = DelegatesController.getInstance().getUnitDelegates();
 		
 		try {
-			this.getFrame().setIconImage(ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/imageflow/resources/iw-icon.png")));
+			this.getFrame().setIconImage(
+					ImageIO.read(this.getClass().getResourceAsStream(
+							"/de/danielsenff/imageflow/resources/iw-icon.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -181,7 +183,6 @@ public class ImageFlowView extends FrameView {
 				setSelected(selections.isSelected());
 			}
 		});
-		
 		
 		setModified(false);
 	}
@@ -412,10 +413,11 @@ public class ImageFlowView extends FrameView {
 	 */
 	public void setGraphController(final GraphController graphController) {
 		this.graphController = graphController;
-		this.units = this.graphController.getUnitElements();
-		this.connections = this.graphController.getConnections();
-		this.selections = this.graphController.getSelections();
+		this.units 			= graphController.getUnitElements();
+		this.connections 	= graphController.getConnections();
+		this.selections 	= graphController.getSelections();
 		graphPanel.setGraphController(this.graphController);
+		registerModelListeners();
 		graphPanel.repaint();
 	}
 	
@@ -486,17 +488,17 @@ public class ImageFlowView extends FrameView {
 
 
 	/**
-	 * @return the hasPaste
+	 * @return the paste
 	 */
-	public boolean isHasPaste() {
-		return hasPaste;
+	public boolean isPaste() {
+		return paste;
 	}
 
 	/**
 	 * @param hasPaste the hasPaste to set
 	 */
-	public void setHasPaste(boolean hasPaste) {
-		this.hasPaste = hasPaste;
+	public void setPaste(boolean hasPaste) {
+		this.paste = hasPaste;
 	}
 	
 	/**
@@ -602,7 +604,16 @@ public class ImageFlowView extends FrameView {
 			GroupUnitElement group = (GroupUnitElement) selections.get(0);
 			graphController.ungroup(group);
 		} else {
-			graphController.group(selections);
+			try {
+				graphController.group(selections);
+			} catch (Exception e) {
+				System.out.println("Group disallowed: No conistent connections between units");
+				JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+						"This grouping of units is not permitted.  " + '\n' +
+						"The connected units need to form a conistent branch.",
+						"Grouping refused", 
+						JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
 	
@@ -744,7 +755,7 @@ public class ImageFlowView extends FrameView {
 //				activePanel.getEdgeL().remove(c);
 			}
 			selectedUnits.clear();
-			setHasPaste(true);
+			setPaste(true);
 		}
 		graphPanel.repaint();
 	}
@@ -768,7 +779,7 @@ public class ImageFlowView extends FrameView {
 				} catch (final CloneNotSupportedException e) {
 					e.printStackTrace();
 				}	
-				setHasPaste(true);
+				setPaste(true);
 			}
 			
 		}
@@ -777,7 +788,7 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * Paste {@link UnitElement} into the workflow.
 	 */
-	@Action(enabledProperty = "hasPaste")
+	@Action(enabledProperty = "paste")
 	public void paste() {
 		final Selection<Node> selectedUnits = graphPanel.getSelection();
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
@@ -787,14 +798,13 @@ public class ImageFlowView extends FrameView {
 			selectedUnits.addAll(copyUnitsList);
 			copyUnitsList.clear();
 			for (final Node t : selectedUnits) {
-//			for (Node t : copyUnitsList) {
 				try {
 					t.setSelected(true);
 //					UnitElement clone = (UnitElement)t.clone();
 					// retain a copy, in case he pastes several times
 					final Node clone = t.clone();
 					clone.setLabel(t.getLabel());
-					graphPanel.getNodeL().add(t, t.getLabel());
+					graphPanel.getNodeL().add(t);
 					copyUnitsList.add(clone);
 				} catch(final CloneNotSupportedException ex) {
 //					ErrorPrinter.printInfo("CloneNotSupportedException");
@@ -827,7 +837,6 @@ public class ImageFlowView extends FrameView {
 			
 			if(optionSave == JOptionPane.OK_OPTION) {
 				save().run();
-//				new SaveFlowGraphTask(getFile()).run();
 			}else if(optionSave == JOptionPane.CANCEL_OPTION) {
 				return;
 			}
@@ -847,7 +856,6 @@ public class ImageFlowView extends FrameView {
 			final int optionSave = showSaveConfirmation();
 			if(optionSave == JOptionPane.OK_OPTION) {
 				save().run();
-//				new SaveFlowGraphTask(getFile()).run();
 			}else if(optionSave == JOptionPane.CANCEL_OPTION) {
 				return null;
 			}
@@ -871,9 +879,7 @@ public class ImageFlowView extends FrameView {
 				+'\n'+"Save changes now?",
 				"Save changes?", 
 				JOptionPane.INFORMATION_MESSAGE);
-		
 	}
-	
     
     /**
      * Save the current workflow, either in existing file or in a new file.
@@ -1000,7 +1006,6 @@ public class ImageFlowView extends FrameView {
     	gpanel.setEdgeL(cloneUnitList.getConnections());
     	
     	dialog.add(gpanel);
-//		dialog.pack();
     	dialog.setSize(400, 300);
 		dialog.setVisible(true);
     }
@@ -1026,7 +1031,8 @@ public class ImageFlowView extends FrameView {
         		lm.addElement("name:"+input.getName());
         		lm.addElement("datatype: "+input.getDataType());
         		if(input.getDataType() instanceof DataTypeFactory.Image)
-        			lm.addElement("imagetype def:"+((DataTypeFactory.Image)input.getDataType()).getImageBitDepth());
+        			lm.addElement("imagetype def:"
+        					+((DataTypeFactory.Image)input.getDataType()).getImageBitDepth());
         		lm.addElement("connected to:");
         		lm.addElement(input.getConnection());
         	}
@@ -1035,7 +1041,8 @@ public class ImageFlowView extends FrameView {
         		lm.addElement("name:"+output.getName());
         		lm.addElement("datatype:"+output.getDataType());
         		if(output.getDataType() instanceof DataTypeFactory.Image)
-        			lm.addElement("imagetype:"+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
+        			lm.addElement("imagetype:"
+        					+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
         		lm.addElement("connected to:");
         		for (Connection conn : output.getConnections()) {
         			lm.addElement(conn);
@@ -1049,6 +1056,27 @@ public class ImageFlowView extends FrameView {
     		dialog.setVisible(true);	
 		}
     	
+    }
+    
+    @Action public void showGroupContents() {
+    	if(selections.size() == 1 && selections.get(0) instanceof GroupUnitElement) {
+    		final JDialog dialog = new JDialog();
+    		
+    		
+    		GroupUnitElement group = (GroupUnitElement) selections.get(0);
+//    		group.showGroupWindow();
+    		dialog.setTitle(group.getLabel());
+    		
+    		GPanelPopup popup = new GPanelPopup(unitDelegates.values(), graphController);
+        	GraphPanel gpanel = new GraphPanel(popup);
+    		gpanel.setNodeL(group.getNodes());
+    		popup.setActivePanel(gpanel);
+        	gpanel.setEdgeL(group.getInternalConnections());
+        	
+        	dialog.add(gpanel);
+        	dialog.setSize(400, 300);
+    		dialog.setVisible(true);
+    	}
     }
     
     /**

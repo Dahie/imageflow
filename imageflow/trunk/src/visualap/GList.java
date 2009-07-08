@@ -35,7 +35,7 @@ interface Clearable {
 	public void clear();
 }
 
-public class GList<E extends Changeable&Labelable> extends ArrayList<E> {
+public class GList<E extends Changeable&Labelable> extends Vector<E> {
 	private transient boolean changed=false;
     private transient HashMap<String, Object> labels = new HashMap<String, Object>();
 

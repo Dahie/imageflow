@@ -11,7 +11,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -26,6 +25,7 @@ import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -35,7 +35,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
-import visualap.GList;
 import visualap.GPanel;
 import visualap.GPanelListener;
 import visualap.Node;
@@ -141,7 +140,7 @@ public class GraphPanel extends GPanel {
 	}
 
 	@Override
-	protected void paintPrintableConnection(Graphics g, Connection connection) {
+	protected void paintPrintableConnection(final Graphics g, final Connection connection) {
 		final Point from = connection.getInput().getLocation();
 		final Point to = connection.getOutput().getLocation();
 		g.setColor(  (connection.isCompatible()) ? Color.BLACK : Color.RED );
@@ -318,7 +317,7 @@ public class GraphPanel extends GPanel {
 	/**
 	 * @return
 	 */
-	protected GList<Node> getUnitList() {
+	protected Collection<Node> getUnitList() {
 		return this.nodeL;
 	}
 
@@ -359,7 +358,7 @@ public class GraphPanel extends GPanel {
 				isCompatible = drawEdge.isCompatible(pin);
 				if(drawEdge instanceof Output
 						&& pin instanceof Input) {
-					isLoop = ((Input)pin).isConnectedInInputBranch(drawEdge.getParent());
+					isLoop = ((Input)pin).isConnectedInOutputBranch(drawEdge.getParent());
 
 				} else if (drawEdge instanceof Input
 						&& pin instanceof Output) {
@@ -489,7 +488,7 @@ public class GraphPanel extends GPanel {
 	 * Replace the current {@link UnitList} with a different one.
 	 * @param units2
 	 */
-	public void setNodeL(final UnitList units2) {
+	public void setNodeL(final Collection<Node> units2) {
 		super.nodeL = units2;
 	}
 
@@ -524,7 +523,6 @@ public class GraphPanel extends GPanel {
 		this.selection.clear();
 		this.nodeL = graphController.getUnitElements();
 		this.connectionList = graphController.getConnections();
-
 	}
 
 	public void setSelections(final SelectionList selections) {

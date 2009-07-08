@@ -41,6 +41,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ListIterator;
 
 import javax.swing.JInternalFrame;
@@ -58,9 +59,10 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 
 	protected Point pick = null;
 	protected Selection<Node> selection = new Selection<Node>();
-	protected GList<Node> nodeL = new GList<Node>();
+	protected Collection<Node> nodeL = new GList<Node>();
 	protected Pin drawEdge;
-	protected ConnectionList connectionList = new ConnectionList();
+//	protected ConnectionList connectionList = new ConnectionList();
+	protected Collection<Connection> connectionList = new ConnectionList();
 	protected Point mouse;
 
 
@@ -93,7 +95,6 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	public void clear() {
 		nodeL.clear();
 		connectionList.clear();
-		nodeL.setChanged(false);
 		selection.clear();
 		repaint();
 	}
@@ -171,21 +172,22 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		int x = e.getX();
 		int y = e.getY();
 		// qui � obbligatorio un iteratore che scandisce la lista al contrario!
-		for (ListIterator<Node> it = nodeL.listIterator(nodeL.size()); it.hasPrevious(); ) {
-			Node aNode = it.previous();
+//		for (ListIterator<Node> it = nodeL.listIterator(nodeL.size()); it.hasPrevious(); ) {
+//			Node aNode = it.previous();
+		for (Node aNode : nodeL) {
 			Object sel = aNode.contains(x,y);
 			// 	check selected element, is it a Node?
 			if (sel instanceof Node) {
 				pick = new Point(x,y);
 				if (!selection.contains(aNode)) {
 					if(!e.isControlDown()
-							|| e.isMetaDown() && IJ.isMacintosh()) {
+							|| ( e.isMetaDown() && IJ.isMacintosh())) {
 						selection.clear();
 					}
 					selection.add(aNode);
 				} else {
 					if(e.isControlDown()
-							|| e.isMetaDown() && IJ.isMacintosh())
+							|| (e.isMetaDown() && IJ.isMacintosh()))
 						selection.remove(aNode);
 				} 
 				
@@ -225,6 +227,24 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		repaint();
 	}
 
+	/**
+	 * Sees, if a connection between the given Pins exists.
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public boolean containsConnection(final Pin from, final Pin to) {
+		for (final Connection connection : connectionList) {
+			if (connection.getInput().equals(from) 
+					&& connection.getOutput().equals(to))
+				return true;
+			else if (connection.getInput().equals(to) 
+					&& connection.getOutput().equals(from))
+				return true;
+		}
+		return false;
+	}
+	
 	public void mouseReleased(MouseEvent e) {
 		// generato quando il mouse viene rilasciato, anche a seguito di click
 		int x = e.getX();
@@ -241,12 +261,14 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		}
 		else if (drawEdge != null)	{
 			// insert new Edge if not already present in EdgeL
-			for (ListIterator<Node> it = nodeL.listIterator(nodeL.size()); it.hasPrevious(); ) {
-				Node aNode = it.previous();
+//			for (ListIterator<Node> it = nodeL.listIterator(nodeL.size()); it.hasPrevious(); ) {
+//				Node aNode = it.previous();
+			for (Node aNode : nodeL) {
 				Object sel = aNode.contains(x,y);
 				if ((sel instanceof Pin)&&(!drawEdge.equals(sel))) {
-					if (!connectionList.containsConnection(drawEdge, (Pin) sel)) {
-						connectionList.add(drawEdge, (Pin) sel);
+					if (!containsConnection(drawEdge, (Pin) sel)) {
+						Connection newConn = new Connection(drawEdge, (Pin) sel);
+						connectionList.add(newConn);
 					}
 				}
 
@@ -400,7 +422,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	/**
 	 * @return the nodeL
 	 */
-	public GList<Node> getNodeL() {
+	public Collection<Node> getNodeL() {
 		return this.nodeL;
 	}
 
@@ -421,14 +443,14 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	/**
 	 * @return the edgeL
 	 */
-	public ConnectionList getEdgeL() {
+	public Collection<Connection> getEdgeL() {
 		return this.connectionList;
 	}
 
 	/**
 	 * @param edgeL the edgeL to set
 	 */
-	public void setEdgeL(ConnectionList edgeL) {
+	public void setEdgeL(Collection<Connection> edgeL) {
 		this.connectionList = edgeL;
 	}
 

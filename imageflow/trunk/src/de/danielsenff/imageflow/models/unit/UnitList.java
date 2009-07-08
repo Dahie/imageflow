@@ -283,7 +283,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 				// unitlist included in group
 				Element embeddedUnitsElement = new Element("Units");
 				unitDescription.addContent(embeddedUnitsElement);
-				for (Node embeddedNode : group.getUnits()) {
+				for (Node embeddedNode : group.getNodes()) {
 					Element embeddedUnitElement = new Element("Unit");
 					embeddedUnitsElement.addContent(embeddedUnitElement);
 					writeXMLNode(embeddedNode, embeddedUnitElement);

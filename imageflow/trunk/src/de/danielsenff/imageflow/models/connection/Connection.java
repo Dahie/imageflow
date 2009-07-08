@@ -217,7 +217,7 @@ public class Connection {
 	}
 	
 	public boolean causesLoop() {
-		if(((Input)this.to).isConnectedInInputBranch(getFromUnit())) return true;
+		if(((Input)this.to).isConnectedInOutputBranch(getFromUnit())) return true;
 		if(((Output)this.from).existsInInputSubgraph(getToUnit())) return true;
 		return false;
 	}

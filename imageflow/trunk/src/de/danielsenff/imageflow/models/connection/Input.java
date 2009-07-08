@@ -251,7 +251,6 @@ public class Input extends Pin {
 	 * @return 
 	 */
 	public boolean isConnected() {
-//		return (fromUnit != null) && (this.from != null);
 		return connection != null;
 	}
 	
@@ -274,20 +273,8 @@ public class Input extends Pin {
 	 */
 	public void disconnectAll() {
 		generateID(0, 0); // reset connection
-//		this.fromUnit = null;
-//		this.from = null;
 		this.connection = null;
 	}
-
-	/**
-	 * Sets the connection between this input and an output.
-	 * @param fromUnit
-	 * @param fromOutputNumber
-	 */
-	/*public void connectTo(final UnitElement fromUnit, final int fromOutputNumber) {
-		connectTo(fromUnit.getOutput(fromOutputNumber-1));
-	}*/
-
 
 
 	/**
@@ -300,6 +287,21 @@ public class Input extends Pin {
 	}
 
 	/**
+	 * Returns true if the graph branch connected to this inputs parent's output contains the unit.
+	 * @param goal
+	 * @return
+	 */
+	public boolean isConnectedInOutputBranch(Node goal) {
+		// self reference
+		if(goal.equals(parent)) 
+//			 can only check inputs, which are connected
+//			return traverseInput(this, goal);
+			return false;
+		else
+			return traverseOutput((UnitElement) this.parent, goal);
+	}
+	
+	/**
 	 * Returns true if the graph branch connected to this input contains the unit.
 	 * @param goal
 	 * @return
@@ -311,17 +313,26 @@ public class Input extends Pin {
 //			return traverseInput(this, goal);
 			return false;
 		else
-			return traverseOutput((UnitElement) this.parent, goal);
+			return traverseInput(this, goal);
+//			return traverseOutput2(getConnection().getFromUnit(), goal);
 	}
 
-	private static boolean traverseInput(final Input start, final Node goal) {
+	
+	/**
+	 * 
+	 * @param start
+	 * @param goal
+	 * @return
+	 */
+	public static boolean traverseInput(final Input start, final Node goal) {
 		if(start.getParent().equals(goal)) {
-			return false;
+			return true;
 		} else if(start.isConnected()) {
+
 			for (Input input : start.getFromUnit().getInputs()) {
-				if(traverseInput(input, goal));
-					return true;
-			}
+				return traverseInput(input, goal);
+			}	
+			
 		}
 		return false;
 	}
@@ -330,7 +341,7 @@ public class Input extends Pin {
 	private static boolean traverseOutput(UnitElement parent, Node goal) {
 		if(parent.equals(goal)) {
 			return true;
-		} else if (parent.hasOutputsConnected()) {
+		} else if (parent.hasInputsConnected()) {
 			for (Output output : parent.getOutputs()) {
 				if(output.isConnected()) {
 					for (Connection connection : output.getConnections()) {

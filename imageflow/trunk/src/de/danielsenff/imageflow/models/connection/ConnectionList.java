@@ -4,6 +4,7 @@
 package de.danielsenff.imageflow.models.connection;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
@@ -11,7 +12,6 @@ import visualap.Pin;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
@@ -20,7 +20,7 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  * @author danielsenff
  *
  */
-public class ConnectionList extends ArrayList<Connection> implements Model, Cloneable {
+public class ConnectionList extends Vector<Connection> implements Model, Cloneable {
 	
 	private final ArrayList<ModelListener> listeners;
 	
@@ -104,7 +104,7 @@ public class ConnectionList extends ArrayList<Connection> implements Model, Clon
 		final Output output = connection.getOutput();
 		
 		// check if connection produces loop
-		if(input.isConnectedInInputBranch(output.getParent())) {
+		if(input.isConnectedInOutputBranch(output.getParent())) {
 			System.out.println("Connection disallowed: Loop detected");
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
 					"The connection you tried to establish is not allowed " + '\n' +
@@ -118,8 +118,6 @@ public class ConnectionList extends ArrayList<Connection> implements Model, Clon
 		if(!connection.isCompatible()) {
 			String dataTypeI = connection.getInput().getDataType().toString();
 			String dataTypeO = connection.getOutput().getDataType().toString();
-			System.out.println(((DataTypeFactory.Image)connection.getOutput().getDataType()).getImageBitDepth());
-			System.out.println(((DataTypeFactory.Image)connection.getInput().getDataType()).getImageBitDepth());
 			System.out.println("Connection disallowed: " +
 					"Incompatible dataTypes " + dataTypeO + " to " + dataTypeI);
 			//			return false;

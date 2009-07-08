@@ -4,6 +4,8 @@
 package models;
 
 
+import ij.plugin.filter.PlugInFilter;
+
 import java.awt.Dimension;
 import java.awt.Point;
 
@@ -19,16 +21,21 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitElement.Type;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author danielsenff
  *
  */
-public class UnitElementTests extends TestCase {
+public class UnitElementTests {
 
 
-	public void testInputsActualCount() {
+	@Test public void testInputsActualCount() {
 
 		UnitElement unit = UnitFactoryExt.createAddNoiseUnit();
 
@@ -49,10 +56,7 @@ public class UnitElementTests extends TestCase {
 	}
 
 
-	/**
-	 *  
-	 */
-	public void testAddParameter() {
+	@Test public void testAddParameter() {
 		//unit with one allowed parameter
 		UnitElement unit = new UnitElement("name", "");
 
@@ -66,7 +70,7 @@ public class UnitElementTests extends TestCase {
 		assertTrue("add second", addSecond);
 	}
 
-	public void testHasInputs() {
+	@Test public void testHasInputs() {
 
 		// Sources have no inputs
 		UnitElement source = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
@@ -93,7 +97,7 @@ public class UnitElementTests extends TestCase {
 	}
 
 
-	public void testAddInput() {
+	@Test public void testAddInput() {
 		//unit with one allowed parameter
 		UnitElement unit = new UnitElement("name", "");
 
@@ -110,7 +114,7 @@ public class UnitElementTests extends TestCase {
 		assertEquals(2, unit.getInputsCount());
 	}
 	
-	public void testAddOutput() {
+	@Test public void testAddOutput() {
 		//unit with one allowed parameter
 		UnitElement unit = new UnitElement("name", "");
 
@@ -127,12 +131,12 @@ public class UnitElementTests extends TestCase {
 		assertEquals(2, unit.getOutputsCount());
 	}
 
-	public void testRequiredInputs() {
+	@Test public void testRequiredInputs() {
 		//TODO
 	}
 	
 
-	public void testHasOutputs() {
+	@Test public void testHasOutputs() {
 		UnitElement sink = UnitFactoryExt.createHistogramUnit(new Point(0,0));
 		assertTrue("is a sink", sink.getUnitType() == Type.SINK);
 		assertFalse(sink.hasOutputsConnected());
@@ -148,7 +152,7 @@ public class UnitElementTests extends TestCase {
 		
 	}
 
-	public void testHasAllInputsMarked() {
+	@Test public void testHasAllInputsMarked() {
 
 		// test output-only
 		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
@@ -198,7 +202,7 @@ public class UnitElementTests extends TestCase {
 	}
 
 
-	public void testSetMark() {
+	@Test public void testSetMark() {
 
 		// test output-only
 		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
@@ -235,7 +239,7 @@ public class UnitElementTests extends TestCase {
 		}
 	}
 
-	public void testClone() {
+	@Test public void testClone() {
 		UnitElement mergeUnit = UnitFactoryExt.createImageCalculatorUnit();
 
 
@@ -285,7 +289,7 @@ public class UnitElementTests extends TestCase {
 	}
 
 	
-	public void testHasDisplayBranch() {
+	@Test public void testHasDisplayBranch() {
 		
 		// test output-only
 		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
@@ -331,6 +335,58 @@ public class UnitElementTests extends TestCase {
 	}
 	
 	
+
+	/*
+	 * Helper methods
+	 */
 	
+	
+	protected UnitElement createSourceUnit() {
+		UnitElement unit1 = new UnitElement("unit1", "some syntax");
+		Output output1 = new Output("output1", "o", 
+				DataTypeFactory.createImage(PlugInFilter.DOES_32), unit1, 1);
+		unit1.addOutput(output1);
+		Output output2 = new Output("output2", "o", 
+				DataTypeFactory.createImage(PlugInFilter.DOES_ALL), unit1, 2);
+		unit1.addOutput(output2);
+		Output output3 = new Output("output3", "o", 
+				DataTypeFactory.createImage(-1), unit1, 3);
+		unit1.addOutput(output3);
+		Output output4 = new Output("output4", "o", 
+				DataTypeFactory.createImage(PlugInFilter.DOES_16+PlugInFilter.DOES_32), unit1, 4);
+		unit1.addOutput(output4);
+		return unit1;
+	}
+	
+	protected UnitElement createSinkUnit() {
+		UnitElement unit2 = new UnitElement("unit2", "some syntax");
+		Input input1 = new Input("input1", "i", 
+				DataTypeFactory.createImage(PlugInFilter.DOES_32), unit2, 1, true, false);
+		unit2.addInput(input1);
+		Input input2 = new Input("input2", "i", 
+				DataTypeFactory.createImage(PlugInFilter.DOES_16), unit2, 1, true, false);
+		unit2.addInput(input2);
+		Input input3 = new Input("input3", "i", 
+				DataTypeFactory.createImage(PlugInFilter.DOES_ALL), unit2, 1, true, false);
+		unit2.addInput(input3);
+		Input input4 = new Input("input4", "i", 
+				DataTypeFactory.createImage(PlugInFilter.DOES_32+PlugInFilter.DOES_16), 
+				unit2, 1, true, false);
+		unit2.addInput(input4);
+		return unit2;
+	}
+	
+	protected UnitElement createUnit(int inputImageType, int outputImageType) {
+		UnitElement unit2 = new UnitElement("unit", "some syntax");
+		Output output1 = new Output("output1", "o", 
+				DataTypeFactory.createImage(outputImageType), unit2, 1);
+		unit2.addOutput(output1);
+
+		Input input1 = new Input("input1", "i", 
+				DataTypeFactory.createImage(inputImageType), unit2, 1, true, false);
+		unit2.addInput(input1);
+
+		return unit2;
+	}
 
 }

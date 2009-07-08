@@ -164,7 +164,7 @@ public class InputTests {
 		
 	}
 	
-	@Test public void testUnitConnectedInBranch() {
+	@Test public void testUnitConnectedInOutputBranch() {
 		
 		UnitElement unit1 = UnitFactoryExt.createAddNoiseUnit();
 		UnitElement unit2 = UnitFactoryExt.createAddNoiseUnit();
@@ -172,7 +172,32 @@ public class InputTests {
 		
 		Connection conn1 = new Connection(unit1, 1, unit2, 1);
 		
-//		assertTrue(connList.add(conn1));
+		conn1.connect();
+		assertTrue(conn1.isConnected());
+		
+		Input input2 = unit2.getInput(0);
+		assertFalse("input2 knows unit1", input2.isConnectedInOutputBranch(unit1));
+		assertFalse("input2 knows unit2", input2.isConnectedInOutputBranch(unit2));
+		assertFalse("input2 knows unit3", input2.isConnectedInOutputBranch(unit3));
+		
+		Connection conn2 = new Connection(unit2, 1, unit3, 1);
+		conn2.connect();
+		
+		Input input3 = unit3.getInput(0);
+		assertFalse("input3 knows unit1", input3.isConnectedInOutputBranch(unit1));
+		assertFalse("input3 knows unit2", input3.isConnectedInOutputBranch(unit2));
+		assertFalse("input3 knows unit3", input3.isConnectedInOutputBranch(unit3));
+		assertTrue("input2 knows unit3", input2.isConnectedInOutputBranch(unit3));
+	}
+	
+	@Test public void testUnitConnectedInInputBranch() {
+		
+		UnitElement unit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement unit2 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement unit3 = UnitFactoryExt.createAddNoiseUnit();
+		
+		Connection conn1 = new Connection(unit1, 1, unit2, 1);
+		
 		conn1.connect();
 		assertTrue(conn1.isConnected());
 		
@@ -190,6 +215,5 @@ public class InputTests {
 		assertFalse("input3 knows unit1", input3.isConnectedInInputBranch(unit3));
 		assertFalse("input2 knows unit3", input2.isConnectedInInputBranch(unit3));
 	}
-	
 	
 }

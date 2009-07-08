@@ -115,7 +115,7 @@ public class GraphController{
 	}
 	
 	public static void ungroup(final GroupUnitElement group, UnitList units) {
-		units.addAll(group.getUnits());
+		units.addAll(group.getNodes());
 		ConnectionList connections = units.getConnections();
 		
 		/*
@@ -163,8 +163,9 @@ public class GraphController{
 		units.remove(group);
 	}
 
-	public void group(SelectionList selections2) {
-		UnitElement group = new GroupUnitElement(new Point(34, 250), "Group", selections, getUnitElements());
+	public void group(SelectionList selections2) throws Exception {
+		GroupUnitElement group = new GroupUnitElement(new Point(34, 250), "Group");
+		group.putUnits(getSelections(), getUnitElements());
 		getUnitElements().add(group);
 		selections.clear();
 		selections.add(group);	

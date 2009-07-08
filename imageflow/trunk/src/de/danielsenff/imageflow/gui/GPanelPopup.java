@@ -21,6 +21,7 @@ import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.Delegate;
+import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 
@@ -55,7 +56,13 @@ public class GPanelPopup implements GPanelListener {
 		return this.activePanel;
 	}
 
-	
+
+	/**
+	 * @param activePanel the activePanel to set
+	 */
+	public void setActivePanel(GPanel activePanel) {
+		this.activePanel = activePanel;
+	}
 
 	public void showFloatingMenu(MouseEvent e) {
 		if (e.isPopupTrigger()) {
@@ -90,13 +97,22 @@ public class GPanelPopup implements GPanelListener {
 		if (selectedUnits.size() == 1 
 				&& selectedUnits.get(0) instanceof UnitElement) {
 			
+			UnitElement unit = (UnitElement) selectedUnits.get(0);
+			
+			if(unit instanceof GroupUnitElement) {
+				popup.add(getAction("showGroupContents"));
+				popup.add(getAction("group"));
+				popup.addSeparator();
+			}
+				
+			
 			JCheckBoxMenuItem chkBoxDisplayUnit = new JCheckBoxMenuItem(getAction("setDisplayUnit")); 
-			boolean isDisplayUnit = ((UnitElement)selectedUnits.get(0)).isDisplayUnit();
+			boolean isDisplayUnit = unit.isDisplayUnit();
 			chkBoxDisplayUnit.setSelected(isDisplayUnit);
 			popup.add(chkBoxDisplayUnit);
 			
 			JCheckBoxMenuItem chkBoxCollapseIcon = new JCheckBoxMenuItem(getAction("setUnitComponentSize"));
-			boolean isCollapsedIcon = ((UnitElement)selectedUnits.get(0)).getCompontentSize() == Size.SMALL ? true : false;
+			boolean isCollapsedIcon = unit.getCompontentSize() == Size.SMALL ? true : false;
 			chkBoxCollapseIcon.setSelected(isCollapsedIcon);
 			popup.add(chkBoxCollapseIcon);
 //					popup.add(getAction("preview"));
@@ -115,10 +131,4 @@ public class GPanelPopup implements GPanelListener {
 		return actionMap.get(actionName);
 	}
 
-	/**
-	 * @param activePanel the activePanel to set
-	 */
-	public void setActivePanel(GPanel activePanel) {
-		this.activePanel = activePanel;
-	}
 }

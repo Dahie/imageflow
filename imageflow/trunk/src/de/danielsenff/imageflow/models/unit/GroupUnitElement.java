@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
 
+import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
+
 import visualap.Node;
 import visualap.Pin;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -49,11 +51,6 @@ public class GroupUnitElement extends UnitElement {
 			final Collection<Node> selections, final UnitList allUnits) {
 		super(origin, unitName, "");
 		init();
-		try {
-			putUnits(selections, allUnits);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 
@@ -67,6 +64,8 @@ public class GroupUnitElement extends UnitElement {
 
 	public void putUnits(final Collection<Node> unitsToAdd, final UnitList allUnits) throws Exception {
 
+		findRelevantConnections(unitsToAdd, allUnits.getConnections());
+		
 		if(selectedUnitsConsistentGroup(unitsToAdd, allUnits)) {
 
 			for (Node node : unitsToAdd) {
@@ -117,20 +116,36 @@ public class GroupUnitElement extends UnitElement {
 		 * for each input we test, if every unit in input graph is 
 		 */
 
-		/*for (Node node : allUnits) {
-			if(node instanceof UnitElement) {
-				UnitElement unit = (UnitElement) node;
-				for (Input input : unit.getInputs()) {
-					if(input.isConnected() && !testUnit(unitsToAdd, input.getConnection()))
-						return false;
-				}
+		/*for (Node node : unitsToAdd) {
+			for (Node goal : unitsToAdd) {
+
+				if(node instanceof UnitElement) {
+					UnitElement unit = (UnitElement) node;
+					for (Input input : unit.getInputs()) {
+						//					if(input.isConnected() && !isToUnitIn(unitsToAdd, input.getConnection()))
+						
+						if(input.traverseInput(input, goal) 
+								&& !unitsToAdd.contains(input.getFromUnit()))
+							return false;
+					}
+				} 
 			}
 		}*/
+		
+		
+		
+		for (Connection connection : this.externalConnections) {
+			for (Node node : unitsToAdd) {
+				if(unitsToAdd.contains(connection.getToUnit())
+						&& connection.getInput().isConnectedInInputBranch(node))
+					return false;
+			}
+		}
 
 		return true;
 	}
 
-	private boolean testUnit(Collection<Node> unitsToAdd, Connection connection) {
+	private boolean isToUnitIn(Collection<Node> unitsToAdd, Connection connection) {
 
 		UnitElement unit = (UnitElement)connection.getFromUnit();
 		if(unitsToAdd.contains(unit)
@@ -142,7 +157,7 @@ public class GroupUnitElement extends UnitElement {
 		} else {
 			for (Input input : unit.getInputs()) {
 				if(input.isConnected() ) {
-					return testUnit(unitsToAdd, input.getConnection());
+					return isToUnitIn(unitsToAdd, input.getConnection());
 				}	
 			}
 		}
@@ -150,34 +165,6 @@ public class GroupUnitElement extends UnitElement {
 	}
 
 	private void dealWithConnections(final ConnectionList allConnections) {
-		/*
-		 * determine which connections "leave" the group
-		 */
-
-		UnitList groupedUnits = this.units;
-
-		for (Connection connection : allConnections) {
-			for (Node node : groupedUnits) {
-				if (connection.isConnectedToUnit(node) 
-						&& !externalConnections.contains(connection))
-					externalConnections.add(connection);
-			}
-		}
-
-		for (Connection connection : externalConnections) {
-			for (Node node : groupedUnits) {
-				for (Node node2 : groupedUnits) {
-					if(connection.getFromUnit().equals(node)
-							&& connection.getToUnit().equals(node2)) {
-						internalConnections.add(connection);
-					}	
-				}
-			}
-		}
-
-		for (Connection connection : internalConnections) {
-			externalConnections.remove(connection);
-		}
 
 		for (Connection connection : externalConnections) {
 			this.originalConnections.add(connection);
@@ -213,6 +200,36 @@ public class GroupUnitElement extends UnitElement {
 		}
 	}
 
+	private final void findRelevantConnections(Collection<Node> unitsToAdd, final ConnectionList allConnections) {
+		for (Connection connection : allConnections) {
+			for (Node node : unitsToAdd) {
+				if (connection.isConnectedToUnit(node) 
+						&& !externalConnections.contains(connection))
+					externalConnections.add(connection);
+			}
+		}
+
+		for (Connection connection : externalConnections) {
+			for (Node node : unitsToAdd) {
+				for (Node node2 : unitsToAdd) {
+					if(connection.getFromUnit().equals(node)
+							&& connection.getToUnit().equals(node2)) {
+						internalConnections.add(connection);
+					}	
+				}
+			}
+		}
+		
+		/*
+		 * determine which connections "leave" the group
+		 */
+
+		for (Connection connection : internalConnections) {
+			externalConnections.remove(connection);
+		}
+		
+	}
+
 	/**
 	 * Returns true if the node in question is contained in this GroupUnit.
 	 * @param node
@@ -243,7 +260,7 @@ public class GroupUnitElement extends UnitElement {
 	 * Returns a Collection of Units embedded in this Group.
 	 * @return
 	 */
-	public Collection<Node> getUnits() {
+	public Collection<Node> getNodes() {
 		return this.units;
 	}
 
@@ -272,11 +289,11 @@ public class GroupUnitElement extends UnitElement {
 		 */
 		HashMap<Pin, Pin> correspondingPins = new HashMap<Pin, Pin>();
 
-		for (Node node : getUnits()) {
+		for (Node node : getNodes()) {
 			Node c;
 			try {
 				c = node.clone();
-				groupClone.getUnits().add(c);
+				groupClone.getNodes().add(c);
 
 				if(node instanceof UnitElement) {
 					UnitElement unit = (UnitElement) node;
@@ -333,10 +350,14 @@ public class GroupUnitElement extends UnitElement {
 	@Override
 	public String getHelpString() {
 		String string = "Grouped units: \n";
-		for (Node node : getUnits()) {
+		for (Node node : getNodes()) {
 			string += node.getLabel() + " \n ";
 		}
 		return string;
 	}
 
+	public void showGroupWindow() {
+		
+	}
+	
 }

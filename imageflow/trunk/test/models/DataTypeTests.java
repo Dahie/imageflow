@@ -22,7 +22,7 @@ import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
-public class DataTypeTests{
+public class DataTypeTests extends UnitElementTests{
 
 	@Test
 	public void testDataTypeInteger() {
@@ -251,16 +251,11 @@ public class DataTypeTests{
 		Connection conn_4_5 = new Connection(unit4, 1, unit5, 1);
 		connList.add(conn_4_5);
 		
-		assertTrue(conn_1_2.isConnected());
-		assertTrue(conn_2_3.isConnected());
-		assertTrue(conn_3_4.isConnected());
-		assertTrue(conn_4_5.isConnected());
-		
-		assertTrue(conn_1_2.isCompatible());
-		assertTrue(conn_2_3.isCompatible());
-		assertTrue(conn_3_4.isCompatible());
-		assertTrue(conn_4_5.isCompatible());
-		
+		for (Connection connection : connList) {
+			connection.isConnected();
+			connection.isCompatible();
+		}
+				
 		SelectionList selections = new SelectionList();
 		selections.add(unit2);
 		selections.add(unit3);
@@ -317,15 +312,10 @@ public class DataTypeTests{
 		Connection conn_4_5 = new Connection(unit4, 1, unit5, 1);
 		connList.add(conn_4_5);
 		
-		assertTrue(conn_1_2.isConnected());
-		assertTrue(conn_2_3.isConnected());
-		assertTrue(conn_3_4.isConnected());
-		assertTrue(conn_4_5.isConnected());
-		
-		assertTrue(conn_1_2.isCompatible());
-		assertTrue(conn_2_3.isCompatible());
-		assertTrue(conn_3_4.isCompatible());
-		assertTrue(conn_4_5.isCompatible());
+		for (Connection connection : connList) {
+			connection.isConnected();
+			connection.isCompatible();
+		}
 		
 		SelectionList selections = new SelectionList();
 		selections.add(unit1);
@@ -334,17 +324,7 @@ public class DataTypeTests{
 		
 		GroupUnitElement group = new GroupUnitElement(new Point(33, 55), "group", selections, units);
 		
-		for (Node node : group.getUnits()) {
-			if(node instanceof UnitElement) {
-				UnitElement unit = (UnitElement) node;
-				System.out.println(unit);
-				System.out.println(((DataTypeFactory.Image)unit.getOutput(0).getDataType()));
-				System.out.println(((DataTypeFactory.Image)unit.getOutput(0).getDataType()).getImageBitDepth());
-			}
-		}
-		
 		for (Connection connection : group.getInternalConnections()) {
-			System.out.println(connection);
 			assertTrue(connection.isConnected());
 		}
 		
@@ -353,7 +333,7 @@ public class DataTypeTests{
 		assertEquals("number of internal connection", 2, group.getInternalConnections().size());
 		assertEquals("number of connections", 2, units.getConnections().size());
 		assertEquals("number of units",2 , units.size());
-		assertEquals("number of grouped units",3 , group.getUnits().size());
+		assertEquals("number of grouped units",3 , group.getNodes().size());
 		
 		
 		ProxyOutput groupOutput = (ProxyOutput)group.getOutput(0);
@@ -377,58 +357,6 @@ public class DataTypeTests{
 	}
 	
 	
-	/*
-	 * Helper methods
-	 */
-	
-	
-	private UnitElement createSourceUnit() {
-		UnitElement unit1 = new UnitElement("unit1", "some syntax");
-		Output output1 = new Output("output1", "o", 
-				DataTypeFactory.createImage(PlugInFilter.DOES_32), unit1, 1);
-		unit1.addOutput(output1);
-		Output output2 = new Output("output2", "o", 
-				DataTypeFactory.createImage(PlugInFilter.DOES_ALL), unit1, 2);
-		unit1.addOutput(output2);
-		Output output3 = new Output("output3", "o", 
-				DataTypeFactory.createImage(-1), unit1, 3);
-		unit1.addOutput(output3);
-		Output output4 = new Output("output4", "o", 
-				DataTypeFactory.createImage(PlugInFilter.DOES_16+PlugInFilter.DOES_32), unit1, 4);
-		unit1.addOutput(output4);
-		return unit1;
-	}
-	
-	private UnitElement createSinkUnit() {
-		UnitElement unit2 = new UnitElement("unit2", "some syntax");
-		Input input1 = new Input("input1", "i", 
-				DataTypeFactory.createImage(PlugInFilter.DOES_32), unit2, 1, true, false);
-		unit2.addInput(input1);
-		Input input2 = new Input("input2", "i", 
-				DataTypeFactory.createImage(PlugInFilter.DOES_16), unit2, 1, true, false);
-		unit2.addInput(input2);
-		Input input3 = new Input("input3", "i", 
-				DataTypeFactory.createImage(PlugInFilter.DOES_ALL), unit2, 1, true, false);
-		unit2.addInput(input3);
-		Input input4 = new Input("input4", "i", 
-				DataTypeFactory.createImage(PlugInFilter.DOES_32+PlugInFilter.DOES_16), 
-				unit2, 1, true, false);
-		unit2.addInput(input4);
-		return unit2;
-	}
-	
-	private UnitElement createUnit(int inputImageType, int outputImageType) {
-		UnitElement unit2 = new UnitElement("unit", "some syntax");
-		Output output1 = new Output("output1", "o", 
-				DataTypeFactory.createImage(outputImageType), unit2, 1);
-		unit2.addOutput(output1);
-
-		Input input1 = new Input("input1", "i", 
-				DataTypeFactory.createImage(inputImageType), unit2, 1, true, false);
-		unit2.addInput(input1);
-
-		return unit2;
-	}
 	
 	
 	

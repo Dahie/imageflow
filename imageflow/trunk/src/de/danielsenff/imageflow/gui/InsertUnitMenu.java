@@ -62,7 +62,7 @@ public class InsertUnitMenu extends JMenu {
 				if (action.equals("Comment")) {	
 					final CommentNode n = new CommentNode(savedPoint, "text"); 
 					savedPoint.translate(4, 4);
-					activePanel.getNodeL().add(n, "Comment");
+					activePanel.getNodeL().add(n);
 					activePanel.getSelection().clear();
 					activePanel.getSelection().add(n);
 					activePanel.repaint();
@@ -74,7 +74,7 @@ public class InsertUnitMenu extends JMenu {
 				if(unitDelegate != null) {
 					try {
 						final UnitElement n = unitDelegate.createUnit(savedPoint);
-						activePanel.getNodeL().add(n, activePanel.shortName(action));
+						activePanel.getNodeL().add(n);
 						activePanel.getSelection().clear();
 						activePanel.getSelection().add(n);
 						activePanel.repaint();
