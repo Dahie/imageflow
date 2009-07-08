@@ -1,10 +1,12 @@
 package models;
 
+import static org.junit.Assert.*;
 import ij.plugin.filter.PlugInFilter;
 
 import java.awt.Dimension;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
@@ -12,12 +14,11 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.UnitElement;
-import de.danielsenff.imageflow.models.unit.UnitFactory;
 
-public class OutputTests extends TestCase {
+public class OutputTests {
 
 	
-	public void testImageTitle() {
+	@Test public void testImageTitle() {
 		
 		// image title of style "Unit_1_Output_1"
 		// test output-only
@@ -49,7 +50,7 @@ public class OutputTests extends TestCase {
 	}
 	
 
-	public void testIsConnected() {
+	@Test public void testIsConnected() {
 		
 		// test output-only
 		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
@@ -73,7 +74,7 @@ public class OutputTests extends TestCase {
 		assertFalse("output connected", filterUnit2.getOutput(0).isConnected());	
 	}
 	
-	public void testIsConnectedWith() {
+	@Test public void testIsConnectedWith() {
 		// test output-only
 		UnitElement source1Unit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		Output source1Output = source1Unit.getOutput(0);
@@ -106,7 +107,7 @@ public class OutputTests extends TestCase {
 				source1Output.isConnectedWith(filter2Input));
 	}
 	
-	public void testIsDisconnected() {
+	@Test public void testIsDisconnected() {
 		
 		// test output-only
 		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
@@ -155,10 +156,10 @@ public class OutputTests extends TestCase {
 		return "unknown";
 	}
 	
-	public void traverseImageBitDepth(int unit1Obitdepth, 
-			int unit2Ibitdepth, int unit2Obitdepth, 
-			int unit3Ibitdepth,
-			boolean expFirstConn, boolean expScndConn) {
+	public void traverseImageBitDepth(final int unit1Obitdepth, 
+			final int unit2Ibitdepth, final int unit2Obitdepth, 
+			final int unit3Ibitdepth,
+			final boolean expFirstConn, final boolean expScndConn) {
 		UnitElement unit1 = new UnitElement("unit1", "some syntax");
 		DataType dataType = DataTypeFactory.createImage(unit1Obitdepth);
 		unit1.addOutput(new Output(dataType, unit1, 1));
@@ -181,7 +182,7 @@ public class OutputTests extends TestCase {
 				expScndConn, conn2.isCompatible());
 	}
 	
-	public void testImageBitDepthTraversing() {
+	@Test public void testImageBitDepthTraversing() {
 		
 		traverseImageBitDepth(PlugInFilter.DOES_32, //unit 1 output
 				PlugInFilter.DOES_32, PlugInFilter.DOES_32,  //unit2 input, output
@@ -215,7 +216,7 @@ public class OutputTests extends TestCase {
 	}
 	
 	
-	public void testTraversingImageBitDepth() {
+	@Test public void testTraversingImageBitDepth() {
 		UnitElement unit1 = new UnitElement("unit1", "some syntax");
 		unit1.addOutput("output1", "o", PlugInFilter.DOES_32, false);
 		Output output1 = unit1.getOutput(0);
@@ -246,7 +247,7 @@ public class OutputTests extends TestCase {
 	}
 	
 	
-	public void testLoopScenario1() {
+	@Test public void testLoopScenario1() {
 		
 		UnitElement unit1 = UnitFactoryExt.createFindEdgesUnit();
 		UnitElement unit2 = UnitFactoryExt.createImageCalculatorUnit();
@@ -277,7 +278,7 @@ public class OutputTests extends TestCase {
 	}
 	
 
-	public void testLoopScenario2() {
+	@Test public void testLoopScenario2() {
 		
 		UnitElement unit1 = UnitFactoryExt.createFindEdgesUnit();
 		UnitElement unit2 = UnitFactoryExt.createImageCalculatorUnit();
@@ -305,7 +306,7 @@ public class OutputTests extends TestCase {
 		assertTrue(inputU4.isConnectedInInputBranch(unit2));
 	}
 	
-	public void testLoopScenario3() {
+	@Test public void testLoopScenario3() {
 		UnitElement unit1 = UnitFactoryExt.createFindEdgesUnit();
 		UnitElement unit4 = UnitFactoryExt.createGaussianBlurUnit();
 		
@@ -333,7 +334,7 @@ public class OutputTests extends TestCase {
 	}
 	
 	
-	public void testUnitConnectedInBranch() {
+	@Test public void testUnitConnectedInBranch() {
 		
 		UnitElement unit1 = UnitFactoryExt.createAddNoiseUnit();
 		Output output1 = unit1.getOutput(0);

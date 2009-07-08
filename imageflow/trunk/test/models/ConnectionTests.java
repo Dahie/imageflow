@@ -7,14 +7,12 @@ import ij.plugin.filter.PlugInFilter;
 
 import java.awt.Dimension;
 
+import junit.framework.TestCase;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.UnitElement;
-import de.danielsenff.imageflow.models.unit.UnitFactory;
-
-import junit.framework.TestCase;
 
 /**
  * @author danielsenff

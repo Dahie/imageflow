@@ -263,7 +263,6 @@ public class Input extends Pin {
 	 */
 	public boolean isConnectedWith(Pin output) {
 		if(output instanceof Output && isConnected()) {
-//			return this.from.equals(output);
 			return this.connection.getOutput().equals(output);
 		}
 		return false;
@@ -313,8 +312,6 @@ public class Input extends Pin {
 			return false;
 		else
 			return traverseOutput((UnitElement) this.parent, goal);
-		 
-		
 	}
 
 	private static boolean traverseInput(final Input start, final Node goal) {

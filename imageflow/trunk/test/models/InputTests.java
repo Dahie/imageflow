@@ -3,26 +3,24 @@
  */
 package models;
 
-import ij.plugin.filter.PlugInFilter;
-
 import java.awt.Dimension;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.unit.UnitElement;
-import de.danielsenff.imageflow.models.unit.UnitFactory;
-
-import junit.framework.TestCase;
 
 /**
  * @author danielsenff
  *
  */
-public class InputTests extends TestCase {
+public class InputTests {
 
-	public void testImageTitle() {
+	@Test public void testImageTitle() {
 	
 		// image title of style "Unit_1_Output_1"
 		// test output-only
@@ -51,7 +49,7 @@ public class InputTests extends TestCase {
 				"Unit_"+sourceUnit.getUnitID()+"_Output_1", filter2Input.getImageTitle());
 	}
 	
-	public void testIsConnected() {
+	@Test public void testIsConnected() {
 		
 		// test output-only
 		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
@@ -74,7 +72,7 @@ public class InputTests extends TestCase {
 		assertTrue("input connected", filterInput.isConnected());	
 	}
 	
-	public void testIsConnectedWith() {
+	@Test public void testIsConnectedWith() {
 		// test output-only
 		UnitElement source1Unit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
 		Output source1Output = source1Unit.getOutput(0);
@@ -105,7 +103,7 @@ public class InputTests extends TestCase {
 				filterInput.isConnectedWith(source2Output));
 	}
 
-	public void testIsDisconnected() {
+	@Test public void testIsDisconnected() {
 
 		// test output-only
 		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
@@ -119,16 +117,19 @@ public class InputTests extends TestCase {
 		ConnectionList connList = new ConnectionList();
 		
 		// test after connecting
-		assertTrue("add conn 1", connList.add(sourceUnit, 1, filterUnit1, 1));
-		assertTrue("input connected", filterInput.isConnected());			
+		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
+		assertTrue("add conn 1", connList.add(conn));
+		assertTrue("input connected", filterInput.isConnected());
+		assertTrue("conn connected", conn.isConnected());
 
-		assertNotNull(connList.remove(0));
+		assertNotNull(connList.remove(conn));
 		
 		// test after removing connection ie disconnecting
 		assertFalse("input disconnected", filterInput.isConnected());
+		assertFalse("conn connected", conn.isConnected());
 	}
 	
-	public void testIsRequiredInput() {
+	@Test public void testIsRequiredInput() {
 		UnitElement source = UnitFactoryExt.createBackgroundUnit(new Dimension(10,10));
 		UnitElement unit = UnitFactoryExt.createImageCalculatorUnit();
 		
@@ -163,7 +164,7 @@ public class InputTests extends TestCase {
 		
 	}
 	
-	public void testUnitConnectedInBranch() {
+	@Test public void testUnitConnectedInBranch() {
 		
 		UnitElement unit1 = UnitFactoryExt.createAddNoiseUnit();
 		UnitElement unit2 = UnitFactoryExt.createAddNoiseUnit();
