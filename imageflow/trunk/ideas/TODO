@@ -1,5 +1,3 @@
-
-
 - add sample images to the example workflows
 - check for bugs concerning the image retrieving after a workflow was executed (exception because of names with -1)
 
@@ -7,8 +5,12 @@
 Quick jobs:
 - comment selection painting
 
+
 Bugs:
-- linux: right click on unit, you get context menu, left klick in workspace, the unit is moved to this spot 
+- linux: right click on unit, you get context menu, left klick in workspace, the unit is moved to this spot
+- workflow with save-as-unit but without any displayable units is not executed, although this might be wanted
+- grouping of loop-producing units works (although error message is displayed), ungrouping produces red connections
+ 
 
 GUI:
 - filter images in filechooser
@@ -16,10 +18,16 @@ GUI:
 - more keyshortcuts?
 - improved selections: shift, strg
 - drag copy CTRL
+- moving more than one selected at one time does not work
+- copy and paste with keyboard shortcuts (ctrl+c) does not work 
+- red error connections between filter units when no source image connected
+- Unit parameters window padding is not drawn correctly 
+
 
 Functions:
 - no other jars (jdom) -> buildscript
 - quicksearch of filter units in left sidepane
+- Macro-Generator at For-Loops: Integer only visible in loop,
 
 
 Graph:
@@ -41,7 +49,6 @@ Nice-to-have:
 - XML improvement: proper error handling
 
 
-
 V2:
 - editor for unit xml
 - Editing history (for nodes and properties)
@@ -49,4 +56,3 @@ V2:
 - Multi-Document-Application
 - no more visualap? -> new object-framework
 - model-view seperation
-

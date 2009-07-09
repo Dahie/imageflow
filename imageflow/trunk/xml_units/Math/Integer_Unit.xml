@@ -7,7 +7,7 @@
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>OUTPUT_INTEGER_1 = PARA_INTEGER_1;</ImageJSyntax> 
   <Color>0x9cba92</Color>
-  <HelpString>Opens a new image</HelpString>
+  <HelpString>Provides a new Integer</HelpString>
 </General>
 
 <Parameters>
@@ -15,7 +15,7 @@
   		<Name>Value</Name>
   		<DataType>Integer</DataType>
   		<Value>1</Value>
-  		<HelpString>The source unit needs the path of an image file.</HelpString>
+  		<HelpString>An Integer</HelpString>
   	</Parameter> 
 </Parameters>
 

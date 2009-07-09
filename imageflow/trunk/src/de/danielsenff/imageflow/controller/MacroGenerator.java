@@ -90,6 +90,7 @@ public class MacroGenerator {
 		macroElement.parseParameters(unit.getParameters());
 		macroElement.parseInputs(unit.getInputs());
 		macroElement.parseOutputs(unit.getOutputs());
+		macroElement.parseAttributes(unit.getInputs(), unit.getParameters());
 		
 		
 		// parse the command string for TITLE tags that need to be replaced

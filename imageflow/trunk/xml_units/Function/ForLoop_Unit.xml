@@ -5,28 +5,57 @@
 <General>
   <UnitName>For-Loop</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>for (i=0; i&lt;PARA_INTEGER_1; i++) { OUTPUT_INTEGER_1 = i;</ImageJSyntax> 
+  <ImageJSyntax>for (i=ATTRIBUTE_INPUT_2_PARAMETER_1; i&lt;ATTRIBUTE_INPUT_3_PARAMETER_2; i+=ATTRIBUTE_INPUT_4_PARAMETER_3) { OUTPUT_INTEGER_1 = i;</ImageJSyntax> 
   <Color>0xad8946</Color>
-  <HelpString>For-Loop</HelpString>
+  <HelpString>For-Loop with full parameter/input control</HelpString>
   	  
 </General>
 
-<Parameters>
-  	<Parameter>
-  		<Name>Number of Loops</Name>
-  		<DataType>Integer</DataType>
-  		<Value>1</Value>
-  		<HelpString>Number of iterations performed by the For-Loop</HelpString>
-  	</Parameter> 
-</Parameters>
+<Parameters> 
+	
+	
+	<Parameter>
+		<Name>Initialize Value</Name>
+		<DataType>Integer</DataType><Value>0</Value><HelpString>Start Value for the For-Loop</HelpString></Parameter>
+	<Parameter>
+		<Name>Exit Condition</Name><DataType>Integer</DataType>
+		<Value>10</Value><HelpString>End Value for the For-Loop</HelpString>
+		
+		</Parameter>
+	<Parameter>
+		<Name>Step size</Name>
+		<DataType>Integer</DataType>
+		<Value>1</Value>
+		<HelpString>Step size increased in every iteration</HelpString></Parameter></Parameters>
 
 <Inputs> 
 	<Input>
 		<Name>Input</Name>
 		<ShortName>I</ShortName>
-		<Required>false</Required><DataType>Image</DataType>
+		<Required>true</Required><DataType>Image</DataType>
 		<ImageType>31</ImageType>
-		<NeedToCopyInput>true</NeedToCopyInput>
+		
+	<NeedToCopyInput>true</NeedToCopyInput></Input>
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+	</Input>
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+	</Input>
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
 </Inputs>
 

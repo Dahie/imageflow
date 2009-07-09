@@ -133,7 +133,7 @@ public class MacroElement {
 			}
 			pc++;
 			if (parameterIndex != pc) {
-				System.err.println("Error in parameters or ImageJ-syntax");
+//				System.err.println("Error in parameters or ImageJ-syntax");
 				return command;
 			}
 				
@@ -150,7 +150,6 @@ public class MacroElement {
 		this.commandSyntax = parseInputs(inputs, this.commandSyntax);
 	}
 	
-
 	/**
 	 * Writes values of output-DataTypes into the command-string.
 	 * @param inputs
@@ -159,6 +158,15 @@ public class MacroElement {
 		this.commandSyntax = parseOutputs(outputs, this.commandSyntax);
 	}
 
+	/**
+	 * Writes values of output-DataTypes into the command-string.
+	 * @param inputs
+	 * @param parameters
+	 */
+	public void parseAttributes(ArrayList<Input> inputs, ArrayList<Parameter> parameters) {
+		this.commandSyntax = parseAttributes(inputs, parameters, this.commandSyntax);
+	}
+	
 	private static String parseOutputs(ArrayList<Output> outputs, String command) {
 		int index = 0, oDbl = 0, oInt = 0;
 		String searchString;
@@ -220,6 +228,62 @@ public class MacroElement {
 			index++;
 				
 		}
+		return command;
+	}
+	
+	private static String parseAttributes(ArrayList<Input> inputs, ArrayList<Parameter> parameters, String command) {
+		int inputIndex = 0, parameterIndex = 0;
+		String searchString;
+				
+		for (inputIndex = 0; inputIndex < inputs.size(); inputIndex++) {
+			for (parameterIndex = 0; parameterIndex < parameters.size(); parameterIndex++) {
+			
+				Input input = inputs.get(inputIndex);
+				Parameter parameter = parameters.get(parameterIndex);
+				
+				searchString = "ATTRIBUTE_INPUT_" + (inputIndex+1) + "_PARAMETER_" + (parameterIndex+1);
+				
+				if (command.contains(searchString) 
+						&& input.getDataType().getClass().getSimpleName().toLowerCase().equals(parameter.getParaType())) {
+					
+					if (input.isConnected()) {
+						String uniqueOutputName = input.getFromOutput().getOutputTitle();
+						command = Tools.replace(command, searchString, uniqueOutputName);
+					}
+					else {
+						String parameterValue = "";				
+						if (parameter.getParaType().toLowerCase().equals("integer")) 
+							parameterValue += ((IntegerParameter)parameter).getValue(); 
+						if (parameter.getParaType().toLowerCase().equals("double")) 
+							parameterValue += ((DoubleParameter)parameter).getValue();
+						if (parameter.getParaType().toLowerCase().equals("boolean")) 
+							parameterValue += ((BooleanParameter)parameter).getTrueString();
+						if (parameter.getParaType().toLowerCase().equals("string")) 
+							parameterValue += ((StringParameter)parameter).getValue();
+						command = Tools.replace(command, searchString, parameterValue);
+					}
+				}
+			}
+		}
+		
+//		while (index < inputs.size()) {
+//			
+//			Input input = inputs.get(index);
+//
+//			
+//						
+////			searchString = "INPUT_INTEGER_" + (oInt+1);
+//			if(command.contains(searchString) 
+//					&& input.getDataType() instanceof DataTypeFactory.Integer ) {
+//				String uniqueOutputName = input.getFromOutput().getOutputTitle();
+////				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
+//				command = Tools.replace(command, searchString, uniqueOutputName);
+//				oInt++;
+//			}
+//			index++;
+//				
+//		}
+		
 		return command;
 	}
 	

@@ -7,7 +7,7 @@
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>print(INPUT_INTEGER_1);</ImageJSyntax> 
   <Color>0x9cba92</Color>
-  <HelpString>Print</HelpString>
+  <HelpString>Prints an Integer value</HelpString>
 </General>
 
 <Inputs>
