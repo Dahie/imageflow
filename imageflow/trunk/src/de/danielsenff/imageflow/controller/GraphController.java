@@ -115,6 +115,14 @@ public class GraphController{
 	}
 	
 	public static void ungroup(final GroupUnitElement group, UnitList units) {
+		
+		int deltaX = group.getOrigin().x - 25;
+		int deltaY = group.getOrigin().y - 25;
+		for (Node node : group.getNodes()) {
+			int x = node.getOrigin().x, y = node.getOrigin().y;
+			node.getOrigin().setLocation(x+deltaX, y+deltaY);
+		}
+		
 		units.addAll(group.getNodes());
 		ConnectionList connections = units.getConnections();
 		

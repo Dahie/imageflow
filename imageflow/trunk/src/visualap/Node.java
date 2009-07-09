@@ -105,7 +105,8 @@ public abstract class Node implements Selectable, Changeable, Labelable, Cloneab
 	}
 
 	public void drag(int dx, int dy) {
-		dragging.setLocation(origin.x+dx, origin.y+dy);
+		if(dragging != null)
+			dragging.setLocation(origin.x+dx, origin.y+dy);
 	}
 
 	public void drag(boolean status) {

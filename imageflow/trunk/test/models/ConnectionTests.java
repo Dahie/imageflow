@@ -152,31 +152,31 @@ public class ConnectionTests extends TestCase {
 						DataTypeFactory.createImage(PlugInFilter.DOES_ALL), 
 						unit2, 3, true, false));
 		
-		// conn1 32 to 16		
+		// conn1 all to 32		
 		Connection conn1 = new Connection(unit1,1,unit2,1);
-		assertTrue("both do 32", conn1.isCompatible());
+		assertTrue("all to 32", conn1.isCompatible());
 		
-		// conn2 32 to 16		
+		// conn2 all to all
 		Connection conn2 = new Connection(unit1,1,unit2,2);
-		assertFalse("both do 32", conn2.isCompatible());
+		assertTrue("all to 16", conn2.isCompatible());
 
-		// conn3 ALL to 32
+		// conn3 any to 32
 		Connection conn3 = new Connection(unit1,2,unit2, 1);
 		// technically compatable, but we expect something explicit and no guesses
 		assertFalse("all to 32", conn3.isCompatible());
 		
-		// conn4 32 to all
+		// conn4 all to all
 		Connection conn4 = new Connection(unit1,1,unit2, 3);
-		assertTrue("32 to all", conn4.isCompatible());
+		assertTrue("all to all", conn4.isCompatible());
 		
 		// now test pins, which don't care
 		//TODO hm how should this react actually? needs an input set
-		Connection conn5 = new Connection(unit1,3,unit2, 2);
+//		Connection conn5 = new Connection(unit1,3,unit2, 2);
 		//assertTrue("-1 to 16", conn5.areImageBitDepthCompatible());
 		
 		// now test pins, which don't care
 		// doesn't do much since -1 is undefined
-		Connection conn6 = new Connection(unit1,3,unit2, 3);
+//		Connection conn6 = new Connection(unit1,3,unit2, 3);
 		//assertTrue("-1 to ALL", conn6.areImageBitDepthCompatible());
 	}
 	

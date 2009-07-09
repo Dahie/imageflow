@@ -92,7 +92,7 @@ public class FileChooser extends JFileChooser {
 	 * 
 	 * Returns null if no file was saved
 	 * 
-	 * @param parent Parent Component
+	 * @param parentPanel Parent Component
 	 * @param title Title of the frame
 	 * @param ext Extensions 
 	 */

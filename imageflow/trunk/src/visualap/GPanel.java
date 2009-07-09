@@ -44,10 +44,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.JInternalFrame;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 
-import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
@@ -55,7 +53,7 @@ import de.danielsenff.imageflow.models.connection.ConnectionList;
 public class GPanel extends JPanel implements Printable, MouseListener, MouseMotionListener  {
 
 	protected ArrayList<Delegate> beans;
-	protected GPanelListener parent;
+	protected GPanelListener parentPanel;
 
 	protected Point pick = null;
 	protected Pin drawEdge;
@@ -67,7 +65,6 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 
 	boolean cursor=true; // cursor is under control?
 	protected Rectangle rect;
-	JMenu newMenu;
 
 	// handling of selection rectange
 	protected Rectangle currentRect = null;
@@ -84,19 +81,19 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	public GPanel(ArrayList<Delegate> beans, 
 			GPanelListener parent) {
 		this.beans = beans;
-		this.parent = parent;
+		this.parentPanel = parent;
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setBackground(Color.white);
 	}
 
 
-//	public void clear() {
-//		nodeL.clear();
-//		connectionList.clear();
-//		selection.clear();
-//		repaint();
-//	}
+	//	public void clear() {
+	//		nodeL.clear();
+	//		connectionList.clear();
+	//		selection.clear();
+	//		repaint();
+	//	}
 
 	public void setTitle(String title) {
 		frame.setTitle(title);
@@ -129,6 +126,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+
 		// paint printable items
 		paintPrintable(g);
 		// paint non printable items
@@ -171,53 +169,58 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		int x = e.getX();
 		int y = e.getY();
 		// qui � obbligatorio un iteratore che scandisce la lista al contrario!
-//		for (ListIterator<Node> it = nodeL.listIterator(nodeL.size()); it.hasPrevious(); ) {
-//			Node aNode = it.previous();
-		for (Node aNode : nodeL) {
-			Object sel = aNode.contains(x,y);
-			// 	check selected element, is it a Node?
-			if (sel instanceof Node) {
-				pick = new Point(x,y);
-				if (!selection.contains(aNode)) {
-					if(!e.isControlDown()
-							|| ( e.isMetaDown() && IJ.isMacintosh())) {
-						selection.clear();
+			for (Node aNode : nodeL) {
+				Object sel = aNode.contains(x,y);
+				// 	check selected element, is it a Node?
+				if (sel instanceof Node) {
+					pick = new Point(x,y);
+					if (!selection.contains(aNode)) {
+						if(!e.isControlDown()
+								|| ( e.isMetaDown() && IJ.isMacintosh())) {
+							selection.clear();
+						}
+						selection.add(aNode);
+					} else {
+						if(e.isControlDown()
+								|| (e.isMetaDown() && IJ.isMacintosh()))
+							selection.remove(aNode);
+					} 
+
+					if(!e.isPopupTrigger()) {
+						for (Node iNode : selection)
+							if(!e.isPopupTrigger())
+								iNode.drag(true);
+						
+						e.consume();
+						changeCursor(Cursor.MOVE_CURSOR);
+					} else {
+						parentPanel.showFloatingMenu(e);
 					}
-					selection.add(aNode);
-				} else {
-					if(e.isControlDown()
-							|| (e.isMetaDown() && IJ.isMacintosh()))
-						selection.remove(aNode);
+					
+					repaint();
+					
+					
+					return;
+				}
+				// check selected element, is it a Pin?
+				else if (sel instanceof Pin) {
+					drawEdge = (Pin) sel;
+					//	System.out.println(drawEdge);
+					mouse = new Point (x,y);
+					changeCursor(Cursor.CROSSHAIR_CURSOR);
+					return;
 				} 
-				
-				for (Node iNode : selection)
-					if(!e.isPopupTrigger())
-						iNode.drag(true);
-				repaint();
-				parent.showFloatingMenu(e);
-				e.consume();
-				changeCursor(Cursor.MOVE_CURSOR);
-				return;
-			}
-			// check selected element, is it a Pin?
-			else if (sel instanceof Pin) {
-				drawEdge = (Pin) sel;
-				//	System.out.println(drawEdge);
-				mouse = new Point (x,y);
-				changeCursor(Cursor.CROSSHAIR_CURSOR);
-				return;
-			} 
-			// change
-			else {
-				selection.clear();
-			}
+				// change
+				else {
+					selection.clear();
+				}
 
 
-		}
-		parent.showFloatingMenu(e);	
+			}
+		if (e.isPopupTrigger())
+			parentPanel.showFloatingMenu(e);
 
 		selection.clear();
-
 		//	e.consume();
 
 		// handling of selection rectange 
@@ -243,7 +246,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		}
 		return false;
 	}
-	
+
 	public void mouseReleased(MouseEvent e) {
 		// generato quando il mouse viene rilasciato, anche a seguito di click
 		int x = e.getX();
@@ -260,8 +263,6 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		}
 		else if (drawEdge != null)	{
 			// insert new Edge if not already present in EdgeL
-//			for (ListIterator<Node> it = nodeL.listIterator(nodeL.size()); it.hasPrevious(); ) {
-//				Node aNode = it.previous();
 			for (Node aNode : nodeL) {
 				Object sel = aNode.contains(x,y);
 				if ((sel instanceof Pin)&&(!drawEdge.equals(sel))) {
@@ -286,8 +287,8 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			currentRect = null;
 			repaint();
 		}
-		
-		parent.showFloatingMenu(e);
+
+		parentPanel.showFloatingMenu(e);
 		//	e.consume();
 	}
 

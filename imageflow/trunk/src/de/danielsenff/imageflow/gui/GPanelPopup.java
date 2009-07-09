@@ -72,7 +72,7 @@ public class GPanelPopup implements GPanelListener {
 				if (!graphController.getCopyNodesList().isEmpty()) 
 					popup.add(getAction("paste"));
 			} else {
-				
+
 				showSingleUnitActions(popup, selectedUnits);
 				popup.add(getAction("cut"));
 				popup.add(getAction("copy"));
@@ -80,7 +80,7 @@ public class GPanelPopup implements GPanelListener {
 				popup.add(getAction("unbind"));
 				popup.add(getAction("delete"));
 			}
-			
+
 			popup.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
@@ -98,7 +98,7 @@ public class GPanelPopup implements GPanelListener {
 			
 			if(unit instanceof GroupUnitElement) {
 				popup.add(getAction("showGroupContents"));
-				popup.add(getAction("group"));
+				popup.add(getAction("degroup"));
 				popup.addSeparator();
 			}
 				

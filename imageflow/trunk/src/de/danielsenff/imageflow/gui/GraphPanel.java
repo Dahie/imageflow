@@ -78,7 +78,7 @@ public class GraphPanel extends GPanel {
 		this(new ArrayList<Delegate>(), panel);
 	}
 	
-	public GraphPanel(final GPanelListener panel, GraphController graphController) {
+	public GraphPanel(final GPanelListener panel, final GraphController graphController) {
 		this(new ArrayList<Delegate>(), panel);
 		
 		setGraphController(graphController);
@@ -150,6 +150,18 @@ public class GraphPanel extends GPanel {
 		final Point to = connection.getOutput().getLocation();
 		g.setColor(  (connection.isCompatible()) ? Color.BLACK : Color.RED );
 		g.drawLine(from.x, from.y, to.x, to.y);
+		
+		if(connection.isLocked()) {
+			final int dX = Math.abs(from.x - to.x)/2 + Math.min(from.x, to.x);
+			final int dY = Math.abs(from.y - to.y)/2 + Math.min(from.y, to.y);
+			final Point origin = new Point(dX, dY);
+			
+			g.setColor(Color.BLACK);
+			final Ellipse2D.Double circle = 
+				new Ellipse2D.Double(origin.getX()-5, origin.getY()-5, 10, 10);
+			((Graphics2D)g).draw(circle);
+			g.fillRect(origin.x-5, origin.y, 10, 10);
+		}
 		
 		if(!connection.isCompatible()) {
 			final int dX = Math.abs(from.x - to.x)/2 + Math.min(from.x, to.x);

@@ -122,11 +122,12 @@ public class OutputTests {
 		ConnectionList connList = new ConnectionList();
 		
 		// test after connecting
-		assertTrue("connection added to list", connList.add(sourceUnit, 1, filterUnit1, 1));
+		Connection conn = new Connection(sourceUnit, 1, filterUnit1, 1);
+		assertTrue("connection added to list", connList.add(conn));
 		assertTrue("output connected", sourceOutput.isConnected());	
 		assertFalse("output connected", filterUnit2.getOutput(0).isConnected());
 		
-		connList.remove(0);
+		connList.remove(conn);
 		
 		//test after disconnecting
 		assertFalse("output disconnected", sourceOutput.isConnected());
@@ -166,11 +167,11 @@ public class OutputTests {
 //		unit1.addOutput("output1", "o", unit1Obitdepth, false);
 		
 		UnitElement unit2 = new UnitElement("unit2", "some syntax");
-		unit2.addInput("input1", "i", unit2Ibitdepth, false);
-		unit2.addOutput("output1", "o", unit2Obitdepth, false);
+		unit2.addInput(new Input("input1", "i",DataTypeFactory.createImage(unit2Ibitdepth),unit2, 1, true, false));
+		unit2.addOutput(new Output("output1", "o", DataTypeFactory.createImage(unit2Obitdepth), unit2, 1));
 
 		UnitElement unit3 = new UnitElement("unit3", "some syntax");
-		unit3.addInput("input1", "i", unit3Ibitdepth, false);
+		unit3.addInput(new Input("input1", "i",DataTypeFactory.createImage(unit3Ibitdepth),unit3, 1, true, false));
 
 		Connection conn1 = new Connection(unit1, 1, unit2, 1); // 32 to 32
 		conn1.connect();
@@ -218,14 +219,14 @@ public class OutputTests {
 	
 	@Test public void testTraversingImageBitDepth() {
 		UnitElement unit1 = new UnitElement("unit1", "some syntax");
-		unit1.addOutput("output1", "o", PlugInFilter.DOES_32, false);
-		Output output1 = unit1.getOutput(0);
+		Output output1 = new Output("output1", "o", DataTypeFactory.createImage(PlugInFilter.DOES_ALL), unit1, 1);
+		unit1.addOutput(output1);
 		
 		UnitElement unit2 = new UnitElement("unit2", "some syntax");
-		unit2.addInput("input1", "i", PlugInFilter.DOES_ALL, false);
-		Input input1 = unit2.getInput(0);
-		unit2.addOutput("output1", "o", -1, false);
-		Output output2 = unit2.getOutput(0);
+		Input input1 = new Input("input1", "i",DataTypeFactory.createImage(PlugInFilter.DOES_ALL),unit2, 1, true, false);
+		unit2.addInput(input1);
+		Output output2 = new Output("output1", "o", DataTypeFactory.createImage(-1), unit2, 1);
+		unit2.addOutput(output2);
 		
 //		UnitElement unit3 = new UnitElement("unit3", "some syntax");
 //		unit3.addInput("input1", "i", unit3Ibitdepth, false);
@@ -233,16 +234,18 @@ public class OutputTests {
 		Connection conn1 = new Connection(unit1, 1, unit2, 1);
 		conn1.connect();
 		
+		DataTypeFactory.Image o1dT = ((DataTypeFactory.Image)output1.getDataType());
 		assertTrue("travers from DOES_32", 
-				output1.isCompatible(PlugInFilter.DOES_32));
+				o1dT.isImageBitDepthCompatible(PlugInFilter.DOES_32));
 		assertFalse("travers from DOES_32", 
-				output1.isCompatible(PlugInFilter.DOES_16));
+				o1dT.isImageBitDepthCompatible(PlugInFilter.DOES_16));
 		
-		assertTrue("travers from DOES_32 via DOES_ALL to -1", 
-				output2.isCompatible(PlugInFilter.DOES_32));
+		DataTypeFactory.Image o2dT = ((DataTypeFactory.Image)output2.getDataType());
+		assertTrue("travers from DOES_32 via DOES_ALL to -1",
+				o2dT.isImageBitDepthCompatible(PlugInFilter.DOES_32));
 		
 		assertFalse("travers from DOES_32 via DOES_ALL to -1", 
-				output2.isCompatible(PlugInFilter.DOES_16));
+				o2dT.isImageBitDepthCompatible(PlugInFilter.DOES_16));
 
 	}
 	
@@ -265,7 +268,7 @@ public class OutputTests {
 		Input inputU4 = unit4.getInput(0);
 		
 		assertFalse(outputU2.existsInInputSubgraph(unit4));
-		assertFalse(inputU4.isConnectedInOutputBranch(unit2));
+		assertFalse(inputU4.isConnectedInInputBranch(unit2));
 		
 		// now we create a loop
 		
@@ -274,7 +277,7 @@ public class OutputTests {
 		assertTrue(conn3.isConnected());
 		
 		assertTrue(outputU2.existsInInputSubgraph(unit4));
-		assertTrue(inputU4.isConnectedInOutputBranch(unit2));
+		assertTrue(inputU4.isConnectedInInputBranch(unit2));
 	}
 	
 

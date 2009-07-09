@@ -23,6 +23,8 @@ public class Connection {
 	 */
 	public enum Status {OK, MISSING_TO_UNIT, MISSING_FROM_UNIT, MISSING_BOTH }
 	
+	protected boolean locked = false;
+	
 	/**
 	 * @param fromUnit
 	 * @param fromOutputNumber index starting with 1
@@ -216,6 +218,22 @@ public class Connection {
 		return (from.isConnectedWith(to) && to.isConnectedWith(from)); 
 	}
 	
+	/**
+	 * Returns true if the connection is locked and cann not be removed.
+	 * @return the locked
+	 */
+	public boolean isLocked() {
+		return locked;
+	}
+
+	/**
+	 * If set true, the connection can not be removed and is write protected.
+	 * @param locked the locked to set
+	 */
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
 	public boolean causesLoop() {
 		if(((Input)this.to).isConnectedInOutputBranch(getFromUnit())) return true;
 		if(((Output)this.from).existsInInputSubgraph(getToUnit())) return true;

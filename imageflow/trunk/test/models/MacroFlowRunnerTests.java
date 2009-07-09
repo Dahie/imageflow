@@ -3,24 +3,17 @@ package models;
 
 import java.awt.Dimension;
 
+import junit.framework.TestCase;
 import de.danielsenff.imageflow.controller.MacroFlowRunner;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
-import de.danielsenff.imageflow.models.unit.AbstractUnit;
 import de.danielsenff.imageflow.models.unit.UnitElement;
-import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
-
-import junit.framework.TestCase;
 
 public class MacroFlowRunnerTests extends TestCase {
 
 	
 	public void testSortAlgorithm1() {
-
-		
-		
-		
 		UnitList units = buildSampleWorkflow();
 		
 		UnitElement source1 = (UnitElement) units.get(0);

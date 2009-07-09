@@ -101,6 +101,24 @@ public class GroupUnitElement extends UnitElement {
 				connection.connect();
 			}
 		}
+		
+		int lowestX = 3000, lowestY = 3000;
+		for (Node node : getNodes()) {
+			if(node.getOrigin().x < lowestX
+				&& node.getOrigin().y < lowestY) {
+				lowestX = node.getOrigin().x;
+				lowestY = node.getOrigin().y;
+			}
+		}
+		
+		// offset from original
+		int deltaX = lowestX - 25;
+		int deltaY = lowestY - 25;
+		
+		for (Node node : getNodes()) {
+			int x = node.getOrigin().x, y = node.getOrigin().y;
+			node.getOrigin().setLocation(x-deltaX, y-deltaY);
+		}
 
 	}
 

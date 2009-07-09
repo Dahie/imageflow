@@ -19,8 +19,6 @@ GUI:
 - improved selections: shift, strg
 - drag copy CTRL
 - moving more than one selected at one time does not work
-- copy and paste with keyboard shortcuts (ctrl+c) does not work 
-- red error connections between filter units when no source image connected
 - Unit parameters window padding is not drawn correctly 
 
 
@@ -52,7 +50,6 @@ Nice-to-have:
 V2:
 - editor for unit xml
 - Editing history (for nodes and properties)
-- Grouping of units
 - Multi-Document-Application
-- no more visualap? -> new object-framework
+- new object-framework
 - model-view seperation
