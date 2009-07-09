@@ -42,12 +42,12 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.ListIterator;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 
+import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
@@ -58,10 +58,9 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	protected GPanelListener parent;
 
 	protected Point pick = null;
+	protected Pin drawEdge;
 	protected Selection<Node> selection = new Selection<Node>();
 	protected Collection<Node> nodeL = new GList<Node>();
-	protected Pin drawEdge;
-//	protected ConnectionList connectionList = new ConnectionList();
 	protected Collection<Connection> connectionList = new ConnectionList();
 	protected Point mouse;
 
@@ -82,7 +81,8 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	// MDI Support 
 	JInternalFrame frame;
 
-	public GPanel(ArrayList<Delegate> beans, GPanelListener parent) {
+	public GPanel(ArrayList<Delegate> beans, 
+			GPanelListener parent) {
 		this.beans = beans;
 		this.parent = parent;
 		addMouseListener(this);
@@ -91,13 +91,12 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	}
 
 
-
-	public void clear() {
-		nodeL.clear();
-		connectionList.clear();
-		selection.clear();
-		repaint();
-	}
+//	public void clear() {
+//		nodeL.clear();
+//		connectionList.clear();
+//		selection.clear();
+//		repaint();
+//	}
 
 	public void setTitle(String title) {
 		frame.setTitle(title);

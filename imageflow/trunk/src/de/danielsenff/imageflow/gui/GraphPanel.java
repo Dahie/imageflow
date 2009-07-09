@@ -74,9 +74,14 @@ public class GraphPanel extends GPanel {
 
 	private final String iconFile = "/de/danielsenff/imageflow/resources/iw-logo.png";
 
-	
 	public GraphPanel(final GPanelListener panel) {
 		this(new ArrayList<Delegate>(), panel);
+	}
+	
+	public GraphPanel(final GPanelListener panel, GraphController graphController) {
+		this(new ArrayList<Delegate>(), panel);
+		
+		setGraphController(graphController);
 	}
 	
 	/**
@@ -523,6 +528,7 @@ public class GraphPanel extends GPanel {
 		this.selection.clear();
 		this.nodeL = graphController.getUnitElements();
 		this.connectionList = graphController.getConnections();
+		this.selection = graphController.getSelections();
 	}
 
 	public void setSelections(final SelectionList selections) {

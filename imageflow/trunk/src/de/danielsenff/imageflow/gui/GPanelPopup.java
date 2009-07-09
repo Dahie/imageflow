@@ -33,8 +33,7 @@ public class GPanelPopup implements GPanelListener {
 
 	protected GPanel activePanel;
 	protected Point savedPoint = new Point(0,0);
-	protected ArrayList<Node> copyL;
-	protected Collection<Delegate> availableUnits;
+	protected GraphController graphController;
 
 
 
@@ -43,10 +42,8 @@ public class GPanelPopup implements GPanelListener {
 	 * @param graphController 
 	 * @param copyL
 	 */
-	public GPanelPopup(final Collection<Delegate> availableUnits, 
-			final GraphController graphController) {
-		this.availableUnits = availableUnits;
-		this.copyL = graphController.getCopyNodesList();
+	public GPanelPopup(final GraphController graphController) {
+		this.graphController = graphController;
 	}
 
 	/**
@@ -72,7 +69,7 @@ public class GPanelPopup implements GPanelListener {
 			Selection<Node> selectedUnits = activePanel.getSelection();
 			if (selectedUnits.isEmpty()) { 
 				popup.add(new InsertUnitMenu("Insert unit", activePanel, savedPoint));
-				if (!copyL.isEmpty()) 
+				if (!graphController.getCopyNodesList().isEmpty()) 
 					popup.add(getAction("paste"));
 			} else {
 				

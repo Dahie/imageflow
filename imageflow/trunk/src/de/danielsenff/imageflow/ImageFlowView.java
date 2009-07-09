@@ -107,8 +107,6 @@ public class ImageFlowView extends FrameView {
 
 	private boolean showlog = false;
 
-	private SelectionList selections;
-
 	private JCheckBoxMenuItem chkBoxDisplayUnit;
 
 	private JCheckBoxMenuItem chkBoxCollapseIcon;
@@ -126,7 +124,6 @@ public class ImageFlowView extends FrameView {
 		this.graphController = new GraphController(); 
 		this.units 			= graphController.getUnitElements();
 		this.connections 	= graphController.getConnections();
-		this.selections 	= graphController.getSelections();
 		this.unitDelegates = DelegatesController.getInstance().getUnitDelegates();
 		
 		try {
@@ -178,7 +175,7 @@ public class ImageFlowView extends FrameView {
 			}
 		});
 		
-		selections.addSelectionListener(new SelectionListener() {
+		getSelections().addSelectionListener(new SelectionListener() {
 			public void selectionChanged(Selectable selections) {
 				setSelected(selections.isSelected());
 			}
@@ -289,15 +286,15 @@ public class ImageFlowView extends FrameView {
 	}
 
 	private void updateMenu() {
-		if(!selections.isEmpty() 
-				&& selections.size() == 1 
-				&& selections.get(0) instanceof UnitElement) {
+		if(!getSelections().isEmpty() 
+				&& getSelections().size() == 1 
+				&& getSelections().get(0) instanceof UnitElement) {
 			boolean isCollapsedIcon = 
-				((UnitElement)selections.get(0)).getCompontentSize() == Size.SMALL 
+				((UnitElement)getSelections().get(0)).getCompontentSize() == Size.SMALL 
 				? true : false;
 			this.chkBoxCollapseIcon.setSelected(isCollapsedIcon);
 			
-			boolean isDisplayUnit = ((UnitElement)selections.get(0)).isDisplayUnit();
+			boolean isDisplayUnit = ((UnitElement)getSelections().get(0)).isDisplayUnit();
 			this.chkBoxDisplayUnit.setSelected(isDisplayUnit);	
 		} else {
 			this.chkBoxCollapseIcon.setSelected(false);
@@ -322,14 +319,14 @@ public class ImageFlowView extends FrameView {
 		//working area aka graphpanel
 		ArrayList<Delegate> delegatesArrayList = new ArrayList<Delegate>();
 		delegatesArrayList.addAll(unitDelegates.values());
-		GPanelPopup popup = new GPanelPopup(unitDelegates.values(), graphController);
+		GPanelPopup popup = new GPanelPopup(graphController);
 		
 		
 		graphPanel = new GraphPanel(delegatesArrayList, popup);
 		popup.setActivePanel(graphPanel);
 		graphPanel.setGraphController(graphController);
 		graphPanel.setPreferredSize(new Dimension(400, 300));
-		graphPanel.setSelections(this.selections);
+		graphPanel.setSelections(getSelections());
 
 		
 		/*WorkspacePanel workspacePanel = new WorkspacePanel();
@@ -415,11 +412,15 @@ public class ImageFlowView extends FrameView {
 		this.graphController = graphController;
 		this.units 			= graphController.getUnitElements();
 		this.connections 	= graphController.getConnections();
-		this.selections 	= graphController.getSelections();
 		graphPanel.setGraphController(this.graphController);
 		registerModelListeners();
 		graphPanel.repaint();
 	}
+	
+	public final SelectionList getSelections() {
+		return graphController.getSelections();
+	}
+
 	
 	/**
 	 *  Set the bound file property and update the GUI.
@@ -599,13 +600,13 @@ public class ImageFlowView extends FrameView {
 	@Action(enabledProperty = "selected")
 	public void group() {
 		
-		if(selections.size() == 1
-				&& selections.get(0) instanceof GroupUnitElement) {
-			GroupUnitElement group = (GroupUnitElement) selections.get(0);
+		if(getSelections().size() == 1
+				&& getSelections().get(0) instanceof GroupUnitElement) {
+			GroupUnitElement group = (GroupUnitElement) getSelections().get(0);
 			graphController.ungroup(group);
 		} else {
 			try {
-				graphController.group(selections);
+				graphController.group(getSelections());
 			} catch (Exception e) {
 				System.out.println("Group disallowed: No conistent connections between units");
 				JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
@@ -622,9 +623,9 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void degroup() {
-		if(selections.size() == 1
-				&& selections.get(0) instanceof GroupUnitElement) {
-			GroupUnitElement group = (GroupUnitElement) selections.get(0);
+		if(getSelections().size() == 1
+				&& getSelections().get(0) instanceof GroupUnitElement) {
+			GroupUnitElement group = (GroupUnitElement) getSelections().get(0);
 			graphController.ungroup(group);
 		}
 	}
@@ -653,7 +654,7 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void setDisplayUnit() {
-		for (Object selectedElement : selections) {
+		for (Object selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
 				final UnitElement unit = (UnitElement) selectedElement;
 				boolean newDisplayStatus = unit.isDisplayUnit() ? false : true;
@@ -668,7 +669,7 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void setUnitComponentSize() {
-		for (Object selectedElement : selections) {
+		for (Object selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
 				final UnitElement unit = (UnitElement) selectedElement;
 				
@@ -999,10 +1000,10 @@ public class ImageFlowView extends FrameView {
     @Action public void debugDrawClonedWorkflow() {
     	final JDialog dialog = new JDialog();
     	
-    	GPanelPopup popup = new GPanelPopup(unitDelegates.values(), graphController);
-    	GraphPanel gpanel = new GraphPanel(popup);
+    	GPanelPopup popup = new GPanelPopup(graphController);
+    	GraphPanel gpanel = new GraphPanel(popup, graphController);
     	UnitList cloneUnitList = graphController.getUnitElements().clone();
-		gpanel.setNodeL(cloneUnitList);
+    	gpanel.setNodeL(cloneUnitList);
     	gpanel.setEdgeL(cloneUnitList.getConnections());
     	
     	dialog.add(gpanel);
@@ -1059,15 +1060,15 @@ public class ImageFlowView extends FrameView {
     }
     
     @Action public void showGroupContents() {
-    	if(selections.size() == 1 && selections.get(0) instanceof GroupUnitElement) {
+    	if(getSelections().size() == 1 && getSelections().get(0) instanceof GroupUnitElement) {
     		final JDialog dialog = new JDialog();
     		
     		
-    		GroupUnitElement group = (GroupUnitElement) selections.get(0);
+    		GroupUnitElement group = (GroupUnitElement) getSelections().get(0);
 //    		group.showGroupWindow();
     		dialog.setTitle(group.getLabel());
     		
-    		GPanelPopup popup = new GPanelPopup(unitDelegates.values(), graphController);
+    		GPanelPopup popup = new GPanelPopup( graphController);
         	GraphPanel gpanel = new GraphPanel(popup);
     		gpanel.setNodeL(group.getNodes());
     		popup.setActivePanel(gpanel);
