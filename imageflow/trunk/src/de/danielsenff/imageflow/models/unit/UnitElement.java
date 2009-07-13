@@ -17,6 +17,7 @@ import javax.xml.datatype.DatatypeFactory;
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.helper.PaintUtil;
+import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
@@ -51,7 +52,7 @@ import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
  * @author danielsenff
  *
  */
-public class UnitElement extends AbstractUnit {
+public class UnitElement extends AbstractUnit implements ProcessingUnit, Displayable {
 
 	/**
 	 * Pixel radius of tolerance round the pins  
@@ -96,11 +97,7 @@ public class UnitElement extends AbstractUnit {
 	 */
 	protected Status status;
 
-	/**
-	 * boolean indicating if this unit is a display unit
-	 * The result of DisplayUnits will be shown after executing the workflow.  
-	 */
-	protected boolean isDisplayUnit = false;  
+
 
 	/**
 	 * input array
@@ -439,7 +436,7 @@ public class UnitElement extends AbstractUnit {
 
 		// label field 
 		gd.addStringField("Unit label", this.getLabel(),40);
-		gd.addCheckbox("Display", this.isDisplayUnit);
+		gd.addCheckbox("Display", this.isDisplay());
 
 		final ArrayList<Parameter> parameterList = getParameters();
 
@@ -478,7 +475,7 @@ public class UnitElement extends AbstractUnit {
 		String newLabel = (String) (gd.getNextString()).trim();
 		setLabel(newLabel);
 		boolean isNewDisplay = gd.getNextBoolean();
-		setDisplayUnit(isNewDisplay);
+		setDisplay(isNewDisplay);
 
 		for (final Parameter parameter : parameterList) {
 			if(parameter instanceof DoubleParameter) {
@@ -509,54 +506,6 @@ public class UnitElement extends AbstractUnit {
 	}
 
 
-	/*
-	 * Displayable
-	 */
-
-	/**
-	 * Returns whether or not this unit should display the current state of the image.
-	 * @return 
-	 */
-	public boolean isDisplayUnit() {
-		return this.isDisplayUnit;
-	}
-
-	/**
-	 * If activated, the unit will display the current image.
-	 * This setting is actually attached to the {@link Output}. 
-	 * This is a convenience method for changing all outputs of this
-	 * unit at once.
-	 * @param isDisplayUnit
-	 */
-	public void setDisplayUnit(final boolean isDisplayUnit) {
-		this.isDisplayUnit = isDisplayUnit;
-		for (Output output : getOutputs()) {
-			output.setDoDisplay(isDisplayUnit);
-		}
-		notifyModelListeners();
-	}
-
-	/**
-	 * Returns true if any {@link Output} connects to a unit that is set as displayable.
-	 * @return
-	 */
-	public boolean hasDisplayBranch() {
-		if(isDisplayUnit())
-			return true;
-
-		for (Output output : getOutputs()) {
-			if(output.isConnected()) {
-				for (Connection connection : output.getConnections()) {
-					UnitElement next = (UnitElement)connection.getToUnit();
-					//					System.out.println(next +" tested by "+ this);
-					if(next.hasDisplayBranch()) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
 
 
 	/**
@@ -816,7 +765,7 @@ public class UnitElement extends AbstractUnit {
 			}
 			clone.addParameter(parameter);
 		}
-		clone.setDisplayUnit(this.isDisplayUnit);
+		clone.setDisplay(isDisplay());
 		clone.setColor(this.color);
 		clone.setIcon(this.icon);
 		clone.setHelpString(this.infoText);
@@ -969,6 +918,62 @@ public class UnitElement extends AbstractUnit {
 		return (node.getOrigin().x > this.getOrigin().x) ? true : false;
 	}
 
+
+	/*
+	 * Displayable
+	 */
+
+	/**
+	 * boolean indicating if this unit is a display unit
+	 * The result of DisplayUnits will be shown after executing the workflow.  
+	 */
+	protected boolean display = false;  
+	
+	
+	/**
+	 * If activated, the unit will display the current image.
+	 * This setting is actually attached to the {@link Output}. 
+	 * This is a convenience method for changing all outputs of this
+	 * unit at once.
+	 * @param isDisplayUnit
+	 */
+	public void setDisplay(final boolean isDisplay) {
+		this.display = isDisplay;
+		for (Output output : getOutputs()) {
+			output.setDoDisplay(isDisplay);
+		}
+		notifyModelListeners();
+	}
+
+	/**
+	 * Returns true if any {@link Output} connects to a unit that is set as displayable.
+	 * @return
+	 */
+	public boolean hasDisplayBranch() {
+		if(isDisplay())
+			return true;
+
+		for (Output output : getOutputs()) {
+			if(output.isConnected()) {
+				for (Connection connection : output.getConnections()) {
+					UnitElement next = (UnitElement)connection.getToUnit();
+					//					System.out.println(next +" tested by "+ this);
+					if(next.hasDisplayBranch()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns whether or not this unit should display the current state of the image.
+	 * @return 
+	 */
+	public boolean isDisplay() {
+		return this.display;
+	}
 
 
 }

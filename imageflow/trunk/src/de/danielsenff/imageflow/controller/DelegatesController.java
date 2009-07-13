@@ -100,13 +100,17 @@ public class DelegatesController {
 		
 		for (int i = 0; i < listOfFiles.length; i++) {
 			File file = listOfFiles[i];
-			if(file.isDirectory() && !file.isHidden() && !file.getName().startsWith(".")) {
+			if(file.isDirectory() 
+					&& !file.isHidden() 
+					&& !file.getName().startsWith(".")) {
 				DefaultMutableTreeNode subNode = new DefaultMutableTreeNode(file.getName());
 				JMenu subMenu = new JMenu(file.getName());
 				readDelegatesFromFolder(subNode, subMenu, file);
 				((DefaultMutableTreeNode) node).add(subNode);
 				menu.add(subMenu);
-			} else if (file.isFile() && isXML(file)  && !file.getName().startsWith(".")) {
+			} else if (file.isFile() 
+					&& isXML(file)  
+					&& !file.getName().startsWith(".")) {
 
 				final UnitDescription unitDescription = new UnitDescription(file, Tools.getXMLRoot(file));
 				final UnitDelegate unitDelegate = new UnitDelegate(unitDescription);

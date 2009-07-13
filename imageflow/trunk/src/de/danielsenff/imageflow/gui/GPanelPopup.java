@@ -104,7 +104,7 @@ public class GPanelPopup implements GPanelListener {
 				
 			
 			JCheckBoxMenuItem chkBoxDisplayUnit = new JCheckBoxMenuItem(getAction("setDisplayUnit")); 
-			boolean isDisplayUnit = unit.isDisplayUnit();
+			boolean isDisplayUnit = unit.isDisplay();
 			chkBoxDisplayUnit.setSelected(isDisplayUnit);
 			popup.add(chkBoxDisplayUnit);
 			

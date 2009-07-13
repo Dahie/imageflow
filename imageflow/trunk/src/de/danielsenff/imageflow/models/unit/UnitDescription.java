@@ -114,12 +114,6 @@ public class UnitDescription {
 				processOutputs(outputsElement);
 			}
 			
-			if(root.getChild("Units") != null) {
-				
-				
-				
-			}
-			
 		}
 
 		catch (Exception e) {
@@ -147,7 +141,7 @@ public class UnitDescription {
 		numParas = parametersList.size();
 		para = new Para[numParas + 1];
 
-		// loop �ber alle Parameter
+		// loop for all Parameter
 		int num = 1;
 		while (parametersIterator.hasNext()) {
 			Element actualParameterElement = (Element) parametersIterator.next();

@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
 
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 
 import visualap.Node;
 import visualap.Pin;
@@ -56,7 +55,7 @@ public class GroupUnitElement extends UnitElement {
 
 	private void init() {
 		this.units = new UnitList();
-		internalConnections = new Vector<Connection>();
+		this.internalConnections = new Vector<Connection>();
 		this.externalConnections = new Vector<Connection>();
 		this.originalConnections = new Vector<Connection>();
 	}
@@ -134,24 +133,6 @@ public class GroupUnitElement extends UnitElement {
 		 * for each input we test, if every unit in input graph is 
 		 */
 
-		/*for (Node node : unitsToAdd) {
-			for (Node goal : unitsToAdd) {
-
-				if(node instanceof UnitElement) {
-					UnitElement unit = (UnitElement) node;
-					for (Input input : unit.getInputs()) {
-						//					if(input.isConnected() && !isToUnitIn(unitsToAdd, input.getConnection()))
-						
-						if(input.traverseInput(input, goal) 
-								&& !unitsToAdd.contains(input.getFromUnit()))
-							return false;
-					}
-				} 
-			}
-		}*/
-		
-		
-		
 		for (Connection connection : this.externalConnections) {
 			for (Node node : unitsToAdd) {
 				if(unitsToAdd.contains(connection.getToUnit())
@@ -163,7 +144,7 @@ public class GroupUnitElement extends UnitElement {
 		return true;
 	}
 
-	private boolean isToUnitIn(Collection<Node> unitsToAdd, Connection connection) {
+	private boolean isToUnitIn(final Collection<Node> unitsToAdd, final Connection connection) {
 
 		UnitElement unit = (UnitElement)connection.getFromUnit();
 		if(unitsToAdd.contains(unit)
@@ -182,7 +163,7 @@ public class GroupUnitElement extends UnitElement {
 		return false;
 	}
 
-	private void dealWithConnections(final ConnectionList allConnections) {
+	public void dealWithConnections(final ConnectionList allConnections) {
 
 		for (Connection connection : externalConnections) {
 			this.originalConnections.add(connection);
@@ -248,6 +229,15 @@ public class GroupUnitElement extends UnitElement {
 		
 	}
 
+
+	/**
+	 * @return the externalConnections
+	 */
+	public Collection<Connection> getExternalConnections() {
+		return externalConnections;
+	}
+
+	
 	/**
 	 * Returns true if the node in question is contained in this GroupUnit.
 	 * @param node

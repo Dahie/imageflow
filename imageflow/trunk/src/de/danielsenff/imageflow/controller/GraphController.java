@@ -201,7 +201,7 @@ public class GraphController{
 		final UnitElement blurUnit = delegatesController.getDelegate("Gaussian Blur").createUnit(new Point(180, 50));
 		final UnitElement mergeUnit = delegatesController.getDelegate("Image Calculator").createUnit(new Point(320, 100));
 		final UnitElement noiseUnit = delegatesController.getDelegate("Add Noise").createUnit(new Point(450, 100));
-		noiseUnit.setDisplayUnit(true);
+		noiseUnit.setDisplay(true);
 		
 		CommentNode comment = UnitFactory.createComment("my usual example", new Point(30, 40));
 
@@ -278,7 +278,7 @@ public class GraphController{
 		nodes.add(squareUnit2);
 		nodes.add(addUnit);
 		nodes.add(fireUnit);
-		fireUnit.setDisplayUnit(true);
+		fireUnit.setDisplay(true);
 
 		////////////////////////////////////////////////////////
 		// setup the connections

@@ -3,7 +3,6 @@
  */
 package de.danielsenff.imageflow.models.unit;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +13,7 @@ import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.gui.GraphPanel;
+import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
 import de.danielsenff.imageflow.models.connection.Input;
@@ -44,7 +44,6 @@ public class UnitFactory {
 		
 		String unitName = unitDescription.unitName;
 		String imageJSyntax = unitDescription.imageJSyntax;
-		Color color = unitDescription.color;
 		
 		// usual case, we deal with a UnitElement
 		
@@ -57,6 +56,8 @@ public class UnitFactory {
 		} else 
 			unitElement = new UnitElement(new Point(origin), unitName, imageJSyntax);
 		
+		unitElement.setHelpString(unitDescription.helpString);
+		unitElement.setColor(unitDescription.color);
 		
 		// add an icon if there is one mentioned and found
 		File iconFile = new File(unitDescription.pathToIcon);
@@ -72,7 +73,7 @@ public class UnitFactory {
 			}
 		}
 
-		unitElement.setColor(color);
+		// dopppelmoppel?
 		if(unitDescription.icon != null) {
 			unitElement.setIcon(unitDescription.icon);
 			unitElement.setIconFile(unitDescription.iconFile);
@@ -81,7 +82,6 @@ public class UnitFactory {
 			
 		if(unitDescription.componentSize != null)
 			unitElement.setCompontentSize(unitDescription.componentSize);
-		unitElement.setHelpString(unitDescription.helpString);
 		
 		// setup of the Parameters
 		addParameters(unitDescription, unitElement);
@@ -116,6 +116,12 @@ public class UnitFactory {
 		return unitElement;
 	}
 
+	public static void createGroupUnit() {
+		// TODO Auto-generated method stub
+
+	}
+	
+	
 	/**
 	 * sets pinTolerance accordings to number of inputs and outputs
 	 * @param unitElement current {@link UnitElement}, which contains the number of inputs and outputs
@@ -152,7 +158,6 @@ public class UnitFactory {
 			UnitDescription.Output outputDescription = unitDescription.output[i];
 			String name = outputDescription.name;
 			String shortName = outputDescription.shortName;
-			boolean doDisplay = outputDescription.doDisplay;
 			DataType dataType = outputDescription.dataType;
 			
 			if(unitElement instanceof SourceUnitElement
@@ -166,7 +171,10 @@ public class UnitFactory {
 			output.setupOutput(name, shortName);
 			
 			unitElement.addOutput(output); 
-			unitElement.setDisplayUnit(doDisplay);
+			if(unitElement instanceof Displayable) {
+				boolean doDisplay = outputDescription.doDisplay;
+				unitElement.setDisplay(doDisplay);
+			}
 		}
 	}
 
@@ -217,7 +225,7 @@ public class UnitFactory {
 							ifView.setModified(true);
 						}
 					});	
-		} else //if(node instanceof UnitElement) 
+		} else if (node instanceof UnitElement) 
 		{
 			((UnitElement)node).addModelListener(
 					new ModelListener () {

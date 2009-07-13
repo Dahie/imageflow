@@ -287,7 +287,7 @@ public class MacroFlowRunner {
 						// be deleted in the next lap
 					} else if (!unit.hasOutputsConnected() 
 							&& unit.getUnitType() == Type.SOURCE 
-							&& !unit.isDisplayUnit()) {
+							&& !unit.isDisplay()) {
 						// if source has no connected outputs and is not visible
 						unitElements.remove(index);
 					} 

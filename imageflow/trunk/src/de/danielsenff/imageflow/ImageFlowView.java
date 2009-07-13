@@ -294,7 +294,7 @@ public class ImageFlowView extends FrameView {
 				? true : false;
 			this.chkBoxCollapseIcon.setSelected(isCollapsedIcon);
 			
-			boolean isDisplayUnit = ((UnitElement)getSelections().get(0)).isDisplayUnit();
+			boolean isDisplayUnit = ((UnitElement)getSelections().get(0)).isDisplay();
 			this.chkBoxDisplayUnit.setSelected(isDisplayUnit);	
 		} else {
 			this.chkBoxCollapseIcon.setSelected(false);
@@ -582,9 +582,9 @@ public class ImageFlowView extends FrameView {
 		final UnitElement unit = (UnitElement) graphPanel.getSelection().get(0);
 		final MacroFlowRunner mfr = new MacroFlowRunner(this.units);
 		if(mfr.contains(unit)) {
-			unit.setDisplayUnit(true);
+			unit.setDisplay(true);
 			mfr.getSubMacroFlowRunner(unit).generateMacro();
-			unit.setDisplayUnit(false);
+			unit.setDisplay(false);
 		}
 		
 	    /*Task task = null;
@@ -657,8 +657,8 @@ public class ImageFlowView extends FrameView {
 		for (Object selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
 				final UnitElement unit = (UnitElement) selectedElement;
-				boolean newDisplayStatus = unit.isDisplayUnit() ? false : true;
-				unit.setDisplayUnit(newDisplayStatus);	
+				boolean newDisplayStatus = unit.isDisplay() ? false : true;
+				unit.setDisplay(newDisplayStatus);	
 			}
 		}
 		graphPanel.repaint();

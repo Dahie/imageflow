@@ -155,7 +155,7 @@ public class NodeIcon implements UnitModelComponent {
 		int width = largeComponentDimension.width-2*padding;
 		int height = largeComponentDimension.height-2*padding;
 		
-		drawElement(g2, width, height, unit.isDisplayUnit(), true, true);
+		drawElement(g2, width, height, unit.isDisplay(), true, true);
 		return g2;
 	}
 
@@ -319,7 +319,7 @@ public class NodeIcon implements UnitModelComponent {
 	public Graphics2D paintSmallIcon(Graphics2D g2) {
 		int width = smallComponentDimension.width-2*padding;
 		int height = smallComponentDimension.height-2*padding;
-		drawElement(g2, width, height, unit.isDisplayUnit(), false, false);
+		drawElement(g2, width, height, unit.isDisplay(), false, false);
 		return g2;
 	}
 
