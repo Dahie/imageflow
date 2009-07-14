@@ -173,7 +173,6 @@ public class WorkflowXMLBuilder {
 
 				
 				if(internalConnectionsElement != null) {
-					//					readConnections(newNodes, actualUnitElement.getChild("InternalConnections"));
 					List<Element> connectionsList = internalConnectionsElement.getChildren();
 					Iterator<Element> connectionsIterator = connectionsList.iterator();
 
@@ -187,16 +186,11 @@ public class WorkflowXMLBuilder {
 				}
 
 				if(originalConnectionsElement != null) {
-//					readConnections(newNodes, actualUnitElement.getChild("OriginalConnections"));
 					List<Element> connectionsList = internalConnectionsElement.getChildren();
 					Iterator<Element> connectionsIterator = connectionsList.iterator();
 
-					// external connections require the hashmap with all embedded and existing units	
-					// we need all units of the workflow :/
 					while (connectionsIterator.hasNext()) { 
 						Element actualConnectionElement = connectionsIterator.next();
-//						Connection connection = readConnection(embeddedNodes, actualConnectionElement);
-//						((GroupUnitElement)unitElement).getInternalConnections().add(connection);
 						ConnectionDelegate conDelegate = 
 							new ConnectionDelegate(actualConnectionElement, 
 									((GroupUnitElement)unitElement).getOriginalConnections());
@@ -205,7 +199,6 @@ public class WorkflowXMLBuilder {
 				}
 				
 				if(externalConnectionsElement != null) {
-//					readConnections(newNodes, actualUnitElement.getChild("OriginalConnections"));
 					List<Element> connectionsList = externalConnectionsElement.getChildren();
 					Iterator<Element> connectionsIterator = connectionsList.iterator();
 

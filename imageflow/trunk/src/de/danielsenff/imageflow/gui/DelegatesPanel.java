@@ -54,6 +54,7 @@ import de.danielsenff.imageflow.models.unit.UnitList;
 public class DelegatesPanel extends JPanel {
 
 	private final HashMap<TreeNode, Delegate> delegates;
+	private final JTree delegatesTree;
 
 	/**
 	 * @param unitList
@@ -64,7 +65,7 @@ public class DelegatesPanel extends JPanel {
 		final DefaultTreeModel delegatesModel = delegatesController.getDelegatesModel();
 
 
-		final JTree delegatesTree = new JTree(delegatesModel);
+		delegatesTree = new JTree(delegatesModel);
 		delegatesTree.setRootVisible(false);
 		delegatesTree.setToggleClickCount(1);
 		/*delegatesTree.addMouseMotionListener(new MouseMotionListener() {
@@ -103,6 +104,8 @@ public class DelegatesPanel extends JPanel {
 			public void mouseMoved(final MouseEvent e) {}
 		});*/
 
+		
+		/*
 		delegatesTree.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(final MouseEvent e) {
@@ -121,13 +124,9 @@ public class DelegatesPanel extends JPanel {
 			}
 
 			public void mouseEntered(final MouseEvent arg0) {}
-
 			public void mouseExited(final MouseEvent arg0) {}
-
 			public void mousePressed(final MouseEvent arg0) {}
-
 			public void mouseReleased(final MouseEvent arg0) {}
-
 		});
 		
 		
@@ -164,10 +163,9 @@ public class DelegatesPanel extends JPanel {
 			}
 
 			public void keyTyped(final KeyEvent e) {}
-			
 			public void keyReleased(final KeyEvent e) {}
 
-		});
+		});*/
 		
 		delegatesTree.setCellRenderer(new IFTreeCellRenderer());
 		// makes delegatesPanel as big as the sidePane when resized
@@ -177,109 +175,11 @@ public class DelegatesPanel extends JPanel {
 
 	}
 
-/*
-	class IFTreeCellRenderer extends JPanel implements TreeCellRenderer {
-		JLabel filename = new JLabel();
-		private JLabel fileicon;
-		private BufferedImage icon;
-
-
-		public Component getTreeCellRendererComponent(final JTree tree, final Object value,
-				final boolean isSelected, final boolean expanded, final boolean isLeaf, final int row,
-				final boolean hasFocus) {
-
-			init(value, isSelected, isLeaf);
-			return this;//return component used to render
-		}
-
-		private void init(final Object value, final boolean isSelected, final boolean isLeaf) {
-			String theLabel = ((MutableTreeNode)value).toString();
-			String tooltip = "";
-			
-			setLayout(new BorderLayout());
-			fileicon = new JLabel();
-			if(isSelected) {	
-//				setBackground(SystemColor.textHighlight);
-//				filename.setForeground(SystemColor.textHighlightText);
-			}else{	
-//				setBackground(SystemColor.text);
-//				filename.setForeground(SystemColor.textText);
-			}
-			filename.setText(theLabel);
-			filename.setToolTipText(tooltip);
-			filename.setAlignmentX(Component.LEFT_ALIGNMENT);
-			
-//			this.icon = drawIcon(Color.WHITE, 16, 16);
-			try {
-				this.icon = ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/imageflow/resources/folder.png"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			if (value instanceof UnitDelegate && isLeaf) {
-				
-				final UnitDelegate unitDelegate = (UnitDelegate)value;
-				theLabel = unitDelegate.getName();
-				tooltip = unitDelegate.getToolTipText();
-
-				this.icon = drawIcon(unitDelegate.getColor(), 16, 16);
-				fileicon = new JLabel(new Icon() {
-					public int getIconHeight() { return 16;	}
-					public int getIconWidth() { return 16; 	}
-					public void paintIcon(final Component arg0, final Graphics g,
-							final int arg2, final int arg3) {
-						g.drawImage(icon, 0, 0, null);
-					}
-				});
-			}
-
-			
-			fileicon.setPreferredSize(new Dimension(20, 16));
-			this.add(fileicon, BorderLayout.LINE_START);
-			this.add(filename, BorderLayout.CENTER);
-
-
-		}
-
-		private BufferedImage drawIcon(final Color color, final int width, final int height) {
-			final BufferedImage icon = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-			final Graphics2D g2 = icon.createGraphics();
-
-			final int x=0, y=0;
-			final int arc = 5;
-
-			Color cTop = new Color(84, 121, 203, 255);
-			Color cBottom = new Color(136, 169, 242, 255);
-
-			final int delta = 20;
-
-			final int r = color.getRed();
-			final int g = color.getGreen();
-			final int b = color.getBlue();
-
-			cTop = new Color(
-					(r-delta) > 255 ? 255 : r-delta,
-					(g-delta) > 255 ? 255 : g-delta,
-					(b-delta) > 255 ? 255 : b-delta);
-			cBottom = new Color(
-					(r+delta) > 255 ? 255 : r+delta,
-					(g+delta) > 255 ? 255 : g+delta,
-					(b+delta) > 255 ? 255 : b+delta);
-
-			final GradientPaint gradient1 = new GradientPaint(x,y,cTop,x+10,y+10,cBottom);
-			g2.setPaint(gradient1);
-//			g2.fillRoundRect(x+2, y+2, width-4, height-4, arc, arc);
-			g2.fillRect(x+2, y+2, width-4, height-4);
-
-			g2.setStroke(new BasicStroke(1f));
-			g2.setColor(new Color(0,0,0,44));
-//			g2.drawRoundRect(x+2, y+2, width-4, height-4, arc, arc);
-			g2.drawRect(x+2, y+2, width-4, height-4);
-
-			return icon;
-		}
-	} */
+	/**
+	 * @return the delegatesTree
+	 */
+	public JTree getDelegatesTree() {
+		return delegatesTree;
+	}
 
 }

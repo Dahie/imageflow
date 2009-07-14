@@ -8,14 +8,16 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.ScrollPane;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
@@ -33,10 +35,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
+import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
@@ -48,7 +52,6 @@ import visualap.Node;
 import visualap.Selection;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
-import de.danielsenff.imageflow.controller.MacroFlowRunner;
 import de.danielsenff.imageflow.gui.DelegatesPanel;
 import de.danielsenff.imageflow.gui.GPanelPopup;
 import de.danielsenff.imageflow.gui.GraphPanel;
@@ -63,11 +66,10 @@ import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
-import de.danielsenff.imageflow.models.connection.ProxyInput;
-import de.danielsenff.imageflow.models.connection.ProxyOutput;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
+import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
@@ -92,8 +94,6 @@ public class ImageFlowView extends FrameView {
 //	private static final Logger logger = Logger.getLogger(DocumentEditorView.class.getName());
 	private JDialog aboutBox;
 	
-	private UnitList units;
-	private ConnectionList connections;
 	private GraphController graphController;
 
 	private GraphPanel graphPanel;
@@ -122,8 +122,6 @@ public class ImageFlowView extends FrameView {
 		super(app);
 		
 		this.graphController = new GraphController(); 
-		this.units 			= graphController.getUnitElements();
-		this.connections 	= graphController.getConnections();
 		this.unitDelegates = DelegatesController.getInstance().getUnitDelegates();
 		
 		try {
@@ -157,18 +155,18 @@ public class ImageFlowView extends FrameView {
 	 */
 	private void registerModelListeners() {
 		// usually on startup this is empty
-		for (Node node : units) {
+		for (Node node : getNodes()) {
 			UnitFactory.registerModelListener(node);
 		}
 		
-		units.addModelListener(new ModelListener() {
+		getNodes().addModelListener(new ModelListener() {
 			public void modelChanged(Model model) {
 				graphPanel.repaint();
 				setModified(true);
 			}
 		});
 		
-		connections.addModelListener(new ModelListener() {
+		getConnections().addModelListener(new ModelListener() {
 			public void modelChanged(Model model) {
 				graphPanel.repaint();
 				setModified(true);
@@ -381,7 +379,64 @@ public class ImageFlowView extends FrameView {
 
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
-		JPanel delegatesPanel = new DelegatesPanel(this.units);
+		DelegatesPanel delegatesPanel = new DelegatesPanel(this.getNodes());
+		delegatesPanel.getDelegatesTree().addMouseListener(new MouseListener() {
+			public void mouseClicked(final MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					final JTree tree = (JTree) e.getSource();
+
+					final int selRow = tree.getRowForLocation(e.getX(), e.getY());
+					final TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+					if(selRow != -1 && selPath.getLastPathComponent() instanceof UnitDelegate) {
+						//			        	 myDoubleClick(selRow, selPath);
+						final UnitDelegate ud = ((UnitDelegate)selPath.getLastPathComponent());
+						Point insertPoint = UnitDelegate.POINT;
+						getNodes().add(ud.createUnit(insertPoint));
+					}
+				}
+			}
+
+			public void mouseEntered(final MouseEvent arg0) {}
+			public void mouseExited(final MouseEvent arg0) {}
+			public void mousePressed(final MouseEvent arg0) {}
+			public void mouseReleased(final MouseEvent arg0) {}
+		});
+		delegatesPanel.getDelegatesTree().addKeyListener(new KeyListener() {
+			public void keyPressed(final KeyEvent e) {
+				
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					final JTree tree = (JTree) e.getSource();
+					
+					if (tree.getSelectionRows() != null && tree.getSelectionRows().length > 0) {
+						// with 'Enter' all selected Units were inserted, therefore used an array
+						final int[] selRows = tree.getSelectionRows();
+						
+						final TreePath[] selPaths = new TreePath[selRows.length];
+						for (int i = 0; i < selRows.length; i++) {
+							selPaths[i] = tree.getPathForRow(selRows[i]);
+						}
+						
+						final Point insertPoint = UnitDelegate.POINT;
+						// counts only Units, not Folders
+						int realUnitCount = 0;
+						
+						for (int i = 0; i < selRows.length; i++) {
+							if(selRows[i] != -1 && selPaths[i].getLastPathComponent() instanceof UnitDelegate) {
+								final UnitDelegate ud = ((UnitDelegate)selPaths[i].getLastPathComponent());
+								getNodes().add(ud.createUnit(new Point(insertPoint.x + realUnitCount * GraphPanel.GRIDSIZE,
+										insertPoint.y + realUnitCount * GraphPanel.GRIDSIZE)));
+								realUnitCount++;
+							}
+						}
+					}
+				}
+			}
+
+			public void keyTyped(final KeyEvent e) {}
+			public void keyReleased(final KeyEvent e) {}
+		});
+		
+		
 		sidePane.add(delegatesPanel, BorderLayout.CENTER);
 		sidePane.add(buttonPanel, BorderLayout.PAGE_END);
 		
@@ -411,8 +466,6 @@ public class ImageFlowView extends FrameView {
 	 */
 	public void setGraphController(final GraphController graphController) {
 		this.graphController = graphController;
-		this.units 			= graphController.getUnitElements();
-		this.connections 	= graphController.getConnections();
 		graphPanel.setGraphController(this.graphController);
 		registerModelListeners();
 		graphPanel.repaint();
@@ -423,6 +476,25 @@ public class ImageFlowView extends FrameView {
 	}
 
 	
+	/**
+	 * Convenience method for getting the UnitList of the current GraphController
+	 * @return the nodes
+	 */
+	public UnitList getNodes() {
+		return graphController.getUnitElements();
+	}
+
+
+
+	/**
+	 * @return the connections
+	 */
+	public ConnectionList getConnections() {
+		return graphController.getConnections();
+	}
+
+
+
 	/**
 	 *  Set the bound file property and update the GUI.
 	 * @param file 
@@ -573,28 +645,6 @@ public class ImageFlowView extends FrameView {
         return new GenerateMacroTask(this.getApplication(), graphController);
     }
 	
-	
-	/**
-	 * TODO
-	 * Live preview of data processing. Not yet fully implemented.
-	 */
-	@Action(enabledProperty = "selected")
-	public void preview() {
-		final UnitElement unit = (UnitElement) graphPanel.getSelection().get(0);
-		final MacroFlowRunner mfr = new MacroFlowRunner(this.units);
-		if(mfr.contains(unit)) {
-			unit.setDisplay(true);
-			mfr.getSubMacroFlowRunner(unit).generateMacro();
-			unit.setDisplay(false);
-		}
-		
-	    /*Task task = null;
-	    if (option == JFileChooser.APPROVE_OPTION) {
-	    	task = new LoadFlowGraphTask(fc.getSelectedFile());
-	    }*/
-//	    return task;
-	}
-	
 	/**
 	 * A number of units are collapsed into one group-unit.
 	 */
@@ -652,6 +702,7 @@ public class ImageFlowView extends FrameView {
 	
 	/**
 	 * Action that toggles the display-status of a {@link UnitElement}
+	 * TODO use interface displayable
 	 */
 	@Action(enabledProperty = "selected")
 	public void setDisplayUnit() {
@@ -706,9 +757,9 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void unbind() {
-		final Selection<Node> selection = graphPanel.getSelection();
+		final Selection<Node> selection = getSelections();
 		for (final Node unit : selection) {
-			units.unbindUnit((UnitElement)unit);	
+			getNodes().unbindUnit((UnitElement)unit);	
 		}
 		graphPanel.repaint();
 	}
@@ -718,7 +769,7 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void delete() {
-		final Selection<Node> selection = graphPanel.getSelection();
+		final Selection<Node> selection = getSelections();
 		for (final Node unit : selection) {
 			graphController.removeNode(unit);
 		}
@@ -729,7 +780,7 @@ public class ImageFlowView extends FrameView {
 	 * Clears the workflow from all {@link UnitElement}s
 	 */
 	@Action	public void clear() {
-		this.units.clear();
+		getNodes().clear();
 	}
 	
 	/**
@@ -737,13 +788,13 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void cut() {
-		final Selection<Node> selectedUnits = graphPanel.getSelection();
+		final Selection<Node> selectedNodes = getSelections();
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
-		if (selectedUnits.size() > 0) {
+		if (selectedNodes.size() > 0) {
 			// il problema java.util.ConcurrentModificationException � stato risolto introducendo la lista garbage
 			final HashSet<Connection> garbage = new HashSet<Connection>();
 			copyUnitsList.clear();
-			for (final Node t : selectedUnits) {
+			for (final Node t : selectedNodes) {
 				/*for (Edge c : activePanel.getEdgeL())
 					if ((c.from.getParent() == t)||(t == c.to.getParent()))
 						garbage.add(c);
@@ -756,7 +807,7 @@ public class ImageFlowView extends FrameView {
 				graphController.getConnections().remove(c);
 //				activePanel.getEdgeL().remove(c);
 			}
-			selectedUnits.clear();
+			selectedNodes.clear();
 			setPaste(true);
 		}
 		graphPanel.repaint();
@@ -767,7 +818,7 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void copy() { 
-		final Selection<Node> selectedNodes = graphPanel.getSelection();
+		final Selection<Node> selectedNodes = getSelections();
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
 		if (!selectedNodes.isEmpty()) {
 			copyUnitsList.clear();
@@ -792,21 +843,21 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "paste")
 	public void paste() {
-		final Selection<Node> selectedUnits = graphPanel.getSelection();
+		final Selection<Node> selectedNodes = getSelections();
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
 		if (!copyUnitsList.isEmpty()) {
-			selectedUnits.clear();
+			selectedNodes.clear();
 			// this is added here so that the new pasted units are selected
-			selectedUnits.addAll(copyUnitsList);
+			selectedNodes.addAll(copyUnitsList);
 			copyUnitsList.clear();
-			for (final Node t : selectedUnits) {
+			for (final Node t : selectedNodes) {
 				try {
 					t.setSelected(true);
 //					UnitElement clone = (UnitElement)t.clone();
 					// retain a copy, in case he pastes several times
 					final Node clone = t.clone();
 					clone.setLabel(t.getLabel());
-					graphPanel.getNodeL().add(t);
+					getNodes().add(t);
 					copyUnitsList.add(clone);
 				} catch(final CloneNotSupportedException ex) {
 //					ErrorPrinter.printInfo("CloneNotSupportedException");
@@ -821,10 +872,9 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void showUnitParameters() {
-		final Selection<Node> selectedUnits = graphPanel.getSelection();
-		for (int i = 0; i < selectedUnits.size(); i++) {
-			final UnitElement unit = (UnitElement)selectedUnits.get(i);
-			unit.showProperties();
+		for (Node node : getSelections()) {
+			if(node instanceof UnitElement)
+				((UnitElement)node).showProperties();
 		}
 	}
 
@@ -843,7 +893,7 @@ public class ImageFlowView extends FrameView {
 				return;
 			}
 	    }
-		graphController.getUnitElements().clear();
+		getNodes().clear();
 	    setFile(new File("new document"));
 	    this.setModified(false);
 	    graphPanel.repaint();
@@ -971,7 +1021,7 @@ public class ImageFlowView extends FrameView {
     	final JDialog dialog = new JDialog();
 
     	final DefaultListModel lm = new DefaultListModel();
-    	for (final Node node : graphController.getUnitElements()) {
+    	for (final Node node : getNodes()) {
     		lm.addElement(node);	
     	}
     	final JList list = new JList(lm);
@@ -988,7 +1038,7 @@ public class ImageFlowView extends FrameView {
     	final JDialog dialog = new JDialog();
 
     	final DefaultListModel lm = new DefaultListModel();
-    	for (final Connection connection : graphController.getUnitElements().getConnections()) {
+    	for (final Connection connection : getConnections()) {
     		lm.addElement(connection);	
     	}
     	final JList list = new JList(lm);
@@ -1003,7 +1053,7 @@ public class ImageFlowView extends FrameView {
     	
     	GPanelPopup popup = new GPanelPopup(graphController);
     	GraphPanel gpanel = new GraphPanel(popup, graphController);
-    	UnitList cloneUnitList = graphController.getUnitElements().clone();
+    	UnitList cloneUnitList = getNodes().clone();
     	gpanel.setNodeL(cloneUnitList);
     	gpanel.setEdgeL(cloneUnitList.getConnections());
     	
@@ -1017,40 +1067,44 @@ public class ImageFlowView extends FrameView {
      */
     @Action(enabledProperty = "selected")
     public void debugPrintNodeDetails() {
-    	final Selection<Node> selectedUnits = graphPanel.getSelection();
-		for (int i = 0; i < selectedUnits.size(); i++) {
-			final UnitElement unit = (UnitElement)selectedUnits.get(i);
+    	for (Node node : getSelections()) {
     		final JDialog dialog = new JDialog();
-    		dialog.setTitle(unit.getLabel());
+    		final DefaultListModel lm = new DefaultListModel();
 
-    		// list parameters
-        	final DefaultListModel lm = new DefaultListModel();
-        	for (final Parameter parameter : unit.getParameters()) {
-        		lm.addElement(parameter);	
-        	}
-        	for (final Input input : unit.getInputs()) {
-        		lm.addElement(input);
-        		lm.addElement("name:"+input.getName());
-        		lm.addElement("datatype: "+input.getDataType());
-        		if(input.getDataType() instanceof DataTypeFactory.Image)
-        			lm.addElement("imagetype def:"
-        					+((DataTypeFactory.Image)input.getDataType()).getImageBitDepth());
-        		lm.addElement("connected to:");
-        		lm.addElement(input.getConnection());
-        	}
-        	for (final Output output : unit.getOutputs()) {
-        		lm.addElement(output);
-        		lm.addElement("name:"+output.getName());
-        		lm.addElement("datatype:"+output.getDataType());
-        		if(output.getDataType() instanceof DataTypeFactory.Image)
-        			lm.addElement("imagetype:"
-        					+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
-        		lm.addElement("connected to:");
-        		for (Connection conn : output.getConnections()) {
-        			lm.addElement(conn);
-				}
-        		
-        	}
+    		dialog.setTitle(node.getLabel());
+    		lm.addElement(node.getOrigin());
+    		if(node instanceof UnitElement) {
+    			final UnitElement unit = (UnitElement)node;
+
+        		// list parameters
+            	for (final Parameter parameter : unit.getParameters()) {
+            		lm.addElement(parameter);	
+            	}
+            	for (final Input input : unit.getInputs()) {
+            		lm.addElement(input);
+            		lm.addElement("name:"+input.getName());
+            		lm.addElement("datatype: "+input.getDataType());
+            		if(input.getDataType() instanceof DataTypeFactory.Image)
+            			lm.addElement("imagetype def:"
+            					+((DataTypeFactory.Image)input.getDataType()).getImageBitDepth());
+            		lm.addElement("connected to:");
+            		lm.addElement(input.getConnection());
+            	}
+            	for (final Output output : unit.getOutputs()) {
+            		lm.addElement(output);
+            		lm.addElement("name:"+output.getName());
+            		lm.addElement("datatype:"+output.getDataType());
+            		if(output.getDataType() instanceof DataTypeFactory.Image)
+            			lm.addElement("imagetype:"
+            					+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
+            		lm.addElement("connected to:");
+            		for (Connection conn : output.getConnections()) {
+            			lm.addElement(conn);
+    				}
+            		
+            	}
+    		}
+			
         	final JList list = new JList(lm);
         	
     		dialog.add(list);
@@ -1061,7 +1115,8 @@ public class ImageFlowView extends FrameView {
     }
     
     @Action public void showGroupContents() {
-    	if(getSelections().size() == 1 && getSelections().get(0) instanceof GroupUnitElement) {
+    	if(getSelections().size() == 1 
+    			&& getSelections().get(0) instanceof GroupUnitElement) {
     		final JDialog dialog = new JDialog();
     		
     		
@@ -1075,7 +1130,7 @@ public class ImageFlowView extends FrameView {
     		popup.setActivePanel(gpanel);
         	gpanel.setEdgeL(group.getInternalConnections());
         	
-        	dialog.add(gpanel);
+        	dialog.add(new ScrollPane().add(gpanel));
         	dialog.setSize(400, 300);
     		dialog.setVisible(true);
     	}
@@ -1119,8 +1174,8 @@ public class ImageFlowView extends FrameView {
             aboutBox = new ImageFlowAboutBox(mainFrame);
             aboutBox.setLocationRelativeTo(mainFrame);
         }
-//        ImageFlow.getApplication().show(aboutBox);
-        aboutBox.setVisible(true);
+        ImageFlow.getApplication().show(aboutBox);
+//        aboutBox.setVisible(true);
     }
     
 	private javax.swing.Action getAction(String actionName) {
