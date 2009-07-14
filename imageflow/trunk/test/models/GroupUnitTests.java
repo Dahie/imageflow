@@ -1,109 +1,103 @@
 package models;
 
-import static org.junit.Assert.*;
-import ij.plugin.filter.PlugInFilter;
-
 import java.awt.Point;
 
-import org.junit.Test;
-
+import junit.framework.TestCase;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
+import de.danielsenff.imageflow.models.connection.ConnectionList;
+import de.danielsenff.imageflow.models.connection.ProxyInput;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
-public class GroupUnitTests extends UnitElementTests {
+public class GroupUnitTests extends TestCase {
 
-	/**
-	 * We create a unit and after object construction we add
-	 * units to the unit.
-	 */
-	@Test public void testLateGroupAdding() {
-		UnitList units = new UnitList();
-		
-		UnitElement unit1 = createUnit(PlugInFilter.DOES_32, PlugInFilter.DOES_32);
-		UnitElement unit2 = createUnit(PlugInFilter.DOES_32, PlugInFilter.DOES_32);
-		UnitElement unit3 = createUnit(PlugInFilter.DOES_32, PlugInFilter.DOES_32);
+	
+	private GroupUnitElement createGroupUnit() {
 
-		Connection conn1_2 = new Connection(unit1, 1, unit2, 1);
-		units.getConnections().add(conn1_2);
-		Connection conn2_3 = new Connection(unit2, 1, unit3, 1);
-		units.getConnections().add(conn2_3);
-		
 		/*
-		 * construct empty group
+		 * init workspace 
 		 */
-		
-		GroupUnitElement group = new GroupUnitElement(new Point(33, 55), "group");
-		
-		assertEquals("inputs count",0 , group.getInputsCount());
-		assertFalse("has inputs", group.hasInputs());
-		assertEquals("outputs count",0 ,  group.getOutputsCount());
-		assertFalse("has outputs", group.hasOutputs());
-		assertEquals("units count", 0, group.getNodes().size());
-		assertEquals("internal connections count", 0, group.getInternalConnections().size());
 		
 		SelectionList selections = new SelectionList();
-		selections.add(unit1);
-		selections.add(unit2);
+		UnitList allUnits = new UnitList();
+		ConnectionList connList = allUnits.getConnections();
 		
-		/* 
-		 * add units to group
+		/*
+		 * init workflow 
 		 */
 		
-		try {
-			group.putUnits(selections, units);
-			
-			assertEquals("inputs count",0 , group.getInputsCount());
-			assertFalse("has inputs", group.hasInputs());
-			assertEquals("outputs count",1 , group.getOutputsCount());
-			assertTrue("has outputs", group.hasOutputs());
-			assertEquals("units count", 2, group.getNodes().size());
-			assertEquals("internal connections count", 1, group.getInternalConnections().size());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		UnitElement unit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement unit2 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement unit3 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement unit4 = UnitFactoryExt.createAddNoiseUnit();
+		
+		Connection unit1unit2 = new Connection(unit1, 1, unit2, 1);
+		connList.add(unit1unit2);
+		Connection unit2unit3 = new Connection(unit2, 1, unit3, 1);
+		connList.add(unit2unit3);
+		Connection unit3unit4 = new Connection(unit3, 1, unit4, 1);
+		connList.add(unit3unit4);
+		
+		selections.add(unit2);
+		selections.add(unit3);
+		
+		/*
+		 * create group
+		 */
+		
+		GroupUnitElement group = new GroupUnitElement(new Point(55,55), "groupunit", selections, allUnits);
+		
+		return group;
 	}
 	
 	
+	public void testGroupCreation() {
+		GroupUnitElement group = createGroupUnit();
+		
+		assertEquals("nr in group", 2, group.getGroupSize());
+	}
+	
 	/**
-	 * 1 unit1 selected for group
-	 * 2 unit2
-	 * 3 unit3 selected for group
-	 * create group
+	 * a Group is destroyed and the single parts are restored
 	 */
-	@Test public void testGroupWithUnselectedUnitsInGraph() {
-		UnitList units = new UnitList();
+	public void testGroupExplosion() {
+		GroupUnitElement group = createGroupUnit();
 		
-		UnitElement unit1 = createUnit(PlugInFilter.DOES_32, PlugInFilter.DOES_32);
-		UnitElement unit2 = createUnit(PlugInFilter.DOES_32, PlugInFilter.DOES_32);
-		UnitElement unit3 = createUnit(PlugInFilter.DOES_32, PlugInFilter.DOES_32);
-
-		Connection conn1_2 = new Connection(unit1, 1, unit2, 1);
-		units.getConnections().add(conn1_2);
-		Connection conn2_3 = new Connection(unit2, 1, unit3, 1);
-		units.getConnections().add(conn2_3);
 		
-		assertEquals("number of connections", 2, units.getConnections().size());
-		for (Connection connection : units.getConnections()) {
-			assertTrue(connection.isConnected());
-			assertTrue(connection.isCompatible());
-		}
+	}
+	
+	public void testGroupAttachedUnits() {
+		// TODO test that units are directly connected to each other 
 		
-		SelectionList selections = new SelectionList();
-		selections.add(unit1);
-		selections.add(unit3);
+	}
+	
+	
+	public void testProxyInputs() {
+		UnitElement unit1 = UnitFactoryExt.createAddNoiseUnit();
+		UnitElement unit2 = UnitFactoryExt.createFindEdgesUnit();
+		UnitElement unit3 = new UnitElement("name", "imagej");
 		
-		GroupUnitElement group = new GroupUnitElement(new Point(33, 55), "group", selections, units);
+		Connection conn_u1u2 = new Connection(unit1, 1, unit2, 1);
+		conn_u1u2.connect();
+//		Input input = new Input(DataTypeFactory.createInteger(), unit1, 1);
 		
-		assertEquals("inputs count",0 , group.getInputsCount());
-		assertFalse("has inputs", group.hasInputs());
-		assertEquals("outputs count",1 , group.getOutputsCount());
-		assertTrue("has outputs", group.hasOutputs());
-		assertEquals("units count", 2, group.getNodes().size());
-		assertEquals("internal connections count", 1, group.getInternalConnections().size());
+		assertEquals(unit1, conn_u1u2.getFromUnit());
+		assertEquals(unit2, conn_u1u2.getToUnit());
+		assertEquals(unit2.getInput(0), conn_u1u2.getInput());
+		
+		ProxyInput pInput = new ProxyInput(unit2.getInput(0), unit3, 1);
+		unit3.addInput(pInput);
+		
+		Connection conn_u1pu2p = new Connection(unit1.getOutput(0), pInput);
+		conn_u1pu2p.connect();
+		
+		assertEquals(unit1, conn_u1pu2p.getFromUnit());
+		assertEquals(unit2, conn_u1pu2p.getToUnit());
+		assertEquals(unit2.getInput(0), conn_u1pu2p.getInput());
+		
+		
 	}
 	
 }
