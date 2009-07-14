@@ -386,7 +386,8 @@ public class ImageFlowView extends FrameView {
 		sidePane.add(buttonPanel, BorderLayout.PAGE_END);
 		
 		// setting of MinimumSize is required for drag-ability of JSplitPane
-		sidePane.setMinimumSize(new Dimension((int)buttonRun.getPreferredSize().getWidth()+40, 100));
+		sidePane.setMinimumSize(new Dimension(
+				(int)buttonRun.getPreferredSize().getWidth() + 20 + (int)chkShowLog.getPreferredSize().getWidth(), 100));
 		graphScrollpane.setMinimumSize(new Dimension(100, 100));
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidePane, graphScrollpane);
 		splitPane.setEnabled(true);
