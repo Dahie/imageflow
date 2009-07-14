@@ -131,11 +131,13 @@ public class GraphController{
 		 */
 		for (Input input : group.getInputs()) {
 			ProxyInput pInput = (ProxyInput)input;
-			Output connectedOutput = pInput.getFromOutput();
-			Input originalInput = pInput.getEmbeddedInput();
-			
-			Connection connection = new Connection(connectedOutput, originalInput);
-			connections.add(connection);
+			if(pInput.isConnected()) {
+				Output connectedOutput = pInput.getFromOutput();
+				Input originalInput = pInput.getEmbeddedInput();
+				
+				Connection connection = new Connection(connectedOutput, originalInput);
+				connections.add(connection);
+			}
 		}
 		
 		/*
@@ -144,15 +146,17 @@ public class GraphController{
 		Collection<Connection> tmpConn = new Vector<Connection>();
 		for (Output output : group.getOutputs()) {
 			ProxyOutput pOutput = (ProxyOutput)output;
-			Output originalOutput = pOutput.getEmbeddedOutput();
-			if(originalOutput.getDataType() instanceof DataTypeFactory.Image) {
-				((DataTypeFactory.Image)originalOutput.getDataType()).setParentUnitElement(originalOutput.getParent());
-				((DataTypeFactory.Image)originalOutput.getDataType()).setParentPin(originalOutput);
-			}
-			
-			for (Connection	connection : pOutput.getConnections()) {
-				Connection newConn = new Connection(originalOutput, connection.getInput());
-				tmpConn.add(newConn);
+			if(pOutput.isConnected()) {
+				Output originalOutput = pOutput.getEmbeddedOutput();
+				if(originalOutput.getDataType() instanceof DataTypeFactory.Image) {
+					((DataTypeFactory.Image)originalOutput.getDataType()).setParentUnitElement(originalOutput.getParent());
+					((DataTypeFactory.Image)originalOutput.getDataType()).setParentPin(originalOutput);
+				}
+				
+				for (Connection	connection : pOutput.getConnections()) {
+					Connection newConn = new Connection(originalOutput, connection.getInput());
+					tmpConn.add(newConn);
+				}
 			}
 		}
 		// write connections into actual connectionlist

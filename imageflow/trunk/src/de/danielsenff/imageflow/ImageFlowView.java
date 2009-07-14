@@ -319,11 +319,9 @@ public class ImageFlowView extends FrameView {
 		delegatesArrayList.addAll(unitDelegates.values());
 		GPanelPopup popup = new GPanelPopup(graphController);
 		
-		
 		graphPanel = new GraphPanel(delegatesArrayList, popup);
 		popup.setActivePanel(graphPanel);
 		graphPanel.setGraphController(graphController);
-		graphPanel.setPreferredSize(new Dimension(400, 300));
 		graphPanel.setSelections(getSelections());
 
 		
@@ -334,6 +332,7 @@ public class ImageFlowView extends FrameView {
 		
 		ScrollPane graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
+		graphScrollpane.setPreferredSize(new Dimension(400, 300));
 		
 //		graphScrollpane.add(workspacePanel);
 
@@ -841,7 +840,12 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * Paste {@link UnitElement} into the workflow.
 	 */
-	@Action(enabledProperty = "paste")
+	// (enabledProperty = "paste")
+	// FIXME usually this should have this property
+	// this would grey out the method, unless we have something to paste
+	// however it's greyed out permanently, I haven't found the reason yet
+	// 14 jul 09, daniel
+	@Action
 	public void paste() {
 		final Selection<Node> selectedNodes = getSelections();
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
@@ -1026,7 +1030,7 @@ public class ImageFlowView extends FrameView {
     	}
     	final JList list = new JList(lm);
     	
-		dialog.add(list);
+		dialog.add(new ScrollPane().add(list));
 		dialog.pack();
 		dialog.setVisible(true);
     }
@@ -1043,7 +1047,7 @@ public class ImageFlowView extends FrameView {
     	}
     	final JList list = new JList(lm);
     	
-		dialog.add(list);
+		dialog.add(new ScrollPane().add(list));
 		dialog.pack();
 		dialog.setVisible(true);
     }
@@ -1057,7 +1061,7 @@ public class ImageFlowView extends FrameView {
     	gpanel.setNodeL(cloneUnitList);
     	gpanel.setEdgeL(cloneUnitList.getConnections());
     	
-    	dialog.add(gpanel);
+    	dialog.add(new ScrollPane().add(gpanel));
     	dialog.setSize(400, 300);
 		dialog.setVisible(true);
     }
@@ -1107,7 +1111,7 @@ public class ImageFlowView extends FrameView {
 			
         	final JList list = new JList(lm);
         	
-    		dialog.add(list);
+    		dialog.add(new ScrollPane().add(list));
     		dialog.pack();
     		dialog.setVisible(true);	
 		}
@@ -1174,8 +1178,8 @@ public class ImageFlowView extends FrameView {
             aboutBox = new ImageFlowAboutBox(mainFrame);
             aboutBox.setLocationRelativeTo(mainFrame);
         }
-        ImageFlow.getApplication().show(aboutBox);
-//        aboutBox.setVisible(true);
+//        ImageFlow.getApplication().show(aboutBox);
+        aboutBox.setVisible(true);
     }
     
 	private javax.swing.Action getAction(String actionName) {
