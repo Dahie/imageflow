@@ -47,7 +47,7 @@
 			<fileset dir="${basedir}/bin"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/ij.jar"/>
 			<!--<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/junit-4.5.jar"/>-->
-			<fileset dir="${basedir}/../visualap11branch/bin" excludes="**/test/**, *.wav, *.pdf" />
+			<!--<fileset dir="${basedir}/../visualap11branch/bin" excludes="**/test/**, *.wav, *.pdf" />-->
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/jdom.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/appframework-1.0.3.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-worker-1.1.jar"/>

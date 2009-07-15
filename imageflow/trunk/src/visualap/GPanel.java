@@ -75,8 +75,6 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			BasicStroke.CAP_BUTT, 
 			BasicStroke.JOIN_MITER, 
 			10.0f, dash1, 0.0f);
-	// MDI Support 
-	JInternalFrame frame;
 
 	public GPanel(ArrayList<Delegate> beans, 
 			GPanelListener parent) {
@@ -86,19 +84,6 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		addMouseMotionListener(this);
 		setBackground(Color.white);
 	}
-
-
-	//	public void clear() {
-	//		nodeL.clear();
-	//		connectionList.clear();
-	//		selection.clear();
-	//		repaint();
-	//	}
-
-	public void setTitle(String title) {
-		frame.setTitle(title);
-	}
-
 
 	/**
 	 * paint things that eventually go on a printer

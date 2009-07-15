@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>π</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>OUTPUT_DOUBLE_1 = PI;</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Pi: math constant 3.141592...</HelpString>
+</General>
+
+<Parameters />
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<DataType>Double</DataType>
+		<DoDisplay>false</DoDisplay>
+	</Output></Outputs>
+
+</UnitDescription>

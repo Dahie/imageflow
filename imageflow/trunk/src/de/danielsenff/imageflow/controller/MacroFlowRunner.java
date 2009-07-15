@@ -33,10 +33,7 @@ public class MacroFlowRunner {
 	 * @param units
 	 */
 	public MacroFlowRunner(final UnitList units) {
-		this.macroUnitList = units.clone();
-		//FIXME why add all connections here? Doesn't this also include connections to units
-		// which are already deleted by the algorithm? does this matter?
-		this.macroUnitList = sortList(this.macroUnitList);
+		this.macroUnitList = sortList(units.clone());
 	}
 
 	
@@ -188,7 +185,7 @@ public class MacroFlowRunner {
 			//do nothing
 		} 
 
-		//FIXME check if units got all the inputs they need
+		// check if units got all the inputs they need
 		if (!macroUnitList.areAllInputsConnected()) {
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
 					"Some elements don't have all required input connections."
@@ -204,6 +201,8 @@ public class MacroFlowRunner {
 		return true;
 	}
 
+	
+	
 	/**
 	 * @param unitElements
 	 * @return
@@ -217,20 +216,21 @@ public class MacroFlowRunner {
 		// those need to be destroyed and reintergrated into 
 		// the regular workflow
 		
+		
+		// as long as we got groups in the unitList
+		// we identify the group, ungroup it and see if all groups all 
 		Collection<GroupUnitElement> foundGroups = new Vector<GroupUnitElement>();
 		for (Node node : unitElements) {
-			if(node instanceof GroupUnitElement) {
-				GroupUnitElement group = (GroupUnitElement) node;
-				foundGroups.add(group);
-			}
+			if(node instanceof GroupUnitElement)
+				addFoundGroup(foundGroups, node);
 		}
-		
+
 		for (GroupUnitElement group : foundGroups) {
 			GraphController.ungroup(group, unitElements);	
 		}
-		
-		
-		
+
+
+
 		// reset all marks
 		unitElements.unmarkUnits();
 
@@ -307,6 +307,20 @@ public class MacroFlowRunner {
 		}
 
 		return orderedList;
+	}
+
+
+	private static void addFoundGroup(Collection<GroupUnitElement> foundGroups,
+			Node node) {
+		if(node instanceof GroupUnitElement) {
+			GroupUnitElement group = (GroupUnitElement) node;
+			foundGroups.add(group);
+			for (Node embeddedNode : group.getNodes()) {
+				if(node instanceof GroupUnitElement)
+					addFoundGroup(foundGroups, embeddedNode);
+			}
+		}
+		
 	}
 
 }

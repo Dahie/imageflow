@@ -181,11 +181,9 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 
 				// does the unit actually have inputs?
 				if(unit.hasInputs()) {
-					final ArrayList<Input> inputs = unit.getInputs();
 
 					//check all inputs of this unit
-					for (int i = 0; i < inputs.size(); i++) {
-						final Input input = inputs.get(i);
+					for (Input input : unit.getInputs()) {
 						// is this input connected?
 						if (!input.isConnected() 
 								// is this input actually required?

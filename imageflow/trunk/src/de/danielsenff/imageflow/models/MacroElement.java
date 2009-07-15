@@ -174,20 +174,19 @@ public class MacroElement {
 		while (index < outputs.size()) {
 			
 			Output output = outputs.get(index);
+			String uniqueOutputName = output.getOutputTitle();
 
 			searchString = "OUTPUT_DOUBLE_" + (oDbl+1);
-			/*String paraType = input.getParaType().toLowerCase();
-			if(command.contains(searchString) && paraType.equals("double")) { 
-				String parameterString = "" + ((DoubleParameter)input).getValue();
+			if(command.contains(searchString) 
+					&& output.getDataType() instanceof DataTypeFactory.Double) { 
 //				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Double Parameter: " + parameterString);
-				command = Tools.replace(command, searchString, parameterString);
+				command = Tools.replace(command, searchString, uniqueOutputName);
 				oDbl++;
-				inputIndex++;
-			}*/
+//				inputIndex++;
+			}
 			searchString = "OUTPUT_INTEGER_" + (oInt+1);
 			if(command.contains(searchString) 
 					&& output.getDataType() instanceof DataTypeFactory.Integer ) {
-				String uniqueOutputName = output.getOutputTitle();
 //				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, uniqueOutputName);
 				oInt++;
@@ -207,20 +206,20 @@ public class MacroElement {
 		while (index < inputs.size()) {
 			
 			Input input = inputs.get(index);
-
+			String uniqueOutputName = input.getFromOutput().getOutputTitle();
+			
 			searchString = "INPUT_DOUBLE_" + (oDbl+1);
-			/*String paraType = input.getParaType().toLowerCase();
-			if(command.contains(searchString) && paraType.equals("double")) { 
-				String parameterString = "" + ((DoubleParameter)input).getValue();
+			if(command.contains(searchString) 
+					&& input.getDataType() instanceof DataTypeFactory.Double) { 
 //				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Double Parameter: " + parameterString);
-				command = Tools.replace(command, searchString, parameterString);
+				command = Tools.replace(command, searchString, uniqueOutputName);
 				oDbl++;
-				inputIndex++;
-			}*/
+//				inputIndex++;
+			}
 			searchString = "INPUT_INTEGER_" + (oInt+1);
 			if(command.contains(searchString) 
 					&& input.getDataType() instanceof DataTypeFactory.Integer ) {
-				String uniqueOutputName = input.getFromOutput().getOutputTitle();
+				
 //				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, uniqueOutputName);
 				oInt++;

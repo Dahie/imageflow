@@ -5,9 +5,7 @@ import visualap.Pin;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
-import de.danielsenff.imageflow.models.connection.ProxyInput;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
-import de.danielsenff.imageflow.models.unit.ImageSourceUnit;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 /**
@@ -26,11 +24,14 @@ public class DataTypeFactory {
 	 * @return
 	 */
 	public static DataType createDataType(final String dataType) {
-		if(dataType.equals("Integer")) {
+		if(dataType.toLowerCase().equals("integer")) {
 			return createInteger();
-		}else if(dataType.equals("Image")) {
+		}else if(dataType.toLowerCase().equals("image")) {
 			return createImage(31); // 31 ie takes all
+		}else if(dataType.toLowerCase().equals("double")) {
+			return createDouble();
 		}
+		System.err.println("unrecognized DataType: "+ dataType);
 		return null;
 	}
 
