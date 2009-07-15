@@ -64,7 +64,6 @@ public class UnitElementTests {
 		boolean addFirst = unit.addParameter(ParameterFactory.createParameter("integer", "integer",1, "ein int"));
 		assertTrue("add first", addFirst);
 
-
 		//add one more than actually allowed
 		boolean addSecond = unit.addParameter(ParameterFactory.createParameter("integer", "integer",1, "ein int"));
 		assertTrue("add second", addSecond);
@@ -310,15 +309,15 @@ public class UnitElementTests {
 		assertFalse(filterUnit1.hasDisplayBranch());
 		assertFalse(filterUnit2.hasDisplayBranch());
 
-		filterUnit1.setDisplayUnit(true);
+		filterUnit1.setDisplay(true);
 		
-		assertFalse(sourceUnit.isDisplayUnit());
+		assertFalse(sourceUnit.isDisplay());
 		assertTrue(sourceUnit.hasDisplayBranch());
-		assertFalse(sourceUnit2.isDisplayUnit());
+		assertFalse(sourceUnit2.isDisplay());
 		assertFalse(sourceUnit2.hasDisplayBranch());
-		assertTrue(filterUnit1.isDisplayUnit());
+		assertTrue(filterUnit1.isDisplay());
 		assertTrue(filterUnit1.hasDisplayBranch());
-		assertFalse(filterUnit2.isDisplayUnit());
+		assertFalse(filterUnit2.isDisplay());
 		assertFalse(filterUnit2.hasDisplayBranch());
 		
 		Connection conn1b = new Connection(sourceUnit2, 1, filterUnit1, 1);
@@ -326,11 +325,11 @@ public class UnitElementTests {
 		connList.add(conn1b);
 		
 		assertFalse(sourceUnit.hasDisplayBranch());
-		assertFalse(sourceUnit2.isDisplayUnit());
+		assertFalse(sourceUnit2.isDisplay());
 		assertTrue(sourceUnit2.hasDisplayBranch());
-		assertTrue(filterUnit1.isDisplayUnit());
+		assertTrue(filterUnit1.isDisplay());
 		assertTrue(filterUnit1.hasDisplayBranch());
-		assertFalse(filterUnit2.isDisplayUnit());		
+		assertFalse(filterUnit2.isDisplay());		
 		assertFalse(filterUnit2.hasDisplayBranch());
 	}
 	

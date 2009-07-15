@@ -48,7 +48,7 @@ public class MacroFlowRunnerTests extends TestCase {
 		
 		assertEquals(5, unitList.size());
 		assertFalse(unitList.hasUnitAsDisplay());
-		filter2.setDisplayUnit(true);
+		filter2.setDisplay(true);
 		assertTrue(unitList.hasUnitAsDisplay());
 		
 		

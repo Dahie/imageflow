@@ -69,7 +69,7 @@ public class UnitListTests extends TestCase {
 		assertFalse(units.isEmpty());
 		assertFalse("has no displayunits", units.hasUnitAsDisplay());
 		
-		filterUnit1.setDisplayUnit(true);
+		filterUnit1.setDisplay(true);
 		
 		assertTrue("has displayunits", units.hasUnitAsDisplay());
 		

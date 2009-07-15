@@ -35,13 +35,9 @@ public class IconPreview extends JFrame {
 	 * 
 	 */
 	public IconPreview() {
-
-		
 		UnitElement createGaussianBlurUnit = UnitFactoryExt.createGaussianBlurUnit();
-		createGaussianBlurUnit.setDisplayUnit(true);
+		createGaussianBlurUnit.setDisplay(true);
 		icon = new NodeIcon(createGaussianBlurUnit);
-		
-		
 		
 		setTitle("Icon Test");
 		setSize(400,200);
@@ -57,8 +53,6 @@ public class IconPreview extends JFrame {
 //		bi = icon.getImage();
 		int width =  this.getWidth(), height =  this.getHeight();
 
-		
-		
 		g2.setColor(Color.WHITE);
 		g2.fillRect(0, 0, width, height+25);
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);   
@@ -73,15 +67,10 @@ public class IconPreview extends JFrame {
 		
 		g2.translate(150, 0);
 		icon.paintSmallIcon(g2);
-  	
 	}
 	
-	
-	
 	public static void main(String[] args) {
-	
 		new IconPreview();
-		
 	}
 	
 }
