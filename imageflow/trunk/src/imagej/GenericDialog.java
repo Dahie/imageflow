@@ -127,12 +127,12 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     /** Creates a new GenericDialog using the specified title and parent frame. */
     public GenericDialog(String title, JFrame parent) {
 		super(parent==null?new JFrame():parent, title, true);
-		if (Prefs.blackCanvas) {
+		/*if (Prefs.blackCanvas) {
 			setForeground(SystemColor.controlText);
 			setBackground(SystemColor.control);
 		}
-		//if (IJ.isLinux())
-		//	setBackground(new Color(238, 238, 238));
+		if (IJ.isLinux())
+			setBackground(new Color(238, 238, 238));*/
 		grid = new GridBagLayout();
 		c = new GridBagConstraints();
 		setLayout(grid);
