@@ -1,5 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>ImageFlow Project Documentation - Basics</title></head><body><h1>Imageflow Project Documentation</h1><br><h2>Introduction</h2>ImageFlow
+<html><head><meta content="text/html; charset=utf-8" http-equiv="content-type">
+<title>ImageFlow Project Documentation - Basics</title></head><body>
+<h1>Imageflow Project Documentation</h1><br><h2>Introduction</h2>
+<p>ImageFlow
 started out as the&nbsp;Project for the Bachelor-Thesis by Daniel
 Senff. The development was continued during an internship at CRP Henri
 Tudor in Luxemburg. The program is open source and can modified to
@@ -7,45 +10,78 @@ suite their own needs or be taken as a base for own applications.&nbsp;
 In the 10 months of development the application grew in complexity.
 It's still a small project which can be handled easily by 1-2
 developers, however this documentation should help to easily get into
-the technicial solutions applied here.<h2>Task</h2>The task of the
+the technical solutions applied here.</p>
+<h2>Task</h2><p>The task of the
 application is to create a graphical user interface for the creation of
 ImageJ-macro using an node-based solution. The user should be able to
 create image-processing solution just by connecting processing units on
 a workspace. The constructed graph would be transformed to a
 one-dimensional Macro-Code and passed to ImageJ, which would do the
 actual image processing. The application was build around this basic
-dilemma.<h2>History</h2><p>The project began around October 2008 with
+dilemma.</p>
+<h2>History</h2><p>The project began around October 2008 with
 the beginning of the Bachelor-Thesis of Daniel Senff. His mentor for
-the thesis was Prof. Kai-Uwe Barthel who published in accordance with
+the thesis was <a href="http://www.f4.htw-berlin.de/~barthel/" title="Website of Prof. Barthel">Prof. Kai-Uwe Barthel</a> 
+who published in accordance with
 Daniel a paper for the ImageJ conference about the basic intention of
 the program. Based on a rough early prototype describing the basic
 structure of the graph and the conversion from this virtual graph to an
-executable ImageJ Macro.</p><p>Based on this prototype Daniel developed
+executable ImageJ Macro.</p>
+<p>Based on this prototype Daniel developed
 ImageFlow as his project for the Bachelor-Thesis and released the first
-beta in March 2009 and the Bachelor-Thesis in April 2009.&nbsp;</p><p>Interested
-by the conference paper describing the application, the CRP Henri Tudor
+beta in March 2009 and the Bachelor-Thesis in April 2009.&nbsp;</p>
+<p>Interested
+by the conference paper describing the application, the 
+<a href="http://www.tudor.lu" title="CRP Tudor Luxembourg">CRP Henri Tudor</a>
 invited him to continue the development for another 4 months. In
-Luxembourg Daniel was joined by a colleague of his, Friedrich Maiwald. In May 2009 the frist stable version was released. </p><h2>Components</h2>To fullfill the tasks. The programm is originally based on three major components.&nbsp;<p>Obviously
+Luxembourg Daniel was joined by a colleague of his, 
+<a href="http://www.friedrichmaiwald.de/" title="Website of Friedrich Maiwald"Friedrich Maiwald</a>. 
+In May 2009 the first stable version was released. </p>
+<h2>Components</h2>
+<p>To fulfill the tasks. The program is originally based 
+on three major components.</p>
+<p>Obviously
 the most important basis was ImageJ, which would deal with the actual
 image processing. The basis for the graphical workflow was VisualAp,
 however over the course of the project it's influence decreased and
-many functions were implemented seperately. The third component is the
-Swing AppFramework, which gives a skelleton for the basic application
-structure.</p><h3>ImageJ</h3><p>ImageJ is an open source application for image analyzing.
+many functions were implemented separately. The third component is the
+Swing AppFramework, which gives a skeleton for the basic application
+structure.</p>
+<h3>ImageJ</h3>
+<p>ImageJ is an open source application for image analyzing.
 Through it's rich plugin-interface and a well-documented api it was a
 great basis for image-editing in Java. ImageJ has its own scripting
 language to perform batch tasks. These macros can be saved and
-integrated into the programm structure.&nbsp;</p><p>Macros can be
+integrated into the program structure.</p><p>Macros can be
 created by two ways. Either by hand or using the limited
 Macro-Recorder. Imageflow was to provide a visual user interface for
-creating Macros.</p><h3>VisualAp</h3>Since the graph-interaction can be
+creating Macros.</p>
+<h3>VisualAp</h3><p>Since the graph-interaction can be
 quite complex to develop from scratch it was seen to find a basis.
 After trying several Java-based Open-Source Frameworks for
 flow-processing and node-based interaction it was decided to build upon
-VisualAp.<p>VisualAp already included alot of the functionality
+<a href="https://visualap.dev.java.net/" title="VisualAp Website">VisualAp</a>.</p>
+<p>VisualAp already included a lot of the functionality
 intended for the final application of ImageFlow. It brought the
 Components to draw a workspace, including the graph with units and
 their connections. These elements could be moved, copied, pasted,
 duplicated and reconnected. There was a clipboard and VisualAp
-delivered many of the basic graph However there were a few major
-differences. </p><p>Appframework</p><p></p></body></html>
+delivered many of the basic graph.</p> 
+<p>However, there were a few major differences. VisualAp's unit-management 
+was based around JavaBeans. Jar-files containing the processing units. 
+This management was not used,
+but instead an own specification of defining XML-units to generate 
+processing-units was developed.</p>
+<h3>Appframework</h3>
+<p>One of the early decisions was to base the application around a 
+Desktop Application Framework. This framework was supposed to give a skeleton 
+for the model-controller structure, resource management, thread handling 
+and action-handling. <a href="https://appframework.dev.java.net" title="Appframework Website">
+Appframework</a> developed as <a href="http://jcp.org/en/jsr/detail?id=296" title="Spezifikation">
+Specification JSR-296</a> 
+by Sun. The framework was specified in 2006 and has been in development since then. 
+It was scheduled to be included in Java7 and by 2008 it was already included NetBeans.</p>
+
+<hr />
+<em>Daniel Senff, July 2009</em>
+</body></html>
