@@ -206,23 +206,25 @@ public class MacroElement {
 		while (index < inputs.size()) {
 			
 			Input input = inputs.get(index);
-			String uniqueOutputName = input.getFromOutput().getOutputTitle();
-			
-			searchString = "INPUT_DOUBLE_" + (oDbl+1);
-			if(command.contains(searchString) 
-					&& input.getDataType() instanceof DataTypeFactory.Double) { 
-//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Double Parameter: " + parameterString);
-				command = Tools.replace(command, searchString, uniqueOutputName);
-				oDbl++;
-//				inputIndex++;
-			}
-			searchString = "INPUT_INTEGER_" + (oInt+1);
-			if(command.contains(searchString) 
-					&& input.getDataType() instanceof DataTypeFactory.Integer ) {
+			if(input.isRequired() && input.isConnected()) {				
+				String uniqueOutputName = input.getFromOutput().getOutputTitle();
 				
+				searchString = "INPUT_DOUBLE_" + (oDbl+1);
+				if(command.contains(searchString) 
+						&& input.getDataType() instanceof DataTypeFactory.Double) { 
+//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Double Parameter: " + parameterString);
+					command = Tools.replace(command, searchString, uniqueOutputName);
+					oDbl++;
+//				inputIndex++;
+				}
+				searchString = "INPUT_INTEGER_" + (oInt+1);
+				if(command.contains(searchString) 
+						&& input.getDataType() instanceof DataTypeFactory.Integer ) {
+					
 //				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
-				command = Tools.replace(command, searchString, uniqueOutputName);
-				oInt++;
+					command = Tools.replace(command, searchString, uniqueOutputName);
+					oInt++;
+				}
 			}
 			index++;
 				
@@ -238,28 +240,30 @@ public class MacroElement {
 			for (parameterIndex = 0; parameterIndex < parameters.size(); parameterIndex++) {
 			
 				Input input = inputs.get(inputIndex);
-				Parameter parameter = parameters.get(parameterIndex);
-				
-				searchString = "ATTRIBUTE_INPUT_" + (inputIndex+1) + "_PARAMETER_" + (parameterIndex+1);
-				
-				if (command.contains(searchString) 
-						&& input.getDataType().getClass().getSimpleName().toLowerCase().equals(parameter.getParaType())) {
-					
-					if (input.isConnected()) {
-						String uniqueOutputName = input.getFromOutput().getOutputTitle();
-						command = Tools.replace(command, searchString, uniqueOutputName);
-					}
-					else {
-						String parameterValue = "";				
-						if (parameter.getParaType().toLowerCase().equals("integer")) 
-							parameterValue += ((IntegerParameter)parameter).getValue(); 
-						if (parameter.getParaType().toLowerCase().equals("double")) 
-							parameterValue += ((DoubleParameter)parameter).getValue();
-						if (parameter.getParaType().toLowerCase().equals("boolean")) 
-							parameterValue += ((BooleanParameter)parameter).getTrueString();
-						if (parameter.getParaType().toLowerCase().equals("string")) 
-							parameterValue += ((StringParameter)parameter).getValue();
-						command = Tools.replace(command, searchString, parameterValue);
+				if(input.isRequired() && input.isConnected()) {
+					Parameter parameter = parameters.get(parameterIndex);
+
+					searchString = "ATTRIBUTE_INPUT_" + (inputIndex+1) + "_PARAMETER_" + (parameterIndex+1);
+
+					if (command.contains(searchString) 
+							&& input.getDataType().getClass().getSimpleName().toLowerCase().equals(parameter.getParaType())) {
+
+						if (input.isConnected()) {
+							String uniqueOutputName = input.getFromOutput().getOutputTitle();
+							command = Tools.replace(command, searchString, uniqueOutputName);
+						}
+						else {
+							String parameterValue = "";				
+							if (parameter.getParaType().toLowerCase().equals("integer")) 
+								parameterValue += ((IntegerParameter)parameter).getValue(); 
+							if (parameter.getParaType().toLowerCase().equals("double")) 
+								parameterValue += ((DoubleParameter)parameter).getValue();
+							if (parameter.getParaType().toLowerCase().equals("boolean")) 
+								parameterValue += ((BooleanParameter)parameter).getTrueString();
+							if (parameter.getParaType().toLowerCase().equals("string")) 
+								parameterValue += ((StringParameter)parameter).getValue();
+							command = Tools.replace(command, searchString, parameterValue);
+						}
 					}
 				}
 			}
