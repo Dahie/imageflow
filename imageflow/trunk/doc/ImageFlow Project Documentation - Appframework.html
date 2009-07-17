@@ -8,21 +8,46 @@
 <p>During the production of every application comes a point where the programmer is faced with the same general problems. 
 How to handle resources and localization? How to handle threads? How to deal with actions and threads? 
 What is the basic data structure, Model-View-Controller? <br />
-Most programmers develop their own solutions over time and reuse them in their programs. The disadvantages are, 
+Most programmers develop their own solutions over time and reuse them in their programs. The 
+disadvantages are, 
 that for common problems, many different solutions were implemented and everybody cooked by their own recipy. Secondly, 
-these solutions contain only the experience of one programmer and the problems he faced before. Anticipating problems 
-is naturally difficult. </p>
-<p>For this reason, I didn't want to base this application on my earlier programs, but instead on a general purpose
+these solutions contain only the experience of one programmer and the problems he faced before. 
+Anticipating problems is naturally difficult. </p>
+<p>For this reason, I didn't want to base this application on my earlier programs, but instead on a 
+general purpose
 desktop application framework. This framework was supposed to give a skeleton 
 for the model-controller structure, resource management, thread handling 
 and action-handling. <a href="https://appframework.dev.java.net" title="Appframework Website">
-Appframework</a> developed as <a href="http://jcp.org/en/jsr/detail?id=296" title="Spezifikation">
+Appframework</a> developed as <a href="http://jcp.org/en/jsr/detail?id=296" title="Specifikation">
 Specification JSR-296</a> 
 by Sun. The framework was specified in 2006 and has been in development since then. 
 It was scheduled to be included in Java7 and by 2008 it was already included NetBeans.</p>
 
 <h3>Action-handling</h3>
-
+<p>Java's Action-Interface describes a class, which contains one specific action, that is performed 
+by the use 
+from somewhere in the GUI. Usual cases are menu-entries, toolbar-entries, buttons or hotkeys. 
+The Action-interface allows
+to create one class for handling. If you disable the action, this is resembled everywhere this 
+action is used in the GUI. This 
+makes it very easy to deal with actions.</p>
+<p>However there are a few drawbacks. You have to implement the Interface yourself. You can still 
+create many instances of one
+action, although every Action should be treated like a Singleton. Mixing Actions with Resources can be done easily, but there are 
+no best-practice rules. <br />
+Appframework gives straight rules on how to define and use actions. These are defined very differently.</p>
+<p>In your project you have a view, for example a Frame of your programm. Within this frame you 
+have the menus, buttons etc, which
+shall have an assigned Action. You defined this action by creating a new method, which is preceded by the 
+<a href="https://appframework.dev.java.net/nonav/javadoc/AppFramework-1.03/index.html" 
+title="Action Annotation">Annotation <pre>@Action</pre><a>. Using Reflection based on the method name, 
+the framework creates an Action-object with the method's contents taken as the <pre>actionPerformed()</pre>-method.
+This object is automatically put into the ActionMap, a singleton-map, which contains all created actions of this Frame.
+You can identify the action by the name of the method, retrieve it from the map and simply add it to the
+button like you would with your own Action-implementation. For a bit convenience I use this methods:</p>
+<pre>
+</pre> 
+ 
 
 <h3>Resource-Management<h3>
 
