@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Image Calculator by Daniel Senff -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Set Min and Max</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>setMinAndMax(ATTRIBUTE_INPUT_2_PARAMETER_1, ATTRIBUTE_INPUT_3_PARAMETER_2);</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <IconSize>BIG</IconSize>
+  <HelpString>Sets the Minimum and the Maximum of the image, thereby changing brightness and contrast.</HelpString>  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Minimum</Name>
+  		<DataType>integer</DataType>
+  		<Value>0</Value>
+  		<HelpString>Specified Minimum value.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Maximum</Name>
+  		<DataType>integer</DataType>
+  		<Value>255</Value>
+  		<HelpString>Specified Maximum value.</HelpString>
+  	</Parameter>
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+	<Input>
+		<Name>Min</Name>
+		<ShortName>M</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput></Input>
+	<Input>
+		<Name>Max</Name>
+		<ShortName>M</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput></Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
+
