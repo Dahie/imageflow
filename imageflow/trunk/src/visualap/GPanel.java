@@ -154,54 +154,48 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		int x = e.getX();
 		int y = e.getY();
 		// qui � obbligatorio un iteratore che scandisce la lista al contrario!
-			for (Node aNode : nodeL) {
-				Object sel = aNode.contains(x,y);
-				// 	check selected element, is it a Node?
-				if (sel instanceof Node) {
-					pick = new Point(x,y);
-					if (!selection.contains(aNode)) {
-						if(!e.isControlDown()
-								|| ( e.isMetaDown() && IJ.isMacintosh())) {
-							selection.clear();
-						}
-						selection.add(aNode);
-					} else {
-						if(e.isControlDown()
-								|| (e.isMetaDown() && IJ.isMacintosh()))
-							selection.remove(aNode);
-					} 
-
-					if(!e.isPopupTrigger()) {
-						for (Node iNode : selection)
-							if(!e.isPopupTrigger())
-								iNode.drag(true);
-						
-						e.consume();
-						changeCursor(Cursor.MOVE_CURSOR);
-					} else {
-						parentPanel.showFloatingMenu(e);
+		for (Node aNode : nodeL) {
+			Object sel = aNode.contains(x,y);
+			// 	check selected element, is it a Node?
+			if (sel instanceof Node) {
+				pick = new Point(x,y);
+				if (!selection.contains(aNode)) {
+					if(!e.isControlDown()
+							|| ( e.isMetaDown() && IJ.isMacintosh())) {
+						selection.clear();
 					}
-					
-					repaint();
-					
-					
-					return;
-				}
-				// check selected element, is it a Pin?
-				else if (sel instanceof Pin) {
-					drawEdge = (Pin) sel;
-					//	System.out.println(drawEdge);
-					mouse = new Point (x,y);
-					changeCursor(Cursor.CROSSHAIR_CURSOR);
-					return;
+					selection.add(aNode);
+				} else {
+					if(e.isControlDown()
+							|| (e.isMetaDown() && IJ.isMacintosh()))
+						selection.remove(aNode);
 				} 
-				// change
-				else {
-					selection.clear();
+
+				if(!e.isPopupTrigger()) {
+					for (Node iNode : selection)
+						if(!e.isPopupTrigger())
+							iNode.drag(true);
+
+					e.consume();
+					changeCursor(Cursor.MOVE_CURSOR);
+				} else {
+					parentPanel.showFloatingMenu(e);
 				}
 
+				repaint();
 
+
+				return;
 			}
+			// check selected element, is it a Pin?
+			else if (sel instanceof Pin) {
+				drawEdge = (Pin) sel;
+				//	System.out.println(drawEdge);
+				mouse = new Point (x,y);
+				changeCursor(Cursor.CROSSHAIR_CURSOR);
+				return;
+			}
+		}
 		if (e.isPopupTrigger())
 			parentPanel.showFloatingMenu(e);
 
@@ -250,13 +244,13 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			// insert new Edge if not already present in EdgeL
 			for (Node aNode : nodeL) {
 				Object sel = aNode.contains(x,y);
-				if ((sel instanceof Pin)&&(!drawEdge.equals(sel))) {
-					if (!containsConnection(drawEdge, (Pin) sel)) {
+				if ((sel instanceof Pin) 
+						&& (!drawEdge.equals(sel))
+						&& (!containsConnection(drawEdge, (Pin) sel)) ) 
+				{
 						Connection newConn = new Connection(drawEdge, (Pin) sel);
 						connectionList.add(newConn);
-					}
 				}
-
 			}
 			drawEdge = null;
 			changeCursor(Cursor.DEFAULT_CURSOR);
@@ -271,6 +265,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				}
 			currentRect = null;
 			repaint();
+			System.out.println(selection.size());
 		}
 
 		parentPanel.showFloatingMenu(e);
