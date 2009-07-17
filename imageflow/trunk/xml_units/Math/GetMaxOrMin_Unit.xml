@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Get Max or Min</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>OUTPUT_INTEGER_1 = PARA_STRING_1Of(INPUT_INTEGER_1,INPUT_INTEGER_2);</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Get the Maximum / Minimum value of the two Integer Inputs</HelpString>
+</General>
+
+<Parameters >
+	<Parameter>
+		<Name>Max/Min</Name>
+		<DataType>StringArray</DataType><Value>max;min</Value>
+		<HelpString>Option for returning Maximum or Minimum</HelpString>
+		<ChoiceNumber>0</ChoiceNumber></Parameter></Parameters>
+
+<Inputs>
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName><Required>true</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+		</Input>
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<Required>true</Required><DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+		</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<DataType>Integer</DataType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
