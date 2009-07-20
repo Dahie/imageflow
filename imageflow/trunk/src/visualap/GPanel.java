@@ -249,8 +249,9 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 						&& (!drawEdge.equals(sel))
 						&& (!containsConnection(drawEdge, (Pin) sel)) ) 
 				{
-					if( (sel instanceof Input && drawEdge instanceof Output)
-						|| (sel instanceof Output && drawEdge instanceof Input) ) 
+					if( ( (sel instanceof Input && drawEdge instanceof Output)
+						|| (sel instanceof Output && drawEdge instanceof Input) )
+						&& !((Pin)sel).getParent().equals(drawEdge.getParent())) 
 					{
 						Connection newConn = new Connection(drawEdge, (Pin) sel);
 						connectionList.add(newConn);
@@ -271,7 +272,6 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				}
 			currentRect = null;
 			repaint();
-			System.out.println(selection.size());
 		}
 
 		parentPanel.showFloatingMenu(e);
