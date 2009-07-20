@@ -5,7 +5,7 @@
 <General>
   <UnitName>Print</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>print(INPUT_DOUBLE_1);</ImageJSyntax> 
+  <ImageJSyntax>print(INPUT_NUMBER_1);</ImageJSyntax> 
   <Color>0x9cba92</Color>
   <HelpString>Prints an Integer value</HelpString>
 </General>
@@ -14,7 +14,7 @@
 <Input>
 		<Name>Input</Name>
 		<ShortName>A</ShortName>	
-		<DataType>Double</DataType>
+		<DataType>Number</DataType>
 		<NeedToCopyInput>false</NeedToCopyInput>
 </Input>
 </Inputs>

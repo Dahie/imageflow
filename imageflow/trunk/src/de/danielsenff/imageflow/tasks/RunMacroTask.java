@@ -1,7 +1,7 @@
 package de.danielsenff.imageflow.tasks;
 
-import ij.IJ;
 import ij.ImageJ;
+import ij.plugin.Macro_Runner;
 
 import org.jdesktop.application.Application;
 
@@ -36,10 +36,12 @@ public class RunMacroTask extends GenerateMacroTask {
 		if(macro != null) {
 		
 			ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
-			if(this.showlog)
-				IJ.log(macro);
+//			if(this.showlog)
+//				IJ.log(macro);
 
-			IJ.runMacro(macro, "");
+//			IJ.runMacro(macro, "");
+			Macro_Runner mr = new Macro_Runner();
+			return mr.runMacro(macro, "");
 			
 			/* beginning for new functions, but not today, daniel */
 			/*int[] imageIDs = WindowManager.getIDList();

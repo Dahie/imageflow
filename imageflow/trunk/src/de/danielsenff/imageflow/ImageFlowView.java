@@ -656,7 +656,7 @@ public class ImageFlowView extends FrameView {
 			graphController.ungroup(group);
 		} else {
 			try {
-				graphController.group(getSelections());
+				graphController.group();
 			} catch (Exception e) {
 				System.out.println("Group disallowed: No conistent connections between units");
 				JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 

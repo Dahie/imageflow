@@ -212,10 +212,14 @@ public class MacroElement {
 				searchString = "INPUT_DOUBLE_" + (oDbl+1);
 				if(command.contains(searchString) 
 						&& input.getDataType() instanceof DataTypeFactory.Double) { 
-//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Double Parameter: " + parameterString);
 					command = Tools.replace(command, searchString, uniqueOutputName);
 					oDbl++;
-//				inputIndex++;
+				}
+				searchString = "INPUT_DOUBLE_" + (oDbl+1);
+				if(command.contains(searchString) 
+						&& input.getDataType() instanceof DataTypeFactory.Double) { 
+					command = Tools.replace(command, searchString, uniqueOutputName);
+					oDbl++;
 				}
 				searchString = "INPUT_INTEGER_" + (oInt+1);
 				if(command.contains(searchString) 

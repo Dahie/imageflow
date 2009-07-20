@@ -175,12 +175,14 @@ public class GraphController{
 		units.remove(group);
 	}
 
-	public void group(SelectionList selections2) throws Exception {
-		GroupUnitElement group = new GroupUnitElement(new Point(34, 250), "Group");
-		group.putUnits(getSelections(), getUnitElements());
-		getUnitElements().add(group);
-		selections.clear();
-		selections.add(group);	
+	public void group() throws Exception {
+		if(!getSelections().isEmpty()) {
+			GroupUnitElement group = new GroupUnitElement(new Point(34, 250), "Group");
+			group.putUnits(getSelections(), getUnitElements());
+			getUnitElements().add(group);
+			selections.clear();
+			selections.add(group);	
+		}
 	}
 	
 

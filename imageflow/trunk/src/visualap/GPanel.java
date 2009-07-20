@@ -43,12 +43,13 @@ import java.awt.print.PrinterException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
+import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.connection.Input;
 
 public class GPanel extends JPanel implements Printable, MouseListener, MouseMotionListener  {
 
@@ -248,8 +249,13 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 						&& (!drawEdge.equals(sel))
 						&& (!containsConnection(drawEdge, (Pin) sel)) ) 
 				{
+					if( (sel instanceof Input && drawEdge instanceof Output)
+						|| (sel instanceof Output && drawEdge instanceof Input) ) 
+					{
 						Connection newConn = new Connection(drawEdge, (Pin) sel);
 						connectionList.add(newConn);
+					}
+						
 				}
 			}
 			drawEdge = null;

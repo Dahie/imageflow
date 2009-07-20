@@ -30,6 +30,8 @@ public class DataTypeFactory {
 			return createImage(31); // 31 ie takes all
 		}else if(dataType.toLowerCase().equals("double")) {
 			return createDouble();
+		}else if(dataType.toLowerCase().equals("number")) {
+			return createNumber();
 		}
 		System.err.println("unrecognized DataType: "+ dataType);
 		return null;
@@ -50,6 +52,10 @@ public class DataTypeFactory {
 	public static Double createDouble() {
 		return new Double();
 	}
+	
+	public static Number createNumber() {
+		return new Number();
+	}
 
 	/**
 	 * Creates an Image-Datatype. This includes definitions for ImageJ ImageTypes.
@@ -60,12 +66,32 @@ public class DataTypeFactory {
 		return new Image(imageBitDepth);
 	}
 
+
+
+	/**
+	 * Number-DataType
+	 * @author danielsenff
+	 *
+	 */
+	private static class Number implements DataType {
+		public boolean isCompatible(DataType compareType) {
+			boolean compatible = compareType instanceof Number;
+			return compatible;
+		}
+		
+		@Override
+		public Number clone() {
+			return new Number();
+		}
+	}
+
+
 	/**
 	 * Integer-DataType.
 	 * @author danielsenff
 	 *
 	 */
-	public static class Integer implements DataType {
+	public static class Integer extends Number {
 		public boolean isCompatible(DataType compareType) {
 			boolean compatible = compareType instanceof Integer;
 			return compatible;
@@ -81,12 +107,12 @@ public class DataTypeFactory {
 	 * @author danielsenff
 	 *
 	 */
-	public static class Double implements DataType {
+	public static class Double extends Number {
 		public boolean isCompatible(DataType compareType) {
 			boolean compatible = compareType instanceof Integer || compareType instanceof Double;
 			return compatible;
 		}
-		
+
 		@Override
 		public Double clone() {
 			return new Double();
@@ -133,17 +159,16 @@ public class DataTypeFactory {
 			/*System.out.println(this);
 			System.out.println(parent);
 			System.out.println(imageBitDepth);*/
-			if(this.imageBitDepth != -1 && this.imageBitDepth != PlugInFilter.DOES_ALL) {
+			if(this.imageBitDepth != -1 
+					&& this.imageBitDepth != PlugInFilter.DOES_ALL) {
 				return this.imageBitDepth; 
-//			} else if(parentPin instanceof ProxyInput) {
-//
 			} else if(parentPin instanceof ProxyOutput) {
-				
+
 				// instead of looking at our own parent to get a valid image type from an input
 				// we look at the parent of the embedded pin, thereby bubbling through
 				// the internal list of the group
 				UnitElement parent = ((ProxyOutput)parentPin).getEmbeddedOutput().getParent();
-				
+
 				//TODO this could be nicer, how to handle multiple inputs?
 				if(parent.hasInputsConnected()) {
 					for (Input input : parent.getInputs()) {
@@ -154,7 +179,7 @@ public class DataTypeFactory {
 
 					return -1;
 				}
-				
+
 			} else if(parentPin instanceof Output) {
 
 				//TODO this could be nicer, how to handle multiple inputs?
@@ -223,15 +248,15 @@ public class DataTypeFactory {
 		 */
 		public boolean isImageBitDepthCompatible(final int foreignImageBitDepth) {
 			int ownImageBitDepth = getImageBitDepth();
-					
+
 			if(ownImageBitDepth != -1 && foreignImageBitDepth != -1) {
 				/*System.out.println(this);
 				System.out.println(ownImageBitDepth + " vs " + foreignImageBitDepth);*/
 				int remain = ownImageBitDepth&foreignImageBitDepth;
-				
+
 				// if 0 -> it doesn'T fit
 				// if value, we got a match
-				
+
 				return remain != 0;	
 			}
 			return false;
@@ -252,10 +277,10 @@ public class DataTypeFactory {
 		public void setParentPin(Pin pin) {
 			this.parentPin = pin;
 		}
-		
+
 		@Override
 		public Image clone()  {
-		
+
 			Image image = new Image(this.imageBitDepth);
 			return image;
 		}
