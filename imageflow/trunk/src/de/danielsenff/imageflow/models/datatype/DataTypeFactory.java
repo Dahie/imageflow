@@ -73,7 +73,7 @@ public class DataTypeFactory {
 	 * @author danielsenff
 	 *
 	 */
-	private static class Number implements DataType {
+	public static class Number implements DataType {
 		public boolean isCompatible(DataType compareType) {
 			boolean compatible = compareType instanceof Number;
 			return compatible;
