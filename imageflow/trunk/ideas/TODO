@@ -15,15 +15,11 @@ Bugs:
 GUI:
 - filter images in filechooser
 - cursor keys -> move or select?
-- more keyshortcuts?
 - improved selections: shift, strg
-- drag copy CTRL
-- moving more than one selected at one time does not work
 - Unit parameters window padding is not drawn correctly 
 
 
 Functions:
-- no other jars (jdom) -> buildscript
 - quicksearch of filter units in left sidepane
 - Macro-Generator at For-Loops: Integer only visible in loop,
 

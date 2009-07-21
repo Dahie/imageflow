@@ -1,6 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head><meta content="text/html; charset=utf-8" http-equiv="content-type">
-<title>ImageFlow Project Documentation - Basics</title></head><body>
+<title>ImageFlow Project Documentation - Basics</title>
+
+
+<style>
+<!-- 
+h1 {
+	font-family:Helvetica, Arial;
+	color:#224488;
+	font-size:14pt;}
+	
+pre, 
+.codeName {
+	font-family: monospace;
+}
+-->
+</style>
+
+</head>
+<body>
 <h1>Imageflow Project Documentation</h1>
 <h2>Appframework</h2>
 <p>To understand how the application is working, it is important to understand what the Appframework is doing.</p>
@@ -40,16 +58,39 @@ Appframework gives straight rules on how to define and use actions. These are de
 have the menus, buttons etc, which
 shall have an assigned Action. You defined this action by creating a new method, which is preceded by the 
 <a href="https://appframework.dev.java.net/nonav/javadoc/AppFramework-1.03/index.html" 
-title="Action Annotation">Annotation <pre>@Action</pre><a>. Using Reflection based on the method name, 
-the framework creates an Action-object with the method's contents taken as the <pre>actionPerformed()</pre>-method.
+title="Action Annotation">Annotation <span class="codeName">@Action</span><a>. Using Reflection based on the method name, 
+the framework creates an Action-object with the method's contents taken as the 
+<span class="codeName">actionPerformed()</span>-method.
 This object is automatically put into the ActionMap, a singleton-map, which contains all created actions of this Frame.
 You can identify the action by the name of the method, retrieve it from the map and simply add it to the
 button like you would with your own Action-implementation. For a bit convenience I use this methods:</p>
 <pre>
+private javax.swing.Action getAction(String actionName) {
+	ActionMap actionMap = getContext().getActionMap(ImageFlowView.class, this);
+    return actionMap.get(actionName);
+}
 </pre> 
+<p>Note that the <span class="codeName">ImageFlowView</span> describes the class we want to get the ActionMap from. In theory
+you can a uniqe ActionMap for every view.<br />
+A common Action-definition in a <span class="codeName">AppView</span>-Class could look like this:</p>
+<pre>
+@Action()
+public Task doSomething() {
+	System.out.println("Print something");
+}
+</pre>
  
 
 <h3>Resource-Management<h3>
+
+<p>Every view or frame can have it's own property-file, which contains single key-value-pairs for resources. 
+To remain with our example. The Action we created in the section above is included in the properties-files of the 
+frame, in which it is defined. By convention the properties-files are in a subpackage <em>resources</em> and by the
+same name as the frame. Inside the file you can use the Action's name as key to set up different values.</p>
+
+<p>The <em>AppView.properties</em> of our example above may look like this:</p>  
+<pre>
+
 
 <h3>Thread-handling</h3>
 
