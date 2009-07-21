@@ -168,7 +168,7 @@ public class MacroElement {
 	}
 	
 	private static String parseOutputs(ArrayList<Output> outputs, String command) {
-		int index = 0, oDbl = 0, oInt = 0;
+		int index = 0, oDbl = 0, oInt = 0, oNbr = 0;
 		String searchString;
 
 		while (index < outputs.size()) {
@@ -186,10 +186,18 @@ public class MacroElement {
 			}
 			searchString = "OUTPUT_INTEGER_" + (oInt+1);
 			if(command.contains(searchString) 
-					&& output.getDataType() instanceof DataTypeFactory.Integer ) {
+					&& output.getDataType() instanceof DataTypeFactory.Integer) {
 //				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, uniqueOutputName);
 				oInt++;
+//				index++;
+			}
+			searchString = "OUTPUT_NUMBER_" + (oNbr+1);
+			if(command.contains(searchString) 
+					&& output.getDataType() instanceof DataTypeFactory.Number) {
+//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
+				command = Tools.replace(command, searchString, uniqueOutputName);
+				oNbr++;
 //				index++;
 			}
 			index++;
@@ -200,7 +208,7 @@ public class MacroElement {
 	
 
 	private static String parseInputs(ArrayList<Input> inputs, String command) {
-		int index = 0, oDbl = 0, oInt = 0;
+		int index = 0, oDbl = 0, oInt = 0, oNbr = 0;
 		String searchString;
 
 		while (index < inputs.size()) {
@@ -229,6 +237,12 @@ public class MacroElement {
 					command = Tools.replace(command, searchString, uniqueOutputName);
 					oInt++;
 				}
+				searchString = "INPUT_NUMBER_" + (oNbr+1);
+				if(command.contains(searchString) 
+						&& input.getDataType() instanceof DataTypeFactory.Number) { 
+					command = Tools.replace(command, searchString, uniqueOutputName);
+					oNbr++;
+				}
 			}
 			index++;
 				
@@ -237,20 +251,20 @@ public class MacroElement {
 	}
 	
 	private static String parseAttributes(ArrayList<Input> inputs, ArrayList<Parameter> parameters, String command) {
-		int inputIndex = 0, parameterIndex = 0;
+		int inputIndex, parameterIndex;
 		String searchString;
 				
 		for (inputIndex = 0; inputIndex < inputs.size(); inputIndex++) {
 			for (parameterIndex = 0; parameterIndex < parameters.size(); parameterIndex++) {
 			
 				Input input = inputs.get(inputIndex);
-				if(input.isRequired() && input.isConnected()) {
+				if(!input.isRequired()) {
 					Parameter parameter = parameters.get(parameterIndex);
 
 					searchString = "ATTRIBUTE_INPUT_" + (inputIndex+1) + "_PARAMETER_" + (parameterIndex+1);
 
-					if (command.contains(searchString) 
-							&& input.getDataType().getClass().getSimpleName().toLowerCase().equals(parameter.getParaType())) {
+					if (command.contains(searchString) /*
+							&& input.getDataType().getClass().getSimpleName().toLowerCase().equals(parameter.getParaType())*/) {
 
 						if (input.isConnected()) {
 							String uniqueOutputName = input.getFromOutput().getOutputTitle();
@@ -272,24 +286,6 @@ public class MacroElement {
 				}
 			}
 		}
-		
-//		while (index < inputs.size()) {
-//			
-//			Input input = inputs.get(index);
-//
-//			
-//						
-////			searchString = "INPUT_INTEGER_" + (oInt+1);
-//			if(command.contains(searchString) 
-//					&& input.getDataType() instanceof DataTypeFactory.Integer ) {
-//				String uniqueOutputName = input.getFromOutput().getOutputTitle();
-////				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
-//				command = Tools.replace(command, searchString, uniqueOutputName);
-//				oInt++;
-//			}
-//			index++;
-//				
-//		}
 		
 		return command;
 	}
