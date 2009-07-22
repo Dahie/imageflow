@@ -129,7 +129,7 @@ public class UnitFactory {
 	private static void setPinTolerance(UnitElement unitElement) {
 		// get maxiumum of pins and adjust PIN_TOLERANCE to number of pins
 		int maxPins = Math.max(unitElement.inputs.size(), unitElement.outputs.size()); 
-		if (maxPins > 3) {
+		if (maxPins > 2) {
 			int pinTolerance = (100 / (2*maxPins)) - 2;
 			unitElement.setPinTolerance(pinTolerance);
 		}
