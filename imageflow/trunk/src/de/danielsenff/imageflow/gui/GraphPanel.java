@@ -167,7 +167,7 @@ public class GraphPanel extends GPanel {
 			final int dX = Math.abs(from.x - to.x)/2 + Math.min(from.x, to.x);
 			final int dY = Math.abs(from.y - to.y)/2 + Math.min(from.y, to.y);
 			final Point origin = new Point(dX, dY);
-			drawErrorMessage((Graphics2D) g, "incompatible image type", origin);
+			drawErrorMessage((Graphics2D) g, "incompatible data type", origin);
 		}
 	}
 	
@@ -372,13 +372,12 @@ public class GraphPanel extends GPanel {
 
 				// we don't know, if the connection is created 
 				// input first or output first
-				isCompatible = drawEdge.isCompatible(pin);
-				if(drawEdge instanceof Output
-						&& pin instanceof Input) {
+//				isCompatible = drawEdge.isCompatible(pin);
+				isCompatible = pin.isCompatible(drawEdge);
+				if(drawEdge instanceof Output && pin instanceof Input) {
 					isLoop = ((Input)pin).isConnectedInOutputBranch(drawEdge.getParent());
 
-				} else if (drawEdge instanceof Input
-						&& pin instanceof Output) {
+				} else if (drawEdge instanceof Input && pin instanceof Output) {
 					isLoop = ((Output)pin).existsInInputSubgraph(drawEdge.getParent());
 				}
 
@@ -393,7 +392,7 @@ public class GraphPanel extends GPanel {
 
 				String errorMessage = "";
 				if(!isCompatible)
-					errorMessage += "Incompatible bit depth \n";
+					errorMessage += "Incompatible data type \n";
 				if(isLoop) 
 					errorMessage += "Loops are not allowed\n";
 
