@@ -429,7 +429,9 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
 	 */
 	public void showProperties() {
-		final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters", ImageFlow.getApplication().getMainFrame()) ;
+		final GenericDialog gd = new GenericDialog(
+				getLabel() + " - Parameters", 
+				ImageFlow.getApplication().getMainFrame()) ;
 		if(getHelpString() != null)
 			gd.addMessage(getHelpString());
 
@@ -463,8 +465,29 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 					//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
 				} 				
 			}
-
 		}
+		
+		if(hasInputs()) {
+			gd.addMessage("Inputs");
+			for (Input input : getInputs()) {
+				if(input.isConnected())
+					gd.addMessage(input.getName() + " connected to " + input.getConnection().getFromUnit().getLabel());
+				else
+					gd.addMessage(input.getName() + "is not connected.");
+			}
+		}
+		if(hasOutputs()) {			
+			gd.addMessage("Outputs");
+			for (Output output : getOutputs()) {
+				if(output.isConnected())
+					for (Connection conn : output.getConnections()) {
+						gd.addMessage(output.getName() + " connected to " + conn.getToUnit().getLabel());
+					}
+				else
+					gd.addMessage(output.getName() + "is not connected.");
+			}
+		}
+		
 
 		// show properties window
 		gd.showDialog();
