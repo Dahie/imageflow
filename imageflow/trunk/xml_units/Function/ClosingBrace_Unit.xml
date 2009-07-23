@@ -4,7 +4,7 @@
 
 <General>
   <UnitName>Closing Brace</UnitName> 
-  <PathToIcon></PathToIcon> 
+  <PathToIcon>ClosingBrace_Unit.png</PathToIcon> 
   <ImageJSyntax>}</ImageJSyntax> 
   <Color>0xad8946</Color>
   <HelpString>Closing Brace for closing loops</HelpString>
