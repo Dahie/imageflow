@@ -234,6 +234,7 @@ public class ImageFlowView extends FrameView {
 		editMenu.add(getAction("unbind"));
 		editMenu.add(getAction("delete"));
 //		editMenu.add(getAction("clear"));
+		editMenu.add(getAction("selectAll"));
 		
 		editMenu.add(new JSeparator());
 
@@ -771,6 +772,20 @@ public class ImageFlowView extends FrameView {
 		final Selection<Node> selection = getSelections();
 		for (final Node unit : selection) {
 			graphController.removeNode(unit);
+		}
+		graphPanel.repaint();
+	}
+	
+	/**
+	 * Selects all {@link UnitElement}s
+	 */
+	@Action
+	public void selectAll() {
+		final UnitList list = graphController.getUnitElements();
+		final Selection<Node> selection = getSelections();
+		selection.clear();
+		for (final Node unit : list) {
+			selection.add(unit);
 		}
 		graphPanel.repaint();
 	}
