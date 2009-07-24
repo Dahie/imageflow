@@ -1,0 +1,21 @@
+Grouping groups
+
+In theory grouping groups works. However there are a few drawbacks, why this is currently deactivated.
+Grouping a group work is fine in theory. You can do it and the resulting graph is valid and can be executed. 
+A group can successfully be ungrouped. So far so good. 
+
+You can save grouped groups. The problem is when you try to read grouped groups.
+The reading process is not very straight forward. 
+In theory you read the XML. 
+You try to create all units, they are identified by an id.
+You create the connections between the units by connecting ids.
+This works fine on a usual workflow and with some effort it works with groups. 
+The effort is, that you can't create the group in one go. You have to create an empty group. 
+Read different kinds of connections from the XML (internal connections, external connections and original connections). 
+These connections can only be created after all units are read, so they are temporarily saved and processed later.
+I don't want to describe the whole process here, the point is, you build the group step by step and you don't have
+access to everything at every point. You can't create a connection when the unit's Pin's haven't been created yet, for example.
+
+This is where grouping groups gets ugly. To reconstruct the connections, your grouped group has to know what pins it has.
+It can't know this at this point, this the included unit aren't processed yet. To process them would mean to reconstruct the connections
+of the inner group. This is a problematic which the current system can't deal and which would require some rethinking.  
