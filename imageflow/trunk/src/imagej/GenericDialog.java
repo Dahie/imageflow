@@ -133,6 +133,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		}
 		if (IJ.isLinux())
 			setBackground(new Color(238, 238, 238));*/
+		
 		grid = new GridBagLayout();
 		c = new GridBagConstraints();
 		setLayout(grid);
@@ -984,7 +985,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 			c.insets = new Insets(15, 0, 0, 0);
 			grid.setConstraints(buttons, c);
 			add(buttons);
-			if (IJ.isMacintosh())
+			if (IJ.isMacintosh()) 
 			setResizable(false);
 			pack();
 			setup();

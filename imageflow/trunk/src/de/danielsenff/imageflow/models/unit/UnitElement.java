@@ -12,7 +12,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.xml.datatype.DatatypeFactory;
+import javax.swing.JDialog;
 
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
@@ -21,8 +21,6 @@ import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
-import de.danielsenff.imageflow.models.datatype.DataType;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.AbstractParameter;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
@@ -434,8 +432,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 				ImageFlow.getApplication().getMainFrame()) ;
 		if(getHelpString() != null)
 			gd.addMessage(getHelpString());
-
-
+		
 		// label field 
 		gd.addStringField("Unit label", this.getLabel(),40);
 		gd.addCheckbox("Display", this.isDisplay());

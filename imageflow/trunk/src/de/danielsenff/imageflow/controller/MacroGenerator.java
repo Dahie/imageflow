@@ -11,6 +11,7 @@ import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
+import de.danielsenff.imageflow.models.unit.UnitElement.Type;
 
 
 
@@ -122,6 +123,10 @@ public class MacroGenerator {
 		// FIXME duplicates always
 		// maybe use rename(name)
 		// only works for one output
+		/*
+		 * now we iterate over all outputs of this unit. Each output creates 
+		 * a unique image/data, which can be read multiple times by later units. 
+		 */
 		for (Output output : unit.getOutputs()) {
 			final String outputTitle = output.getOutputTitle();
 			final String outputID = output.getOutputID();
@@ -132,6 +137,24 @@ public class MacroGenerator {
 					+ outputID + " = getImageID(); \n"
 					+ "selectImage("+outputID+"); \n";
 				openedImages.add(new ImageJImage(output));
+			}
+		}
+		
+		/*
+		 * Most units require the needCopy-flag true. So when they read their input
+		 * and beginn processing, they duplicate their input in order not to 
+		 * change the original output data.
+		 * However if we work with a sink, ie unit without outputs. The image taken 
+		 * by the unit needs to be closed again.  
+		 */
+		if(unit.getUnitType() == Type.SINK) {
+			for (final Input input : unit.getInputs()) {
+				if(input.isNeedToCopyInput()) {
+					final String inputID = input.getImageID();
+
+					macroText += "selectImage(" + getNeedCopyTitle(inputID) + "); \n";
+					macroText += "close(); \n";
+				}
 			}
 		}
 	}
