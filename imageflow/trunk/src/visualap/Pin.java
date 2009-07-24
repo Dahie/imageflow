@@ -88,7 +88,7 @@ public abstract class Pin implements Connectable, Cloneable {
 	 * @return
 	 */
 	public String getName () {
-		return parent.getLabel()+"." + dataType.getClass().getSimpleName() + index;
+		return parent.getLabel()+"." + dataType.getClass().getSimpleName() + index + "." + displayName;
 	}
 
 	public String getDisplayName() {

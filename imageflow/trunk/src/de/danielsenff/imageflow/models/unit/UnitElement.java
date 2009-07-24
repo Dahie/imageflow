@@ -471,9 +471,9 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 			gd.addMessage("Inputs");
 			for (Input input : getInputs()) {
 				if(input.isConnected())
-					gd.addMessage(input.getName() + " connected to " + input.getConnection().getFromUnit().getLabel());
+					gd.addMessage(input.getDisplayName() + " of type " + input.getDataType().getClass().getSimpleName()+ " connected to " + input.getConnection().getFromUnit().getLabel());
 				else
-					gd.addMessage(input.getName() + "is not connected.");
+					gd.addMessage(input.getDisplayName() + " of type " + input.getDataType().getClass().getSimpleName()+ " is not connected.");
 			}
 		}
 		if(hasOutputs()) {			
@@ -481,10 +481,10 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 			for (Output output : getOutputs()) {
 				if(output.isConnected())
 					for (Connection conn : output.getConnections()) {
-						gd.addMessage(output.getName() + " connected to " + conn.getToUnit().getLabel());
+						gd.addMessage(output.getDisplayName() + " of type " + output.getDataType().getClass().getSimpleName()+" connected to " + conn.getToUnit().getLabel());
 					}
 				else
-					gd.addMessage(output.getName() + "is not connected.");
+					gd.addMessage(output.getDisplayName() + " of type " + output.getDataType().getClass().getSimpleName() + " is not connected.");
 			}
 		}
 		

@@ -30,12 +30,20 @@
 
 <Inputs> 
 	<Input>
-		<Name>Input</Name>
-		<ShortName>I</ShortName>	
+		<Name>Image</Name>
+		<ShortName>I</ShortName>
 		<DataType>Image</DataType>
 		<ImageType>31</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
+		<Required>true</Required>
 	</Input>
+	<!--<Input>
+		<Name>Strength</Name>
+		<ShortName>S</ShortName>	
+		<DataType>Double</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+		<Required>false</Required>
+	</Input>-->
 </Inputs>
 
 <Outputs> 

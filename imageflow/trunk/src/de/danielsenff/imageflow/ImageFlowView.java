@@ -653,9 +653,23 @@ public class ImageFlowView extends FrameView {
 		
 		if(getSelections().size() == 1
 				&& getSelections().get(0) instanceof GroupUnitElement) {
+
 			GroupUnitElement group = (GroupUnitElement) getSelections().get(0);
-			graphController.ungroup(group);
+			graphController.ungroup(group);	
 		} else {
+
+			for (Node node : getSelections()) {
+				if(node instanceof GroupUnitElement) {
+					System.out.println("Group disallowed: No conistent connections between units");
+					JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+							"Groups may not be included in groups.",
+							"Grouping refused", 
+							JOptionPane.INFORMATION_MESSAGE);
+					
+					return;
+				}
+			}
+			
 			try {
 				graphController.group();
 			} catch (Exception e) {
@@ -1058,7 +1072,7 @@ public class ImageFlowView extends FrameView {
 
     	final DefaultListModel lm = new DefaultListModel();
     	for (final Connection connection : getConnections()) {
-    		lm.addElement(connection);	
+    		lm.addElement("Connection between "+ connection.getInput().getName() +" and "+connection.getOutput().getName());	
     	}
     	final JList list = new JList(lm);
     	

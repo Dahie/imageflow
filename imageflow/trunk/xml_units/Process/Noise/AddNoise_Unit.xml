@@ -24,7 +24,7 @@
 
 <Inputs> 
 	<Input>
-		<Name>Input</Name>
+		<Name>Input Image</Name>
 		<ShortName>I</ShortName>
 		<DataType>Image</DataType>	
 		<ImageType>31</ImageType>
@@ -34,7 +34,7 @@
 
 <Outputs> 
 	<Output>
-		<Name>Output</Name>
+		<Name>Output Image</Name>
 		<ShortName>O</ShortName>
 		<DataType>Image</DataType>	
 		<ImageType>-1</ImageType>

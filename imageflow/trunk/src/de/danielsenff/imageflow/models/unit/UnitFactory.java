@@ -156,19 +156,7 @@ public class UnitFactory {
 		int numOutputs = unitDescription.numOutputs;
 		for (int i = 1; i <= numOutputs; i++) {
 			UnitDescription.Output outputDescription = unitDescription.output[i];
-			String name = outputDescription.name;
-			String shortName = outputDescription.shortName;
-			DataType dataType = outputDescription.dataType;
-			
-			if(unitElement instanceof SourceUnitElement
-					&& dataType instanceof DataTypeFactory.Image) {
-				int imageType = ((SourceUnitElement)unitElement).getImageType();
-				((DataTypeFactory.Image)dataType).setImageBitDepth(imageType);
-			} 
-			// imagetype -1 means output will be the same type as the input
-			
-			Output output = new Output(dataType, unitElement, i);
-			output.setupOutput(name, shortName);
+			Output output = createOutput(outputDescription, unitElement, i);
 			
 			unitElement.addOutput(output); 
 			if(unitElement instanceof Displayable) {
@@ -177,26 +165,49 @@ public class UnitFactory {
 			}
 		}
 	}
+	
+	public static Output createOutput(UnitDescription.Output outputDescription, 
+			UnitElement unitElement, int i) {
+		String name = outputDescription.name;
+		String shortName = outputDescription.shortName;
+		DataType dataType = outputDescription.dataType;
+		
+		if(unitElement instanceof SourceUnitElement
+				&& dataType instanceof DataTypeFactory.Image) {
+			int imageType = ((SourceUnitElement)unitElement).getImageType();
+			((DataTypeFactory.Image)dataType).setImageBitDepth(imageType);
+		} 
+		// imagetype -1 means output will be the same type as the input
+		
+		Output output = new Output(dataType, unitElement, i);
+		output.setupOutput(name, shortName);
+		return output;
+	}
+	
 
 	private static void addInputs(final UnitDescription unitDescription,
 			UnitElement unitElement) {
 		int numInputs = unitDescription.numInputs;
 		for (int i = 1; i <= numInputs; i++) {
-			UnitDescription.Input inputDescription = unitDescription.input[i];
-			String name = inputDescription.name;
-			String shortName = inputDescription.shortName;
-			boolean needToCopyInput = inputDescription.needToCopyInput;
-			boolean required = inputDescription.required;
-			DataType dataType = inputDescription.dataType;
-			if(dataType instanceof DataTypeFactory.Image) {
-				((DataTypeFactory.Image)dataType).setImageBitDepth(inputDescription.imageType);
-			}
-			
-			Input input = new Input(dataType, unitElement, i, required);
-			input.setupInput(name, shortName, needToCopyInput);
-			
+			Input input = createInput(unitDescription.input[i], unitElement, i);
 			unitElement.addInput(input);
 		}
+	}
+
+	public static Input createInput(final UnitDescription.Input inputDescription,
+			UnitElement unitElement, int i) {
+		String name = inputDescription.name;
+		String shortName = inputDescription.shortName;
+		boolean needToCopyInput = inputDescription.needToCopyInput;
+		boolean required = inputDescription.required;
+		DataType dataType = inputDescription.dataType;
+		if(dataType instanceof DataTypeFactory.Image) {
+			((DataTypeFactory.Image)dataType).setImageBitDepth(inputDescription.imageType);
+		}
+		
+		Input input = new Input(dataType, unitElement, i, required);
+		input.setupInput(name, shortName, needToCopyInput);
+		return input;
 	}
 
 	/**

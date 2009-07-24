@@ -129,6 +129,8 @@ public class WorkflowXMLBuilder {
 		if(actualUnitElement.getChild("Label") != null)
 			label = actualUnitElement.getChild("Label").getValue();
 
+		System.out.println("Read unit: " +label);
+		
 		Element unitDescriptionElement = actualUnitElement.getChild("UnitDescription");
 		if(actualUnitElement.getChild("UnitID") != null &&
 				unitDescriptionElement != null) {
@@ -139,6 +141,7 @@ public class WorkflowXMLBuilder {
 
 			UnitElement unitElement;
 			
+			
 			Element unitsElement = unitDescriptionElement.getChild("Units");
 			Element internalConnectionsElement = unitDescriptionElement.getChild("InternalConnections");
 			Element externalConnectionsElement = unitDescriptionElement.getChild("ExternalConnections");
@@ -147,12 +150,29 @@ public class WorkflowXMLBuilder {
 					&& originalConnectionsElement != null 
 					&& unitsElement != null ) {
 				
+		
+				
 				/*
 				 * GroupUnit
 				 */
 				
+				System.out.println("Process group..");
+				
 				unitElement = new GroupUnitElement(new Point(xPos, yPos), label);
 				HashMap<Integer, UnitElement> embeddedNodes = new HashMap<Integer, UnitElement>();
+
+				unitElement.setHelpString(unitDescription.helpString);
+				newNodes.put(unitID, unitElement);
+				groupUnits.add((GroupUnitElement) unitElement);
+				
+				/*for (int i = 0; i < unitDescription.numInputs; i++) {
+					unitElement.addInput(UnitFactory.createInput(unitDescription.input[i+1], unitElement, i+1));
+				}
+				
+				for (int i = 0; i < unitDescription.numOutputs; i++) {
+					unitElement.addOutput(UnitFactory.createOutput(unitDescription.output[i+1], unitElement, i+1));
+				}*/
+				
 				
 				if(unitsElement != null) {
 
@@ -164,10 +184,12 @@ public class WorkflowXMLBuilder {
 						Element actualEmbeddedUnitElement = unitsIterator.next();
 						Node embeddedNode = readUnit(actualEmbeddedUnitElement, file);
 						((GroupUnitElement)unitElement).getNodes().add(embeddedNode);
-						if(embeddedNode instanceof UnitElement)
+						if(embeddedNode instanceof UnitElement) {
+							System.out.println("put in embeddedNodes: " + embeddedNode 
+									+ " unitid: "+ ((UnitElement)embeddedNode).getUnitID());
 							newNodes.put(((UnitElement)embeddedNode).getUnitID(), (UnitElement) embeddedNode);
-						if(embeddedNode instanceof UnitElement)
 							embeddedNodes.put(((UnitElement)embeddedNode).getUnitID(), (UnitElement) embeddedNode);
+						}
 					}
 				}
 
@@ -180,8 +202,12 @@ public class WorkflowXMLBuilder {
 					while (connectionsIterator.hasNext()) { 
 						Element actualConnectionElement = connectionsIterator.next();
 
-						Connection connection = readConnection(newNodes, actualConnectionElement);
-						((GroupUnitElement)unitElement).getInternalConnections().add(connection);
+						/*Connection connection = readConnection(newNodes, actualConnectionElement);
+						((GroupUnitElement)unitElement).getInternalConnections().add(connection);*/
+						ConnectionDelegate conDelegate = 
+							new ConnectionDelegate(actualConnectionElement, 
+									((GroupUnitElement)unitElement).getInternalConnections());
+						connectionDelegates.add(conDelegate);
 					}
 				}
 
@@ -215,11 +241,6 @@ public class WorkflowXMLBuilder {
 					}
 				}
 				
-				
-				unitElement.setHelpString(unitDescription.helpString);
-				newNodes.put(unitID, unitElement);
-				groupUnits.add((GroupUnitElement) unitElement);
-			
 			} else {
 				// create UnitElement
 				unitElement = UnitFactory.createProcessingUnit(unitDescription, new Point(xPos, yPos));
@@ -230,12 +251,10 @@ public class WorkflowXMLBuilder {
 			}
 			
 			
-//			add(unitElement);
 			node = unitElement;
 			
 		} else {
 			CommentNode comment = new CommentNode(new Point(xPos, yPos), label);
-//			add(comment);
 			node = comment;
 		}
 		
@@ -294,9 +313,17 @@ public class WorkflowXMLBuilder {
 			Integer.parseInt(actualConnectionElement.getChild("ToUnitID").getValue());
 		int toInputNumber = 
 			Integer.parseInt(actualConnectionElement.getChild("ToInputNumber").getValue());
-		
-		Connection con = new Connection(newNodes.get(fromUnitID), fromOutputNumber, 
-								newNodes.get(toUnitID), toInputNumber);
+
+		Connection con = null;
+		try {
+			con = new Connection(newNodes.get(fromUnitID), fromOutputNumber, 
+					newNodes.get(toUnitID), toInputNumber);
+		} catch (ArrayIndexOutOfBoundsException ex) {
+			System.err.println("fromUnitID " + fromUnitID
+					+ " fromOutputNumber" + fromOutputNumber
+					+ " toUnitId " + toUnitID
+					+ " toInputNumber " + toInputNumber);
+		}
 		return con;
 	}
 	
@@ -307,8 +334,16 @@ public class WorkflowXMLBuilder {
 		int toUnitID = connDel.toUnitID;
 		int toInputNumber = connDel.toUnitInput;
 		
-		Connection con = new Connection(newNodes.get(fromUnitID), fromOutputNumber, 
-								newNodes.get(toUnitID), toInputNumber);
+		Connection con = null;
+		try {
+			con = new Connection(newNodes.get(fromUnitID), fromOutputNumber, 
+					newNodes.get(toUnitID), toInputNumber);
+		} catch (ArrayIndexOutOfBoundsException ex) {
+			System.err.println("fromUnitID " + fromUnitID
+					+ " fromOutputNumber" + fromOutputNumber
+					+ " toUnitId " + toUnitID
+					+ " toInputNumber " + toInputNumber);
+		}
 		return con;
 	}
 
@@ -489,7 +524,7 @@ public class WorkflowXMLBuilder {
 			inputs.addContent(inputElement);	
 
 			Element name = new Element("Name");
-			name.addContent(input.getName());
+			name.addContent(input.getDisplayName());
 			inputElement.addContent(name);
 
 			Element shortName = new Element("ShortName");
@@ -523,7 +558,7 @@ public class WorkflowXMLBuilder {
 			outputs.addContent(outputElement);	
 
 			Element name = new Element("Name");
-			name.addContent(output.getName());
+			name.addContent(output.getDisplayName());
 			outputElement.addContent(name);
 
 			Element shortName = new Element("ShortName");
