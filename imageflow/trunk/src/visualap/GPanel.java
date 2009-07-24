@@ -51,6 +51,8 @@ import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.Input;
 
+import static de.danielsenff.imageflow.utils.Reversed.reversed;
+
 public class GPanel extends JPanel implements Printable, MouseListener, MouseMotionListener  {
 
 	protected ArrayList<Delegate> beans;
@@ -59,7 +61,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	protected Point pick = null;
 	protected Pin drawEdge;
 	protected Selection<Node> selection = new Selection<Node>();
-	protected Collection<Node> nodeL = new GList<Node>();
+	protected GList<Node> nodeL = new GList<Node>();
 	protected Collection<Connection> connectionList = new ConnectionList();
 	protected Point mouse;
 
@@ -155,7 +157,9 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		int x = e.getX();
 		int y = e.getY();
 		// qui � obbligatorio un iteratore che scandisce la lista al contrario!
-		for (Node aNode : nodeL) {
+//		for (Node aNode : nodeL) {
+		for (Node aNode : reversed(nodeL)) {
+			
 			Object sel = aNode.contains(x,y);
 			// 	check selected element, is it a Node?
 			if (sel instanceof Node) {
@@ -208,6 +212,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		updateDrawableRect(getWidth(), getHeight());
 		repaint();
 	}
+
 
 	/**
 	 * Sees, if a connection between the given Pins exists.

@@ -16,7 +16,6 @@ import javax.xml.datatype.DatatypeFactory;
 
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
-import de.danielsenff.imageflow.helper.PaintUtil;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -34,6 +33,7 @@ import de.danielsenff.imageflow.models.parameter.ParameterFactory;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
 import de.danielsenff.imageflow.models.parameter.TextParameter;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
+import de.danielsenff.imageflow.utils.PaintUtil;
 
 
 

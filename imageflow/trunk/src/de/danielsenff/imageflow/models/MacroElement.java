@@ -5,7 +5,6 @@ package de.danielsenff.imageflow.models;
 
 import java.util.ArrayList;
 
-import de.danielsenff.imageflow.helper.Tools;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
@@ -14,6 +13,7 @@ import de.danielsenff.imageflow.models.parameter.DoubleParameter;
 import de.danielsenff.imageflow.models.parameter.IntegerParameter;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
+import de.danielsenff.imageflow.utils.Tools;
 
 /**
  * MacroElement is a processor class. It contains the ImageJ-syntax template.

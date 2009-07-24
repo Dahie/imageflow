@@ -35,6 +35,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
+import visualap.GList;
 import visualap.GPanel;
 import visualap.GPanelListener;
 import visualap.Node;
@@ -504,7 +505,7 @@ public class GraphPanel extends GPanel {
 	 * Replace the current {@link UnitList} with a different one.
 	 * @param units2
 	 */
-	public void setNodeL(final Collection<Node> units2) {
+	public void setNodeL(final GList<Node> units2) {
 		super.nodeL = units2;
 	}
 

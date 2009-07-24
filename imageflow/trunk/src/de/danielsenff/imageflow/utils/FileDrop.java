@@ -1,4 +1,4 @@
-package de.danielsenff.imageflow.helper;
+package de.danielsenff.imageflow.utils;
 
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;

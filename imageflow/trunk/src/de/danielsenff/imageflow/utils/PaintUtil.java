@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.danielsenff.imageflow.helper;
+package de.danielsenff.imageflow.utils;
 
 
 /**

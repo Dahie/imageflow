@@ -14,12 +14,12 @@ import org.jdom.Element;
 
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.controller.DelegatesController;
-import de.danielsenff.imageflow.helper.Tools;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
+import de.danielsenff.imageflow.utils.Tools;
 
 /**
  * UnitDescription reads the single pieces a UnitElement is made of from an
