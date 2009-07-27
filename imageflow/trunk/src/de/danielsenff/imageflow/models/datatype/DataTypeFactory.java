@@ -191,14 +191,17 @@ public class DataTypeFactory {
 
 					return -1;
 				} 
-			} else if(parentPin instanceof Input) {
+			} 
+			/*
+			 * it seems I don't need this, usually I always check inputs if their outputs are legal
+			 * else if(parentPin instanceof Input) {
 
 				Input parentInput = (Input) parentPin;
 				if(parentInput.isConnected()) {
 					Connection conn = parentInput.getConnection();
 					return ((Image)conn.getOutput().getDataType()).getImageBitDepth();
 				}
-			}
+			}*/
 
 			// this means our output doesn't know his own capabilities
 			// and because it has no inputs, it can't get them anywhere

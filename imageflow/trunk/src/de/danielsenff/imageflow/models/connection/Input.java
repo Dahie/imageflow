@@ -199,7 +199,7 @@ public class Input extends Pin {
 	 */
 	@Override
 	public String toString() {
-		return super.toString()+" Connection: " + this.connection;
+		return super.toString()+" DataType: " + getDataType();
 	}
 
 	
