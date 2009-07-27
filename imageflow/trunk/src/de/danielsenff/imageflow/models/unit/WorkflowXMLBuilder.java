@@ -520,71 +520,84 @@ public class WorkflowXMLBuilder {
 		Element inputs = new Element("Inputs");
 		unitDescription.addContent(inputs);
 		for (Input input : unit.getInputs()) {
-			Element inputElement = new Element("Input");
-			inputs.addContent(inputElement);	
-
-			Element name = new Element("Name");
-			name.addContent(input.getDisplayName());
-			inputElement.addContent(name);
-
-			Element shortName = new Element("ShortName");
-			shortName.addContent(input.getShortDisplayName());
-			inputElement.addContent(shortName);
-
-
-			Element dataTypeElement = new Element("DataType");
-			DataType dataType = input.getDataType();
-			dataTypeElement.addContent(dataType.getClass().getSimpleName());
-			inputElement.addContent(dataTypeElement);
-
-			if(dataType instanceof DataTypeFactory.Image) {
-				Element imageType = new Element("ImageType");
-				imageType.addContent(""+((DataTypeFactory.Image)dataType).getImageBitDepth());
-				inputElement.addContent(imageType);	
-			}
-
-
-			Element needToCopyInput = new Element("NeedToCopyInput");
-			String boolNeedCopy = input.isNeedToCopyInput() ? "true" : "false"; 
-			needToCopyInput.addContent(boolNeedCopy);
-			inputElement.addContent(needToCopyInput);
+			writeXMLInput(inputs, input);
 		}
 
-		// deal with inputs
+		// deal with outputs
 		Element outputs = new Element("Outputs");
 		unitDescription.addContent(outputs);
 		for (Output output : unit.getOutputs()) {
-			Element outputElement = new Element("Output");
-			outputs.addContent(outputElement);	
-
-			Element name = new Element("Name");
-			name.addContent(output.getDisplayName());
-			outputElement.addContent(name);
-
-			Element shortName = new Element("ShortName");
-			shortName.addContent(output.getShortDisplayName());
-			outputElement.addContent(shortName);
-
-			Element dataType = new Element("DataType");
-			dataType.addContent(output.getDataType().getClass().getSimpleName());
-			outputElement.addContent(dataType);
-
-			if(output.getDataType() instanceof DataTypeFactory.Image) {
-				Element imageType = new Element("ImageType");
-				imageType.addContent(""+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
-				outputElement.addContent(imageType);	
-			}
-
-
-
-			// In case of plugins with multiple outputs
-			// I want to leave the option to display only selected outputs
-			Element doDisplay = new Element("DoDisplay");
-			String boolIsDisplay = output.isDoDisplay() ? "true" : "false"; 
-			doDisplay.addContent(boolIsDisplay);
-			outputElement.addContent(doDisplay);
+			writeXMLOutput(outputs, output);
 		}
 		return unitDescription;
+	}
+
+
+	private void writeXMLInput(Element inputs, Input input) {
+		Element inputElement = new Element("Input");
+		inputs.addContent(inputElement);	
+
+		Element name = new Element("Name");
+		name.addContent(input.getDisplayName());
+		inputElement.addContent(name);
+
+		Element shortName = new Element("ShortName");
+		shortName.addContent(input.getShortDisplayName());
+		inputElement.addContent(shortName);
+
+		Element required = new Element("Required");
+		required.addContent(input.isRequired() ? "true" : "false");
+		inputElement.addContent(required);
+
+		Element dataTypeElement = new Element("DataType");
+		DataType dataType = input.getDataType();
+		dataTypeElement.addContent(dataType.getClass().getSimpleName());
+		inputElement.addContent(dataTypeElement);
+
+		if(dataType instanceof DataTypeFactory.Image) {
+			Element imageType = new Element("ImageType");
+			imageType.addContent(""+((DataTypeFactory.Image)dataType).getImageBitDepth());
+			inputElement.addContent(imageType);	
+		}
+
+
+		Element needToCopyInput = new Element("NeedToCopyInput");
+		String boolNeedCopy = input.isNeedToCopyInput() ? "true" : "false"; 
+		needToCopyInput.addContent(boolNeedCopy);
+		inputElement.addContent(needToCopyInput);
+	}
+
+
+	private void writeXMLOutput(Element outputs, Output output) {
+		Element outputElement = new Element("Output");
+		outputs.addContent(outputElement);	
+
+		Element name = new Element("Name");
+		name.addContent(output.getDisplayName());
+		outputElement.addContent(name);
+
+		Element shortName = new Element("ShortName");
+		shortName.addContent(output.getShortDisplayName());
+		outputElement.addContent(shortName);
+
+		Element dataType = new Element("DataType");
+		dataType.addContent(output.getDataType().getClass().getSimpleName());
+		outputElement.addContent(dataType);
+
+		if(output.getDataType() instanceof DataTypeFactory.Image) {
+			Element imageType = new Element("ImageType");
+			imageType.addContent(""+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
+			outputElement.addContent(imageType);	
+		}
+
+
+
+		// In case of plugins with multiple outputs
+		// I want to leave the option to display only selected outputs
+		Element doDisplay = new Element("DoDisplay");
+		String boolIsDisplay = output.isDoDisplay() ? "true" : "false"; 
+		doDisplay.addContent(boolIsDisplay);
+		outputElement.addContent(doDisplay);
 	}
 
 
