@@ -12,12 +12,11 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.JDialog;
-
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.MacroElement;
+import de.danielsenff.imageflow.models.Positionable;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
@@ -50,7 +49,7 @@ import de.danielsenff.imageflow.utils.PaintUtil;
  * @author danielsenff
  *
  */
-public class UnitElement extends AbstractUnit implements ProcessingUnit, Displayable {
+public class UnitElement extends AbstractUnit implements ProcessingUnit, Displayable, Positionable {
 
 	/**
 	 * Pixel radius of tolerance round the pins  
@@ -949,20 +948,17 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 */
 	protected boolean display = false;  
 	
-	
-	/**
-	 * If activated, the unit will display the current image.
-	 * This setting is actually attached to the {@link Output}. 
-	 * This is a convenience method for changing all outputs of this
-	 * unit at once.
-	 * @param isDisplayUnit
-	 */
 	public void setDisplay(final boolean isDisplay) {
 		this.display = isDisplay;
 		for (Output output : getOutputs()) {
 			output.setDoDisplay(isDisplay);
 		}
 		notifyModelListeners();
+	}
+	
+	
+	public boolean isDisplay() {
+		return this.display;
 	}
 
 	/**
@@ -987,13 +983,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		return false;
 	}
 
-	/**
-	 * Returns whether or not this unit should display the current state of the image.
-	 * @return 
-	 */
-	public boolean isDisplay() {
-		return this.display;
-	}
+
 
 
 }

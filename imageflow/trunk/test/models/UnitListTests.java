@@ -4,22 +4,28 @@
 package models;
 
 import java.awt.Dimension;
+import java.awt.Point;
 
-import junit.framework.TestCase;
+import visualap.Node;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.unit.UnitElement;
-import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * @author danielsenff
  *
  */
-public class UnitListTests extends TestCase {
+public class UnitListTests {
 
 
-	
+	/**
+	 * tests wheather all inputs of a all unit are connected
+	 */
+	@Test
 	public void testAreAllInputsConnected() {
 
 		// test output-only
@@ -47,13 +53,14 @@ public class UnitListTests extends TestCase {
 		units.add(filterUnit2);
 		
 		//assertion
-		assertFalse("contains nodes, which are not connected", units.areAllInputsConnected());
+		assertFalse("contains inputs, which are not connected", units.areAllInputsConnected());
+		
 	}
 	
-
-	public void testHasDisplayUnit() {
+	@Test public void testHasDisplayUnit() {
 		// test output-only
 		UnitElement sourceUnit = UnitFactoryExt.createBackgroundUnit(new Dimension(12, 12));
+		Node comment = UnitFactoryExt.createComment("hello a comment", new Point(13, 13));
 		
 		// test input/output case
 		UnitElement filterUnit1 = UnitFactoryExt.createAddNoiseUnit();
@@ -62,6 +69,7 @@ public class UnitListTests extends TestCase {
 		// adding to UnitList
 		
 		UnitList units = new UnitList();
+		units.add(comment);
 		units.add(sourceUnit);
 		units.add(filterUnit1);
 		units.add(filterUnit2);
@@ -75,7 +83,7 @@ public class UnitListTests extends TestCase {
 		
 	}
 	
-	public void testIsEmpty() {
+	@Test public void testIsEmpty() {
 		UnitList units = new UnitList();
 		
 		assertTrue(units.isEmpty());

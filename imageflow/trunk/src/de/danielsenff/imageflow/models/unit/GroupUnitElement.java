@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
 
-
+import visualap.GList;
 import visualap.Node;
 import visualap.Pin;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -268,7 +268,7 @@ public class GroupUnitElement extends UnitElement {
 	 * Returns a Collection of Units embedded in this Group.
 	 * @return
 	 */
-	public Collection<Node> getNodes() {
+	public GList<Node> getNodes() {
 		return this.units;
 	}
 

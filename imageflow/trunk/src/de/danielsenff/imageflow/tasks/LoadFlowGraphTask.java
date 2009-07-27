@@ -7,7 +7,6 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 import de.danielsenff.imageflow.ImageFlow;
-import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.unit.UnitList;
 

@@ -97,8 +97,6 @@ public class MacroGenerator {
 		// parse the command string for TITLE tags that need to be replaced
 		for (int in = 0; in < unit.getInputsCount(); in++) {
 			final Input input = unit.getInput(in);
-			System.out.println(input.isConnected());
-			System.out.println(input.getConnection());
 			final String searchString = "TITLE_" + (in+1);
 			final String parameterString = 
 				input.isNeedToCopyInput() ? getNeedCopyTitle(input.getImageID()) : input.getImageTitle();
@@ -170,7 +168,7 @@ public class MacroGenerator {
 
 		for (ImageJImage image : this.openedImages) {
 			macroText += "selectImage("+ image.id +"); \n" 
-				+ "rename(\"" + image.parentOutput.getName()  + "\"); \n";
+				+ "rename(\"" + image.parentOutput.getDisplayName()  + "\"); \n";
 		}
 		return macroText;
 	}

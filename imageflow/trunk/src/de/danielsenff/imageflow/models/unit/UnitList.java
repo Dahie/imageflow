@@ -14,6 +14,7 @@ import java.util.Vector;
 import visualap.GList;
 import visualap.Node;
 import visualap.Pin;
+import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -291,10 +292,11 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 * @return
 	 */
 	public boolean hasUnitAsDisplay() {
-		for (int i = 0; i < size(); i++) {
-			final UnitElement unit = (UnitElement) get(i);
-			if(unit.isDisplay()) 
-				return true;
+		for (Node node : this) {
+			if(node instanceof Displayable) {
+				if(((Displayable)node).isDisplay()) 
+					return true;
+			}
 		}
 		return false;
 	}
