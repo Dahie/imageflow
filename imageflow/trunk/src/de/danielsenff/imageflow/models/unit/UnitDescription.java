@@ -34,7 +34,7 @@ public class UnitDescription {
 	}
 
 	protected String unitName;
-	protected String helpString;
+	public String helpString;
 	protected String pathToIcon;
 	protected String colorString;
 	protected String componentSizeString;

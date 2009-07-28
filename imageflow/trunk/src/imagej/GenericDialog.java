@@ -83,7 +83,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 
 	public static final int MAX_SLIDERS = 25;
 	protected Vector numberField, stringField, checkbox, choice, slider;
-	protected TextArea textArea1, textArea2;
+	protected JTextArea textArea1, textArea2;
 	protected Vector defaultValues,defaultText;
 	protected JComponent theLabel;
 	private JButton cancel, okay, no;
@@ -139,9 +139,9 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		setLayout(grid);
 		macroOptions = Macro.getOptions();
 		macro = macroOptions!=null;
-		addKeyListener(this);
-		addWindowListener(this);
-		setResizable(false);
+//		addKeyListener(this);
+//		addWindowListener(this);
+//		setResizable(false);
 		pack();
     }
     
@@ -535,12 +535,12 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     public void addTextAreas(String text1, String text2, int rows, int columns) {
     	if (textArea1!=null) return;
     	JPanel panel = new JPanel();
-		textArea1 = new TextArea(text1,rows,columns,TextArea.SCROLLBARS_NONE);
+		textArea1 = new JTextArea(text1,rows,columns);
 		if (IJ.isLinux()) textArea1.setBackground(Color.white);
-		textArea1.addTextListener(this);
+//		textArea1.addTextListener(this);
 		panel.add(textArea1);
 		if (text2!=null) {
-			textArea2 = new TextArea(text2,rows,columns,TextArea.SCROLLBARS_NONE);
+			textArea2 = new JTextArea(text2,rows,columns);
 			if (IJ.isLinux()) textArea2.setBackground(Color.white);
 			panel.add(textArea2);
 		}
@@ -1039,12 +1039,12 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
   	}
 
   	/** Returns a reference to textArea1. */
-  	public TextArea getTextArea1() {
+  	public JTextArea getTextArea1() {
   		return textArea1;
   	}
 
   	/** Returns a reference to textArea2. */
-  	public TextArea getTextArea2() {
+  	public JTextArea getTextArea2() {
   		return textArea2;
   	}
   	
@@ -1205,7 +1205,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
         if (workaroundOSXbug) repaint(); // OSX 10.4 bug delays update of enabled until the next input
     }
 
-	public void paint(Graphics g) {
+	/*public void paint(Graphics g) {
 		super.paint(g);
 		if (firstPaint) {
 			if (numberField!=null && IJ.isMacOSX()) {
@@ -1216,7 +1216,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 			}
 			firstPaint = false;
 		}
-	}
+	}*/
     	
     public void windowClosing(WindowEvent e) {
 		wasCanceled = true; 

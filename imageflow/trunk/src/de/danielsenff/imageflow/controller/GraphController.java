@@ -185,17 +185,21 @@ public class GraphController{
 		}
 	}
 	
-
 	/**
-	 * Convenience method for calling ConnectionList.write() to save the workflow
-	 * into a XML-file.
+	 * Reads the contents of a flow-XML-file.
 	 * @param file
-	 * @throws IOException
+	 * @throws FileNotFoundException 
 	 */
-	public void write(File file) throws IOException {
-		nodes.write(file);
+	public void read(File file) throws FileNotFoundException {
+		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(nodes);
+		workflowbuilder.read(file);
 	}
-
+	
+	public void write(final File file) throws IOException {
+		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(nodes);
+		workflowbuilder.write(file);
+	}
+	
 
 	public void setupExample1() {
 		////////////////////////////////////////////////////////
@@ -223,8 +227,6 @@ public class GraphController{
 		// setup the connections
 		////////////////////////////////////////////////////////
 
-
-
 		// add six connections
 		// the conn is established on adding
 		// fromUnit, fromOutputNumber, toUnit, toInputNumber
@@ -243,7 +245,7 @@ public class GraphController{
 
 		nodes.clear();
 		try {
-			nodes.read(new File("xml_flows/Example0_flow.xml"));
+			read(new File("xml_flows/Example0_flow.xml"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

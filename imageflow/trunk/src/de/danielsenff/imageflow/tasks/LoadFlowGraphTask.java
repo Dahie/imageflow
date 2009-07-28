@@ -39,10 +39,9 @@ public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
     protected GraphController doInBackground() throws IOException {
         final GraphController graphController = new GraphController();
     	
-        final UnitList unitList = graphController.getUnitElements();
-        unitList.clear();
+        graphController.getUnitElements().clear();
         try {
-        	unitList.read(file);	
+        	graphController.read(file);
         } catch(OutOfMemoryError ex) {
         	ex.printStackTrace();
         	JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 

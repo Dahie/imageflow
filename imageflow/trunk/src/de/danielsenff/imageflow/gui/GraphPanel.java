@@ -3,6 +3,8 @@
  */
 package de.danielsenff.imageflow.gui;
 
+import ij.IJ;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -93,7 +95,8 @@ public class GraphPanel extends GPanel {
 		super(delegates, parent);
 
     	JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-		this.setBorder(BorderFactory.createLoweredBevelBorder());
+    	if(!IJ.isMacintosh())
+    		this.setBorder(BorderFactory.createLoweredBevelBorder());
 		
 		final DropTargetListener dropTargetListener = new DropTargetListener() {
 			// Die Maus betritt die Komponente mit

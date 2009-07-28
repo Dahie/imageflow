@@ -398,19 +398,4 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		this.connections = connList;
 	}
 
-	/**
-	 * Reads the contents of a flow-XML-file.
-	 * @param file
-	 * @throws FileNotFoundException 
-	 */
-	public void read(File file) throws FileNotFoundException {
-		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(this);
-		workflowbuilder.read(file);
-	}
-	
-	public void write(final File file) throws IOException {
-		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(this);
-		workflowbuilder.write(file);
-	}
-	
 }
