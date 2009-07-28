@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Color Histogram</UnitName> 
+  <PathToIcon>Histogram_Unit.png</PathToIcon> 
+  <ImageJSyntax>run("Color Histogram");</ImageJSyntax>
+   
+  <Color>0x6e91de</Color>
+  <HelpString>Displays the Histogram of the color image.</HelpString>
+</General>
+
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>16</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+
+</UnitDescription>

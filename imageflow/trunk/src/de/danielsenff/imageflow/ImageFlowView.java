@@ -104,11 +104,9 @@ public class ImageFlowView extends FrameView {
 	private boolean modified = false;
 	private boolean selected = false;
 	private boolean paste = false;
-
 	private boolean showlog = false;
 
 	private JCheckBoxMenuItem chkBoxDisplayUnit;
-
 	private JCheckBoxMenuItem chkBoxCollapseIcon;
 
 	

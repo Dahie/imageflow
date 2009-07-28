@@ -1,5 +1,5 @@
 - add sample images to the example workflows
-- check for bugs concerning the image retrieving after a workflow was executed (exception because of names with -1)
+
 
 
 Quick jobs:
@@ -9,8 +9,7 @@ Quick jobs:
 Bugs:
 - linux: right click on unit, you get context menu, left klick in workspace, the unit is moved to this spot
 - workflow with save-as-unit but without any displayable units is not executed, although this might be wanted
-- grouping of loop-producing units works (although error message is displayed), ungrouping produces red connections
- 
+
 
 GUI:
 - filter images in filechooser
@@ -22,6 +21,7 @@ GUI:
 Functions:
 - quicksearch of filter units in left sidepane
 - Macro-Generator at For-Loops: Integer only visible in loop,
+- check for bugs concerning the image retrieving after a workflow was executed (exception because of names with -1)
 
 
 Graph:
