@@ -22,6 +22,10 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  */
 public class ConnectionList extends Vector<Connection> implements Model, Cloneable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final ArrayList<ModelListener> listeners;
 	
 	/**
@@ -116,8 +120,8 @@ public class ConnectionList extends Vector<Connection> implements Model, Cloneab
 		
 		// check the bit depth
 		if(!connection.isCompatible()) {
-			String dataTypeI = connection.getInput().getDataType().toString();
-			String dataTypeO = connection.getOutput().getDataType().toString();
+			final String dataTypeI = connection.getInput().getDataType().toString();
+			final String dataTypeO = connection.getOutput().getDataType().toString();
 			System.out.println("Connection disallowed: " +
 					"Incompatible dataTypes " + dataTypeO + " to " + dataTypeI);
 			//			return false;
@@ -206,8 +210,8 @@ public class ConnectionList extends Vector<Connection> implements Model, Cloneab
 		return cloneList;
 	}
 	
-	public Connection getConnectionByID(int id) {
-		for (Connection connection : this) {
+	public Connection getConnectionByID(final int id) {
+		for (final Connection connection : this) {
 			if(connection.id == id)
 				return connection;
 		}
