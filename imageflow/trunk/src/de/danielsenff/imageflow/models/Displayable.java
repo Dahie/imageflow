@@ -1,7 +1,5 @@
 package de.danielsenff.imageflow.models;
 
-import de.danielsenff.imageflow.models.connection.Output;
-
 public interface Displayable {
 
 	/**
