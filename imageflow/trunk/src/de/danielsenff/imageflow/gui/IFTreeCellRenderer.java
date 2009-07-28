@@ -15,14 +15,23 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
 
+/**
+ * Cellrenderer in the Delegates-JTree
+ * @author senff
+ *
+ */
 public class IFTreeCellRenderer extends DefaultTreeCellRenderer {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Icon icon;
 	
 	@Override
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean sel, boolean expanded, boolean isLeaf, int row,
-			boolean hasFocus) {
+	public Component getTreeCellRendererComponent(final JTree tree, final Object value,
+			final boolean sel, final boolean expanded, final boolean isLeaf, final int row,
+			final boolean hasFocus) {
 
 		// register ToolTips
 		ToolTipManager.sharedInstance().registerComponent(tree);
@@ -50,7 +59,6 @@ public class IFTreeCellRenderer extends DefaultTreeCellRenderer {
 		final Graphics2D g2 = icon.createGraphics();
 
 		final int x=0, y=0;
-		final int arc = 5;
 
 		Color cTop = new Color(84, 121, 203, 255);
 		Color cBottom = new Color(136, 169, 242, 255);

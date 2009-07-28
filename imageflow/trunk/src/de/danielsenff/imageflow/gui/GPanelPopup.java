@@ -5,8 +5,6 @@ package de.danielsenff.imageflow.gui;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -20,12 +18,12 @@ import visualap.Selection;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
-import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 
 /**
+ * Contextmenu on the GPanel
  * @author danielsenff
  *
  */

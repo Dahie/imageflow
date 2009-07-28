@@ -54,7 +54,6 @@ public class InsertUnitMenu extends JMenu {
 		this.setName(name);
 		this.setText(name);
 		this.activePanel = gpanel;
-		final Collection<Delegate> availableUnits = DelegatesController.getInstance().getUnitDelegates().values();
 		final ActionListener newAction = new ActionListener() {
 			public void actionPerformed(final ActionEvent e) {
 				final JMenuItem source = (JMenuItem)(e.getSource());
