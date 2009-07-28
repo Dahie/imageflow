@@ -1,6 +1,6 @@
 =================================================================================
 
-ImageFlow 1.0, 19 May 2009, 
+ImageFlow 1.1, 01 August 2009, 
 authors: 
 Daniel Senff (mail@danielsenff.de)
 Kai-Uwe Barthel (k.barthel@fhtw-berlin.de)
@@ -37,12 +37,13 @@ Feedback of any kind is well appreciated.
 Please read the imageflow.html for further information. 
 
 Imageflow requires either JRE or JDK, version 1.5 or later
-Tested with Windows XP, Linux Debian distro (KDE) and Mac OS X 10.4
+Tested with Windows XP, Linux Debian distro (KDE and Gnome) and MacOS X 10.4
 
 ----------------------------------------
 
 Releases notes
 
+Version 1.1: stable release
 Version 1.0: stable release
 Version 0.9: is the first public beta. It works, but it is not yet stable.
 
@@ -58,8 +59,6 @@ https://visualap.dev.java.net/
 
 Thanks by Daniel to:
 - family, who survived me working on this project for half a year now
-- friends, who É same thing
-- Weezer, background-music of the past few weeks
 - my testers
 - everyone, who had no idea what I was talking about, when I explained this concept
 - David for giving me the idea to make this my final thesis
