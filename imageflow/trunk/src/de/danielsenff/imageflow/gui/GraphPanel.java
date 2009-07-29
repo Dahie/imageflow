@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,7 +50,10 @@ import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.unit.CommentNode;
+import de.danielsenff.imageflow.models.unit.SourceUnitElement;
+import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
+import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
 /**
@@ -123,9 +127,20 @@ public class GraphPanel extends GPanel {
 							// Zun�chst annehmen
 							e.acceptDrop (e.getDropAction());
 							final List files = (List) tr.getTransferData(flavors[i]);
-							// Wir setzen in das Label den Namen der ersten 
-							// Datei
-							//							label.setText(files.get(0).toString());
+
+							/*
+							 * TODO unused
+							 */
+							for (int j = 0; j < files.size(); j++) {
+								File file = (File) files.get(j);
+								
+								UnitDescription sourceUnitDescription = new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
+								final SourceUnitElement sourceUnit = (SourceUnitElement) UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
+								sourceUnit.setFile(file.getAbsolutePath());
+								getNodeL().add(sourceUnit);
+								System.out.println(file);
+							}
+							
 							e.dropComplete(true);
 							return;
 						}
@@ -152,6 +167,7 @@ public class GraphPanel extends GPanel {
 		}
 		
 	}
+
 
 	@Override
 	protected void paintPrintableConnection(final Graphics g, final Connection connection) {

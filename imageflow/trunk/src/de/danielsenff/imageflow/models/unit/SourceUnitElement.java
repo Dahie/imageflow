@@ -107,9 +107,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	    	filepath = fc.getSelectedFile().getAbsolutePath();
 	    	// backslashes need to be escaped
 	    	filepath = filepath.replace("\\", "\\\\"); // \ to \\
-	    	((StringParameter)getParameter(0)).setValue(filepath);
-	    	String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
-	    	setLabel(filename);
+	    	setFile(filepath);
 	    }
 	}
 	
@@ -127,11 +125,19 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		if(openDialog.getFileName() != null) {
 	    	// backslashes need to be escaped
 	    	filepath = filepath.replace("\\", "\\\\"); // \ to \\
-			((StringParameter)getParameter(0)).setValue(filepath);
-	    	String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
-	    	setLabel(filename);
+			setFile(filepath);
 		}
 		
+	}
+
+	/**
+	 * Set the file connected with the filepath.
+	 * @param filepath
+	 */
+	public void setFile(String filepath) {
+		((StringParameter)getParameter(0)).setValue(filepath);
+		String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
+		setLabel(filename);
 	}
 
 	/**
