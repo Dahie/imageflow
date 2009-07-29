@@ -33,9 +33,7 @@ public class DelegatesController {
 	HashMap<TreeNode, Delegate> delegates;
 	public DefaultTreeModel delegatesModel;
 
-	public DelegatesController(String unitFolderPath) {
-		DelegatesController.setUnitFolder(unitFolderPath);
-	}
+
 	
 	/**
 	 * Get a list of all Units that can be added to the workflow.
@@ -54,7 +52,6 @@ public class DelegatesController {
 	}
 
 	private DelegatesController() {
-		//		unitDelegates = new ArrayList<Delegate>();
 		delegates = new HashMap<TreeNode, Delegate>();
 
 		DefaultMutableTreeNode top =
@@ -63,23 +60,6 @@ public class DelegatesController {
 		JMenu insertMenu = new JMenu("Insert unit");
 
 		String unitsFolder = System.getProperty("user.dir")+File.separator+getUnitFolder();
-		/*String unitsFolder = ""; 
-		try {
-			ProtectionDomain protectionDomain = DelegatesController.class.getProtectionDomain();
-			CodeSource codeSource = protectionDomain.getCodeSource();
-			URL location = codeSource.getLocation();
-			URI uri = location.toURI();
-			File jarFile = new File(uri);
-			if(jarFile.exists()) {
-				unitsFolder = jarFile.getParentFile().getAbsolutePath()+File.separator+unitFolder;	
-			} else
-				unitsFolder = System.getProperty("user.dir")+File.separator+unitFolder;	
-			
-		} catch (URISyntaxException e) {
-//			e.printStackTrace();
-		}*/ 
-		
-		
 		File folder = new File(unitsFolder);
 		if(folder.exists()) 
 			readDelegatesFromFolder(top, insertMenu, folder);
@@ -90,6 +70,10 @@ public class DelegatesController {
 					JOptionPane.WARNING_MESSAGE);
 	}
 
+	private DelegatesController(String unitFolderPath) {
+		DelegatesController.setUnitFolder(unitFolderPath);
+	}
+	
 	private void readDelegatesFromFolder(MutableTreeNode node, JMenu menu, File folder) {
 		File[] listOfFiles = folder.listFiles();
 		
@@ -109,7 +93,6 @@ public class DelegatesController {
 
 				final UnitDescription unitDescription = new UnitDescription(file, Tools.getXMLRoot(file));
 				final UnitDelegate unitDelegate = new UnitDelegate(unitDescription);
-				//				unitDelegates.add(unitDelegate);
 				DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(unitDelegate.getName());
 				delegates.put(treeNode, unitDelegate);
 

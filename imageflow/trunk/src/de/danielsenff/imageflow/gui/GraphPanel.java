@@ -205,33 +205,30 @@ public class GraphPanel extends GPanel {
 
 			// paint non printable items
 			if (drawEdge != null) {
-				final Point origin = drawEdge.getLocation();
-				//			g2.setStroke(new BasicStroke(1f));
+				// drag new connection
+				
 				for (final Node node : nodeL) {
 					int margin = 18;
 					// get units margin, could be lesser than 18 if unit has many pins
-					if (node instanceof UnitElement) {
+					if (node instanceof UnitElement
+							&& (!drawEdge.getParent().equals(node)) ) {
 						margin = ((UnitElement) node).getPinTolerance();
-					}
-					// check if mouse is within this dimensions of a node
-					if(isWithin2DRange(mouse, node.getOrigin(), node.getDimension(), margin)) {
+						// check if mouse is within this dimensions of a node#
+						if(isWithin2DRange(mouse, node.getOrigin(), node.getDimension(), margin)) {
 
-						// draw every pin
-						if(node instanceof UnitElement) {
+							// draw every pin
 							for (final Pin pin : ((UnitElement)node).getInputs()) {
-								if(!drawEdge.getParent().equals(node)) 
-									drawCompatbilityIndicator(g2, margin, pin);
+								drawCompatbilityIndicator(g2, margin, pin);
 							}
 
 							for (final Pin pin : ((UnitElement)node).getOutputs()) {
-								if(!drawEdge.getParent().equals(node))
-									drawCompatbilityIndicator(g2, margin, pin);
+								drawCompatbilityIndicator(g2, margin, pin);
 							}	
 						}
-
 					}
 				}
 
+				final Point origin = drawEdge.getLocation();
 				g2.setColor(Color.BLACK);
 				g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
 				g2.draw(new Line2D.Double(origin.x, origin.y, mouse.x, mouse.y));
@@ -239,7 +236,6 @@ public class GraphPanel extends GPanel {
 			//If currentRect exists, paint a box on top.
 			if (currentRect != null) {
 				//Draw a rectangle on top of the image.
-//				g2.setXORMode(Color.white); //Color of Edge varies
 				//depending on image colors
 				g2.setColor(new Color(0,0,255, 80));
 				//			g2.setStroke(dashed);
@@ -383,7 +379,6 @@ public class GraphPanel extends GPanel {
 				isCompatible = pin.isCompatible(drawEdge);
 				if(drawEdge instanceof Output && pin instanceof Input) {
 					isLoop = ((Input)pin).isConnectedInOutputBranch(drawEdge.getParent());
-
 				} else if (drawEdge instanceof Input && pin instanceof Output) {
 					isLoop = ((Output)pin).existsInInputSubgraph(drawEdge.getParent());
 				}
@@ -395,8 +390,6 @@ public class GraphPanel extends GPanel {
 				g2.setColor(new Color(0,0,0,44));
 				g2.draw(circle);
 
-
-
 				String errorMessage = "";
 				if(!isCompatible)
 					errorMessage += "Incompatible data type \n";
@@ -405,8 +398,6 @@ public class GraphPanel extends GPanel {
 
 				if(errorMessage.length() != 0) 
 					drawErrorMessage(g2, errorMessage, pin.getLocation());
-
-
 			}
 		}
 	}

@@ -7,7 +7,7 @@
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>saveAs("PARA_STRING_1","PARA_STRING_2");</ImageJSyntax> 
   <Color>0x9cba92</Color>
-  <HelpString>Saves an image</HelpString>
+  <HelpString>Saves an image to the hard disc. \nThis needs the absolute path. On Windows backslashes need to be escaped. </HelpString>
 </General>
 
 <Parameters>

@@ -2,18 +2,20 @@
 <project default="create_run_jar" name="Create Runnable Jar for ImageFlow">
 <!--this file was created by Eclipse Runnable JAR Export Wizard-->
 <!--ANT 1.7 is required                                        -->
-	<property name="bin.dir" location="${basedir}" /> 
+	<property name="bin.dir" location="${basedir}/bin" /> 
 	<property name="src.dir" location="${basedir}/src" /> 
-	<property name="build.dir" location="${bin.dir}/build" />
-	<property name="units.dir" location="${bin.dir}/xml_units" />
-	<property name="icons.dir" location="${bin.dir}/xml_icons" />
-	<property name="doc.dir" location="${bin.dir}/doc" />
-	<property name="example.dir" location="${bin.dir}/examples" />
+	<property name="build.dir" location="${basedir}/build" />
+	<property name="units.dir" location="${basedir}/xml_units" />
+	<property name="icons.dir" location="${basedir}/xml_icons" />
+	<property name="doc.dir" location="${basedir}/doc" />
+	<property name="example.dir" location="${basedir}/examples" />
 	
 	 <target name="copy" description="Delete old build and dist directories">
 	    <delete dir="${build.dir}"/>
 	 	<mkdir dir="${build.dir}" />
 	 	<mkdir dir="${build.dir}/Imageflow" />
+	 	<copy todir="${build.dir}/Imageflow" file="${basedir}/ImageFlow" />
+	 	
 	 	
 	 	<mkdir dir="${build.dir}/Imageflow/xml_units" />
 	 	<copy todir="${build.dir}/Imageflow/xml_units">
@@ -21,9 +23,9 @@
 	 	</copy>
 	 	
 	 	<mkdir dir="${build.dir}/Imageflow/xml_icons" />
-	 		 	<copy todir="${build.dir}/Imageflow/xml_icons">
-	 		 		<fileset dir="${icons.dir}" />
-	 		 	</copy>
+	 	<copy todir="${build.dir}/Imageflow/xml_icons">
+	 		<fileset dir="${icons.dir}" />
+	 	</copy>
 	 	
 	 	<mkdir dir="${build.dir}/Imageflow/doc" />
 	 	<copy todir="${build.dir}/Imageflow/doc">
@@ -44,7 +46,7 @@
 				<attribute name="Main-Class" value="de.danielsenff.imageflow.ImageFlow"/>
 				<attribute name="Class-Path" value="."/>
 			</manifest>
-			<fileset dir="${basedir}/bin"/>
+			<fileset dir="${bin.dir}"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/ij.jar"/>
 			<!--<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/junit-4.5.jar"/>-->
 			<!--<fileset dir="${basedir}/../visualap11branch/bin" excludes="**/test/**, *.wav, *.pdf" />-->
