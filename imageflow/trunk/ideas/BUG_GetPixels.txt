@@ -1,0 +1,13 @@
+2009-07-28 Friedrich Maiwald
+
+When a workflow contains several (more than one) GetPixel-Units 
+(and also Print-Units to display the values), 
+the pixel-values will not be correct in any case. 
+Especially when image conversion units (Green from RGB, 8bit, ...) 
+are applied to the workflow, some Print-Units will display 
+the values of other GetPixel-Units.
+
+The generated Macro-Code seems to be correct, 
+the reason for this behaviour is not known. 
+It could be, that the image conversion affects more than one image 
+or the GetPixel-Unit access the wrong image (wrong ID, temporary ID, ...).

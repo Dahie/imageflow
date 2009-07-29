@@ -129,7 +129,7 @@ public class MacroGenerator {
 			final String outputTitle = output.getOutputTitle();
 			final String outputID = output.getOutputID();
 			
-			if(output.getDataType() instanceof DataTypeFactory.Image) {
+			 if(output.getDataType() instanceof DataTypeFactory.Image) {
 				macroText +=  
 					"rename(\"" + outputTitle  + "\"); \n"
 					+ outputID + " = getImageID(); \n"
@@ -150,7 +150,7 @@ public class MacroGenerator {
 				if(input.isNeedToCopyInput()) {
 					final String inputID = input.getImageID();
 
-					macroText += "selectImage(" + getNeedCopyTitle(inputID) + "); \n";
+					macroText += "selectImage(\"" + getNeedCopyTitle(inputID) + "\"); \n";
 					macroText += "close(); \n";
 				}
 			}
