@@ -487,6 +487,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 
 		// show properties window
 		gd.showDialog();
+		gd.invalidate();
 
 		if( gd.wasCanceled())
 			return;

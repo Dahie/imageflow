@@ -60,6 +60,11 @@ import de.danielsenff.imageflow.models.unit.UnitList;
 public class GraphPanel extends GPanel {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Draw a small grid on the {@link GraphPanel}
 	 */
 	protected boolean drawGrid = false;
@@ -273,8 +278,6 @@ public class GraphPanel extends GPanel {
 		g2.setColor(Color.GRAY);
 		
 		// scale font on big lengths
-		final FontMetrics fm = g2.getFontMetrics();
-		final int stringWidth = fm.stringWidth(headline);
 		final int fontsize = 24;
 		final int fontsizeOriginal = 12;
 		final Font font = g2.getFont();

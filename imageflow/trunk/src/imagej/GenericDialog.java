@@ -14,6 +14,7 @@ import ij.util.Tools;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -134,14 +135,19 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		if (IJ.isLinux())
 			setBackground(new Color(238, 238, 238));*/
 		
+		
+		
+		Container contentPane = getRootPane();
+        contentPane.setBackground(Color.black);
+		
 		grid = new GridBagLayout();
 		c = new GridBagConstraints();
 		setLayout(grid);
 		macroOptions = Macro.getOptions();
 		macro = macroOptions!=null;
-//		addKeyListener(this);
-//		addWindowListener(this);
-//		setResizable(false);
+		addKeyListener(this);
+		addWindowListener(this);
+		setResizable(false);
 		pack();
     }
     
