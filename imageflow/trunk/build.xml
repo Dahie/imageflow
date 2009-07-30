@@ -8,7 +8,7 @@
 	<property name="units.dir" location="${basedir}/xml_units" />
 	<property name="icons.dir" location="${basedir}/xml_icons" />
 	<property name="doc.dir" location="${basedir}/doc" />
-	<property name="example.dir" location="${basedir}/examples" />
+	<property name="example.dir" location="${basedir}/xml_flows" />
 	
 	 <target name="copy" description="Delete old build and dist directories">
 	    <delete dir="${build.dir}"/>
@@ -32,8 +32,8 @@
 	 			<fileset dir="${doc.dir}" />
 	 	</copy>
 	 	
-	 	<mkdir dir="${build.dir}/Imageflow/examples" />
-	 	<copy todir="${build.dir}/Imageflow/examples">
+	 	<mkdir dir="${build.dir}/Imageflow/xml_flows" />
+	 	<copy todir="${build.dir}/Imageflow/xml_flows">
 	 			<fileset dir="${example.dir}" />
 	 	</copy>
 	 	
