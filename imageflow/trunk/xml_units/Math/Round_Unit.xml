@@ -5,7 +5,7 @@
 <General>
   <UnitName>Round</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>if ("PARA_STRING_1" == "round") OUTPUT_INTEGER_1 = round(INPUT_DOUBLE_1); else if ("PARA_STRING_1" == "ceil") OUTPUT_INTEGER_1 = floor(INPUT_DOUBLE_1+1); else if ("PARA_STRING_1" == "floor") OUTPUT_INTEGER_1 = floor(INPUT_DOUBLE_1);</ImageJSyntax> 
+  <ImageJSyntax>if ("PARA_STRING_1" == "round") OUTPUT_INTEGER_1 = round(INPUT_NUMBER_1); else if ("PARA_STRING_1" == "ceil") OUTPUT_INTEGER_1 = floor(INPUT_NUMBER_1+1); else if ("PARA_STRING_1" == "floor") OUTPUT_INTEGER_1 = floor(INPUT_NUMBER_1);</ImageJSyntax> 
   <Color>0x9cba92</Color>
   <HelpString>Rounds a Double to an Integer</HelpString>
 </General>
@@ -18,9 +18,10 @@
 		<HelpString>Exact Rounding Mode (ceil, floor, floor)</HelpString>
 		<ChoiceNumber>1</ChoiceNumber></Parameter></Parameters><Inputs>
 <Input>
-		<Name>Input</Name>
-		<ShortName>I</ShortName>	
-		<DataType>Double</DataType>
+		<Name>Number</Name>
+		<ShortName>N</ShortName>	
+		<DataType>Number</DataType>
+		<Required>true</Required>
 		<NeedToCopyInput>false</NeedToCopyInput>
 </Input>
 </Inputs>
