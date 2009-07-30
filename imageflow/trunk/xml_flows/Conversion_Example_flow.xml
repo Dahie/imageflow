@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlowDescription>
+  <Units>
+    <Unit>
+      <XPos>30</XPos>
+      <YPos>100</YPos>
+      <Label>hough-sight.png</Label>
+      <UnitID>46</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Image Source</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>open("PARA_STRING_1");</ImageJSyntax>
+          <Color>0x9cba92</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Opens a new image</HelpString>
+        </General>
+        <Parameters>
+          <Parameter>
+            <Name>Image</Name>
+            <DataType>String</DataType>
+            <HelpString>The source unit needs the path of an image file.</HelpString>
+            <Value>/home/senff/Bilder/hough-sight.png</Value>
+          </Parameter>
+        </Parameters>
+        <Inputs />
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Image</DataType>
+            <ImageType>16</ImageType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>150</XPos>
+      <YPos>100</YPos>
+      <Label>to 8 Bit</Label>
+      <UnitID>47</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>to 8 Bit</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>run("8-bit");</ImageJSyntax>
+          <Color>0x6e91de</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Converts the image to an 8 bit image</HelpString>
+        </General>
+        <Parameters />
+        <Inputs>
+          <Input>
+            <Name>Input</Name>
+            <ShortName>I</ShortName>
+            <Required>true</Required>
+            <DataType>Image</DataType>
+            <ImageType>31</ImageType>
+            <NeedToCopyInput>true</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Image</DataType>
+            <ImageType>1</ImageType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>260</XPos>
+      <YPos>100</YPos>
+      <Label>to 32 Bit</Label>
+      <UnitID>48</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>to 32 Bit</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>run("32-bit");</ImageJSyntax>
+          <Color>0x6e91de</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Converts the image to an 32 bit floating point image</HelpString>
+        </General>
+        <Parameters />
+        <Inputs>
+          <Input>
+            <Name>Input</Name>
+            <ShortName>I</ShortName>
+            <Required>true</Required>
+            <DataType>Image</DataType>
+            <ImageType>31</ImageType>
+            <NeedToCopyInput>true</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Image</DataType>
+            <ImageType>8</ImageType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>400</XPos>
+      <YPos>50</YPos>
+      <Label>Convolve</Label>
+      <UnitID>49</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Convolve</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>run("Convolve...", "text1=[PARA_STRING_1] PARA_BOOLEAN_1");</ImageJSyntax>
+          <Color>0x6e91de</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Performs a convolution with the given kernel</HelpString>
+        </General>
+        <Parameters>
+          <Parameter>
+            <Name>Kernel</Name>
+            <DataType>String</DataType>
+            <HelpString>Kernel to be used for the convolution</HelpString>
+            <Value>-1 -1 -1   -1  8 -1    -1 -1 -1</Value>
+          </Parameter>
+          <Parameter>
+            <Name>normalize Kernel</Name>
+            <DataType>boolean</DataType>
+            <HelpString>Should the kernel be normalized?</HelpString>
+            <Value>true</Value>
+            <TrueString>normalize</TrueString>
+          </Parameter>
+        </Parameters>
+        <Inputs>
+          <Input>
+            <Name>Input</Name>
+            <ShortName>I</ShortName>
+            <Required>true</Required>
+            <DataType>Image</DataType>
+            <ImageType>31</ImageType>
+            <NeedToCopyInput>true</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Image</DataType>
+            <ImageType>8</ImageType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>510</XPos>
+      <YPos>50</YPos>
+      <Label>Math</Label>
+      <UnitID>51</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Math</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>run("PARA_STRING_1", "PARA_BOOLEAN_1 value=PARA_DOUBLE_1");</ImageJSyntax>
+          <Color>0x6e91de</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Performs a mathematical operation on the pixels of an image</HelpString>
+        </General>
+        <Parameters>
+          <Parameter>
+            <Name>Math</Name>
+            <DataType>StringArray</DataType>
+            <HelpString>Defines what math operation will be performed</HelpString>
+            <ChoiceNumber>0</ChoiceNumber>
+            <Value>Add...;Subtract...;Multiply...;Divide...;AND...;OR...;XOR...;Min...;Max...;Gamma...;Log;Exp;Square;Square_Root;Reciprocal;NAN_Background;Abs;</Value>
+          </Parameter>
+          <Parameter>
+            <Name>Process stack?</Name>
+            <DataType>boolean</DataType>
+            <HelpString>Process stack?</HelpString>
+            <Value>false</Value>
+            <TrueString>stack</TrueString>
+          </Parameter>
+          <Parameter>
+            <Name>Value</Name>
+            <DataType>double</DataType>
+            <HelpString>Operand value</HelpString>
+            <Value>25.0</Value>
+          </Parameter>
+        </Parameters>
+        <Inputs>
+          <Input>
+            <Name>Input1</Name>
+            <ShortName>I1</ShortName>
+            <Required>true</Required>
+            <DataType>Image</DataType>
+            <ImageType>31</ImageType>
+            <NeedToCopyInput>true</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Image</DataType>
+            <ImageType>8</ImageType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>400</XPos>
+      <YPos>160</YPos>
+      <Label>Convolve</Label>
+      <UnitID>50</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Convolve</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>run("Convolve...", "text1=[PARA_STRING_1] PARA_BOOLEAN_1");</ImageJSyntax>
+          <Color>0x6e91de</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Performs a convolution with the given kernel</HelpString>
+        </General>
+        <Parameters>
+          <Parameter>
+            <Name>Kernel</Name>
+            <DataType>String</DataType>
+            <HelpString>Kernel to be used for the convolution</HelpString>
+            <Value>-1 -1 -1   -1  8 -1    -1 -1 -1</Value>
+          </Parameter>
+          <Parameter>
+            <Name>normalize Kernel</Name>
+            <DataType>boolean</DataType>
+            <HelpString>Should the kernel be normalized?</HelpString>
+            <Value>true</Value>
+            <TrueString>normalize</TrueString>
+          </Parameter>
+        </Parameters>
+        <Inputs>
+          <Input>
+            <Name>Input</Name>
+            <ShortName>I</ShortName>
+            <Required>true</Required>
+            <DataType>Image</DataType>
+            <ImageType>31</ImageType>
+            <NeedToCopyInput>true</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Image</DataType>
+            <ImageType>8</ImageType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>510</XPos>
+      <YPos>160</YPos>
+      <Label>Math</Label>
+      <UnitID>52</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Math</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>run("PARA_STRING_1", "PARA_BOOLEAN_1 value=PARA_DOUBLE_1");</ImageJSyntax>
+          <Color>0x6e91de</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Performs a mathematical operation on the pixels of an image</HelpString>
+        </General>
+        <Parameters>
+          <Parameter>
+            <Name>Math</Name>
+            <DataType>StringArray</DataType>
+            <HelpString>Defines what math operation will be performed</HelpString>
+            <ChoiceNumber>0</ChoiceNumber>
+            <Value>Add...;Subtract...;Multiply...;Divide...;AND...;OR...;XOR...;Min...;Max...;Gamma...;Log;Exp;Square;Square_Root;Reciprocal;NAN_Background;Abs;</Value>
+          </Parameter>
+          <Parameter>
+            <Name>Process stack?</Name>
+            <DataType>boolean</DataType>
+            <HelpString>Process stack?</HelpString>
+            <Value>false</Value>
+            <TrueString>stack</TrueString>
+          </Parameter>
+          <Parameter>
+            <Name>Value</Name>
+            <DataType>double</DataType>
+            <HelpString>Operand value</HelpString>
+            <Value>25.0</Value>
+          </Parameter>
+        </Parameters>
+        <Inputs>
+          <Input>
+            <Name>Input1</Name>
+            <ShortName>I1</ShortName>
+            <Required>true</Required>
+            <DataType>Image</DataType>
+            <ImageType>31</ImageType>
+            <NeedToCopyInput>true</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Image</DataType>
+            <ImageType>8</ImageType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>650</XPos>
+      <YPos>100</YPos>
+      <Label>Add</Label>
+      <UnitID>53</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Add</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>run("Image Calculator...", "image1=TITLE_1 operation=Add image2=TITLE_2 create 32-bit");</ImageJSyntax>
+          <Color>0x6e91de</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Adds two images</HelpString>
+        </General>
+        <Parameters />
+        <Inputs>
+          <Input>
+            <Name>Input1</Name>
+            <ShortName>I1</ShortName>
+            <Required>true</Required>
+            <DataType>Image</DataType>
+            <ImageType>31</ImageType>
+            <NeedToCopyInput>false</NeedToCopyInput>
+          </Input>
+          <Input>
+            <Name>Input2</Name>
+            <ShortName>I2</ShortName>
+            <Required>true</Required>
+            <DataType>Image</DataType>
+            <ImageType>31</ImageType>
+            <NeedToCopyInput>false</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Image</DataType>
+            <ImageType>8</ImageType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>770</XPos>
+      <YPos>100</YPos>
+      <Label>Fire</Label>
+      <UnitID>54</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Fire</UnitName>
+          <PathToIcon>LookupTable_Unit.png</PathToIcon>
+          <ImageJSyntax>run("Fire");</ImageJSyntax>
+          <Color>0xbe91de</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Applies the fire LUT</HelpString>
+        </General>
+        <Parameters />
+        <Inputs>
+          <Input>
+            <Name>Input</Name>
+            <ShortName>I</ShortName>
+            <Required>true</Required>
+            <DataType>Image</DataType>
+            <ImageType>13</ImageType>
+            <NeedToCopyInput>true</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Image</DataType>
+            <ImageType>8</ImageType>
+            <DoDisplay>true</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+  </Units>
+  <Connections>
+    <Connection>
+      <FromUnitID>46</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>47</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>47</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>48</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>48</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>49</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>48</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>50</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>49</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>51</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>50</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>52</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>51</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>53</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>52</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>53</ToUnitID>
+      <ToInputNumber>2</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>53</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>54</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+  </Connections>
+</FlowDescription>
+

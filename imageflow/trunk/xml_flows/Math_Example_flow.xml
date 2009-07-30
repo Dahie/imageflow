@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlowDescription>
+  <Units>
+    <Unit>
+      <XPos>462</XPos>
+      <YPos>57</YPos>
+      <Label>Print</Label>
+      <UnitID>21</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Print</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>print(INPUT_NUMBER_1);</ImageJSyntax>
+          <Color>0x9cba92</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Prints an Integer value</HelpString>
+        </General>
+        <Parameters />
+        <Inputs>
+          <Input>
+            <Name>Input</Name>
+            <ShortName>A</ShortName>
+            <Required>true</Required>
+            <DataType>Number</DataType>
+            <NeedToCopyInput>false</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs />
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>56</XPos>
+      <YPos>186</YPos>
+      <Label>5</Label>
+      <UnitID>22</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Integer</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>OUTPUT_INTEGER_1 = PARA_INTEGER_1;</ImageJSyntax>
+          <Color>0x9cba92</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Provides a new Integer</HelpString>
+        </General>
+        <Parameters>
+          <Parameter>
+            <Name>Value</Name>
+            <DataType>integer</DataType>
+            <HelpString>An Integer</HelpString>
+            <Value>5</Value>
+          </Parameter>
+        </Parameters>
+        <Inputs />
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Integer</DataType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>169</XPos>
+      <YPos>59</YPos>
+      <Label>Get Dimension</Label>
+      <UnitID>23</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Get Dimension</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>OUTPUT_INTEGER_1 = getWidth();OUTPUT_INTEGER_2 = getHeight();</ImageJSyntax>
+          <Color>0x9cba92</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Get the Dimension of an input image.</HelpString>
+        </General>
+        <Parameters />
+        <Inputs>
+          <Input>
+            <Name>Image</Name>
+            <ShortName>I</ShortName>
+            <Required>true</Required>
+            <DataType>Image</DataType>
+            <ImageType>31</ImageType>
+            <NeedToCopyInput>false</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output>
+            <Name>Width</Name>
+            <ShortName>W</ShortName>
+            <DataType>Integer</DataType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+          <Output>
+            <Name>Height</Name>
+            <ShortName>H</ShortName>
+            <DataType>Integer</DataType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>46</XPos>
+      <YPos>45</YPos>
+      <Label>U-Bahn Lulu.jpg</Label>
+      <UnitID>24</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Image Source</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>open("PARA_STRING_1");</ImageJSyntax>
+          <Color>0x9cba92</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Opens a new image</HelpString>
+        </General>
+        <Parameters>
+          <Parameter>
+            <Name>Image</Name>
+            <DataType>String</DataType>
+            <HelpString>The source unit needs the path of an image file.</HelpString>
+            <Value>/home/senff/U-Bahn Lulu.jpg</Value>
+          </Parameter>
+        </Parameters>
+        <Inputs />
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Image</DataType>
+            <ImageType>16</ImageType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>319</XPos>
+      <YPos>61</YPos>
+      <Label>Simple Equation</Label>
+      <UnitID>25</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Simple Equation</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>OUTPUT_INTEGER_1 = INPUT_INTEGER_1 PARA_STRING_1 INPUT_INTEGER_2;</ImageJSyntax>
+          <Color>0x9cba92</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Equation</HelpString>
+        </General>
+        <Parameters>
+          <Parameter>
+            <Name>Value</Name>
+            <DataType>StringArray</DataType>
+            <HelpString>Operation performed.</HelpString>
+            <ChoiceNumber>0</ChoiceNumber>
+            <Value>+;-;*;/;%;</Value>
+          </Parameter>
+        </Parameters>
+        <Inputs>
+          <Input>
+            <Name>Input</Name>
+            <ShortName>A</ShortName>
+            <Required>true</Required>
+            <DataType>Integer</DataType>
+            <NeedToCopyInput>false</NeedToCopyInput>
+          </Input>
+          <Input>
+            <Name>Input</Name>
+            <ShortName>B</ShortName>
+            <Required>true</Required>
+            <DataType>Integer</DataType>
+            <NeedToCopyInput>false</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>C</ShortName>
+            <DataType>Integer</DataType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>176</XPos>
+      <YPos>29</YPos>
+      <Label>Number of pixels in this image</Label>
+    </Unit>
+    <Unit>
+      <XPos>50</XPos>
+      <YPos>301</YPos>
+      <Label>2.5</Label>
+      <UnitID>28</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Double</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>OUTPUT_DOUBLE_1 = PARA_DOUBLE_1;</ImageJSyntax>
+          <Color>0x9cba92</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Provides a new Double</HelpString>
+        </General>
+        <Parameters>
+          <Parameter>
+            <Name>Value</Name>
+            <DataType>double</DataType>
+            <HelpString>A Double</HelpString>
+            <Value>2.5</Value>
+          </Parameter>
+        </Parameters>
+        <Inputs />
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>O</ShortName>
+            <DataType>Double</DataType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>463</XPos>
+      <YPos>260</YPos>
+      <Label>Print</Label>
+      <UnitID>29</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Print</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>print(INPUT_NUMBER_1);</ImageJSyntax>
+          <Color>0x9cba92</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Prints an Integer value</HelpString>
+        </General>
+        <Parameters />
+        <Inputs>
+          <Input>
+            <Name>Input</Name>
+            <ShortName>A</ShortName>
+            <Required>true</Required>
+            <DataType>Number</DataType>
+            <NeedToCopyInput>false</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs />
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>234</XPos>
+      <YPos>260</YPos>
+      <Label>Simple Equation</Label>
+      <UnitID>30</UnitID>
+      <UnitDescription>
+        <General>
+          <UnitName>Simple Equation</UnitName>
+          <PathToIcon />
+          <ImageJSyntax>OUTPUT_NUMBER_1 = INPUT_NUMBER_1 PARA_STRING_1 INPUT_NUMBER_2;</ImageJSyntax>
+          <Color>0x9cba92</Color>
+          <IconSize>BIG</IconSize>
+          <HelpString>Equation</HelpString>
+        </General>
+        <Parameters>
+          <Parameter>
+            <Name>Value</Name>
+            <DataType>StringArray</DataType>
+            <HelpString>Operation performed.</HelpString>
+            <ChoiceNumber>0</ChoiceNumber>
+            <Value>+;-;*;/;%;</Value>
+          </Parameter>
+        </Parameters>
+        <Inputs>
+          <Input>
+            <Name>Input</Name>
+            <ShortName>A</ShortName>
+            <Required>true</Required>
+            <DataType>Number</DataType>
+            <NeedToCopyInput>false</NeedToCopyInput>
+          </Input>
+          <Input>
+            <Name>Input</Name>
+            <ShortName>B</ShortName>
+            <Required>true</Required>
+            <DataType>Number</DataType>
+            <NeedToCopyInput>false</NeedToCopyInput>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output>
+            <Name>Output</Name>
+            <ShortName>C</ShortName>
+            <DataType>Number</DataType>
+            <DoDisplay>false</DoDisplay>
+          </Output>
+        </Outputs>
+      </UnitDescription>
+    </Unit>
+    <Unit>
+      <XPos>294</XPos>
+      <YPos>228</YPos>
+      <Label>Simple equation</Label>
+    </Unit>
+  </Units>
+  <Connections>
+    <Connection>
+      <FromUnitID>24</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>23</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>23</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>25</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>23</FromUnitID>
+      <FromOutputNumber>2</FromOutputNumber>
+      <ToUnitID>25</ToUnitID>
+      <ToInputNumber>2</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>25</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>21</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>22</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>30</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>28</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>30</ToUnitID>
+      <ToInputNumber>2</ToInputNumber>
+    </Connection>
+    <Connection>
+      <FromUnitID>30</FromUnitID>
+      <FromOutputNumber>1</FromOutputNumber>
+      <ToUnitID>29</ToUnitID>
+      <ToInputNumber>1</ToInputNumber>
+    </Connection>
+  </Connections>
+</FlowDescription>
+
