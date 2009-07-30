@@ -30,7 +30,7 @@
 <Input>
 		<Name>Input</Name>
 		<ShortName>B</ShortName>	
-		<DataType>Integer</DataType>
+		<DataType>Number</DataType>
 		<NeedToCopyInput>false</NeedToCopyInput>
 </Input>
 </Inputs>
@@ -39,7 +39,7 @@
 <Output>
 		<Name>Output</Name>
 		<ShortName>C</ShortName>	
-		<DataType>Integer</DataType>
+		<DataType>Number</DataType>
 		<DoDisplay>false</DoDisplay>
 	</Output>
 </Outputs>
