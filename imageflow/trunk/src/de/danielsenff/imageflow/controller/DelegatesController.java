@@ -26,7 +26,15 @@ import de.danielsenff.imageflow.utils.Tools;
  */
 public class DelegatesController {
 
+	/**
+	 * folder, which contains the unit xml descriptions
+	 * TODO not hardcoded ...
+	 */
 	public static String unitFolder = "xml_units";
+	/**
+	 * folder containing the icons which might be referenced in the xml descriptions
+	 * TODO not hardcoded ...
+	 */
 	public static String unitIconFolder = "xml_icons";
 	
 	private static DelegatesController controller;

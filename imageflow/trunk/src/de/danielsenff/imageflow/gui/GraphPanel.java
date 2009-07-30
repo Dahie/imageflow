@@ -83,6 +83,10 @@ public class GraphPanel extends GPanel {
 	protected boolean align = false;
 
 	private BufferedImage iwIcon;
+	
+	
+	
+	
 
 	private final String iconFile = "/de/danielsenff/imageflow/resources/iw-logo.png";
 

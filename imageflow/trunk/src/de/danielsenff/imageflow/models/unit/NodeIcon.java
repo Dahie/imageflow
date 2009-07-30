@@ -155,7 +155,7 @@ public class NodeIcon implements UnitModelComponent {
 		int width = largeComponentDimension.width-2*padding;
 		int height = largeComponentDimension.height-2*padding;
 		
-		drawElement(g2, width, height, unit.isDisplay(), true, true);
+		drawElement(g2, width, height, unit.isDisplay(), true, false);
 		return g2;
 	}
 

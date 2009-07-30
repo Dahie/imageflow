@@ -14,6 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -21,6 +23,8 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
 import visualap.Node;
+import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
@@ -108,6 +112,11 @@ public class WorkflowXMLBuilder {
 		catch (Exception e) {
 			System.err.println("Invalid XML-File!");
 			e.printStackTrace();
+			
+			JOptionPane.showMessageDialog(((ImageFlow)ImageFlow.getInstance()).getMainFrame(), 
+					"The selected workflow could not be loaded.",
+					"Workflow not loaded", 
+					JOptionPane.INFORMATION_MESSAGE);
 		}	
 	}
 

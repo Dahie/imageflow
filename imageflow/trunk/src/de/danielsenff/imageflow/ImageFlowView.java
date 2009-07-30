@@ -259,6 +259,7 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(new JSeparator());
 		debugMenu.add(getAction("exampleFlow1"));
 		debugMenu.add(getAction("exampleFlow2"));
+		debugMenu.add(getAction("exampleFlow3"));
 		
 		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates.values());
 		
@@ -609,24 +610,27 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * convenient Example workflow
 	 */
-	@Action public void exampleFlow1() {
-		graphController.setupExample1();
+	@Action public Task exampleFlow1() {
+		File flow = new File("xml_flows/ImageCalculator_Example_flow.xml");
+		return new LoadFlowGraphTask(flow); 
 	}
 	
 	/**
 	 * convenient Example workflow
 	 */
-	@Action public void exampleFlow2() {
-		graphController.setupExample2();
+	@Action public Task exampleFlow2() {
+		File flow = new File("xml_flows/Conversion_Example_flow.xml");
+		return new LoadFlowGraphTask(flow);
 	}
 	
 	/**
 	 * convenient Example workflow
 	 */
-	@Action public void exampleFlowXML() {
-		graphController.setupExample0_XML();
+	@Action public Task exampleFlow3() {
+		File flow = new File("xml_flows/Math_Example_flow.xml");
+		return new LoadFlowGraphTask(flow);
 	}
-	
+
 	/**
 	 * Converts the current workflow into a macro and executes it in ImageJ.
 	 * @return
