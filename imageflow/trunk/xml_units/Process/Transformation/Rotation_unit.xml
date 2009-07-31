@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Image Calculator by Daniel Senff -->
             
 <UnitDescription>
 
 <General>
   <UnitName>Rotation</UnitName> 
-  <PathToIcon>Rotation_Unit.png</PathToIcon> 
-  
-  <ImageJSyntax>run("Arbitrarily...", "angle=PARA_DOUBLE_1 grid=PARA_INTEGER_1 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3");</ImageJSyntax>
+  <PathToIcon>Rotation_Unit.png</PathToIcon>   
+  <ImageJSyntax>run("Arbitrarily...", "angle=" + ATTRIBUTE_INPUT_2_PARAMETER_1 + " grid=1 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3");</ImageJSyntax>
   <Color>0x6e91de</Color>
   <IconSize>BIG</IconSize>
   <HelpString>Rotates the image around a specified angle.</HelpString>  
@@ -20,13 +18,14 @@
   		<Value>15.00</Value>
   		<HelpString>Specified angle for the rotation.</HelpString>
   	</Parameter>
+  	<!-- 
   	<Parameter>
   		<Name>Grid Lines</Name>
   		<DataType>integer</DataType>
   		<Value>1</Value>
   		<HelpString>Gridlines for the rotation.</HelpString>
   	</Parameter>
-  	 
+  	--> 
   	<Parameter>
   		<Name>Interpolate</Name>
   		<DataType>boolean</DataType>
@@ -60,6 +59,12 @@
 		<ImageType>31</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
+	<Input>
+		<Name>Angle</Name>
+		<ShortName>A</ShortName>
+		<Required>false</Required>
+		<DataType>Number</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput></Input>
 </Inputs>
 
 <Outputs> 

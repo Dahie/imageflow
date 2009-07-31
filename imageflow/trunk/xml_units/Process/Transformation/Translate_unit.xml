@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Image Calculator by Daniel Senff -->
             
 <UnitDescription>
 
@@ -7,7 +6,7 @@
   <UnitName>Translate</UnitName> 
   <PathToIcon>Translate_Unit.png</PathToIcon> 
   
-  <ImageJSyntax>run("Translate...", "x=PARA_INTEGER_1 y=PARA_INTEGER_2");</ImageJSyntax>
+  <ImageJSyntax>run("Translate...", "x=" + ATTRIBUTE_INPUT_2_PARAMETER_1 + " y=" + ATTRIBUTE_INPUT_3_PARAMETER_2 + "");</ImageJSyntax>
   <Color>0x6e91de</Color>
   <IconSize>BIG</IconSize>
   <HelpString>Resizes the image to the specified dimensions.</HelpString>  
@@ -36,6 +35,18 @@
 		<ImageType>31</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
+	<Input>
+		<Name>X-Offset</Name>
+		<ShortName>X</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput></Input>
+	<Input>
+		<Name>Y-Offset</Name>
+		<ShortName>Y</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput></Input>
 </Inputs>
 
 <Outputs> 

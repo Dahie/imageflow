@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Image Calculator by Daniel Senff -->
             
 <UnitDescription>
 
@@ -7,7 +6,7 @@
   <UnitName>Resize</UnitName> 
   <PathToIcon>Resize_Unit.png</PathToIcon> 
   
-  <ImageJSyntax>run("Size...", "width=PARA_INTEGER_1 height=PARA_INTEGER_2 PARA_BOOLEAN_1 PARA_BOOLEAN_2");</ImageJSyntax>
+  <ImageJSyntax>run("Size...", "width=" + ATTRIBUTE_INPUT_2_PARAMETER_1 + " height=" + ATTRIBUTE_INPUT_3_PARAMETER_2 + " PARA_BOOLEAN_1 PARA_BOOLEAN_2");</ImageJSyntax>
   <Color>0x6e91de</Color>
   <IconSize>BIG</IconSize>
   <HelpString>Resizes the image to the specified dimensions.</HelpString>  
@@ -16,13 +15,13 @@
 <Parameters>
   	<Parameter>
   		<Name>Width in pixels</Name>
-  		<DataType>integer</DataType>
+  		<DataType>Integer</DataType>
   		<Value>500</Value>
   		<HelpString>Specified width in pixels.</HelpString>
   	</Parameter>
   	<Parameter>
   		<Name>Height in pixels</Name>
-  		<DataType>integer</DataType>
+  		<DataType>Integer</DataType>
   		<Value>500</Value>
   		<HelpString>Specified height in pixels.</HelpString>
   	</Parameter>
@@ -53,6 +52,18 @@
 		<ImageType>31</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
+	<Input>
+		<Name>Width</Name>
+		<ShortName>W</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput></Input>
+	<Input>
+		<Name>Height</Name>
+		<ShortName>H</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput></Input>
 </Inputs>
 
 <Outputs> 
