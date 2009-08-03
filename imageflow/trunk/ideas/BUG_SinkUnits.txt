@@ -1,0 +1,11 @@
+2009-08-03 Friedrich Maiwald
+
+Since Units of Type SINK do not have any outputs, 
+the MacroGenerator cannot handle them correctly. 
+Due to the missing output there can be problems in displaying the Units, 
+which can be solved by setting the NeedToCopyInput in the xml-file to true.
+Also the renaming in human readable names cannot be done by the MacroGenerator 
+due to the missing outputs.
+
+This part of the MacroGenerator (the method: addProcessingUnit(UnitElement unit) )
+should be rewritten to solve the problem.
