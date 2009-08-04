@@ -109,11 +109,6 @@ public class UnitFactory {
 			sourceUnit.updateImageType();
 		}
 		
-		// in case we want to create a unit without an running application
-		// eg for testing
-		if(ImageFlow.getApplication() != null) 
-			registerModelListener(unitElement);
-		
 		return unitElement;
 	}
 
@@ -219,11 +214,6 @@ public class UnitFactory {
 	 */
 	public static CommentNode createComment(final String string, final Point point) {
 		CommentNode commentNode = new CommentNode(point, string);
-		if(ImageFlow.getApplication() != null) {
-			System.out.println(ImageFlow.getApplication());
-			System.err.println("peng");
-			registerModelListener(commentNode);
-		}
 		return commentNode;
 	}
 	

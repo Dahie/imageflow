@@ -34,33 +34,7 @@ public class ConnectionList extends Vector<Connection> implements Model, Cloneab
 	public ConnectionList() {
 		this.listeners = new ArrayList<ModelListener>();
 	}
-	
-	/**
-	 * Creates a new Connection between two pins and adds it to the list. 
-	 * @param from
-	 * @param to
-	 * @return
-	 */
-	public boolean add(final Pin from, final Pin to) {
-		
-		// check if both pins are on the same node
-		if(from.getParent().equals(to.getParent())) return false;
 
-		// check if connection is between input and output, not 2 outputs or two inputs
-		if((from instanceof Output && to instanceof Input) ) {
-			final Connection connection = new Connection(
-					((UnitElement)from.getParent()), from.getIndex(), 
-					((UnitElement)to.getParent()), to.getIndex());
-			return this.add(connection);
-		} else if (  (from instanceof Input && to instanceof Output) ) {
-			final Connection connection = new Connection(
-					((UnitElement)to.getParent()), to.getIndex(), 
-					((UnitElement)from.getParent()), from.getIndex());
-			return this.add(connection);
-		}
-		
-		return false;
-	}
 	
 
 	/**
@@ -82,6 +56,11 @@ public class ConnectionList extends Vector<Connection> implements Model, Cloneab
 	}
 	
 	
+	/*
+	 * add
+	 */
+	
+	
 	/**
 	 * Creates a new Connection and adds it to the ConnectionList
 	 * @param from
@@ -95,6 +74,28 @@ public class ConnectionList extends Vector<Connection> implements Model, Cloneab
 			final UnitElement to, 
 			final int toInput) {
 		return this.add(new Connection(from, fromOutput, to, toInput));
+	}
+	
+	
+	/**
+	 * Creates a new Connection between two pins and adds it to the list. 
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public boolean add(final Pin from, final Pin to) {
+		
+		// check if both pins are on the same node
+		if(from.getParent().equals(to.getParent())) return false;
+
+		// check if connection is between input and output, not 2 outputs or two inputs
+		if((from instanceof Input && to instanceof Input)
+			 || (from instanceof Output && to instanceof Output)) {
+			return false;
+		}
+		
+		return this.add(new Connection(from, to));
+		
 	}
 	
 	
@@ -160,14 +161,18 @@ public class ConnectionList extends Vector<Connection> implements Model, Cloneab
 	
 	
 
-	/*@Override
+	/*
+	 * Remove
+	 */
+	
+	@Override
 	public Connection remove(final int index) {
 		final Connection connection = (Connection) super.remove(index);
 		((Input)connection.to).disconnectAll();
 		((Output)connection.from).disconnectAll();
 		notifyModelListeners();
 		return connection;
-	}*/
+	}
 	
 	@Override
 	public boolean remove(final Object o) {
@@ -179,6 +184,16 @@ public class ConnectionList extends Vector<Connection> implements Model, Cloneab
 	}
 	
 
+
+	/*
+	 * ModelListener
+	 */
+	
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.danielsenff.imageflow.models.Model#addModelListener(de.danielsenff.imageflow.models.ModelListener)
+	 */
 	public void addModelListener(final ModelListener listener) {
 		if (! this.listeners.contains(listener)) {
 			this.listeners.add(listener);

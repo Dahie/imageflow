@@ -59,6 +59,7 @@ import de.danielsenff.imageflow.gui.InsertUnitMenu;
 import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
+import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.Selectable;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.SelectionListener;
@@ -390,7 +391,9 @@ public class ImageFlowView extends FrameView {
 						//			        	 myDoubleClick(selRow, selPath);
 						final UnitDelegate ud = ((UnitDelegate)selPath.getLastPathComponent());
 						Point insertPoint = UnitDelegate.POINT;
-						getNodes().add(ud.createUnit(insertPoint));
+						UnitElement node = ud.createUnit(insertPoint);
+						((UnitElement)node).addModelListener(new NodeListener(graphPanel, getInstance()));
+						getNodes().add(node);
 					}
 				}
 			}
@@ -422,8 +425,10 @@ public class ImageFlowView extends FrameView {
 						for (int i = 0; i < selRows.length; i++) {
 							if(selRows[i] != -1 && selPaths[i].getLastPathComponent() instanceof UnitDelegate) {
 								final UnitDelegate ud = ((UnitDelegate)selPaths[i].getLastPathComponent());
-								getNodes().add(ud.createUnit(new Point(insertPoint.x + realUnitCount * GraphPanel.GRIDSIZE,
-										insertPoint.y + realUnitCount * GraphPanel.GRIDSIZE)));
+								UnitElement node = ud.createUnit(new Point(insertPoint.x + realUnitCount * GraphPanel.GRIDSIZE,
+										insertPoint.y + realUnitCount * GraphPanel.GRIDSIZE));
+								((UnitElement)node).addModelListener(new NodeListener(graphPanel, getInstance()));
+								getNodes().add(node);
 								realUnitCount++;
 							}
 						}
@@ -474,6 +479,9 @@ public class ImageFlowView extends FrameView {
 		return graphController.getSelections();
 	}
 
+	private ImageFlowView getInstance() {
+		return this;
+	}
 	
 	/**
 	 * Convenience method for getting the UnitList of the current GraphController
