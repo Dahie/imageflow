@@ -12,8 +12,11 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 
 import visualap.GPanel;
+import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.Delegate;
+import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -58,12 +61,14 @@ public class InsertUnitMenu extends JMenu {
 			public void actionPerformed(final ActionEvent e) {
 				final JMenuItem source = (JMenuItem)(e.getSource());
 				final String action = source.getText();
+				final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
 				if (action.equals("Comment")) {	
-					final CommentNode n = new CommentNode(savedPoint, "text"); 
+					final CommentNode node = new CommentNode(savedPoint, "text"); 
+					node.addModelListener(new NodeListener(activePanel, ifView));
 					savedPoint.translate(4, 4);
-					activePanel.getNodeL().add(n);
+					activePanel.getNodeL().add(node);
 					activePanel.getSelection().clear();
-					activePanel.getSelection().add(n);
+					activePanel.getSelection().add(node);
 					activePanel.repaint();
 					return;
 				}
@@ -72,10 +77,11 @@ public class InsertUnitMenu extends JMenu {
 				UnitDelegate unitDelegate = DelegatesController.getInstance().getDelegate(action);
 				if(unitDelegate != null) {
 					try {
-						final UnitElement n = unitDelegate.createUnit(savedPoint);
-						activePanel.getNodeL().add(n);
+						final UnitElement node = unitDelegate.createUnit(savedPoint);
+						node.addModelListener(new NodeListener(activePanel, ifView));
+						activePanel.getNodeL().add(node);
 						activePanel.getSelection().clear();
-						activePanel.getSelection().add(n);
+						activePanel.getSelection().add(node);
 						activePanel.repaint();
 					} catch (final Exception ex) {
 					}

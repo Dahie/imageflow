@@ -16,6 +16,7 @@ import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
+import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
@@ -218,34 +219,27 @@ public class UnitFactory {
 	 */
 	public static CommentNode createComment(final String string, final Point point) {
 		CommentNode commentNode = new CommentNode(point, string);
-		registerModelListener(commentNode);
+		if(ImageFlow.getApplication() != null) {
+			System.out.println(ImageFlow.getApplication());
+			System.err.println("peng");
+			registerModelListener(commentNode);
+		}
 		return commentNode;
 	}
 	
 	
-
+	/**
+	 * Node is registered to the GraphPanel
+	 * @param node
+	 */
 	public static void registerModelListener(Node node) {
 		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
 		final GraphPanel graphPanel = ifView.getGraphPanel();
 		if(node instanceof CommentNode) {
-			((CommentNode)node).addModelListener(
-					new ModelListener () {
-						public void modelChanged (final Model hitModel)	{
-							graphPanel.invalidate();
-							graphPanel.repaint();
-							ifView.setModified(true);
-						}
-					});	
+			((CommentNode)node).addModelListener(new NodeListener(graphPanel, ifView));
 		} else if (node instanceof UnitElement) 
 		{
-			((UnitElement)node).addModelListener(
-					new ModelListener () {
-						public void modelChanged (final Model hitModel)	{
-							graphPanel.invalidate();
-							graphPanel.repaint();
-							ifView.setModified(true);
-						}
-					});	
+			((UnitElement)node).addModelListener(new NodeListener(graphPanel, ifView));	
 		}
 	}
 }

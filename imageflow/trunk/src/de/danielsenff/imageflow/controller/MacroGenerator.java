@@ -51,20 +51,7 @@ public class MacroGenerator {
 		// loop over all units
 		// they have to be presorted so they are in the right order
 		for (Node node : this.unitList) {
-		
-			System.out.println(node);
-			
-			macroText += " \n";
-			macroText += "// " + node.getLabel() + "\n";
-			macroText += " \n";
-			
-			if(node instanceof UnitElement) {
-				final UnitElement unit = (UnitElement) node;
-				addProcessingUnit(unit);	
-			} else if (node instanceof GroupUnitElement) {
-				final GroupUnitElement unit = (GroupUnitElement) node;
-			} 
-			
+			generateUnitMacroCode(node, 0); 
 		}
 
 		
@@ -80,7 +67,102 @@ public class MacroGenerator {
 	}
 
 
-	private void addFunctionUnit(UnitElement unit) {
+	private void generateUnitMacroCode(Node node, int i) {
+		System.out.println(node);
+		
+		macroText += " \n";
+		macroText += "// " + node.getLabel() + "\n";
+		macroText += " \n";
+		
+		if(node instanceof UnitElement) {
+			final UnitElement unit = (UnitElement) node;
+			addProcessingUnit(unit, i);	
+		} else if (node instanceof GroupUnitElement) {
+			final GroupUnitElement unit = (GroupUnitElement) node;
+			addForUnitElement(unit, i);
+		}
+	}
+
+	/**
+	 * we assume embedded units are already in the correct order
+	 * @param unit
+	 */
+	private void addForUnitElement(GroupUnitElement unit, int i) {
+		
+		int begin = 0;
+		int step = 1;
+		int end = 10;
+		
+		/*
+		 * for-header 
+		 */
+		
+		macroText += "// For-Loop /n";
+		
+		// duplicate input images if necessary
+		macroText += duplicateImages(unit);
+		
+		macroText += "for (i="+begin+"; i<"+end+"; i+="+step+") { Unit_7_Output_2 = i;"
+			+ "rename(\"Unit_7_Output_1_\"+"+i+");" 
+			+ "ID_Unit_7_Output_1 = getImageID();" 
+			+ "selectImage(ID_Unit_7_Output_1); ";
+		
+		renameOutputImages(unit, i);
+		
+		/*
+		 * content middle section
+		 */
+		
+		// iterate over all units i this for-group
+		for (Node node : unit.getNodes()) {
+			
+			// process unit as usual
+			generateUnitMacroCode(node, i);
+			
+			for (int j = begin; j < end; i+= step) {
+
+				/*
+				 * now we iterate over all outputs of this unit. Each output creates 
+				 * a unique image/data, which can be read multiple times by later units. 
+				 */
+				renameOutputImages(unit, i);
+//				openedImages.add(new ImageJImage(output, j));
+			}
+			
+		}
+		
+		/*
+		 * closing footer 
+		 */
+		
+		// close all images create in the loop
+		
+		
+		/*selectImage(ID_Unit_9_Output_1); 
+		//run("Duplicate...", "title=Title_Temp_ID_Unit_7_Output_1"); 
+		//rename("Unit_7_Output_1"); 
+		*/
+		
+		// close for loop
+		macroText += "} \n";
+		
+		
+		
+		macroText += "// close all loop images here"
+		+"for (i=0; i<"+end+"; i+=1) { "
+		+"selectImage(\"Unit_7_Output_1_\"+"+i+");" 
+		+"close();"
+		+"}";
+		
+		
+		//prepare output
+		renameOutputImages(unit, end+1);
+	}
+
+	
+	
+
+	private void addFunctionUnit(UnitElement unit, int i) {
 		final MacroElement macroElement = ((MacroElement)unit.getObject()); 
 		macroElement.reset();
 		
@@ -99,9 +181,9 @@ public class MacroGenerator {
 			final Input input = unit.getInput(in);
 			final String searchString = "TITLE_" + (in+1);
 			final String parameterString = 
-				input.isNeedToCopyInput() ? getNeedCopyTitle(input.getImageID()) : input.getImageTitle();
+				input.isNeedToCopyInput() ? getNeedCopyTitle(input.getImageID()+"_"+i) : input.getImageTitle()+"_"+i;
 //			System.out.println(input.getImageTitle());
-//			System.out.println("Unit: " + unitIndex + " Input: " + in + " Title: " + parameterString);
+			System.out.println("Unit: " + unit.getUnitID() + " Input: " + in + " Title: " + parameterString);
 			macroElement.replace(searchString, parameterString);
 		}
 		
@@ -115,8 +197,8 @@ public class MacroGenerator {
 	 * for Processing Units
 	 * @param unit
 	 */
-	private void addProcessingUnit(UnitElement unit) {
-		addFunctionUnit(unit);
+	private void addProcessingUnit(UnitElement unit, int i) {
+		addFunctionUnit(unit, i);
 		
 		// FIXME duplicates always
 		// maybe use rename(name)
@@ -125,22 +207,11 @@ public class MacroGenerator {
 		 * now we iterate over all outputs of this unit. Each output creates 
 		 * a unique image/data, which can be read multiple times by later units. 
 		 */
-		for (Output output : unit.getOutputs()) {
-			final String outputTitle = output.getOutputTitle();
-			final String outputID = output.getOutputID();
-			
-			 if(output.getDataType() instanceof DataTypeFactory.Image) {
-				macroText +=  
-					"rename(\"" + outputTitle  + "\"); \n"
-					+ outputID + " = getImageID(); \n"
-					+ "selectImage("+outputID+"); \n";
-				openedImages.add(new ImageJImage(output));
-			}
-		}
+		renameOutputImages(unit, i);
 		
 		/*
 		 * Most units require the needCopy-flag true. So when they read their input
-		 * and beginn processing, they duplicate their input in order not to 
+		 * and begin processing, they duplicate their input in order not to 
 		 * change the original output data.
 		 * However if we work with a sink, ie unit without outputs. The image taken 
 		 * by the unit needs to be closed again.  
@@ -148,11 +219,27 @@ public class MacroGenerator {
 		if(unit.getUnitType() == Type.SINK) {
 			for (final Input input : unit.getInputs()) {
 				if(input.isNeedToCopyInput()) {
-					final String inputID = input.getImageID();
+					final String inputID = input.getImageID()+"_"+i;
 
 					macroText += "selectImage(\"" + getNeedCopyTitle(inputID) + "\"); \n";
 					macroText += "close(); \n";
 				}
+			}
+		}
+	}
+
+
+	private void renameOutputImages(UnitElement unit, int i) {
+		for (Output output : unit.getOutputs()) {
+			final String outputTitle = output.getOutputTitle()+"_"+0;
+			final String outputID = output.getOutputID()+"_"+i;
+			
+			 if(output.getDataType() instanceof DataTypeFactory.Image) {
+				macroText +=  
+					"rename(\"" + outputTitle  + "\"); \n"
+					+ outputID + " = getImageID(); \n"
+					+ "selectImage("+outputID+"); \n";
+				openedImages.add(new ImageJImage(output, 0));
 			}
 		}
 	}
@@ -199,7 +286,7 @@ public class MacroGenerator {
 		String code = "";
 		for (final Input input : unit.getInputs()) {
 			if(input.isNeedToCopyInput()) {
-				final String inputID = input.getImageID();
+				final String inputID = input.getImageID()+"_"+0;
 
 				code += "selectImage(" + inputID + "); \n";
 				code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +"\"); \n";
@@ -219,11 +306,19 @@ public class MacroGenerator {
 		Output parentOutput;
 		boolean display;
 		
-		public ImageJImage(Output output) {
+		/*private ImageJImage(Output output) {
 			this.id 	= output.getOutputID();
 			this.title 	= output.getOutputTitle();
 			this.parentOutput = output;
 			this.display = output.isDoDisplay();
+		}*/
+		
+		public ImageJImage(Output output, int i) {
+			this.id 	= output.getOutputID()+"_"+i;
+			this.title 	= output.getOutputTitle()+"_"+i;
+			this.parentOutput = output;
+			this.display = output.isDoDisplay();
 		}
+		
 	}
 }

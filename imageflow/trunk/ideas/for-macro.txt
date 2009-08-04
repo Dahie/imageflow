@@ -1,0 +1,72 @@
+setBatchMode(true); 
+ 
+// U-Bahn Lulu.jpg
+ 
+open("/home/senff/U-Bahn Lulu.jpg");
+rename("Unit_6_Output_1"); 
+ID_Unit_6_Output_1 = getImageID(); 
+selectImage(ID_Unit_6_Output_1); 
+
+// For-Loop
+ 
+selectImage(ID_Unit_6_Output_1); 
+run("Duplicate...", "title=Title_Temp_ID_Unit_6_Output_1"); 
+for (i=0; i<10; i+=1) { Unit_7_Output_2 = i;
+rename("Unit_7_Output_1_"+i); 
+ID_Unit_7_Output_1 = getImageID(); 
+selectImage(ID_Unit_7_Output_1); 
+ 
+// Sharpen
+ 
+// this has to take the last one from the loop
+selectImage(ID_Unit_7_Output_1); 
+run("Duplicate...", "title=Title_Temp_ID_Unit_7_Output_1_"+i); 
+run("Sharpen");
+rename("Unit_9_Output_1_"+i); 
+ID_Unit_9_Output_1 = getImageID(); 
+selectImage(ID_Unit_9_Output_1); 
+ 
+// Closing Brace
+ 
+selectImage(ID_Unit_9_Output_1); 
+//run("Duplicate...", "title=Title_Temp_ID_Unit_7_Output_1"); 
+//rename("Unit_7_Output_1"); 
+
+
+//run("Duplicate...", "title=Title_Temp_ID_Unit_9_Output_1"); 
+}
+// close all loop images here
+for (i=0; i<10; i+=1) { Unit_7_Output_2 = i;
+selectImage("Unit_7_Output_1_"+i); 
+close();
+}
+selectImage("Unit_9_Output_1_"+9); 
+rename("Unit_8_Output_1"); 
+ID_Unit_8_Output_1 = getImageID(); 
+selectImage(ID_Unit_8_Output_1); 
+ 
+ 
+ 
+// Smooth
+ 
+selectImage(ID_Unit_8_Output_1); 
+run("Duplicate...", "title=Title_Temp_ID_Unit_8_Output_1"); 
+run("Smooth");
+rename("Unit_10_Output_1"); 
+ID_Unit_10_Output_1 = getImageID(); 
+selectImage(ID_Unit_10_Output_1); 
+
+setBatchMode("exit and display"); 
+
+// delete unwanted images 
+selectImage(ID_Unit_6_Output_1); 
+close(); 
+//selectImage(ID_Unit_9_Output_1); 
+//close(); 
+selectImage(ID_Unit_8_Output_1); 
+close(); 
+// human understandable names 
+selectImage(ID_Unit_10_Output_1); 
+rename("Smooth.Image1.Smooth.Image1.Output"); 
+
+

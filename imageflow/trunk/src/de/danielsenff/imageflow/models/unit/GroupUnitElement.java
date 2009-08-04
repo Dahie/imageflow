@@ -50,6 +50,12 @@ public class GroupUnitElement extends UnitElement {
 			final Collection<Node> selections, final UnitList allUnits) {
 		super(origin, unitName, "");
 		init();
+		try {
+			putUnits(selections, allUnits);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 
