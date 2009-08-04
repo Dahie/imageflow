@@ -32,7 +32,7 @@
 		<ShortName>I</ShortName>
 		<DataType>Image</DataType>		
 		<ImageType>31</ImageType>
-		<NeedToCopyInput>true</NeedToCopyInput>
+		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
 </Inputs>
 
