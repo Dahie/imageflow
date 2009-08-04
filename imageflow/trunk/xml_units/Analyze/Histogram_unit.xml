@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--This is the unit to add noise to an image. (No parameters to be set.)-->
             
 <UnitDescription>
 
@@ -18,8 +17,8 @@
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
 		<DataType>Image</DataType>
-		<ImageType>1</ImageType>
-		<NeedToCopyInput>true</NeedToCopyInput>
+		<ImageType>31</ImageType>
+		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
 </Inputs>
 

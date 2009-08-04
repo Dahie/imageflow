@@ -221,7 +221,7 @@ public class MacroGenerator {
 				if(input.isNeedToCopyInput()) {
 					final String inputID = input.getImageID()+"_"+i;
 
-					macroText += "selectImage(\"" + getNeedCopyTitle(inputID) + "\"); \n";
+					macroText += "selectImage(" + getNeedCopyTitle(inputID) + "); \n";
 					macroText += "close(); \n";
 				}
 			}
@@ -285,10 +285,10 @@ public class MacroGenerator {
 	private static String duplicateImages(final UnitElement unit) {
 		String code = "";
 		for (final Input input : unit.getInputs()) {
+			final String inputID = input.getImageID()+"_"+0;
+			code += "selectImage(" + inputID + "); \n";
 			if(input.isNeedToCopyInput()) {
-				final String inputID = input.getImageID()+"_"+0;
 
-				code += "selectImage(" + inputID + "); \n";
 				code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +"\"); \n";
 			}
 		}
