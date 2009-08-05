@@ -170,10 +170,11 @@ public class MacroGenerator {
 		macroText += duplicateImages(unit);
 		
 		// parse the command string for wildcards, that need to be replaced
-		macroElement.parseParameters(unit.getParameters());
-		macroElement.parseInputs(unit.getInputs());
-		macroElement.parseOutputs(unit.getOutputs());
-		macroElement.parseAttributes(unit.getInputs(), unit.getParameters());
+		// int i is needed for correct generation identifiers according to loops
+		macroElement.parseParameters(unit.getParameters(), i);
+		macroElement.parseInputs(unit.getInputs(), i);
+		macroElement.parseOutputs(unit.getOutputs(), i);
+		macroElement.parseAttributes(unit.getInputs(), unit.getParameters(), i);
 		
 		
 		// parse the command string for TITLE tags that need to be replaced
@@ -234,7 +235,8 @@ public class MacroGenerator {
 			final String outputTitle = output.getOutputTitle()+"_"+0;
 			final String outputID = output.getOutputID()+"_"+i;
 			
-			 if(output.getDataType() instanceof DataTypeFactory.Image) {
+			 if((output.getDataType() instanceof DataTypeFactory.Image) ||
+					 (unit.getUnitType() != Type.SOURCE)) {
 				macroText +=  
 					"rename(\"" + outputTitle  + "\"); \n"
 					+ outputID + " = getImageID(); \n"

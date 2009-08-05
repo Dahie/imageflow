@@ -82,11 +82,11 @@ public class MacroElement {
 	 * Writes the values of the Parameters into the syntax.
 	 * @param parameters
 	 */
-	public void parseParameters(final ArrayList<Parameter> parameters) {
-		this.commandSyntax = parseParameters(parameters, this.commandSyntax);
+	public void parseParameters(final ArrayList<Parameter> parameters, int i) {
+		this.commandSyntax = parseParameters(parameters, this.commandSyntax, i);
 	}
 
-	private static String parseParameters(ArrayList<Parameter> parameters, String command) {
+	private static String parseParameters(ArrayList<Parameter> parameters, String command, int i) {
 //		int unitID = unit.getUnitID();
 
 		int parameterIndex = 0, pc = 0, pd = 0, ps = 0, pi = 0, pb = 0;
@@ -96,7 +96,7 @@ public class MacroElement {
 			
 			Parameter parameter = parameters.get(parameterIndex);
 
-			searchString = "PARA_DOUBLE_" + (pd+1);
+			searchString = "PARA_DOUBLE_" + (pd+1) + "_" + i;
 			String paraType = parameter.getParaType().toLowerCase();
 			if(command.contains(searchString) && paraType.equals("double")) { 
 				String parameterString = "" + ((DoubleParameter)parameter).getValue();
@@ -146,16 +146,16 @@ public class MacroElement {
 	 * Writes values of input-DataTypes into the command-string.
 	 * @param inputs
 	 */
-	public void parseInputs(ArrayList<Input> inputs) {
-		this.commandSyntax = parseInputs(inputs, this.commandSyntax);
+	public void parseInputs(ArrayList<Input> inputs, int i) {
+		this.commandSyntax = parseInputs(inputs, this.commandSyntax, i);
 	}
 	
 	/**
 	 * Writes values of output-DataTypes into the command-string.
 	 * @param inputs
 	 */
-	public void parseOutputs(ArrayList<Output> outputs) {
-		this.commandSyntax = parseOutputs(outputs, this.commandSyntax);
+	public void parseOutputs(ArrayList<Output> outputs, int i) {
+		this.commandSyntax = parseOutputs(outputs, this.commandSyntax, i);
 	}
 
 	/**
@@ -163,18 +163,18 @@ public class MacroElement {
 	 * @param inputs
 	 * @param parameters
 	 */
-	public void parseAttributes(ArrayList<Input> inputs, ArrayList<Parameter> parameters) {
-		this.commandSyntax = parseAttributes(inputs, parameters, this.commandSyntax);
+	public void parseAttributes(ArrayList<Input> inputs, ArrayList<Parameter> parameters, int i) {
+		this.commandSyntax = parseAttributes(inputs, parameters, this.commandSyntax, i);
 	}
 	
-	private static String parseOutputs(ArrayList<Output> outputs, String command) {
+	private static String parseOutputs(ArrayList<Output> outputs, String command, int i) {
 		int index = 0, oDbl = 0, oInt = 0, oNbr = 0;
 		String searchString;
 
 		while (index < outputs.size()) {
 			
 			Output output = outputs.get(index);
-			String uniqueOutputName = output.getOutputTitle();
+			String uniqueOutputName = output.getOutputTitle() + "_" + i;
 
 			searchString = "OUTPUT_DOUBLE_" + (oDbl+1);
 			if(command.contains(searchString) 
@@ -207,7 +207,7 @@ public class MacroElement {
 	}
 	
 
-	private static String parseInputs(ArrayList<Input> inputs, String command) {
+	private static String parseInputs(ArrayList<Input> inputs, String command, int i) {
 		int index = 0, oDbl = 0, oInt = 0, oNbr = 0;
 		String searchString;
 
@@ -215,7 +215,7 @@ public class MacroElement {
 			
 			Input input = inputs.get(index);
 			if(input.isRequired() && input.isConnected()) {				
-				String uniqueOutputName = input.getFromOutput().getOutputTitle();
+				String uniqueOutputName = input.getFromOutput().getOutputTitle() + "_" + i;
 				
 				searchString = "INPUT_DOUBLE_" + (oDbl+1);
 				if(command.contains(searchString) 
@@ -250,7 +250,7 @@ public class MacroElement {
 		return command;
 	}
 	
-	private static String parseAttributes(ArrayList<Input> inputs, ArrayList<Parameter> parameters, String command) {
+	private static String parseAttributes(ArrayList<Input> inputs, ArrayList<Parameter> parameters, String command, int i) {
 		int inputIndex, parameterIndex;
 		String searchString;
 				
@@ -267,7 +267,7 @@ public class MacroElement {
 							&& input.getDataType().getClass().getSimpleName().toLowerCase().equals(parameter.getParaType())*/) {
 
 						if (input.isConnected()) {
-							String uniqueOutputName = input.getFromOutput().getOutputTitle();
+							String uniqueOutputName = input.getFromOutput().getOutputTitle() + "_" + i;
 							command = Tools.replace(command, searchString, uniqueOutputName);
 						}
 						else {
