@@ -82,11 +82,11 @@ public class MacroElement {
 	 * Writes the values of the Parameters into the syntax.
 	 * @param parameters
 	 */
-	public void parseParameters(final ArrayList<Parameter> parameters, int i) {
-		this.commandSyntax = parseParameters(parameters, this.commandSyntax, i);
+	public void parseParameters(final ArrayList<Parameter> parameters) {
+		this.commandSyntax = parseParameters(parameters, this.commandSyntax);
 	}
 
-	private static String parseParameters(ArrayList<Parameter> parameters, String command, int i) {
+	private static String parseParameters(ArrayList<Parameter> parameters, String command) {
 //		int unitID = unit.getUnitID();
 
 		int parameterIndex = 0, pc = 0, pd = 0, ps = 0, pi = 0, pb = 0;
@@ -96,7 +96,7 @@ public class MacroElement {
 			
 			Parameter parameter = parameters.get(parameterIndex);
 
-			searchString = "PARA_DOUBLE_" + (pd+1) + "_" + i;
+			searchString = "PARA_DOUBLE_" + (pd+1);
 			String paraType = parameter.getParaType().toLowerCase();
 			if(command.contains(searchString) && paraType.equals("double")) { 
 				String parameterString = "" + ((DoubleParameter)parameter).getValue();

@@ -7,6 +7,7 @@ import visualap.Node;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -171,7 +172,7 @@ public class MacroGenerator {
 		
 		// parse the command string for wildcards, that need to be replaced
 		// int i is needed for correct generation identifiers according to loops
-		macroElement.parseParameters(unit.getParameters(), i);
+		macroElement.parseParameters(unit.getParameters());
 		macroElement.parseInputs(unit.getInputs(), i);
 		macroElement.parseOutputs(unit.getOutputs(), i);
 		macroElement.parseAttributes(unit.getInputs(), unit.getParameters(), i);
@@ -287,11 +288,12 @@ public class MacroGenerator {
 	private static String duplicateImages(final UnitElement unit) {
 		String code = "";
 		for (final Input input : unit.getInputs()) {
-			final String inputID = input.getImageID()+"_"+0;
-			code += "selectImage(" + inputID + "); \n";
-			if(input.isNeedToCopyInput()) {
-
-				code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +"\"); \n";
+			if (input.getDataType() instanceof DataTypeFactory.Image) {
+				final String inputID = input.getImageID()+"_"+0;
+				code += "selectImage(" + inputID + "); \n";
+				if(input.isNeedToCopyInput()) {
+					code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +"\"); \n";
+				}
 			}
 		}
 		return code;
