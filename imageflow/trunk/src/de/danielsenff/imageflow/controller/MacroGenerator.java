@@ -9,6 +9,7 @@ import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.unit.ForGroupUnitElement;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
@@ -64,6 +65,7 @@ public class MacroGenerator {
 		
 		macroText += "\nsetBatchMode(\"exit and display\"); ";
 		
+		System.out.println("finished generation");
 		return macroText;
 	}
 
@@ -75,20 +77,26 @@ public class MacroGenerator {
 		macroText += "// " + node.getLabel() + "\n";
 		macroText += " \n";
 		
-		if(node instanceof UnitElement) {
-			final UnitElement unit = (UnitElement) node;
-			addProcessingUnit(unit, i);	
-		} else if (node instanceof GroupUnitElement) {
-			final GroupUnitElement unit = (GroupUnitElement) node;
-			addForUnitElement(unit, i);
+		try {
+			if (node instanceof GroupUnitElement) {
+				final ForGroupUnitElement unit = (ForGroupUnitElement) node;
+				addForUnitElement(unit, i);
+			} else if(node instanceof UnitElement) {
+				final UnitElement unit = (UnitElement) node;
+				addProcessingUnit(unit, i);	
+			}
+		} catch (Exception e) {
+			macroText += "// An Error has occured, this unit will not be processed";
+			e.printStackTrace();
 		}
+		
 	}
 
 	/**
 	 * we assume embedded units are already in the correct order
 	 * @param unit
 	 */
-	private void addForUnitElement(GroupUnitElement unit, int i) {
+	private void addForUnitElement(ForGroupUnitElement unit, int i) {
 		
 		int begin = 0;
 		int step = 1;
@@ -108,7 +116,7 @@ public class MacroGenerator {
 			+ "ID_Unit_7_Output_1 = getImageID();" 
 			+ "selectImage(ID_Unit_7_Output_1); ";
 		
-		renameOutputImages(unit, i);
+//		renameOutputImages(unit, i);
 		
 		/*
 		 * content middle section
@@ -116,7 +124,7 @@ public class MacroGenerator {
 		
 		// iterate over all units i this for-group
 		for (Node node : unit.getNodes()) {
-			
+			System.out.println("process nodes in loop");
 			// process unit as usual
 			generateUnitMacroCode(node, i);
 			
@@ -163,7 +171,7 @@ public class MacroGenerator {
 	
 	
 
-	private void addFunctionUnit(UnitElement unit, int i) {
+	private void addFunctionUnit(UnitElement unit, int i) throws Exception {
 		final MacroElement macroElement = ((MacroElement)unit.getObject()); 
 		macroElement.reset();
 		
@@ -173,6 +181,7 @@ public class MacroGenerator {
 		// parse the command string for wildcards, that need to be replaced
 		// int i is needed for correct generation identifiers according to loops
 		macroElement.parseParameters(unit.getParameters());
+		if(!unit.hasRequiredInputsConnected()) throw new Exception("not all required Inputs connected");
 		macroElement.parseInputs(unit.getInputs(), i);
 		macroElement.parseOutputs(unit.getOutputs(), i);
 		macroElement.parseAttributes(unit.getInputs(), unit.getParameters(), i);
@@ -198,8 +207,9 @@ public class MacroGenerator {
 	/**
 	 * for Processing Units
 	 * @param unit
+	 * @throws Exception 
 	 */
-	private void addProcessingUnit(UnitElement unit, int i) {
+	private void addProcessingUnit(UnitElement unit, int i) throws Exception {
 		addFunctionUnit(unit, i);
 		
 		// FIXME duplicates always

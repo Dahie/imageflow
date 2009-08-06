@@ -18,6 +18,7 @@ import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.unit.CommentNode;
+import de.danielsenff.imageflow.models.unit.ForGroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
@@ -72,7 +73,6 @@ public class InsertUnitMenu extends JMenu {
 					activePanel.repaint();
 					return;
 				}
-
 
 				UnitDelegate unitDelegate = DelegatesController.getInstance().getDelegate(action);
 				if(unitDelegate != null) {

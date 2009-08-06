@@ -97,20 +97,20 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 
 				}
 
-
-
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
 			}
 		}
 
-
-		//		clone.setConnectionList(getConnections().clone());
-
 		return clone;
 	}
 
-
+	/**
+	 * @param clone
+	 * @param tmpConn
+	 * @param correspondingPins
+	 * @param conn
+	 */
 	private void cloneConnection(UnitList clone,
 			Collection<Connection> tmpConn,
 			HashMap<Pin, Pin> correspondingPins, Connection conn) {
@@ -200,6 +200,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 
 	/**
 	 * Remove this Unit from the workflow.
+	 * This also removes and replaces the connections between possibly connected unit.
 	 * @param unit 
 	 * @return 
 	 */
@@ -215,11 +216,23 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		}
 
 		// remove unit itself
+		return removeUnchecked(node);
+	}
+
+	/**
+	 * Remove this Unit from the workflow.
+	 * This doesn't touch connections at all.
+	 * @param unit 
+	 * @return 
+	 */
+	public boolean removeUnchecked(final Node node) {
+		// remove unit itself
 		boolean remove = super.remove(node);
 		notifyModelListeners();
 		return remove;
 	}
-
+	
+	
 
 	/**
 	 * Removes all connections to this {@link UnitElement}.
@@ -229,7 +242,8 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		// find connections which are attached to this unit
 		Collection<Connection> tmpConn = new Vector<Connection>();
 		for (Connection connection : getConnections()) {
-			if(connection.isConnectedToUnit(unit)) {
+			if(connection.isConnectedToUnit(unit)
+					&& !connection.isLocked()) {
 				// put in list to delete
 				tmpConn.add(connection);
 			}

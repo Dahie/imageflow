@@ -17,6 +17,7 @@ import de.danielsenff.imageflow.models.connection.ProxyInput;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.CommentNode;
+import de.danielsenff.imageflow.models.unit.ForGroupUnitElement;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -43,7 +44,6 @@ public class GraphController{
 	 * List of selected units
 	 */
 	private SelectionList selections;
-
 
 	
 	/**
@@ -130,13 +130,15 @@ public class GraphController{
 		 * reconnect inputs
 		 */
 		for (Input input : group.getInputs()) {
-			ProxyInput pInput = (ProxyInput)input;
-			if(pInput.isConnected()) {
-				Output connectedOutput = pInput.getFromOutput();
-				Input originalInput = pInput.getEmbeddedInput();
-				
-				Connection connection = new Connection(connectedOutput, originalInput);
-				connections.add(connection);
+			if(input instanceof ProxyInput) {
+				ProxyInput pInput = (ProxyInput)input;
+				if(pInput.isConnected()) {
+					Output connectedOutput = pInput.getFromOutput();
+					Input originalInput = pInput.getEmbeddedInput();
+					
+					Connection connection = new Connection(connectedOutput, originalInput);
+					connections.add(connection);
+				}
 			}
 		}
 		
@@ -145,17 +147,19 @@ public class GraphController{
 		 */
 		Collection<Connection> tmpConn = new Vector<Connection>();
 		for (Output output : group.getOutputs()) {
-			ProxyOutput pOutput = (ProxyOutput)output;
-			if(pOutput.isConnected()) {
-				Output originalOutput = pOutput.getEmbeddedOutput();
-				if(originalOutput.getDataType() instanceof DataTypeFactory.Image) {
-					((DataTypeFactory.Image)originalOutput.getDataType()).setParentUnitElement(originalOutput.getParent());
-					((DataTypeFactory.Image)originalOutput.getDataType()).setParentPin(originalOutput);
-				}
-				
-				for (Connection	connection : pOutput.getConnections()) {
-					Connection newConn = new Connection(originalOutput, connection.getInput());
-					tmpConn.add(newConn);
+			if(output instanceof ProxyOutput) {
+				ProxyOutput pOutput = (ProxyOutput)output;
+				if(pOutput.isConnected()) {
+					Output originalOutput = pOutput.getEmbeddedOutput();
+					if(originalOutput.getDataType() instanceof DataTypeFactory.Image) {
+						((DataTypeFactory.Image)originalOutput.getDataType()).setParentUnitElement(originalOutput.getParent());
+						((DataTypeFactory.Image)originalOutput.getDataType()).setParentPin(originalOutput);
+					}
+					
+					for (Connection	connection : pOutput.getConnections()) {
+						Connection newConn = new Connection(originalOutput, connection.getInput());
+						tmpConn.add(newConn);
+					}
 				}
 			}
 		}

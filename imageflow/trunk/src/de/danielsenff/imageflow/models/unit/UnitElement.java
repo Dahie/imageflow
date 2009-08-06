@@ -751,45 +751,57 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 				this.label, 
 				imageJSyntax);
 		for (int j = 0; j < getInputsCount(); j++) {
-			Input input = getInput(j);				
-			Input clonedInput = new Input(input.getDataType().clone(), clone, j+1, input.isRequired());
-			clonedInput.setupInput(input.getName(), input.getShortDisplayName(), input.isNeedToCopyInput());
-			clone.addInput(clonedInput);
+			cloneInput(clone, j);
 		}
 		for (int i = 0; i < getOutputsCount(); i++) {
-			Output output = getOutput(i);
-			Output clonedOutput = new Output(output.getDataType().clone(), clone, i+1);
-			clonedOutput.setupOutput(output.getName(), output.getShortDisplayName());
-			clonedOutput.setDoDisplay(output.isDoDisplay());
-			clone.addOutput(clonedOutput);
+			cloneOutput(clone, i);
 		}
 		for (Parameter parameter : parameters) {
-			Parameter clonedParameter;
-			if(parameter instanceof ChoiceParameter) {
-				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
-						parameter.getParaType(),
-						parameter.getValue(), 
-						parameter.getHelpString(), null, 
-						((ChoiceParameter)parameter).getChoiceIndex());
-			} else if (parameter instanceof BooleanParameter){
-				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
-						parameter.getParaType(),
-						parameter.getValue(), 
-						parameter.getHelpString(), 
-						((BooleanParameter)parameter).getTrueString(), 0);
-			} else {
-				clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
-						parameter.getParaType(),
-						parameter.getValue(), 
-						parameter.getHelpString());	
-			}
-			clone.addParameter(parameter);
+			cloneParameter(clone, parameter);
 		}
 		clone.setDisplay(isDisplay());
 		clone.setColor(this.color);
 		clone.setIcon(this.icon);
 		clone.setHelpString(this.infoText);
 		return clone;
+	}
+
+	protected void cloneParameter(UnitElement clone, Parameter parameter) {
+		Parameter clonedParameter;
+		if(parameter instanceof ChoiceParameter) {
+			clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+					parameter.getParaType(),
+					parameter.getValue(), 
+					parameter.getHelpString(), null, 
+					((ChoiceParameter)parameter).getChoiceIndex());
+		} else if (parameter instanceof BooleanParameter){
+			clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+					parameter.getParaType(),
+					parameter.getValue(), 
+					parameter.getHelpString(), 
+					((BooleanParameter)parameter).getTrueString(), 0);
+		} else {
+			clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+					parameter.getParaType(),
+					parameter.getValue(), 
+					parameter.getHelpString());	
+		}
+		clone.addParameter(parameter);
+	}
+
+	protected void cloneOutput(UnitElement clone, int i) {
+		Output output = getOutput(i);
+		Output clonedOutput = new Output(output.getDataType().clone(), clone, i+1);
+		clonedOutput.setupOutput(output.getName(), output.getShortDisplayName());
+		clonedOutput.setDoDisplay(output.isDoDisplay());
+		clone.addOutput(clonedOutput);
+	}
+
+	protected void cloneInput(UnitElement clone, int j) {
+		Input input = getInput(j);				
+		Input clonedInput = new Input(input.getDataType().clone(), clone, j+1, input.isRequired());
+		clonedInput.setupInput(input.getName(), input.getShortDisplayName(), input.isNeedToCopyInput());
+		clone.addInput(clonedInput);
 	}
 
 

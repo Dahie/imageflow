@@ -1096,6 +1096,7 @@ public class ImageFlowView extends FrameView {
     	
     	GPanelPopup popup = new GPanelPopup(graphController);
     	GraphPanel gpanel = new GraphPanel(popup, graphController);
+    	popup.setActivePanel(gpanel);
     	UnitList cloneUnitList = getNodes().clone();
     	gpanel.setNodeL(cloneUnitList);
     	gpanel.setEdgeL(cloneUnitList.getConnections());

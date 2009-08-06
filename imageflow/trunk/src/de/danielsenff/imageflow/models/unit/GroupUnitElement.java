@@ -4,6 +4,7 @@
 package de.danielsenff.imageflow.models.unit;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
@@ -93,19 +94,32 @@ public class GroupUnitElement extends UnitElement {
 		 * remove original units from workflow
 		 */
 
+		
 		for (Node node : this.units) {
+			// this removes not only the node from the unitList
+			// but also disconnects all connections to this unit.
+			// Therefore all connections are backuped before doing this.
 			allUnits.remove(node);
 		}
 
+		// Reconnecting the connections within the group.
 		for (Connection connection : internalConnections) {
 			connection.connect();
 		}
 
+		
+		// uh, reconnect the external connections
+		// if the target-unit is contained in the group
+		// just not sure why not connecting from-units
 		for (Connection connection : externalConnections) {
-			if(this.units.contains(connection.getToUnit())) {
+			if(this.units.contains(connection.getToUnit())
+					|| this.units.contains(connection.getFromUnit())) {
 				connection.connect();
 			}
 		}
+		
+		// proxy connections
+		
 		
 		int lowestX = 3000, lowestY = 3000;
 		for (Node node : getNodes()) {
@@ -297,7 +311,14 @@ public class GroupUnitElement extends UnitElement {
 	public GroupUnitElement clone() {
 
 		GroupUnitElement groupClone = new GroupUnitElement(getOrigin(), getLabel());
+		groupClone = initClone(groupClone);
+		
+		
+		
+		return groupClone;
+	}
 
+	protected GroupUnitElement initClone(GroupUnitElement groupClone) {
 		/*
 		 * clone included units
 		 */
@@ -346,16 +367,24 @@ public class GroupUnitElement extends UnitElement {
 		 */
 
 		for (int i = 0; i < getInputsCount(); i++) {
-			Input input = ((ProxyInput)getInput(i)).getEmbeddedInput();
-			Input embeddedInputClone = (Input) correspondingPins.get(input); 
-			ProxyInput pInput = new ProxyInput(embeddedInputClone, groupClone, i+1);
-			groupClone.addInput(pInput);
+			if(getInput(i) instanceof ProxyInput) {
+				Input input = ((ProxyInput)getInput(i)).getEmbeddedInput();
+				Input embeddedInputClone = (Input) correspondingPins.get(input); 
+				ProxyInput pInput = new ProxyInput(embeddedInputClone, groupClone, i+1);
+				groupClone.addInput(pInput);
+			} else {
+				super.cloneInput(groupClone, i);
+			}
 		}
 		for (int i = 0; i < getOutputsCount(); i++) {
-			Output output = ((ProxyOutput)getOutput(i)).getEmbeddedOutput();
-			Output embeddedOutputClone = (Output) correspondingPins.get(output); 
-			ProxyOutput pOutput = new ProxyOutput(embeddedOutputClone, groupClone, i+1);
-			groupClone.addOutput(pOutput);
+			if(getOutput(i) instanceof ProxyOutput) {
+				Output output = ((ProxyOutput)getOutput(i)).getEmbeddedOutput();
+				Output embeddedOutputClone = (Output) correspondingPins.get(output); 
+				ProxyOutput pOutput = new ProxyOutput(embeddedOutputClone, groupClone, i+1);
+				groupClone.addOutput(pOutput);
+			} else {
+				super.cloneOutput(groupClone, i);
+			}
 		}
 
 		return groupClone;

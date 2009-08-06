@@ -11,6 +11,7 @@ import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.unit.CommentNode;
+import de.danielsenff.imageflow.models.unit.ForGroupUnitElement;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.SourceUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -221,8 +222,10 @@ public class MacroFlowRunner {
 		// we identify the group, ungroup it and see if all groups all 
 		Collection<GroupUnitElement> foundGroups = new Vector<GroupUnitElement>();
 		for (Node node : unitElements) {
-			if(node instanceof GroupUnitElement)
+			if(node instanceof GroupUnitElement && !(node instanceof ForGroupUnitElement)) {
+				System.out.println(node);
 				addFoundGroup(foundGroups, node);
+			}
 		}
 
 		for (GroupUnitElement group : foundGroups) {
