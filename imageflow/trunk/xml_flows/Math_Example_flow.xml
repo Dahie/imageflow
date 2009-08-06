@@ -5,7 +5,7 @@
       <XPos>462</XPos>
       <YPos>57</YPos>
       <Label>Print</Label>
-      <UnitID>21</UnitID>
+      <UnitID>1</UnitID>
       <UnitDescription>
         <General>
           <UnitName>Print</UnitName>
@@ -14,6 +14,7 @@
           <Color>0x9cba92</Color>
           <IconSize>BIG</IconSize>
           <HelpString>Prints an Integer value</HelpString>
+          <DoDisplay>true</DoDisplay>
         </General>
         <Parameters />
         <Inputs>
@@ -32,7 +33,7 @@
       <XPos>56</XPos>
       <YPos>186</YPos>
       <Label>5</Label>
-      <UnitID>22</UnitID>
+      <UnitID>2</UnitID>
       <UnitDescription>
         <General>
           <UnitName>Integer</UnitName>
@@ -41,6 +42,7 @@
           <Color>0x9cba92</Color>
           <IconSize>BIG</IconSize>
           <HelpString>Provides a new Integer</HelpString>
+          <DoDisplay>false</DoDisplay>
         </General>
         <Parameters>
           <Parameter>
@@ -65,7 +67,7 @@
       <XPos>169</XPos>
       <YPos>59</YPos>
       <Label>Get Dimension</Label>
-      <UnitID>23</UnitID>
+      <UnitID>3</UnitID>
       <UnitDescription>
         <General>
           <UnitName>Get Dimension</UnitName>
@@ -74,6 +76,7 @@
           <Color>0x9cba92</Color>
           <IconSize>BIG</IconSize>
           <HelpString>Get the Dimension of an input image.</HelpString>
+          <DoDisplay>false</DoDisplay>
         </General>
         <Parameters />
         <Inputs>
@@ -106,7 +109,7 @@
       <XPos>46</XPos>
       <YPos>45</YPos>
       <Label>U-Bahn Lulu.jpg</Label>
-      <UnitID>24</UnitID>
+      <UnitID>4</UnitID>
       <UnitDescription>
         <General>
           <UnitName>Image Source</UnitName>
@@ -115,6 +118,7 @@
           <Color>0x9cba92</Color>
           <IconSize>BIG</IconSize>
           <HelpString>Opens a new image</HelpString>
+          <DoDisplay>false</DoDisplay>
         </General>
         <Parameters>
           <Parameter>
@@ -140,7 +144,7 @@
       <XPos>319</XPos>
       <YPos>61</YPos>
       <Label>Simple Equation</Label>
-      <UnitID>25</UnitID>
+      <UnitID>5</UnitID>
       <UnitDescription>
         <General>
           <UnitName>Simple Equation</UnitName>
@@ -149,6 +153,7 @@
           <Color>0x9cba92</Color>
           <IconSize>BIG</IconSize>
           <HelpString>Equation</HelpString>
+          <DoDisplay>false</DoDisplay>
         </General>
         <Parameters>
           <Parameter>
@@ -194,7 +199,7 @@
       <XPos>50</XPos>
       <YPos>301</YPos>
       <Label>2.5</Label>
-      <UnitID>28</UnitID>
+      <UnitID>7</UnitID>
       <UnitDescription>
         <General>
           <UnitName>Double</UnitName>
@@ -203,6 +208,7 @@
           <Color>0x9cba92</Color>
           <IconSize>BIG</IconSize>
           <HelpString>Provides a new Double</HelpString>
+          <DoDisplay>false</DoDisplay>
         </General>
         <Parameters>
           <Parameter>
@@ -227,7 +233,7 @@
       <XPos>463</XPos>
       <YPos>260</YPos>
       <Label>Print</Label>
-      <UnitID>29</UnitID>
+      <UnitID>8</UnitID>
       <UnitDescription>
         <General>
           <UnitName>Print</UnitName>
@@ -236,6 +242,7 @@
           <Color>0x9cba92</Color>
           <IconSize>BIG</IconSize>
           <HelpString>Prints an Integer value</HelpString>
+          <DoDisplay>true</DoDisplay>
         </General>
         <Parameters />
         <Inputs>
@@ -254,7 +261,7 @@
       <XPos>234</XPos>
       <YPos>260</YPos>
       <Label>Simple Equation</Label>
-      <UnitID>30</UnitID>
+      <UnitID>9</UnitID>
       <UnitDescription>
         <General>
           <UnitName>Simple Equation</UnitName>
@@ -263,6 +270,7 @@
           <Color>0x9cba92</Color>
           <IconSize>BIG</IconSize>
           <HelpString>Equation</HelpString>
+          <DoDisplay>false</DoDisplay>
         </General>
         <Parameters>
           <Parameter>
@@ -307,45 +315,45 @@
   </Units>
   <Connections>
     <Connection>
-      <FromUnitID>24</FromUnitID>
+      <FromUnitID>4</FromUnitID>
       <FromOutputNumber>1</FromOutputNumber>
-      <ToUnitID>23</ToUnitID>
+      <ToUnitID>3</ToUnitID>
       <ToInputNumber>1</ToInputNumber>
     </Connection>
     <Connection>
-      <FromUnitID>23</FromUnitID>
+      <FromUnitID>3</FromUnitID>
       <FromOutputNumber>1</FromOutputNumber>
-      <ToUnitID>25</ToUnitID>
+      <ToUnitID>5</ToUnitID>
       <ToInputNumber>1</ToInputNumber>
     </Connection>
     <Connection>
-      <FromUnitID>23</FromUnitID>
+      <FromUnitID>3</FromUnitID>
       <FromOutputNumber>2</FromOutputNumber>
-      <ToUnitID>25</ToUnitID>
+      <ToUnitID>5</ToUnitID>
       <ToInputNumber>2</ToInputNumber>
     </Connection>
     <Connection>
-      <FromUnitID>25</FromUnitID>
+      <FromUnitID>5</FromUnitID>
       <FromOutputNumber>1</FromOutputNumber>
-      <ToUnitID>21</ToUnitID>
+      <ToUnitID>1</ToUnitID>
       <ToInputNumber>1</ToInputNumber>
     </Connection>
     <Connection>
-      <FromUnitID>22</FromUnitID>
+      <FromUnitID>2</FromUnitID>
       <FromOutputNumber>1</FromOutputNumber>
-      <ToUnitID>30</ToUnitID>
+      <ToUnitID>9</ToUnitID>
       <ToInputNumber>1</ToInputNumber>
     </Connection>
     <Connection>
-      <FromUnitID>28</FromUnitID>
+      <FromUnitID>7</FromUnitID>
       <FromOutputNumber>1</FromOutputNumber>
-      <ToUnitID>30</ToUnitID>
+      <ToUnitID>9</ToUnitID>
       <ToInputNumber>2</ToInputNumber>
     </Connection>
     <Connection>
-      <FromUnitID>30</FromUnitID>
+      <FromUnitID>9</FromUnitID>
       <FromOutputNumber>1</FromOutputNumber>
-      <ToUnitID>29</ToUnitID>
+      <ToUnitID>8</ToUnitID>
       <ToInputNumber>1</ToInputNumber>
     </Connection>
   </Connections>
