@@ -246,8 +246,7 @@ public class MacroGenerator {
 			final String outputTitle = output.getOutputTitle()+"_"+0;
 			final String outputID = output.getOutputID()+"_"+i;
 			
-			 if((output.getDataType() instanceof DataTypeFactory.Image) ||
-					 (unit.getUnitType() != Type.SOURCE)) {
+			 if((output.getDataType() instanceof DataTypeFactory.Image)) {
 				macroText +=  
 					"rename(\"" + outputTitle  + "\"); \n"
 					+ outputID + " = getImageID(); \n"
