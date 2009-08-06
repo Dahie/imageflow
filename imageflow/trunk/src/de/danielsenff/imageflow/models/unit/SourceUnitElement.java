@@ -53,6 +53,36 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	{
 		super(origin, unitName, macroString);
 	}
+	
+	/**
+	 * @param origin
+	 * @param unitName
+	 * @param macroElement
+	 * @param filepath 
+	 */
+	public SourceUnitElement(final Point origin, 
+			final String unitName,
+			final MacroElement macroElement, 
+			final String filepath) 
+	{
+		super(origin, unitName, macroElement);
+		setFile(filepath);
+	}
+	
+	/**
+	 * @param origin
+	 * @param unitName
+	 * @param macroString
+	 * @param filepath 
+	 */
+	public SourceUnitElement(final Point origin, 
+			final String unitName,
+			final String macroString, 
+			final String filepath) 
+	{
+		super(origin, unitName, macroString);
+		setFile(filepath);
+	}
 
 	@Override
 	public void showProperties() {
@@ -79,11 +109,10 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 			imageType = getImageType();
 			this.unitComponentIcon.setIcon(
 					getImagePlus().getImage().getScaledInstance(48, 48, BufferedImage.SCALE_FAST));
-			
 		} else {
 			this.setIcon(null);
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
-					"The file" +getFile()+ " you selected does not exist."+
+					"The file " +getFile()+ " you selected does not exist."+
 					'\n'+"An image type can not be determined, which can invalidate the current graph.",
 					"File doesn't exist", 
 					JOptionPane.WARNING_MESSAGE);
@@ -180,7 +209,6 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 				final int type = imp.getType();
 				imp.close();
 				imp = null;
-				System.out.println(type);
 				switch (type) {
 				case ImagePlus.GRAY8:
 					return PlugInFilter.DOES_8G;

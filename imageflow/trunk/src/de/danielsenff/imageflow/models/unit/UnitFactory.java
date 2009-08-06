@@ -14,8 +14,6 @@ import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.models.Displayable;
-import de.danielsenff.imageflow.models.Model;
-import de.danielsenff.imageflow.models.ModelListener;
 import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
@@ -42,9 +40,24 @@ public class UnitFactory {
 	public static UnitElement createProcessingUnit(
 			final UnitDescription unitDescription, 
 			final Point origin) {
+		return createProcessingUnit(unitDescription, origin, null);
+	}
+	
+	/**
+	 * Creates a {@link UnitElement} based on the given Descriptions.
+	 * @param unitDescription
+	 * @param origin
+	 * @return
+	 */
+	public static UnitElement createProcessingUnit(
+			final UnitDescription unitDescription, 
+			final Point origin, 
+			String[] args) {
 		
 		String unitName = unitDescription.unitName;
 		String imageJSyntax = unitDescription.imageJSyntax;
+
+		
 		
 		// usual case, we deal with a UnitElement
 		
@@ -72,15 +85,11 @@ public class UnitFactory {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-
-		// dopppelmoppel?
-		if(unitDescription.icon != null) {
 			unitElement.setIcon(unitDescription.icon);
 			unitElement.setIconFile(unitDescription.iconFile);
 			unitElement.setIconPath(unitDescription.pathToIcon);
 		}
-			
+
 		if(unitDescription.componentSize != null)
 			unitElement.setCompontentSize(unitDescription.componentSize);
 		
@@ -102,6 +111,9 @@ public class UnitFactory {
 			((BackgroundUnitElement)unitElement).setOutputImageType(imageType);	
 		} else if(unitElement instanceof SourceUnitElement) {
 			SourceUnitElement sourceUnit = (SourceUnitElement)unitElement;
+			if(args != null && args[0] != null) {
+				((SourceUnitElement)unitElement).setFile(args[0]);
+			}
 			if(!sourceUnit.hasFilePath()) {
 //				sourceUnit.showIJOpenDialog();
 				sourceUnit.showOpenFileChooser();	

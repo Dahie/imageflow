@@ -21,6 +21,7 @@ import java.util.HashSet;
 
 import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -70,6 +71,7 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
+import de.danielsenff.imageflow.models.unit.SourceUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
@@ -81,6 +83,8 @@ import de.danielsenff.imageflow.tasks.ImportGraphTask;
 import de.danielsenff.imageflow.tasks.LoadFlowGraphTask;
 import de.danielsenff.imageflow.tasks.RunMacroTask;
 import de.danielsenff.imageflow.tasks.SaveFlowGraphTask;
+import de.danielsenff.imageflow.utils.FileDrop;
+import de.danielsenff.imageflow.utils.FileDropListener;
 
 
 
@@ -324,6 +328,8 @@ public class ImageFlowView extends FrameView {
 		popup.setActivePanel(graphPanel);
 		graphPanel.setGraphController(graphController);
 		graphPanel.setSelections(getSelections());
+		if(IJ.isMacOSX())
+			graphPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 
 		
 		/*WorkspacePanel workspacePanel = new WorkspacePanel();
@@ -337,25 +343,7 @@ public class ImageFlowView extends FrameView {
 		
 //		graphScrollpane.add(workspacePanel);
 
-		/*
-		new FileDrop( null, graphPanel,  new FileDrop.Listener()
-	        {   
-				Point coordinates = new Point(75, 75);
-				
-				public void filesDropped( java.io.File[] files )
-	            {   
-	        		for( int i = 0; i < files.length; i++ )
-	                {   
-	        			//TODO check filetype
-	        			
-	            		// add Source-Units
-	        			graphController.getUnitElements().add(
-	        					UnitFactory.createSourceUnit(files[i].getAbsolutePath(), coordinates));
-	        			graphPanel.repaint();
-	                }   // end for: through each dropped file
-	            }   // end filesDropped
-	        }); // end FileDrop.Listener
-		*/
+		new FileDrop( null, graphPanel,  new FileDropListener(graphPanel, getInstance())); // end FileDrop.Listener
 		
 		
 		

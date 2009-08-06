@@ -2,7 +2,6 @@ package de.danielsenff.imageflow.models.datatype;
 
 import ij.plugin.filter.PlugInFilter;
 import visualap.Pin;
-import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
@@ -53,6 +52,9 @@ public class DataTypeFactory {
 		return new Double();
 	}
 	
+	/**
+	 * @return
+	 */
 	public static Number createNumber() {
 		return new Number();
 	}
@@ -92,6 +94,7 @@ public class DataTypeFactory {
 	 *
 	 */
 	public static class Integer extends Number {
+		@Override
 		public boolean isCompatible(DataType compareType) {
 			boolean compatible = compareType instanceof Integer;
 			return compatible;
@@ -108,6 +111,7 @@ public class DataTypeFactory {
 	 *
 	 */
 	public static class Double extends Number {
+		@Override
 		public boolean isCompatible(DataType compareType) {
 			boolean compatible = compareType instanceof Integer || compareType instanceof Double;
 			return compatible;
@@ -135,6 +139,9 @@ public class DataTypeFactory {
 		 * Unit to which this DataType belongs
 		 */
 		protected UnitElement parent;
+		/**
+		 * 
+		 */
 		protected Pin parentPin;
 
 		/**
@@ -277,6 +284,9 @@ public class DataTypeFactory {
 			return super.toString() + " ParentPin: "+parentPin.getDisplayName();
 		}
 
+		/**
+		 * @param pin
+		 */
 		public void setParentPin(Pin pin) {
 			this.parentPin = pin;
 		}
