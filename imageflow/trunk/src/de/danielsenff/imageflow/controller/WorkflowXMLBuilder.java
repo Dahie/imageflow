@@ -55,7 +55,7 @@ public class WorkflowXMLBuilder {
 
 	public WorkflowXMLBuilder(UnitList units) {
 		this.unitList = units;
-		this.connectionDelegates = new Vector();
+		this.connectionDelegates = new Vector<ConnectionDelegate>();
 		this.newNodes = new HashMap<Integer, UnitElement>();
 		this.groupUnits = new Vector<GroupUnitElement>();
 	}
@@ -300,7 +300,6 @@ public class WorkflowXMLBuilder {
 				list
 			);
 		}
-		
 	} 
 	
 
@@ -484,6 +483,9 @@ public class WorkflowXMLBuilder {
 		Element helpStringU = new Element("HelpString");
 		helpStringU.addContent(unit.getHelpString());
 		general.addContent(helpStringU);
+		Element doDisplayU = new Element("DoDisplay");
+		doDisplayU.addContent(unit.isDisplay() ? "true" : "false");
+		general.addContent(doDisplayU);
 
 
 		// deal with all parameters

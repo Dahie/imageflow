@@ -340,10 +340,10 @@ public class ImageFlowView extends FrameView {
 		ScrollPane graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
 		graphScrollpane.setPreferredSize(new Dimension(400, 300));
+		new FileDrop( null, graphPanel,  new FileDropListener(graphPanel, getInstance())); // end FileDrop.Listener
 		
 //		graphScrollpane.add(workspacePanel);
 
-		new FileDrop( null, graphPanel,  new FileDropListener(graphPanel, getInstance())); // end FileDrop.Listener
 		
 		
 		

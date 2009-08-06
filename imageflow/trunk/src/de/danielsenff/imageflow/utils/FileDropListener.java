@@ -42,6 +42,7 @@ public class FileDropListener implements FileDrop.Listener {
 	 */
 	public void filesDropped( java.io.File[] files, Point point )
     {   
+		point.translate(-50, -50);
 		coordinates = point;
 		
 		for( int i = 0; i < files.length; i++ )
@@ -54,10 +55,13 @@ public class FileDropListener implements FileDrop.Listener {
 			UnitElement unit = UnitFactory.createProcessingUnit(delegate.getUnitDescription(), coordinates, args);
 			unit.addModelListener(new NodeListener(gpanel, ifView));
 			unitList.add(unit);
-			gpanel.invalidate();
-			gpanel.repaint();
+			
 			coordinates.translate(25, 25);
         }   // end for: through each dropped file
+		
+		gpanel.invalidate();
+		gpanel.repaint();
+		
     }   // end filesDropped
 
 	/**
