@@ -109,6 +109,10 @@ The icon file is placed in the xml_icons/ folder.</p>
 <p>The representation icon on the workflow can be of different sizes. Possible are big, medium and small. 
 Only big and small are implemented right now. This is handy to save screen real estate.</p>
 
+<pre><code>        &lt;DoDisplay&gt;false&lt;/DoDisplay&gt;</code></pre>
+
+<p>Defines this unit as Display. Usually all outputs will be displayed. However this setting also works for units who have no outputs</p>
+
 <pre>&lt;/General&gt;</pre>
 
 <h4>Wildcards</h4>
@@ -345,6 +349,13 @@ in later versions and the option to display only selected outputs, this setting 
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>05/08/09</td>
+<td>
+<ul>
+	<li>DoDisplay also for Units</li>
+</ul>
+</tr>
 
 <tr>
 <td>23/07/09</td>
