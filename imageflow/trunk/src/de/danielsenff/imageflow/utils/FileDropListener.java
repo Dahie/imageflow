@@ -44,6 +44,7 @@ public class FileDropListener implements FileDrop.Listener {
     {   
 		point.translate(-50, -50);
 		coordinates = point;
+		gpanel.getSelection().clear();
 		
 		for( int i = 0; i < files.length; i++ )
         {   
@@ -55,6 +56,8 @@ public class FileDropListener implements FileDrop.Listener {
 			UnitElement unit = UnitFactory.createProcessingUnit(delegate.getUnitDescription(), coordinates, args);
 			unit.addModelListener(new NodeListener(gpanel, ifView));
 			unitList.add(unit);
+			
+			gpanel.getSelection().add(unit);
 			
 			coordinates.translate(25, 25);
         }   // end for: through each dropped file
