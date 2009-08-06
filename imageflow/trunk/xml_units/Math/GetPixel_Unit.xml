@@ -31,7 +31,7 @@
 		<ShortName>I</ShortName>	
 		<DataType>Image</DataType>
 		<ImageType>31</ImageType>
-		<NeedToCopyInput>false</NeedToCopyInput>
+		<NeedToCopyInput>true</NeedToCopyInput>
 </Input>
 	<Input>
 		<Name>X-coordinate</Name>
