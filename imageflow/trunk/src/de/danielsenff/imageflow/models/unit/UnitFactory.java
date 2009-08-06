@@ -85,6 +85,9 @@ public class UnitFactory {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+		
+		if(unitDescription.icon != null) {
 			unitElement.setIcon(unitDescription.icon);
 			unitElement.setIconFile(unitDescription.iconFile);
 			unitElement.setIconPath(unitDescription.pathToIcon);
@@ -101,6 +104,7 @@ public class UnitFactory {
 		
 		// setup of the output(s)
 		addOutputs(unitDescription,unitElement);
+		unitElement.setDisplay(unitDescription.isDisplayUnit);
 		
 		// setup the PinTolerance
 		setPinTolerance(unitElement);
