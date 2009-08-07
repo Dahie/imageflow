@@ -396,6 +396,7 @@ public class GraphPanel extends GPanel {
 
 			boolean isCompatible = false;
 			boolean isLoop = false;
+			boolean isLocked = false;
 
 			if( !(drawEdge instanceof Output && pin instanceof Output)
 					&& !(drawEdge instanceof Input && pin instanceof Input)) {
@@ -406,8 +407,12 @@ public class GraphPanel extends GPanel {
 				isCompatible = pin.isCompatible(drawEdge);
 				if(drawEdge instanceof Output && pin instanceof Input) {
 					isLoop = ((Input)pin).isConnectedInOutputBranch(drawEdge.getParent());
-				} else if (drawEdge instanceof Input && pin instanceof Output) {
+				}
+				if (drawEdge instanceof Input && pin instanceof Output) {
 					isLoop = ((Output)pin).existsInInputSubgraph(drawEdge.getParent());
+				}
+				if(drawEdge.isLocked() || pin.isLocked() ) {
+					isLocked = true;
 				}
 
 				g2.setColor((isCompatible && !isLoop) ? Color.green : Color.red);
@@ -422,6 +427,8 @@ public class GraphPanel extends GPanel {
 					errorMessage += "Incompatible data type \n";
 				if(isLoop) 
 					errorMessage += "Loops are not allowed\n";
+				if(isLocked) 
+					errorMessage += "Pin is locked\n";
 
 				if(errorMessage.length() != 0) 
 					drawErrorMessage(g2, errorMessage, pin.getLocation());

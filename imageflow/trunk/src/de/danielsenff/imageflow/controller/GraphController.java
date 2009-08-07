@@ -120,7 +120,16 @@ public class GraphController{
 		for (Node node : group.getNodes()) {
 			int x = node.getOrigin().x, y = node.getOrigin().y;
 			node.getOrigin().setLocation(x+deltaX, y+deltaY);
+			
+			for (Input input : ((UnitElement)node).getInputs()) {
+				input.setLocked(false);
+			}
+			for (Output output : ((UnitElement)node).getOutputs()) {
+				output.setLocked(false);
+			}
 		}
+		
+		
 		
 		units.addAll(group.getNodes());
 		ConnectionList connections = units.getConnections();
@@ -129,7 +138,6 @@ public class GraphController{
 		 * reconnect inputs
 		 */
 		for (Input input : group.getInputs()) {
-			input.setLocked(false);
 			if(input instanceof ProxyInput) {
 				ProxyInput pInput = (ProxyInput)input;
 				if(pInput.isConnected()) {
@@ -147,7 +155,6 @@ public class GraphController{
 		 */
 		Collection<Connection> tmpConn = new Vector<Connection>();
 		for (Output output : group.getOutputs()) {
-			output.setLocked(false);
 			if(output instanceof ProxyOutput) {
 				ProxyOutput pOutput = (ProxyOutput)output;
 				if(pOutput.isConnected()) {
