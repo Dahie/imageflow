@@ -42,7 +42,10 @@ public class Input extends Pin {
 	 */
 	protected boolean requiredInput = true;
 	
-	
+	/**
+	 * write protection
+	 */
+	protected boolean locked = false;
 
 	/**
 	 * Connection
@@ -103,20 +106,14 @@ public class Input extends Pin {
 		this.inputTitle = "Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
 		this.inputID = "ID_Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
 	}
-	
-	/**
-	 * Sets the connection between this input and an output.
-	 */
-	/*public void connectTo(final Pin fromOutput) {
-		this.from = (Output)fromOutput;
-		this.fromUnit = (UnitElement) fromOutput.getParent();
-		generateID(fromUnit.getUnitID(), fromOutput.getIndex());
-	}*/
-	
+
 	public void setConnection(Connection connection) {
-		this.connection = connection;
-		generateID(connection.getOutput().getParent().getUnitID(), 
-				connection.getOutput().getIndex());
+		if(!isLocked()) {
+			this.connection = connection;
+			generateID(connection.getOutput().getParent().getUnitID(), 
+					connection.getOutput().getIndex());	
+		}
+		
 	}
 
 	/**
@@ -272,8 +269,10 @@ public class Input extends Pin {
 	 * Resets the this Input, so that it is unconnected.
 	 */
 	public void disconnectAll() {
-		generateID(0, 0); // reset connection
-		this.connection = null;
+		if(!isLocked()) {
+			generateID(0, 0); // reset connection
+			this.connection = null;	
+		}
 	}
 
 
@@ -353,6 +352,14 @@ public class Input extends Pin {
 		} 
 
 		return false;
+	}
+
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean isLocked) {
+		this.locked = isLocked;
 	}
 	
 }

@@ -120,6 +120,13 @@ public class GroupUnitElement extends UnitElement {
 		
 		// proxy connections
 		
+		for (Input input : getInputs()) {
+			((ProxyInput)input).getEmbeddedInput().setLocked(true);
+		}
+		for (Output output : getOutputs()) {
+			((ProxyOutput)output).getEmbeddedOutput().setLocked(true);
+		}
+		
 		
 		int lowestX = 3000, lowestY = 3000;
 		for (Node node : getNodes()) {
@@ -138,7 +145,6 @@ public class GroupUnitElement extends UnitElement {
 			int x = node.getOrigin().x, y = node.getOrigin().y;
 			node.getOrigin().setLocation(x-deltaX, y-deltaY);
 		}
-
 	}
 
 	/**

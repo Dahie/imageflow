@@ -70,6 +70,8 @@ public class UnitDescription {
 			pathToIcon = elementGeneral.getChild("PathToIcon").getValue();
 			helpString = elementGeneral.getChild("HelpString").getValue();
 			colorString = elementGeneral.getChild("Color").getValue();
+			if(elementGeneral.getChild("DoDisplay") != null)
+				isDisplayUnit = elementGeneral.getChild("DoDisplay").getValue().toLowerCase().equals("true") ? true : false;
 			
 			try {
 				color = Color.decode(colorString);

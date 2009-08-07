@@ -20,7 +20,6 @@ public class FileDropListener implements FileDrop.Listener {
 
 	protected Point coordinates;
 	protected GPanel gpanel;
-	private Collection<Node> unitList;
 	private ImageFlowView ifView;
 
 	/**
@@ -29,7 +28,6 @@ public class FileDropListener implements FileDrop.Listener {
 	 */
 	public FileDropListener(final GPanel gpanel, final ImageFlowView ifView) {
 		this.gpanel = gpanel;
-		this.unitList = gpanel.getNodeL();
 		this.ifView = ifView;
 	}
 	
@@ -42,6 +40,8 @@ public class FileDropListener implements FileDrop.Listener {
 	 */
 	public void filesDropped( java.io.File[] files, Point point )
     {   
+		Collection<Node> unitList = gpanel.getNodeL();
+		
 		point.translate(-50, -50);
 		coordinates = point;
 		gpanel.getSelection().clear();

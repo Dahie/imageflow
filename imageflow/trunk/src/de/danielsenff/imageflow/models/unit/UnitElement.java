@@ -682,6 +682,10 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 
 			int y =  PaintUtil.alignY(numberInputs, i, unitComponentIcon.getHeight(), NodeIcon.pinSize);
 			g.fillRect(origin.x, origin.y+y, NodeIcon.pinSize, NodeIcon.pinSize);
+			
+			if(getInput(i).isLocked())
+				g.fillRect(origin.x-20, origin.y+y, NodeIcon.pinSize, NodeIcon.pinSize);	
+				
 		}
 
 		//draw outputs
@@ -692,6 +696,9 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 			int x = (unitComponentIcon.getWidth() - 8) + origin.x;
 			int y = PaintUtil.alignY(numberOutputs, i, unitComponentIcon.getHeight(), NodeIcon.pinSize)+origin.y;
 
+			if(getOutput(i).isLocked())
+				g.fillRect(x+20, y, NodeIcon.pinSize, NodeIcon.pinSize);
+			
 			Polygon po=new Polygon(); 
 			po.addPoint(x, y); //top
 			po.addPoint(x + NodeIcon.pinSize, y + (NodeIcon.pinSize/2)); //pointy

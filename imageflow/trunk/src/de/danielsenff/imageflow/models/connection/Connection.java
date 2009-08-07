@@ -2,6 +2,7 @@ package de.danielsenff.imageflow.models.connection;
 
 import visualap.Node;
 import visualap.Pin;
+import de.danielsenff.imageflow.models.Lockable;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 /**
@@ -9,7 +10,7 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  * @author danielsenff
  *
  */
-public class Connection {
+public class Connection implements Lockable {
 	/**
 	 * the id of this connection
 	 */
@@ -232,6 +233,8 @@ public class Connection {
 	 */
 	public void setLocked(boolean locked) {
 		this.locked = locked;
+		this.to.setLocked(locked);
+		this.from.setLocked(locked);
 	}
 
 	public boolean causesLoop() {

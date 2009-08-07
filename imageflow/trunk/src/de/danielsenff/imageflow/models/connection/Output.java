@@ -35,6 +35,10 @@ public class Output extends Pin {
 	
 	Vector<Connection> connections;
 	
+	/**
+	 * write protection
+	 */
+	protected boolean locked = false;
 	
 	/**
 	 * @param name
@@ -79,36 +83,21 @@ public class Output extends Pin {
 		this.outputTitle = "Unit_" + unitNumber + "_Output_" + outputNumber;
 		this.outputID = "ID_Unit_" + unitNumber + "_Output_" + outputNumber;
 	}
-
-	
-	/**
-	 * Sets the connection between this input and an output.
-	 * @param toUnit
-	 * @param toOutputNumber 
-	 */
-	/*public void connectTo(final UnitElement toUnit, final int toInputNumber) {
-		connectTo(toUnit.getInput(toInputNumber-1));
-	}
-	
-	public void connectTo(final Pin toInput) {
-		this.to = (Input)toInput;
-		Connection conn = new Connection(this, this.to);
-		addConnection(conn);
-	}*/
 	
 	/**
 	 * Adds a new {@link Connection} to this Output. 
 	 * @param conn 
 	 */
 	public void addConnection(final Connection conn) {
-		this.connections.add(conn);
+		if(!isLocked())
+			this.connections.add(conn);
 	}
 
 	/**
 	 * Returns the {@link Connection} of this output.
 	 * @return
 	 */
-	public Collection<Connection> getConnections() {
+	public final Collection<Connection> getConnections() {
 		return this.connections;
 	}
 	
@@ -120,7 +109,6 @@ public class Output extends Pin {
 	public void setupOutput(final String name, final String shortname, final int outputBitDepth) {
 		this.displayName = name;
 		this.shortDisplayName = shortname;
-//		this.imageType = outputBitDepth;
 	}
 
 	/**
@@ -184,9 +172,6 @@ public class Output extends Pin {
 		return point;
 	}
 
-
-
-
 	@Override
 	public UnitElement getParent() {
 		return (UnitElement)super.getParent();
@@ -222,7 +207,8 @@ public class Output extends Pin {
 	 * Resets the this Output, so that it is unconnected.
 	 */
 	public void disconnectAll() {
-		this.connections.clear();
+		if(!isLocked())
+			this.connections.clear();
 	}
 	
 	public Connection getConnectionTo(Pin toInput) {
@@ -234,8 +220,11 @@ public class Output extends Pin {
 	}
 	
 	public void disconnectFrom(Pin input) {
-		Connection oldConnection = getConnectionTo(input);
-		this.connections.remove(oldConnection);
+		if(!isLocked()) {
+			Connection oldConnection = getConnectionTo(input);
+			this.connections.remove(oldConnection);
+		}
+		
 	}
 	
 
@@ -258,6 +247,14 @@ public class Output extends Pin {
 				return true;
 		}
 		return false;
+	}
+	
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean isLocked) {
+		this.locked = isLocked;
 	}
 	
 }

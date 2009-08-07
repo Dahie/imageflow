@@ -286,6 +286,9 @@ The unit can have multiple inputs.</p>
 in the following units. This is required when you get the error message "Image -xx not found or no image open."</p>
 		<pre>&lt;Required&gt;true&lt;/Required&gt;</pre>
 		<p>Inputs don't have to be mandatory. They can be defined as optional.</p>
+		<pre><code>&lt;Protected&gt;false&lt;/Protected&gt;</code></pre>
+		<p>Pins can be locked if necessary. This means, changing the connections on this input will be prohibited. 
+		They can be defined as optional.</p>
 		
 <pre><code>&lt;/Inputs&gt;
     &lt;Input&gt;
@@ -323,6 +326,9 @@ the first input.</p>
 This is because with one output there is no difference whether the option is attached
 to the unit or the output. Since there is the possibility of requiring multiple outputs
 in later versions and the option to display only selected outputs, this setting is defined here.</p>
+<pre><code>		&lt;Protected&gt;false&lt;/Protected&gt;</code></pre>
+		<p>Pins can be locked if necessary. This means, changing the connections on this input will be prohibited. 
+		They can be defined as optional.</p>
 
 <pre><code>    &lt;/Output&gt;
 &lt;/Outputs&gt;
@@ -349,11 +355,13 @@ in later versions and the option to display only selected outputs, this setting 
 </tr>
 </thead>
 <tbody>
+
 <tr>
 <td>05/08/09</td>
 <td>
 <ul>
 	<li>DoDisplay also for Units</li>
+	<li>Pins and Connections can be write protected using locks</li>
 </ul>
 </tr>
 

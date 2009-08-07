@@ -101,12 +101,17 @@ public class ConnectionList extends Vector<Connection> implements Model, Cloneab
 	
 	/**
 	 * adds the connection, if the pins are already connected, the old connection is deleted
+	 * if inputs are locked, the connection will not be added.
 	 * @param connection
 	 * @return
 	 */
 	public boolean add(final Connection connection) {
 		final Input input = connection.getInput();
 		final Output output = connection.getOutput();
+		
+		if(input.isLocked() || output.isLocked()) {
+			return false;
+		}
 		
 		// check if connection produces loop
 		if(input.isConnectedInOutputBranch(output.getParent())) {

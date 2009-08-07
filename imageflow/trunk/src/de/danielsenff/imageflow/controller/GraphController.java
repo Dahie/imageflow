@@ -17,7 +17,6 @@ import de.danielsenff.imageflow.models.connection.ProxyInput;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.CommentNode;
-import de.danielsenff.imageflow.models.unit.ForGroupUnitElement;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -130,6 +129,7 @@ public class GraphController{
 		 * reconnect inputs
 		 */
 		for (Input input : group.getInputs()) {
+			input.setLocked(false);
 			if(input instanceof ProxyInput) {
 				ProxyInput pInput = (ProxyInput)input;
 				if(pInput.isConnected()) {
@@ -147,6 +147,7 @@ public class GraphController{
 		 */
 		Collection<Connection> tmpConn = new Vector<Connection>();
 		for (Output output : group.getOutputs()) {
+			output.setLocked(false);
 			if(output instanceof ProxyOutput) {
 				ProxyOutput pOutput = (ProxyOutput)output;
 				if(pOutput.isConnected()) {

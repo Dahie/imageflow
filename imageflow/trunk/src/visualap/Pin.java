@@ -21,6 +21,7 @@ javalc6
 package visualap;
 import java.awt.Point;
 
+import de.danielsenff.imageflow.models.Lockable;
 import de.danielsenff.imageflow.models.connection.Connectable;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
@@ -30,7 +31,7 @@ import de.danielsenff.imageflow.models.datatype.DataType;
  * @author senff
  *
  */
-public abstract class Pin implements Connectable, Cloneable {
+public abstract class Pin implements Connectable, Cloneable, Lockable {
 	protected Node parent; // node that contains this Pin
 	protected int index;
 	transient protected int mark; // used only for analysis of graph
