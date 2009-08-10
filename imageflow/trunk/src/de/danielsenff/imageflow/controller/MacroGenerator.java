@@ -179,7 +179,7 @@ public class MacroGenerator {
 		macroText += duplicateImages(unit);
 		
 		// parse the command string for wildcards, that need to be replaced
-		// int i is needed for correct generation identifiers according to loops
+		// int i is needed for correct generation of identifiers according to loops
 		macroElement.parseParameters(unit.getParameters());
 		macroElement.parseStack(unit.getInputs());
 		if(!unit.hasRequiredInputsConnected()) throw new Exception("not all required Inputs connected");
@@ -212,6 +212,8 @@ public class MacroGenerator {
 	 */
 	private void addProcessingUnit(UnitElement unit, int i) throws Exception {
 		addFunctionUnit(unit, i);
+		
+		printNumbers(unit, i);
 		
 		// FIXME duplicates always
 		// maybe use rename(name)
@@ -302,6 +304,7 @@ public class MacroGenerator {
 				final String inputID = input.getImageID()+"_"+0;
 				code += "selectImage(" + inputID + "); \n";
 				if(input.isNeedToCopyInput()) {
+					//if () //TODO: Duplicate also for stacks
 					code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +"\"); \n";
 				}
 			}
@@ -313,6 +316,25 @@ public class MacroGenerator {
 		return "Title_Temp_"+ inputID;
 	}
 	
+	/**
+	 * If Units have an {@link Output} of Type Double/Integer/Number and are set to Display
+	 * their result values are printed to the Log. There is no need for an extra Print-Unit.   
+	 * @param unit
+	 * @param i
+	 */
+	private void printNumbers(UnitElement unit, int i) {
+		ArrayList<Output> outputs = unit.getOutputs();
+		for (int outputIndex = 0; outputIndex < outputs.size(); outputIndex++) {
+			Output output = outputs.get(outputIndex);
+			if (output.getDataType() instanceof DataTypeFactory.Double
+					|| output.getDataType() instanceof DataTypeFactory.Integer
+					|| output.getDataType() instanceof DataTypeFactory.Number) {
+				if (output.getParent().isDisplay()) {
+					macroText += "print (" + output.getOutputTitle() + "_" + i + "); \n";
+				}	
+			}
+		}
+	}
 	
 	public class ImageJImage {
 		String id;
