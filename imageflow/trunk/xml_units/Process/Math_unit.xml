@@ -6,7 +6,7 @@
 <General>
   <UnitName>Math</UnitName> 
   <PathToIcon>Math_Unit.png</PathToIcon> 
-  <ImageJSyntax>run("PARA_STRING_1", "PARA_BOOLEAN_1 value=PARA_DOUBLE_1");</ImageJSyntax> 
+  <ImageJSyntax>run("PARA_STRING_1", "STACK value=PARA_DOUBLE_1 ");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Performs a mathematical operation on the pixels of an image</HelpString>
   <IconSize>BIG</IconSize>  
@@ -21,13 +21,6 @@
   		<ChoiceNumber>0</ChoiceNumber>
   	</Parameter>
   	<Parameter>
-  		<Name>Process stack?</Name>
-  		<DataType>boolean</DataType>
-  		<Value>false</Value>
-  		<HelpString>Process stack?</HelpString>
-  		<TrueString>stack</TrueString>
-  	</Parameter> 
-  		<Parameter>
   		<Name>Value</Name>
   		<DataType>double</DataType>
   		<Value>25</Value>

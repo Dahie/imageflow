@@ -6,7 +6,7 @@
 <General>
   <UnitName>Invert</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Invert");</ImageJSyntax> 
+  <ImageJSyntax>run("Invert", "STACK");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Invert the colors of the image.</HelpString>
 </General>
@@ -16,7 +16,7 @@
 		<Name>Input</Name>
 		<ShortName>I</ShortName>
 		<DataType>Image</DataType>	
-		<ImageType>31</ImageType>
+		<ImageType>63</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
 </Inputs>

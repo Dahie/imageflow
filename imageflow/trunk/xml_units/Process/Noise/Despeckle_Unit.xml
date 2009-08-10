@@ -6,7 +6,7 @@
 <General>
   <UnitName>Despeckle</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Despeckle");</ImageJSyntax>
+  <ImageJSyntax>run("Despeckle", "STACK");</ImageJSyntax>
    
   <Color>0x6e91de</Color>
   <HelpString>Adds noise to an image</HelpString>
@@ -27,7 +27,7 @@
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
 		<DataType>Image</DataType>
-		<ImageType>31</ImageType>
+		<ImageType>63</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
 </Inputs>

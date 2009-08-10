@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Image Calculator -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Subtract Background</UnitName> 
+  <PathToIcon>ImageCalculator_Unit.png</PathToIcon> 
+  <ImageJSyntax>run("Image Calculator...", "rolling=PARA_DOUBLE_1 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3 PARA_BOOLEAN_4 STACK");</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+  <HelpString>Subtracts the background from the image.</HelpString>  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Rolling Ball Radius</Name>
+  		<DataType>double</DataType>
+  		<Value>50.0</Value>
+  		<HelpString>Defines the radius for which the subtraction is applied.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Light Background</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString>Light Background</HelpString>
+  		<TrueString>light</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Create Background (Don't Subtract)</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString>Create Background</HelpString>
+  		<TrueString>create</TrueString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Sliding Paraboloid</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString>Sliding Paraboloid</HelpString>
+  		<TrueString>sliding</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Disable Smoothing</Name>
+  		<DataType>boolean</DataType>
+  		<Value>true</Value>
+  		<HelpString>Disable Smoothing</HelpString>
+  		<TrueString>disable</TrueString>
+  	</Parameter>  
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Image</Name>
+		<ShortName>I1</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>63</ImageType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>
+		<DataType>Image</DataType>	
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

@@ -6,7 +6,7 @@
 <General>
   <UnitName>Remove Outliers</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Remove Outliers...", "radius=PARA_DOUBLE_1 threshold=PARA_INTEGER_1 which=PARA_STRING_1");</ImageJSyntax>
+  <ImageJSyntax>run("Remove Outliers...", "radius=PARA_DOUBLE_1 threshold=PARA_INTEGER_1 which=PARA_STRING_1 STACK");</ImageJSyntax>
    
   <Color>0x6e91de</Color>
   <HelpString>Removes outlines from an image.</HelpString>
@@ -39,7 +39,7 @@
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
 		<DataType>Image</DataType>
-		<ImageType>31</ImageType>
+		<ImageType>63</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
 </Inputs>

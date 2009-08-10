@@ -6,7 +6,7 @@
 <General>
   <UnitName>Sharpen</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Sharpen");</ImageJSyntax>
+  <ImageJSyntax>run("Sharpen", "STACK");</ImageJSyntax>
    
   <Color>0x6e91de</Color>
   <HelpString>Sharpens the image.</HelpString>

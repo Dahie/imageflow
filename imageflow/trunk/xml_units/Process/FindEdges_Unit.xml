@@ -6,7 +6,7 @@
 <General>
   <UnitName>Find Edges</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Find Edges");</ImageJSyntax> 
+  <ImageJSyntax>run("Find Edges", "STACK");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Pronounces the edges in the image.</HelpString>
 </General>

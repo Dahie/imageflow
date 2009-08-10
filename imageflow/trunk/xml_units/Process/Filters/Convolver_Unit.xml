@@ -5,7 +5,7 @@
 <General>
   <UnitName>Convolve</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Convolve...", "text1=[PARA_STRING_1] PARA_BOOLEAN_1");</ImageJSyntax> 
+  <ImageJSyntax>run("Convolve...", "text1=[PARA_STRING_1] PARA_BOOLEAN_1 STACK");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Performs a convolution with the given kernel</HelpString>
   	  
@@ -32,7 +32,7 @@
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
 		<DataType>Image</DataType>
-		<ImageType>31</ImageType>
+		<ImageType>63</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
 </Inputs>

@@ -7,7 +7,7 @@
   <UnitName>Flip</UnitName> 
   <PathToIcon>Flip_Unit.png</PathToIcon> 
   
-  <ImageJSyntax>run("Flip PARA_STRING_1");</ImageJSyntax>
+  <ImageJSyntax>run("Flip PARA_STRING_1", "STACK");</ImageJSyntax>
   <Color>0x6e91de</Color>
   <IconSize>BIG</IconSize>
   <HelpString>Resizes the image to the specified dimensions.</HelpString>  

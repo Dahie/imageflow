@@ -6,7 +6,7 @@
   <UnitName>Translate</UnitName> 
   <PathToIcon>Translate_Unit.png</PathToIcon> 
   
-  <ImageJSyntax>run("Translate...", "x=" + ATTRIBUTE_INPUT_2_PARAMETER_1 + " y=" + ATTRIBUTE_INPUT_3_PARAMETER_2 + "");</ImageJSyntax>
+  <ImageJSyntax>run("Translate...", "x=" + ATTRIBUTE_INPUT_2_PARAMETER_1 + " y=" + ATTRIBUTE_INPUT_3_PARAMETER_2 + " STACK");</ImageJSyntax>
   <Color>0x6e91de</Color>
   <IconSize>BIG</IconSize>
   <HelpString>Resizes the image to the specified dimensions.</HelpString>  
@@ -32,7 +32,7 @@
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
 		<DataType>Image</DataType>
-		<ImageType>31</ImageType>
+		<ImageType>63</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
 	<Input>

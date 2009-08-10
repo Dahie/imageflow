@@ -6,7 +6,7 @@
 <General>
   <UnitName>Add Specified Noise</UnitName> 
   <PathToIcon>AddNoise_Unit.png</PathToIcon> 
-  <ImageJSyntax>run("Add Specified Noise...", "standard=PARA_DOUBLE_1" PARA_BOOLEAN_1);</ImageJSyntax>
+  <ImageJSyntax>run("Add Specified Noise...", "STACK standard=PARA_DOUBLE_1");</ImageJSyntax>
    
   <Color>0x6e91de</Color>
   <HelpString>Adds noise to an image</HelpString>
@@ -19,13 +19,6 @@
   		<Value>25</Value>
   		<HelpString>Defines the Standard Deviation of Noise added.</HelpString>
   	</Parameter> 
-  	<Parameter>
-  		<Name>Stack</Name>
-  		<DataType>boolean</DataType>
-  		<Value>false</Value>
-  		<HelpString>Stack support</HelpString>
-  		<TrueString>, "stack"</TrueString>
-  	</Parameter> 
 </Parameters>
 
 <Inputs> 
@@ -33,7 +26,7 @@
 		<Name>Image</Name>
 		<ShortName>I</ShortName>
 		<DataType>Image</DataType>
-		<ImageType>31</ImageType>
+		<ImageType>63</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 		<Required>true</Required>
 	</Input>

@@ -6,7 +6,7 @@
 <General>
   <UnitName>Smooth</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Smooth");</ImageJSyntax>
+  <ImageJSyntax>run("Smooth", "STACK");</ImageJSyntax>
    
   <Color>0x6e91de</Color>
   <HelpString>Blurs the image.</HelpString>

@@ -6,7 +6,7 @@
 <General>
   <UnitName>Image Calculator</UnitName> 
   <PathToIcon>ImageCalculator_Unit.png</PathToIcon> 
-  <ImageJSyntax>run("Image Calculator...", "image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create PARA_BOOLEAN_1");</ImageJSyntax> 
+  <ImageJSyntax>run("Image Calculator...", "image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create PARA_BOOLEAN_1 STACK");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Performs a mathematical calculation of two images</HelpString>  
 </General>
@@ -33,14 +33,14 @@
 		<Name>Input1</Name>
 		<ShortName>I1</ShortName>	
 		<DataType>Image</DataType>
-		<ImageType>31</ImageType>
+		<ImageType>63</ImageType>
 		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
 	<Input>
 		<Name>Input2</Name>
 		<ShortName>I2</ShortName>	
 		<DataType>Image</DataType>
-		<ImageType>31</ImageType>
+		<ImageType>63</ImageType>
 		<NeedToCopyInput>false</NeedToCopyInput></Input>
 </Inputs>
 

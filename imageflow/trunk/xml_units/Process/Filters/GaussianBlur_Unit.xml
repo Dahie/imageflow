@@ -6,7 +6,7 @@
 <General>
   <UnitName>Gaussian Blur</UnitName> 
   <PathToIcon>GaussianBlur_Unit.png</PathToIcon> 
-  <ImageJSyntax>run("Gaussian Blur...", "sigma=PARA_DOUBLE_1");</ImageJSyntax> 
+  <ImageJSyntax>run("Gaussian Blur...", "sigma=PARA_DOUBLE_1 STACK");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Performs a gaussian blur</HelpString>
   	  
@@ -26,7 +26,7 @@
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
 		<DataType>Image</DataType>
-		<ImageType>31</ImageType>
+		<ImageType>63</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
 </Inputs>

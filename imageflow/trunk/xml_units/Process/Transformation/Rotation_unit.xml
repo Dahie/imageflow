@@ -5,7 +5,7 @@
 <General>
   <UnitName>Rotation</UnitName> 
   <PathToIcon>Rotation_Unit.png</PathToIcon>   
-  <ImageJSyntax>run("Arbitrarily...", "angle=" + ATTRIBUTE_INPUT_2_PARAMETER_1 + " grid=1 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3");</ImageJSyntax>
+  <ImageJSyntax>run("Arbitrarily...", "angle=" + ATTRIBUTE_INPUT_2_PARAMETER_1 + " grid=1 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3 STACK");</ImageJSyntax>
   <Color>0x6e91de</Color>
   <IconSize>BIG</IconSize>
   <HelpString>Rotates the image around a specified angle.</HelpString>  
@@ -56,7 +56,7 @@
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
 		<DataType>Image</DataType>
-		<ImageType>31</ImageType>
+		<ImageType>63</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
 	</Input>
 	<Input>
