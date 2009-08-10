@@ -307,10 +307,11 @@ public class MacroElement {
 			Input input = inputs.get(inputIndex);
 			if (input.isConnected()) {
 				if (input.getDataType() instanceof DataTypeFactory.Image) {
-					if (((DataTypeFactory.Image)input.getDataType()).getImageBitDepth()
+					System.out.println("BITDEPTH: " + ((DataTypeFactory.Image)input.getFromOutput().getDataType()).getImageBitDepth());
+					/*if ((DataTypeFactory.Image)input.getFromOutput().getDataType()).getImageBitDepth()
 							== ij.plugin.filter.PlugInFilter.DOES_STACKS) {
 						stackParameter = " stack";
-					}
+					}*/
 				}
 			}
 		}
