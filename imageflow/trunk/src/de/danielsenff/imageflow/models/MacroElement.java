@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory.Image;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.DoubleParameter;
 import de.danielsenff.imageflow.models.parameter.IntegerParameter;
@@ -162,9 +163,17 @@ public class MacroElement {
 	 * Writes values of output-DataTypes into the command-string.
 	 * @param inputs
 	 * @param parameters
+	 * @param i
 	 */
 	public void parseAttributes(ArrayList<Input> inputs, ArrayList<Parameter> parameters, int i) {
 		this.commandSyntax = parseAttributes(inputs, parameters, this.commandSyntax, i);
+	}
+	
+	/**
+	 * Writes stack-command in the command-string, if input-DataType is stack
+	 */
+	public void parseStack(ArrayList<Input> inputs) {
+		this.commandSyntax = parseStack(inputs, this.commandSyntax);
 	}
 	
 	private static String parseOutputs(ArrayList<Output> outputs, String command, int i) {
@@ -290,4 +299,22 @@ public class MacroElement {
 		return command;
 	}
 	
+	public static String parseStack(ArrayList<Input> inputs, String command) {
+		String searchString = "STACK";
+		String stackParameter = "";
+				
+		for (int inputIndex = 0; inputIndex < inputs.size(); inputIndex++) {
+			Input input = inputs.get(inputIndex);
+			if (input.isConnected()) {
+				if (input.getDataType() instanceof DataTypeFactory.Image) {
+					if (((DataTypeFactory.Image)input.getDataType()).getImageBitDepth()
+							== ij.plugin.filter.PlugInFilter.DOES_STACKS) {
+						stackParameter = " stack";
+					}
+				}
+			}
+		}
+		command = Tools.replace(command, searchString, stackParameter);
+		return command;
+	}
 }

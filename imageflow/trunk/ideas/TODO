@@ -22,6 +22,7 @@ Functions:
 - quicksearch of filter units in left sidepane
 - Macro-Generator at For-Loops: Integer only visible in loop,
 - check for bugs concerning the image retrieving after a workflow was executed (exception because of names with -1)
+- setDisplay makes number units (xml_units/Math) displaying their outputs (number, double, ...), that would make the Print-unit obsolete needless
 
 
 Graph:

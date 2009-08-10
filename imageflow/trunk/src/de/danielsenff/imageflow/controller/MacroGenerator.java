@@ -181,6 +181,7 @@ public class MacroGenerator {
 		// parse the command string for wildcards, that need to be replaced
 		// int i is needed for correct generation identifiers according to loops
 		macroElement.parseParameters(unit.getParameters());
+		macroElement.parseStack(unit.getInputs());
 		if(!unit.hasRequiredInputsConnected()) throw new Exception("not all required Inputs connected");
 		macroElement.parseInputs(unit.getInputs(), i);
 		macroElement.parseOutputs(unit.getOutputs(), i);
