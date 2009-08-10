@@ -10,14 +10,7 @@
   <HelpString>Provides a random number between 0 and 1</HelpString>
 </General>
 
-<Parameters>
-  	<Parameter>
-  		<Name>Value</Name>
-  		<DataType>Double</DataType>
-  		<Value>1</Value>
-  		<HelpString>A Double</HelpString>
-  	</Parameter> 
-</Parameters>
+<Parameters />
 
 <Outputs> 
 	
