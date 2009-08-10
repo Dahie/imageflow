@@ -207,20 +207,29 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 			ImagePlus imp = IJ.openImage(path);
 			if(imp != null) {
 				final int type = imp.getType();
+				boolean isStack = imp.getStackSize() > 1 ? true : false;
+				
 				imp.close();
 				imp = null;
+				
+				int bitDepth =0;
+				
 				switch (type) {
 				case ImagePlus.GRAY8:
-					return PlugInFilter.DOES_8G;
+					bitDepth = PlugInFilter.DOES_8G;
 				case ImagePlus.COLOR_256:
-					return PlugInFilter.DOES_8C;
+					bitDepth = PlugInFilter.DOES_8C;
 				case ImagePlus.GRAY16:
-					return PlugInFilter.DOES_16;
+					bitDepth = PlugInFilter.DOES_16;
 				case ImagePlus.GRAY32:
-					return PlugInFilter.DOES_32;
+					bitDepth = PlugInFilter.DOES_32;
 				case ImagePlus.COLOR_RGB:
-					return PlugInFilter.DOES_RGB;
+					bitDepth = PlugInFilter.DOES_RGB;
 				}
+				
+				bitDepth += isStack ? PlugInFilter.DOES_STACKS : 0;
+				
+				return bitDepth;
 			}
 		}
 		return -1; 
