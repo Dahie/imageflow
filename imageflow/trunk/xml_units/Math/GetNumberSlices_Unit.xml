@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Number Slices</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>OUTPUT_INTEGER_1 = nSlices;</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Number of slices in this Stack.</HelpString>
+</General>
+
+<Parameters />
+
+<Inputs>
+  <Input>
+	<Name>Stack</Name>
+	<ShortName>I</ShortName>	
+	<DataType>Image</DataType>
+	<ImageType>32</ImageType>
+	<NeedToCopyInput>true</NeedToCopyInput>
+  </Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Slices</Name>
+		<ShortName>P</ShortName>	
+		<DataType>Integer</DataType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

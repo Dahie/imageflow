@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Power</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>OUTPUT_NUMBER_1 = pow(INPUT_NUMBER_1, INPUT_NUMBER_2);</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Functions to modify your number.</HelpString>
+</General>
+
+<Parameters>
+  <Parameter>
+  	 <Name>Math</Name>
+  	 <DataType>StringArray</DataType>
+  	 <Value>abs;acos;asyn;atan;atan2;cos;floor;log;round;sin;sqrt;tan</Value>
+  	 <HelpString>Defines what math should be used to merge both images</HelpString>
+     <ChoiceNumber>1</ChoiceNumber>
+   </Parameter>
+ </Parameters>
+
+<Inputs>
+  <Input>
+    <Name>Base</Name>
+    <ShortName>B</ShortName>	
+    <DataType>Number</DataType>
+    <NeedToCopyInput>false</NeedToCopyInput>
+  </Input>
+  <Input>
+    <Name>Exponent</Name>
+    <ShortName>E</ShortName>	
+    <DataType>Number</DataType>
+    <NeedToCopyInput>false</NeedToCopyInput>
+  </Input>
+</Inputs>
+
+<Outputs> 
+<Output>
+		<Name>Output</Name>
+		<ShortName>C</ShortName>	
+		<DataType>Number</DataType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
