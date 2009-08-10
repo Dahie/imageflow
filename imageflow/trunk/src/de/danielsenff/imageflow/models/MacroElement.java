@@ -307,9 +307,9 @@ public class MacroElement {
 			Input input = inputs.get(inputIndex);
 			if (input.isConnected()) {
 				if (input.getDataType() instanceof DataTypeFactory.Image) {
-					int result = ((DataTypeFactory.Image)input.getFromOutput().getDataType()).getImageBitDepth() 
+					int binaryComparison = ((DataTypeFactory.Image)input.getFromOutput().getDataType()).getImageBitDepth() 
 						& (ij.plugin.filter.PlugInFilter.DOES_STACKS);
-					if (result != 0) {
+					if (binaryComparison != 0) {
 						stackParameter = "stack";
 					}
 				}

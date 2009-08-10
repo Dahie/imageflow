@@ -304,8 +304,15 @@ public class MacroGenerator {
 				final String inputID = input.getImageID()+"_"+0;
 				code += "selectImage(" + inputID + "); \n";
 				if(input.isNeedToCopyInput()) {
-					//if () //TODO: Duplicate also for stacks
-					code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +"\"); \n";
+					// Stacks need an additional Parameter 'duplicate' in the Duplicate-command
+					int binaryComparison = ((DataTypeFactory.Image)input.getFromOutput().getDataType()).getImageBitDepth() 
+					& (ij.plugin.filter.PlugInFilter.DOES_STACKS);
+					if (binaryComparison != 0) {
+						code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +" duplicate\"); \n";
+					}
+					else {
+						code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +"\"); \n";
+					}
 				}
 			}
 		}
