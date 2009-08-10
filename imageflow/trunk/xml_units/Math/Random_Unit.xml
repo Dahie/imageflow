@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Random</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>OUTPUT_DOUBLE_1 = random;</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Provides a random number between 0 and 1</HelpString>
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Value</Name>
+  		<DataType>Double</DataType>
+  		<Value>1</Value>
+  		<HelpString>A Double</HelpString>
+  	</Parameter> 
+</Parameters>
+
+<Outputs> 
+	
+<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<DataType>Double</DataType>
+		<DoDisplay>false</DoDisplay>
+	</Output></Outputs>
+
+</UnitDescription>
