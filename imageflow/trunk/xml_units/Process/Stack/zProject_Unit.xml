@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Image Calculator -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Z Project</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Z Project...", "start=PARA_INTEGER_1 stop=PARA_INTEGER_2 projection=[Max Intensity]");</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+  <HelpString>Projects all slices in one image.</HelpString>  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Start</Name>
+  		<DataType>integer</DataType>
+  		<Value>1</Value>
+  		<HelpString>First slices to begin.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>End</Name>
+  		<DataType>integer</DataType>
+  		<Value>20</Value>
+  		<HelpString>Last slice to use.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Projection</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>Average Intensity;Max Intensity;Min Intensity;Sum Slices;Standard Deviation;Median</Value>
+  		<HelpString>Defines what math should be used to merge both images</HelpString>
+  		<ChoiceNumber>1</ChoiceNumber>
+  	</Parameter>
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Stack</Name>
+		<ShortName>S</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>63</ImageType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>
+		<DataType>Image</DataType>	
+		<ImageType>-2</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

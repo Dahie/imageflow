@@ -166,7 +166,7 @@ public class DataTypeFactory {
 			/*System.out.println(this);
 			System.out.println(parent);
 			System.out.println(imageBitDepth);*/
-			if(this.imageBitDepth != -1 
+			if(this.imageBitDepth < 0 
 					&& this.imageBitDepth != PlugInFilter.DOES_ALL) {
 				return this.imageBitDepth; 
 			} else if(parentPin instanceof ProxyOutput) {
@@ -180,7 +180,10 @@ public class DataTypeFactory {
 				if(parent.hasInputsConnected()) {
 					for (Input input : parent.getInputs()) {
 						if(input.isConnected() && input.getDataType() instanceof Image) {
-							return ((Image)input.getFromOutput().getDataType()).getImageBitDepth();
+							int inheritedBitDepth = ((Image)input.getFromOutput().getDataType()).getImageBitDepth();
+							// if -2 then convert from stack to image
+							inheritedBitDepth -= this.imageBitDepth == -2 ? PlugInFilter.DOES_STACKS : 0;
+							return inheritedBitDepth;
 						}
 					}
 
@@ -192,8 +195,11 @@ public class DataTypeFactory {
 				//TODO this could be nicer, how to handle multiple inputs?
 				if(parent.hasInputsConnected()) {
 					for (Input input : parent.getInputs()) {
-						if(input.isConnected() && input.getDataType() instanceof Image)
-							return ((Image)input.getFromOutput().getDataType()).getImageBitDepth();
+						if(input.isConnected() && input.getDataType() instanceof Image) {
+							int inheritedBitDepth = ((Image)input.getFromOutput().getDataType()).getImageBitDepth();
+							inheritedBitDepth -= this.imageBitDepth == -2 ? PlugInFilter.DOES_STACKS : 0;
+							return inheritedBitDepth;
+						}
 					}
 
 					return -1;

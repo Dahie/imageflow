@@ -4,7 +4,6 @@
 package de.danielsenff.imageflow.models.unit;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
