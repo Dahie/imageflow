@@ -793,7 +793,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 					parameter.getValue(), 
 					parameter.getHelpString());	
 		}
-		clone.addParameter(parameter);
+		clone.addParameter(clonedParameter);
 	}
 
 	protected void cloneOutput(UnitElement clone, int i) {
