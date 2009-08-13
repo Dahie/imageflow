@@ -646,7 +646,7 @@ public class ImageFlowView extends FrameView {
 	 * @return
 	 */
     @Action public RunMacroTask runMacro() {
-        return new RunMacroTask(this.getApplication(), graphController, this.showCode);
+        return new RunMacroTask(this.getApplication(), graphController, this.showCode, this.closeAll);
     }
 
     /**

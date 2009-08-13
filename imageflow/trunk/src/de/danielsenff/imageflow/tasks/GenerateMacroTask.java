@@ -21,7 +21,7 @@ import de.danielsenff.imageflow.controller.GraphController;
 public class GenerateMacroTask extends Task<Object, String> {
 
 	protected GraphController graphController;
-	protected boolean showlog;
+	protected boolean showCode;
 	
 	/**
 	 * @param app
@@ -31,27 +31,32 @@ public class GenerateMacroTask extends Task<Object, String> {
 			final GraphController graphController) {
 		super(app);
 		this.graphController = graphController;
-		this.showlog = true;
+		this.showCode = true;
 	}
 	
 	@Override 
 	protected String doInBackground() throws InterruptedException {
 
+		final String macro = generateMacro();
+
+		return macro;
+	}
+
+	protected String generateMacro() {
 		final String macro = graphController.generateMacro();
 		
-		if(this.showlog) {
+		if(this.showCode) {
 //			System.out.println(macro);
-			JDialog preview = new JDialog(ImageFlow.getApplication().getMainFrame(), "generated Macro");
+			JDialog codePreview = new JDialog(ImageFlow.getApplication().getMainFrame(), "generated Macro");
+			codePreview.setPreferredSize(new Dimension(350,150));
 			JTextArea ta = new JTextArea(macro);
-			ta.setPreferredSize(new Dimension(350,150));
-			preview.setLayout(new BorderLayout());
+			codePreview.setLayout(new BorderLayout());
 
 			JScrollPane scrollPane = new JScrollPane(ta);
-			preview.add(scrollPane, BorderLayout.CENTER);
-			preview.pack();
-			preview.setVisible(true);			
+			codePreview.add(scrollPane, BorderLayout.CENTER);
+			codePreview.pack();
+			codePreview.setVisible(true);			
 		}
-
 		return macro;
 	}
 	

@@ -16,6 +16,8 @@ import de.danielsenff.imageflow.controller.GraphController;
  */
 public class RunMacroTask extends GenerateMacroTask {
 	
+	private boolean closeAll;
+	
 	/**
 	 * @param app
 	 * @param graphController
@@ -23,20 +25,36 @@ public class RunMacroTask extends GenerateMacroTask {
 	 */
 	public RunMacroTask(final Application app, 
 			final GraphController graphController, 
-			final boolean doShowLog) {
+			final boolean showCode, 
+			final boolean closeAll) {
 		super(app, graphController);
-		this.showlog = doShowLog;
+		this.showCode = showCode;
+		this.closeAll = closeAll;
+	}
+	
+	public RunMacroTask(final Application app, 
+			final GraphController graphController, 
+			final boolean showCode) {
+		this(app, graphController, showCode, false);
 	}
 
 	@Override 
 	protected String doInBackground() throws InterruptedException {
 		
+		// create macro
 		String macro = super.doInBackground(); 
+		
+		if(closeAll) {
+			String closeAllCommand = "while (nImages>0) { \n selectImage(nImages);\n close(); } ";
+			macro = closeAllCommand + macro;
+		}
+		
+		
 		// if the graph checks turn out false, the resulting macro will be just a null-pointer
 		if(macro != null) {
 		
 			ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
-//			if(this.showlog)
+//			if(this.showCode)
 //				IJ.log(macro);
 
 //			IJ.runMacro(macro, "");
