@@ -6,6 +6,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.ScrollPane;
 import java.awt.event.KeyEvent;
@@ -22,6 +25,7 @@ import java.util.HashSet;
 import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -349,13 +353,15 @@ public class ImageFlowView extends FrameView {
 		
 		
 		
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.setLayout(new BorderLayout());
+		
 		JPanel buttonPanel = new JPanel();
-		FlowLayout flowLayout = new FlowLayout();
-		flowLayout.setAlignment(FlowLayout.LEADING);
-		buttonPanel.setLayout(flowLayout);
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
 		
 		JButton buttonRun = new JButton(getAction("runMacro"));
 		buttonPanel.add(buttonRun);
+		
 		JCheckBox chkShowCode = new JCheckBox(resourceMap.getString("showLog"));
 		resourceMap.injectComponent(chkShowCode);
 		chkShowCode.addChangeListener(new ChangeListener() {
@@ -373,13 +379,20 @@ public class ImageFlowView extends FrameView {
 			}});
 		buttonPanel.add(chkCloseAll);
 		
+		bottomPanel.add(buttonPanel, BorderLayout.LINE_START);
+		
+		JPanel progressPanel = new JPanel();
+		progressPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
 		progressBar = new JProgressBar();
 		progressBar.setMinimum(0);
 		progressBar.setMaximum(100);
 		progressBar.setSize(150, 20);
-		buttonPanel.add(progressBar);
 		
-
+		progressPanel.add(progressBar);
+		
+		bottomPanel.add(progressPanel, BorderLayout.LINE_END);
+		
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
 		DelegatesPanel delegatesPanel = new DelegatesPanel(this.getNodes());
@@ -456,7 +469,7 @@ public class ImageFlowView extends FrameView {
 		splitPane.setContinuousLayout(true);
 		
 		mainPanel.add(splitPane, BorderLayout.CENTER);
-		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+		mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 		setComponent(mainPanel);
 	}
 
