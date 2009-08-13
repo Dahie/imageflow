@@ -34,6 +34,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
@@ -114,8 +115,8 @@ public class ImageFlowView extends FrameView {
 
 	private JCheckBoxMenuItem chkBoxDisplayUnit;
 	private JCheckBoxMenuItem chkBoxCollapseIcon;
-
 	
+	private static JProgressBar progressBar;	
 
 	
 	
@@ -372,6 +373,12 @@ public class ImageFlowView extends FrameView {
 			}});
 		buttonPanel.add(chkCloseAll);
 		
+		progressBar = new JProgressBar();
+		progressBar.setMinimum(0);
+		progressBar.setMaximum(100);
+		progressBar.setSize(150, 20);
+		buttonPanel.add(progressBar);
+		
 
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
@@ -438,11 +445,9 @@ public class ImageFlowView extends FrameView {
 		
 		
 		sidePane.add(delegatesPanel, BorderLayout.CENTER);
-		sidePane.add(buttonPanel, BorderLayout.PAGE_END);
 		
 		// setting of MinimumSize is required for drag-ability of JSplitPane
-		sidePane.setMinimumSize(new Dimension(
-				(int)buttonRun.getPreferredSize().getWidth() + 20 + (int)chkShowCode.getPreferredSize().getWidth(), 100));
+		sidePane.setMinimumSize(new Dimension(150, 100));
 		graphScrollpane.setMinimumSize(new Dimension(100, 100));
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidePane, graphScrollpane);
 		splitPane.setEnabled(true);
@@ -450,7 +455,8 @@ public class ImageFlowView extends FrameView {
 		// enables continuous redrawing while moving the JSplitPane-Divider
 		splitPane.setContinuousLayout(true);
 		
-		mainPanel.add(splitPane , BorderLayout.CENTER);
+		mainPanel.add(splitPane, BorderLayout.CENTER);
+		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 		setComponent(mainPanel);
 	}
 
@@ -1229,6 +1235,21 @@ public class ImageFlowView extends FrameView {
 	 */
 	public GraphPanel getGraphPanel() {
 		return this.graphPanel;
+	}
+	
+	/**
+	 * Sets the current value of the ProgressBar. The parameter must be of type String
+	 * to meet the demands of the macro call() function
+	 * @param progress must be between 0.0 and 1.0
+	 */
+	public static void setProgress(String progress) {
+		Double progressValue = Double.valueOf(progress).doubleValue();
+		
+		if (progressValue < 0) {progressValue = 0.0;}
+		else if(progressValue > 1) {progressValue = 1.0;}
+		
+		// adjust value for progressBar (0 to 100%)
+		progressBar.setValue((int)(progressValue*100));
 	}
 	
 
