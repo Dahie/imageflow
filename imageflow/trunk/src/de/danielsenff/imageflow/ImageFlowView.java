@@ -109,7 +109,8 @@ public class ImageFlowView extends FrameView {
 	private boolean modified = false;
 	private boolean selected = false;
 	private boolean paste = false;
-	private boolean showlog = false;
+	private boolean showCode = false;
+	private boolean closeAll = false;
 
 	private JCheckBoxMenuItem chkBoxDisplayUnit;
 	private JCheckBoxMenuItem chkBoxCollapseIcon;
@@ -349,20 +350,27 @@ public class ImageFlowView extends FrameView {
 		
 		JPanel buttonPanel = new JPanel();
 		FlowLayout flowLayout = new FlowLayout();
-		flowLayout.setAlignment(FlowLayout.LEFT);
+		flowLayout.setAlignment(FlowLayout.LEADING);
 		buttonPanel.setLayout(flowLayout);
 		
 		JButton buttonRun = new JButton(getAction("runMacro"));
 		buttonPanel.add(buttonRun);
-		JCheckBox chkShowLog = new JCheckBox(resourceMap.getString("showLog"));
-		resourceMap.injectComponent(chkShowLog);
-		chkShowLog.addChangeListener(new ChangeListener() {
-
+		JCheckBox chkShowCode = new JCheckBox(resourceMap.getString("showLog"));
+		resourceMap.injectComponent(chkShowCode);
+		chkShowCode.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				boolean selected = ((JCheckBox)e.getSource()).isSelected();
-				showlog = selected;
+				showCode = ((JCheckBox)e.getSource()).isSelected();
 			}});
-		buttonPanel.add(chkShowLog);
+		buttonPanel.add(chkShowCode);
+		
+		JCheckBox chkCloseAll = new JCheckBox(resourceMap.getString("closeAll.text"));
+		chkCloseAll.setToolTipText(resourceMap.getString("closeAll.shortDescription"));
+		resourceMap.injectComponent(chkCloseAll);
+		chkCloseAll.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				closeAll = ((JCheckBox)e.getSource()).isSelected();
+			}});
+		buttonPanel.add(chkCloseAll);
 		
 
 		JPanel sidePane = new JPanel();
@@ -434,7 +442,7 @@ public class ImageFlowView extends FrameView {
 		
 		// setting of MinimumSize is required for drag-ability of JSplitPane
 		sidePane.setMinimumSize(new Dimension(
-				(int)buttonRun.getPreferredSize().getWidth() + 20 + (int)chkShowLog.getPreferredSize().getWidth(), 100));
+				(int)buttonRun.getPreferredSize().getWidth() + 20 + (int)chkShowCode.getPreferredSize().getWidth(), 100));
 		graphScrollpane.setMinimumSize(new Dimension(100, 100));
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidePane, graphScrollpane);
 		splitPane.setEnabled(true);
@@ -574,7 +582,7 @@ public class ImageFlowView extends FrameView {
 	 * @return the showlog
 	 */
 	public boolean isShowlog() {
-		return showlog;
+		return showCode;
 	}
 
 
@@ -583,7 +591,7 @@ public class ImageFlowView extends FrameView {
 	 * @param showlog the showlog to set
 	 */
 	public void setShowlog(boolean showlog) {
-		this.showlog = showlog;
+		this.showCode = showlog;
 	}
 	
     
@@ -632,7 +640,7 @@ public class ImageFlowView extends FrameView {
 	 * @return
 	 */
     @Action public RunMacroTask runMacro() {
-        return new RunMacroTask(this.getApplication(), graphController, this.showlog);
+        return new RunMacroTask(this.getApplication(), graphController, this.showCode);
     }
 
     /**
