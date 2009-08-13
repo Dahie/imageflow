@@ -33,9 +33,12 @@ public class MacroGenerator {
 	private Collection<Node> unitList;
 	private ArrayList<ImageJImage> openedImages;
 	private String  macroText;
+	private int unitAmount;
+	private int currentUnit;
 
 	public MacroGenerator(final Collection<Node> unitElements) {
 		this.unitList = unitElements;
+		this.unitAmount = unitList.size();
 		this.openedImages = new ArrayList<ImageJImage>();
 		this.macroText = "";
 	}
@@ -49,6 +52,8 @@ public class MacroGenerator {
 		// reset in case somebody has the mad idea to run this twice
 		this.macroText = ""; 
 		macroText += "setBatchMode(true); \n";
+		// reset progressBar to 0%
+		macroText += "call(\"de.danielsenff.imageflow.ImageFlowView.setProgress\", \"0\")";
 		
 		// loop over all units
 		// they have to be presorted so they are in the right order
@@ -89,6 +94,11 @@ public class MacroGenerator {
 			macroText += "// An Error has occured, this unit will not be processed";
 			e.printStackTrace();
 		}
+		
+		// update progressBar
+		currentUnit++;
+		Double currentProgress = (1.0*currentUnit) / unitAmount;
+		macroText += "call(\"de.danielsenff.imageflow.ImageFlowView.setProgress\", \"" + currentProgress + "\")";
 		
 	}
 
