@@ -140,6 +140,9 @@ The number denotes the number of Parameter-wildcards of this datatype. This coun
 <p>In this case NUMBER is a general datatype for any numbers, superior to Integer and Double. So a unit with this input can handle Integer values as well as Double values.
 The wildcards <code>INPUT_IMAGE_x</code> and <code>TITLE_x</code> refer to an image input and will do exactly the same.</p>
 
+<p>To use several macros for Stacks it is necessary to add a flag to their method-arguments. The wildcard is simply called <code>STACK</code>.
+If the workflow is handling regular images, this is simply empty, when we are dealing with stacks, it is replaced with the necessary flag.</p>
+
 <p>Output-wildcards:</p>
 
 <ul>
@@ -242,7 +245,8 @@ The unit can have multiple inputs.</p>
 
 <pre><code>        &lt;ImageType&gt;31&lt;/ImageType&gt;</code></pre>
 		
-<p>An input can either have one ore more defined imagetypes. If you want to predefine the type, use the ImageType constants defined in ImageJ:</p>
+<p>An input can either have one ore more defined imagetypes. 
+If you want to predefine the type, use the ImageType constants defined in ImageJ:</p>
 <table>
 	<thead>
 	<tr>
@@ -280,7 +284,7 @@ The unit can have multiple inputs.</p>
 		<td>31</td>
 	</tr>
 	<tr>
-		<td>Does Stacks</td>
+		<td>Stacks</td>
 		<td>32</td>
 	</tr>
 	</tbody>
@@ -292,6 +296,12 @@ The unit can have multiple inputs.</p>
 	<li>13 permits 8bit greyscale, 16bit greyscale and 32bit greyscale</li>
 	<li>18 permits RGB Color and 8bit RGB indexed</li>
 	<li>31 permits everything supported</li>
+</ul>
+
+<p><strong>Only for Outputs</strong> exist 2 more types:</p>
+<ul>
+	<li>-1: The Output assumes the ImageType taken from the first incoming Input</li>
+	<li>-2: The Output assumes the ImageType taken from the first incoming Input and converts this from a Stack to a regular Image.</li>
 </ul>
 
 <pre><code>        &lt;NeedToCopyInput&gt;false&lt;/NeedToCopyInput&gt;</code></pre>
@@ -389,6 +399,8 @@ They can be defined as optional.</p>
 <ul>
 	<li>DoDisplay also for Units</li>
 	<li>Pins and Connections can be write protected using locks</li>
+	<li>Description for ImageTypes -1 and -2</li>
+	<li>added Stacks</li>
 </ul>
 </tr>
 
