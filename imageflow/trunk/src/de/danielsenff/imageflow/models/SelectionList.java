@@ -54,7 +54,6 @@ public class SelectionList extends Selection<Node>
 	@Override
 	public boolean remove(Object o) {
 		boolean remove = super.remove(o);
-		System.out.println(o);
 		this.notifySelectionListeners();
 		return remove;
 	}

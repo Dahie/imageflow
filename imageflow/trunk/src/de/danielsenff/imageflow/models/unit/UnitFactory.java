@@ -77,11 +77,7 @@ public class UnitFactory {
 		File iconFile = new File(unitDescription.pathToIcon);
 		if(iconFile.exists()) {
 			try {
-				if(unitElement instanceof SourceUnitElement) {
-					SourceUnitElement sourceUnit = (SourceUnitElement)unitElement;
-					unitElement.setIcon(ImageIO.read(sourceUnit.getFile()));
-				} else 
-					unitElement.setIcon(ImageIO.read(iconFile));	
+				unitElement.setIcon(ImageIO.read(iconFile));	
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -119,7 +115,6 @@ public class UnitFactory {
 				((SourceUnitElement)unitElement).setFilePath(args[0]);
 			}
 			if(!sourceUnit.hasFilePath()) {
-//				sourceUnit.showIJOpenDialog();
 				sourceUnit.showOpenFileChooser();	
 			}
 			sourceUnit.updateImageType();

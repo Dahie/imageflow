@@ -149,7 +149,6 @@ public class GraphPanel extends GPanel {
 								final SourceUnitElement sourceUnit = (SourceUnitElement) UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 								sourceUnit.setFilePath(file.getAbsolutePath());
 								getNodeL().add(sourceUnit);
-								System.out.println(file);
 							}
 							
 							e.dropComplete(true);

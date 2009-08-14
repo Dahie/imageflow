@@ -33,6 +33,9 @@ import de.danielsenff.imageflow.utils.UrlCheck;
  */
 public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 
+	private boolean exists = false;
+	
+	
 	/**
 	 * @param origin
 	 * @param unitName
@@ -91,7 +94,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	public void showProperties() {
 		
 		// display file dialog
-		if(existsFile())
+		if(!existsFile())
 			showOpenFileChooser();
 		
 		super.showProperties();
@@ -108,6 +111,8 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 */
 	public void updateImageType() {
 		int imageType = -1;
+		setExistsFile(getFilePath());
+		
 		if(existsFile()) {
 			imageType = getImageType();
 			this.unitComponentIcon.setIcon(
@@ -138,7 +143,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	/**
 	 * Opens a {@link JFileChooser} to select a new file.
 	 */
-	protected void showOpenJFileChooser() {
+	private void showOpenJFileChooser() {
 		final JFileChooser fc = new JFileChooser();
 	    String filepath = getFilePath();
 	    
@@ -156,7 +161,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	/**
 	 * Opens an ImageJ {@link OpenDialog} for selecting an image file.
 	 */
-	protected void showIJOpenDialog() {
+	private void showIJOpenDialog() {
 		OpenDialog openDialog;
 		if(hasFilePath()) 
 			openDialog = new OpenDialog("Select image", getFilePath());
@@ -232,6 +237,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		return imageType; 
 	}
 	
+	
 	/**
 	 * {@link ImagePlus} based on the path saved in the first parameter of this UnitElement.
 	 * @return
@@ -285,6 +291,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		((StringParameter)getParameter(0)).setValue(filepath);
 		String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
 		setLabel(filename);
+		setExistsFile(filepath);
 	}
 
 	/**
@@ -292,19 +299,18 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * @return
 	 */
 	private boolean existsFile() {
-		String path = getFilePath();
-		boolean exists = false;
-		if (path.indexOf("://")>0) {
-			// is url
-			exists = UrlCheck.existsFile(path);
-		} else {
-			// is file
-			exists = this.getFile().exists();
-		}
-		return exists;
+		return this.exists;
 	}
 	
-	
+	private void setExistsFile(String path) {
+		if (path.indexOf("://")>0) {
+			// is url
+			this.exists = UrlCheck.existsFile(path);
+		} else {
+			// is file
+			this.exists = this.getFile().exists();
+		}
+	}
 
 	
 	
@@ -319,13 +325,11 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 */
 	@Override
 	public Rectangle paint(final Graphics g, final ImageObserver io) {
-		
 		if(!existsFile() && !selected) {
 			g.setColor(new Color(255,0,0,80));
 		    g.fillRoundRect(origin.x, origin.y, getDimension().width, getDimension().height, 
 		    		unitComponentIcon.arc, unitComponentIcon.arc);
 		}
-		
 		final Rectangle paint = super.paint(g, io);
 		return paint;
 	}
