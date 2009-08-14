@@ -166,7 +166,7 @@ public class DataTypeFactory {
 			/*System.out.println(this);
 			System.out.println(parent);
 			System.out.println(imageBitDepth);*/
-			if(this.imageBitDepth < 0 
+			if(this.imageBitDepth > 0 
 					&& this.imageBitDepth != PlugInFilter.DOES_ALL) {
 				return this.imageBitDepth; 
 			} else if(parentPin instanceof ProxyOutput) {
