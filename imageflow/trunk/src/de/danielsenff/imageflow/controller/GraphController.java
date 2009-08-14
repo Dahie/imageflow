@@ -64,11 +64,12 @@ public class GraphController{
 
 	/**
 	 * Generates the executable Macro based on the current graph.
+	 * @param extendedMacro determines if callback functions are put into macro code 
 	 * @return
 	 */
-	public String generateMacro() {
+	public String generateMacro(boolean extendedMacro) {
 		final MacroFlowRunner macroFlowRunner = new MacroFlowRunner(this.nodes);
-		return macroFlowRunner.generateMacro();
+		return macroFlowRunner.generateMacro(extendedMacro);
 	}
 
 	/**

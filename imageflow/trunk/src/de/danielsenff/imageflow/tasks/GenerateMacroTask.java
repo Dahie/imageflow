@@ -43,13 +43,17 @@ public class GenerateMacroTask extends Task<Object, String> {
 	}
 
 	protected String generateMacro() {
-		final String macro = graphController.generateMacro();
+		
+		// generates Macro with callback function (for progressBar)
+		final String macro = graphController.generateMacro(true);
 		
 		if(this.showCode) {
 //			System.out.println(macro);
+			// generates cleaner Macro without callback function (for progressBar)
+			final String extendedMacro = graphController.generateMacro(false);
 			JDialog codePreview = new JDialog(ImageFlow.getApplication().getMainFrame(), "generated Macro");
 			codePreview.setPreferredSize(new Dimension(350,150));
-			JTextArea ta = new JTextArea(macro);
+			JTextArea ta = new JTextArea(extendedMacro);
 			codePreview.setLayout(new BorderLayout());
 
 			JScrollPane scrollPane = new JScrollPane(ta);

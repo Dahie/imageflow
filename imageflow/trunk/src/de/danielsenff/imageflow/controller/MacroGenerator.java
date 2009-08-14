@@ -46,19 +46,22 @@ public class MacroGenerator {
 	
 	/**
 	 * Generates a macro.
+	 * @param extendedMacro determines if callback functions are put into macro code
 	 * @return
 	 */
-	public String generateMacro() {
+	public String generateMacro(boolean extendedMacro) {
 		// reset in case somebody has the mad idea to run this twice
 		this.macroText = ""; 
 		macroText += "setBatchMode(true); \n";
 		// reset progressBar to 0%
-		macroText += "call(\"de.danielsenff.imageflow.ImageFlowView.setProgress\", \"0\")";
+		if (extendedMacro) {
+			macroText += "call(\"de.danielsenff.imageflow.ImageFlowView.setProgress\", \"0\")";
+		}
 		
 		// loop over all units
 		// they have to be presorted so they are in the right order
 		for (Node node : this.unitList) {
-			generateUnitMacroCode(node, 0); 
+			generateUnitMacroCode(node, 0, extendedMacro); 
 		}
 
 		
@@ -75,7 +78,7 @@ public class MacroGenerator {
 	}
 
 
-	private void generateUnitMacroCode(Node node, int i) {
+	private void generateUnitMacroCode(Node node, int i, boolean extendedMacro) {
 		System.out.println(node);
 		
 		macroText += " \n";
@@ -85,7 +88,7 @@ public class MacroGenerator {
 		try {
 			if (node instanceof GroupUnitElement) {
 				final ForGroupUnitElement unit = (ForGroupUnitElement) node;
-				addForUnitElement(unit, i);
+				addForUnitElement(unit, i, extendedMacro);
 			} else if(node instanceof UnitElement) {
 				final UnitElement unit = (UnitElement) node;
 				addProcessingUnit(unit, i);	
@@ -96,9 +99,11 @@ public class MacroGenerator {
 		}
 		
 		// update progressBar
-		currentUnit++;
-		Double currentProgress = (1.0*currentUnit) / unitAmount;
-		macroText += "call(\"de.danielsenff.imageflow.ImageFlowView.setProgress\", \"" + currentProgress + "\")";
+		if (extendedMacro) {
+			currentUnit++;
+			Double currentProgress = (1.0*currentUnit) / unitAmount;
+			macroText += "call(\"de.danielsenff.imageflow.ImageFlowView.setProgress\", \"" + currentProgress + "\")";
+		}
 		
 	}
 
@@ -106,7 +111,7 @@ public class MacroGenerator {
 	 * we assume embedded units are already in the correct order
 	 * @param unit
 	 */
-	private void addForUnitElement(ForGroupUnitElement unit, int i) {
+	private void addForUnitElement(ForGroupUnitElement unit, int i, boolean extendedMacro) {
 		
 		int begin = 0;
 		int step = 1;
@@ -136,7 +141,7 @@ public class MacroGenerator {
 		for (Node node : unit.getNodes()) {
 			System.out.println("process nodes in loop");
 			// process unit as usual
-			generateUnitMacroCode(node, i);
+			generateUnitMacroCode(node, i, extendedMacro);
 			
 			for (int j = begin; j < end; i+= step) {
 

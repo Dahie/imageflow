@@ -41,9 +41,10 @@ public class MacroFlowRunner {
 	/**
 	 * Verification and generation of the ImageJ macro for the full graph.
 	 * UnitElements has to be ordered according to the correct processing sequence
+	 * @param extendedMacro determines if callback functions are put into macro code
 	 * @return 
 	 */
-	public String generateMacro() {
+	public String generateMacro(boolean extendedMacro) {
 		/*
 		 *  analysis and verification of the connection network 
 		 */
@@ -57,7 +58,7 @@ public class MacroFlowRunner {
 		 *  generation of the ImageJ macro
 		 */
 		MacroGenerator macGen = new MacroGenerator(macroUnitList);
-		return macGen.generateMacro();
+		return macGen.generateMacro(extendedMacro);
 	}
 
 	/**

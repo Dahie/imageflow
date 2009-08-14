@@ -39,7 +39,8 @@ public class ExportMacroTask extends SaveFileTask {
 	@Override 
 	protected Void doInBackground() throws InterruptedException {
 
-		String macro = graphController.generateMacro();
+		// generates clean Macro without callback function (for progressBar)
+		String macro = graphController.generateMacro(false);
 		if(macro != null) {
 			System.out.println(macro);
 			//		graphController.runImageJMacro(macro, false);
