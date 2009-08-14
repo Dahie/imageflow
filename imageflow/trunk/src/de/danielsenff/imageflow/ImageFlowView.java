@@ -473,6 +473,15 @@ public class ImageFlowView extends FrameView {
 		setComponent(mainPanel);
 	}
 
+	
+	
+	
+	
+	
+	/*
+	 * getter and setters
+	 */
+	
 	/**
 	 * @return
 	 */
@@ -506,13 +515,18 @@ public class ImageFlowView extends FrameView {
 		return graphController.getUnitElements();
 	}
 
-
-
 	/**
 	 * @return the connections
 	 */
 	public ConnectionList getConnections() {
 		return graphController.getConnections();
+	}
+
+	/**
+	 * @return the progressBar
+	 */
+	public static synchronized final JProgressBar getProgressBar() {
+		return progressBar;
 	}
 
 
@@ -622,13 +636,18 @@ public class ImageFlowView extends FrameView {
 		return file;
 	}
 	
+
+	
+	
+	
+	
+	
+	
 	
 	/*
 	 * Action related stuff
 	 * 
 	 */
-	
-	
 	
 	/**
 	 * convenient Example workflow
