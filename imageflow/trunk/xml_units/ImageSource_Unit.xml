@@ -7,7 +7,7 @@
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>open("PARA_STRING_1");</ImageJSyntax> 
   <Color>0x9cba92</Color>
-  <HelpString>Opens a new image</HelpString>
+  <HelpString>Opens a new image. You can select an image on your hard drive or you can enter an URL.</HelpString>
 </General>
 
 <Parameters>

@@ -125,7 +125,7 @@
             <Name>Image</Name>
             <DataType>String</DataType>
             <HelpString>The source unit needs the path of an image file.</HelpString>
-            <Value>/home/senff/U-Bahn Lulu.jpg</Value>
+            <Value>http://rsb.info.nih.gov/ij/images/clown.jpg</Value>
           </Parameter>
         </Parameters>
         <Inputs />

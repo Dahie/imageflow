@@ -13,14 +13,14 @@
           <ImageJSyntax>open("PARA_STRING_1");</ImageJSyntax>
           <Color>0x9cba92</Color>
           <IconSize>BIG</IconSize>
-          <HelpString>Opens a new image</HelpString>
+          <HelpString>Opens a new image. You can select an image on your hard drive or you can enter an URL.</HelpString>
         </General>
         <Parameters>
           <Parameter>
             <Name>Image</Name>
             <DataType>String</DataType>
             <HelpString>The source unit needs the path of an image file.</HelpString>
-            <Value>/home/senff/Bilder/hough-sight.png</Value>
+            <Value>http://rsb.info.nih.gov/ij/images/clown.jpg</Value>
           </Parameter>
         </Parameters>
         <Inputs />
@@ -166,7 +166,7 @@
         <General>
           <UnitName>Math</UnitName>
           <PathToIcon />
-          <ImageJSyntax>run("PARA_STRING_1", "PARA_BOOLEAN_1 value=PARA_DOUBLE_1");</ImageJSyntax>
+          <ImageJSyntax>run("PARA_STRING_1", "STACK value=PARA_DOUBLE_1");</ImageJSyntax>
           <Color>0x6e91de</Color>
           <IconSize>BIG</IconSize>
           <HelpString>Performs a mathematical operation on the pixels of an image</HelpString>
@@ -178,13 +178,6 @@
             <HelpString>Defines what math operation will be performed</HelpString>
             <ChoiceNumber>0</ChoiceNumber>
             <Value>Add...;Subtract...;Multiply...;Divide...;AND...;OR...;XOR...;Min...;Max...;Gamma...;Log;Exp;Square;Square_Root;Reciprocal;NAN_Background;Abs;</Value>
-          </Parameter>
-          <Parameter>
-            <Name>Process stack?</Name>
-            <DataType>boolean</DataType>
-            <HelpString>Process stack?</HelpString>
-            <Value>false</Value>
-            <TrueString>stack</TrueString>
           </Parameter>
           <Parameter>
             <Name>Value</Name>
@@ -273,7 +266,7 @@
         <General>
           <UnitName>Math</UnitName>
           <PathToIcon />
-          <ImageJSyntax>run("PARA_STRING_1", "PARA_BOOLEAN_1 value=PARA_DOUBLE_1");</ImageJSyntax>
+          <ImageJSyntax>run("PARA_STRING_1", "STACK value=PARA_DOUBLE_1");</ImageJSyntax>
           <Color>0x6e91de</Color>
           <IconSize>BIG</IconSize>
           <HelpString>Performs a mathematical operation on the pixels of an image</HelpString>
@@ -285,13 +278,6 @@
             <HelpString>Defines what math operation will be performed</HelpString>
             <ChoiceNumber>0</ChoiceNumber>
             <Value>Add...;Subtract...;Multiply...;Divide...;AND...;OR...;XOR...;Min...;Max...;Gamma...;Log;Exp;Square;Square_Root;Reciprocal;NAN_Background;Abs;</Value>
-          </Parameter>
-          <Parameter>
-            <Name>Process stack?</Name>
-            <DataType>boolean</DataType>
-            <HelpString>Process stack?</HelpString>
-            <Value>false</Value>
-            <TrueString>stack</TrueString>
           </Parameter>
           <Parameter>
             <Name>Value</Name>
