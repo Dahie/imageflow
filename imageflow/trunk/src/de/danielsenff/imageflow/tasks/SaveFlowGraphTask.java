@@ -4,6 +4,7 @@ package de.danielsenff.imageflow.tasks;
 import java.io.File;
 import java.io.IOException;
 
+import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
 
 /**
@@ -30,6 +31,9 @@ public class SaveFlowGraphTask extends SaveFileTask<GraphController, Void> {
      */
     @Override
     protected GraphController doInBackground() throws IOException {
+    	ImageFlowView.getProgressBar().setIndeterminate(true);
+    	ImageFlowView.getProgressBar().setVisible(true);
+    	
     	// get current graphcontroller
     	final GraphController graphController = view.getGraphController();
         graphController.write(file);

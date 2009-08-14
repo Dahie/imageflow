@@ -4,11 +4,12 @@ package de.danielsenff.imageflow.tasks;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
-import de.danielsenff.imageflow.models.unit.UnitList;
 
 
 /**
@@ -38,13 +39,17 @@ public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
     @Override
     protected GraphController doInBackground() throws IOException {
         final GraphController graphController = new GraphController();
-    	
+        JFrame mainFrame = ImageFlow.getApplication().getMainFrame();
+        ImageFlowView.getProgressBar().setIndeterminate(true);
+    	ImageFlowView.getProgressBar().setVisible(true);
+        
+        
         graphController.getUnitElements().clear();
         try {
         	graphController.read(file);
         } catch(OutOfMemoryError ex) {
         	ex.printStackTrace();
-        	JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+			JOptionPane.showMessageDialog(mainFrame, 
     				"The images are too large."	+'\n'+"I'm out of memory.",
     				"Of of memory", 
     				JOptionPane.ERROR_MESSAGE);
@@ -61,7 +66,6 @@ public class LoadFlowGraphTask extends LoadFileTask<GraphController, Void> {
     @Override
     protected void succeeded(GraphController graphController) {
     	this.view.setGraphController(graphController);
-    	System.out.println("replace graphcontroller");
     	super.succeeded(graphController);
     }
     

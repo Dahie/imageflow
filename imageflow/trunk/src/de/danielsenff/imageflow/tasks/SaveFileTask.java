@@ -40,7 +40,6 @@ public abstract class SaveFileTask<T, V> extends Task<T, V> {
     	super(ImageFlow.getApplication());
 		this.file = file;
 		this.view = (ImageFlowView) ImageFlow.getApplication().getMainView();
-//        super(DocumentEditorView.this.getApplication(), file);
     }
 
     
@@ -55,8 +54,8 @@ public abstract class SaveFileTask<T, V> extends Task<T, V> {
     @Override
 	protected void succeeded(final T fileContents) {
         view.setFile(getFile());
-        
-//        textArea.setText(fileContents);
+        ImageFlowView.getProgressBar().setIndeterminate(false);
+    	ImageFlowView.getProgressBar().setVisible(false);
         view.setModified(false);
     }
 
@@ -79,6 +78,8 @@ public abstract class SaveFileTask<T, V> extends Task<T, V> {
         final String msg = getResourceMap().getString("loadFailedMessage", getFile());
         final String title = getResourceMap().getString("loadFailedTitle");
         final int type = JOptionPane.ERROR_MESSAGE;
+        ImageFlowView.getProgressBar().setIndeterminate(false);
+    	ImageFlowView.getProgressBar().setVisible(false);
         JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), msg, title, type);
     }
 
