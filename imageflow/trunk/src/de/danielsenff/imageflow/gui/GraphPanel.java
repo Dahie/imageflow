@@ -147,7 +147,7 @@ public class GraphPanel extends GPanel {
 								
 								UnitDescription sourceUnitDescription = new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
 								final SourceUnitElement sourceUnit = (SourceUnitElement) UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
-								sourceUnit.setFile(file.getAbsolutePath());
+								sourceUnit.setFilePath(file.getAbsolutePath());
 								getNodeL().add(sourceUnit);
 								System.out.println(file);
 							}

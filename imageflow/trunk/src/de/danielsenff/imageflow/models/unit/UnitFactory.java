@@ -116,7 +116,7 @@ public class UnitFactory {
 		} else if(unitElement instanceof SourceUnitElement) {
 			SourceUnitElement sourceUnit = (SourceUnitElement)unitElement;
 			if(args != null && args[0] != null) {
-				((SourceUnitElement)unitElement).setFile(args[0]);
+				((SourceUnitElement)unitElement).setFilePath(args[0]);
 			}
 			if(!sourceUnit.hasFilePath()) {
 //				sourceUnit.showIJOpenDialog();

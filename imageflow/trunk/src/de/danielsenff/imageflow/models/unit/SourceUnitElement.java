@@ -12,6 +12,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -21,6 +23,7 @@ import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
+import de.danielsenff.imageflow.utils.UrlCheck;
 
 /**
  * Specialized {@link UnitElement} for loading image files.
@@ -66,7 +69,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 			final String filepath) 
 	{
 		super(origin, unitName, macroElement);
-		setFile(filepath);
+		setFilePath(filepath);
 	}
 	
 	/**
@@ -81,15 +84,15 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 			final String filepath) 
 	{
 		super(origin, unitName, macroString);
-		setFile(filepath);
+		setFilePath(filepath);
 	}
 
 	@Override
 	public void showProperties() {
 		
-		// display filedialog
-	    showOpenFileChooser();
-//		showIJOpenDialog();
+		// display file dialog
+		if(existsFile())
+			showOpenFileChooser();
 		
 		super.showProperties();
 		
@@ -105,7 +108,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 */
 	public void updateImageType() {
 		int imageType = -1;
-		if(getFile().exists()) {
+		if(existsFile()) {
 			imageType = getImageType();
 			this.unitComponentIcon.setIcon(
 					getImagePlus().getImage().getScaledInstance(48, 48, BufferedImage.SCALE_FAST));
@@ -118,17 +121,27 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 					JOptionPane.WARNING_MESSAGE);
 		}
 		
-		// change bitdepth for all outputs
+		// change bit depth for all outputs
 		setOutputImageType(imageType);
 		System.gc();
 	}
 
+	/*
+	 * Display the default file chooser.
+	 */
+	protected void showOpenFileChooser() {
+		  showOpenJFileChooser();
+		  // showIJOpenDialog();
+	}
+	
+	
 	/**
 	 * Opens a {@link JFileChooser} to select a new file.
 	 */
-	public void showOpenFileChooser() {
+	protected void showOpenJFileChooser() {
 		final JFileChooser fc = new JFileChooser();
-	    String filepath = (String)getParameter(0).getValue();
+	    String filepath = getFilePath();
+	    
 	    fc.setSelectedFile(new File(filepath));
 	    
 	    final int option = fc.showOpenDialog(null);
@@ -136,14 +149,14 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	    	filepath = fc.getSelectedFile().getAbsolutePath();
 	    	// backslashes need to be escaped
 	    	filepath = filepath.replace("\\", "\\\\"); // \ to \\
-	    	setFile(filepath);
+	    	setFilePath(filepath);
 	    }
 	}
 	
 	/**
 	 * Opens an ImageJ {@link OpenDialog} for selecting an image file.
 	 */
-	public void showIJOpenDialog() {
+	protected void showIJOpenDialog() {
 		OpenDialog openDialog;
 		if(hasFilePath()) 
 			openDialog = new OpenDialog("Select image", getFilePath());
@@ -154,20 +167,10 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		if(openDialog.getFileName() != null) {
 	    	// backslashes need to be escaped
 	    	filepath = filepath.replace("\\", "\\\\"); // \ to \\
-			setFile(filepath);
+			setFilePath(filepath);
 		}
-		
 	}
 
-	/**
-	 * Set the file connected with the filepath.
-	 * @param filepath
-	 */
-	public void setFile(String filepath) {
-		((StringParameter)getParameter(0)).setValue(filepath);
-		String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
-		setLabel(filename);
-	}
 
 	/**
 	 * The ImageType on the output depends on the current image.
@@ -183,18 +186,17 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 
 
 	/**
-	 * Bitdepth of the file behind the specified FilePath
+	 * Bit depth of the file behind the specified FilePath
 	 * @return
 	 */
 	public int getBitDepth() {
-		final String path = getFilePath();
-		if(new File(path).exists()) {
-			ImagePlus imp = IJ.openImage(path);
+		ImagePlus imp = IJ.openImage(getFilePath());
+		int bitDepth = 0;
+		if(imp != null) {
 			imp.close();
-			System.out.println(imp.getBitDepth());
-			return imp.getBitDepth();
+			bitDepth = imp.getBitDepth();
 		}
-		return -1;
+		return bitDepth;
 	}
 	
 	/**
@@ -202,51 +204,51 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * @return
 	 */
 	public int getImageType() {
-		final String path = getFilePath();
-		if(new File(path).exists()) {
-			ImagePlus imp = IJ.openImage(path);
-			if(imp != null) {
-				final int type = imp.getType();
-				boolean isStack = imp.getStackSize() > 1 ? true : false;
-				
-				imp.close();
-				imp = null;
-				
-				int bitDepth =0;
-				
-				switch (type) {
-				case ImagePlus.GRAY8:
-					bitDepth = PlugInFilter.DOES_8G;
-				case ImagePlus.COLOR_256:
-					bitDepth = PlugInFilter.DOES_8C;
-				case ImagePlus.GRAY16:
-					bitDepth = PlugInFilter.DOES_16;
-				case ImagePlus.GRAY32:
-					bitDepth = PlugInFilter.DOES_32;
-				case ImagePlus.COLOR_RGB:
-					bitDepth = PlugInFilter.DOES_RGB;
-				}
-				
-				bitDepth += isStack ? PlugInFilter.DOES_STACKS : 0;
-				
-				return bitDepth;
+		ImagePlus imp = IJ.openImage(getFilePath());
+		int imageType =0;
+		if(imp != null) {
+			final int type = imp.getType();
+			boolean isStack = imp.getStackSize() > 1 ? true : false;
+
+			imp.close();
+			imp = null;
+
+			switch (type) {
+			case ImagePlus.GRAY8:
+				imageType = PlugInFilter.DOES_8G;
+			case ImagePlus.COLOR_256:
+				imageType = PlugInFilter.DOES_8C;
+			case ImagePlus.GRAY16:
+				imageType = PlugInFilter.DOES_16;
+			case ImagePlus.GRAY32:
+				imageType = PlugInFilter.DOES_32;
+			case ImagePlus.COLOR_RGB:
+				imageType = PlugInFilter.DOES_RGB;
 			}
+
+			imageType += isStack ? PlugInFilter.DOES_STACKS : 0;
+
 		}
-		return -1; 
+		return imageType; 
 	}
 	
-
 	/**
 	 * {@link ImagePlus} based on the path saved in the first parameter of this UnitElement.
 	 * @return
 	 */
 	public ImagePlus getImagePlus() {
-		final String path = getFilePath();
-		if(new File(path).exists()) {
-			return IJ.openImage(path);
+		if(existsFile()) {
+			return IJ.openImage(getFilePath());
 		}
 		return null; 
 	}
+	
+	
+	
+	
+	/*
+	 * Handling File
+	 */
 	
 	/**
 	 * Returns true if the first parameter has a path.
@@ -254,8 +256,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * @return
 	 */
 	public boolean hasFilePath() {
-		final StringParameter stringParameter = (StringParameter)parameters.get(0);
-		return (stringParameter.getValue().length() > 0);
+		return (getFilePath().length() > 0);
 	}
 	
 	/**
@@ -272,14 +273,54 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * @return
 	 */
 	public File getFile() {
-		final String path = ((StringParameter)parameters.get(0)).getValue();
+		final String path = getFilePath();
 		return new File(path);
 	}
+	
+	/**
+	 * Set the file connected with the file path.
+	 * @param filepath
+	 */
+	public void setFilePath(String filepath) {
+		((StringParameter)getParameter(0)).setValue(filepath);
+		String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
+		setLabel(filename);
+	}
 
+	/**
+	 * Returns true if the File exists.
+	 * @return
+	 */
+	private boolean existsFile() {
+		String path = getFilePath();
+		boolean exists = false;
+		if (path.indexOf("://")>0) {
+			// is url
+			exists = UrlCheck.existsFile(path);
+		} else {
+			// is file
+			exists = this.getFile().exists();
+		}
+		return exists;
+	}
+	
+	
+
+	
+	
+	/*
+	 * painting
+	 */
+	
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.danielsenff.imageflow.models.unit.UnitElement#paint(java.awt.Graphics, java.awt.image.ImageObserver)
+	 */
 	@Override
 	public Rectangle paint(final Graphics g, final ImageObserver io) {
 		
-		if(!getFile().exists() && !selected) {
+		if(!existsFile() && !selected) {
 			g.setColor(new Color(255,0,0,80));
 		    g.fillRoundRect(origin.x, origin.y, getDimension().width, getDimension().height, 
 		    		unitComponentIcon.arc, unitComponentIcon.arc);
