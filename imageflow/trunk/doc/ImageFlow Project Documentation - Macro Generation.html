@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta content="text/html; charset=utf-8" http-equiv="content-type">
+<title>ImageFlow Project Documentation - Basics</title>
+
+
+<style>
+<!-- 
+h1 {
+	font-family:Helvetica, Arial;
+	color:#224488;
+	font-size:14pt;}
+	
+pre, 
+.codeName {
+	font-family: monospace;
+}
+-->
+</style>
+
+</head>
+<body>
+<h1>Imageflow Project Documentation</h1>
+<h2>Macro Generation</h2>
+<p>We have a workflow constructed in our workspace and we execute it. 
+In short, the workflow is checked, if it's valid, the units are sorted 
+and ImageJ Macro Code is generated and handed over to ImageJ.
+ImageJ then performs the actual processing, while ImageFlow never touches any
+Image data. Read here in more details how this Macro Code is generated. </p>
+
+<h3>Start workflow task</h3>
+<p>The application starts a new <code><a href="https://appframework.dev.java.net/nonav/javadoc/AppFramework-1.03/org/jdesktop/application/Task.html" title="Task API">Task</a></code>, 
+which creates a new Thread that performs the execution. To read more about 
+Tasks consult the pages about the used 
+<a href="ImageFlow%20Project%20Documentation%20-%20Appframework.html" title="Appframework in ImageFlow">Appframework</a>.
+
+<h3>Create Macro Code</h3>
+
+<p>The Task contains the current GraphController, which has a method to start 
+generating Macro-code based on it's contents. 
+The GraphController has a <code>generateMacro()</code>-method, which is 
+called by the Task. This method creates a 
+new <code>FlowRunner</code-object.</p>
+
+<h3>MacroFlowRunner</h3>
+
+<p>The <code>MacroFlowRunner</code> receives a clone of the list of all units 
+contained in a workflow.
+Before processing we check the unitList for different common errors, which 
+check the validity of the workflow. This tests if all required inputs 
+are connected, if all datatypes are valid and the connections ok.</p>  
+
+ 
+<p>The second purpose of the class is to clean and sort all 
+units in the workflow. Unnecessary units are are dismissed and
+the units are resorted in the order required to be performed later. Since 
+certain units require the input of other units, they need
+to be processed later. Solving these dependencies is done by a special 
+algorithm.</p>
+
+<p>This algorithm cleans and resorts the list of units. 
+It gets the cloned list of units and creates a second temporary list.  
+If this condition is true, the units is moved from the first list to the 
+second list and it's outputs are marked as processed.
+When a unit is checked, the algorithm tests the connected inputs and 
+checks if these marks are set for all of them. 
+If this condition is true, the unit is moved again and we take a look 
+at the next unit. The algorithm performs as long as units 
+exist in the first list.</p>
+
+<p>There are more than the above condition to move units.</p>
+<ul>
+<li>The usual condition is, as described above to check all inputs 
+and whether they are fulfilled.</li>
+<li>Comments-Nodes are removed completely.</li>
+<li>Source-Units don't have inputs, so they are moved as long as 
+they are set to display.</li>
+</ul>
+<p>for each unit the algorithm checks, if this branch of the workflow needs to be translated to Macro Code at all.
+You can create a branch in the your workspace, which is dormant, 
+as long as no unit in this branch is set to display.</p>
+
+<p>The <code>MacroFlowRunner</code> returns a list of Units. 
+which is in the right order and where all invalid or unused Units are removed.
+This list is passed to the <code>MacroGenerator</code>.
+
+<h3>Macro Generator</h3>
+
+<p>The <code>MacroGenerator</code> translates the ordered list of Units 
+and list of connections into Macro Code which is performed by ImageJ. 
+The class iterates over all units and creates the Macro Code based on the 
+properties of the unit. </p>
+
+<p>The generated Macro Code can explained rather easy. The first line sets the 
+macro execution to batch mode, which means, that it runs in the background
+without displaying any temporary results.</p>
+<pre><code>setBatchMode(true); </code></pre>
+
+<p>Nun kommt der Hauptteil des Macros, in dem nacheinander die Units 
+blöckeweise dem Macro angehängt werden.</p>
+
+<pre><code>open("/home/user/pics/image.png");
+rename("Unit_1_Output_1_0"); 
+ID_Unit_1_Output_1_0 = getImageID(); 
+selectImage(ID_Unit_1_Output_1_0); </code></pre>
+
+<p>This shows the open command. The opening the image creates a new image, 
+which is renamed to be uniquely identifiable by succeeding units. </p>
+
+<pre><code>// Gaussian Blur
+ 
+selectImage(ID_Unit_1_Output_1_0); 
+run("Duplicate...", "title=Title_Temp_ID_Unit_1_Output_1_0"); 
+run("Gaussian Blur...", "sigma=4.0 ");
+rename("Unit_2_Output_1_0"); 
+ID_Unit_2_Output_1_0 = getImageID(); 
+selectImage(ID_Unit_2_Output_1_0);</code></pre> 
+
+<p>This shows a processing unit, which takes the image from the open-unit
+and performs a Gaussian Blur on it. Since we don't want to change the 
+original Output-Image, we clone this output, before we apply the filter.
+The result is renamed again and can now be access by succeeding units.</p>
+
+<p>At this point, for every unit the <code>MacroElement</code>-String 
+is parsed. This is the command that contains the command ImageJ is
+supposed to call. This command contains a number of wildcards, 
+which are replaced at this point. More about this in the 
+<a href="Unit%20XML%20Documentation.html" title="XML Specification">XML-specification</a>.</p>
+<p>Once, all units are done, we do some post-cleaning on the macro. 
+All temporary and unused images are closed. Only images for units, that are set
+display remain at the end and are renamed with a human-readable name.</p>
+
+<h3>ImageJ</h3>
+
+<p>The generated Macro is stored in a String. This is 
+passed to an ImageJ instance.</p>
+
+<pre><code>
+String macro = ...
+Macro_Runner mr = new Macro_Runner();
+return mr.runMacro(macro, "");</code></pre>
+
+<p>A ImageJ GUI pops up, the macro is performed and displays the desired images.</p>
+<p>Imageflow tries to catch as many errors in the workflow as possible, however there are limits.
+Possible incompatibilities or problems will occure here and ImageJ will give out his
+error messages.</p>
+
+<p>The workflow either processed successfully or failed at some point. This Exceptions are caught and
+the programm can continously used without restart.</p>
+
+<hr />
+<em>Daniel Senff, August 2009</em>
+</body></html>

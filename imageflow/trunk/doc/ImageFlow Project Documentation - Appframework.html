@@ -80,8 +80,10 @@ public Task doSomething() {
 	return new DoesSomethingTask();
 }
 </pre>
-<p><span class="codeName">@Action</span> can have two Attributes. <span class="codeName">enabledProperty</span> can bind the 
-enabled-property of the Action with a boolean-field by the same name. <span class="codeName">selectedProperty</span> does the same for the selected-property. 
+<p><span class="codeName">@Action</span> can have two Attributes. 
+<span class="codeName">enabledProperty</span> can bind the 
+enabled-property of the Action with a boolean-field by the same name. 
+<span class="codeName">selectedProperty</span> does the same for the selected-property. 
  
 <pre>
 boolean enabled = true;
@@ -104,13 +106,37 @@ doSomething.Action.shortDescription = Paste the Unit in the clipboard to the wor
 doSomething.Action.icon=icon.png
 </pre>
 
-<p>This can also be used for any other kind of text or path.</p>
+<p>This can also be used for any other kind of texts or paths.</p>
 
 
 <h3>Thread-handling</h3>
 
-<p></p>
+<p>Appframework allows easy thread handling based on the SwingWorker-Classes. In a nutshell, 
+Appframeworks let's you create <code><a href="https://appframework.dev.java.net/nonav/javadoc/AppFramework-1.03/org/jdesktop/application/Task.html" title="Task API">Task</a></code> 
+which encapsulates procedures. Without any thread-management this procedure would occupy the main-thread, 
+Tasks allow to perform it parallel in an own thread.</p>
+<p>Tasks are written by extending the <code>Task</code>-class. Tasks can be used in Actions, which is one way to start them.</p>
+
+<pre><code>
+class DoSomethingTask<String> extends Task<String, Void> {
+	protected GraphController doInBackground() throws InterruptedException {
+		String facNumber = "f: ";
+		for (int i = 0; i < 10;i++) { facNumber += " "+i;}
+	}
+}
+
+@Action public Task<String> doSomething() {
+  return new DoSomethingTask<String>();
+}
+</code></pre>
+
+
+<p>The <code><a href="https://appframework.dev.java.net/nonav/javadoc/AppFramework-1.03/org/jdesktop/application/Task.html" title="Task API">Task</a></code>-class is abstract and you create your Task by overriding the necessary method <code>doInBackground()</code>. 
+There are more methods to override. <code>succeed()</code> is called after the procedure is finished, <code>failed</code>, 
+in case of problems and <code>cancelled()</code> in case of a cancellation by the user.</p>
+
+
 
 <hr />
-<em>Daniel Senff, July-August 2009</em>
+<em>Daniel Senff, August 2009</em>
 </body></html>
