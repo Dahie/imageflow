@@ -91,6 +91,13 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	}
 
 	@Override
+	public UnitElement clone() {
+		
+		return super.clone();
+	}
+	
+	
+	@Override
 	public void showProperties() {
 		
 		// display file dialog
@@ -195,7 +202,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * @return
 	 */
 	public int getBitDepth() {
-		ImagePlus imp = IJ.openImage(getFilePath());
+		ImagePlus imp = getImagePlus();
 		int bitDepth = 0;
 		if(imp != null) {
 			imp.close();
@@ -209,7 +216,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * @return
 	 */
 	public int getImageType() {
-		ImagePlus imp = IJ.openImage(getFilePath());
+		ImagePlus imp = getImagePlus();
 		int imageType =0;
 		if(imp != null) {
 			final int type = imp.getType();
