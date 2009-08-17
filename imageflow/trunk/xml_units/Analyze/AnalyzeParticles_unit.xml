@@ -30,7 +30,8 @@
  	<Parameter>
   		<Name>Show</Name>
   		<DataType>StringArray</DataType>
-  		<Value>Nothing;Outlines;Masks;Ellipses;Count Masks</Value>
+  		<!-- Nothing; -->
+  		<Value>Outlines;Masks;Ellipses;Count Masks</Value>
   		<HelpString></HelpString>
   		<ChoiceNumber>0</ChoiceNumber>
   	</Parameter>
