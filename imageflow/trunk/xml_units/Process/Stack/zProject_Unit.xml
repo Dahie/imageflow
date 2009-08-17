@@ -13,13 +13,13 @@
 
 <Parameters>
   	<Parameter>
-  		<Name>Start</Name>
+  		<Name>First Slice</Name>
   		<DataType>integer</DataType>
   		<Value>1</Value>
   		<HelpString>First slices to begin.</HelpString>
   	</Parameter>
   	<Parameter>
-  		<Name>End</Name>
+  		<Name>Last Slice</Name>
   		<DataType>integer</DataType>
   		<Value>20</Value>
   		<HelpString>Last slice to use.</HelpString>

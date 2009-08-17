@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Combine -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Montage</UnitName> 
+  <PathToIcon>ImageCalculator_Unit.png</PathToIcon> 
+  <ImageJSyntax>run("Make Montage...", "columns=PARA_INTEGER_1 rows=PARA_INTEGER_2 scale=PARA_DOUBLE_1 first=PARA_INTEGER_3 last=PARA_INTEGER_4 increment=PARA_INTEGER_5 border=PARA_INTEGER_6 font=PARA_INTEGER_6 PARA_BOOLEAN_1");</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <HelpString>Combines two images.</HelpString>  
+</General>
+
+<Parameters>
+  <Parameter>
+  	<Name>Columns</Name>
+  	<DataType>integer</DataType>
+  	<Value>6</Value>
+  	<HelpString>Columns</HelpString>
+  </Parameter>
+  <Parameter>
+  	<Name>Rows</Name>
+  	<DataType>integer</DataType>
+  	<Value>5</Value>
+  	<HelpString>Rows</HelpString>
+  </Parameter>
+  <Parameter>
+  	<Name>Scale Factor</Name>
+  	<DataType>double</DataType>
+  	<Value>0.50</Value>
+  	<HelpString>Rows</HelpString>
+  </Parameter>
+  <Parameter>
+  	<Name>First Slice</Name>
+  	<DataType>integer</DataType>
+  	<Value>1</Value>
+  	<HelpString>First slices to begin.</HelpString>
+  </Parameter>
+  <Parameter>
+  	<Name>Last Slice</Name>
+  	<DataType>integer</DataType>
+  	<Value>20</Value>
+  	<HelpString>Last slice to use.</HelpString>
+  </Parameter>
+  <Parameter>
+  	<Name>Increment</Name>
+  	<DataType>integer</DataType>
+  	<Value>1</Value>
+  	<HelpString>Size of Increment</HelpString>
+  </Parameter>
+  <Parameter>
+  	<Name>Border Width</Name>
+  	<DataType>integer</DataType>
+  	<Value>0</Value>
+  	<HelpString>Border</HelpString>
+  </Parameter>
+  <Parameter>
+  	<Name>Font Size</Name>
+  	<DataType>integer</DataType>
+  	<Value>12</Value>
+  	<HelpString>Font size</HelpString>
+  </Parameter>
+  <Parameter>
+  	<Name>Label Slices</Name>
+  	<DataType>boolean</DataType>
+  	<Value>false</Value>
+  	<HelpString>Add label below slice.</HelpString>
+  	<TrueString>label</TrueString>
+  </Parameter> 
+</Parameters>
+
+<Inputs> 
+  <Input>
+	<Name>Stack1</Name>
+	<ShortName>S1</ShortName>	
+	<DataType>Image</DataType>
+	<ImageType>63</ImageType>
+	<NeedToCopyInput>false</NeedToCopyInput>
+  </Input>
+</Inputs>
+
+<Outputs> 
+  <Output>
+    <Name>Output</Name>
+	<ShortName>O</ShortName>
+	<DataType>Image</DataType>	
+	<ImageType>-1</ImageType>
+	<DoDisplay>false</DoDisplay>
+  </Output>
+</Outputs>
+
+</UnitDescription>

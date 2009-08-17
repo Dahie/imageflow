@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Combine -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Combine</UnitName> 
+  <PathToIcon>ImageCalculator_Unit.png</PathToIcon> 
+  <ImageJSyntax>run("Combine...", "stack1=TITLE_1 stack2=TITLE_2 PARA_BOOLEAN_1");</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <HelpString>Combines two images.</HelpString>  
+</General>
+
+<Parameters>
+  <Parameter>
+  	<Name>Combine vertically</Name>
+  	<DataType>boolean</DataType>
+  	<Value>true</Value>
+  	<HelpString>Puts the second image below the first.</HelpString>
+  	<TrueString>combine</TrueString>
+  </Parameter> 
+</Parameters>
+
+<Inputs> 
+  <Input>
+	<Name>Image1</Name>
+	<ShortName>I1</ShortName>	
+	<DataType>Image</DataType>
+	<ImageType>63</ImageType>
+	<NeedToCopyInput>true</NeedToCopyInput>
+  </Input>
+  <Input>
+	<Name>Image2</Name>
+	<ShortName>I2</ShortName>	
+	<DataType>Image</DataType>
+	<ImageType>63</ImageType>
+	<NeedToCopyInput>true</NeedToCopyInput>
+  </Input>
+</Inputs>
+
+<Outputs> 
+  <Output>
+    <Name>Output</Name>
+	<ShortName>O</ShortName>
+	<DataType>Image</DataType>	
+	<ImageType>-1</ImageType>
+	<DoDisplay>false</DoDisplay>
+  </Output>
+</Outputs>
+
+</UnitDescription>

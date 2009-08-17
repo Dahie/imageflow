@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Combine -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Concatenate</UnitName> 
+  <PathToIcon>ImageCalculator_Unit.png</PathToIcon> 
+  <ImageJSyntax>run("Concatenate...", "stack1=TITLE_1 stack2=TITLE_2 title=[PARA_STRING_1]");</ImageJSyntax>
+  <Color>0x6e91de</Color>
+  <HelpString>Combines two images.</HelpString>  
+</General>
+
+<Parameters>
+  <Parameter>
+  	<Name>Math</Name>
+  	<DataType>String</DataType>
+  	<Value>Concatenated Stacks</Value>
+  	<HelpString>Defines what math should be used to merge both images</HelpString>
+  </Parameter>
+</Parameters>
+
+<Inputs> 
+  <Input>
+	<Name>Stack1</Name>
+	<ShortName>S1</ShortName>	
+	<DataType>Image</DataType>
+	<ImageType>63</ImageType>
+	<NeedToCopyInput>false</NeedToCopyInput>
+  </Input>
+  <Input>
+	<Name>Stack2</Name>
+	<ShortName>S2</ShortName>	
+	<DataType>Image</DataType>
+	<ImageType>63</ImageType>
+	<NeedToCopyInput>false</NeedToCopyInput>
+  </Input>
+</Inputs>
+
+<Outputs> 
+  <Output>
+    <Name>Output</Name>
+	<ShortName>O</ShortName>
+	<DataType>Image</DataType>	
+	<ImageType>-1</ImageType>
+	<DoDisplay>false</DoDisplay>
+  </Output>
+</Outputs>
+
+</UnitDescription>
