@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Slice</UnitName> 
+  <HelpString>Selects a single Slice from a Stack</HelpString>  
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>setSlice(PARA_INTEGER_1);</ImageJSyntax> 
+  <Color>0x6e91de</Color>
+</General>
+
+<Parameters>
+  <Parameter>
+  	<Name>Slice Number</Name>
+  	<DataType>Integer</DataType>
+  	<Value>1</Value>
+    <HelpString>Sets the slice that is going to be output.</HelpString>
+  </Parameter>
+</Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Stack</Name>
+		<ShortName>S</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>63</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>	
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Slice</Name>
+		<ShortName>S</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>-2</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

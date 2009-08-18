@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reslice -->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Reslice</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>run("Reslice [/]...", "slice=PARA_DOUBLE_1 start=PARA_STRING_1 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3");</ImageJSyntax>
+   
+  <Color>0x6e91de</Color>
+  <HelpString>Projects all slices in one image.</HelpString>  
+</General>
+
+<Parameters>
+  <Parameter>
+  	<Name>Slice Spacing (pixels)</Name>
+  	<DataType>double</DataType>
+  	<Value>1.000</Value>
+  	<HelpString>Slice Spacing in pixels.</HelpString>
+  </Parameter>
+  <Parameter>
+  	<Name>Start At</Name>
+  	<DataType>StringArray</DataType>
+  	<Value>Top;Left;Bottom;Right</Value>
+  	<HelpString>Last slice to use.</HelpString>
+  	<ChoiceNumber>0</ChoiceNumber>
+  </Parameter>
+  <Parameter>
+  	<Name>Flip Vertically</Name>
+  	<DataType>boolean</DataType>
+  	<Value>true</Value>
+  	<HelpString>Flip Vertically</HelpString>
+  	<TrueString>flip</TrueString>
+  </Parameter>
+  <Parameter>
+  	<Name>Rotate 90 degrees</Name>
+  	<DataType>boolean</DataType>
+  	<Value>false</Value>
+  	<HelpString>Rotate 90 degrees.</HelpString>
+  	<TrueString>rotate</TrueString>
+  </Parameter>
+  <Parameter>
+  	<Name>Avoid Interpolation (use 1.0 for Spacing)</Name>
+  	<DataType>boolean</DataType>
+  	<Value>false</Value>
+  	<HelpString>Avoids Interpolation when resorting the Stack.</HelpString>
+  	<TrueString>avoid</TrueString>
+  </Parameter>
+</Parameters>
+
+<Inputs> 
+  <Input>
+	<Name>Stack</Name>
+	<ShortName>S</ShortName>	
+	<DataType>Image</DataType>
+	<ImageType>63</ImageType>
+	<NeedToCopyInput>false</NeedToCopyInput>
+  </Input>
+</Inputs>
+
+<Outputs> 
+  <Output>
+	<Name>Output</Name>
+	<ShortName>O</ShortName>
+	<DataType>Image</DataType>	
+	<ImageType>-1</ImageType>
+	<DoDisplay>false</DoDisplay>
+  </Output>
+</Outputs>
+
+</UnitDescription>
