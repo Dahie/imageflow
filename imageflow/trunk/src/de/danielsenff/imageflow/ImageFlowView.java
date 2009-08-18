@@ -388,6 +388,7 @@ public class ImageFlowView extends FrameView {
 		progressBar.setMinimum(0);
 		progressBar.setMaximum(100);
 		progressBar.setSize(150, 20);
+		progressBar.setVisible(false);
 		
 		progressPanel.add(progressBar);
 		

@@ -11,6 +11,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
 
 /**
@@ -44,8 +45,10 @@ public class GenerateMacroTask extends Task<Object, String> {
 
 	protected String generateMacro() {
 		
-		// generates Macro with callback function (for progressBar)
-		final String macro = graphController.generateMacro(true);
+		ImageFlowView.getProgressBar().setIndeterminate(true);
+		ImageFlowView.getProgressBar().setVisible(true);
+    	// generates Macro with callback function (for progressBar)
+    	final String macro = graphController.generateMacro(true);
 		
 		if(this.showCode) {
 //			System.out.println(macro);
@@ -61,7 +64,14 @@ public class GenerateMacroTask extends Task<Object, String> {
 			codePreview.pack();
 			codePreview.setVisible(true);			
 		}
+		ImageFlowView.getProgressBar().setIndeterminate(false);
 		return macro;
 	}
+    
+	@Override
+	protected void succeeded(final Object superclass) {
+    	ImageFlowView.getProgressBar().setVisible(false);
+    	ImageFlowView.getProgressBar().setValue(0);
+    }
 	
 }

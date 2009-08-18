@@ -38,6 +38,8 @@ public abstract class SaveFileTask<T, V> extends Task<T, V> {
      */
     public SaveFileTask(final File file) {
     	super(ImageFlow.getApplication());
+        ImageFlowView.getProgressBar().setIndeterminate(true);
+    	ImageFlowView.getProgressBar().setVisible(true);
 		this.file = file;
 		this.view = (ImageFlowView) ImageFlow.getApplication().getMainView();
     }
@@ -55,7 +57,7 @@ public abstract class SaveFileTask<T, V> extends Task<T, V> {
 	protected void succeeded(final T fileContents) {
         view.setFile(getFile());
         ImageFlowView.getProgressBar().setIndeterminate(false);
-//    	ImageFlowView.getProgressBar().setVisible(false);
+    	ImageFlowView.getProgressBar().setVisible(false);
         view.setModified(false);
     }
 
@@ -79,7 +81,7 @@ public abstract class SaveFileTask<T, V> extends Task<T, V> {
         final String title = getResourceMap().getString("loadFailedTitle");
         final int type = JOptionPane.ERROR_MESSAGE;
         ImageFlowView.getProgressBar().setIndeterminate(false);
-//    	ImageFlowView.getProgressBar().setVisible(false);
+    	ImageFlowView.getProgressBar().setVisible(false);
         JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), msg, title, type);
     }
 
