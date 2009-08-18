@@ -3,10 +3,10 @@
 <UnitDescription>
 
 <General>
-  <UnitName>Slice</UnitName> 
-  <HelpString>Returns the selected Slice from the Stack</HelpString>  
+  <UnitName>Set Slice</UnitName> 
+  <HelpString>Sets the active image on the Stack</HelpString>  
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>setSlice(PARA_INTEGER_1);close();run("Duplicate...", "title=temp_duplicate");</ImageJSyntax> 
+  <ImageJSyntax>setSlice(PARA_INTEGER_1);</ImageJSyntax> 
   <Color>0x6e91de</Color>
 </General>
 
@@ -34,7 +34,7 @@
 		<Name>Slice</Name>
 		<ShortName>S</ShortName>	
 		<DataType>Image</DataType>
-		<ImageType>-2</ImageType>
+		<ImageType>-1</ImageType>
 		<DoDisplay>false</DoDisplay>
 	</Output>
 </Outputs>
