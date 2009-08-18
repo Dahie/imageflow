@@ -66,6 +66,7 @@ public class MacroGenerator {
 
 		
 		// delete all images that are not to be displayed
+		macroText +=  "\n";
 		macroText +=  "// delete unwanted images \n";
 		macroText += deleteImages();
 		macroText +=  "// human understandable names \n";

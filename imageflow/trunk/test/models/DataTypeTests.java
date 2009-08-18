@@ -252,8 +252,8 @@ public class DataTypeTests extends UnitElementTests{
 		connList.add(conn_4_5);
 		
 		for (Connection connection : connList) {
-			connection.isConnected();
-			connection.isCompatible();
+			assertTrue(connection.isConnected());
+			assertTrue(connection.isCompatible());
 		}
 				
 		SelectionList selections = new SelectionList();
@@ -271,12 +271,7 @@ public class DataTypeTests extends UnitElementTests{
 			assertTrue(connection.isConnected());
 			assertTrue(connection.isCompatible());
 		}
-		
-		for (Connection connection : units.getConnections()) {
-			assertTrue(connection.isConnected());
-			assertTrue(connection.isCompatible());
-		}
-		
+
 		Connection connToGroup = group.getInput(0).getConnection();
 		assertTrue(connToGroup.isConnected());
 		assertTrue(connToGroup.isCompatible());

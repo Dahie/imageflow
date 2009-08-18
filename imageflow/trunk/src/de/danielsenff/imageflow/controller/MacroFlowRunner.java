@@ -141,7 +141,7 @@ public class MacroFlowRunner {
 			// sources -> file exists
 			if(node instanceof SourceUnitElement) {
 				SourceUnitElement sUnit = (SourceUnitElement) node;
-				if(!sUnit.getFile().exists()) {
+				if(!sUnit.existsFile()) {
 					JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
 							"The file "+sUnit.getFilePath()+" doesn't exist."
 							+'\n' + "The operation will not proceed.",

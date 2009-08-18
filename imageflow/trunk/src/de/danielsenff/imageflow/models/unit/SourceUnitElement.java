@@ -305,7 +305,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * Returns true if the File exists.
 	 * @return
 	 */
-	private boolean existsFile() {
+	public boolean existsFile() {
 		return this.exists;
 	}
 	

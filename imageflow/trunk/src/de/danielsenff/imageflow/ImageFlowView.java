@@ -136,7 +136,7 @@ public class ImageFlowView extends FrameView {
 		try {
 			this.getFrame().setIconImage(
 					ImageIO.read(this.getClass().getResourceAsStream(
-							"/de/danielsenff/imageflow/resources/iw-icon.png")));
+							getResourceMap().getString("mainFrame.icon"))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

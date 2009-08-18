@@ -43,6 +43,8 @@ import visualap.GPanel;
 import visualap.GPanelListener;
 import visualap.Node;
 import visualap.Pin;
+import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.SelectionList;

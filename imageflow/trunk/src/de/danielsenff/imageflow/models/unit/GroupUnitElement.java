@@ -112,7 +112,8 @@ public class GroupUnitElement extends UnitElement {
 		// just not sure why not connecting from-units
 		for (Connection connection : externalConnections) {
 			if(this.units.contains(connection.getToUnit())
-					|| this.units.contains(connection.getFromUnit())) {
+					//|| this.units.contains(connection.getFromUnit())
+			) {
 				connection.connect();
 			}
 		}

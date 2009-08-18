@@ -193,7 +193,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				return;
 			}
 			// check selected element, is it a Pin?
-			else if (sel instanceof Pin) {
+			else if (sel instanceof Pin && !((Pin)sel).isLocked()) {
 				drawEdge = (Pin) sel;
 				//	System.out.println(drawEdge);
 				mouse = new Point (x,y);
@@ -256,7 +256,8 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				{
 					if( ( (sel instanceof Input && drawEdge instanceof Output)
 						|| (sel instanceof Output && drawEdge instanceof Input) )
-						&& !((Pin)sel).getParent().equals(drawEdge.getParent())) 
+						&& !((Pin)sel).getParent().equals(drawEdge.getParent())
+						&& !((Pin)sel).isLocked()) 
 					{
 						Connection newConn = new Connection(drawEdge, (Pin) sel);
 						connectionList.add(newConn);
