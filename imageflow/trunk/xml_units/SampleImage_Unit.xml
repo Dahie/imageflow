@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Sample Image</UnitName> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>open("PARA_STRING_1");</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Opens a sample image</HelpString>
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Image</Name>
+  		<DataType>StringArray</DataType>
+  		<Value>AuPbSn 40 (56K);Blobs (25K);Boats (356K);Bridge (174K);Cardio (768K, RGB DICOM);Cell Colony (31K);Clown (14K);Confocal Series (2.2MB);CT (420K, 16-bit DICOM);Dot Blot (7K);Embryos (42K);Fluorescent Cells (400K);Gel (105K);HeLa Cells (1.3M, 48-bit RGB);Leaf (36K);Lena (68K);Line Graph (21K);MRI Stack (528K);M51 Galaxy (177K, 16-bits);M51 Galaxy  (116K, RGB);Nile Bend (1.9M);Particles (75K);T1 Head Renderings (736K);T1 Head (2.4M, 16-bits);TEM Filter (112K);Tree Rings (48K)</Value>
+  		<HelpString>The source unit needs the path of an image file.</HelpString>
+  		<ChoiceNumber>0</ChoiceNumber>
+  	</Parameter> 
+</Parameters>
+
+<Outputs> 
+	
+<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output></Outputs>
+
+</UnitDescription>

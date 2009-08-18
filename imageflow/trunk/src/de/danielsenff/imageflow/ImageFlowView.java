@@ -653,25 +653,25 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * convenient Example workflow
 	 */
-	@Action public Task exampleFlow1() {
-		File flow = new File("xml_flows/ImageCalculator_Example_flow.xml");
-		return new LoadFlowGraphTask(flow); 
+	@Action public LoadFlowGraphTask exampleFlow1() {
+		String exampleFilename = getResourceMap().getString("exampleFlow1.Path");
+		return new LoadFlowGraphTask(new File(exampleFilename));
 	}
 	
 	/**
 	 * convenient Example workflow
 	 */
-	@Action public Task exampleFlow2() {
-		File flow = new File("xml_flows/Conversion_Example_flow.xml");
-		return new LoadFlowGraphTask(flow);
+	@Action public LoadFlowGraphTask exampleFlow2() {
+		String exampleFilename = getResourceMap().getString("exampleFlow2.Path");
+		return new LoadFlowGraphTask(new File(exampleFilename));
 	}
 	
 	/**
 	 * convenient Example workflow
 	 */
-	@Action public Task exampleFlow3() {
-		File flow = new File("xml_flows/Math_Example_flow.xml");
-		return new LoadFlowGraphTask(flow);
+	@Action public LoadFlowGraphTask exampleFlow3() {
+		String exampleFilename = getResourceMap().getString("exampleFlow3.Path");
+		return new LoadFlowGraphTask(new File(exampleFilename));
 	}
 
 	/**
@@ -748,8 +748,9 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action public ImportGraphTask importGraph() {
 	    final JFileChooser fc = new JFileChooser();
+	    final String filesExtension = getResourceMap().getString("flowXMLFileExtension");
 	    final String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
-	    fc.setFileFilter(new FlowXMLFilter(filesDesc));
+	    fc.setFileFilter(new DescriptiveFileFilter(filesExtension, filesDesc));
 	    
 	    ImportGraphTask task = null;
 	    final int option = fc.showOpenDialog(null);
@@ -991,8 +992,10 @@ public class ImageFlowView extends FrameView {
 			}
 		} 
 		final JFileChooser fc = new JFileChooser();
-		final String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
-		fc.setFileFilter(new FlowXMLFilter(filesDesc));
+		final String fileExtension = getResourceMap().getString("flowXMLFileExtension");
+        final String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
+        fc.setFileFilter(new DescriptiveFileFilter("XML", filesDesc + " Version 1.0"));
+		fc.setFileFilter(new DescriptiveFileFilter(fileExtension, filesDesc));
 
 		Task task = null;
 		final int option = fc.showOpenDialog(null);
@@ -1030,16 +1033,16 @@ public class ImageFlowView extends FrameView {
     @Action
     public SaveFlowGraphTask saveAs() {
         final JFileChooser fc = createFileChooser("saveAsFileChooser");
+        final String fileExtension = getResourceMap().getString("flowXMLFileExtension");
         final String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
-	    fc.setFileFilter(new FlowXMLFilter(filesDesc));
-        
+		fc.setFileFilter(new DescriptiveFileFilter(fileExtension, filesDesc));
         
         final int option = fc.showSaveDialog(getFrame());
         SaveFlowGraphTask task = null;
         if (JFileChooser.APPROVE_OPTION == option) {
         	File selectedFile = fc.getSelectedFile();
-        	if(!selectedFile.getName().toLowerCase().endsWith(".xml")) {
-        		selectedFile = new File(selectedFile.getAbsoluteFile()+".xml");
+        	if(!selectedFile.getName().toLowerCase().endsWith("."+fileExtension)) {
+        		selectedFile = new File(selectedFile.getAbsoluteFile()+"."+fileExtension);
         	}
         	
         	if(selectedFile.exists()) {
@@ -1062,27 +1065,28 @@ public class ImageFlowView extends FrameView {
 	 * @return
 	 */
 	@Action public ExportMacroTask export() {
-		 JFileChooser fc = createFileChooser("saveAsFileChooser");
-	        String filesDesc = getResourceMap().getString("imageJMacroFileExtensionDescription");
-		    fc.setFileFilter(new ImageJMacroFilter(filesDesc));
-	        
-	        int option = fc.showSaveDialog(getFrame());
-	        ExportMacroTask task = null;
-	        if (JFileChooser.APPROVE_OPTION == option) {
-	        	File selectedFile = fc.getSelectedFile();
-	        	if(selectedFile.exists()) {
-					int response = JOptionPane.showConfirmDialog(this.getFrame(), 
-							"This file already exists. Do you want to overwrite it?",
-							"Overwrite existing file?", 
-							JOptionPane.OK_CANCEL_OPTION);
-					if (!(response == JOptionPane.OK_OPTION)) {
-						return null;
-					}
-	        	}
-	        	task = new ExportMacroTask(selectedFile, graphController);
-	            
-	        }
-		
+		JFileChooser fc = createFileChooser("saveAsFileChooser");
+		final String fileExtension = getResourceMap().getString("imageJMacroFileExtension");
+		final String filesDesc = getResourceMap().getString("imageJMacroFileExtensionDescription");
+		fc.setFileFilter(new DescriptiveFileFilter(fileExtension, filesDesc));
+
+		int option = fc.showSaveDialog(getFrame());
+		ExportMacroTask task = null;
+		if (JFileChooser.APPROVE_OPTION == option) {
+			File selectedFile = fc.getSelectedFile();
+			if(selectedFile.exists()) {
+				int response = JOptionPane.showConfirmDialog(this.getFrame(), 
+						"This file already exists. Do you want to overwrite it?",
+						"Overwrite existing file?", 
+						JOptionPane.OK_CANCEL_OPTION);
+				if (!(response == JOptionPane.OK_OPTION)) {
+					return null;
+				}
+			}
+			task = new ExportMacroTask(selectedFile, graphController);
+
+		}
+
 	    return task;
 	}
     
@@ -1117,7 +1121,7 @@ public class ImageFlowView extends FrameView {
 
     	final DefaultListModel lm = new DefaultListModel();
     	for (final Connection connection : getConnections()) {
-    		lm.addElement("Connection between "+ connection.getInput().getName() +" and "+connection.getOutput().getName());	
+    		lm.addElement("Connection between "+ connection.getOutput().getName() + " and " + connection.getInput().getName());	
     	}
     	final JList list = new JList(lm);
     	
@@ -1221,7 +1225,7 @@ public class ImageFlowView extends FrameView {
     @Action 
     public void openDevblogURL() {
     	try {
-			ij.plugin.BrowserLauncher.openURL("http://imageflow.danielsenff.de");
+			ij.plugin.BrowserLauncher.openURL(getResourceMap().getString("openDevblogURL.Url"));
 		} catch (final IOException e) { e.printStackTrace(); }
     }
     
@@ -1231,7 +1235,7 @@ public class ImageFlowView extends FrameView {
     @Action 
     public void openImageJURL() {
     	try {
-			ij.plugin.BrowserLauncher.openURL("http://rsb.info.nih.gov/ij/");
+			ij.plugin.BrowserLauncher.openURL(getResourceMap().getString("openImageJURL.Url"));
 		} catch (final IOException e) { e.printStackTrace(); }
     }
     
@@ -1311,12 +1315,14 @@ public class ImageFlowView extends FrameView {
     /** This is a substitute for FileNameExtensionFilter, which is
      * only available on Java SE 6.
      */
-    private static class FlowXMLFilter extends FileFilter {
+    private static class DescriptiveFileFilter extends FileFilter {
 
         private final String description;
+        private final String extension; 
 
-        FlowXMLFilter(String description) {
-            this.description = description;
+        public DescriptiveFileFilter(String extension, String description) {
+        	this.extension = extension;
+        	this.description = extension + " - " +description;
         }
 
         @Override
@@ -1328,7 +1334,7 @@ public class ImageFlowView extends FrameView {
             int i = fileName.lastIndexOf('.');
             if ((i > 0) && (i < (fileName.length() - 1))) {
                 String fileExt = fileName.substring(i + 1);
-                if ("xml".equalsIgnoreCase(fileExt)) {
+                if (extension.equalsIgnoreCase(fileExt)) {
                     return true;
                 }
             }
@@ -1341,39 +1347,4 @@ public class ImageFlowView extends FrameView {
         }
     }
     
-
-    /** This is a substitute for FileNameExtensionFilter, which is
-     * only available on Java SE 6.
-     */
-    private static class ImageJMacroFilter extends FileFilter {
-
-        private final String description;
-
-        ImageJMacroFilter(String description) {
-            this.description = description;
-        }
-
-        @Override
-        public boolean accept(File f) {
-            if (f.isDirectory()) {
-                return true;
-            }
-            String fileName = f.getName();
-            int i = fileName.lastIndexOf('.');
-            if ((i > 0) && (i < (fileName.length() - 1))) {
-                String fileExt = fileName.substring(i + 1);
-                if ("xml".equalsIgnoreCase(fileExt)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        @Override
-        public String getDescription() {
-            return description;
-        }
-    }
-
-
 }
