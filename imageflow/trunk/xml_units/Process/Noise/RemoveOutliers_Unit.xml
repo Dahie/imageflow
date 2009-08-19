@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--This is the unit to add noise to an image. (No parameters to be set.)-->
+<!---->
             
 <UnitDescription>
 
@@ -9,7 +9,7 @@
   <ImageJSyntax>run("Remove Outliers...", "radius=PARA_DOUBLE_1 threshold=PARA_INTEGER_1 which=PARA_STRING_1 STACK");</ImageJSyntax>
    
   <Color>0x6e91de</Color>
-  <HelpString>Removes outlines from an image.</HelpString>
+  <HelpString>Removes outlying pixels from an image.</HelpString>
 </General>
 
 <Parameters>

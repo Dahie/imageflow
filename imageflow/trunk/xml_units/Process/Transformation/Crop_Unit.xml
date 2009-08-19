@@ -5,7 +5,7 @@
 <General>
   <UnitName>Crop</UnitName> 
   <PathToIcon>Crop_Unit.png</PathToIcon> 
-  <ImageJSyntax>makeRectangle(PARA_INTEGER_1, PARA_INTEGER_2, PARA_INTEGER_3, PARA_INTEGER_4);</ImageJSyntax> 
+  <ImageJSyntax>makeRectangle(PARA_INTEGER_1, PARA_INTEGER_2, PARA_INTEGER_3, PARA_INTEGER_4); run("Crop");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Defines a selection rectangle and crops the image</HelpString>
 </General>
