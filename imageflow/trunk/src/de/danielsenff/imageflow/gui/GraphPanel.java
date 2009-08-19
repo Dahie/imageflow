@@ -38,13 +38,14 @@ import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ResourceMap;
+
 import visualap.GList;
 import visualap.GPanel;
 import visualap.GPanelListener;
 import visualap.Node;
 import visualap.Pin;
-import de.danielsenff.imageflow.ImageFlow;
-import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.SelectionList;
@@ -75,6 +76,7 @@ public class GraphPanel extends GPanel {
 	 */
 	protected boolean drawGrid = false;
 
+	
 	/**
 	 * size of the grid
 	 */
@@ -90,7 +92,7 @@ public class GraphPanel extends GPanel {
 	
 	
 
-	private final String iconFile = "/de/danielsenff/imageflow/resources/iw-logo.png";
+	private String iwFilePath;
 
 	/**
 	 * @param panel
@@ -115,6 +117,10 @@ public class GraphPanel extends GPanel {
 	 */
 	public GraphPanel(final ArrayList<Delegate> delegates, final GPanelListener parent) {
 		super(delegates, parent);
+		
+		this.iwFilePath = 
+			"/de/danielsenff/imageflow/resources/iw-logo.png";
+//			getResourceMap().getString("Background.image");
 
     	JPopupMenu.setDefaultLightWeightPopupEnabled(false);
     	if(!IJ.isMacintosh())
@@ -147,8 +153,10 @@ public class GraphPanel extends GPanel {
 							for (int j = 0; j < files.size(); j++) {
 								File file = (File) files.get(j);
 								
-								UnitDescription sourceUnitDescription = new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
-								final SourceUnitElement sourceUnit = (SourceUnitElement) UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
+								UnitDescription sourceUnitDescription = 
+									new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
+								final SourceUnitElement sourceUnit = 
+									(SourceUnitElement) UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 								sourceUnit.setFilePath(file.getAbsolutePath());
 								getNodeL().add(sourceUnit);
 							}
@@ -171,9 +179,7 @@ public class GraphPanel extends GPanel {
 		
 		
 		try {
-//			this.iwIcon = ImageIO.read(new File(iconFile ));
-			
-			this.iwIcon = ImageIO.read(this.getClass().getResourceAsStream(iconFile));
+			this.iwIcon = ImageIO.read(this.getClass().getResourceAsStream(iwFilePath));
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -291,7 +297,9 @@ public class GraphPanel extends GPanel {
 
 		g2.drawImage(this.iwIcon, 25, 25, null);
 		
-		final String headline = "Create your workflow";
+		final String headline = 
+			"Create your workflow";
+//			getResourceMap().getString("Intro.headline"); 
 		final String description = "Add new units to the graph by using the" + '\n'
 			+"context menu units on this canvas." + '\n' + "   " + '\n'
 			+ "A workflow is constructed from a Source-Unit and requires a Display-Unit." + '\n'
@@ -369,6 +377,9 @@ public class GraphPanel extends GPanel {
 		return this.nodeL;
 	}
 
+	public ResourceMap getResourceMap() {
+		return Application.getInstance().getContext().getResourceMap(GraphPanel.class);
+	}
 
 	/** 
 	 * paints a simple grid on the canvas

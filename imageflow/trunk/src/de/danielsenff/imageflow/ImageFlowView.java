@@ -6,9 +6,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.ScrollPane;
 import java.awt.event.KeyEvent;
@@ -25,7 +22,6 @@ import java.util.HashSet;
 import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -52,7 +48,6 @@ import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.FrameView;
 import org.jdesktop.application.ResourceMap;
-import org.jdesktop.application.Task;
 
 import visualap.Node;
 import visualap.Selection;
@@ -76,7 +71,6 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
-import de.danielsenff.imageflow.models.unit.SourceUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
@@ -331,6 +325,7 @@ public class ImageFlowView extends FrameView {
 		GPanelPopup popup = new GPanelPopup(graphController);
 		
 		graphPanel = new GraphPanel(delegatesArrayList, popup);
+		resourceMap.injectComponent(graphPanel);
 		popup.setActivePanel(graphPanel);
 		graphPanel.setGraphController(graphController);
 		graphPanel.setSelections(getSelections());
@@ -378,7 +373,6 @@ public class ImageFlowView extends FrameView {
 				closeAll = ((JCheckBox)e.getSource()).isSelected();
 			}});
 		buttonPanel.add(chkCloseAll);
-		
 		bottomPanel.add(buttonPanel, BorderLayout.LINE_START);
 		
 		JPanel progressPanel = new JPanel();
@@ -678,7 +672,9 @@ public class ImageFlowView extends FrameView {
 	 * Converts the current workflow into a macro and executes it in ImageJ.
 	 * @return
 	 */
-    @Action public RunMacroTask runMacro() {
+    @Action
+//    (block = Block.COMPONENT)
+    public RunMacroTask runMacro() {
         return new RunMacroTask(this.getApplication(), graphController, this.showCode, this.closeAll);
     }
 
@@ -706,7 +702,7 @@ public class ImageFlowView extends FrameView {
 			for (Node node : getSelections()) {
 				if(node instanceof GroupUnitElement) {
 					System.out.println("Group disallowed: No conistent connections between units");
-					JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+					JOptionPane.showMessageDialog(this.getFrame(), 
 							"Groups may not be included in groups.",
 							"Grouping refused", 
 							JOptionPane.INFORMATION_MESSAGE);
@@ -719,7 +715,7 @@ public class ImageFlowView extends FrameView {
 				graphController.group();
 			} catch (Exception e) {
 				System.out.println("Group disallowed: No conistent connections between units");
-				JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+				JOptionPane.showMessageDialog(this.getFrame(), 
 						"This grouping of units is not permitted.  " + '\n' +
 						"The connected units need to form a conistent branch.",
 						"Grouping refused", 
@@ -982,7 +978,7 @@ public class ImageFlowView extends FrameView {
 	 * Open a workflow file from hard drive.
 	 * @return
 	 */
-	@Action public Task open() {
+	@Action public LoadFlowGraphTask open() {
 		if(isModified()) {
 			final int optionSave = showSaveConfirmation();
 			if(optionSave == JOptionPane.OK_OPTION) {
@@ -997,7 +993,7 @@ public class ImageFlowView extends FrameView {
         fc.setFileFilter(new DescriptiveFileFilter("XML", filesDesc + " Version 1.0"));
 		fc.setFileFilter(new DescriptiveFileFilter(fileExtension, filesDesc));
 
-		Task task = null;
+		LoadFlowGraphTask task = null;
 		final int option = fc.showOpenDialog(null);
 		if (option == JFileChooser.APPROVE_OPTION) {
 			this.setModified(false);
@@ -1007,7 +1003,7 @@ public class ImageFlowView extends FrameView {
 	}
 	
 	private int showSaveConfirmation() {
-		return JOptionPane.showConfirmDialog(ImageFlow.getApplication().getMainFrame(), 
+		return JOptionPane.showConfirmDialog(this.getFrame(), 
 				"The workflow has modifications which were not yet saved."
 				+'\n'+"Save changes now?",
 				"Save changes?", 
@@ -1253,12 +1249,13 @@ public class ImageFlowView extends FrameView {
     @Action
     public void showAboutBox() {
         if (aboutBox == null) {
-            final JFrame mainFrame = ImageFlow.getApplication().getMainFrame();
+            final JFrame mainFrame = getFrame();
             aboutBox = new ImageFlowAboutBox(mainFrame);
             aboutBox.setLocationRelativeTo(mainFrame);
         }
 //        ImageFlow.getApplication().show(aboutBox);
         aboutBox.setVisible(true);
+        ((ImageFlow)getApplication()).addWindow(aboutBox);
     }
     
 	private javax.swing.Action getAction(String actionName) {

@@ -7,10 +7,14 @@ import ij.IJ;
 import ij.ImageJ;
 import ij.plugin.PlugIn;
 
+import java.awt.Window;
 import java.io.File;
+import java.util.Vector;
+
+import javax.swing.JFrame;
 
 import org.jdesktop.application.Application;
-import org.jdesktop.application.SingleFrameApplication;
+import org.jdesktop.application.FrameView;
 
 
 /**
@@ -18,9 +22,12 @@ import org.jdesktop.application.SingleFrameApplication;
  * @author danielsenff
  *
  */
-public class ImageFlow extends SingleFrameApplication implements PlugIn {
+public class ImageFlow extends Application implements PlugIn {
 
 	protected ImageJ imageJ;
+	
+	Vector<Window> windows;
+	
 
 	/**
 	 * Main, start of the application
@@ -30,7 +37,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 		launch(ImageFlow.class, args);
 	}
 	
-	
 
     /**
      * A convenient static getter for the application instance.
@@ -39,15 +45,21 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
     public static ImageFlow getApplication() {
         return Application.getInstance(ImageFlow.class);
     }
-    
-    /**
-     * This method is to initialize the specified window by injecting resources.
-     * Windows shown in our application come fully initialized from the GUI
-     * builder, so this additional configuration is not needed.
-     */
-    @Override protected void configureWindow(java.awt.Window root) {
-    }
 
+    @Override
+    protected void initialize(String[] args) {
+    	super.initialize(args);
+    	windows = new Vector<Window>();
+    	
+    	
+    	// open workflow by argument
+//    	String workflowPath = args != null ? args[0] : "none";
+//    	System.out.println(workflowPath);
+    	
+    }
+    
+    private ImageFlowView imageFlowView;
+    
 	@Override
 	protected void startup() {
 		
@@ -55,13 +67,21 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 			System.setProperty("apple.laf.useScreenMenuBar", "true"); 
 			System.setProperty("apple.awt.brushMetalRounded", "true");
 		}
-//		getImageJInstance();
-		ImageFlowView imageFlowView = new ImageFlowView(this);
+		imageFlowView = new ImageFlowView(this);
+		imageFlowView.getFrame().setSize(800, 600);
 		
 		show(imageFlowView);
-		getMainFrame().setSize(800, 600);
+		addWindow(imageFlowView.getFrame());
 	}
 
+	
+	public FrameView getMainView() {
+		return this.imageFlowView;
+	}
+	
+	public JFrame getMainFrame() {
+		return this.imageFlowView.getFrame();
+	}
 	
 	/*private class MainFrameListener extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
@@ -70,6 +90,9 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
         }
     }*/
 
+	/*
+	 * Start-method for starting the app from within ImageJ as plugin.
+	 */
 	public void run(String args) {
 		String oldPath = System.getProperty("user.dir");
 		System.setProperty("user.dir", oldPath + File.separator + "plugins" + File.separator + "Imageflow");
@@ -80,7 +103,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	public ImageJ getImageJInstance() {
 		if(IJ.getInstance() == null)
 			this.imageJ = new ImageJ();
-		
 		return this.imageJ;
 	}
 
@@ -88,6 +110,10 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 
 	public void handleQuit() throws IllegalStateException {
     	System.exit(0);
+	}
+	
+	public void addWindow(final Window window) {
+		this.windows.add(window);
 	}
 	
 }
