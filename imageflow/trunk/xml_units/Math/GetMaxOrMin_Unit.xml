@@ -5,9 +5,9 @@
 <General>
   <UnitName>Get Max or Min</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>OUTPUT_INTEGER_1 = PARA_STRING_1Of(INPUT_INTEGER_1,INPUT_INTEGER_2);</ImageJSyntax> 
+  <ImageJSyntax>OUTPUT_NUMBER_1 = PARA_STRING_1Of(INPUT_NUMBER_1,INPUT_NUMBER_2);</ImageJSyntax> 
   <Color>0x9cba92</Color>
-  <HelpString>Get the Maximum / Minimum value of the two Integer Inputs</HelpString>
+  <HelpString>Get the Maximum / Minimum value of the two Numbers</HelpString>
 </General>
 
 <Parameters >
@@ -21,13 +21,13 @@
 	<Input>
 		<Name>Input</Name>
 		<ShortName>I</ShortName><Required>true</Required>
-		<DataType>Integer</DataType>
+		<DataType>Number</DataType>
 		<NeedToCopyInput>false</NeedToCopyInput>
 		</Input>
 	<Input>
 		<Name>Input</Name>
 		<ShortName>I</ShortName>	
-		<Required>true</Required><DataType>Integer</DataType>
+		<Required>true</Required><DataType>Number</DataType>
 		<NeedToCopyInput>false</NeedToCopyInput>
 		</Input>
 </Inputs>
@@ -36,7 +36,7 @@
 	<Output>
 		<Name>Output</Name>
 		<ShortName>O</ShortName>	
-		<DataType>Integer</DataType>
+		<DataType>Number</DataType>
 		<DoDisplay>false</DoDisplay>
 	</Output>
 </Outputs>

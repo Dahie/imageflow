@@ -14,7 +14,7 @@
   <Parameter>
   	 <Name>Math</Name>
   	 <DataType>StringArray</DataType>
-  	 <Value>abs;acos;asyn;atan;atan2;cos;exp;floor;log;round;sin;sqrt;tan</Value>
+  	 <Value>abs;acos;asin;atan;cos;exp;floor;log;round;sin;sqrt;tan</Value>
   	 <HelpString>Defines what math should be used to merge both images</HelpString>
      <ChoiceNumber>1</ChoiceNumber>
    </Parameter>
