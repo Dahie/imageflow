@@ -60,7 +60,7 @@ public class ImageFlow extends Application implements PlugIn {
     	System.out.println(workflowPath);
     	GraphController graphController = new GraphController();
     	try {
-			graphController.read(new File(workflowPath))
+			graphController.read(new File(workflowPath));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,8 +78,8 @@ public class ImageFlow extends Application implements PlugIn {
 			System.setProperty("apple.awt.brushMetalRounded", "true");
 		}
 		imageFlowView = new ImageFlowView(this);
-		if()
-		imageFlowView.setG
+//		if()
+//		imageFlowView.setG
 		imageFlowView.getFrame().setSize(800, 600);
 		
 		show(imageFlowView);
