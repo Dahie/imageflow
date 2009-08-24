@@ -56,7 +56,7 @@ public class ImageFlow extends Application implements PlugIn {
     	
     	
     	// open workflow by argument
-    	String workflowPath = args != null ? args[0] : "none";
+    	/*String workflowPath = args != null ? args[0] : "none";
     	System.out.println(workflowPath);
     	GraphController graphController = new GraphController();
     	try {
@@ -64,7 +64,7 @@ public class ImageFlow extends Application implements PlugIn {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		};
+		};*/
     	
     }
     
@@ -80,10 +80,10 @@ public class ImageFlow extends Application implements PlugIn {
 		imageFlowView = new ImageFlowView(this);
 //		if()
 //		imageFlowView.setG
-		imageFlowView.getFrame().setSize(800, 600);
 		
 		show(imageFlowView);
 		addWindow(imageFlowView.getFrame());
+		imageFlowView.getFrame().setSize(800, 600);
 	}
 
 	
