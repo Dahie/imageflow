@@ -43,6 +43,10 @@ public class GenerateMacroTask extends Task<Object, String> {
 		return macro;
 	}
 
+	/**
+	 * Create macro from the {@link GraphController} stored in this Task.
+	 * @return
+	 */
 	protected String generateMacro() {
 		
 		ImageFlowView.getProgressBar().setIndeterminate(true);
