@@ -21,6 +21,8 @@ public class RunMacroTask extends GenerateMacroTask {
 	/**
 	 * @param app
 	 * @param graphController
+	 * @param showCode 
+	 * @param closeAll 
 	 * @param doShowLog
 	 */
 	public RunMacroTask(final Application app, 
@@ -32,6 +34,11 @@ public class RunMacroTask extends GenerateMacroTask {
 		this.closeAll = closeAll;
 	}
 	
+	/**
+	 * @param app
+	 * @param graphController
+	 * @param showCode
+	 */
 	public RunMacroTask(final Application app, 
 			final GraphController graphController, 
 			final boolean showCode) {
