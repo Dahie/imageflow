@@ -9,12 +9,15 @@ import ij.plugin.PlugIn;
 
 import java.awt.Window;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Vector;
 
 import javax.swing.JFrame;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.FrameView;
+
+import de.danielsenff.imageflow.controller.GraphController;
 
 
 /**
@@ -53,8 +56,15 @@ public class ImageFlow extends Application implements PlugIn {
     	
     	
     	// open workflow by argument
-//    	String workflowPath = args != null ? args[0] : "none";
-//    	System.out.println(workflowPath);
+    	String workflowPath = args != null ? args[0] : "none";
+    	System.out.println(workflowPath);
+    	GraphController graphController = new GraphController();
+    	try {
+			graphController.read(new File(workflowPath))
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
     	
     }
     
@@ -68,6 +78,8 @@ public class ImageFlow extends Application implements PlugIn {
 			System.setProperty("apple.awt.brushMetalRounded", "true");
 		}
 		imageFlowView = new ImageFlowView(this);
+		if()
+		imageFlowView.setG
 		imageFlowView.getFrame().setSize(800, 600);
 		
 		show(imageFlowView);

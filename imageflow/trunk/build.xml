@@ -7,7 +7,7 @@
 	<property name="build.dir" location="${basedir}/build" />
 	<property name="units.dir" location="${basedir}/xml_units" />
 	<property name="icons.dir" location="${basedir}/xml_icons" />
-	<property name="doc.dir" location="${basedir}/doc" />
+	<property name="doc.dir" location="${basedir}/doc/release" />
 	<property name="example.dir" location="${basedir}/xml_flows" />
 	
 	 <target name="copy" description="Delete old build and dist directories">

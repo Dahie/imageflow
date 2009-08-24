@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta content="text/html; charset=utf-8" http-equiv="content-type">
+<title>ImageFlow Project Documentation - Basics</title>
+
+
+<style>
+<!-- 
+h1 {
+	font-family:Helvetica, Arial;
+	color:#224488;
+	font-size:14pt;}
+	
+pre, 
+.codeName {
+	font-family: monospace;
+}
+-->
+</style>
+
+</head>
+<body>
+<h1>Imageflow Project Documentation</h1>
+<h2>Workflow</h2>
+<p>A quick look at, how a workflow is created.</p>
+<h3>Loading XML-units</h3>
+
+
+<p>On the start of the program, the DelegatesController is created and searches a specified (hardcoded :/) directory.
+This directory is read recursively and each subfolder and their containing XML are put into a hashmap. <br />
+Based on this Hashmap the Menu-hierarchy is created. </p>
+
+<p>Based on each XML a UnitDescription-object is created, which contains the information to construct a unit element instance of this type.
+This UnitDescription can later be passed to a UnitFactory, which creates an actual instance of this UnitElement.
+The UnitDescription is stored in a UnitDelegate, which is basically a Delegate, that contains meta-information about the unit.
+The delegates are listed in the insert-menu.</p> 
+
+
+<p>The actual instance of a UnitElement is created by giving the UnitDescription to the UnitFactory, who constructs a corresponding object.</p>
+
+
+<h3>XML-workflow</h3>
+
+
+
+<hr />
+<em>Daniel Senff, August 2009</em>
+</body></html>

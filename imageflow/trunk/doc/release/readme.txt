@@ -1,6 +1,6 @@
 =================================================================================
 
-ImageFlow 1.1, 01 August 2009, 
+ImageFlow 1.1, 25 August 2009, 
 authors: 
 Daniel Senff (mail@danielsenff.de)
 Kai-Uwe Barthel (k.barthel@fhtw-berlin.de)
@@ -18,7 +18,7 @@ This plugin offers a node-based graphical user interface for Macro-creation and 
 It allows to create macros by connecting nodes to form a workflow, which represents the 
 way macro-commandos are called by ImageJ. These workflows can be saved and loaded. 
 
-A workflow consists of Sources, which load or create images. 
+A workflow consists of Sources, which loads or create images and stacks. 
 They will be connected to other units to define the order of processing. 
 The workflow requires at least one node to be defined as a display. 
 The result of this unit will be displayed after executing the workflow.
