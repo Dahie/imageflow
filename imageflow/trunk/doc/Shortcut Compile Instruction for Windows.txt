@@ -1,0 +1,19 @@
+Shortcut Compile Instruction for Windows
+========================================
+Version: 2009-08-26
+
+To use ImageFlow with more memory than the given standard 64 MB we need to run the Java VM with the parameter -Xmx.
+
+Example: java -Xmx512m -jar "Imageflow_.jar"
+(provides up to 512 MB of memory)
+
+Since Windows shortcuts does not allow any relative paths in shortcuts, we could put exactly this command in a batch file.
+Running this batch file would open a command window additionally to the ImageFlow window (as well as a shortcut would do this). This is not very useful and even dangerous, because closing this command window closes also the whole ImageFlow application.
+
+This command window can be "hidden" by compiling the batch file into an exe file. Therefore the free "Bat To Exe Converter" [1] can be useful. It comes with English and German help files. The Converter needs the batch file, "Unsichtbares Programm" must be checked and you can specify an Icon. After compiling we get an Executable with relative paths and a self defined memory limit. While executing this exe file no other window than the ImageFlow application window is shown.
+
+This procedure was successfully tested on Windows XP SP3.
+
+
+
+[1] http://www.f2ko.de/English/b2e/index.php

@@ -47,6 +47,7 @@ public class ImageFlowAboutBox extends javax.swing.JDialog {
         super(parent);
         initComponents();
         getRootPane().setDefaultButton(closeButton);
+        setLocationByPlatform(true);
     }
 
     @Action public void closeAboutBox() {

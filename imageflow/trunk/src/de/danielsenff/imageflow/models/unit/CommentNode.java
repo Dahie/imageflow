@@ -20,6 +20,9 @@ import visualap.Node;
  */
 public class CommentNode extends AbstractUnit {
 
+	/**
+	 * Text of the Comment
+	 */
 	protected String text;
 	
 	/**
@@ -33,10 +36,18 @@ public class CommentNode extends AbstractUnit {
 	}
 	
 
+	/**
+	 * Get the Text displayed in the CommentNode.
+	 * @return
+	 */
 	public String getText() {
 		return(text);
 	}
 
+	/**
+	 * Set the Text displayed in the CommentNode.
+	 * @param text
+	 */
 	public void setText(String text) {
 		this.text = text;
 		setLabel(text);

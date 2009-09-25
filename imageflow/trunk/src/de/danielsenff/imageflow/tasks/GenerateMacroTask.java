@@ -1,12 +1,5 @@
 package de.danielsenff.imageflow.tasks;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-
-import javax.swing.JDialog;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 
@@ -58,24 +51,18 @@ public class GenerateMacroTask extends Task<Object, String> {
 //			System.out.println(macro);
 			// generates cleaner Macro without callback function (for progressBar)
 			final String extendedMacro = graphController.generateMacro(false);
-			JDialog codePreview = new JDialog(ImageFlow.getApplication().getMainFrame(), "generated Macro");
-			codePreview.setPreferredSize(new Dimension(350,150));
-			JTextArea ta = new JTextArea(extendedMacro);
-			codePreview.setLayout(new BorderLayout());
-
-			JScrollPane scrollPane = new JScrollPane(ta);
-			codePreview.add(scrollPane, BorderLayout.CENTER);
-			codePreview.pack();
-			codePreview.setVisible(true);			
+			((ImageFlowView)((ImageFlow)ImageFlow.getApplication()).getMainView())
+				.getCodePreviewBox().setMacroCode(extendedMacro);
+						
 		}
 		ImageFlowView.getProgressBar().setIndeterminate(false);
 		return macro;
 	}
     
-	@Override
+	/*@Override
 	protected void succeeded(final Object superclass) {
     	ImageFlowView.getProgressBar().setVisible(false);
     	ImageFlowView.getProgressBar().setValue(0);
-    }
+    }*/
 	
 }

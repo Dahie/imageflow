@@ -29,11 +29,6 @@ public class Input extends Pin {
 	protected String inputTitle;  
 	
 	/**
-	 * Type of data expected from the connected {@link Output}.
-	 */
-	protected DataType dataType;
-
-	/**
 	 * flag indicating if the image at this input needs to be duplicated
 	 */
 	protected boolean needToCopyInput;

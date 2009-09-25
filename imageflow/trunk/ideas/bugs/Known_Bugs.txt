@@ -2,7 +2,4 @@
 - parameters window has at its borders a repaint problem in WinXP
 - input pins don't show their compatible datatypes (you have to guess and try if you don't know the units)
 - CombineStacks leaves a temporary window opened
-- adding more than one comment to the workflow: all comments were drawn on the same spot
-- in right-click-menu the group command is missing
-- "Simulate Workflow Clone" shows collaped units at normal size
-- macroCode window is not closed, although "Close all windows" is checked
+- imageJ window sometimes doesn't close properly on Mac OSX and Linux

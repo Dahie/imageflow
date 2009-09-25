@@ -5,6 +5,7 @@ package de.danielsenff.imageflow.gui;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.Collection;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -77,10 +78,22 @@ public class GPanelPopup implements GPanelListener {
 				popup.add(getAction("paste"));
 				popup.add(getAction("unbind"));
 				popup.add(getAction("delete"));
+				if (!hasGroup(selectedUnits)) {
+					popup.add(getAction("group"));
+				}
 			}
 
 			popup.show(e.getComponent(), e.getX(), e.getY());
 		}
+	}
+	
+	private boolean hasGroup(Collection<Node> selectedUnits) {
+		for (Node node : selectedUnits) {
+			if (node instanceof GroupUnitElement) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

@@ -40,7 +40,10 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 		this.treenodes = new Vector<MutableTreeNode>();
 	}
 	
-	public UnitDelegate(UnitDescription unitDescription) {
+	/**
+	 * @param unitDescription
+	 */
+	public UnitDelegate(final UnitDescription unitDescription) {
 		this(unitDescription.getUnitName(), unitDescription.getHelpString());
 		this.unitDescription = unitDescription;
 	}
@@ -87,10 +90,18 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 		return toolTipText;
 	}
 	
+	/**
+	 * Returns the {@link UnitDescription}.
+	 * @return
+	 */
 	public UnitDescription getUnitDescription() {
 		return unitDescription;
 	}
 	
+	/**
+	 * Get Color of unit.
+	 * @return
+	 */
 	public Color getColor() {
 		return unitDescription.color;
 	}
@@ -113,7 +124,7 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	}
 
 	public void remove(MutableTreeNode arg0) {
-		this.remove(arg0);
+		this.treenodes.remove(arg0);
 	}
 
 	public void removeFromParent() {

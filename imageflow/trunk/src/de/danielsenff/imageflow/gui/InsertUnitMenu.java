@@ -18,7 +18,6 @@ import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.unit.CommentNode;
-import de.danielsenff.imageflow.models.unit.ForGroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
@@ -34,7 +33,6 @@ public class InsertUnitMenu extends JMenu {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final GPanel activePanel;
-	private static Point savedPoint = new Point(75, 75);
 
 	/**
 	 * 
@@ -42,7 +40,7 @@ public class InsertUnitMenu extends JMenu {
 	 * @param availableUnits
 	 */
 	public InsertUnitMenu(final GPanel gpanel, final Collection<Delegate> availableUnits) {
-		this("Insert", gpanel, savedPoint);
+		this("Insert", gpanel, new Point(75, 75));
 	}
 
 	/**
@@ -64,7 +62,7 @@ public class InsertUnitMenu extends JMenu {
 				final String action = source.getText();
 				final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
 				if (action.equals("Comment")) {	
-					final CommentNode node = new CommentNode(savedPoint, "text"); 
+					final CommentNode node = new CommentNode(new Point(savedPoint.x, savedPoint.y), "Newly added comment"); 
 					node.addModelListener(new NodeListener(activePanel, ifView));
 					savedPoint.translate(4, 4);
 					activePanel.getNodeL().add(node);

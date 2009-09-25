@@ -35,8 +35,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -48,15 +50,20 @@ import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.FrameView;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.Task.BlockingScope;
 
 import visualap.Node;
 import visualap.Selection;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.controller.MacroFlowRunner;
+import de.danielsenff.imageflow.controller.MacroGenerator;
 import de.danielsenff.imageflow.gui.DelegatesPanel;
 import de.danielsenff.imageflow.gui.GPanelPopup;
 import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.gui.InsertUnitMenu;
+import de.danielsenff.imageflow.gui.MacOSAboutHandler;
+import de.danielsenff.imageflow.gui.StatusBar;
 import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
@@ -97,6 +104,7 @@ public class ImageFlowView extends FrameView {
 
 //	private static final Logger logger = Logger.getLogger(DocumentEditorView.class.getName());
 	private JDialog aboutBox;
+	private CodePreviewDialog codePreviewBox;
 	
 	private GraphController graphController;
 
@@ -115,7 +123,7 @@ public class ImageFlowView extends FrameView {
 	private JCheckBoxMenuItem chkBoxCollapseIcon;
 	
 	private static JProgressBar progressBar;	
-
+	private StatusBar statusBar = null;
 	
 	
 	/**
@@ -124,13 +132,13 @@ public class ImageFlowView extends FrameView {
 	public ImageFlowView(final Application app) {
 		super(app);
 		
-		this.graphController = new GraphController(); 
 		this.unitDelegates = DelegatesController.getInstance().getUnitDelegates();
+		this.graphController = new GraphController(); 
 		
 		try {
 			this.getFrame().setIconImage(
 					ImageIO.read(this.getClass().getResourceAsStream(
-							getResourceMap().getString("mainFrame.icon"))));
+							getResourceString("mainFrame.icon"))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -196,7 +204,7 @@ public class ImageFlowView extends FrameView {
 		JMenuBar menuBar = new JMenuBar();
 		
 		
-		JMenu fileMenu = new JMenu("File");
+		JMenu fileMenu = new JMenu(getResourceString("file.menu"));
 		fileMenu.add(getAction("newDocument"));
 		fileMenu.add(getAction("open"));
 		
@@ -230,7 +238,7 @@ public class ImageFlowView extends FrameView {
 		}
 		
 		
-		JMenu editMenu = new JMenu("Edit");
+		JMenu editMenu = new JMenu(getResourceString("edit.menu"));
 		editMenu.add(getAction("cut"));
 		editMenu.add(getAction("copy"));
 		editMenu.add(getAction("paste"));
@@ -252,11 +260,11 @@ public class ImageFlowView extends FrameView {
 		
 		
 		
-		JMenu viewMenu = new JMenu("View");
+		JMenu viewMenu = new JMenu(getResourceString("view.menu"));
 		viewMenu.add(new JCheckBoxMenuItem(getAction("alignElements")));
 		viewMenu.add(new JCheckBoxMenuItem(getAction("setDrawGrid")));
 		
-		JMenu debugMenu = new JMenu("Debug");
+		JMenu debugMenu = new JMenu(getResourceString("debug.menu"));
 		debugMenu.add(getAction("debugPrintNodes"));
 		debugMenu.add(getAction("debugPrintNodeDetails"));
 		debugMenu.add(getAction("debugPrintEdges"));
@@ -268,13 +276,17 @@ public class ImageFlowView extends FrameView {
 		
 		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates.values());
 		
-		/*JMenu windowMenu = new JMenu("Window");
+		/*JMenu windowMenu = new JMenu(getResourceString("window.menu"));
 		windowMenu.add(getAction("minimize"));*/
-		JMenu helpMenu = new JMenu("Help");
+		JMenu helpMenu = new JMenu(getResourceString("help.menu"));
 		helpMenu.add(getAction("openDevblogURL"));
 		helpMenu.add(getAction("openImageJURL"));
-		helpMenu.add(new JSeparator());
-        helpMenu.add(getAction("showAboutBox"));
+		if(!IJ.isMacintosh()) {
+			helpMenu.add(new JSeparator());
+	        helpMenu.add(getAction("showAboutBox"));	
+		}else {                                               
+            new MacOSAboutHandler(getFrame());            
+	     }  
 		
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
@@ -357,7 +369,7 @@ public class ImageFlowView extends FrameView {
 		JButton buttonRun = new JButton(getAction("runMacro"));
 		buttonPanel.add(buttonRun);
 		
-		JCheckBox chkShowCode = new JCheckBox(resourceMap.getString("showLog"));
+		JCheckBox chkShowCode = new JCheckBox(getResourceString("showLog"));
 		resourceMap.injectComponent(chkShowCode);
 		chkShowCode.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -365,8 +377,8 @@ public class ImageFlowView extends FrameView {
 			}});
 		buttonPanel.add(chkShowCode);
 		
-		JCheckBox chkCloseAll = new JCheckBox(resourceMap.getString("closeAll.text"));
-		chkCloseAll.setToolTipText(resourceMap.getString("closeAll.shortDescription"));
+		JCheckBox chkCloseAll = new JCheckBox(getResourceString("closeAll.text"));
+		chkCloseAll.setToolTipText(getResourceString("closeAll.shortDescription"));
 		resourceMap.injectComponent(chkCloseAll);
 		chkCloseAll.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -378,13 +390,17 @@ public class ImageFlowView extends FrameView {
 		JPanel progressPanel = new JPanel();
 		progressPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
+		
+		statusBar = new StatusBar(getApplication(), getContext().getTaskMonitor());
+        
+		
 		progressBar = new JProgressBar();
 		progressBar.setMinimum(0);
 		progressBar.setMaximum(100);
 		progressBar.setSize(150, 20);
 		progressBar.setVisible(false);
 		
-		progressPanel.add(progressBar);
+		progressPanel.add(statusBar);
 		
 		bottomPanel.add(progressPanel, BorderLayout.LINE_END);
 		
@@ -484,16 +500,66 @@ public class ImageFlowView extends FrameView {
 		return graphController;
 	}
 
+	private String getResourceString(final String key) {
+		return getResourceMap().getString(key);
+	}
+	
 	/**
 	 * @param graphController
 	 */
 	public void setGraphController(final GraphController graphController) {
+		GraphController oldValue = this.graphController;
 		this.graphController = graphController;
 		graphPanel.setGraphController(this.graphController);
 		registerModelListeners();
 		graphPanel.repaint();
+		firePropertyChange("graphController", oldValue, graphController);
 	}
 	
+	/**
+	 * Returns a Singleton-Instance of a {@link CodePreviewDialog}.
+	 * @return
+	 */
+	public CodePreviewDialog getCodePreviewBox() {
+		if(codePreviewBox == null) {
+			this.codePreviewBox  = new CodePreviewDialog(ImageFlow.getApplication().getMainFrame(), "generated Macro");
+		}
+		return this.codePreviewBox;
+	}
+	
+	/**
+	 * Jdialog for displaying macro code.
+	 * @author danielsenff
+	 *
+	 */
+	public class CodePreviewDialog extends JDialog {
+		private final JTextArea ta;
+		
+		public CodePreviewDialog(final JFrame frame, final String title) {
+			setPreferredSize(new Dimension(350,150));
+			ta = new JTextArea();
+			setLayout(new BorderLayout());
+
+			final JScrollPane scrollPane = new JScrollPane(ta);
+			add(scrollPane, BorderLayout.CENTER);
+			pack();
+			setVisible(true);
+		}
+		
+		public void setMacroCode(final String code) {
+			this.ta.setText(code);
+		}
+		
+		public String getMacroCode() {
+			return this.ta.getText();
+		}
+	}
+	
+	
+	/**
+	 * Returns the current selection in the {@link GraphPanel}.
+	 * @return
+	 */
 	public final SelectionList getSelections() {
 		return graphController.getSelections();
 	}
@@ -533,7 +599,7 @@ public class ImageFlowView extends FrameView {
     public void setFile(final File file) {
     	File oldValue = this.file;
     	this.file = file;
-    	String appId = getResourceMap().getString("Application.id");
+    	String appId = getResourceString("Application.id");
     	getFrame().setTitle(file.getName() + " - " + appId);
     	firePropertyChange("file", oldValue, this.file);	
     }
@@ -570,7 +636,7 @@ public class ImageFlowView extends FrameView {
         this.modified = modified;
         // on program start, file may not be initialised
         if(file != null){
-        	String appId = getResourceMap().getString("Application.id");
+        	String appId = getResourceString("Application.id");
             String changed = modified ? "*" : "";
         	getFrame().setTitle(file.getName() + changed +" - " + appId);	
         }
@@ -603,7 +669,9 @@ public class ImageFlowView extends FrameView {
 	 * @param hasPaste the hasPaste to set
 	 */
 	public void setPaste(boolean hasPaste) {
+		boolean oldValue = this.paste;
 		this.paste = hasPaste;
+		firePropertyChange("paste", oldValue, hasPaste );
 	}
 	
 	/**
@@ -618,8 +686,10 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * @param showlog the showlog to set
 	 */
-	public void setShowlog(boolean showlog) {
-		this.showCode = showlog;
+	public void setShowlog(boolean showcode) {
+		boolean oldValue = showcode;
+		this.showCode = showcode;
+		firePropertyChange("showcode", oldValue, showcode);
 	}
 	
     
@@ -646,25 +716,28 @@ public class ImageFlowView extends FrameView {
 	
 	/**
 	 * convenient Example workflow
+	 * @return 
 	 */
 	@Action public LoadFlowGraphTask exampleFlow1() {
-		String exampleFilename = getResourceMap().getString("exampleFlow1.Path");
+		String exampleFilename = getResourceString("exampleFlow1.Path");
 		return new LoadFlowGraphTask(new File(exampleFilename));
 	}
 	
 	/**
 	 * convenient Example workflow
+	 * @return 
 	 */
 	@Action public LoadFlowGraphTask exampleFlow2() {
-		String exampleFilename = getResourceMap().getString("exampleFlow2.Path");
+		String exampleFilename = getResourceString("exampleFlow2.Path");
 		return new LoadFlowGraphTask(new File(exampleFilename));
 	}
 	
 	/**
 	 * convenient Example workflow
+	 * @return 
 	 */
 	@Action public LoadFlowGraphTask exampleFlow3() {
-		String exampleFilename = getResourceMap().getString("exampleFlow3.Path");
+		String exampleFilename = getResourceString("exampleFlow3.Path");
 		return new LoadFlowGraphTask(new File(exampleFilename));
 	}
 
@@ -673,7 +746,7 @@ public class ImageFlowView extends FrameView {
 	 * @return
 	 */
     @Action
-//    (block = Block.COMPONENT)
+    (block = BlockingScope.ACTION)
     public RunMacroTask runMacro() {
         return new RunMacroTask(this.getApplication(), graphController, this.showCode, this.closeAll);
     }
@@ -744,8 +817,8 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action public ImportGraphTask importGraph() {
 	    final JFileChooser fc = new JFileChooser();
-	    final String filesExtension = getResourceMap().getString("flowXMLFileExtension");
-	    final String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
+	    final String filesExtension = getResourceString("flowXMLFileExtension");
+	    final String filesDesc = getResourceString("flowXMLFileExtensionDescription");
 	    fc.setFileFilter(new DescriptiveFileFilter(filesExtension, filesDesc));
 	    
 	    ImportGraphTask task = null;
@@ -911,12 +984,7 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * Paste {@link UnitElement} into the workflow.
 	 */
-	// (enabledProperty = "paste")
-	// FIXME usually this should have this property
-	// this would grey out the method, unless we have something to paste
-	// however it's greyed out permanently, I haven't found the reason yet
-	// 14 jul 09, daniel
-	@Action
+	@Action(enabledProperty = "paste")
 	public void paste() {
 		final Selection<Node> selectedNodes = getSelections();
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
@@ -988,8 +1056,8 @@ public class ImageFlowView extends FrameView {
 			}
 		} 
 		final JFileChooser fc = new JFileChooser();
-		final String fileExtension = getResourceMap().getString("flowXMLFileExtension");
-        final String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
+		final String fileExtension = getResourceString("flowXMLFileExtension");
+        final String filesDesc = getResourceString("flowXMLFileExtensionDescription");
         fc.setFileFilter(new DescriptiveFileFilter("XML", filesDesc + " Version 1.0"));
 		fc.setFileFilter(new DescriptiveFileFilter(fileExtension, filesDesc));
 
@@ -1010,9 +1078,18 @@ public class ImageFlowView extends FrameView {
 				JOptionPane.INFORMATION_MESSAGE);
 	}
     
-    /**
-     * Save the current workflow, either in existing file or in a new file.
-     * @return
+	/**
+     * Save the contents of the workspace to the current {@link #getFile file}.
+     * <p>
+     * The text is written to the file on a worker thread because we don't want to 
+     * block the EDT while the file system is accessed.  To do that, this
+     * Action method returns a new SaveFlowGraphTask instance.  The task
+     * is executed when the "save" Action's actionPerformed method runs.
+     * The SaveFlowGraphTask is responsible for updating the GUI after it
+     * has successfully completed saving the file.
+
+     * 
+     * @see #getFile
      */
     @Action(enabledProperty = "modified")
     public SaveFlowGraphTask save() {
@@ -1024,13 +1101,21 @@ public class ImageFlowView extends FrameView {
     }
     
     /**
-     * @return
+     * Save the contents of the workspace to the current file.
+     * <p>
+     * This action is nearly identical to {@link #open open}.  In
+     * this case, if the user chooses a file, a {@code SaveFlowGraphTask}
+     * is returned.  Note that the selected file only becomes the
+     * value of the {@code file} property if the file is saved
+     * successfully.
+     * @return 
      */
     @Action
     public SaveFlowGraphTask saveAs() {
         final JFileChooser fc = createFileChooser("saveAsFileChooser");
-        final String fileExtension = getResourceMap().getString("flowXMLFileExtension");
-        final String filesDesc = getResourceMap().getString("flowXMLFileExtensionDescription");
+        getResourceMap().injectComponents(fc);
+        final String fileExtension = getResourceString("flowXMLFileExtension");
+        final String filesDesc = getResourceString("flowXMLFileExtensionDescription");
 		fc.setFileFilter(new DescriptiveFileFilter(fileExtension, filesDesc));
         
         final int option = fc.showSaveDialog(getFrame());
@@ -1062,9 +1147,13 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action public ExportMacroTask export() {
 		JFileChooser fc = createFileChooser("saveAsFileChooser");
-		final String fileExtension = getResourceMap().getString("imageJMacroFileExtension");
-		final String filesDesc = getResourceMap().getString("imageJMacroFileExtensionDescription");
-		fc.setFileFilter(new DescriptiveFileFilter(fileExtension, filesDesc));
+		getResourceMap().injectComponents(fc);
+		fc.setFileFilter(new DescriptiveFileFilter(
+				getResourceString("imageJMacroTXTFileExtension"), 
+				getResourceString("imageJMacroTXTFileExtensionDescription")));
+		fc.setFileFilter(new DescriptiveFileFilter(
+				getResourceString("imageJMacroFileExtension"), 
+				getResourceString("imageJMacroFileExtensionDescription")));
 
 		int option = fc.showSaveDialog(getFrame());
 		ExportMacroTask task = null;
@@ -1088,7 +1177,7 @@ public class ImageFlowView extends FrameView {
     
     private JFileChooser createFileChooser(String name) {
         JFileChooser fc = new JFileChooser(this.file);
-        fc.setDialogTitle(getResourceMap().getString(name + ".dialogTitle"));
+        fc.setDialogTitle(getResourceString(name + ".dialogTitle"));
         return fc;
     }
 	
@@ -1126,13 +1215,20 @@ public class ImageFlowView extends FrameView {
 		dialog.setVisible(true);
     }
     
+    /**
+     * Simulates the cloning if Workflows.
+     * This is convinient for work on the {@link MacroFlowRunner} and
+     * the {@link MacroGenerator}, because they use only a cloned 
+     * version of the actual workflow. This simulates the cloning to 
+     * check if the clone is identical.
+     */
     @Action public void debugDrawClonedWorkflow() {
     	final JDialog dialog = new JDialog();
     	
-    	GPanelPopup popup = new GPanelPopup(graphController);
-    	GraphPanel gpanel = new GraphPanel(popup, graphController);
+    	final GPanelPopup popup = new GPanelPopup(graphController);
+    	final GraphPanel gpanel = new GraphPanel(popup, graphController);
     	popup.setActivePanel(gpanel);
-    	UnitList cloneUnitList = getNodes().clone();
+    	final UnitList cloneUnitList = getNodes().clone();
     	gpanel.setNodeL(cloneUnitList);
     	gpanel.setEdgeL(cloneUnitList.getConnections());
     	
@@ -1193,18 +1289,21 @@ public class ImageFlowView extends FrameView {
     	
     }
     
+    /**
+     * Opens a {@link JDialog} with the contents of a selected {@link GroupUnitElement}.
+     */
     @Action public void showGroupContents() {
     	if(getSelections().size() == 1 
     			&& getSelections().get(0) instanceof GroupUnitElement) {
     		final JDialog dialog = new JDialog();
     		
     		
-    		GroupUnitElement group = (GroupUnitElement) getSelections().get(0);
+    		final GroupUnitElement group = (GroupUnitElement) getSelections().get(0);
 //    		group.showGroupWindow();
     		dialog.setTitle(group.getLabel());
     		
-    		GPanelPopup popup = new GPanelPopup( graphController);
-        	GraphPanel gpanel = new GraphPanel(popup);
+    		final GPanelPopup popup = new GPanelPopup( graphController);
+        	final GraphPanel gpanel = new GraphPanel(popup);
     		gpanel.setNodeL(group.getNodes());
     		popup.setActivePanel(gpanel);
         	gpanel.setEdgeL(group.getInternalConnections());
@@ -1221,7 +1320,7 @@ public class ImageFlowView extends FrameView {
     @Action 
     public void openDevblogURL() {
     	try {
-			ij.plugin.BrowserLauncher.openURL(getResourceMap().getString("openDevblogURL.Url"));
+			ij.plugin.BrowserLauncher.openURL(getResourceString("openDevblogURL.Url"));
 		} catch (final IOException e) { e.printStackTrace(); }
     }
     
@@ -1231,7 +1330,7 @@ public class ImageFlowView extends FrameView {
     @Action 
     public void openImageJURL() {
     	try {
-			ij.plugin.BrowserLauncher.openURL(getResourceMap().getString("openImageJURL.Url"));
+			ij.plugin.BrowserLauncher.openURL(getResourceString("openImageJURL.Url"));
 		} catch (final IOException e) { e.printStackTrace(); }
     }
     
@@ -1242,7 +1341,7 @@ public class ImageFlowView extends FrameView {
     public void minimize() {
     	this.getFrame().setState(Frame.ICONIFIED);
     }
-
+    
     /**
      * Displays the About-dialog
      */
@@ -1253,9 +1352,9 @@ public class ImageFlowView extends FrameView {
             aboutBox = new ImageFlowAboutBox(mainFrame);
             aboutBox.setLocationRelativeTo(mainFrame);
         }
-//        ImageFlow.getApplication().show(aboutBox);
-        aboutBox.setVisible(true);
-        ((ImageFlow)getApplication()).addWindow(aboutBox);
+        ImageFlow.getApplication().show(aboutBox);
+//        aboutBox.setVisible(true);
+//        ((ImageFlow)getApplication()).addWindow(aboutBox);
     }
     
 	private javax.swing.Action getAction(String actionName) {
@@ -1271,26 +1370,10 @@ public class ImageFlowView extends FrameView {
 		return this.graphPanel;
 	}
 	
-	/**
-	 * Sets the current value of the ProgressBar. The parameter must be of type String
-	 * to meet the demands of the macro call() function
-	 * @param progress must be between 0.0 and 1.0
-	 */
-	public static void setProgress(String progress) {
-		Double progressValue = Double.valueOf(progress).doubleValue();
-		
-		if (progressValue < 0) {progressValue = 0.0;}
-		else if(progressValue > 1) {progressValue = 1.0;}
-		
-		// adjust value for progressBar (0 to 100%)
-		progressBar.setValue((int)(progressValue*100));
-	}
-	
-
     private class ConfirmExit implements Application.ExitListener {
         public boolean canExit(EventObject e) {
             if (isModified()) {
-//                String confirmExitText = getResourceMap().getString("confirmTextExit", getFile());
+//                String confirmExitText = getResourceString("confirmTextExit", getFile());
 //                int option = JOptionPane.showConfirmDialog(getFrame(), confirmExitText);
             	int option = showSaveConfirmation();
                 if(option == JOptionPane.YES_OPTION) {
@@ -1301,9 +1384,7 @@ public class ImageFlowView extends FrameView {
             }
             return true;
         }
-        public void willExit(EventObject e) { 
-        	System.exit(0);
-        }
+        public void willExit(EventObject e) { }
         
         
     }

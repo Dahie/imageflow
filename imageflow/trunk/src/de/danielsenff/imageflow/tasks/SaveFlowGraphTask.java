@@ -36,13 +36,28 @@ public class SaveFlowGraphTask extends SaveFileTask<GraphController, Void> {
     	
     	// get current graphcontroller
     	final GraphController graphController = view.getGraphController();
-        graphController.write(file);
     	
-        if (!isCancelled()) {
-            return graphController;
-        } else {
-            return null;
-        }
+    	// defensive file saving, so we create temp-file and backup
+    	String absPath = file.getAbsolutePath();
+		File tmpFile = new File(absPath + ".tmp");
+		tmpFile.createNewFile();
+		tmpFile.deleteOnExit();
+		File backupFile = new File(absPath + ".bak");
+    	
+		graphController.write(tmpFile);
+		
+		if (!isCancelled()) {
+			backupFile.delete();
+			if (file.exists()) {
+				renameFile(file, backupFile);
+			}
+			renameFile(tmpFile, file);
+			return graphController;
+		}
+		else {
+			tmpFile.delete();
+			return null;
+		}
     }
 	
 }

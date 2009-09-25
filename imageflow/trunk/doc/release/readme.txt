@@ -1,6 +1,6 @@
 =================================================================================
 
-ImageFlow 1.1, 25 August 2009, 
+ImageFlow 1.1, 26 August 2009, 
 authors: 
 Daniel Senff (mail@danielsenff.de)
 Kai-Uwe Barthel (k.barthel@fhtw-berlin.de)
@@ -46,6 +46,16 @@ Releases notes
 Version 1.1: stable release
 Version 1.0: stable release
 Version 0.9: is the first public beta. It works, but it is not yet stable.
+
+----------------------------------------
+
+Known issues
+
+- ColorHistogram unit does not work (in ImageFlow as standalone application)
+- parameters window has at its borders a repaint problem in WinXP
+- input pins don't show their compatible datatypes (you have to guess and try if you don't know the units)
+- CombineStacks leaves a temporary window opened
+- imageJ window sometimes doesn't close properly on Mac OSX and Linux
 
 ----------------------------------------
 

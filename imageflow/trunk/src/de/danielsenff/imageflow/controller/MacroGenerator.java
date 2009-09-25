@@ -55,7 +55,7 @@ public class MacroGenerator {
 		macroText += "setBatchMode(true); \n";
 		// reset progressBar to 0%
 		if (extendedMacro) {
-			macroText += "call(\"de.danielsenff.imageflow.ImageFlowView.setProgress\", \"0\")";
+			macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setProgress\", \"0\")";
 		}
 		
 		// loop over all units
@@ -103,7 +103,7 @@ public class MacroGenerator {
 		if (extendedMacro) {
 			currentUnit++;
 			Double currentProgress = (1.0*currentUnit) / unitAmount;
-			macroText += "call(\"de.danielsenff.imageflow.ImageFlowView.setProgress\", \"" + currentProgress + "\")";
+			macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setProgress\", \""+ currentProgress +"\")";
 		}
 		
 	}

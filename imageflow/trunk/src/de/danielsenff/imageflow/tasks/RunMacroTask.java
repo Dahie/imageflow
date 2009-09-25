@@ -17,6 +17,7 @@ import de.danielsenff.imageflow.controller.GraphController;
 public class RunMacroTask extends GenerateMacroTask {
 	
 	private boolean closeAll;
+	private static ProgressObserver progressObserver;
 	
 	/**
 	 * @param app
@@ -32,6 +33,7 @@ public class RunMacroTask extends GenerateMacroTask {
 		super(app, graphController);
 		this.showCode = showCode;
 		this.closeAll = closeAll;
+		this.progressObserver = new ProgressObserver(new ProgListener());
 	}
 	
 	/**
@@ -47,9 +49,11 @@ public class RunMacroTask extends GenerateMacroTask {
 
 	@Override 
 	protected String doInBackground() throws InterruptedException {
-		
+		setMessage("Translating workflow... ");
 		// create macro
 		String macro = super.doInBackground(); 
+		
+		setMessage("Executing Macro...");
 		
 		if(closeAll) {
 			String closeAllCommand = "while (nImages>0) { \n selectImage(nImages);\n close(); } ";
@@ -61,10 +65,6 @@ public class RunMacroTask extends GenerateMacroTask {
 		if(macro != null) {
 		
 			ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
-//			if(this.showCode)
-//				IJ.log(macro);
-
-//			IJ.runMacro(macro, "");
 			Macro_Runner mr = new Macro_Runner();
 			return mr.runMacro(macro, "");
 			
@@ -91,7 +91,52 @@ public class RunMacroTask extends GenerateMacroTask {
 			}*/
 		}
 		
-		
+		System.out.println("we are done");
 		return macro;
 	}
+	
+	/**
+	 * Sets the current value of the ProgressBar. The parameter must be of type String
+	 * to meet the demands of the macro call() function
+	 * @param progress must be between 0.0 and 1.0
+	 */
+	public static void setProgress(String progress) {
+		float progressValue = Float.valueOf(progress).floatValue();
+		
+		if (progressValue < 0) {progressValue = 0.0f;}
+		else if(progressValue > 1) {progressValue = 1.0f;}
+		
+		progressObserver.setValue(progressValue);
+	}
+	
+	
+	@Override protected void succeeded(final Object superclass) {
+	    setMessage("Done");
+	}
+	@Override protected void cancelled() {
+	    setMessage("Canceled");
+	}
+	
+	private class ProgListener {
+		public void fireProgressChanged(float value) {
+			setProgress(value);
+		}
+	}
+	
+	static class ProgressObserver {
+		public static float value = 0;
+		
+		ProgListener progListener;
+		
+		public ProgressObserver(ProgListener listener) {
+			this.progListener = listener;
+		}
+
+		public void setValue(float progressValue) {
+			value = progressValue;
+			progListener.fireProgressChanged(value);
+		} 
+	}
 }
+
+

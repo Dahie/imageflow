@@ -21,82 +21,48 @@ pre,
 <body>
 <h1>Imageflow Project Documentation</h1>
 <h2>Appframework</h2>
-<p>To understand how the application is working, it is important to understand what the Appframework is doing.</p>
+<p>To understand how the application is working, it is important to understand what the Swing Applciation Framework is doing.</p>
 <h3>General</h3>
 <p>During the production of every application comes a point where the programmer is faced with the same general problems. 
-How to handle resources and localization? How to handle threads? How to deal with actions and threads? 
-What is the basic data structure, Model-View-Controller? <br />
-Most programmers develop their own solutions over time and reuse them in their programs. The 
-disadvantages are, 
-that for common problems, many different solutions were implemented and everybody cooked by their own recipy. Secondly, 
-these solutions contain only the experience of one programmer and the problems he faced before. 
-Anticipating problems is naturally difficult. </p>
-<p>For this reason, I didn't want to base this application on my earlier programs, but instead on a 
-general purpose
-desktop application framework. This framework was supposed to give a skeleton 
-for the model-controller structure, resource management, thread handling 
-and action-handling. <a href="https://appframework.dev.java.net" title="Appframework Website">
-Appframework</a> developed as <a href="http://jcp.org/en/jsr/detail?id=296" title="Specifikation">
-Specification JSR-296</a> 
-by Sun. The framework was specified in 2006 and has been in development since then. 
-It was scheduled to be included in Java7 and by 2008 it was already included NetBeans.</p>
+How to handle resources and localization? How to handle threads? How to deal with actions and threads? What is the basic data structure, Model-View-Controller? <br />
+Most programmers develop their own solutions over time and reuse them in their programs. The disadvantages are, that for common problems, many different solutions were implemented and everybody cooked by their own recipy. Secondly, these solutions contain only the experience of one programmer and the problems he faced before. Anticipating problems is naturally difficult. </p>
+<p>For this reason, I didn't want to base this application on my earlier programs, but instead on a general purpose
+desktop application framework. This framework was supposed to give a skeleton for the model-controller structure, resource management, thread handling and action-handling. <a href="https://appframework.dev.java.net" title="Appframework Website">Appframework</a> developed as <a href="http://jcp.org/en/jsr/detail?id=296" title="Specifikation">Specification JSR-296</a> by Sun. The framework was specified in 2006 and has been in development since then. It was scheduled to be included in Java7 and by 2008 it was already included NetBeans.</p>
 
 <h3>Action-handling</h3>
-<p>Java's Action-Interface describes a class, which contains one specific action, that is performed 
-by the use 
-from somewhere in the GUI. Usual cases are menu-entries, toolbar-entries, buttons or hotkeys. 
-The Action-interface allows
-to create one class for handling. If you disable the action, this is resembled everywhere this 
-action is used in the GUI. This 
-makes it very easy to deal with actions.</p>
-<p>However there are a few drawbacks. You have to implement the Interface yourself. You can still 
-create many instances of one
-action, although every Action should be treated like a Singleton. Mixing Actions with Resources can be done easily, but there are 
-no best-practice rules. <br />
+<p>Java's Action-Interface describes a class, which contains one specific action, that is performed by the use from somewhere in the GUI. Usual cases are menu-entries, toolbar-entries, buttons or hotkeys. The Action-interface allows to create one class for handling. If you disable the action, this is resembled everywhere this action is used in the GUI. This makes it very easy to deal with actions.</p>
+<p>However there are a few drawbacks. You have to implement the Interface yourself. You can still create many instances of one
+action, although every Action should be treated like a Singleton. Mixing Actions with Resources can be done easily, but there are no best-practice rules. <br />
 Appframework gives straight rules on how to define and use actions. These are defined very differently.</p>
-<p>In your project you have a view, for example a Frame of your programm. Within this frame you 
-have the menus, buttons etc, which
-shall have an assigned Action. You defined this action by creating a new method, which is preceded by the 
-<a href="https://appframework.dev.java.net/nonav/javadoc/AppFramework-1.03/index.html" 
-title="Action Annotation">Annotation <span class="codeName">@Action</span><a>. Using Reflection based on the method name, 
-the framework creates an Action-object with the method's contents taken as the 
-<span class="codeName">actionPerformed()</span>-method.
-This object is automatically put into the ActionMap, a singleton-map, which contains all created actions of this Frame.
-You can identify the action by the name of the method, retrieve it from the map and simply add it to the
+<p>In your project you have a view, for example a Frame of your program. Within this frame you have the menus, buttons etc, which
+shall have an assigned Action. You defined this action by creating a new method, which is preceded by the <a href="https://appframework.dev.java.net/nonav/javadoc/AppFramework-1.03/index.html" title="Action Annotation">Annotation <code>@Action</code></a>. Using Reflection based on the method name, the framework creates an Action-object with the method's contents taken as the <code>actionPerformed()</code>-method. This object is automatically put into the ActionMap, a singleton-map, which contains all created actions of this Frame. You can identify the action by the name of the method, retrieve it from the map and simply add it to the
 button like you would with your own Action-implementation. For a bit convenience I use this methods:</p>
-<pre>
+<pre><code>
 private javax.swing.Action getAction(String actionName) {
 	ActionMap actionMap = getContext().getActionMap(ImageFlowView.class, this);
     return actionMap.get(actionName);
 }
-</pre> 
+</code></pre> 
 <p>Note that the <span class="codeName">ImageFlowView</span> describes the class we want to get the ActionMap from. In theory
-you can a uniqe ActionMap for every view.<br />
-A common Action-definition in a <span class="codeName">AppView</span>-Class could look like this:</p>
-<pre>
+you can a uniqe ActionMap for every view.<br />A common Action-definition in a <code>AppView</code>-Class could look like this:</p>
+<pre><code>
 @Action
 public Task doSomething() {
 	System.out.println("Print something");
 	return new DoesSomethingTask();
 }
-</pre>
-<p><span class="codeName">@Action</span> can have two Attributes. 
-<span class="codeName">enabledProperty</span> can bind the 
-enabled-property of the Action with a boolean-field by the same name. 
-<span class="codeName">selectedProperty</span> does the same for the selected-property. 
- 
-<pre>
+</code></pre>
+<p><code>@Action</code> can have two Attributes. <code>enabledProperty</code> can bind the 
+enabled-property of the Action with a boolean-field by the same name. <code>selectedProperty</code> does the same for the selected-property.  
+<code><pre>
 boolean enabled = true;
 @Action (enabledProperty = "enabled")
 public Task doSomething() { ... }
-</pre>
+</pre></code>
 
 <h3>Resource-Management</h3>
 
-<p>Every view or frame can have it's own property-file, which contains single key-value-pairs for resources. 
-To remain with our example. The Action we created in the section above is included in the properties-files of the 
-frame, in which it is defined. By convention the properties-files are in a subpackage <em>resources</em> and by the
-same name as the frame. Inside the file you can use the Action's name as key to set up different values.</p>
+<p>Every view or frame can have it's own property-file, which contains single key-value-pairs for resources. To remain with our example. The Action we created in the section above is included in the properties-files of the frame, in which it is defined. By convention the properties-files are in a subpackage <em>resources</em> and by the same name as the frame. Inside the file you can use the Action's name as key to set up different values.</p>
 
 <p>The <em>AppView.properties</em> of our example above may look like this:</p>  
 <pre>
@@ -108,12 +74,9 @@ doSomething.Action.icon=icon.png
 
 <p>This can also be used for any other kind of texts or paths.</p>
 
-
 <h3>Thread-handling</h3>
 
-<p>Appframework allows easy thread handling based on the SwingWorker-Classes. In a nutshell, 
-Appframeworks let's you create <code><a href="https://appframework.dev.java.net/nonav/javadoc/AppFramework-1.03/org/jdesktop/application/Task.html" title="Task API">Task</a></code> 
-which encapsulates procedures. Without any thread-management this procedure would occupy the main-thread, 
+<p>Appframework allows easy thread handling based on the SwingWorker-Classes. In a nutshell, Appframeworks let's you create <a href="https://appframework.dev.java.net/nonav/javadoc/AppFramework-1.03/org/jdesktop/application/Task.html" title="Task API">Task</a> which encapsulates procedures. Without any thread-management this procedure would occupy the main-thread, 
 Tasks allow to perform it parallel in an own thread.</p>
 <p>Tasks are written by extending the <code>Task</code>-class. Tasks can be used in Actions, which is one way to start them.</p>
 
@@ -131,9 +94,7 @@ class DoSomethingTask<String> extends Task<String, Void> {
 </code></pre>
 
 
-<p>The <code><a href="https://appframework.dev.java.net/nonav/javadoc/AppFramework-1.03/org/jdesktop/application/Task.html" title="Task API">Task</a></code>-class is abstract and you create your Task by overriding the necessary method <code>doInBackground()</code>. 
-There are more methods to override. <code>succeed()</code> is called after the procedure is finished, <code>failed</code>, 
-in case of problems and <code>cancelled()</code> in case of a cancellation by the user.</p>
+<p>The <code><a href="https://appframework.dev.java.net/nonav/javadoc/AppFramework-1.03/org/jdesktop/application/Task.html" title="Task API">Task</a></code>-class is abstract and you create your Task by overriding the necessary method <code>doInBackground()</code>. There are more methods to override. <code>succeed()</code> is called after the procedure is finished, <code>failed</code>, in case of problems and <code>cancelled()</code> in case of a cancellation by the user.</p>
 
 
 

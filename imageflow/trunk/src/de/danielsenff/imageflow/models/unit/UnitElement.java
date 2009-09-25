@@ -770,6 +770,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		clone.setColor(this.color);
 		clone.setIcon(this.icon);
 		clone.setHelpString(this.infoText);
+		clone.setCompontentSize(this.getCompontentSize());
 		return clone;
 	}
 

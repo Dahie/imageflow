@@ -2,6 +2,7 @@ package de.danielsenff.imageflow.tasks;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,11 +63,27 @@ public abstract class SaveFileTask<T, V> extends Task<T, V> {
     }
 
     /**
-     * File handled, by this Task.
-     * @return
-     */
-    public File getFile() {
-		return file;
+	 * Return the File that the {@link #getText text} will be
+	 * written to.
+	 *
+	 * @return the value of the read-only file property.
+	 */
+	public final File getFile() {
+	    return file;
+	}
+	
+	
+
+	/**
+	 * @param oldFile
+	 * @param newFile
+	 * @throws IOException
+	 */
+	protected void renameFile(final File oldFile, final File newFile) throws IOException {
+	    if (!oldFile.renameTo(newFile)) {
+		String fmt = "file rename failed: %s => %s";
+		throw new IOException(String.format(fmt, oldFile, newFile));
+	    }
 	}
 
 	/* Called on the EDT if doInBackground fails because

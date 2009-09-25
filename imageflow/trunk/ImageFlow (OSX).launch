@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/imageflow/src/de/danielsenff/imageflow/ImageFlow.java"/>
@@ -11,5 +11,5 @@
 </mapAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="de.danielsenff.imageflow.ImageFlow"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="imageflow"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xdock:name=ImageFlow"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xdock:name=ImageFlow -Xms24m -Xmx512m -Dcom.apple.mrj.application.apple.menu.about.name=ImageFlow"/>
 </launchConfiguration>

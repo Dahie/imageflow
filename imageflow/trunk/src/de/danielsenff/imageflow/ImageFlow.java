@@ -9,15 +9,13 @@ import ij.plugin.PlugIn;
 
 import java.awt.Window;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Vector;
 
 import javax.swing.JFrame;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.FrameView;
-
-import de.danielsenff.imageflow.controller.GraphController;
+import org.jdesktop.application.SingleFrameApplication;
 
 
 /**
@@ -25,7 +23,7 @@ import de.danielsenff.imageflow.controller.GraphController;
  * @author danielsenff
  *
  */
-public class ImageFlow extends Application implements PlugIn {
+public class ImageFlow extends SingleFrameApplication implements PlugIn {
 
 	protected ImageJ imageJ;
 	
@@ -87,13 +85,14 @@ public class ImageFlow extends Application implements PlugIn {
 	}
 
 	
-	public FrameView getMainView() {
+	/*public FrameView getMainView() {
 		return this.imageFlowView;
-	}
+	}*/
 	
+	/*@Override
 	public JFrame getMainFrame() {
 		return this.imageFlowView.getFrame();
-	}
+	}*/
 	
 	/*private class MainFrameListener extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
@@ -121,7 +120,7 @@ public class ImageFlow extends Application implements PlugIn {
 
 
 	public void handleQuit() throws IllegalStateException {
-    	System.exit(0);
+//    	System.exit(0);
 	}
 	
 	public void addWindow(final Window window) {

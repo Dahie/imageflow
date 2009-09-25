@@ -1,59 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project default="create_run_jar" name="Create Runnable Jar for ImageFlow">
+<project default="build" name="Create Runnable Jar for ImageFlow">
 <!--this file was created by Eclipse Runnable JAR Export Wizard-->
 <!--ANT 1.7 is required                                        -->
+	<property name="project-name" value="ImageFlow" /> 
+	<property name="main-class"  value="de.danielsenff.imageflow.ImageFlow"/>
+	
 	<property name="bin.dir" location="${basedir}/bin" /> 
 	<property name="src.dir" location="${basedir}/src" /> 
 	<property name="build.dir" location="${basedir}/build" />
+	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="release.dir" location="${build.dir}/release/${project-name}" />
 	<property name="units.dir" location="${basedir}/xml_units" />
 	<property name="icons.dir" location="${basedir}/xml_icons" />
 	<property name="doc.dir" location="${basedir}/doc/release" />
 	<property name="example.dir" location="${basedir}/xml_flows" />
 	
-	 <target name="copy" description="Delete old build and dist directories">
-	    <delete dir="${build.dir}"/>
-	 	<mkdir dir="${build.dir}" />
-	 	<mkdir dir="${build.dir}/Imageflow" />
-	 	<copy todir="${build.dir}/Imageflow" file="${basedir}/ImageFlow" />
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+	</path>
+	
+	
+	
+	
+	<target name="clean" description="Clean and delete exisinst folders">
+		<delete dir="${release.dir}"/>
+		<delete dir="${bin.dir}"/>
+	</target>
+	
+	
+	 <target name="copy" description="Copy stuff for distribution" depends="clean">
+	 	<mkdir dir="${release.dir}" />
+	 	<!-- copy *nix batch starter, windows exe -->
+	 		<!-- TODO build mac-app is not created automatically -->
 	 	
+	 	<copy todir="${release.dir}" file="${build.dir}/ImageFlow" />
+	 	<copy todir="${release.dir}" file="${build.dir}/ImageFlow.exe" />
 	 	
-	 	<mkdir dir="${build.dir}/Imageflow/xml_units" />
-	 	<copy todir="${build.dir}/Imageflow/xml_units">
+	 	<!-- copy folder for example flows and unit xml -->
+	 	
+	 	<mkdir dir="${release.dir}/xml_units" />
+	 	<copy todir="${release.dir}/xml_units">
 	 		<fileset dir="${units.dir}" />
 	 	</copy>
 	 	
-	 	<mkdir dir="${build.dir}/Imageflow/xml_icons" />
-	 	<copy todir="${build.dir}/Imageflow/xml_icons">
+	 	<mkdir dir="${release.dir}/xml_icons" />
+	 	<copy todir="${release.dir}/xml_icons">
 	 		<fileset dir="${icons.dir}" />
 	 	</copy>
 	 	
-	 	<mkdir dir="${build.dir}/Imageflow/doc" />
-	 	<copy todir="${build.dir}/Imageflow/doc">
+	 	<mkdir dir="${release.dir}/doc" />
+	 	<copy todir="${release.dir}/doc">
 	 			<fileset dir="${doc.dir}" />
 	 	</copy>
 	 	
-	 	<mkdir dir="${build.dir}/Imageflow/xml_flows" />
-	 	<copy todir="${build.dir}/Imageflow/xml_flows">
+	 	<mkdir dir="${release.dir}/xml_flows" />
+	 	<copy todir="${release.dir}/xml_flows">
 	 			<fileset dir="${example.dir}" />
 	 	</copy>
-	 	
-	  </target>
+	</target>
 	
-	<target name="create_run_jar" depends="copy">
-		<jar destfile="${build.dir}/Imageflow/Imageflow_.jar" filesetmanifest="mergewithoutmain">
+	<target name="compile" depends="clean" description="Fresh compile Java class files">
+	    <mkdir dir="${bin.dir}" />
+		<!-- copy all files from src which are not java-files -->
+		<copy todir="${bin.dir}">
+			<fileset dir="${src.dir}" excludes="**.java, packaging/" />
+		</copy>
+		<javac srcdir="src" destdir="${bin.dir}"  classpathref="classpath"/>
+	</target>
+	
+	<target name="create_run_jar" depends="copy, compile">
+		<jar destfile="${release.dir}/${project-name}_.jar" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}"/>
-				<attribute name="Main-Class" value="de.danielsenff.imageflow.ImageFlow"/>
+				<attribute name="Main-Class" value="${main-class}"/>
 				<attribute name="Class-Path" value="."/>
 			</manifest>
 			<fileset dir="${bin.dir}"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/ij.jar"/>
-			<!--<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/junit-4.5.jar"/>-->
-			<!--<fileset dir="${basedir}/../visualap11branch/bin" excludes="**/test/**, *.wav, *.pdf" />-->
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/jdom.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/appframework-1.0.3.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-worker-1.1.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-layout-1.0.3.jar"/>
 		</jar>
+	</target>
+	
+	<target name="build_osx_app" depends="create_run_jar" if="isOSX">
+		<!-- TODO -->
+	</target>
+	
+	<target name="zip_for_release" depends="create_run_jar">
+		<tstamp>
+		    <format property="TODAY" pattern="d-MMMM-yyyy" />
+		</tstamp>
+		<zip destfile="${build.dir}/Imageflow-${TODAY}.zip">
+			<fileset dir="${build.dir}/release/"/>
+		</zip>
+	</target>
+	
+
+	<target name="build" description="Build project" depends="build_osx_app, zip_for_release">
+		<!-- done -->
 	</target>
 </project>

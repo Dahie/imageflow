@@ -39,7 +39,7 @@ Tasks consult the pages about the used
 generating Macro-code based on it's contents. 
 The GraphController has a <code>generateMacro()</code>-method, which is 
 called by the Task. This method creates a 
-new <code>FlowRunner</code-object.</p>
+new <code>FlowRunner</code>-object.</p>
 
 <h3>MacroFlowRunner</h3>
 
@@ -95,8 +95,7 @@ macro execution to batch mode, which means, that it runs in the background
 without displaying any temporary results.</p>
 <pre><code>setBatchMode(true); </code></pre>
 
-<p>Nun kommt der Hauptteil des Macros, in dem nacheinander die Units 
-blöckeweise dem Macro angehängt werden.</p>
+<p>Now for the main body of the macro, which is attached to the header.</p>
 
 <pre><code>open("/home/user/pics/image.png");
 rename("Unit_1_Output_1_0"); 
