@@ -34,7 +34,7 @@ import de.danielsenff.imageflow.utils.UrlCheck;
 public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 
 	private boolean exists = false;
-	
+	private static final int FILE_PARAMETER_INDEX = 0;
 	
 	/**
 	 * @param origin
@@ -137,7 +137,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		setOutputImageType(imageType);
 	}
 
-	/*
+	/**
 	 * Display the default file chooser.
 	 */
 	protected void showOpenFileChooser() {
@@ -299,7 +299,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * @param filepath
 	 */
 	public void setFilePath(String filepath) {
-		((StringParameter)getParameter(0)).setValue(filepath);
+		((StringParameter)getParameter(FILE_PARAMETER_INDEX)).setValue(filepath);
 		String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
 		setLabel(filename);
 		setExistsFile(filepath);

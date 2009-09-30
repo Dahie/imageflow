@@ -972,9 +972,13 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	public void setDisplay(final boolean isDisplay) {
 		this.display = isDisplay;
 		for (Output output : getOutputs()) {
-			output.setDoDisplay(isDisplay);
+			setOutputDisplay(isDisplay, output);
 		}
 		notifyModelListeners();
+	}
+
+	private void setOutputDisplay(final boolean isDisplay, Output output) {
+		output.setDoDisplay(isDisplay);
 	}
 	
 	
