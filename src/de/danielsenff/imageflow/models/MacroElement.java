@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory.Image;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.DoubleParameter;
 import de.danielsenff.imageflow.models.parameter.IntegerParameter;
@@ -134,6 +133,14 @@ public class MacroElement {
 			}
 			pc++;
 			if (parameterIndex != pc) {
+				searchString = "_PARAMETER_" + (parameterIndex+1);
+				if(command.contains(searchString) && paraType.equals("boolean")) {
+					// This parameter is used as an "attibute" somewhere
+					// Go ahead and increment parameter index, so subsequent parameters are still read
+					parameterIndex++;
+				}
+			} 
+			if (parameterIndex != pc) {
 //				System.err.println("Error in parameters or ImageJ-syntax");
 				return command;
 			}
@@ -146,14 +153,16 @@ public class MacroElement {
 	/**
 	 * Writes values of input-DataTypes into the command-string.
 	 * @param inputs
+	 * @param i 
 	 */
-	public void parseInputs(ArrayList<Input> inputs, int i) {
+	public void parseInputs(ArrayList<Input> inputs, final int i) {
 		this.commandSyntax = parseInputs(inputs, this.commandSyntax, i);
 	}
 	
 	/**
 	 * Writes values of output-DataTypes into the command-string.
-	 * @param inputs
+	 * @param outputs 
+	 * @param i 
 	 */
 	public void parseOutputs(ArrayList<Output> outputs, int i) {
 		this.commandSyntax = parseOutputs(outputs, this.commandSyntax, i);
@@ -171,6 +180,7 @@ public class MacroElement {
 	
 	/**
 	 * Writes stack-command in the command-string, if input-DataType is stack
+	 * @param inputs 
 	 */
 	public void parseStack(ArrayList<Input> inputs) {
 		this.commandSyntax = parseStack(inputs, this.commandSyntax);
@@ -226,12 +236,6 @@ public class MacroElement {
 			if(input.isRequired() && input.isConnected()) {				
 				String uniqueOutputName = input.getFromOutput().getOutputTitle() + "_" + i;
 				
-				searchString = "INPUT_DOUBLE_" + (oDbl+1);
-				if(command.contains(searchString) 
-						&& input.getDataType() instanceof DataTypeFactory.Double) { 
-					command = Tools.replace(command, searchString, uniqueOutputName);
-					oDbl++;
-				}
 				searchString = "INPUT_DOUBLE_" + (oDbl+1);
 				if(command.contains(searchString) 
 						&& input.getDataType() instanceof DataTypeFactory.Double) { 
@@ -299,7 +303,12 @@ public class MacroElement {
 		return command;
 	}
 	
-	public static String parseStack(ArrayList<Input> inputs, String command) {
+	/**
+	 * @param inputs
+	 * @param command
+	 * @return
+	 */
+	public static String parseStack(final ArrayList<Input> inputs, String command) {
 		String searchString = "STACK";
 		String stackParameter = "";
 				
