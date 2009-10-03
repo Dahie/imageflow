@@ -26,6 +26,8 @@ public abstract class Delegate {
 		} else	return fullName;
 	}
 
-	
+	public String getName() {
+		return this.name;
+	}
 	
 }

@@ -297,6 +297,18 @@ public class UnitDescription implements NodeDescription{
 		return isDisplayUnit;
 	}
 
+	
+	public boolean hasInputs() {
+		return this.para.length > 0;
+	}
+	
+	public boolean hasOutputs() {
+		return this.para.length > 0;
+	}
+	
+	public boolean hasParameters() {
+		return this.para.length > 0;
+	}
 
 	public class Para {
 		String name;

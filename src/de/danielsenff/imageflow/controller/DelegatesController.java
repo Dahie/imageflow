@@ -60,7 +60,7 @@ public class DelegatesController {
 		return delegatesModel;
 	}
 
-	private DelegatesController() {
+	protected DelegatesController() {
 		delegates = new HashMap<TreeNode, Delegate>();
 
 		DefaultMutableTreeNode top =
@@ -68,6 +68,10 @@ public class DelegatesController {
 		delegatesModel = new DefaultTreeModel(top);
 		JMenu insertMenu = new JMenu("Insert unit");
 
+		fillDelegatesModel(top, insertMenu);
+	}
+
+	protected void fillDelegatesModel(DefaultMutableTreeNode top, JMenu insertMenu) {
 		String unitsFolder = System.getProperty("user.dir")+File.separator+getUnitFolder();
 		File folder = new File(unitsFolder);
 		if(folder.exists()) 
@@ -88,18 +92,17 @@ public class DelegatesController {
 		
 		for (int i = 0; i < listOfFiles.length; i++) {
 			File file = listOfFiles[i];
-			if(file.isDirectory() 
-					&& !file.isHidden() 
-					&& !file.getName().startsWith(".")) {
+			if(file.isDirectory() && !file.isHidden() && !file.getName().startsWith(".")) {
+				// found directory
+				
 				DefaultMutableTreeNode subNode = new DefaultMutableTreeNode(file.getName());
 				JMenu subMenu = new JMenu(file.getName());
 				readDelegatesFromFolder(subNode, subMenu, file);
 				((DefaultMutableTreeNode) node).add(subNode);
 				menu.add(subMenu);
-			} else if (file.isFile() 
-					&& isXML(file)  
-					&& !file.getName().startsWith(".")) {
-
+			} else if (file.isFile() && isXML(file)	&& !file.getName().startsWith(".")) {
+				// found item
+				
 				final NodeDescription unitDescription = new UnitDescription(file, Tools.getXMLRoot(file));
 				final UnitDelegate unitDelegate = new UnitDelegate(unitDescription);
 				DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(unitDelegate.getName());
@@ -108,7 +111,6 @@ public class DelegatesController {
 				((DefaultMutableTreeNode) node).add(unitDelegate);
 				JMenuItem item = new JMenuItem(unitDelegate.getName());
 				menu.add(item);
-
 			}
 		}
 	}

@@ -16,6 +16,7 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.ProxyInput;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory.Image;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitDescription;
@@ -161,8 +162,9 @@ public class GraphController{
 				if(pOutput.isConnected()) {
 					Output originalOutput = pOutput.getEmbeddedOutput();
 					if(originalOutput.getDataType() instanceof DataTypeFactory.Image) {
-						((DataTypeFactory.Image)originalOutput.getDataType()).setParentUnitElement(originalOutput.getParent());
-						((DataTypeFactory.Image)originalOutput.getDataType()).setParentPin(originalOutput);
+						Image imageDataType = (DataTypeFactory.Image)originalOutput.getDataType();
+						imageDataType.setParentUnitElement(originalOutput.getParent());
+						imageDataType.setParentPin(originalOutput);
 					}
 					
 					for (Connection	connection : pOutput.getConnections()) {

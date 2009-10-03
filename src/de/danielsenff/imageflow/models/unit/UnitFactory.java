@@ -105,13 +105,16 @@ public class UnitFactory {
 			unitElement.setCompontentSize(unitDescription.componentSize);
 
 		// setup of the Parameters
-		addParameters(unitDescription, unitElement);
+		if(unitDescription.hasParameters())
+			addParameters(unitDescription, unitElement);
 
 		// setup of the inputs
-		addInputs(unitDescription, unitElement);
+		if(unitDescription.hasInputs())
+			addInputs(unitDescription, unitElement);
 
 		// setup of the output(s)
-		addOutputs(unitDescription,unitElement);
+		if(unitDescription.hasOutputs())
+			addOutputs(unitDescription,unitElement);
 		unitElement.setDisplay(unitDescription.isDisplayUnit);
 
 		// setup the PinTolerance
