@@ -59,6 +59,7 @@ import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.controller.MacroFlowRunner;
 import de.danielsenff.imageflow.controller.MacroGenerator;
 import de.danielsenff.imageflow.gui.DelegatesPanel;
+import de.danielsenff.imageflow.gui.DelegatesTreeListener;
 import de.danielsenff.imageflow.gui.GPanelPopup;
 import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.gui.InsertUnitMenu;
@@ -107,11 +108,15 @@ public class ImageFlowView extends FrameView {
 	private CodePreviewDialog codePreviewBox;
 	
 	private GraphController graphController;
-
-	private GraphPanel graphPanel;
-	private HashMap<TreeNode,Delegate> unitDelegates;
-
+	private HashMap<TreeNode,Delegate> delegates;
 	private File file;
+
+	private JPanel mainPanel;
+	protected GraphPanel graphPanel;
+	private static JProgressBar progressBar;	
+	private StatusBar statusBar = null;
+	
+	
 
 	private boolean modified = false;
 	private boolean selected = false;
@@ -122,8 +127,7 @@ public class ImageFlowView extends FrameView {
 	private JCheckBoxMenuItem chkBoxDisplayUnit;
 	private JCheckBoxMenuItem chkBoxCollapseIcon;
 	
-	private static JProgressBar progressBar;	
-	private StatusBar statusBar = null;
+	
 	
 	
 	/**
@@ -132,16 +136,15 @@ public class ImageFlowView extends FrameView {
 	public ImageFlowView(final Application app) {
 		super(app);
 		
-		this.unitDelegates = DelegatesController.getInstance().getUnitDelegates();
+		this.delegates = DelegatesController.getInstance().getDelegates();
 		this.graphController = new GraphController(); 
 		
-		try {
-			this.getFrame().setIconImage(
-					ImageIO.read(this.getClass().getResourceAsStream(
-							getResourceString("mainFrame.icon"))));
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (IJ.isMacOSX()) {
+			System.setProperty("apple.laf.useScreenMenuBar", "true"); 
+			System.setProperty("apple.awt.brushMetalRounded", "true");
 		}
+		
+		initAppIcon();
 		
 		initComponents();
 		
@@ -150,10 +153,22 @@ public class ImageFlowView extends FrameView {
 
 
 
+	private void initAppIcon() {
+		try {
+			this.getFrame().setIconImage(
+					ImageIO.read(this.getClass().getResourceAsStream(
+							getResourceString("mainFrame.icon"))));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
 	private void initComponents() {
 		addComponents();
 		
-		addMenu();
+		setMenuBar(addMenu());
 		
 		// register listeners
 		registerModelListeners();
@@ -165,7 +180,6 @@ public class ImageFlowView extends FrameView {
 	 * Register the ModelListeners.
 	 */
 	private void registerModelListeners() {
-		// usually on startup this is empty
 		for (Node node : getNodes()) {
 			UnitFactory.registerModelListener(node);
 		}
@@ -200,7 +214,7 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * Adds all components of
 	 */
-	private void addMenu() {
+	private JMenuBar addMenu() {
 		JMenuBar menuBar = new JMenuBar();
 		
 		
@@ -274,7 +288,7 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(getAction("exampleFlow2"));
 		debugMenu.add(getAction("exampleFlow3"));
 		
-		JMenu insertMenu = new InsertUnitMenu(graphPanel, unitDelegates.values());
+		JMenu insertMenu = new InsertUnitMenu(graphPanel, getDelegates().values());
 		
 		/*JMenu windowMenu = new JMenu(getResourceString("window.menu"));
 		windowMenu.add(getAction("minimize"));*/
@@ -297,7 +311,7 @@ public class ImageFlowView extends FrameView {
 		menuBar.add(helpMenu);
 		
 		menuBar.setVisible(true);
-		setMenuBar(menuBar);
+		return menuBar;
 	}
 
 	private void updateMenu() {
@@ -328,27 +342,20 @@ public class ImageFlowView extends FrameView {
 		ResourceMap resourceMap = getResourceMap();
 		
 		JPanel mainPanel = new JPanel();
-		
 		mainPanel.setLayout(new BorderLayout());
 		
 		//working area aka graphpanel
 		ArrayList<Delegate> delegatesArrayList = new ArrayList<Delegate>();
-		delegatesArrayList.addAll(unitDelegates.values());
-		GPanelPopup popup = new GPanelPopup(graphController);
+		delegatesArrayList.addAll(getDelegates().values());
+		GPanelPopup popup = new GPanelPopup(getGraphController());
 		
 		graphPanel = new GraphPanel(delegatesArrayList, popup);
 		resourceMap.injectComponent(graphPanel);
 		popup.setActivePanel(graphPanel);
-		graphPanel.setGraphController(graphController);
+		graphPanel.setGraphController(getGraphController());
 		graphPanel.setSelections(getSelections());
 		if(IJ.isMacOSX())
 			graphPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-
-		
-		/*WorkspacePanel workspacePanel = new WorkspacePanel();
-		workspacePanel.setPreferredSize(new Dimension(400, 300));
-		workspacePanel.add(new UnitProcessingComponent(UnitFactory.createAddNoiseUnit()));*/
-		
 		
 		ScrollPane graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
@@ -357,9 +364,6 @@ public class ImageFlowView extends FrameView {
 		
 //		graphScrollpane.add(workspacePanel);
 
-		
-		
-		
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new BorderLayout());
 		
@@ -407,66 +411,9 @@ public class ImageFlowView extends FrameView {
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
 		DelegatesPanel delegatesPanel = new DelegatesPanel(this.getNodes());
-		delegatesPanel.getDelegatesTree().addMouseListener(new MouseListener() {
-			public void mouseClicked(final MouseEvent e) {
-				if (e.getClickCount() == 2) {
-					final JTree tree = (JTree) e.getSource();
-
-					final int selRow = tree.getRowForLocation(e.getX(), e.getY());
-					final TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-					if(selRow != -1 && selPath.getLastPathComponent() instanceof UnitDelegate) {
-						//			        	 myDoubleClick(selRow, selPath);
-						final UnitDelegate ud = ((UnitDelegate)selPath.getLastPathComponent());
-						Point insertPoint = UnitDelegate.POINT;
-						UnitElement node = ud.createUnit(insertPoint);
-						((UnitElement)node).addModelListener(new NodeListener(graphPanel, getInstance()));
-						getNodes().add(node);
-					}
-				}
-			}
-
-			public void mouseEntered(final MouseEvent arg0) {}
-			public void mouseExited(final MouseEvent arg0) {}
-			public void mousePressed(final MouseEvent arg0) {}
-			public void mouseReleased(final MouseEvent arg0) {}
-		});
-		delegatesPanel.getDelegatesTree().addKeyListener(new KeyListener() {
-			public void keyPressed(final KeyEvent e) {
-				
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					final JTree tree = (JTree) e.getSource();
-					
-					if (tree.getSelectionRows() != null && tree.getSelectionRows().length > 0) {
-						// with 'Enter' all selected Units were inserted, therefore used an array
-						final int[] selRows = tree.getSelectionRows();
-						
-						final TreePath[] selPaths = new TreePath[selRows.length];
-						for (int i = 0; i < selRows.length; i++) {
-							selPaths[i] = tree.getPathForRow(selRows[i]);
-						}
-						
-						final Point insertPoint = UnitDelegate.POINT;
-						// counts only Units, not Folders
-						int realUnitCount = 0;
-						
-						for (int i = 0; i < selRows.length; i++) {
-							if(selRows[i] != -1 && selPaths[i].getLastPathComponent() instanceof UnitDelegate) {
-								final UnitDelegate ud = ((UnitDelegate)selPaths[i].getLastPathComponent());
-								UnitElement node = ud.createUnit(new Point(insertPoint.x + realUnitCount * GraphPanel.GRIDSIZE,
-										insertPoint.y + realUnitCount * GraphPanel.GRIDSIZE));
-								((UnitElement)node).addModelListener(new NodeListener(graphPanel, getInstance()));
-								getNodes().add(node);
-								realUnitCount++;
-							}
-						}
-					}
-				}
-			}
-
-			public void keyTyped(final KeyEvent e) {}
-			public void keyReleased(final KeyEvent e) {}
-		});
-		
+		DelegatesTreeListener delegatesTreeListener = new DelegatesTreeListener(getInstance());
+		delegatesPanel.getDelegatesTree().addMouseListener(delegatesTreeListener);
+		delegatesPanel.getDelegatesTree().addKeyListener(delegatesTreeListener);
 		
 		sidePane.add(delegatesPanel, BorderLayout.CENTER);
 		
@@ -481,8 +428,11 @@ public class ImageFlowView extends FrameView {
 		
 		mainPanel.add(splitPane, BorderLayout.CENTER);
 		mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-		setComponent(mainPanel);
+		setMainPanel(mainPanel);
 	}
+
+
+
 
 	
 	
@@ -493,6 +443,10 @@ public class ImageFlowView extends FrameView {
 	 * getter and setters
 	 */
 	
+	
+
+
+
 	/**
 	 * @return
 	 */
@@ -514,6 +468,11 @@ public class ImageFlowView extends FrameView {
 		registerModelListeners();
 		graphPanel.repaint();
 		firePropertyChange("graphController", oldValue, graphController);
+	}
+	
+
+	protected HashMap<TreeNode, Delegate> getDelegates() {
+		return delegates;
 	}
 	
 	/**
@@ -590,6 +549,17 @@ public class ImageFlowView extends FrameView {
 		return progressBar;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public JPanel getMainPanel() {
+		return this.mainPanel;
+	}
+	
+	protected void setMainPanel(JPanel mainPanel2) {
+		setComponent(mainPanel);
+	}
 
 
 	/**
@@ -1127,7 +1097,7 @@ public class ImageFlowView extends FrameView {
         	}
         	
         	if(selectedFile.exists()) {
-				final int response = JOptionPane.showConfirmDialog(this.getFrame(), 
+				final int response = JOptionPane.showConfirmDialog(getMainPanel(), 
 						"This file already exists. Do you want to overwrite it?",
 						"Overwrite existing file?", 
 						JOptionPane.OK_CANCEL_OPTION);

@@ -48,7 +48,7 @@ public class DelegatesController {
 	 * Get a list of all Units that can be added to the workflow.
 	 * @return
 	 */
-	public HashMap<TreeNode, Delegate> getUnitDelegates() {
+	public HashMap<TreeNode, Delegate> getDelegates() {
 		return  delegates;
 	}
 
@@ -149,7 +149,7 @@ public class DelegatesController {
 	 */
 	public UnitDelegate getDelegate(String unitName) {
 		UnitDelegate unitDelegate = null; 
-		for (final Delegate delegate : getUnitDelegates().values()) {
+		for (final Delegate delegate : getDelegates().values()) {
 			if(delegate instanceof UnitDelegate) {
 				unitDelegate = (UnitDelegate) delegate;
 			}
