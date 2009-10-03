@@ -53,7 +53,11 @@ public class WorkflowXMLBuilder {
 	private Collection<GroupUnitElement> groupUnits;
 	private HashMap<Integer, UnitElement> newNodes;
 
-	public WorkflowXMLBuilder(UnitList units) {
+	/**
+	 * Create a builder object based on a {@link UnitList}
+	 * @param units
+	 */
+	public WorkflowXMLBuilder(final UnitList units) {
 		this.unitList = units;
 		this.connectionDelegates = new Vector<ConnectionDelegate>();
 		this.newNodes = new HashMap<Integer, UnitElement>();
@@ -126,154 +130,182 @@ public class WorkflowXMLBuilder {
 			List<Element> unitsList = unitsElement.getChildren();
 			Iterator<Element> unitsIterator = unitsList.iterator();
 
-			// loop over alle Units
+			// loop over all Units
 			while (unitsIterator.hasNext()) { 
 				Element actualUnitElement = unitsIterator.next();
-				Node node = readUnit(actualUnitElement, file);
+				Node node = readNode(actualUnitElement, file);
 				getUnitList().add(node);
 			}
 		}
 	}
 
-	private Node readUnit(final Element actualUnitElement, 
-			File file) {
+	/**
+	 * @param actualUnitElement
+	 * @param file
+	 * @return
+	 */
+	protected Node readNode(final Element actualUnitElement, final File file) {
 		Node node;
 		int xPos = Integer.parseInt(actualUnitElement.getChild("XPos").getValue());
 		int yPos = Integer.parseInt(actualUnitElement.getChild("YPos").getValue());
+		Point position = new Point(xPos, yPos);
 		String label = "";
+		
 		if(actualUnitElement.getChild("Label") != null)
 			label = actualUnitElement.getChild("Label").getValue();
 
 		System.out.println("Read unit: " +label);
 		
 		Element unitDescriptionElement = actualUnitElement.getChild("UnitDescription");
-		if(actualUnitElement.getChild("UnitID") != null &&
-				unitDescriptionElement != null) {
-
-			int unitID 	= Integer.parseInt(actualUnitElement.getChild("UnitID").getValue());
-			UnitDescription unitDescription = 
-				new UnitDescription(file, unitDescriptionElement);
-
-			UnitElement unitElement;
-			
-			
-			Element unitsElement = unitDescriptionElement.getChild("Units");
-			Element internalConnectionsElement = unitDescriptionElement.getChild("InternalConnections");
-			Element externalConnectionsElement = unitDescriptionElement.getChild("ExternalConnections");
-			Element originalConnectionsElement = unitDescriptionElement.getChild("OriginalConnections");
-			if(internalConnectionsElement != null 
-					&& originalConnectionsElement != null 
-					&& unitsElement != null ) {
-				
-		
-				
-				/*
-				 * GroupUnit
-				 */
-				
-				System.out.println("Process group..");
-				
-				unitElement = new GroupUnitElement(new Point(xPos, yPos), label);
-				HashMap<Integer, UnitElement> embeddedNodes = new HashMap<Integer, UnitElement>();
-
-				unitElement.setHelpString(unitDescription.helpString);
-				newNodes.put(unitID, unitElement);
-				groupUnits.add((GroupUnitElement) unitElement);
-				
-				/*for (int i = 0; i < unitDescription.numInputs; i++) {
-					unitElement.addInput(UnitFactory.createInput(unitDescription.input[i+1], unitElement, i+1));
-				}
-				
-				for (int i = 0; i < unitDescription.numOutputs; i++) {
-					unitElement.addOutput(UnitFactory.createOutput(unitDescription.output[i+1], unitElement, i+1));
-				}*/
-				
-				
-				if(unitsElement != null) {
-
-					List<Element> unitsList = unitsElement.getChildren();
-					Iterator<Element> unitsIterator = unitsList.iterator();
-
-					// loop over all Units
-					while (unitsIterator.hasNext()) { 
-						Element actualEmbeddedUnitElement = unitsIterator.next();
-						Node embeddedNode = readUnit(actualEmbeddedUnitElement, file);
-						((GroupUnitElement)unitElement).getNodes().add(embeddedNode);
-						if(embeddedNode instanceof UnitElement) {
-							System.out.println("put in embeddedNodes: " + embeddedNode 
-									+ " unitid: "+ ((UnitElement)embeddedNode).getUnitID());
-							newNodes.put(((UnitElement)embeddedNode).getUnitID(), (UnitElement) embeddedNode);
-							embeddedNodes.put(((UnitElement)embeddedNode).getUnitID(), (UnitElement) embeddedNode);
-						}
-					}
-				}
-
-				
-				if(internalConnectionsElement != null) {
-					List<Element> connectionsList = internalConnectionsElement.getChildren();
-					Iterator<Element> connectionsIterator = connectionsList.iterator();
-
-					// internal connections require the hashmap with all embedded units
-					while (connectionsIterator.hasNext()) { 
-						Element actualConnectionElement = connectionsIterator.next();
-
-						/*Connection connection = readConnection(newNodes, actualConnectionElement);
-						((GroupUnitElement)unitElement).getInternalConnections().add(connection);*/
-						ConnectionDelegate conDelegate = 
-							new ConnectionDelegate(actualConnectionElement, 
-									((GroupUnitElement)unitElement).getInternalConnections());
-						connectionDelegates.add(conDelegate);
-					}
-				}
-
-				if(originalConnectionsElement != null) {
-					List<Element> connectionsList = internalConnectionsElement.getChildren();
-					Iterator<Element> connectionsIterator = connectionsList.iterator();
-
-					while (connectionsIterator.hasNext()) { 
-						Element actualConnectionElement = connectionsIterator.next();
-						ConnectionDelegate conDelegate = 
-							new ConnectionDelegate(actualConnectionElement, 
-									((GroupUnitElement)unitElement).getOriginalConnections());
-						connectionDelegates.add(conDelegate);
-					}
-				}
-				
-				if(externalConnectionsElement != null) {
-					List<Element> connectionsList = externalConnectionsElement.getChildren();
-					Iterator<Element> connectionsIterator = connectionsList.iterator();
-
-					// external connections require the hashmap with all embedded and existing units	
-					// we need all units of the workflow :/
-					while (connectionsIterator.hasNext()) { 
-						Element actualConnectionElement = connectionsIterator.next();
-//						Connection connection = readConnection(embeddedNodes, actualConnectionElement);
-//						((GroupUnitElement)unitElement).getInternalConnections().add(connection);
-						ConnectionDelegate conDelegate = 
-							new ConnectionDelegate(actualConnectionElement, 
-									((GroupUnitElement)unitElement).getExternalConnections());
-						connectionDelegates.add(conDelegate);
-					}
-				}
-				
-			} else {
-				// create UnitElement
-				unitElement = UnitFactory.createProcessingUnit(unitDescription, new Point(xPos, yPos));
-				unitElement.setDisplay(unitDescription.getIsDisplayUnit());
-				unitElement.setHelpString(unitDescription.helpString);
-				unitElement.setLabel(label);
-				newNodes.put(unitID, unitElement);
-			}
-			
-			
-			node = unitElement;
-			
+		if(actualUnitElement.getChild("UnitID") != null 
+				&& unitDescriptionElement != null) {
+			node = createUnitElement(actualUnitElement, file, position,	label, unitDescriptionElement);
 		} else {
-			CommentNode comment = new CommentNode(new Point(xPos, yPos), label);
-			node = comment;
+			node = createCommentNode(position, label);
 		}
 		
 		return node;
+	}
+
+
+	protected Node createUnitElement(final Element actualUnitElement,
+			final File file, 
+			final Point position, 
+			final String label,
+			final Element unitDescriptionElement) {
+		int unitID 	= Integer.parseInt(actualUnitElement.getChild("UnitID").getValue());
+		UnitDescription unitDescription = new UnitDescription(file, unitDescriptionElement);
+
+		UnitElement unitElement;
+		
+		Element unitsElement = unitDescriptionElement.getChild("Units");
+		
+		Element internalConnectionsElement = unitDescriptionElement.getChild("InternalConnections");
+		Element externalConnectionsElement = unitDescriptionElement.getChild("ExternalConnections");
+		Element originalConnectionsElement = unitDescriptionElement.getChild("OriginalConnections");
+		if(unitsElement != null 
+				&& internalConnectionsElement != null
+				&& externalConnectionsElement != null
+				&& originalConnectionsElement != null) {
+			//create GroupUnit
+			unitElement = readGroup(file, position, label, unitID,
+					unitDescription, unitsElement,
+					internalConnectionsElement, 
+					externalConnectionsElement,
+					originalConnectionsElement);
+		} else {
+			// create UnitElement
+			unitElement = createProcessingUnit(position, label, unitID, unitDescription);
+		}
+		
+		return unitElement;
+	}
+
+
+	private Node createCommentNode(final Point position, String label) {
+		return new CommentNode(position, label);
+	}
+
+	protected UnitElement createProcessingUnit(final Point position, String label,
+			int unitID, UnitDescription unitDescription) {
+		UnitElement unitElement = UnitFactory.createProcessingUnit(unitDescription, position);
+		unitElement.setDisplay(unitDescription.getIsDisplayUnit());
+		unitElement.setHelpString(unitDescription.helpString);
+		unitElement.setLabel(label);
+		newNodes.put(unitID, unitElement);
+		return unitElement;
+	}
+
+	protected UnitElement readGroup(final File file, final Point position,
+			String label, int unitID, UnitDescription unitDescription,
+			Element unitsElement, Element internalConnectionsElement,
+			Element externalConnectionsElement,
+			Element originalConnectionsElement) {
+		System.out.println("Process group..");
+		
+		UnitElement unitElement = new GroupUnitElement(position, label);
+		HashMap<Integer, UnitElement> embeddedNodes = new HashMap<Integer, UnitElement>();
+
+		unitElement.setHelpString(unitDescription.helpString);
+		newNodes.put(unitID, unitElement);
+		groupUnits.add((GroupUnitElement) unitElement);
+		
+		/*for (int i = 0; i < unitDescription.numInputs; i++) {
+			unitElement.addInput(UnitFactory.createInput(unitDescription.input[i+1], unitElement, i+1));
+		}
+		
+		for (int i = 0; i < unitDescription.numOutputs; i++) {
+			unitElement.addOutput(UnitFactory.createOutput(unitDescription.output[i+1], unitElement, i+1));
+		}*/
+		
+		
+		if(unitsElement != null) {
+
+			List<Element> unitsList = unitsElement.getChildren();
+			Iterator<Element> unitsIterator = unitsList.iterator();
+
+			// loop over all Units
+			while (unitsIterator.hasNext()) { 
+				Element actualEmbeddedUnitElement = unitsIterator.next();
+				Node embeddedNode = readNode(actualEmbeddedUnitElement, file);
+				((GroupUnitElement)unitElement).getNodes().add(embeddedNode);
+				if(embeddedNode instanceof UnitElement) {
+					System.out.println("put in embeddedNodes: " + embeddedNode 
+							+ " unitid: "+ ((UnitElement)embeddedNode).getUnitID());
+					newNodes.put(((UnitElement)embeddedNode).getUnitID(), (UnitElement) embeddedNode);
+					embeddedNodes.put(((UnitElement)embeddedNode).getUnitID(), (UnitElement) embeddedNode);
+				}
+			}
+		}
+
+		
+		if(internalConnectionsElement != null) {
+			List<Element> connectionsList = internalConnectionsElement.getChildren();
+			Iterator<Element> connectionsIterator = connectionsList.iterator();
+
+			// internal connections require the hashmap with all embedded units
+			while (connectionsIterator.hasNext()) { 
+				Element actualConnectionElement = connectionsIterator.next();
+
+				/*Connection connection = readConnection(newNodes, actualConnectionElement);
+				((GroupUnitElement)unitElement).getInternalConnections().add(connection);*/
+				ConnectionDelegate conDelegate = 
+					new ConnectionDelegate(actualConnectionElement, 
+							((GroupUnitElement)unitElement).getInternalConnections());
+				connectionDelegates.add(conDelegate);
+			}
+		}
+
+		if(originalConnectionsElement != null) {
+			List<Element> connectionsList = internalConnectionsElement.getChildren();
+			Iterator<Element> connectionsIterator = connectionsList.iterator();
+
+			while (connectionsIterator.hasNext()) { 
+				Element actualConnectionElement = connectionsIterator.next();
+				ConnectionDelegate conDelegate = 
+					new ConnectionDelegate(actualConnectionElement, 
+							((GroupUnitElement)unitElement).getOriginalConnections());
+				connectionDelegates.add(conDelegate);
+			}
+		}
+		
+		if(externalConnectionsElement != null) {
+			List<Element> connectionsList = externalConnectionsElement.getChildren();
+			Iterator<Element> connectionsIterator = connectionsList.iterator();
+
+			// external connections require the hashmap with all embedded and existing units	
+			// we need all units of the workflow :/
+			while (connectionsIterator.hasNext()) { 
+				Element actualConnectionElement = connectionsIterator.next();
+//						Connection connection = readConnection(embeddedNodes, actualConnectionElement);
+//						((GroupUnitElement)unitElement).getInternalConnections().add(connection);
+				ConnectionDelegate conDelegate = 
+					new ConnectionDelegate(actualConnectionElement, 
+							((GroupUnitElement)unitElement).getExternalConnections());
+				connectionDelegates.add(conDelegate);
+			}
+		}
+		return unitElement;
 	}
 	
 	

@@ -38,7 +38,7 @@ public class UnitFactory {
 	 * @return
 	 */
 	public static UnitElement createProcessingUnit(
-			final UnitDescription unitDescription, 
+			final NodeDescription unitDescription, 
 			final Point origin) {
 		return createProcessingUnit(unitDescription, origin, null);
 	}
@@ -50,29 +50,41 @@ public class UnitFactory {
 	 * @return
 	 */
 	public static UnitElement createProcessingUnit(
-			final UnitDescription unitDescription, 
+			final NodeDescription nodeDescription, 
 			final Point origin, 
 			String[] args) {
 		
-		String unitName = unitDescription.unitName;
+		UnitElement unitElement = null;
+		
+		if(nodeDescription instanceof UnitDescription) {
+			UnitDescription unitDescription = (UnitDescription)nodeDescription;
+			unitElement = manufactureUnitElement(origin, args, unitDescription);
+		}
+		return unitElement;
+	}
+
+	private static UnitElement manufactureUnitElement(final Point origin,
+			String[] args, UnitDescription unitDescription) {
+		UnitElement unitElement;
+		String unitName = unitDescription.getUnitName();
 		String imageJSyntax = unitDescription.imageJSyntax;
 
-		
-		
+
+
 		// usual case, we deal with a UnitElement
-		
+
 		// if we have a SourceUnit, we have to take the according class
-		UnitElement unitElement;
+		
 		if(unitName.equals("Image Source")) {
 			unitElement = new SourceUnitElement(new Point(origin), unitName, imageJSyntax);
 		} else if(unitName.equals("Background")) {
 			unitElement = new BackgroundUnitElement(new Point(origin), unitName, imageJSyntax);
 		} else 
 			unitElement = new UnitElement(new Point(origin), unitName, imageJSyntax);
-		
+
 		unitElement.setHelpString(unitDescription.helpString);
-		unitElement.setColor(unitDescription.color);
-		
+		unitElement.setColor(unitDescription.getColor());
+
 		// add an icon if there is one mentioned and found
 		File iconFile = new File(unitDescription.pathToIcon);
 		if(iconFile.exists()) {
@@ -82,7 +94,7 @@ public class UnitFactory {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if(unitDescription.icon != null) {
 			unitElement.setIcon(unitDescription.icon);
 			unitElement.setIconFile(unitDescription.iconFile);
@@ -91,20 +103,20 @@ public class UnitFactory {
 
 		if(unitDescription.componentSize != null)
 			unitElement.setCompontentSize(unitDescription.componentSize);
-		
+
 		// setup of the Parameters
 		addParameters(unitDescription, unitElement);
-		
+
 		// setup of the inputs
 		addInputs(unitDescription, unitElement);
-		
+
 		// setup of the output(s)
 		addOutputs(unitDescription,unitElement);
 		unitElement.setDisplay(unitDescription.isDisplayUnit);
-		
+
 		// setup the PinTolerance
 		setPinTolerance(unitElement);
-		
+
 		//special cases
 		if(unitElement instanceof BackgroundUnitElement) {
 			String imageType = (String) unitElement.getParameter(2).getValue();
@@ -119,7 +131,6 @@ public class UnitFactory {
 			}
 			sourceUnit.updateImageType();
 		}
-		
 		return unitElement;
 	}
 

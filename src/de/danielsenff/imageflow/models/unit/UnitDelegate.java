@@ -28,7 +28,7 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	 * default startpoint of nodes
 	 */
 	public static Point POINT = new Point(40, 40);
-	private UnitDescription unitDescription;
+	private NodeDescription unitDescription;
 	
 	/**
 	 * @param unitName 
@@ -43,7 +43,7 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	/**
 	 * @param unitDescription
 	 */
-	public UnitDelegate(final UnitDescription unitDescription) {
+	public UnitDelegate(final NodeDescription unitDescription) {
 		this(unitDescription.getUnitName(), unitDescription.getHelpString());
 		this.unitDescription = unitDescription;
 	}
@@ -94,7 +94,7 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	 * Returns the {@link UnitDescription}.
 	 * @return
 	 */
-	public UnitDescription getUnitDescription() {
+	public NodeDescription getUnitDescription() {
 		return unitDescription;
 	}
 	
@@ -103,7 +103,7 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	 * @return
 	 */
 	public Color getColor() {
-		return unitDescription.color;
+		return unitDescription.getColor();
 	}
 	
 	@Override

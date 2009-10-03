@@ -14,6 +14,7 @@ import javax.swing.tree.TreeNode;
 
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.Delegate;
+import de.danielsenff.imageflow.models.unit.NodeDescription;
 import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.utils.Tools;
@@ -99,7 +100,7 @@ public class DelegatesController {
 					&& isXML(file)  
 					&& !file.getName().startsWith(".")) {
 
-				final UnitDescription unitDescription = new UnitDescription(file, Tools.getXMLRoot(file));
+				final NodeDescription unitDescription = new UnitDescription(file, Tools.getXMLRoot(file));
 				final UnitDelegate unitDelegate = new UnitDelegate(unitDescription);
 				DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(unitDelegate.getName());
 				delegates.put(treeNode, unitDelegate);

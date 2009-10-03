@@ -28,7 +28,7 @@ import de.danielsenff.imageflow.utils.Tools;
  * @author senff
  *
  */
-public class UnitDescription {
+public class UnitDescription implements NodeDescription{
 
 	public UnitDescription() {
 	}
@@ -348,6 +348,10 @@ public class UnitDescription {
 		DataType dataType;
 		int imageType;
 		boolean doDisplay;
+	}
+
+	public Color getColor() {
+		return this.color;
 	}
 
 }
