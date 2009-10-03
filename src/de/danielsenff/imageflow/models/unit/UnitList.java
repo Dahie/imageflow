@@ -3,9 +3,6 @@
  */
 package de.danielsenff.imageflow.models.unit;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -222,7 +219,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	/**
 	 * Remove this Unit from the workflow.
 	 * This doesn't touch connections at all.
-	 * @param unit 
+	 * @param node 
 	 * @return 
 	 */
 	public boolean removeUnchecked(final Node node) {
@@ -408,7 +405,11 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	}
 
 
-	public void setConnectionList(ConnectionList connList) {
+	/**
+	 * Set the {@link ConnectionList} 
+	 * @param connList
+	 */
+	public void setConnectionList(final ConnectionList connList) {
 		this.connections = connList;
 	}
 

@@ -149,7 +149,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	/**
 	 * Opens a {@link JFileChooser} to select a new file.
 	 */
-	private void showOpenJFileChooser() {
+	protected void showOpenJFileChooser() {
 		final JFileChooser fc = new JFileChooser();
 	    String filepath = getFilePath();
 	    

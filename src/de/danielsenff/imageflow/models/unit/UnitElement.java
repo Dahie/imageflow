@@ -54,7 +54,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	/**
 	 * Pixel radius of tolerance round the pins  
 	 */
-	private int pinTolerance = 18;
+	protected int pinTolerance = 18;
 
 	/**
 	 * name of this unit, this is not displayed, Label is displayed
@@ -967,7 +967,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * boolean indicating if this unit is a display unit
 	 * The result of DisplayUnits will be shown after executing the workflow.  
 	 */
-	protected boolean display = false;  
+	private boolean display = false;  
 	
 	public void setDisplay(final boolean isDisplay) {
 		this.display = isDisplay;
@@ -977,7 +977,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		notifyModelListeners();
 	}
 
-	private void setOutputDisplay(final boolean isDisplay, Output output) {
+	protected void setOutputDisplay(final boolean isDisplay, Output output) {
 		output.setDoDisplay(isDisplay);
 	}
 	

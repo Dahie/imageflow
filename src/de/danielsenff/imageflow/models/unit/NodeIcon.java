@@ -86,18 +86,35 @@ public class NodeIcon implements UnitModelComponent {
 		this.unitID = unit.getUnitID();
 		this.dimension = largeComponentDimension;
 		
-		try {
-			this.displayIcon = ImageIO.read(this.getClass().getResourceAsStream(displayIconFile));
-//			this.displayIcon = ImageIO.read(new File(displayIconFile));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		initDimension();
+		
+		initDisplayIcon();
 		if(unit.getIcon() !=null) {
 			this.icon = unit.getIcon();
 		}
 	}
 
 
+	protected void initDimension() {}
+
+
+	/**
+	 * Initializes the icon showing the function of the unit.
+	 */
+	protected void initDisplayIcon() {
+		try {
+			this.displayIcon = ImageIO.read(this.getClass().getResourceAsStream(displayIconFile));
+//			this.displayIcon = ImageIO.read(new File(displayIconFile));
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	public UnitElement getUnit() {
+		return this.unit;
+	}
+	
 	/**
 	 * @return 
 	 */
@@ -187,11 +204,21 @@ public class NodeIcon implements UnitModelComponent {
 	    
 	    // draw icon for display
 	    if(isDisplayUnit) {
-	    	int xDisplay = this.x+(widthBg/2)+30;
-			int yDisplay = this.y+5;
-//			g2.drawImage(this.displayIcon, xDisplay, yDisplay, null);
-			g2.drawImage(this.displayIcon, xDisplay, yDisplay, xDisplay+12,yDisplay+12, 0, 0, 18, 18, null);
+	    	drawDisplayIndicator(g2, widthBg);
 	    }
+	}
+
+
+	/**
+	 * Draws the indicator of the display status of this unit.
+	 * @param g2
+	 * @param widthBg
+	 */
+	protected void drawDisplayIndicator(final Graphics2D g2, final int widthBg) {
+		int xDisplay = this.x+(widthBg/2)+30;
+		int yDisplay = this.y+5;
+//			g2.drawImage(this.displayIcon, xDisplay, yDisplay, null);
+		g2.drawImage(this.displayIcon, xDisplay, yDisplay, xDisplay+12,yDisplay+12, 0, 0, 18, 18, null);
 	}
 	
 	
