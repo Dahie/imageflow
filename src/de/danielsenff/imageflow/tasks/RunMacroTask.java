@@ -17,6 +17,12 @@ import de.danielsenff.imageflow.controller.GraphController;
 public class RunMacroTask extends GenerateMacroTask {
 	
 	private boolean closeAll;
+	/**
+	 * ProgressObserver is a workaround.
+	 * We get the status of the progress from ImageJ from a static class.
+	 * We need to convert this to a synchronized object to 
+	 * be able to get the status in realtime.
+	 */
 	private static ProgressObserver progressObserver;
 	
 	/**
@@ -67,6 +73,15 @@ public class RunMacroTask extends GenerateMacroTask {
 			ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
 			Macro_Runner mr = new Macro_Runner();
 			return mr.runMacro(macro, "");
+			
+			/*
+			 * TODO FIXME
+			 * This Task has one major problem.
+			 * We create/use an instance of ImageJ. The tasks expects ImageJ to terminate at some point.
+			 * Therefore as ImageJ is kept alive and the task is never closed.
+			 * In MacOS X this causes ImageFlow to not shutdown on close.
+			 * In Linux it can cause problems with ImageJ not wanting to close.
+			 */
 			
 			/* beginning for new functions, but not today, daniel */
 			/*int[] imageIDs = WindowManager.getIDList();
