@@ -8,6 +8,7 @@
 	<property name="bin.dir" location="${basedir}/bin" /> 
 	<property name="src.dir" location="${basedir}/src" /> 
 	<property name="build.dir" location="${basedir}/build" />
+	<property name="packaging.dir" location="${src.dir}/packaging" />
 	<property name="lib.dir" location="${basedir}/lib" />
 	<property name="release.dir" location="${build.dir}/release/${project-name}" />
 	<property name="units.dir" location="${basedir}/xml_units" />
@@ -33,8 +34,8 @@
 	 	<!-- copy *nix batch starter, windows exe -->
 	 		<!-- TODO build mac-app is not created automatically -->
 	 	
-	 	<copy todir="${release.dir}" file="${build.dir}/ImageFlow" />
-	 	<copy todir="${release.dir}" file="${build.dir}/ImageFlow.exe" />
+	 	<copy todir="${release.dir}" file="${packaging.dir}/ImageFlow" />
+	 	<!--<copy todir="${release.dir}" file="${build.dir}/ImageFlow.exe" />-->
 	 	
 	 	<!-- copy folder for example flows and unit xml -->
 	 	
