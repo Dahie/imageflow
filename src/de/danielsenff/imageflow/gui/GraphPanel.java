@@ -264,7 +264,7 @@ public class GraphPanel extends GPanel {
 
 				final Point origin = drawEdge.getLocation();
 				g2.setColor(Color.BLACK);
-				g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
+//				g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
 				g2.draw(new Line2D.Double(origin.x, origin.y, mouse.x, mouse.y));
 			}
 			//If currentRect exists, paint a box on top.
