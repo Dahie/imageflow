@@ -30,9 +30,9 @@ Kai Uwe Barthel<br>
 Friedrich Maiwald
 
 ## License
-Released under a Gnu Public License Version 3.
+Released under a [Gnu General Public License v2][license].
 
-[dahie]: http://dahie.github.com
+[dahie]: http://github.com/Dahie
 [imagej]: http://rsb.info.nih.gov/ij/
 [wiki]: http://wiki.github.com/Dahie/imageflow
-[license]: http://github.com/chriseppstein/compass/tree/master/LICENSE.markdown
+[license]: http://github.com/Dahie/imageflow/blob/master/LICENSE.md
