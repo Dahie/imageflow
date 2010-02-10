@@ -33,9 +33,6 @@
 	 	<!-- copy *nix batch starter, windows exe -->
 	 		<!-- TODO build mac-app is not created automatically -->
 	 	
-	 	<copy todir="${release.dir}" file="${build.dir}/ImageFlow" />
-	 	<copy todir="${release.dir}" file="${build.dir}/ImageFlow.exe" />
-	 	
 	 	<!-- copy folder for example flows and unit xml -->
 	 	
 	 	<mkdir dir="${release.dir}/xml_units" />
