@@ -29,13 +29,13 @@ public class MacroEnvironment {
 		
 		"setBatchMode(true); \n" +
 
-		"// open an image \n" +
+		"// open an image\n" +
 		"open(\"/Users/danielsenff/zange1.png\"); \n" +
 		"ID_temp = getImageID(); \n" +
 		"run(\"Duplicate...\", \"title=Source1\"); \n" +
 		"ID_Source1 = getImageID(); \n" +
 		"selectImage(ID_temp); \n" +
-		"close(); \n" +
+		"close();\n" +
 
 		"// blur image\n" +
 		"selectImage(ID_Source1); \n" +
@@ -45,7 +45,7 @@ public class MacroEnvironment {
 
 		"// close the images that are not to be displayed \n" +
 		"selectImage(ID_Source1); \n" +
-		"close(); \n" +
+		"close();\n" +
 
 		"setBatchMode(\"exit and display\"); ";
 
