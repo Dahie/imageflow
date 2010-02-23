@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
+import java.net.URL;
+import java.net.MalformedURLException;
+
+import javax.swing.JOptionPane;
 
 import visualap.Node;
 import de.danielsenff.imageflow.models.SelectionList;
@@ -22,6 +26,7 @@ import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
+import de.danielsenff.imageflow.ImageFlow;
 
 
 
@@ -199,13 +204,12 @@ public class GraphController{
 	}
 	
 	/**
-	 * Reads the contents of a flow-XML-file.
-	 * @param file
-	 * @throws FileNotFoundException 
+	 * Reads the contents of a flow-XML-document.
+	 * @param url The document to load.
 	 */
-	public void read(File file) throws FileNotFoundException {
+	public void read(URL url) {
 		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(nodes);
-		workflowbuilder.read(file);
+		workflowbuilder.read(url);
 	}
 	
 	public void write(final File file) throws IOException {
@@ -213,6 +217,9 @@ public class GraphController{
 		workflowbuilder.write(file);
 	}
 	
+	private URL getExampleURL(String unitPath) throws MalformedURLException {
+		return new URL(DelegatesController.getInstance().getResourcesBase(), unitPath);
+	}
 
 	public void setupExample1() {
 		////////////////////////////////////////////////////////
@@ -255,12 +262,14 @@ public class GraphController{
 	}
 
 	public void setupExample0_XML() {
-
 		nodes.clear();
+
 		try {
-			read(new File("xml_flows/Example0_flow.xml"));
-		} catch (FileNotFoundException e) {
+			read(getExampleURL("xml_flows/Example0_flow.xml"));
+		}
+		catch (MalformedURLException e) {
 			e.printStackTrace();
+			showExampleLoadError(e);
 		}
 	}
 
@@ -271,55 +280,65 @@ public class GraphController{
 		// setup of units
 		////////////////////////////////////////////////////////
 
+		try {
+			UnitDescription sourceUnitDescription = new UnitDescription(getExampleURL("xml_units/ImageSource_Unit.xml"));
+			final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 
-		UnitDescription sourceUnitDescription = new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
-		final UnitElement sourceUnit = UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
+			final UnitElement to8BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(getExampleURL("xml_units/Image/8Bit_Unit.xml")), new Point(150, 100));
+			final UnitElement to32BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(getExampleURL("xml_units/Image/32Bit_Unit.xml")), new Point(260, 100));
 
-		final UnitElement to8BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Image/8Bit_Unit.xml")), new Point(150, 100));
-		final UnitElement to32BitUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Image/32Bit_Unit.xml")), new Point(260, 100));
+			UnitDescription unitConvolveDescription = new UnitDescription(getExampleURL("xml_units/Process/Filters/Convolver_Unit.xml"));
+			final UnitElement convUnit = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 50));
+			final UnitElement convUnit2 = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 160));
 
-		UnitDescription unitConvolveDescription = new UnitDescription(new File("xml_units/Process/Filters/Convolver_Unit.xml"));
-		final UnitElement convUnit = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 50));
-		final UnitElement convUnit2 = UnitFactory.createProcessingUnit(unitConvolveDescription, new Point(400, 160));
+			UnitDescription unitSquareDescription = new UnitDescription(getExampleURL("xml_units/Process/Math_unit.xml"));
+			final UnitElement squareUnit = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 50));
+			final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 160));
 
-		UnitDescription unitSquareDescription = new UnitDescription(new File("xml_units/Process/Math_unit.xml"));
-		final UnitElement squareUnit = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 50));
-		final UnitElement squareUnit2 = UnitFactory.createProcessingUnit(unitSquareDescription, new Point(510, 160));
+			final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(getExampleURL("xml_units/Process/Add_unit.xml")), new Point(650, 100));
+			final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(getExampleURL("xml_units/Lookup Tables/Fire_Unit.xml")), new Point(770, 100));
 
-		final UnitElement addUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Process/Add_unit.xml")), new Point(650, 100));
-		final UnitElement fireUnit = UnitFactory.createProcessingUnit(new UnitDescription(new File("xml_units/Lookup Tables/Fire_Unit.xml")), new Point(770, 100));
+			// some mixing, so they are not in order
+			nodes.add(sourceUnit);
+			nodes.add(to8BitUnit);
+			nodes.add(to32BitUnit);
+			nodes.add(convUnit);
+			nodes.add(squareUnit);
+			nodes.add(convUnit2);
+			nodes.add(squareUnit2);
+			nodes.add(addUnit);
+			nodes.add(fireUnit);
+			fireUnit.setDisplay(true);
 
-		// some mixing, so they are not in order
-		nodes.add(sourceUnit);
-		nodes.add(to8BitUnit);
-		nodes.add(to32BitUnit);
-		nodes.add(convUnit);
-		nodes.add(squareUnit);
-		nodes.add(convUnit2);
-		nodes.add(squareUnit2);
-		nodes.add(addUnit);
-		nodes.add(fireUnit);
-		fireUnit.setDisplay(true);
+			////////////////////////////////////////////////////////
+			// setup the connections
+			////////////////////////////////////////////////////////
 
-		////////////////////////////////////////////////////////
-		// setup the connections
-		////////////////////////////////////////////////////////
+			// add six connections
+			// the conn is established on adding
+			// fromUnit, fromOutputNumber, toUnit, toInputNumber
 
-		// add six connections
-		// the conn is established on adding
-		// fromUnit, fromOutputNumber, toUnit, toInputNumber
-
-		nodes.addConnection(new Connection(sourceUnit,1,to8BitUnit,1));
-		nodes.addConnection(new Connection(to8BitUnit,1,to32BitUnit,1));
-		nodes.addConnection(new Connection(to32BitUnit,1,convUnit,1));
-		nodes.addConnection(new Connection(to32BitUnit,1,convUnit2,1));
-		nodes.addConnection(new Connection(convUnit,1,squareUnit,1));
-		nodes.addConnection(new Connection(convUnit2,1,squareUnit2,1));
-		nodes.addConnection(new Connection(squareUnit,1,addUnit,1));
-		nodes.addConnection(new Connection(squareUnit2,1,addUnit,2));
-		nodes.addConnection(new Connection(addUnit,1,fireUnit,1));
-
+			nodes.addConnection(new Connection(sourceUnit,1,to8BitUnit,1));
+			nodes.addConnection(new Connection(to8BitUnit,1,to32BitUnit,1));
+			nodes.addConnection(new Connection(to32BitUnit,1,convUnit,1));
+			nodes.addConnection(new Connection(to32BitUnit,1,convUnit2,1));
+			nodes.addConnection(new Connection(convUnit,1,squareUnit,1));
+			nodes.addConnection(new Connection(convUnit2,1,squareUnit2,1));
+			nodes.addConnection(new Connection(squareUnit,1,addUnit,1));
+			nodes.addConnection(new Connection(squareUnit2,1,addUnit,2));
+			nodes.addConnection(new Connection(addUnit,1,fireUnit,1));
+		}
+		catch (MalformedURLException e) {
+			e.printStackTrace();
+			showExampleLoadError(e);
+		}
 	}
 
+	private void showExampleLoadError(Exception e) {
+		final int type = JOptionPane.ERROR_MESSAGE;
+		JOptionPane.showMessageDialog(
+			ImageFlow.getApplication().getMainFrame(),
+			"An error occured while loading the example!", "Could not load example", type);
+	}
 }
 

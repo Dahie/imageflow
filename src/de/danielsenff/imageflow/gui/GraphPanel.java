@@ -58,6 +58,7 @@ import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
+import de.danielsenff.imageflow.utils.Tools;
 
 /**
  * Graphical workspace on which the units are drawn and which handles the mouse actions.
@@ -154,7 +155,7 @@ public class GraphPanel extends GPanel {
 								File file = (File) files.get(j);
 								
 								UnitDescription sourceUnitDescription = 
-									new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
+									new UnitDescription( Tools.getResourceURL("xml_units/ImageSource_Unit.xml"));
 								final SourceUnitElement sourceUnit = 
 									(SourceUnitElement) UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 								sourceUnit.setFilePath(file.getAbsolutePath());
