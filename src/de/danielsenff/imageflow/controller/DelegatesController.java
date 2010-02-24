@@ -83,9 +83,9 @@ public class DelegatesController {
 
 		String unitsLocation = "";
 		try {
-			// the location ot the unit xml files
-			unitsLocation = System.getProperty("user.dir")+File.separator+getUnitFolder();
-			URL resource = (new File(unitsLocation)).toURL();
+			// try to load xml units from surrounding jar
+			unitsLocation = getResourceBase();
+			URL resource = DelegatesController.class.getClassLoader().getResource(unitsLocation);
 
 			if (resource != null && resource.openConnection().getContentLength() > 0) {
 				readDelegatesFromURL(top, insertMenu, resource);
@@ -123,6 +123,8 @@ public class DelegatesController {
 		String protocol = url.getProtocol();
 		if (protocol.equals("file")) {
 			readDelegatesFromFolder(node, menu, url);
+		} else if (protocol.equals("jar")) {
+			readDelegatesFromJar(node, menu, url);
 		} else {
 			throw new RuntimeException("Currenty only jar and file are valid resource protocols!");
 		}
@@ -153,6 +155,112 @@ public class DelegatesController {
 					&& !file.getName().startsWith(".")) {
 				URL fileURL = file.toURL();
 				addUnitDelegate(node, menu, fileURL);
+			}
+		}
+	}
+
+       /**
+        * Reads contents of a jar file and manages the trversal of the file tree.
+        */
+       private void readDelegatesFromJar(MutableTreeNode node, JMenu menu, URL url)
+			throws MalformedURLException {
+		Dictionary<String, UnitDelegateInfo> unitGroups = new Hashtable<String, UnitDelegateInfo>();
+		// strip out the jar file
+		String jarPath = url.getPath().substring(5, url.getPath().indexOf("!"));
+		try {
+			JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
+			// get _all_ entries in jar
+			Enumeration<JarEntry> entries = jar.entries();
+
+			// get all relevant files
+			Set<String> relevantXmlFiles = new HashSet<String>();
+			while (entries.hasMoreElements()) {
+				String absoluteName = entries.nextElement().getName();
+				if (absoluteName.startsWith(unitFolder)) { // filter specified path
+					String fileName = absoluteName.substring(unitFolder.length());
+
+					if (fileName.startsWith(".")) // ignore hidden files and folders
+						continue;
+
+					if (fileName.endsWith("/")) // ignore pure folder entries
+						continue;
+
+					relevantXmlFiles.add(fileName);
+				}
+			}
+
+			// populate the menu
+			String[] paths =
+			relevantXmlFiles.toArray(new String[relevantXmlFiles.size()]);
+
+			Arrays.sort(paths, new Comparator<String>() {
+					public int compare(String s1, String s2) {
+						int slash1 = s1.lastIndexOf('/');
+						int slash2 = s2.lastIndexOf('/');
+						return s1.substring(slash1 + 1)
+							.compareTo(s2.substring(slash2 + 1));
+					}
+					public boolean equals(Object o) {
+						return false;
+					}
+				});
+
+			for (String p : paths) {
+				reflectJarUnitsInMenu(unitGroups, node, menu, p, "", url);
+			}
+		}
+		catch (java.io.UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		catch (java.io.IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Goes through a given resource and creates menu and tree items when neccecary.
+	 */
+	private void reflectJarUnitsInMenu(Dictionary<String, UnitDelegateInfo> entries, MutableTreeNode node,
+			JMenu menu, String resource, String basePath, URL url) {
+		int slash = resource.indexOf("/");
+		if (slash >= 0) { // is it a directory?
+			String name = resource.substring(0, slash);
+
+			resource = resource.substring(slash + 1);
+			basePath = basePath + name + "/";
+
+			// make no new items for files in relative root ("/", if applicable)
+			if (basePath.length() > 1) {
+				UnitDelegateInfo ud = entries.get(basePath);
+				if (ud == null) {
+					ud = addUnitDelegateGroup(name, node, menu);
+					entries.put(basePath, ud);
+				}
+				reflectJarUnitsInMenu(entries, ud.treeNode, ud.subMenu, resource, basePath, url);
+			} else if (resource.length() > 0) {
+				reflectJarUnitsInMenu(entries, node, menu, resource, basePath, url);
+			}
+		} else {
+			if (resource.length() == 0) // stop if there is no file to add
+				return;
+
+			try {
+				String xmlPath = "/" + unitFolder + basePath + resource;
+				URL fileURL = new URL(url, xmlPath);
+
+				if (basePath.length() > 1) {
+					UnitDelegateInfo ud = entries.get(basePath);
+					if (ud == null) {
+						ud = addUnitDelegateGroup(basePath, node, menu);
+						entries.put(basePath, ud);
+					}
+					addUnitDelegate(ud.treeNode, ud.subMenu, fileURL);
+				} else {
+					addUnitDelegate(node, menu, fileURL);
+				}
+			}
+			catch (MalformedURLException e){
+				e.printStackTrace();
 			}
 		}
 	}
