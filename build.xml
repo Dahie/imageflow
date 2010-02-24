@@ -9,6 +9,7 @@
 	<property name="src.dir" location="${basedir}/src" /> 
 	<property name="build.dir" location="${basedir}/build" />
 	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="ij.path" location="${basedir}/lib/ij.jar" />
 	<property name="release.dir" location="${build.dir}/release/${project-name}" />
 	<property name="units.dir" location="${basedir}/xml_units" />
 	<property name="icons.dir" location="${basedir}/xml_icons" />
@@ -16,6 +17,7 @@
 	<property name="example.dir" location="${basedir}/xml_flows" />
 	
 	<path id="classpath">
+		<pathelement location="${ij.path}" />
 		<fileset dir="${lib.dir}" includes="**/*.jar"/>
 	</path>
 	
@@ -70,7 +72,6 @@
 				<attribute name="Class-Path" value="."/>
 			</manifest>
 			<fileset dir="${bin.dir}"/>
-			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/ij.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/jdom.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/appframework-1.0.3.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-worker-1.1.jar"/>
