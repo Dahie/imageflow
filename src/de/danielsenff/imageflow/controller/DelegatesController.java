@@ -81,6 +81,26 @@ public class DelegatesController {
 	private DelegatesController(String unitFolderPath) {
 		DelegatesController.setUnitFolder(unitFolderPath);
 	}
+
+	/**
+	 * An inner class for convenience. It represents some information about unit delegates.
+	 */
+	private class UnitDelegateInfo {
+		public String name;
+		public JMenu subMenu;
+		public DefaultMutableTreeNode treeNode;
+
+		public UnitDelegateInfo(String name, JMenu submenu, MutableTreeNode node) {
+			this.name = name;
+			this.subMenu = submenu;
+			this.treeNode = (DefaultMutableTreeNode) node;
+		}
+		public UnitDelegateInfo(String name, JMenu submenu, DefaultMutableTreeNode node) {
+			this.name = name;
+			this.subMenu = submenu;
+			this.treeNode = node;
+		}
+	}
 	
 	private void readDelegatesFromFolder(MutableTreeNode node, JMenu menu, File folder) {
 		File[] listOfFiles = folder.listFiles();
