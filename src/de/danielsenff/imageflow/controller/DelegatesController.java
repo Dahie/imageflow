@@ -89,8 +89,8 @@ public class DelegatesController {
 		String unitsLocation = "";
 		try {
 			// try to load xml units from surrounding jar
-			unitsLocation = getResourceBase();
-			resourcesBase = DelegatesController.class.getClassLoader().getResource(unitsLocation);
+			unitsLocation = getClassResourceBase();
+			setResourcesBase(DelegatesController.class.getClassLoader().getResource(unitsLocation));
 
 			if (resourcesBase != null && resourcesBase.openConnection().getContentLength() > 0) {
 				readDelegatesFromURL(top, insertMenu, resourcesBase);
@@ -362,6 +362,14 @@ public class DelegatesController {
 	 */
 	public URL getResourcesBase() {
 		return resourcesBase;
+	}
+
+	/**
+	 * Sets the resource base path by taking a URL and
+	 * removing its relative parts.
+	 */
+	private void setResourcesBase(URL path) throws MalformedURLException {
+		resourcesBase = new URL(path, "/");
 	}
 	
 	/**
