@@ -53,7 +53,7 @@
 		</copy>
 	</target>
 	
-	<target name="compile" depends="clean" description="Fresh compile Java class files">
+	<target name="compile" description="Fresh compile Java class files">
 	    <mkdir dir="${bin.dir}" />
 		<!-- copy all files from src which are not java-files -->
 		<copy todir="${bin.dir}">
