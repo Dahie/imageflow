@@ -66,6 +66,11 @@ public class DelegatesController {
 	}
 
 	/**
+         * The URL from where the initial units have been loaded.
+         */
+        public URL resourcesBase;
+
+	/**
 	 * Get a TreeModel with the delegates and their tree structure
 	 * @return
 	 */
@@ -85,10 +90,10 @@ public class DelegatesController {
 		try {
 			// try to load xml units from surrounding jar
 			unitsLocation = getResourceBase();
-			URL resource = DelegatesController.class.getClassLoader().getResource(unitsLocation);
+			resourcesBase = DelegatesController.class.getClassLoader().getResource(unitsLocation);
 
-			if (resource != null && resource.openConnection().getContentLength() > 0) {
-				readDelegatesFromURL(top, insertMenu, resource);
+			if (resourcesBase != null && resourcesBase.openConnection().getContentLength() > 0) {
+				readDelegatesFromURL(top, insertMenu, resourcesBase);
 			} else {
 				throw new IOException("The resource has no content!");
 			}
@@ -348,6 +353,15 @@ public class DelegatesController {
 	
 	public static String getUnitIconFolder() {
 		return unitIconFolder;
+	}
+
+
+	/**
+	 * Gets the resource base path of the initially loaded units.
+	 * This could be a folder or a jar file.
+	 */
+	public URL getResourcesBase() {
+		return resourcesBase;
 	}
 	
 	/**
