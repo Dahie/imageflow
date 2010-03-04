@@ -27,33 +27,30 @@
 		<delete dir="${bin.dir}"/>
 	</target>
 	
-	
 	 <target name="copy" description="Copy stuff for distribution" depends="clean">
-	 	<mkdir dir="${release.dir}" />
-	 	<!-- copy *nix batch starter, windows exe -->
-	 		<!-- TODO build mac-app is not created automatically -->
-	 	
-	 	<!-- copy folder for example flows and unit xml -->
-	 	
-	 	<mkdir dir="${release.dir}/xml_units" />
-	 	<copy todir="${release.dir}/xml_units">
-	 		<fileset dir="${units.dir}" />
-	 	</copy>
-	 	
-	 	<mkdir dir="${release.dir}/xml_icons" />
-	 	<copy todir="${release.dir}/xml_icons">
-	 		<fileset dir="${icons.dir}" />
-	 	</copy>
-	 	
-	 	<mkdir dir="${release.dir}/doc" />
-	 	<copy todir="${release.dir}/doc">
-	 			<fileset dir="${doc.dir}" />
-	 	</copy>
-	 	
-	 	<mkdir dir="${release.dir}/xml_flows" />
-	 	<copy todir="${release.dir}/xml_flows">
-	 			<fileset dir="${example.dir}" />
-	 	</copy>
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${release.dir}" />
+		<!-- copy folder for example flows and unit xml -->
+
+		<mkdir dir="${bin.dir}/xml_units" />
+		<copy todir="${bin.dir}/xml_units">
+			<fileset dir="${units.dir}" />
+		</copy>
+
+		<mkdir dir="${bin.dir}/xml_icons" />
+		<copy todir="${bin.dir}/xml_icons">
+			<fileset dir="${icons.dir}" />
+		</copy>
+
+		<mkdir dir="${bin.dir}/doc" />
+		<copy todir="${bin.dir}/doc">
+				<fileset dir="${doc.dir}" />
+		</copy>
+
+		<mkdir dir="${bin.dir}/xml_flows" />
+		<copy todir="${bin.dir}/xml_flows">
+				<fileset dir="${example.dir}" />
+		</copy>
 	</target>
 	
 	<target name="compile" depends="clean" description="Fresh compile Java class files">
