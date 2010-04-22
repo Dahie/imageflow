@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -47,6 +48,7 @@ import visualap.GPanelListener;
 import visualap.Node;
 import visualap.Pin;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -58,6 +60,7 @@ import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
+import de.danielsenff.imageflow.utils.Tools;
 
 /**
  * Graphical workspace on which the units are drawn and which handles the mouse actions.
@@ -154,7 +157,9 @@ public class GraphPanel extends GPanel {
 								File file = (File) files.get(j);
 								
 								UnitDescription sourceUnitDescription = 
-									new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
+									new UnitDescription(
+										new URL(DelegatesController.getInstance().getResourcesBase(),
+											"xml_units/ImageSource_Unit.xml"));
 								final SourceUnitElement sourceUnit = 
 									(SourceUnitElement) UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
 								sourceUnit.setFilePath(file.getAbsolutePath());

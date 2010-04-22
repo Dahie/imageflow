@@ -10,6 +10,7 @@
 	<property name="build.dir" location="${basedir}/build" />
 	<property name="packaging.dir" location="${src.dir}/packaging" />
 	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="ij.path" location="${basedir}/lib/ij.jar" />
 	<property name="release.dir" location="${build.dir}/release/${project-name}" />
 	<property name="units.dir" location="${basedir}/xml_units" />
 	<property name="icons.dir" location="${basedir}/xml_icons" />
@@ -17,6 +18,7 @@
 	<property name="example.dir" location="${basedir}/xml_flows" />
 	
 	<path id="classpath">
+		<pathelement location="${ij.path}" />
 		<fileset dir="${lib.dir}" includes="**/*.jar"/>
 	</path>
 	
@@ -28,39 +30,33 @@
 		<delete dir="${bin.dir}"/>
 	</target>
 	
-	
 	 <target name="copy" description="Copy stuff for distribution" depends="clean">
-	 	<mkdir dir="${release.dir}" />
-	 	<!-- copy *nix batch starter, windows exe -->
-	 		<!-- TODO build mac-app is not created automatically -->
-	 	
-	 	<copy todir="${release.dir}" file="${packaging.dir}/ImageFlow" />
-	 	<!--<copy todir="${release.dir}" file="${build.dir}/ImageFlow.exe" />-->
-	 	
-	 	<!-- copy folder for example flows and unit xml -->
-	 	
-	 	<mkdir dir="${release.dir}/xml_units" />
-	 	<copy todir="${release.dir}/xml_units">
-	 		<fileset dir="${units.dir}" />
-	 	</copy>
-	 	
-	 	<mkdir dir="${release.dir}/xml_icons" />
-	 	<copy todir="${release.dir}/xml_icons">
-	 		<fileset dir="${icons.dir}" />
-	 	</copy>
-	 	
-	 	<mkdir dir="${release.dir}/doc" />
-	 	<copy todir="${release.dir}/doc">
-	 			<fileset dir="${doc.dir}" />
-	 	</copy>
-	 	
-	 	<mkdir dir="${release.dir}/xml_flows" />
-	 	<copy todir="${release.dir}/xml_flows">
-	 			<fileset dir="${example.dir}" />
-	 	</copy>
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${release.dir}" />
+		<!-- copy folder for example flows and unit xml -->
+
+		<mkdir dir="${bin.dir}/xml_units" />
+		<copy todir="${bin.dir}/xml_units">
+			<fileset dir="${units.dir}" />
+		</copy>
+
+		<mkdir dir="${bin.dir}/xml_icons" />
+		<copy todir="${bin.dir}/xml_icons">
+			<fileset dir="${icons.dir}" />
+		</copy>
+
+		<mkdir dir="${bin.dir}/doc" />
+		<copy todir="${bin.dir}/doc">
+				<fileset dir="${doc.dir}" />
+		</copy>
+
+		<mkdir dir="${bin.dir}/xml_flows" />
+		<copy todir="${bin.dir}/xml_flows">
+				<fileset dir="${example.dir}" />
+		</copy>
 	</target>
 	
-	<target name="compile" depends="clean" description="Fresh compile Java class files">
+	<target name="compile" description="Fresh compile Java class files">
 	    <mkdir dir="${bin.dir}" />
 		<!-- copy all files from src which are not java-files -->
 		<copy todir="${bin.dir}">
@@ -77,7 +73,6 @@
 				<attribute name="Class-Path" value="."/>
 			</manifest>
 			<fileset dir="${bin.dir}"/>
-			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/ij.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/jdom.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/appframework-1.0.3.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-worker-1.1.jar"/>

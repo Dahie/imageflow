@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -62,18 +64,13 @@ public class WorkflowXMLBuilder {
 
 
 	/**
-	 * Reads the contents of a flow-XML-file.
-	 * @param file
-	 * @throws FileNotFoundException 
+	 * Reads the contents of a flow-XML input stream.
+	 * @param in S flow-XML input stream
 	 */
-	public void read(File file) throws FileNotFoundException {
-
-		if(!file.exists()) throw new FileNotFoundException("reading failed, the file as not found");
-
-		// setup of units
+	public void read(URL url) {
 		try {
 			SAXBuilder sb = new SAXBuilder();
-			Document doc = sb.build(file);
+			Document doc = sb.build(url);
 
 			Element root = doc.getRootElement();
 
@@ -81,9 +78,9 @@ public class WorkflowXMLBuilder {
 			
 			// read units
 			Element unitsElement = root.getChild("Units");
-			readUnits(newNodes, file, unitsElement);
 
 			
+			readUnits(newNodes, url, unitsElement);
 			
 			// at this point we have all units in the workflow, however no connections
 			// groups are missing their inputs and outputs
@@ -121,7 +118,7 @@ public class WorkflowXMLBuilder {
 	}
 
 	private void readUnits(HashMap<Integer, UnitElement> newNodes,
-			File file, Element unitsElement) {
+			URL url, Element unitsElement) {
 		if (unitsElement != null) {  
 			List<Element> unitsList = unitsElement.getChildren();
 			Iterator<Element> unitsIterator = unitsList.iterator();
@@ -129,14 +126,14 @@ public class WorkflowXMLBuilder {
 			// loop over alle Units
 			while (unitsIterator.hasNext()) { 
 				Element actualUnitElement = unitsIterator.next();
-				Node node = readUnit(actualUnitElement, file);
+				Node node = readUnit(actualUnitElement, url);
 				getUnitList().add(node);
 			}
 		}
 	}
 
 	private Node readUnit(final Element actualUnitElement, 
-			File file) {
+			URL url) {
 		Node node;
 		int xPos = Integer.parseInt(actualUnitElement.getChild("XPos").getValue());
 		int yPos = Integer.parseInt(actualUnitElement.getChild("YPos").getValue());
@@ -152,7 +149,7 @@ public class WorkflowXMLBuilder {
 
 			int unitID 	= Integer.parseInt(actualUnitElement.getChild("UnitID").getValue());
 			UnitDescription unitDescription = 
-				new UnitDescription(file, unitDescriptionElement);
+				new UnitDescription(url, unitDescriptionElement);
 
 			UnitElement unitElement;
 			
@@ -197,7 +194,7 @@ public class WorkflowXMLBuilder {
 					// loop over all Units
 					while (unitsIterator.hasNext()) { 
 						Element actualEmbeddedUnitElement = unitsIterator.next();
-						Node embeddedNode = readUnit(actualEmbeddedUnitElement, file);
+						Node embeddedNode = readUnit(actualEmbeddedUnitElement, url);
 						((GroupUnitElement)unitElement).getNodes().add(embeddedNode);
 						if(embeddedNode instanceof UnitElement) {
 							System.out.println("put in embeddedNodes: " + embeddedNode 

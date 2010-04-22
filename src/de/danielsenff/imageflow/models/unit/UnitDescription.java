@@ -3,9 +3,16 @@ package de.danielsenff.imageflow.models.unit;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.MalformedURLException;
+import java.io.FileInputStream;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -13,6 +20,7 @@ import javax.swing.JOptionPane;
 import org.jdom.Element;
 
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
@@ -20,6 +28,7 @@ import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 import de.danielsenff.imageflow.utils.Tools;
+
 
 /**
  * UnitDescription reads the single pieces a UnitElement is made of from an
@@ -52,18 +61,16 @@ public class UnitDescription {
 	protected int numOutputs;
 	protected Output[] output;
 	protected boolean isDisplayUnit;
-	protected BufferedImage icon;
-	protected File iconFile;
+	protected BufferedImage icon = null;
+	protected URL iconURL;
 	
 	
-	public UnitDescription(File unitXML) {
-		this(unitXML, Tools.getXMLRoot(unitXML));
+	public UnitDescription(URL url) {
+		this(url, Tools.getXMLRoot(url));
 	}
 	
-	
-	public UnitDescription(File unitXML, Element root) {
+	public UnitDescription(URL url, Element root) {
 		try {
-
 			// read general infos about this unit
 			Element elementGeneral = root.getChild("General");
 			unitName = elementGeneral.getChild("UnitName").getValue();
@@ -75,28 +82,34 @@ public class UnitDescription {
 			
 			try {
 				color = Color.decode(colorString);
-		    } catch (NumberFormatException e) {
-		          System.out.println("Wrong color string ");
-		    }
-		    if (color == null)
-		    	color = new Color(argbDefault);
+			} catch (NumberFormatException e) {
+				System.out.println("Wrong color string ");
+			}
 
-		    if(elementGeneral.getChild("IconSize") != null) {
-		    	componentSizeString = elementGeneral.getChild("IconSize").getValue();
-			    componentSize = NodeIcon.getSizeFromString(componentSizeString);
-		    }
+			if (color == null)
+				color = new Color(argbDefault);
+
+			if(elementGeneral.getChild("IconSize") != null) {
+				componentSizeString = elementGeneral.getChild("IconSize").getValue();
+				componentSize = NodeIcon.getSizeFromString(componentSizeString);
+			}
 		    
 			imageJSyntax = elementGeneral.getChild("ImageJSyntax").getValue() + "\n";
-			
-			if(pathToIcon.length() > 0) {
-				String path = DelegatesController.getUnitIconFolder() + File.separator+ pathToIcon;
-				iconFile = new File(path);	
-			} else {
-				// search for unitname.png in same directory as xml
-				iconFile = new File(unitXML.getAbsolutePath().replace(".xml", ".png"));
+
+			try {
+				// get icon
+				InputStream iconStream;
+				URL imgURL = getIconURL(url, pathToIcon);
+				iconStream = imgURL.openStream();
+
+				icon = ImageIO.read(iconStream);
+				iconURL = imgURL;
 			}
-			if(iconFile.exists())
-				this.icon = ImageIO.read(iconFile);
+			catch (Exception e) {
+				// no exception handling is needed here, since it is often
+				// the case that icons are missing. Most of the untis are
+				// even not intended to have icons.
+			}
 			
 			// parameters
 			Element parametersElement = root.getChild("Parameters");
@@ -122,7 +135,7 @@ public class UnitDescription {
 			System.err.println("Invalid XML-File!");
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
 					"There has been a problem loading a XML unit description." +'\n' 
-					+ "The error ocures in " + unitXML.getName() + "." + '\n'
+					+ "The error ocures in " + url + "." + '\n'
 					+ "The programm start will continue without this unit."
 					,
 					"Missing connections", 
@@ -283,6 +296,28 @@ public class UnitDescription {
 			throw new Exception("invalid datatype");
 	}
 
+	/**
+	 * Creates a new URL based on a given context URL.
+	 * If a path is given, the new URL is dependent of the protocol
+	 * of the context URL. If not, the context URL with an extesion
+	 * replacement from "xml" to "png" is returned.
+	 */
+	private URL getIconURL(URL context, String relativeIconPath) throws MalformedURLException {
+		String path;
+		if(relativeIconPath != null && relativeIconPath.length() > 0) {
+			String iconFolder = DelegatesController.getUnitIconFolder();
+			String unitFolder = DelegatesController.getUnitFolder();
+
+			if (context.getProtocol().equals("jar"))
+				path = "/" + iconFolder + "/" + relativeIconPath;
+			else
+				path = iconFolder + File.separator + relativeIconPath;
+		} else {
+			// search for unitname.png in same directory as xml
+			path = context.getPath().replace(".xml", ".png");
+		}
+		return new URL(context, path);
+	}
 
 	public String getHelpString() {
 		return helpString;
@@ -297,6 +332,13 @@ public class UnitDescription {
 		return isDisplayUnit;
 	}
 
+	/**
+	 * Returns the prevously read in icon
+	 * or null if no icon was found
+	 */
+	public BufferedImage  getUnitIcon() {
+		return icon;
+	}
 
 	public class Para {
 		String name;

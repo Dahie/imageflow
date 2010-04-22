@@ -10,6 +10,7 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 
 import visualap.Node;
@@ -60,7 +61,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * name of this unit, this is not displayed, Label is displayed
 	 */
 	protected String unitName;    
-	protected File iconFile;
+	protected URL iconURL;
 	/**
 	 * unit color
 	 */
@@ -574,20 +575,16 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	}
 
 	/**
-	 * Returns the {@link File} of this unit's icon.
+	 * Returns the {@link URL} of this unit's icon.
 	 * @return
 	 */
-	public File getIconFile() {
-		return this.iconFile;
+	public URL getIconURL() {
+		return this.iconURL;
 	}
 
 
-	public void setIconFile(File iconFile) {
-		this.iconFile = iconFile; 
-	}
-
-	public void setIconPath(String pathToIcon) {
-		this.iconPath = pathToIcon;
+	public void setIconURL(URL iconURL) {
+		this.iconURL = iconURL;
 	}
 
 	/**

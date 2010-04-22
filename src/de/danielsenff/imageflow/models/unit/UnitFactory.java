@@ -73,20 +73,9 @@ public class UnitFactory {
 		unitElement.setHelpString(unitDescription.helpString);
 		unitElement.setColor(unitDescription.color);
 		
-		// add an icon if there is one mentioned and found
-		File iconFile = new File(unitDescription.pathToIcon);
-		if(iconFile.exists()) {
-			try {
-				unitElement.setIcon(ImageIO.read(iconFile));	
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
 		if(unitDescription.icon != null) {
 			unitElement.setIcon(unitDescription.icon);
-			unitElement.setIconFile(unitDescription.iconFile);
-			unitElement.setIconPath(unitDescription.pathToIcon);
+			unitElement.setIconURL(unitDescription.iconURL);
 		}
 
 		if(unitDescription.componentSize != null)

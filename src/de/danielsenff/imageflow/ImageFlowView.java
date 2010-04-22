@@ -14,10 +14,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
@@ -718,27 +720,31 @@ public class ImageFlowView extends FrameView {
 	 * convenient Example workflow
 	 * @return 
 	 */
-	@Action public LoadFlowGraphTask exampleFlow1() {
-		String exampleFilename = getResourceString("exampleFlow1.Path");
-		return new LoadFlowGraphTask(new File(exampleFilename));
+	@Action public LoadFlowGraphTask exampleFlow1() throws MalformedURLException {
+		return new LoadFlowGraphTask(
+			getFlowURL(getResourceString("exampleFlow1.Path")));
 	}
 	
 	/**
 	 * convenient Example workflow
 	 * @return 
 	 */
-	@Action public LoadFlowGraphTask exampleFlow2() {
-		String exampleFilename = getResourceString("exampleFlow2.Path");
-		return new LoadFlowGraphTask(new File(exampleFilename));
+	@Action public LoadFlowGraphTask exampleFlow2() throws MalformedURLException {
+		return new LoadFlowGraphTask(
+			getFlowURL(getResourceString("exampleFlow2.Path")));
 	}
 	
 	/**
 	 * convenient Example workflow
 	 * @return 
 	 */
-	@Action public LoadFlowGraphTask exampleFlow3() {
-		String exampleFilename = getResourceString("exampleFlow3.Path");
-		return new LoadFlowGraphTask(new File(exampleFilename));
+	@Action public LoadFlowGraphTask exampleFlow3() throws MalformedURLException {
+		return new LoadFlowGraphTask(
+			getFlowURL(getResourceString("exampleFlow3.Path")));
+	}
+
+	private URL getFlowURL(String path) throws MalformedURLException {
+		return new URL(DelegatesController.getInstance().getResourcesBase(), path);
 	}
 
 	/**
@@ -815,7 +821,7 @@ public class ImageFlowView extends FrameView {
 	 * The current workflow will remain and the second workflow will be added without replacement
 	 * @return
 	 */
-	@Action public ImportGraphTask importGraph() {
+	@Action public ImportGraphTask importGraph() throws MalformedURLException {
 	    final JFileChooser fc = new JFileChooser();
 	    final String filesExtension = getResourceString("flowXMLFileExtension");
 	    final String filesDesc = getResourceString("flowXMLFileExtensionDescription");
@@ -824,7 +830,7 @@ public class ImageFlowView extends FrameView {
 	    ImportGraphTask task = null;
 	    final int option = fc.showOpenDialog(null);
 	    if (option == JFileChooser.APPROVE_OPTION) {
-	    	task = new ImportGraphTask(fc.getSelectedFile());
+		task = new ImportGraphTask(fc.getSelectedFile().toURL());
 	    }
 	    return task;
 	}
@@ -1046,7 +1052,7 @@ public class ImageFlowView extends FrameView {
 	 * Open a workflow file from hard drive.
 	 * @return
 	 */
-	@Action public LoadFlowGraphTask open() {
+	@Action public LoadFlowGraphTask open() throws MalformedURLException {
 		if(isModified()) {
 			final int optionSave = showSaveConfirmation();
 			if(optionSave == JOptionPane.OK_OPTION) {
@@ -1065,7 +1071,7 @@ public class ImageFlowView extends FrameView {
 		final int option = fc.showOpenDialog(null);
 		if (option == JFileChooser.APPROVE_OPTION) {
 			this.setModified(false);
-			task = new LoadFlowGraphTask(fc.getSelectedFile());
+			task = new LoadFlowGraphTask(fc.getSelectedFile().toURL());
 		}
 		return task;			
 	}
