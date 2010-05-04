@@ -16,7 +16,11 @@
 	<property name="icons.dir" location="${basedir}/xml_icons" />
 	<property name="doc.dir" location="${basedir}/doc/release" />
 	<property name="example.dir" location="${basedir}/xml_flows" />
-	
+	<tstamp>
+	  <format property="TODAY" pattern="d-MMMM-yyyy" />
+  </tstamp>
+  
+  
 	<path id="classpath">
 		<pathelement location="${ij.path}" />
 		<fileset dir="${lib.dir}" includes="**/*.jar"/>
@@ -30,11 +34,11 @@
 		<delete dir="${bin.dir}"/>
 	</target>
 	
-	 <target name="copy" description="Copy stuff for distribution" depends="clean">
+	 <target name="copy" description="Copy stuff for plugin creation" depends="clean">
 		<mkdir dir="${bin.dir}" />
 		<mkdir dir="${release.dir}" />
+    
 		<!-- copy folder for example flows and unit xml -->
-
 		<mkdir dir="${bin.dir}/xml_units" />
 		<copy todir="${bin.dir}/xml_units">
 			<fileset dir="${units.dir}" />
@@ -57,7 +61,7 @@
 	</target>
 	
 	<target name="compile" description="Fresh compile Java class files">
-	    <mkdir dir="${bin.dir}" />
+    <mkdir dir="${bin.dir}" />
 		<!-- copy all files from src which are not java-files -->
 		<copy todir="${bin.dir}">
 			<fileset dir="${src.dir}" excludes="**.java, packaging/" />
@@ -65,8 +69,9 @@
 		<javac srcdir="src" destdir="${bin.dir}"  classpathref="classpath"/>
 	</target>
 	
-	<target name="create_run_jar" depends="copy, compile">
-		<jar destfile="${release.dir}/${project-name}_.jar" filesetmanifest="mergewithoutmain">
+	<target name="create_plugin_jar" depends="copy, compile">
+    <mkdir dir="${release.dir}/plugin" />
+		<jar destfile="${release.dir}/plugin/${project-name}_.jar" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}"/>
 				<attribute name="Main-Class" value="${main-class}"/>
@@ -79,22 +84,45 @@
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-layout-1.0.3.jar"/>
 		</jar>
 	</target>
+  
+  <target name="create_run_jar" depends="copy, compile">
+    <mkdir dir="${release.dir}/executable" />
+		<jar destfile="${release.dir}/executable/${project-name}.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}"/>
+				<attribute name="Main-Class" value="${main-class}"/>
+				<attribute name="Class-Path" value="."/>
+			</manifest>
+			<fileset dir="${bin.dir}"/>
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/jdom.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/ij.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/appframework-1.0.3.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-worker-1.1.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-layout-1.0.3.jar"/>
+		</jar>
+	</target>
 	
 	<target name="build_osx_app" depends="create_run_jar" if="isOSX">
 		<!-- TODO -->
 	</target>
 	
 	<target name="zip_for_release" depends="create_run_jar">
-		<tstamp>
-		    <format property="TODAY" pattern="d-MMMM-yyyy" />
-		</tstamp>
-		<zip destfile="${build.dir}/Imageflow-${TODAY}.zip">
-			<fileset dir="${build.dir}/release/"/>
+		<zip destfile="${build.dir}/Imageflow-${TODAY}.zip"> 
+			<fileset dir="${release.dir}/executable/"/>
 		</zip>
 	</target>
-	
+  
+	<target name="zip_plugin_for_release" depends="create_plugin_jar">
+		<zip destfile="${build.dir}/Imageflow-ijplugin-${TODAY}.zip"> 
+			<fileset dir="${release.dir}/plugin/"/>
+		</zip>
+	</target>
 
-	<target name="build" description="Build project" depends="build_osx_app, zip_for_release">
+	<target name="build_plugin" description="Build project" depends="zip_plugin_for_release">
+		<!-- done -->
+	</target>	
+
+	<target name="build" description="Build project" depends="build_osx_app, build_plugin, zip_for_release">
 		<!-- done -->
 	</target>
 </project>
