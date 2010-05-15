@@ -7,8 +7,11 @@ import ij.plugin.filter.PlugInFilter;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -122,8 +125,10 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		
 		if(existsFile()) {
 			imageType = getImageType();
-			this.unitComponentIcon.setIcon(
-					getImagePlus().getImage().getScaledInstance(48, 48, BufferedImage.SCALE_FAST));
+			int width = 48, height = 48;
+			BufferedImage thumbnail = scaleThumbnail(width, height);
+			
+			this.unitComponentIcon.setIcon(thumbnail);
 		} else {
 			this.setIcon(null);
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
@@ -135,6 +140,15 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		
 		// change bit depth for all outputs
 		setOutputImageType(imageType);
+	}
+
+	private BufferedImage scaleThumbnail(int width, int height) {
+		BufferedImage thumbnail = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = (Graphics2D) thumbnail.getGraphics();
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2.drawImage(getImagePlus().getImage(), 0, 0, width, height, null);
+		g2.dispose();
+		return thumbnail;
 	}
 
 	/**
