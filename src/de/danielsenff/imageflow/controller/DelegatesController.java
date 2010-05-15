@@ -52,7 +52,7 @@ public class DelegatesController {
 	 * TODO not hardcoded ...
 	 */
 	public static String unitIconFolder = "xml_icons";
-	
+
 	private static DelegatesController controller;
 	HashMap<TreeNode, Delegate> delegates;
 	public DefaultTreeModel delegatesModel;
@@ -66,9 +66,9 @@ public class DelegatesController {
 	}
 
 	/**
-         * The URL from where the initial units have been loaded.
-         */
-        public URL resourcesBase;
+	 * The URL from where the initial units have been loaded.
+	 */
+	public URL resourcesBase;
 
 	/**
 	 * Get a TreeModel with the delegates and their tree structure
@@ -111,11 +111,6 @@ public class DelegatesController {
 		}
 	}
 
-	private DelegatesController(String unitFolderPath) {
-		DelegatesController.setUnitFolder(unitFolderPath);
-
-	}
-
 	/**
 	 * Gets the base path of the resources contained in this jar.
 	 */
@@ -124,7 +119,7 @@ public class DelegatesController {
 	}
 
 	private void readDelegatesFromURL(MutableTreeNode node, JMenu menu, URL url)
-			throws RuntimeException, MalformedURLException {
+	throws RuntimeException, MalformedURLException {
 		String protocol = url.getProtocol();
 		if (protocol.equals("file")) {
 			readDelegatesFromFolder(node, menu, url);
@@ -136,7 +131,7 @@ public class DelegatesController {
 	}
 
 	private void readDelegatesFromFolder(MutableTreeNode node, JMenu menu, URL url)
-			throws MalformedURLException {
+	throws MalformedURLException {
 		File folder;
 		try {
 			folder = new File(url.toURI());
@@ -152,23 +147,23 @@ public class DelegatesController {
 					&& !file.getName().startsWith(".")) {
 				DefaultMutableTreeNode subNode = new DefaultMutableTreeNode(file.getName());
 				JMenu subMenu = new JMenu(file.getName());
-				readDelegatesFromFolder(subNode, subMenu, file.toURL());
+				readDelegatesFromFolder(subNode, subMenu, file.toURI().toURL());
 				((DefaultMutableTreeNode) node).add(subNode);
 				menu.add(subMenu);
 			} else if (file.isFile()
 					&& isXML(file)
 					&& !file.getName().startsWith(".")) {
-				URL fileURL = file.toURL();
+				URL fileURL = file.toURI().toURL();
 				addUnitDelegate(node, menu, fileURL);
 			}
 		}
 	}
 
-       /**
-        * Reads contents of a jar file and manages the trversal of the file tree.
-        */
-       private void readDelegatesFromJar(MutableTreeNode node, JMenu menu, URL url)
-			throws MalformedURLException {
+	/**
+	 * Reads contents of a jar file and manages the trversal of the file tree.
+	 */
+	private void readDelegatesFromJar(MutableTreeNode node, JMenu menu, URL url)
+	throws MalformedURLException {
 		Dictionary<String, UnitDelegateInfo> unitGroups = new Hashtable<String, UnitDelegateInfo>();
 		// strip out the jar file
 		String jarPath = url.getPath().substring(5, url.getPath().indexOf("!"));
@@ -196,19 +191,19 @@ public class DelegatesController {
 
 			// populate the menu
 			String[] paths =
-			relevantXmlFiles.toArray(new String[relevantXmlFiles.size()]);
+				relevantXmlFiles.toArray(new String[relevantXmlFiles.size()]);
 
 			Arrays.sort(paths, new Comparator<String>() {
-					public int compare(String s1, String s2) {
-						int slash1 = s1.lastIndexOf('/');
-						int slash2 = s2.lastIndexOf('/');
-						return s1.substring(slash1 + 1)
-							.compareTo(s2.substring(slash2 + 1));
-					}
-					public boolean equals(Object o) {
-						return false;
-					}
-				});
+				public int compare(String s1, String s2) {
+					int slash1 = s1.lastIndexOf('/');
+					int slash2 = s2.lastIndexOf('/');
+					return s1.substring(slash1 + 1).compareTo(s2.substring(slash2 + 1));
+				}
+				@Override
+				public boolean equals(Object o) {
+					return false;
+				}
+			});
 
 			for (String p : paths) {
 				reflectJarUnitsInMenu(unitGroups, node, menu, p, "", url);
@@ -289,11 +284,11 @@ public class DelegatesController {
 			this.treeNode = node;
 		}
 	}
-	
+
 
 	/**
 	 * Creates a menu item and a tree node for a given file name. These objects are
-	 * added to the given parents and returned within a nev UnitDelegateInfo object.
+	 * added to the given parents and returned within a new UnitDelegateInfo object.
 	 */
 	private UnitDelegateInfo addUnitDelegateGroup(String fileName, MutableTreeNode node, JMenu menu) {
 		// cut away leading and trailing slashs
@@ -343,14 +338,16 @@ public class DelegatesController {
 		return controller;
 	}
 
-	public static void setUnitFolder(String unitFolder) {
-		DelegatesController.unitFolder = unitFolder;
-	}
-
+	/**
+	 * @return
+	 */
 	public static String getUnitFolder() {
 		return unitFolder;
 	}
-	
+
+	/**
+	 * @return
+	 */
 	public static String getUnitIconFolder() {
 		return unitIconFolder;
 	}
@@ -359,6 +356,7 @@ public class DelegatesController {
 	/**
 	 * Gets the resource base path of the initially loaded units.
 	 * This could be a folder or a jar file.
+	 * @return 
 	 */
 	public URL getResourcesBase() {
 		return resourcesBase;
@@ -371,24 +369,23 @@ public class DelegatesController {
 	private void setResourcesBase(URL path) throws MalformedURLException {
 		resourcesBase = new URL(path, "/");
 	}
-	
+
 	/**
-	 * 
+	 * Find a UnitDelegate by name.
+	 * @param unitName 
 	 * @return
 	 */
-	public UnitDelegate getDelegate(String unitName) {
+	public UnitDelegate getDelegate(final String unitName) {
 		UnitDelegate unitDelegate = null; 
 		for (final Delegate delegate : getUnitDelegates().values()) {
 			if(delegate instanceof UnitDelegate) {
 				unitDelegate = (UnitDelegate) delegate;
-			}
-			
-			if (unitDelegate != null && unitDelegate.getName().equals(unitName)) {
-				return unitDelegate;		
+				if (unitDelegate.getName().equals(unitName))
+					return unitDelegate;		
 			}
 		}
 		return null;
-		
+
 	}
-	
+
 }
