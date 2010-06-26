@@ -19,6 +19,7 @@ import de.danielsenff.imageflow.models.connection.ProxyInput;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
 
 /**
+ * Group unit is similar to the graph controller and contains own lists of Units and Connections.
  * @author danielsenff
  *
  */
@@ -53,11 +54,9 @@ public class GroupUnitElement extends UnitElement {
 		try {
 			putUnits(selections, allUnits);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
 
 	private void init() {
 		this.units = new UnitList();
@@ -66,7 +65,12 @@ public class GroupUnitElement extends UnitElement {
 		this.originalConnections = new Vector<Connection>();
 	}
 
-
+	/**
+	 * Add a number of Units to this group.
+	 * @param unitsToAdd
+	 * @param allUnits
+	 * @throws Exception
+	 */
 	public void putUnits(final Collection<Node> unitsToAdd, final UnitList allUnits) throws Exception {
 
 		findRelevantConnections(unitsToAdd, allUnits.getConnections());
@@ -81,9 +85,8 @@ public class GroupUnitElement extends UnitElement {
 			 * determine position
 			 */
 
-			int x, y;
-			x = (int) getUnit(0).getOrigin().getX();
-			y = (int) getUnit(0).getOrigin().getY();
+			int x = (int) getUnit(0).getOrigin().getX();
+			int y = (int) getUnit(0).getOrigin().getY();
 			setOrigin(new Point(x, y));
 
 			dealWithConnections(allUnits.getConnections());
@@ -140,9 +143,10 @@ public class GroupUnitElement extends UnitElement {
 		// offset from original
 		int deltaX = lowestX - 25;
 		int deltaY = lowestY - 25;
-		
+		int x = 0, y = 0;
 		for (Node node : getNodes()) {
-			int x = node.getOrigin().x, y = node.getOrigin().y;
+			x = node.getOrigin().x; 
+			y = node.getOrigin().y;
 			node.getOrigin().setLocation(x-deltaX, y-deltaY);
 		}
 	}
@@ -170,8 +174,12 @@ public class GroupUnitElement extends UnitElement {
 		return true;
 	}
 
+	/**
+	 * @param unitsToAdd
+	 * @param connection
+	 * @return
+	 */
 	private boolean isToUnitIn(final Collection<Node> unitsToAdd, final Connection connection) {
-
 		UnitElement unit = (UnitElement)connection.getFromUnit();
 		if(unitsToAdd.contains(unit)
 				&& unitsToAdd.contains(connection.getToUnit())) {
@@ -199,28 +207,29 @@ public class GroupUnitElement extends UnitElement {
 		 * create inputs and outputs based on external connections
 		 */
 		HashMap<Output, ProxyOutput> externalOutputs = new HashMap<Output, ProxyOutput>();
-		for (Connection connection : externalConnections) {
-			if(contains(connection.getToUnit())) 
+		ProxyInput pInput;
+		Connection newConnection;
+		ProxyOutput pOutput;
+		for (Connection externalConnection : externalConnections) {
+			if(contains(externalConnection.getToUnit())) 
 			{
-				ProxyInput pInput = new ProxyInput(connection.getInput(), this, getInputsCount()+1);
+				pInput = new ProxyInput(externalConnection.getInput(), this, getInputsCount()+1);
 				addInput(pInput);
-				Connection newconn = new Connection(connection.getOutput(), pInput);
-				allConnections.add(newconn);
+				newConnection = new Connection(externalConnection.getOutput(), pInput);
+				allConnections.add(newConnection);
 			}
-			if(contains(connection.getFromUnit())) 
-			{
-				ProxyOutput pOutput;
-				if(externalOutputs.containsKey(connection.getOutput())) {
+			if(contains(externalConnection.getFromUnit())) {
+				if(externalOutputs.containsKey(externalConnection.getOutput())) {
 					// output already used, take existing proxy
-					pOutput = externalOutputs.get(connection.getOutput());
+					pOutput = externalOutputs.get(externalConnection.getOutput());
 				} else {
 					// output not yet used, create new
-					pOutput = new ProxyOutput(connection.getOutput(), this, getOutputsCount()+1);
+					pOutput = new ProxyOutput(externalConnection.getOutput(), this, getOutputsCount()+1);
 					addOutput(pOutput);
-					externalOutputs.put(connection.getOutput(), pOutput);
+					externalOutputs.put(externalConnection.getOutput(), pOutput);
 				}
-				Connection newconn = new Connection(pOutput, connection.getInput());
-				allConnections.add(newconn);
+				newConnection = new Connection(pOutput, externalConnection.getInput());
+				allConnections.add(newConnection);
 			}
 		}
 	}
@@ -252,7 +261,6 @@ public class GroupUnitElement extends UnitElement {
 		for (Connection connection : internalConnections) {
 			externalConnections.remove(connection);
 		}
-		
 	}
 
 
@@ -324,21 +332,26 @@ public class GroupUnitElement extends UnitElement {
 		return groupClone;
 	}
 
-	protected GroupUnitElement initClone(GroupUnitElement groupClone) {
+	/**
+	 * Initiate a clone the contents of this group into the given groupClone.
+	 * @param groupClone
+	 * @return
+	 */
+	protected GroupUnitElement initClone(final GroupUnitElement groupClone) {
 		/*
 		 * clone included units
 		 */
 		HashMap<Pin, Pin> correspondingPins = new HashMap<Pin, Pin>();
-
+		UnitElement unit, unitClone;
+		Node c;
 		for (Node node : getNodes()) {
-			Node c;
 			try {
 				c = node.clone();
 				groupClone.getNodes().add(c);
 
 				if(node instanceof UnitElement) {
-					UnitElement unit = (UnitElement) node;
-					UnitElement unitClone = (UnitElement) c;
+					unit = (UnitElement) node;
+					unitClone = (UnitElement) c;
 					for (int i = 0; i < unit.getInputsCount(); i++) {
 						correspondingPins.put(unit.getInput(i), unitClone.getInput(i));
 					}
@@ -357,40 +370,42 @@ public class GroupUnitElement extends UnitElement {
 		 * the internal connections have the original pins
 		 * we have to create new connections with the respective pins 
 		 */
-
+		Input cloneInput;
+		Output cloneOutput;
+		Connection newConnection; 
 		for (Connection originalConnection : getInternalConnections()) {
-
-			Input cloneInput = (Input) correspondingPins.get(originalConnection.getInput());
-			Output cloneOutput = (Output) correspondingPins.get(originalConnection.getOutput());
-			Connection newConnection = new Connection(cloneInput, cloneOutput);
+			cloneInput = (Input) correspondingPins.get(originalConnection.getInput());
+			cloneOutput = (Output) correspondingPins.get(originalConnection.getOutput());
+			newConnection = new Connection(cloneInput, cloneOutput);
 			groupClone.getInternalConnections().add(newConnection);
 		}
-
 
 
 		/*
 		 * clone pins
 		 */
-
+		Input input, embeddedInputClone;
+		ProxyInput pInput;
 		for (int i = 0; i < getInputsCount(); i++) {
 			if(getInput(i) instanceof ProxyInput) {
-				Input input = ((ProxyInput)getInput(i)).getEmbeddedInput();
-				Input embeddedInputClone = (Input) correspondingPins.get(input); 
-				ProxyInput pInput = new ProxyInput(embeddedInputClone, groupClone, i+1);
+				input = ((ProxyInput)getInput(i)).getEmbeddedInput();
+				embeddedInputClone = (Input) correspondingPins.get(input); 
+				pInput = new ProxyInput(embeddedInputClone, groupClone, i+1);
 				groupClone.addInput(pInput);
 			} else {
 				super.cloneInput(groupClone, i);
 			}
 		}
+		Output output, embeddedOutputClone;
+		ProxyOutput pOutput;
 		for (int i = 0; i < getOutputsCount(); i++) {
 			if(getOutput(i) instanceof ProxyOutput) {
-				Output output = ((ProxyOutput)getOutput(i)).getEmbeddedOutput();
-				Output embeddedOutputClone = (Output) correspondingPins.get(output); 
-				ProxyOutput pOutput = new ProxyOutput(embeddedOutputClone, groupClone, i+1);
+				output = ((ProxyOutput)getOutput(i)).getEmbeddedOutput();
+				embeddedOutputClone = (Output) correspondingPins.get(output); 
+				pOutput = new ProxyOutput(embeddedOutputClone, groupClone, i+1);
 				groupClone.addOutput(pOutput);
-			} else {
+			} else
 				super.cloneOutput(groupClone, i);
-			}
 		}
 
 		return groupClone;
@@ -406,7 +421,7 @@ public class GroupUnitElement extends UnitElement {
 	}
 
 	public void showGroupWindow() {
-		
+		//TODO OMG, what is this for?
 	}
 	
 }
