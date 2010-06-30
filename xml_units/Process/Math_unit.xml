@@ -6,7 +6,7 @@
 <General>
   <UnitName>Math</UnitName> 
   <PathToIcon>Math_Unit.png</PathToIcon> 
-  <ImageJSyntax>run("PARA_STRING_1", "STACK value=PARA_DOUBLE_1 ");</ImageJSyntax> 
+  <ImageJSyntax>run("PARA_STRING_1", "STACK value="+ATTRIBUTE_INPUT_2_PARAMETER_2+" ");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Performs a mathematical operation on the pixels of an image</HelpString>
   <IconSize>BIG</IconSize>  
@@ -36,6 +36,13 @@
 	<ImageType>63</ImageType>
 	<NeedToCopyInput>true</NeedToCopyInput>
 	<Required>true</Required>
+  </Input>
+  <Input>
+    <Name>Value</Name>
+    <ShortName>V</ShortName>
+    <Required>false</Required>
+    <DataType>Number</DataType>
+    <NeedToCopyInput>false</NeedToCopyInput>
   </Input>
 </Inputs>
 
