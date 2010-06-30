@@ -141,17 +141,19 @@ public class GraphPanel extends GPanel {
 				try {
 					final Transferable tr = e.getTransferable();
 					final DataFlavor[] flavors = tr.getTransferDataFlavors();
+					final List files;
+					File file;
 					for (int i = 0; i < flavors.length; i++)
 						if (flavors[i].isFlavorJavaFileListType()) {
 							// Zun�chst annehmen
 							e.acceptDrop (e.getDropAction());
-							final List files = (List) tr.getTransferData(flavors[i]);
+							files = (List) tr.getTransferData(flavors[i]);
 
 							/*
 							 * TODO unused
 							 */
 							for (int j = 0; j < files.size(); j++) {
-								File file = (File) files.get(j);
+								file = (File) files.get(j);
 								
 								UnitDescription sourceUnitDescription = 
 									new UnitDescription(new File("xml_units/ImageSource_Unit.xml"));
@@ -241,8 +243,8 @@ public class GraphPanel extends GPanel {
 			if (drawEdge != null) {
 				// drag new connection
 				
+				int margin = 18;
 				for (final Node node : nodeL) {
-					int margin = 18;
 					// get units margin, could be lesser than 18 if unit has many pins
 					if (node instanceof UnitElement
 							&& (!drawEdge.getParent().equals(node)) ) {
@@ -282,7 +284,6 @@ public class GraphPanel extends GPanel {
 			}	
 		} else {
 			//draw a nice message to promote creating a graph
-
 			drawWelcome(g2);
 		}
 	}
@@ -297,8 +298,7 @@ public class GraphPanel extends GPanel {
 
 		g2.drawImage(this.iwIcon, 25, 25, null);
 		
-		final String headline = 
-			"Create your workflow";
+		final String headline = "Create your workflow";
 //			getResourceMap().getString("Intro.headline"); 
 		final String description = "Add new units to the graph by using the" + '\n'
 			+"context menu units on this canvas." + '\n' + "   " + '\n'
@@ -503,7 +503,8 @@ public class GraphPanel extends GPanel {
 
 
 	/**
-	 * Returns rue if the value is within this range of values.
+	 * Returns true if the value is within this range of values.
+	 * Excludes the limits.
 	 * @param compareValue
 	 * @param startValue
 	 * @param endValue
@@ -512,8 +513,7 @@ public class GraphPanel extends GPanel {
 	public static boolean isWithinRange(final int compareValue, 
 			final int startValue, 
 			final int endValue) {
-		return (compareValue > startValue) 
-		&& (compareValue < endValue);
+		return (compareValue > startValue) && (compareValue < endValue);
 	}
 
 	/**
@@ -546,10 +546,10 @@ public class GraphPanel extends GPanel {
 
 	/**
 	 * Replace the current {@link UnitList} with a different one.
-	 * @param units2
+	 * @param units
 	 */
-	public void setNodeL(final GList<Node> units2) {
-		super.nodeL = units2;
+	public void setNodeL(final GList<Node> units) {
+		super.nodeL = units;
 	}
 
 	/**
@@ -560,6 +560,10 @@ public class GraphPanel extends GPanel {
 		return drawGrid;
 	}
 
+	/**
+	 * (De)activate the grid on the workspace.
+	 * @param drawGrid
+	 */
 	public void setDrawGrid(final boolean drawGrid) {
 		this.drawGrid = drawGrid;
 	}

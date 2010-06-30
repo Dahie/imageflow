@@ -24,12 +24,24 @@ public class BackgroundUnitElement extends UnitElement implements ImageSourceUni
 		super(unitName, unitsImageJSyntax);
 	}
 
+	/**
+	 * 
+	 * @param origin
+	 * @param unitName
+	 * @param unitsImageJSyntax
+	 */
 	public BackgroundUnitElement(final Point origin, 
 			final String unitName,
 			final String unitsImageJSyntax) {
 		super(origin, unitName, unitsImageJSyntax);
 	}
 
+	/**
+	 * 
+	 * @param origin
+	 * @param unitName
+	 * @param macroElement
+	 */
 	public BackgroundUnitElement(final Point origin, 
 			final String unitName,
 			final MacroElement macroElement) {

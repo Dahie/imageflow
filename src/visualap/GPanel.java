@@ -222,11 +222,10 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	 */
 	public boolean containsConnection(final Pin from, final Pin to) {
 		for (final Connection connection : connectionList) {
-			if (connection.getInput().equals(from) 
-					&& connection.getOutput().equals(to))
-				return true;
-			else if (connection.getInput().equals(to) 
-					&& connection.getOutput().equals(from))
+			if ( (connection.getInput().equals(from) 
+						&& connection.getOutput().equals(to) )
+					|| ( (connection.getInput().equals(to) 
+							&& connection.getOutput().equals(from)) ) )
 				return true;
 		}
 		return false;

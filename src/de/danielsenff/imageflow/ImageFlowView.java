@@ -817,11 +817,12 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void setUnitComponentSize() {
+		UnitElement unit;
+		Size newSize;
 		for (Object selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
-				final UnitElement unit = (UnitElement) selectedElement;
-				
-				Size newSize = (unit.getCompontentSize() == Size.BIG) ? Size.SMALL : Size.BIG;
+				unit = (UnitElement) selectedElement;
+				newSize = (unit.getCompontentSize() == Size.BIG) ? Size.SMALL : Size.BIG;
 				unit.setCompontentSize(newSize);				
 			}
 		}
@@ -905,17 +906,11 @@ public class ImageFlowView extends FrameView {
 			final HashSet<Connection> garbage = new HashSet<Connection>();
 			copyUnitsList.clear();
 			for (final Node t : selectedNodes) {
-				/*for (Edge c : activePanel.getEdgeL())
-					if ((c.from.getParent() == t)||(t == c.to.getParent()))
-						garbage.add(c);
-				copyUnitsList.add(t);
-				activePanel.getNodeL().remove(t);*/
 				copyUnitsList.add(t);
 				graphController.removeNode(t);
 			}
 			for (final Connection c : garbage) {
 				graphController.getConnections().remove(c);
-//				activePanel.getEdgeL().remove(c);
 			}
 			selectedNodes.clear();
 			setPaste(true);
@@ -932,8 +927,8 @@ public class ImageFlowView extends FrameView {
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
 		if (!selectedNodes.isEmpty()) {
 			copyUnitsList.clear();
+			Node clone;
 			for (final Node t : selectedNodes) {
-				Node clone;
 				try {
 					clone = t.clone();
 					clone.setLabel(t.getLabel());
@@ -960,12 +955,13 @@ public class ImageFlowView extends FrameView {
 			// this is added here so that the new pasted units are selected
 			selectedNodes.addAll(copyUnitsList);
 			copyUnitsList.clear();
+			Node clone;
 			for (final Node t : selectedNodes) {
 				try {
 					t.setSelected(true);
 //					UnitElement clone = (UnitElement)t.clone();
 					// retain a copy, in case he pastes several times
-					final Node clone = t.clone();
+					clone = t.clone();
 					clone.setLabel(t.getLabel());
 					getNodes().add(t);
 					copyUnitsList.add(clone);
@@ -1209,14 +1205,16 @@ public class ImageFlowView extends FrameView {
      */
     @Action(enabledProperty = "selected")
     public void debugPrintNodeDetails() {
+    	DefaultListModel lm;
+    	JDialog dialog;
+    	UnitElement unit;
     	for (Node node : getSelections()) {
-    		final JDialog dialog = new JDialog();
-    		final DefaultListModel lm = new DefaultListModel();
-
+    		dialog = new JDialog();
     		dialog.setTitle(node.getLabel());
+    		lm = new DefaultListModel();
     		lm.addElement(node.getOrigin());
     		if(node instanceof UnitElement) {
-    			final UnitElement unit = (UnitElement)node;
+    			unit = (UnitElement)node;
 
         		// list parameters
             	for (final Parameter parameter : unit.getParameters()) {

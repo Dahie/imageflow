@@ -82,33 +82,33 @@ public class WorkflowXMLBuilder {
 			Element root = doc.getRootElement();
 
 			System.out.println("Read nodes ...");
-			
+
 			// read units
 			Element unitsElement = root.getChild("Units");
 			readUnits(newNodes, file, unitsElement);
 
-			
-			
+
+
 			// at this point we have all units in the workflow, however no connections
 			// groups are missing their inputs and outputs
 			//
-			
+
 			System.out.println("Process Connection Delegates ...");
-			
+
 			// process ConnectionDelegates
 			for (ConnectionDelegate conndel : connectionDelegates) {
 				conndel.list.add(readConnection(newNodes, conndel));
 			}
-			
+
 			System.out.println("Process Groups and add inputs and outputs ...");
-			
+
 			// process groups
 			for (GroupUnitElement unit : groupUnits) {
 				unit.dealWithConnections(getConnectionList());
 			}
-			
+
 			System.out.println("Read global connections ...");
-			
+
 			// read connections
 			Element connectionsElement = root.getChild("Connections");
 			readConnections(newNodes, connectionsElement);
@@ -116,7 +116,7 @@ public class WorkflowXMLBuilder {
 		catch (Exception e) {
 			System.err.println("Invalid XML-File!");
 			e.printStackTrace();
-			
+
 			JOptionPane.showMessageDialog(((ImageFlow)ImageFlow.getInstance()).getMainFrame(), 
 					"The selected workflow could not be loaded.",
 					"Workflow not loaded", 
@@ -131,9 +131,11 @@ public class WorkflowXMLBuilder {
 			Iterator<Element> unitsIterator = unitsList.iterator();
 
 			// loop over all Units
+			Element actualUnitElement;
+			Node node;
 			while (unitsIterator.hasNext()) { 
-				Element actualUnitElement = unitsIterator.next();
-				Node node = readNode(actualUnitElement, file);
+				actualUnitElement = unitsIterator.next();
+				node = readNode(actualUnitElement, file);
 				getUnitList().add(node);
 			}
 		}
@@ -145,25 +147,25 @@ public class WorkflowXMLBuilder {
 	 * @return
 	 */
 	protected Node readNode(final Element actualUnitElement, final File file) {
-		Node node;
 		int xPos = Integer.parseInt(actualUnitElement.getChild("XPos").getValue());
 		int yPos = Integer.parseInt(actualUnitElement.getChild("YPos").getValue());
 		Point position = new Point(xPos, yPos);
 		String label = "";
-		
+
 		if(actualUnitElement.getChild("Label") != null)
 			label = actualUnitElement.getChild("Label").getValue();
 
 		System.out.println("Read unit: " +label);
-		
+
 		Element unitDescriptionElement = actualUnitElement.getChild("UnitDescription");
+		Node node;
 		if(actualUnitElement.getChild("UnitID") != null 
 				&& unitDescriptionElement != null) {
 			node = createUnitElement(actualUnitElement, file, position,	label, unitDescriptionElement);
 		} else {
 			node = createCommentNode(position, label);
 		}
-		
+
 		return node;
 	}
 
@@ -177,9 +179,9 @@ public class WorkflowXMLBuilder {
 		UnitDescription unitDescription = new UnitDescription(file, unitDescriptionElement);
 
 		UnitElement unitElement;
-		
+
 		Element unitsElement = unitDescriptionElement.getChild("Units");
-		
+
 		Element internalConnectionsElement = unitDescriptionElement.getChild("InternalConnections");
 		Element externalConnectionsElement = unitDescriptionElement.getChild("ExternalConnections");
 		Element originalConnectionsElement = unitDescriptionElement.getChild("OriginalConnections");
@@ -197,7 +199,7 @@ public class WorkflowXMLBuilder {
 			// create UnitElement
 			unitElement = createProcessingUnit(position, label, unitID, unitDescription);
 		}
-		
+
 		return unitElement;
 	}
 
@@ -222,23 +224,23 @@ public class WorkflowXMLBuilder {
 			Element externalConnectionsElement,
 			Element originalConnectionsElement) {
 		System.out.println("Process group..");
-		
+
 		UnitElement unitElement = new GroupUnitElement(position, label);
 		HashMap<Integer, UnitElement> embeddedNodes = new HashMap<Integer, UnitElement>();
 
 		unitElement.setHelpString(unitDescription.helpString);
 		newNodes.put(unitID, unitElement);
 		groupUnits.add((GroupUnitElement) unitElement);
-		
+
 		/*for (int i = 0; i < unitDescription.numInputs; i++) {
 			unitElement.addInput(UnitFactory.createInput(unitDescription.input[i+1], unitElement, i+1));
 		}
-		
+
 		for (int i = 0; i < unitDescription.numOutputs; i++) {
 			unitElement.addOutput(UnitFactory.createOutput(unitDescription.output[i+1], unitElement, i+1));
 		}*/
-		
-		
+
+
 		if(unitsElement != null) {
 
 			List<Element> unitsList = unitsElement.getChildren();
@@ -258,63 +260,52 @@ public class WorkflowXMLBuilder {
 			}
 		}
 
-		
 		if(internalConnectionsElement != null) {
 			List<Element> connectionsList = internalConnectionsElement.getChildren();
-			Iterator<Element> connectionsIterator = connectionsList.iterator();
-
-			// internal connections require the hashmap with all embedded units
-			while (connectionsIterator.hasNext()) { 
-				Element actualConnectionElement = connectionsIterator.next();
-
-				/*Connection connection = readConnection(newNodes, actualConnectionElement);
-				((GroupUnitElement)unitElement).getInternalConnections().add(connection);*/
-				ConnectionDelegate conDelegate = 
-					new ConnectionDelegate(actualConnectionElement, 
-							((GroupUnitElement)unitElement).getInternalConnections());
-				connectionDelegates.add(conDelegate);
-			}
+			Collection<Connection> groupInternalConnections = 
+				((GroupUnitElement)unitElement).getInternalConnections();
+			readGroupConnections(connectionsList, groupInternalConnections);
 		}
 
 		if(originalConnectionsElement != null) {
+			// FIXME WTF, why internal connection here? is this a bug?
 			List<Element> connectionsList = internalConnectionsElement.getChildren();
-			Iterator<Element> connectionsIterator = connectionsList.iterator();
-
-			while (connectionsIterator.hasNext()) { 
-				Element actualConnectionElement = connectionsIterator.next();
-				ConnectionDelegate conDelegate = 
-					new ConnectionDelegate(actualConnectionElement, 
-							((GroupUnitElement)unitElement).getOriginalConnections());
-				connectionDelegates.add(conDelegate);
-			}
+			Collection<Connection> groupOriginalConnections = 
+				((GroupUnitElement)unitElement).getOriginalConnections();
+			readGroupConnections(connectionsList, groupOriginalConnections);
 		}
-		
+
 		if(externalConnectionsElement != null) {
 			List<Element> connectionsList = externalConnectionsElement.getChildren();
-			Iterator<Element> connectionsIterator = connectionsList.iterator();
-
-			// external connections require the hashmap with all embedded and existing units	
-			// we need all units of the workflow :/
-			while (connectionsIterator.hasNext()) { 
-				Element actualConnectionElement = connectionsIterator.next();
-//						Connection connection = readConnection(embeddedNodes, actualConnectionElement);
-//						((GroupUnitElement)unitElement).getInternalConnections().add(connection);
-				ConnectionDelegate conDelegate = 
-					new ConnectionDelegate(actualConnectionElement, 
-							((GroupUnitElement)unitElement).getExternalConnections());
-				connectionDelegates.add(conDelegate);
-			}
+			Collection<Connection> groupExternalConnections = 
+				((GroupUnitElement)unitElement).getExternalConnections();
+			readGroupConnections(connectionsList, groupExternalConnections);
 		}
+
 		return unitElement;
 	}
-	
-	
+
+
+	private void readGroupConnections(List<Element> connectionsList,
+			Collection<Connection> groupExternalConnections) {
+		Iterator<Element> connectionsIterator = connectionsList.iterator();
+
+		// external connections require the hashmap with all embedded and existing units	
+		// we need all units of the workflow :/
+		ConnectionDelegate conDelegate;
+		while (connectionsIterator.hasNext()) { 
+			conDelegate = new ConnectionDelegate(connectionsIterator.next(), groupExternalConnections);
+			connectionDelegates.add(conDelegate);
+		}
+	}
+
+
 	private class ConnectionDelegate {
 		public int fromUnitID, fromUnitOutput;
 		public int toUnitID, toUnitInput;
 		// to add this list
 		public Collection<Connection> list;
-		
+
 		public ConnectionDelegate(int fromUnitID, int fromUnitOutput,
 				int toUnitID, int toUnitInput, Collection<Connection> list) {
 			this.fromUnitID = fromUnitID;
@@ -323,42 +314,40 @@ public class WorkflowXMLBuilder {
 			this.toUnitInput = toUnitInput;
 			this.list = list;
 		}
-		
+
 		public ConnectionDelegate(Element connectionElement, Collection<Connection> list) {
 			this(Integer.parseInt(connectionElement.getChild("FromUnitID").getValue()), 
-				Integer.parseInt(connectionElement.getChild("FromOutputNumber").getValue()),
-				Integer.parseInt(connectionElement.getChild("ToUnitID").getValue()),
-				Integer.parseInt(connectionElement.getChild("ToInputNumber").getValue()),
-				list
+					Integer.parseInt(connectionElement.getChild("FromOutputNumber").getValue()),
+					Integer.parseInt(connectionElement.getChild("ToUnitID").getValue()),
+					Integer.parseInt(connectionElement.getChild("ToInputNumber").getValue()),
+					list
 			);
 		}
 	} 
-	
+
 
 	private void readConnections(HashMap<Integer, UnitElement> newNodes, Element connectionsElement) {
 		//unitsElement != null &&
 		if ( connectionsElement != null) {  
 			List<Element> connectionsList = connectionsElement.getChildren();
 			Iterator<Element> connectionsIterator = connectionsList.iterator();
-
 			while (connectionsIterator.hasNext()) { 
-				Element actualConnectionElement = connectionsIterator.next();
-				getUnitList().addConnection(readConnection(newNodes, actualConnectionElement));
+				getUnitList().addConnection(readConnection(newNodes, connectionsIterator.next()));
 			}
 		}
 	}
 
 
 	private static Connection readConnection(HashMap<Integer, UnitElement> newNodes,
-			Element actualConnectionElement) {
+			Element connectionElement) {
 		int fromUnitID = 
-			Integer.parseInt(actualConnectionElement.getChild("FromUnitID").getValue());
+			Integer.parseInt(connectionElement.getChild("FromUnitID").getValue());
 		int fromOutputNumber = 
-			Integer.parseInt(actualConnectionElement.getChild("FromOutputNumber").getValue());
+			Integer.parseInt(connectionElement.getChild("FromOutputNumber").getValue());
 		int toUnitID = 
-			Integer.parseInt(actualConnectionElement.getChild("ToUnitID").getValue());
+			Integer.parseInt(connectionElement.getChild("ToUnitID").getValue());
 		int toInputNumber = 
-			Integer.parseInt(actualConnectionElement.getChild("ToInputNumber").getValue());
+			Integer.parseInt(connectionElement.getChild("ToInputNumber").getValue());
 
 		Connection con = null;
 		try {
@@ -372,14 +361,14 @@ public class WorkflowXMLBuilder {
 		}
 		return con;
 	}
-	
+
 	private static Connection readConnection(HashMap<Integer, UnitElement> newNodes,
 			ConnectionDelegate connDel) {
 		int fromUnitID = connDel.fromUnitID;
 		int fromOutputNumber = connDel.fromUnitOutput;
 		int toUnitID = connDel.toUnitID;
 		int toInputNumber = connDel.toUnitInput;
-		
+
 		Connection con = null;
 		try {
 			con = new Connection(newNodes.get(fromUnitID), fromOutputNumber, 
@@ -393,7 +382,7 @@ public class WorkflowXMLBuilder {
 		return con;
 	}
 
-	
+
 	/**
 	 * @param file
 	 * @throws IOException
@@ -403,10 +392,10 @@ public class WorkflowXMLBuilder {
 		Document flowGraph = new Document(root);
 
 		Element units = new Element("Units");
+		Element unitElement;
 		root.addContent(units);
-
 		for (Node node : getUnitList()) {
-			Element unitElement = new Element("Unit");
+			unitElement = new Element("Unit");
 			units.addContent(unitElement);
 
 			writeXMLNode(node, unitElement);
@@ -432,18 +421,18 @@ public class WorkflowXMLBuilder {
 		Element xPos = new Element("XPos");
 		xPos.addContent(node.getOrigin().x+"");
 		unitElement.addContent(xPos);
+
 		Element yPos = new Element("YPos");
 		yPos.addContent(node.getOrigin().y+"");
 		unitElement.addContent(yPos);
+
 		Element label = new Element("Label");
 		label.addContent(node.getLabel());
 		unitElement.addContent(label);
 
-
 		if(node instanceof UnitElement) {
 
 			UnitElement unit = (UnitElement) node;
-
 			Element unitDescription = writeXMLUnitElement(unit, unitElement);
 
 			if(node instanceof GroupUnitElement) {
@@ -453,8 +442,9 @@ public class WorkflowXMLBuilder {
 				// unitlist included in group
 				Element embeddedUnitsElement = new Element("Units");
 				unitDescription.addContent(embeddedUnitsElement);
+				Element embeddedUnitElement;
 				for (Node embeddedNode : group.getNodes()) {
-					Element embeddedUnitElement = new Element("Unit");
+					embeddedUnitElement = new Element("Unit");
 					embeddedUnitsElement.addContent(embeddedUnitElement);
 					writeXMLNode(embeddedNode, embeddedUnitElement);
 				}
@@ -472,7 +462,7 @@ public class WorkflowXMLBuilder {
 				for (Connection connection : group.getExternalConnections()) {
 					writeXMLConnection(externalConnectionsElement, connection);	
 				}				
-				
+
 				// list of original connections
 				Element originalConnectionsElement = new Element("OriginalConnections");
 				unitDescription.addContent(originalConnectionsElement);
@@ -499,22 +489,28 @@ public class WorkflowXMLBuilder {
 		Element unitName = new Element("UnitName");
 		unitName.addContent(unit.getUnitName());
 		general.addContent(unitName);
+
 		Element pathToIcon = new Element("PathToIcon");
 		pathToIcon.addContent(unit.getIconPath());
 		general.addContent(pathToIcon);
+
 		Element imageJSyntax = new Element("ImageJSyntax");
 		imageJSyntax.addContent(((MacroElement)unit.getObject()).getImageJSyntax());
 		general.addContent(imageJSyntax);
+
 		Element color = new Element("Color");
 		String colorHex = Integer.toHexString( unit.getColor().getRGB() );
 		color.addContent("0x"+colorHex.substring(2));
 		general.addContent(color);
+
 		Element iconSize = new Element("IconSize");
 		iconSize.addContent(unit.getCompontentSize().toString());
 		general.addContent(iconSize);
+
 		Element helpStringU = new Element("HelpString");
 		helpStringU.addContent(unit.getHelpString());
 		general.addContent(helpStringU);
+
 		Element doDisplayU = new Element("DoDisplay");
 		doDisplayU.addContent(unit.isDisplay() ? "true" : "false");
 		general.addContent(doDisplayU);
@@ -537,7 +533,6 @@ public class WorkflowXMLBuilder {
 
 			Element value = new Element("Value");
 			value.addContent(parameter.getValue()+"");
-
 
 			Element helpStringP = new Element("HelpString");
 			helpStringP.addContent(parameter.getHelpString());
@@ -638,8 +633,6 @@ public class WorkflowXMLBuilder {
 			imageType.addContent(""+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
 			outputElement.addContent(imageType);	
 		}
-
-
 
 		// In case of plugins with multiple outputs
 		// I want to leave the option to display only selected outputs
