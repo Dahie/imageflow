@@ -615,8 +615,9 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		if ((x >= origin.x - pinTolerance)
 				&&(x < origin.x + pinTolerance))	{
 			int inputsMaxCount = getInputsCount();
+			int lower_y;
 			for (int i = 0; i < inputsMaxCount; i++) {
-				int lower_y = PaintUtil.alignY(inputsMaxCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
+				lower_y = PaintUtil.alignY(inputsMaxCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
 				if ((y >= lower_y)&&(y <= lower_y + pinTolerance*2)) {
 					return getInput(i);
 				}
@@ -625,8 +626,9 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		if ((x >= origin.x + getDimension().width - pinTolerance)
 				&&(x < origin.x + getDimension().width + pinTolerance)) {
 			int outputsCount = getOutputsCount();
+			int lower_y;
 			for (int i = 0; i < outputsCount; i++) {
-				int lower_y = PaintUtil.alignY(outputsCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
+				lower_y = PaintUtil.alignY(outputsCount, i, getDimension().height, NodeIcon.pinSize)+origin.y;
 				if ((y >= lower_y)&&(y <= lower_y + pinTolerance*2)) {
 					return getOutput(i);
 				}
@@ -672,7 +674,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 
 
 		//draw inputs
-		int numberInputs = getInputsCount();
+		int numberInputs = getInputsCount(), x, y;
 		for (int i = 0; i < numberInputs; i++) {
 
 			if(getInput(i).isRequired())
@@ -680,7 +682,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 			else
 				g.setColor(new Color(0,0,0,60));
 
-			int y =  PaintUtil.alignY(numberInputs, i, unitComponentIcon.getHeight(), NodeIcon.pinSize);
+			y =  PaintUtil.alignY(numberInputs, i, unitComponentIcon.getHeight(), NodeIcon.pinSize);
 			g.fillRect(origin.x, origin.y+y, NodeIcon.pinSize, NodeIcon.pinSize);
 			
 			if(getInput(i).isLocked())
@@ -690,16 +692,17 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 
 		//draw outputs
 		int numberOutputs = getOutputsCount();
+		Polygon po;
 		for (int i = 0; i < numberOutputs; i++) {
 			g.setColor(Color.BLACK);
 
-			int x = (unitComponentIcon.getWidth() - 8) + origin.x;
-			int y = PaintUtil.alignY(numberOutputs, i, unitComponentIcon.getHeight(), NodeIcon.pinSize)+origin.y;
+			x = (unitComponentIcon.getWidth() - 8) + origin.x;
+			y = PaintUtil.alignY(numberOutputs, i, unitComponentIcon.getHeight(), NodeIcon.pinSize)+origin.y;
 
 			if(getOutput(i).isLocked())
 				g.fillRect(x+20, y, NodeIcon.pinSize, NodeIcon.pinSize);
 			
-			Polygon po=new Polygon(); 
+			po = new Polygon(); 
 			po.addPoint(x, y); //top
 			po.addPoint(x + NodeIcon.pinSize, y + (NodeIcon.pinSize/2)); //pointy
 			po.addPoint(x, y+NodeIcon.pinSize); //bottom

@@ -11,10 +11,7 @@ import java.awt.Window;
 import java.io.File;
 import java.util.Vector;
 
-import javax.swing.JFrame;
-
 import org.jdesktop.application.Application;
-import org.jdesktop.application.FrameView;
 import org.jdesktop.application.SingleFrameApplication;
 
 
@@ -25,7 +22,11 @@ import org.jdesktop.application.SingleFrameApplication;
  */
 public class ImageFlow extends SingleFrameApplication implements PlugIn {
 
+	/**
+	 * Current ImageJ instance.
+	 */
 	protected ImageJ imageJ;
+	private ImageFlowView imageFlowView;
 	
 	Vector<Window> windows;
 	
@@ -66,7 +67,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
     	
     }
     
-    private ImageFlowView imageFlowView;
     
 	@Override
 	protected void startup() {
@@ -76,23 +76,13 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 		imageFlowView.getFrame().setSize(800, 600);
 	}
 
+	@Override
+	protected void shutdown() {
+		// TODO clean imagej shutdown
+		//imageJ.
+		super.shutdown();
+	}
 	
-	/*public FrameView getMainView() {
-		return this.imageFlowView;
-	}*/
-	
-	/*@Override
-	public JFrame getMainFrame() {
-		return this.imageFlowView.getFrame();
-	}*/
-	
-	/*private class MainFrameListener extends WindowAdapter {
-        public void windowClosing(WindowEvent e) {
-        	exit(e);
-        	System.exit(0);
-        }
-    }*/
-
 	/*
 	 * Start-method for starting the app from within ImageJ as plugin.
 	 */
@@ -103,16 +93,14 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 		launch(ImageFlow.class, null);
 	}
 
+	/**
+	 * Return the currently running ImageJ instance.
+	 * @return
+	 */
 	public ImageJ getImageJInstance() {
 		if(IJ.getInstance() == null)
 			this.imageJ = new ImageJ();
 		return this.imageJ;
-	}
-
-
-
-	public void handleQuit() throws IllegalStateException {
-//    	System.exit(0);
 	}
 	
 	public void addWindow(final Window window) {

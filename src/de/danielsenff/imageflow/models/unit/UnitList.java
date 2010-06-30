@@ -51,13 +51,15 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 
 		Collection<Connection> tmpConn = new Vector<Connection>();
 		HashMap<Pin, Pin> correspondingPins = new HashMap<Pin, Pin>();
+		Node nodeClone;
+		UnitElement unit, unitClone;
 		for (Node node : this) {
 			try {
-				Node nodeClone = node.clone();
+				nodeClone = node.clone();
 				clone.add(nodeClone);
 				if(node instanceof UnitElement) {
-					UnitElement unit = (UnitElement) node;
-					UnitElement unitClone = (UnitElement) nodeClone;
+					unit = (UnitElement) node;
+					unitClone = (UnitElement) nodeClone;
 
 					/*
 					 * clone inputs
@@ -91,7 +93,6 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 						}
 
 					}
-
 				}
 
 			} catch (CloneNotSupportedException e) {
@@ -205,7 +206,7 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	public boolean remove(final Node node) {
 		if(node instanceof UnitElement) {
 			UnitElement unit = (UnitElement) node;
-			// new connection between the nodes that this deleted node was inbetween
+			// new connection between the nodes that this deleted node was in between
 			replaceConnection(unit);
 
 			// delete old connections
@@ -317,8 +318,9 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 * @return
 	 */
 	public boolean hasSourcesAsDisplay() {
+		UnitElement unit;
 		for (int i = 0; i < size(); i++) {
-			final UnitElement unit = (UnitElement) get(i);
+			unit = (UnitElement) get(i);
 			if(unit.getUnitType() == Type.SOURCE && unit.isDisplay()) 
 				return true;
 		}
@@ -380,12 +382,12 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 * @param units
 	 */
 	public void unmarkUnits() {
+		UnitElement unit;
 		for (Node node : this) {
 			if(node instanceof UnitElement) {
-				UnitElement unit = (UnitElement) node;
+				unit = (UnitElement) node;
 				unit.setMark(0);
 			}
-
 		}
 	}
 
@@ -403,7 +405,6 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	public int getSize() {
 		return super.size();
 	}
-
 
 	/**
 	 * Set the {@link ConnectionList} 

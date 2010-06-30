@@ -11,6 +11,11 @@ import visualap.NodeAbstract;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
 
+/**
+ * Commonly shared methods of Units.
+ * @author dahie
+ *
+ */
 public abstract class AbstractUnit extends NodeAbstract implements Model {
 
 

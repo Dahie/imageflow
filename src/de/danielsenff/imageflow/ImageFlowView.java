@@ -45,6 +45,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.undo.UndoManager;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
@@ -137,7 +138,7 @@ public class ImageFlowView extends FrameView {
 		super(app);
 		
 		this.delegates = DelegatesController.getInstance().getDelegates();
-		this.graphController = new GraphController(); 
+		this.graphController = new GraphController();
 		
 		if (IJ.isMacOSX()) {
 			System.setProperty("apple.laf.useScreenMenuBar", "true"); 
@@ -172,7 +173,7 @@ public class ImageFlowView extends FrameView {
 		
 		// register listeners
 		registerModelListeners();
-		getApplication().addExitListener(new ConfirmExit());
+//		getApplication().addExitListener(new ConfirmExit());
 	}
 	
 
@@ -206,8 +207,6 @@ public class ImageFlowView extends FrameView {
 		
 		setModified(false);
 	}
-
-
 
 
 	
@@ -329,10 +328,8 @@ public class ImageFlowView extends FrameView {
 			this.chkBoxCollapseIcon.setSelected(false);
 			this.chkBoxDisplayUnit.setSelected(false);
 		}
-		
 	}
 
-	
 	
 	/**
 	 * Adds all components to the JFrame
@@ -487,7 +484,7 @@ public class ImageFlowView extends FrameView {
 	}
 	
 	/**
-	 * Jdialog for displaying macro code.
+	 * JDialog for displaying macro code.
 	 * @author danielsenff
 	 *
 	 */
@@ -1343,8 +1340,6 @@ public class ImageFlowView extends FrameView {
     private class ConfirmExit implements Application.ExitListener {
         public boolean canExit(EventObject e) {
             if (isModified()) {
-//                String confirmExitText = getResourceString("confirmTextExit", getFile());
-//                int option = JOptionPane.showConfirmDialog(getFrame(), confirmExitText);
             	int option = showSaveConfirmation();
                 if(option == JOptionPane.YES_OPTION) {
                 	save().run();

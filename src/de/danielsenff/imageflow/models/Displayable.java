@@ -1,5 +1,10 @@
 package de.danielsenff.imageflow.models;
 
+/**
+ * Interface describes Elements that can be displayed on the workflow canvas.
+ * @author dahie
+ *
+ */
 public interface Displayable {
 
 	/**
@@ -13,7 +18,7 @@ public interface Displayable {
 	 * This setting is actually attached to the {@link Output}. 
 	 * This is a convenience method for changing all outputs of this
 	 * unit at once.
-	 * @param isDisplayUnit
+	 * @param display
 	 */
 	public void setDisplay(boolean display);
 	

@@ -76,7 +76,6 @@ public class GroupUnitElement extends UnitElement {
 		findRelevantConnections(unitsToAdd, allUnits.getConnections());
 		
 		if(selectedUnitsConsistentGroup(unitsToAdd, allUnits)) {
-
 			for (Node node : unitsToAdd) {
 				this.units.add(node);
 			}
@@ -310,7 +309,7 @@ public class GroupUnitElement extends UnitElement {
 	 * @return the originalConnections
 	 */
 	public Vector<Connection> getOriginalConnections() {
-		return originalConnections;
+		return this.originalConnections;
 	}
 
 
@@ -318,7 +317,7 @@ public class GroupUnitElement extends UnitElement {
 	 * @return the internalConnections
 	 */
 	public final Collection<Connection> getInternalConnections() {
-		return internalConnections;
+		return this.internalConnections;
 	}
 
 	@Override

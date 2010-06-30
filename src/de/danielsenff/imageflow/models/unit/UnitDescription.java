@@ -28,7 +28,7 @@ import de.danielsenff.imageflow.utils.Tools;
  * @author senff
  *
  */
-public class UnitDescription implements NodeDescription{
+public class UnitDescription implements NodeDescription {
 
 	public UnitDescription() {
 	}

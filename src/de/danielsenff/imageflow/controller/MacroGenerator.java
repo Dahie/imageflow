@@ -7,7 +7,6 @@ import visualap.Node;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
-import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.unit.ForGroupUnitElement;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
@@ -36,6 +35,10 @@ public class MacroGenerator {
 	private int unitAmount;
 	private int currentUnit;
 
+	/**
+	 * MacroGenerator based on a List of unitElements.
+	 * @param unitElements
+	 */
 	public MacroGenerator(final Collection<Node> unitElements) {
 		this.unitList = unitElements;
 		this.unitAmount = unitList.size();
@@ -52,10 +55,10 @@ public class MacroGenerator {
 	public String generateMacro(boolean extendedMacro) {
 		// reset in case somebody has the mad idea to run this twice
 		this.macroText = ""; 
-		macroText += "setBatchMode(true); \n";
+		this.macroText += "setBatchMode(true); \n";
 		// reset progressBar to 0%
 		if (extendedMacro) {
-			macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setProgress\", \"0\")";
+			this.macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setProgress\", \"0\")";
 		}
 		
 		// loop over all units
@@ -66,19 +69,24 @@ public class MacroGenerator {
 
 		
 		// delete all images that are not to be displayed
-		macroText +=  "\n";
-		macroText +=  "// delete unwanted images \n";
-		macroText += deleteImages();
-		macroText +=  "// human understandable names \n";
-		macroText += renameImages();
+		this.macroText +=  "\n";
+		this.macroText +=  "// delete unwanted images \n";
+		this.macroText += deleteImages();
+		this.macroText +=  "// human understandable names \n";
+		this.macroText += renameImages();
 		
-		macroText += "\nsetBatchMode(\"exit and display\"); ";
+		this.macroText += "\nsetBatchMode(\"exit and display\"); ";
 		
 		System.out.println("finished generation");
 		return macroText;
 	}
 
-
+	/**
+	 * Generates the macro code for one node.
+	 * @param node
+	 * @param i
+	 * @param extendedMacro
+	 */
 	private void generateUnitMacroCode(Node node, int i, boolean extendedMacro) {
 		System.out.println(node);
 		
@@ -172,20 +180,15 @@ public class MacroGenerator {
 		macroText += "} \n";
 		
 		
-		
 		macroText += "// close all loop images here"
 		+"for (i=0; i<"+end+"; i+=1) { "
 		+"selectImage(\"Unit_7_Output_1_\"+"+i+");" 
 		+"close();"
 		+"}";
 		
-		
 		//prepare output
 		renameOutputImages(unit, end+1);
 	}
-
-	
-	
 
 	private void addFunctionUnit(UnitElement unit, int i) throws Exception {
 		final MacroElement macroElement = ((MacroElement)unit.getObject()); 
@@ -205,11 +208,12 @@ public class MacroGenerator {
 		
 		
 		// parse the command string for TITLE tags that need to be replaced
+		String parameterString, searchString;
+		Input input;
 		for (int in = 0; in < unit.getInputsCount(); in++) {
-			final Input input = unit.getInput(in);
-			final String searchString = "TITLE_" + (in+1);
-			final String parameterString = 
-				input.isNeedToCopyInput() ? getNeedCopyTitle(input.getImageID()+"_"+i) : input.getImageTitle()+"_"+i;
+			input = unit.getInput(in);
+			searchString = "TITLE_" + (in+1);
+			parameterString = input.isNeedToCopyInput() ? getNeedCopyTitle(input.getImageID()+"_"+i) : input.getImageTitle()+"_"+i;
 //			System.out.println(input.getImageTitle());
 			System.out.println("Unit: " + unit.getUnitID() + " Input: " + in + " Title: " + parameterString);
 			macroElement.replace(searchString, parameterString);
@@ -247,10 +251,11 @@ public class MacroGenerator {
 		 * However if we work with a sink, ie unit without outputs. The image taken 
 		 * by the unit needs to be closed again.  
 		 */
+		String inputID;
 		if(unit.getUnitType() == Type.SINK) {
 			for (final Input input : unit.getInputs()) {
 				if(input.isNeedToCopyInput()) {
-					final String inputID = input.getImageID()+"_"+i;
+					inputID = input.getImageID()+"_"+i;
 
 					macroText += "selectImage(" + getNeedCopyTitle(inputID) + "); \n";
 					macroText += "close(); \n";
@@ -261,9 +266,10 @@ public class MacroGenerator {
 
 
 	private void renameOutputImages(UnitElement unit, int i) {
+		String outputTitle, outputID;
 		for (Output output : unit.getOutputs()) {
-			final String outputTitle = output.getOutputTitle()+"_"+0;
-			final String outputID = output.getOutputID()+"_"+i;
+			outputTitle = output.getOutputTitle()+"_"+0;
+			outputID = output.getOutputID()+"_"+i;
 			
 			 if((output.getDataType() instanceof DataTypeFactory.Image)) {
 				macroText +=  
@@ -315,20 +321,20 @@ public class MacroGenerator {
 
 	private static String duplicateImages(final UnitElement unit) {
 		String code = "";
+		String inputID;
+		int binaryComparison;
 		for (final Input input : unit.getInputs()) {
 			if (input.getDataType() instanceof DataTypeFactory.Image) {
-				final String inputID = input.getImageID()+"_"+0;
+				inputID = input.getImageID()+"_"+0;
 				code += "selectImage(" + inputID + "); \n";
 				if(input.isNeedToCopyInput()) {
 					// Stacks need an additional Parameter 'duplicate' in the Duplicate-command
-					int binaryComparison = ((DataTypeFactory.Image)input.getFromOutput().getDataType()).getImageBitDepth() 
-					& (ij.plugin.filter.PlugInFilter.DOES_STACKS);
-					if (binaryComparison != 0) {
+					binaryComparison = ((DataTypeFactory.Image)input.getFromOutput().getDataType()).getImageBitDepth() 
+						& (ij.plugin.filter.PlugInFilter.DOES_STACKS);
+					if (binaryComparison != 0)
 						code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +" duplicate\"); \n";
-					}
-					else {
+					else
 						code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +"\"); \n";
-					}
 				}
 			}
 		}
@@ -346,31 +352,26 @@ public class MacroGenerator {
 	 * @param i
 	 */
 	private void printNumbers(UnitElement unit, int i) {
-		ArrayList<Output> outputs = unit.getOutputs();
-		for (int outputIndex = 0; outputIndex < outputs.size(); outputIndex++) {
-			Output output = outputs.get(outputIndex);
-			if (output.getDataType() instanceof DataTypeFactory.Double
+		for (Output output : unit.getOutputs()) {
+			if ( (output.getDataType() instanceof DataTypeFactory.Double
 					|| output.getDataType() instanceof DataTypeFactory.Integer
-					|| output.getDataType() instanceof DataTypeFactory.Number) {
-				if (output.getParent().isDisplay()) {
-					macroText += "print (" + output.getOutputTitle() + "_" + i + "); \n";
-				}	
+					|| output.getDataType() instanceof DataTypeFactory.Number)
+					&& output.getParent().isDisplay()) {
+				macroText += "print (" + output.getOutputTitle() + "_" + i + "); \n";
 			}
 		}
 	}
 	
+	/**
+	 * 
+	 * @author dahie
+	 *
+	 */
 	public class ImageJImage {
 		String id;
 		String title;
 		Output parentOutput;
 		boolean display;
-		
-		/*private ImageJImage(Output output) {
-			this.id 	= output.getOutputID();
-			this.title 	= output.getOutputTitle();
-			this.parentOutput = output;
-			this.display = output.isDoDisplay();
-		}*/
 		
 		public ImageJImage(Output output, int i) {
 			this.id 	= output.getOutputID()+"_"+i;

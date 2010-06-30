@@ -7,6 +7,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
+
 import visualap.Node;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -45,6 +51,8 @@ public class GraphController{
 	 */
 	private SelectionList selections;
 
+	
+	private UndoableEditListener listener;
 	
 	/**
 	 * 
@@ -99,6 +107,22 @@ public class GraphController{
 	}
 
 	/**
+	 * Set the UndoableEditListener.
+	 * @param l
+	 */
+	public void addUndoableEditListener(UndoableEditListener l) {
+		listener = l; // Should ideally throw an exception if listener != null
+	}
+
+	/**
+	 * Remove the UndoableEditListener.
+	 * @param l
+	 */
+	public void removeUndoableEditListener(UndoableEditListener l) {
+		listener = null;
+	}
+	
+	/**
 	 * Removes the {@link UnitElement} from the unitList and its Connections.
 	 * @param node 
 	 * @return
@@ -115,7 +139,11 @@ public class GraphController{
 		ungroup(group, getUnitElements());
 	}
 	
-	public static void ungroup(final GroupUnitElement group, UnitList units) {
+	/**
+	 * @param group
+	 * @param units
+	 */
+	public static void ungroup(final GroupUnitElement group, final UnitList units) {
 		
 		int deltaX = group.getOrigin().x - 25;
 		int deltaY = group.getOrigin().y - 25;
@@ -198,6 +226,50 @@ public class GraphController{
 			selections.clear();
 			selections.add(group);	
 		}
+		/*if (listener != null) {
+			listener.undoableEditHappened(new UndoableEditEvent(this, new UndoableEdit() {
+
+				public boolean addEdit(UndoableEdit anEdit) {
+					// TODO Auto-generated method stub
+					return false;
+				}
+
+				public boolean canRedo() {	return true; }
+
+				public boolean canUndo() {	return true; }
+
+				public void die() {}
+
+				public String getPresentationName() {
+					return null;
+				}
+
+				public String getRedoPresentationName() {
+					return "Regroup";
+				}
+
+				public String getUndoPresentationName() {
+					return "Ungroup";
+				}
+
+				public boolean isSignificant() { return true; }
+
+				public void redo() throws CannotRedoException {
+					// TODO Auto-generated method stub
+					
+				}
+
+				public boolean replaceEdit(UndoableEdit anEdit) {
+					// TODO Auto-generated method stub
+					return false;
+				}
+
+				public void undo() throws CannotUndoException {
+					ungroup(group);
+				}
+				
+			}));
+		}*/
 	}
 	
 	/**

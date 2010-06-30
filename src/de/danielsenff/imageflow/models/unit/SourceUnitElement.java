@@ -8,15 +8,12 @@ import ij.plugin.filter.PlugInFilter;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -95,7 +92,6 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 
 	@Override
 	public UnitElement clone() {
-		
 		return super.clone();
 	}
 	
@@ -108,9 +104,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 			showOpenFileChooser();
 		
 		super.showProperties();
-		
 		updateImageType();
-		
 		notifyModelListeners();
 	}
 
@@ -158,7 +152,6 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		  showOpenJFileChooser();
 		  // showIJOpenDialog();
 	}
-	
 	
 	/**
 	 * Opens a {@link JFileChooser} to select a new file.

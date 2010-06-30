@@ -58,8 +58,6 @@ public class MacroElement {
 	public String getCommandSyntax() {
 		return this.commandSyntax;
 	}
-	
-
 
 	/**
 	 * Resets the MacroElement. All parsed commands will be removed.
@@ -90,16 +88,17 @@ public class MacroElement {
 //		int unitID = unit.getUnitID();
 
 		int parameterIndex = 0, pc = 0, pd = 0, ps = 0, pi = 0, pb = 0;
-		String searchString;
-
+		String searchString, paraType;
+		String parameterString;
+		Parameter parameter;
 		while (parameterIndex < parameters.size()) {
 			
-			Parameter parameter = parameters.get(parameterIndex);
+			parameter = parameters.get(parameterIndex);
 
 			searchString = "PARA_DOUBLE_" + (pd+1);
-			String paraType = parameter.getParaType().toLowerCase();
+			paraType = parameter.getParaType().toLowerCase();
 			if(command.contains(searchString) && paraType.equals("double")) { 
-				String parameterString = "" + ((DoubleParameter)parameter).getValue();
+				parameterString = "" + ((DoubleParameter)parameter).getValue();
 //				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Double Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, parameterString);
 				pd++;
@@ -107,7 +106,7 @@ public class MacroElement {
 			}
 			searchString = "PARA_STRING_" + (ps+1);
 			if(command.contains(searchString) && (paraType.equals("string") || paraType.equals("stringarray"))) {
-				String parameterString = "" + ((StringParameter)parameter).getValue();
+				parameterString = "" + ((StringParameter)parameter).getValue();
 //				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, parameterString);
 				ps++;
@@ -124,7 +123,7 @@ public class MacroElement {
 			searchString = "PARA_BOOLEAN_" + (pb+1);
 			if(command.contains(searchString) && paraType.equals("boolean")) {
 				boolean bool = ((BooleanParameter)parameter).getValue();
-				String parameterString =  (bool) ? ((BooleanParameter)parameter).getTrueString() : ""; 
+				parameterString =  (bool) ? ((BooleanParameter)parameter).getTrueString() : ""; 
 				//String parameterString = "" + ((BooleanParameter)parameter).getValue();
 //				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
 				command = Tools.replace(command, searchString, parameterString);
@@ -188,12 +187,12 @@ public class MacroElement {
 	
 	private static String parseOutputs(ArrayList<Output> outputs, String command, int i) {
 		int index = 0, oDbl = 0, oInt = 0, oNbr = 0;
-		String searchString;
-
+		String searchString, uniqueOutputName;
+		Output output;
 		while (index < outputs.size()) {
 			
-			Output output = outputs.get(index);
-			String uniqueOutputName = output.getOutputTitle() + "_" + i;
+			output = outputs.get(index);
+			uniqueOutputName = output.getOutputTitle() + "_" + i;
 
 			searchString = "OUTPUT_DOUBLE_" + (oDbl+1);
 			if(command.contains(searchString) 
@@ -228,13 +227,12 @@ public class MacroElement {
 
 	private static String parseInputs(ArrayList<Input> inputs, String command, int i) {
 		int index = 0, oDbl = 0, oInt = 0, oNbr = 0;
-		String searchString;
-
+		String searchString, uniqueOutputName;
 		while (index < inputs.size()) {
 			
 			Input input = inputs.get(index);
 			if(input.isRequired() && input.isConnected()) {				
-				String uniqueOutputName = input.getFromOutput().getOutputTitle() + "_" + i;
+				uniqueOutputName = input.getFromOutput().getOutputTitle() + "_" + i;
 				
 				searchString = "INPUT_DOUBLE_" + (oDbl+1);
 				if(command.contains(searchString) 
@@ -266,13 +264,14 @@ public class MacroElement {
 	private static String parseAttributes(ArrayList<Input> inputs, ArrayList<Parameter> parameters, String command, int i) {
 		int inputIndex, parameterIndex;
 		String searchString;
-				
+		Parameter parameter;
+		Input input;
 		for (inputIndex = 0; inputIndex < inputs.size(); inputIndex++) {
 			for (parameterIndex = 0; parameterIndex < parameters.size(); parameterIndex++) {
 			
-				Input input = inputs.get(inputIndex);
+				input = inputs.get(inputIndex);
 				if(!input.isRequired()) {
-					Parameter parameter = parameters.get(parameterIndex);
+					parameter = parameters.get(parameterIndex);
 
 					searchString = "ATTRIBUTE_INPUT_" + (inputIndex+1) + "_PARAMETER_" + (parameterIndex+1);
 
@@ -282,8 +281,7 @@ public class MacroElement {
 						if (input.isConnected()) {
 							String uniqueOutputName = input.getFromOutput().getOutputTitle() + "_" + i;
 							command = Tools.replace(command, searchString, uniqueOutputName);
-						}
-						else {
+						} else {
 							String parameterValue = "";				
 							if (parameter.getParaType().toLowerCase().equals("integer")) 
 								parameterValue += ((IntegerParameter)parameter).getValue(); 
@@ -311,17 +309,13 @@ public class MacroElement {
 	public static String parseStack(final ArrayList<Input> inputs, String command) {
 		String searchString = "STACK";
 		String stackParameter = "";
-				
-		for (int inputIndex = 0; inputIndex < inputs.size(); inputIndex++) {
-			Input input = inputs.get(inputIndex);
-			if (input.isConnected()) {
-				if (input.getDataType() instanceof DataTypeFactory.Image) {
-					int binaryComparison = ((DataTypeFactory.Image)input.getFromOutput().getDataType()).getImageBitDepth() 
-						& (ij.plugin.filter.PlugInFilter.DOES_STACKS);
-					if (binaryComparison != 0) {
-						stackParameter = "stack";
-					}
-				}
+		int binaryComparison, bitdepth;
+		for (Input input : inputs) {
+			if (input.isConnected() && (input.getDataType() instanceof DataTypeFactory.Image) ) {
+				bitdepth = ((DataTypeFactory.Image)input.getFromOutput().getDataType()).getImageBitDepth();
+				binaryComparison = bitdepth	& (ij.plugin.filter.PlugInFilter.DOES_STACKS);
+				if (binaryComparison != 0) 
+					stackParameter = "stack";
 			}
 		}
 		command = Tools.replace(command, searchString, stackParameter);

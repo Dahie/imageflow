@@ -18,8 +18,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
-
 import visualap.GPanel;
 
 

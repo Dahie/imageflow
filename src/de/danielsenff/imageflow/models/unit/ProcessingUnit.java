@@ -7,11 +7,16 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.parameter.AbstractParameter;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 
+/**
+ * Interface for processing unit. Usually with inputs and outputs.
+ * @author dahie
+ *
+ */
 public interface ProcessingUnit {
 
 
 	/*
-	 * Inputs
+	 * Outputs and Inputs
 	 */
 	
 
@@ -74,11 +79,6 @@ public interface ProcessingUnit {
 	 */
 	public int getInputsCount();
 	
-	
-	/*
-	 * Outputs
-	 */
-	
 	/*
 	 * Parameters
 	 */
@@ -105,7 +105,7 @@ public interface ProcessingUnit {
 
 	/**
 	 * Parameter on index i.
-	 * @param i
+	 * @param index
 	 * @return
 	 */
 	public Parameter getParameter(final int index);
