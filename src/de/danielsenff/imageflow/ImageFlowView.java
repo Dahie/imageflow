@@ -3,6 +3,7 @@ package de.danielsenff.imageflow;
 import ij.IJ;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -335,11 +336,8 @@ public class ImageFlowView extends FrameView {
 	 * Adds all components to the JFrame
 	 */
 	private void addComponents() {
-		
 		ResourceMap resourceMap = getResourceMap();
 		
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BorderLayout());
 		
 		//working area aka graphpanel
 		ArrayList<Delegate> delegatesArrayList = new ArrayList<Delegate>();
@@ -393,8 +391,6 @@ public class ImageFlowView extends FrameView {
 		
 		
 		statusBar = new StatusBar(getApplication(), getContext().getTaskMonitor());
-        
-		
 		progressBar = new JProgressBar();
 		progressBar.setMinimum(0);
 		progressBar.setMaximum(100);
@@ -423,9 +419,12 @@ public class ImageFlowView extends FrameView {
 		// enables continuous redrawing while moving the JSplitPane-Divider
 		splitPane.setContinuousLayout(true);
 		
+		
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout());
 		mainPanel.add(splitPane, BorderLayout.CENTER);
 		mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-		setMainPanel(mainPanel);
+		setComponent(mainPanel);
 	}
 
 
@@ -554,9 +553,6 @@ public class ImageFlowView extends FrameView {
 		return this.mainPanel;
 	}
 	
-	protected void setMainPanel(JPanel mainPanel2) {
-		setComponent(mainPanel);
-	}
 
 
 	/**
