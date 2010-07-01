@@ -16,10 +16,16 @@ public interface DataType extends Cloneable {
 	 * @return
 	 */
 	public boolean isCompatible(DataType compareType);
+	
 	/**
 	 * Clone this DataType.
 	 * @return
 	 */
 	public DataType clone();
 	
+	/**
+	 * Returns the simple Class name of this DataType. 
+	 * @return
+	 */
+	public String getName();
 }

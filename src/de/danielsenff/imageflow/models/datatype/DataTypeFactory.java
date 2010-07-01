@@ -1,5 +1,6 @@
 package de.danielsenff.imageflow.models.datatype;
 
+import ij.ImagePlus;
 import ij.plugin.filter.PlugInFilter;
 import visualap.Pin;
 import de.danielsenff.imageflow.models.connection.Input;
@@ -85,6 +86,8 @@ public class DataTypeFactory {
 		public Number clone() {
 			return new Number();
 		}
+		
+		public String getName() { return this.getClass().getSimpleName();}
 	}
 
 
@@ -103,6 +106,9 @@ public class DataTypeFactory {
 		public Integer clone() {
 			return new Integer();
 		}
+		
+		@Override
+		public String getName() { return this.getClass().getSimpleName();}
 	}
 
 	/**
@@ -121,6 +127,8 @@ public class DataTypeFactory {
 		public Double clone() {
 			return new Double();
 		}
+		@Override
+		public String getName() { return this.getClass().getSimpleName();}
 	}
 
 	/**
@@ -163,9 +171,6 @@ public class DataTypeFactory {
 		 * @return
 		 */
 		public int getImageBitDepth() {
-			/*System.out.println(this);
-			System.out.println(parent);
-			System.out.println(imageBitDepth);*/
 			if(this.imageBitDepth > 0 
 					&& this.imageBitDepth != PlugInFilter.DOES_ALL) {
 				return this.imageBitDepth; 
@@ -205,21 +210,33 @@ public class DataTypeFactory {
 					return -1;
 				} 
 			} 
-			/*
-			 * it seems I don't need this, usually I always check inputs if their outputs are legal
-			 * else if(parentPin instanceof Input) {
-
-				Input parentInput = (Input) parentPin;
-				if(parentInput.isConnected()) {
-					Connection conn = parentInput.getConnection();
-					return ((Image)conn.getOutput().getDataType()).getImageBitDepth();
-				}
-			}*/
+			
 
 			// this means our output doesn't know his own capabilities
 			// and because it has no inputs, it can't get them anywhere
 			// this sucks
 			return this.imageBitDepth;
+		}
+		
+		public String getName() { return this.getClass().getSimpleName()+"("+getVerboseImageFormat()+")";}
+
+		private String getVerboseImageFormat() {
+			
+			switch(getImageBitDepth()) {
+			case PlugInFilter.DOES_8G:
+				return "8-bit grayscale";
+			case PlugInFilter.DOES_16:
+				return "16-bit grayscale";
+			case PlugInFilter.DOES_32:
+				return "32-bit floating-point grayscale";
+			case PlugInFilter.DOES_8C:
+				return "8-bit indexed color";
+			case PlugInFilter.DOES_RGB:
+				return "32-bit RGB color";
+			case PlugInFilter.DOES_ALL:
+				return "ambigous type";
+			}
+			return "unknown";
 		}
 
 		public boolean isCompatible(DataType compareType) {
@@ -228,33 +245,6 @@ public class DataTypeFactory {
 
 			return false;
 		}
-
-		/*	public int getImageBitDepth() {
-
-			if(this.imageBitDepth != -1 && this.imageBitDepth != PlugInFilter.DOES_ALL) {
-				return this.imageBitDepth; 
-			} else if(parentPin instanceof ProxyInput) {
-
-
-			} else if(parent != null) {
-
-				//TODO this could be nicer, how to handle multiple inputs?
-				if(parent.hasInputsConnected()) {
-					for (Input input : parent.getInputs()) {
-						if(input.isConnected() && input.getDataType() instanceof Image)
-							return ((Image)input.getFromOutput().getDataType()).getImageBitDepth();
-					}
-
-					return -1;
-				} else if(parent instanceof ImageSourceUnit) {
-					return ((ImageSourceUnit)parent).getImageType();
-				} 
-			}
-			// this means our output doesn't know his own capabilities
-			// and because it has no inputs, it can't get them anywhere
-			// this sucks
-			return this.imageBitDepth;
-		}*/
 
 		/**
 		 * Returns true, if the imageBitDepth in question is supported
@@ -289,6 +279,7 @@ public class DataTypeFactory {
 		public String toString() {
 			return super.toString() + " ParentPin: "+parentPin.getDisplayName();
 		}
+		
 
 		/**
 		 * @param pin
