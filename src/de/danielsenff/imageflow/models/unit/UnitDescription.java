@@ -299,15 +299,15 @@ public class UnitDescription implements NodeDescription {
 
 	
 	public boolean hasInputs() {
-		return this.para.length > 0;
+		return this.input != null && this.input.length > 0;
 	}
 	
 	public boolean hasOutputs() {
-		return this.para.length > 0;
+		return this.output != null && this.output.length > 0;
 	}
 	
 	public boolean hasParameters() {
-		return this.para.length > 0;
+		return this.para != null && this.para.length > 0;
 	}
 
 	public class Para {

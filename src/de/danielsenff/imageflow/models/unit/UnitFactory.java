@@ -45,8 +45,10 @@ public class UnitFactory {
 	
 	/**
 	 * Creates a {@link UnitElement} based on the given Descriptions.
+	 * @param nodeDescription 
 	 * @param unitDescription
 	 * @param origin
+	 * @param args 
 	 * @return
 	 */
 	public static UnitElement createProcessingUnit(

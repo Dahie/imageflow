@@ -25,7 +25,7 @@ public class DelegatesTreeListener implements MouseListener, KeyListener {
 	private ImageFlowView ifView;
 	
 	public DelegatesTreeListener(ImageFlowView ifView) {
-		ifView = ifView;
+		this.ifView = ifView;
 	}
 	
 	private UnitList getNodes() {
@@ -47,7 +47,6 @@ public class DelegatesTreeListener implements MouseListener, KeyListener {
 			final int selRow = tree.getRowForLocation(e.getX(), e.getY());
 			final TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 			if(selRow != -1 && selPath.getLastPathComponent() instanceof UnitDelegate) {
-				//			        	 myDoubleClick(selRow, selPath);
 				final UnitDelegate ud = ((UnitDelegate)selPath.getLastPathComponent());
 				Point insertPoint = UnitDelegate.POINT;
 				UnitElement node = ud.createUnit(insertPoint);
