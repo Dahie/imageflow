@@ -157,39 +157,42 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		int x = e.getX();
 		int y = e.getY();
 		// qui � obbligatorio un iteratore che scandisce la lista al contrario!
-//		for (Node aNode : nodeL) {
 		for (Node aNode : reversed(nodeL)) {
 			
 			Object sel = aNode.contains(x,y);
 			// 	check selected element, is it a Node?
 			if (sel instanceof Node) {
 				pick = new Point(x,y);
-				if (!selection.contains(aNode)) {
-					if(!e.isControlDown()
-							|| ( e.isMetaDown() && IJ.isMacintosh())) {
+				
+				if(!selection.contains(sel)) {
+					// if there are selections
+					// and the new selection should not be added (Meta or CTRL down)
+					// or 
+					if(!selection.isEmpty() && !isMetaOrCTRLDown(e) || e.isPopupTrigger() ) {
 						selection.clear();
 					}
+					
+					// add node
 					selection.add(aNode);
 				} else {
-					if(e.isControlDown()
-							|| (e.isMetaDown() && IJ.isMacintosh()))
+					// node is selected
+					
+					// if no popup triggered
+					// and new selection should not be added
+					if(!e.isPopupTrigger() && isMetaOrCTRLDown(e))
 						selection.remove(aNode);
-				} 
-
+				}
+				
 				if(!e.isPopupTrigger()) {
 					for (Node iNode : selection)
-						if(!e.isPopupTrigger())
-							iNode.drag(true);
+						iNode.drag(true);
 
 					e.consume();
 					changeCursor(Cursor.MOVE_CURSOR);
 				} else {
 					parentPanel.showFloatingMenu(e);
 				}
-
 				repaint();
-
-
 				return;
 			}
 			// check selected element, is it a Pin?
@@ -201,18 +204,22 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				return;
 			}
 		}
+		selection.clear();
 		if (e.isPopupTrigger())
 			parentPanel.showFloatingMenu(e);
 
-		selection.clear();
 		//	e.consume();
 
-		// handling of selection rectange 
+		// handling of selection rectangle 
 		currentRect = new Rectangle(x, y, 0, 0);
 		updateDrawableRect(getWidth(), getHeight());
 		repaint();
 	}
 
+
+	private boolean isMetaOrCTRLDown(MouseEvent e) {
+		return e.isControlDown() || (e.isMetaDown() && IJ.isMacintosh() );
+	}
 
 	/**
 	 * Sees, if a connection between the given Pins exists.
@@ -236,9 +243,11 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		int x = e.getX();
 		int y = e.getY();
 		if (pick != null) {
-			for (Node iNode : selection) {
-				if (cursor) iNode.translate(x-pick.x, y-pick.y);
-				iNode.drag(false);
+			if(!e.isPopupTrigger()) {
+				for (Node iNode : selection) {
+					if (cursor) iNode.translate(x-pick.x, y-pick.y);
+					iNode.drag(false);
+				}
 			}
 			pick = null;
 			repaint();
@@ -285,19 +294,21 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 
 	public void mouseDragged(MouseEvent e) {
 		// generato quando il mouse premuto viene spostato, vari eventi sono generati durante il trascinamento
-		if (pick!= null) {
-			for (Node iNode : selection)
-				iNode.drag(e.getX()-pick.x, e.getY()-pick.y);
-			repaint();
-			e.consume();
+		if(!e.isPopupTrigger()) {
+			if (pick!= null) {
+				for (Node iNode : selection)
+					iNode.drag(e.getX()-pick.x, e.getY()-pick.y);
+				repaint();
+				e.consume();
+			}
+			else if (drawEdge != null)	{
+				mouse.x = e.getX(); mouse.y = e.getY();
+				repaint();
+				e.consume();
+			}
+			// handling of selection rectange
+			else if (currentRect != null) updateSize(e);
 		}
-		else if (drawEdge != null)	{
-			mouse.x = e.getX(); mouse.y = e.getY();
-			repaint();
-			e.consume();
-		}
-		// handling of selection rectange
-		else if (currentRect != null) updateSize(e);
 	}
 
 	public void mouseMoved(MouseEvent e) {

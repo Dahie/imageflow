@@ -31,7 +31,6 @@ import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 public class GPanelPopup implements GPanelListener {
 
 	protected GPanel activePanel;
-	protected Point savedPoint = new Point(0,0);
 	protected GraphController graphController;
 
 
@@ -62,23 +61,22 @@ public class GPanelPopup implements GPanelListener {
 
 	public void showFloatingMenu(MouseEvent e) {
 		if (e.isPopupTrigger()) {
-			savedPoint = e.getPoint();
+			Point savedPoint = e.getPoint();
 			//Create the popup menu.
 			JPopupMenu popup = new JPopupMenu();
-			Selection<Node> selectedUnits = activePanel.getSelection();
-			if (selectedUnits.isEmpty()) { 
+			Selection<Node> selections = activePanel.getSelection();
+			if (selections.isEmpty()) { 
 				popup.add(new InsertUnitMenu("Insert unit", activePanel, savedPoint));
 				if (!graphController.getCopyNodesList().isEmpty()) 
 					popup.add(getAction("paste"));
 			} else {
-
-				showSingleUnitActions(popup, selectedUnits);
+				showSingleUnitActions(popup, selections);
 				popup.add(getAction("cut"));
 				popup.add(getAction("copy"));
 				popup.add(getAction("paste"));
 				popup.add(getAction("unbind"));
 				popup.add(getAction("delete"));
-				if (!hasGroup(selectedUnits)) {
+				if (!hasGroup(selections)) {
 					popup.add(getAction("group"));
 				}
 			}
