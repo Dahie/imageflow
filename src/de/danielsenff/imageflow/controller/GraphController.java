@@ -282,6 +282,11 @@ public class GraphController{
 		workflowbuilder.read(file);
 	}
 	
+	/**
+	 * Write the workflow to a XML-file
+	 * @param file
+	 * @throws IOException
+	 */
 	public void write(final File file) throws IOException {
 		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(nodes);
 		workflowbuilder.write(file);

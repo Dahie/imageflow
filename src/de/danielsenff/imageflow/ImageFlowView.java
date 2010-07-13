@@ -128,6 +128,7 @@ public class ImageFlowView extends FrameView {
 
 	private JCheckBoxMenuItem chkBoxDisplayUnit;
 	private JCheckBoxMenuItem chkBoxCollapseIcon;
+	private ScrollPane graphScrollpane;
 	
 	
 	
@@ -233,22 +234,6 @@ public class ImageFlowView extends FrameView {
 		if(!IJ.isMacintosh()) {
 			fileMenu.add(new JSeparator());
 			fileMenu.add(getAction("quit"));
-		} else {
-			/*MRJApplicationUtils.registerQuitHandler(new MRJQuitHandler()
-			   {
-			      public void handleQuit()
-			      {
-			         SwingUtilities.invokeLater(new Runnable()
-			         {
-			            public void run()
-			            {
-			               if(promptTheUser())
-			                  System.exit(0);
-			            }
-			         });
-			         throw new IllegalStateException("Stop Pending User Confirmation");
-			      }
-			   });*/
 		}
 		
 		
@@ -352,7 +337,7 @@ public class ImageFlowView extends FrameView {
 		if(IJ.isMacOSX())
 			graphPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		
-		ScrollPane graphScrollpane = new ScrollPane();
+		graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
 		graphScrollpane.setPreferredSize(new Dimension(400, 300));
 		new FileDrop( null, graphPanel,  new FileDropListener(graphPanel, getInstance())); // end FileDrop.Listener
@@ -462,11 +447,17 @@ public class ImageFlowView extends FrameView {
 		this.graphController = graphController;
 		graphPanel.setGraphController(this.graphController);
 		registerModelListeners();
-		graphPanel.repaint();
+		graphPanel.updatePreferredSize();
+		graphScrollpane.invalidate();
+		graphPanel.invalidate();
+		
 		firePropertyChange("graphController", oldValue, graphController);
 	}
 	
-
+	/**
+	 * 
+	 * @return
+	 */
 	protected HashMap<TreeNode, Delegate> getDelegates() {
 		return delegates;
 	}

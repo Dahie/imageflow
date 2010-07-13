@@ -167,25 +167,21 @@ public class GraphPanel extends GPanel {
 							return;
 						}
 				} catch (final Throwable t) { t.printStackTrace(); }
-				// Ein Problem ist aufgetreten
+				// a problem happend
 				e.rejectDrop();
 			}
 
-			// Jemand hat die Art des Drops (Move, Copy, Link)
-			// ge�ndert
 			public void dropActionChanged(final DropTargetDragEvent e) {}
 
 		};
 		final DropTarget dropTarget = new DropTarget(this, dropTargetListener);
 		this.setDropTarget(dropTarget);
 		
-		
 		try {
 			this.iwIcon = ImageIO.read(this.getClass().getResourceAsStream(iwFilePath));
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 
@@ -222,9 +218,8 @@ public class GraphPanel extends GPanel {
 	 */
 	@Override
 	public void paintComponent(final Graphics g) {
-//		super.paint(g);
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		super.paintComponent(g);
+//		System.out.println(getSize());
 
 		final Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(
@@ -234,7 +229,8 @@ public class GraphPanel extends GPanel {
 		if(!getUnitList().isEmpty()) {
 
 			//paint grid
-			paintGrid(g2);
+			if(drawGrid)
+				paintGrid(g2);
 			
 			// paint printable items
 			paintPrintable(g2);
@@ -245,9 +241,9 @@ public class GraphPanel extends GPanel {
 				
 				int margin = 18;
 				for (final Node node : nodeL) {
-					// get units margin, could be lesser than 18 if unit has many pins
-					if (node instanceof UnitElement
-							&& (!drawEdge.getParent().equals(node)) ) {
+					// if node is a UnitElement and not trying to connect to itself
+					if (node instanceof UnitElement	&& (!drawEdge.getParent().equals(node)) ) {
+						// get units margin, could be lesser than 18 if unit has many pins
 						margin = ((UnitElement) node).getPinTolerance();
 						// check if mouse is within this dimensions of a node#
 						if(isWithin2DRange(mouse, node.getOrigin(), node.getDimension(), margin)) {
@@ -377,6 +373,10 @@ public class GraphPanel extends GPanel {
 		return this.nodeL;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ResourceMap getResourceMap() {
 		return Application.getInstance().getContext().getResourceMap(GraphPanel.class);
 	}
@@ -386,15 +386,13 @@ public class GraphPanel extends GPanel {
 	 * @param g
 	 */
 	private void paintGrid(final Graphics g) {
-		if(drawGrid) {
-			g.setColor(new Color(240, 240, 240));
-			for (int x = 0; x < this.getWidth(); x+=GRIDSIZE) {
-				g.drawLine(x, 0, x, getHeight());
-			}
-			for (int y = 0; y < this.getHeight(); y+=GRIDSIZE) {
-				g.drawLine(0, y, getWidth(), y);
-			}	
+		g.setColor(new Color(240, 240, 240));
+		for (int x = 0; x < this.getWidth(); x+=GRIDSIZE) {
+			g.drawLine(x, 0, x, getHeight());
 		}
+		for (int y = 0; y < this.getHeight(); y+=GRIDSIZE) {
+			g.drawLine(0, y, getWidth(), y);
+		}	
 	}
 
 	private void drawCompatbilityIndicator(final Graphics2D g2, final int margin, final Pin pin) {
@@ -548,6 +546,7 @@ public class GraphPanel extends GPanel {
 	 * Replace the current {@link UnitList} with a different one.
 	 * @param units
 	 */
+	@Override
 	public void setNodeL(final GList<Node> units) {
 		super.nodeL = units;
 	}
@@ -583,13 +582,22 @@ public class GraphPanel extends GPanel {
 		}
 	}
 
+	/**
+	 * 
+	 * @param graphController
+	 */
 	public void setGraphController(final GraphController graphController) {
 		this.selection.clear();
 		this.nodeL = graphController.getUnitElements();
 		this.connectionList = graphController.getConnections();
 		this.selection = graphController.getSelections();
+		invalidate();
 	}
 
+	/**
+	 * 
+	 * @param selections
+	 */
 	public void setSelections(final SelectionList selections) {
 		this.selection = selections;
 	}

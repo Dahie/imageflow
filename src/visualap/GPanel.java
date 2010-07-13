@@ -93,14 +93,19 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	 * @param g
 	 */
 	public void paintPrintable(Graphics g) {
-		rect = new Rectangle();
-		for (Node t : getNodeL()) {
-			rect = rect.union(t.paint(g, this));
-		}
-		setPreferredSize(rect.getSize());
+		updatePreferredSize();
 		for (Connection aEdge : connectionList) {
 			paintPrintableConnection(g, aEdge);
 		}
+	}
+
+	public void updatePreferredSize() {
+		rect = new Rectangle();
+		for (Node t : getNodeL()) {
+			rect = rect.union(t.paint(this.getGraphics(), this));
+		}
+		setPreferredSize(rect.getSize());
+		invalidate();
 	}
 
 
@@ -114,7 +119,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
+/*
 		// paint printable items
 		paintPrintable(g);
 		// paint non printable items
@@ -136,7 +141,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			g2.setStroke(dashed);
 			g2.drawRect(rectToDraw.x, rectToDraw.y, 
 					rectToDraw.width - 1, rectToDraw.height - 1);
-		}
+		}*/
 	}
 
 
