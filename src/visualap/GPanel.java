@@ -29,6 +29,7 @@ import ij.IJ;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -69,7 +70,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	boolean cursor=true; // cursor is under control?
 	protected Rectangle rect;
 
-	// handling of selection rectange
+	// handling of selection rectangle
 	protected Rectangle currentRect = null;
 	protected Rectangle rectToDraw = null;
 	protected Rectangle previousRectDrawn = new Rectangle();
@@ -104,8 +105,9 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		for (Node t : getNodeL()) {
 			rect = rect.union(t.paint(this.getGraphics(), this));
 		}
-		setPreferredSize(rect.getSize());
-		invalidate();
+		this.setPreferredSize(rect.getSize());
+		this.getParent().setPreferredSize(rect.getSize());
+		revalidate();
 	}
 
 

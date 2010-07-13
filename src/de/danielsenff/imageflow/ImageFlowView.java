@@ -114,6 +114,9 @@ public class ImageFlowView extends FrameView {
 	private File file;
 
 	private JPanel mainPanel;
+	/**
+	 * Workspace panel
+	 */
 	protected GraphPanel graphPanel;
 	private static JProgressBar progressBar;	
 	private StatusBar statusBar = null;
@@ -128,8 +131,6 @@ public class ImageFlowView extends FrameView {
 
 	private JCheckBoxMenuItem chkBoxDisplayUnit;
 	private JCheckBoxMenuItem chkBoxCollapseIcon;
-	private ScrollPane graphScrollpane;
-	
 	
 	
 	
@@ -304,8 +305,7 @@ public class ImageFlowView extends FrameView {
 				&& getSelections().size() == 1 
 				&& getSelections().get(0) instanceof UnitElement) {
 			boolean isCollapsedIcon = 
-				((UnitElement)getSelections().get(0)).getCompontentSize() == Size.SMALL 
-				? true : false;
+				((UnitElement)getSelections().get(0)).getCompontentSize() == Size.SMALL;
 			this.chkBoxCollapseIcon.setSelected(isCollapsedIcon);
 			
 			boolean isDisplayUnit = ((UnitElement)getSelections().get(0)).isDisplay();
@@ -337,7 +337,7 @@ public class ImageFlowView extends FrameView {
 		if(IJ.isMacOSX())
 			graphPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		
-		graphScrollpane = new ScrollPane();
+		ScrollPane graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
 		graphScrollpane.setPreferredSize(new Dimension(400, 300));
 		new FileDrop( null, graphPanel,  new FileDropListener(graphPanel, getInstance())); // end FileDrop.Listener
@@ -448,8 +448,6 @@ public class ImageFlowView extends FrameView {
 		graphPanel.setGraphController(this.graphController);
 		registerModelListeners();
 		graphPanel.updatePreferredSize();
-		graphScrollpane.invalidate();
-		graphPanel.invalidate();
 		
 		firePropertyChange("graphController", oldValue, graphController);
 	}
@@ -638,7 +636,7 @@ public class ImageFlowView extends FrameView {
 
 
 	/**
-	 * @param showlog the showlog to set
+	 * @param showcode the showlog to set
 	 */
 	public void setShowlog(boolean showcode) {
 		boolean oldValue = showcode;
@@ -946,7 +944,6 @@ public class ImageFlowView extends FrameView {
 			for (final Node t : selectedNodes) {
 				try {
 					t.setSelected(true);
-//					UnitElement clone = (UnitElement)t.clone();
 					// retain a copy, in case he pastes several times
 					clone = t.clone();
 					clone.setLabel(t.getLabel());
