@@ -5,9 +5,9 @@ package de.danielsenff.imageflow.controller;
 
 import java.awt.Point;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,7 +24,6 @@ import org.jdom.output.XMLOutputter;
 
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
-import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
@@ -66,18 +65,13 @@ public class WorkflowXMLBuilder {
 
 
 	/**
-	 * Reads the contents of a flow-XML-file.
-	 * @param file
-	 * @throws FileNotFoundException 
+	 * Reads the contents of a flow-XML input stream.
+	 * @param in S flow-XML input stream
 	 */
-	public void read(File file) throws FileNotFoundException {
-
-		if(!file.exists()) throw new FileNotFoundException("reading failed, the file as not found");
-
-		// setup of units
+	public void read(URL url) {
 		try {
 			SAXBuilder sb = new SAXBuilder();
-			Document doc = sb.build(file);
+			Document doc = sb.build(url);
 
 			Element root = doc.getRootElement();
 
@@ -85,10 +79,9 @@ public class WorkflowXMLBuilder {
 
 			// read units
 			Element unitsElement = root.getChild("Units");
-			readUnits(newNodes, file, unitsElement);
 
-
-
+			readUnits(newNodes, url, unitsElement);
+			
 			// at this point we have all units in the workflow, however no connections
 			// groups are missing their inputs and outputs
 			//
@@ -125,7 +118,7 @@ public class WorkflowXMLBuilder {
 	}
 
 	private void readUnits(HashMap<Integer, UnitElement> newNodes,
-			File file, Element unitsElement) {
+			URL url, Element unitsElement) {
 		if (unitsElement != null) {  
 			List<Element> unitsList = unitsElement.getChildren();
 			Iterator<Element> unitsIterator = unitsList.iterator();
@@ -135,7 +128,7 @@ public class WorkflowXMLBuilder {
 			Node node;
 			while (unitsIterator.hasNext()) { 
 				actualUnitElement = unitsIterator.next();
-				node = readNode(actualUnitElement, file);
+				node = readNode(actualUnitElement, url);
 				getUnitList().add(node);
 			}
 		}
@@ -143,10 +136,10 @@ public class WorkflowXMLBuilder {
 
 	/**
 	 * @param actualUnitElement
-	 * @param file
+	 * @param url
 	 * @return
 	 */
-	protected Node readNode(final Element actualUnitElement, final File file) {
+	protected Node readNode(final Element actualUnitElement, final URL url) {
 		int xPos = Integer.parseInt(actualUnitElement.getChild("XPos").getValue());
 		int yPos = Integer.parseInt(actualUnitElement.getChild("YPos").getValue());
 		Point position = new Point(xPos, yPos);
@@ -161,22 +154,21 @@ public class WorkflowXMLBuilder {
 		Node node;
 		if(actualUnitElement.getChild("UnitID") != null 
 				&& unitDescriptionElement != null) {
-			node = createUnitElement(actualUnitElement, file, position,	label, unitDescriptionElement);
+			node = createUnitElement(actualUnitElement, url, position,	label, unitDescriptionElement);
 		} else {
 			node = createCommentNode(position, label);
 		}
-
 		return node;
 	}
 
 
 	protected Node createUnitElement(final Element actualUnitElement,
-			final File file, 
+			final URL url, 
 			final Point position, 
 			final String label,
 			final Element unitDescriptionElement) {
 		int unitID 	= Integer.parseInt(actualUnitElement.getChild("UnitID").getValue());
-		UnitDescription unitDescription = new UnitDescription(file, unitDescriptionElement);
+		UnitDescription unitDescription = new UnitDescription(url, unitDescriptionElement);
 
 		UnitElement unitElement;
 
@@ -190,7 +182,7 @@ public class WorkflowXMLBuilder {
 				&& externalConnectionsElement != null
 				&& originalConnectionsElement != null) {
 			//create GroupUnit
-			unitElement = readGroup(file, position, label, unitID,
+			unitElement = readGroup(url, position, label, unitID,
 					unitDescription, unitsElement,
 					internalConnectionsElement, 
 					externalConnectionsElement,
@@ -218,7 +210,7 @@ public class WorkflowXMLBuilder {
 		return unitElement;
 	}
 
-	protected UnitElement readGroup(final File file, final Point position,
+	protected UnitElement readGroup(final URL url, final Point position,
 			String label, int unitID, UnitDescription unitDescription,
 			Element unitsElement, Element internalConnectionsElement,
 			Element externalConnectionsElement,
@@ -249,7 +241,7 @@ public class WorkflowXMLBuilder {
 			// loop over all Units
 			while (unitsIterator.hasNext()) { 
 				Element actualEmbeddedUnitElement = unitsIterator.next();
-				Node embeddedNode = readNode(actualEmbeddedUnitElement, file);
+				Node embeddedNode = readNode(actualEmbeddedUnitElement, url);
 				((GroupUnitElement)unitElement).getNodes().add(embeddedNode);
 				if(embeddedNode instanceof UnitElement) {
 					System.out.println("put in embeddedNodes: " + embeddedNode 

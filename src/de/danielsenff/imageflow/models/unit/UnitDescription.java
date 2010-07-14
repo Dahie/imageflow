@@ -3,6 +3,8 @@ package de.danielsenff.imageflow.models.unit;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +22,7 @@ import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 import de.danielsenff.imageflow.utils.Tools;
+
 
 /**
  * UnitDescription reads the single pieces a UnitElement is made of from an
@@ -52,18 +55,16 @@ public class UnitDescription implements NodeDescription {
 	protected int numOutputs;
 	protected Output[] output;
 	protected boolean isDisplayUnit;
-	protected BufferedImage icon;
-	protected File iconFile;
+	protected BufferedImage icon = null;
+	protected URL iconURL;
 	
 	
-	public UnitDescription(File unitXML) {
-		this(unitXML, Tools.getXMLRoot(unitXML));
+	public UnitDescription(URL url) {
+		this(url, Tools.getXMLRoot(url));
 	}
 	
-	
-	public UnitDescription(File unitXML, Element root) {
+	public UnitDescription(URL url, Element root) {
 		try {
-
 			// read general infos about this unit
 			Element elementGeneral = root.getChild("General");
 			unitName = elementGeneral.getChild("UnitName").getValue();
@@ -75,28 +76,30 @@ public class UnitDescription implements NodeDescription {
 			
 			try {
 				color = Color.decode(colorString);
-		    } catch (NumberFormatException e) {
-		          System.out.println("Wrong color string ");
-		    }
-		    if (color == null)
-		    	color = new Color(argbDefault);
+			} catch (NumberFormatException e) {
+				System.out.println("Wrong color string ");
+			}
 
-		    if(elementGeneral.getChild("IconSize") != null) {
-		    	componentSizeString = elementGeneral.getChild("IconSize").getValue();
-			    componentSize = NodeIcon.getSizeFromString(componentSizeString);
-		    }
+			if (color == null)
+				color = new Color(argbDefault);
+
+			if(elementGeneral.getChild("IconSize") != null) {
+				componentSizeString = elementGeneral.getChild("IconSize").getValue();
+				componentSize = NodeIcon.getSizeFromString(componentSizeString);
+			}
 		    
 			imageJSyntax = elementGeneral.getChild("ImageJSyntax").getValue() + "\n";
-			
-			if(pathToIcon.length() > 0) {
-				String path = DelegatesController.getUnitIconFolder() + File.separator+ pathToIcon;
-				iconFile = new File(path);	
-			} else {
-				// search for unitname.png in same directory as xml
-				iconFile = new File(unitXML.getAbsolutePath().replace(".xml", ".png"));
+
+			try {
+				// get icon
+				iconURL = getIconURL(url, pathToIcon);
+				icon = ImageIO.read(iconURL.openStream());
 			}
-			if(iconFile.exists())
-				this.icon = ImageIO.read(iconFile);
+			catch (Exception e) {
+				// no exception handling is needed here, since it is often
+				// the case that icons are missing. Most of the units are
+				// not even intended to have icons.
+			}
 			
 			// parameters
 			Element parametersElement = root.getChild("Parameters");
@@ -122,7 +125,7 @@ public class UnitDescription implements NodeDescription {
 			System.err.println("Invalid XML-File!");
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
 					"There has been a problem loading a XML unit description." +'\n' 
-					+ "The error ocures in " + unitXML.getName() + "." + '\n'
+					+ "The error ocures in " + url + "." + '\n'
 					+ "The programm start will continue without this unit."
 					,
 					"Missing connections", 
@@ -283,6 +286,28 @@ public class UnitDescription implements NodeDescription {
 			throw new Exception("invalid datatype");
 	}
 
+	/**
+	 * Creates a new URL based on a given context URL.
+	 * If a path is given, the new URL is dependent of the protocol
+	 * of the context URL. If not, the context URL with an extension
+	 * replacement from "xml" to "png" is returned.
+	 */
+	private URL getIconURL(URL context, String relativeIconPath) throws MalformedURLException {
+		String path;
+		if(relativeIconPath != null && relativeIconPath.length() > 0) {
+			String iconFolder = DelegatesController.getUnitIconFolder();
+
+			if (context.getProtocol().equals("jar"))
+				path = "/" + iconFolder + "/" + relativeIconPath;
+			else
+				path = System.getProperty("user.dir") + File.separator 
+					+ iconFolder + File.separator + relativeIconPath;
+		} else {
+			// search for unitname.png in same directory as xml
+			path = context.getPath().replace(".xml", ".png");
+		}
+		return new URL(context, path);
+	}
 
 	public String getHelpString() {
 		return helpString;
@@ -297,7 +322,6 @@ public class UnitDescription implements NodeDescription {
 		return isDisplayUnit;
 	}
 
-	
 	public boolean hasInputs() {
 		return this.input != null && this.input.length > 0;
 	}
@@ -308,6 +332,15 @@ public class UnitDescription implements NodeDescription {
 	
 	public boolean hasParameters() {
 		return this.para != null && this.para.length > 0;
+	}
+	
+	/**
+	 * Returns the previously read in icon
+	 * or null if no icon was found
+	 * @return 
+	 */
+	public BufferedImage  getUnitIcon() {
+		return icon;
 	}
 
 	public class Para {

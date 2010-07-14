@@ -99,8 +99,7 @@ public class UnitFactory {
 
 		if(unitDescription.icon != null) {
 			unitElement.setIcon(unitDescription.icon);
-			unitElement.setIconFile(unitDescription.iconFile);
-			unitElement.setIconPath(unitDescription.pathToIcon);
+			unitElement.setIconURL(unitDescription.iconURL);
 		}
 
 		if(unitDescription.componentSize != null)

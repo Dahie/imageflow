@@ -1,6 +1,8 @@
 package de.danielsenff.imageflow.utils;
 
-import java.io.File;
+import java.net.URL;
+import java.net.MalformedURLException;
+import java.io.InputStream;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -23,18 +25,18 @@ public class Tools {
         return result.toString();
     }
 	
-	public static Element getXMLRoot(File file) {
+	public static Element getXMLRoot(URL url) {
 		try {
 //			System.out.println("Reading xml-description");
 			SAXBuilder sb = new SAXBuilder();
-			Document doc = sb.build(file);
+			Document doc = sb.build(url);
 
 			Element root = doc.getRootElement();
 			
 			return root;
 		}
 		catch (Exception e) {
-			System.err.println("Invalid XML-File!");
+			System.err.println("Invalid XML document!");
 			e.printStackTrace();
 		}
 		return null;
