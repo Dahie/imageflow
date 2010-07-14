@@ -3,16 +3,11 @@ package de.danielsenff.imageflow.models.unit;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.net.MalformedURLException;
-import java.io.FileInputStream;
-
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -97,17 +92,13 @@ public class UnitDescription {
 
 			try {
 				// get icon
-				InputStream iconStream;
-				URL imgURL = getIconURL(url, pathToIcon);
-				iconStream = imgURL.openStream();
-
-				icon = ImageIO.read(iconStream);
-				iconURL = imgURL;
+				iconURL = getIconURL(url, pathToIcon);
+				icon = ImageIO.read(iconURL.openStream());
 			}
 			catch (Exception e) {
 				// no exception handling is needed here, since it is often
 				// the case that icons are missing. Most of the units are
-				// even not intended to have icons.
+				// not even intended to have icons.
 			}
 			
 			// parameters
@@ -305,12 +296,12 @@ public class UnitDescription {
 		String path;
 		if(relativeIconPath != null && relativeIconPath.length() > 0) {
 			String iconFolder = DelegatesController.getUnitIconFolder();
-			String unitFolder = DelegatesController.getUnitFolder();
 
 			if (context.getProtocol().equals("jar"))
 				path = "/" + iconFolder + "/" + relativeIconPath;
 			else
-				path = iconFolder + File.separator + relativeIconPath;
+				path = System.getProperty("user.dir") + File.separator 
+					+ iconFolder + File.separator + relativeIconPath;
 		} else {
 			// search for unitname.png in same directory as xml
 			path = context.getPath().replace(".xml", ".png");
