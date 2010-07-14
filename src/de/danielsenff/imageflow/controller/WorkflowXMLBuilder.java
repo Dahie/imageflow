@@ -5,10 +5,8 @@ package de.danielsenff.imageflow.controller;
 
 import java.awt.Point;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,7 +24,6 @@ import org.jdom.output.XMLOutputter;
 
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
-import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;

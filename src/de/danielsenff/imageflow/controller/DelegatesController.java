@@ -1,24 +1,21 @@
 package de.danielsenff.imageflow.controller;
 
-import java.net.URL;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.net.MalformedURLException;
-
 import java.io.File;
 import java.io.IOException;
-
-import java.util.HashMap;
-import java.lang.RuntimeException;
-import java.util.jar.JarFile;
-import java.util.jar.JarEntry;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Dictionary;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Comparator;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -81,8 +78,7 @@ public class DelegatesController {
 	private DelegatesController() {
 		delegates = new HashMap<TreeNode, Delegate>();
 
-		DefaultMutableTreeNode top =
-			new DefaultMutableTreeNode("Node delegates");
+		DefaultMutableTreeNode top = new DefaultMutableTreeNode("Node delegates");
 		delegatesModel = new DefaultTreeModel(top);
 		JMenu insertMenu = new JMenu("Insert unit");
 
@@ -91,7 +87,6 @@ public class DelegatesController {
 			// try to load xml units from surrounding jar
 			unitsLocation = getClassResourceBase();
 			setResourcesBase(DelegatesController.class.getClassLoader().getResource(unitsLocation));
-
 			if (resourcesBase != null && resourcesBase.openConnection().getContentLength() > 0) {
 				readDelegatesFromURL(top, insertMenu, resourcesBase);
 			} else {
@@ -139,6 +134,8 @@ public class DelegatesController {
 			folder = new File(url.getPath());
 		}
 		File[] listOfFiles = folder.listFiles();
+		//		Vector<File> listOfFiles = new Vector<File>();
+		//		listOfFiles.addAll(folder.listFiles());
 
 		for (int i = 0; i < listOfFiles.length; i++) {
 			File file = listOfFiles[i];
@@ -160,7 +157,7 @@ public class DelegatesController {
 	}
 
 	/**
-	 * Reads contents of a jar file and manages the trversal of the file tree.
+	 * Reads contents of a jar file and manages the traversal of the file tree.
 	 */
 	private void readDelegatesFromJar(MutableTreeNode node, JMenu menu, URL url)
 	throws MalformedURLException {
@@ -218,7 +215,7 @@ public class DelegatesController {
 	}
 
 	/**
-	 * Goes through a given resource and creates menu and tree items when neccecary.
+	 * Goes through a given resource and creates menu and tree items when necessary.
 	 */
 	private void reflectJarUnitsInMenu(Dictionary<String, UnitDelegateInfo> entries, MutableTreeNode node,
 			JMenu menu, String resource, String basePath, URL url) {
@@ -322,8 +319,13 @@ public class DelegatesController {
 		menu.add(item);
 	}
 
+	/**
+	 * Returns true if the checked file file has the ,xml-extension.
+	 * @param file
+	 * @return
+	 */
 	private boolean isXML(File file) {
-		return file.getName().toLowerCase().contains("xml");
+		return file.getName().toLowerCase().contains(".xml");
 	}
 
 	/**
@@ -354,7 +356,7 @@ public class DelegatesController {
 
 
 	/**
-	 * Gets the resource base path of the initially loaded units.
+	 * Gets the resource base url of the initially loaded units.
 	 * This could be a folder or a jar file.
 	 * @return 
 	 */
@@ -367,7 +369,12 @@ public class DelegatesController {
 	 * removing its relative parts.
 	 */
 	private void setResourcesBase(URL path) throws MalformedURLException {
-		resourcesBase = new URL(path, "/");
+		String protocol = path.getProtocol();
+		if (protocol.equals("file")) {
+			resourcesBase = new URL(path, System.getProperty("user.dir") + File.separator + getUnitFolder());
+		} else if (protocol.equals("jar")) {
+			resourcesBase = new URL(path, "/");
+		}
 	}
 
 	/**

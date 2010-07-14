@@ -49,10 +49,10 @@
 			<fileset dir="${icons.dir}" />
 		</copy>
 
-		<mkdir dir="${bin.dir}/doc" />
-		<copy todir="${bin.dir}/doc">
+		<!--<mkdir dir="${release.dir}/doc" />
+		<copy todir="${release.dir}/executable/doc">
 				<fileset dir="${doc.dir}" />
-		</copy>
+		</copy>-->
 
 		<mkdir dir="${bin.dir}/xml_flows" />
 		<copy todir="${bin.dir}/xml_flows">

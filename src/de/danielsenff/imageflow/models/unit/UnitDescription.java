@@ -20,7 +20,6 @@ import javax.swing.JOptionPane;
 import org.jdom.Element;
 
 import de.danielsenff.imageflow.ImageFlow;
-import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
@@ -107,7 +106,7 @@ public class UnitDescription {
 			}
 			catch (Exception e) {
 				// no exception handling is needed here, since it is often
-				// the case that icons are missing. Most of the untis are
+				// the case that icons are missing. Most of the units are
 				// even not intended to have icons.
 			}
 			
@@ -299,7 +298,7 @@ public class UnitDescription {
 	/**
 	 * Creates a new URL based on a given context URL.
 	 * If a path is given, the new URL is dependent of the protocol
-	 * of the context URL. If not, the context URL with an extesion
+	 * of the context URL. If not, the context URL with an extension
 	 * replacement from "xml" to "png" is returned.
 	 */
 	private URL getIconURL(URL context, String relativeIconPath) throws MalformedURLException {
@@ -335,6 +334,7 @@ public class UnitDescription {
 	/**
 	 * Returns the prevously read in icon
 	 * or null if no icon was found
+	 * @return 
 	 */
 	public BufferedImage  getUnitIcon() {
 		return icon;
