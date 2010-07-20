@@ -24,11 +24,11 @@ public class MacroFlowRunnerTests {
 		UnitElement filter3 = (UnitElement) units.get(3);
 		UnitElement source2 = (UnitElement) units.get(4);
 		
-		MacroFlowRunner.sortList(units);
+		UnitList sortedList = MacroFlowRunner.sortList(units);
 		
-		assertEquals("source on correct position 0", source1, units.get(0));
-		assertEquals("source on correct position 1", filter1, units.get(1));
-		assertEquals("source on correct position 2", filter2, units.get(2));
+		assertEquals("source on correct position 0", source1, sortedList.get(0));
+		assertEquals("source on correct position 1", filter1, sortedList.get(1));
+		assertEquals("source on correct position 2", filter2, sortedList.get(2));
 		
 	}
 

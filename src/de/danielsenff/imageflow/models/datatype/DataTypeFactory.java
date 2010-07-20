@@ -256,12 +256,13 @@ public class DataTypeFactory {
 			int ownImageBitDepth = getImageBitDepth();
 
 			if(ownImageBitDepth != -1 && foreignImageBitDepth != -1) {
-				/*System.out.println(this);
-				System.out.println(ownImageBitDepth + " vs " + foreignImageBitDepth);*/
 				int remain = ownImageBitDepth&foreignImageBitDepth;
+//				System.out.println(ownImageBitDepth + " vs " + foreignImageBitDepth + " remains " + remain);
 
-				// if 0 -> it doesn'T fit
-				// if value, we got a match
+				/*
+				 *  if 0 -> it doesn't fit
+				 *  if value, we got a match
+				 */
 
 				return remain != 0;	
 			}

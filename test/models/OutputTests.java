@@ -233,18 +233,18 @@ public class OutputTests {
 
 		Connection conn1 = new Connection(unit1, 1, unit2, 1);
 		conn1.connect();
-		
 		DataTypeFactory.Image o1dT = ((DataTypeFactory.Image)output1.getDataType());
 		assertTrue("travers from DOES_32", 
 				o1dT.isImageBitDepthCompatible(PlugInFilter.DOES_32));
-		assertFalse("travers from DOES_32", 
+		assertTrue("travers from DOES_16", 
 				o1dT.isImageBitDepthCompatible(PlugInFilter.DOES_16));
 		
 		DataTypeFactory.Image o2dT = ((DataTypeFactory.Image)output2.getDataType());
 		assertTrue("travers from DOES_32 via DOES_ALL to -1",
 				o2dT.isImageBitDepthCompatible(PlugInFilter.DOES_32));
 		
-		assertFalse("travers from DOES_32 via DOES_ALL to -1", 
+		// if the source is DOES_ALL we can't say for sure what comes, but we have to accept
+		assertTrue("travers from DOES_32 via DOES_ALL to -1", 
 				o2dT.isImageBitDepthCompatible(PlugInFilter.DOES_16));
 
 	}

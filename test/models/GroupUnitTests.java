@@ -1,8 +1,11 @@
 package models;
 
+import static org.junit.Assert.*;
+
 import java.awt.Point;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
@@ -11,7 +14,7 @@ import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
-public class GroupUnitTests extends TestCase {
+public class GroupUnitTests {
 
 	
 	private GroupUnitElement createGroupUnit() {
@@ -53,7 +56,7 @@ public class GroupUnitTests extends TestCase {
 	}
 	
 	
-	public void testGroupCreation() {
+	@Test public void testGroupCreation() {
 		GroupUnitElement group = createGroupUnit();
 		
 		assertEquals("nr in group", 2, group.getGroupSize());
@@ -62,7 +65,7 @@ public class GroupUnitTests extends TestCase {
 	/**
 	 * a Group is destroyed and the single parts are restored
 	 */
-	public void testGroupExplosion() {
+	@Test public void testGroupExplosion() {
 		GroupUnitElement group = createGroupUnit();
 		
 		
@@ -74,7 +77,7 @@ public class GroupUnitTests extends TestCase {
 	}
 	
 	
-	public void testProxyInputs() {
+	@Test public void testProxyInputs() {
 		UnitElement unit1 = UnitFactoryExt.createAddNoiseUnit();
 		UnitElement unit2 = UnitFactoryExt.createFindEdgesUnit();
 		UnitElement unit3 = new UnitElement("name", "imagej");
@@ -96,8 +99,5 @@ public class GroupUnitTests extends TestCase {
 		assertEquals(unit1, conn_u1pu2p.getFromUnit());
 		assertEquals(unit2, conn_u1pu2p.getToUnit());
 		assertEquals(unit2.getInput(0), conn_u1pu2p.getInput());
-		
-		
 	}
-
 }
