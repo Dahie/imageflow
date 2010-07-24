@@ -73,7 +73,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 		imageFlowView = new ImageFlowView(this);
 		show(imageFlowView);
 		addWindow(imageFlowView.getFrame());
-		imageFlowView.getFrame().setSize(800, 600);
 	}
 
 	@Override
