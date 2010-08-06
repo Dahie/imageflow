@@ -109,7 +109,7 @@ public class DelegatesController {
 
 	private void readDelegatesFromURL(MutableTreeNode node, JMenu menu, URL url)
 	throws RuntimeException, MalformedURLException {
-		UnitXMLLoader loader = UnitXMLLoaderFactory.createUnitXMLLoaderByProtocol(this, url.getProtocol()); 
+		UnitDelegateLoader loader = UnitXMLLoaderFactory.createUnitXMLLoaderByProtocol(this, url.getProtocol()); 
 		loader.readDelegates(node, menu, url);
 	}
 	

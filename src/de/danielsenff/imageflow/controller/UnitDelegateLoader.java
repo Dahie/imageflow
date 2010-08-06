@@ -11,7 +11,14 @@ import javax.swing.tree.MutableTreeNode;
  * @author dahie
  *
  */
-public interface UnitXMLLoader {
+public interface UnitDelegateLoader {
 
+	/**
+	 * Read UnitDelegates from some source specified by the Implemantation class.
+	 * @param node
+	 * @param menu
+	 * @param url
+	 * @throws MalformedURLException
+	 */
 	void readDelegates(MutableTreeNode node, JMenu menu, URL url) throws MalformedURLException;
 }

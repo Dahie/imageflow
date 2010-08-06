@@ -12,7 +12,7 @@ public class UnitXMLLoaderFactory {
 	 * @param controller
 	 * @return
 	 */
-	public static UnitXMLLoader createFolderUnitXMLLoader(DelegatesController controller) {
+	public static UnitDelegateLoader createFolderUnitXMLLoader(DelegatesController controller) {
 		return new FolderUnitXMLLoader(controller);
 	}
 	
@@ -21,17 +21,17 @@ public class UnitXMLLoaderFactory {
 	 * @param controller
 	 * @return
 	 */
-	public static UnitXMLLoader createJarUnitXMLLoader(DelegatesController controller) {
+	public static UnitDelegateLoader createJarUnitXMLLoader(DelegatesController controller) {
 		return new JarUnitXMLLoader(controller);
 	}
 
 	/**
-	 * Creates the suitable {@link UnitXMLLoader} for the given protocol.
+	 * Creates the suitable {@link UnitDelegateLoader} for the given protocol.
 	 * @param controller
 	 * @param protocol
 	 * @return
 	 */
-	public static UnitXMLLoader createUnitXMLLoaderByProtocol(DelegatesController controller, 
+	public static UnitDelegateLoader createUnitXMLLoaderByProtocol(DelegatesController controller, 
 			final String protocol) {
 		if (protocol.equals("file")) {
 			return UnitXMLLoaderFactory.createFolderUnitXMLLoader(controller);

@@ -9,7 +9,7 @@ import javax.swing.JMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
-public class FolderUnitXMLLoader implements UnitXMLLoader {
+public class FolderUnitXMLLoader implements UnitDelegateLoader {
 
 	private DelegatesController delegatesController;
 	

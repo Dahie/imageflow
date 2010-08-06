@@ -22,7 +22,7 @@ import javax.swing.tree.MutableTreeNode;
  * @author dahie
  *
  */
-public class JarUnitXMLLoader implements UnitXMLLoader {
+public class JarUnitXMLLoader implements UnitDelegateLoader {
 
 	private DelegatesController delegatesController;
 	
