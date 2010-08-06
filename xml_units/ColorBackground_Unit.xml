@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Color Background unit element -->
+
+<UnitDescription>
+
+<General>
+  <UnitName>Color Background</UnitName>
+  <PathToIcon></PathToIcon>
+  <ImageJSyntax>newImage("Background", "RGB White", PARA_INTEGER_1, PARA_INTEGER_2, 1);
+  	setForegroundColor(ATTRIBUTE_INPUT_1_PARAMETER_3, ATTRIBUTE_INPUT_2_PARAMETER_4, ATTRIBUTE_INPUT_3_PARAMETER_5);
+  	floodFill(1, 1);
+  </ImageJSyntax>
+  <Color>0x9cba92</Color>
+  <HelpString>Creates a new Background of defined size</HelpString>
+
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Width</Name>
+  		<DataType>integer</DataType>
+  		<Value>256</Value>
+  		<HelpString>Width of the background</HelpString>
+  	</Parameter>
+
+  	<Parameter>
+  		<Name>Height</Name>
+  		<DataType>integer</DataType>
+  		<Value>256</Value>
+  		<HelpString>Height of the background</HelpString>
+  	</Parameter>
+  	
+  	<Parameter>
+  		<Name>Red value</Name>
+  		<DataType>integer</DataType>
+  		<Value>256</Value>
+  		<HelpString>Red color value of the new image.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Green value</Name>
+  		<DataType>integer</DataType>
+  		<Value>256</Value>
+  		<HelpString>Green color value of the new image.</HelpString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Blue value</Name>
+  		<DataType>integer</DataType>
+  		<Value>256</Value>
+  		<HelpString>Blue color value of the new image.</HelpString>
+  	</Parameter>
+
+	
+</Parameters>
+
+<Inputs>
+	<Input>
+		<Name>Red value</Name>
+		<ShortName>R</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput></Input>
+	<Input>
+		<Name>Green value</Name>
+		<ShortName>G</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput></Input>
+	<Input>
+		<Name>Blue value</Name>
+		<ShortName>B</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput></Input>
+
+</Inputs>
+
+<Outputs>
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>
+		<DataType>Image</DataType>
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
