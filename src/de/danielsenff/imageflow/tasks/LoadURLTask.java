@@ -56,12 +56,12 @@ public abstract class LoadURLTask<T, V> extends Task<T, V> {
 	 */
 	@Override
 	protected void succeeded(final T fileContents) {
-		view.setFile(new File("New Document"));
-	        view.setGraphController((GraphController)fileContents);
+		view.setFile(new File(this.url.getFile()));
+		view.setGraphController((GraphController)fileContents);
 		ImageFlowView.getProgressBar().setIndeterminate(false);
 		ImageFlowView.getProgressBar().setVisible(false);
 		//textArea.setText(fileContents);
-	        view.setModified(false);
+		view.setModified(false);
 	}
 
 	/**
@@ -72,27 +72,27 @@ public abstract class LoadURLTask<T, V> extends Task<T, V> {
 		return url;
 	}
 
-    @Override
-    protected void cancelled() {
-	ImageFlowView.getProgressBar().setIndeterminate(false);
-	ImageFlowView.getProgressBar().setVisible(false);
-	super.cancelled();
-    }
+	@Override
+	protected void cancelled() {
+		ImageFlowView.getProgressBar().setIndeterminate(false);
+		ImageFlowView.getProgressBar().setVisible(false);
+		super.cancelled();
+	}
 
 	/* Called on the EDT if doInBackground fails because
-     * an uncaught exception is thrown.  We show an error
-     * dialog here.  The dialog is configured with resources
-     * loaded from this Tasks's ResourceMap.
-     */
-    @Override
-    protected void failed(final Throwable e) {
-        logger.log(Level.WARNING, "couldn't load " + getURL(), e);
-        final String msg = getResourceMap().getString("loadFailedMessage", getURL());
-        final String title = getResourceMap().getString("loadFailedTitle");
-        final int type = JOptionPane.ERROR_MESSAGE;
-        ImageFlowView.getProgressBar().setIndeterminate(false);
-	ImageFlowView.getProgressBar().setVisible(false);
-        JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), msg, title, type);
-    }
+	 * an uncaught exception is thrown.  We show an error
+	 * dialog here.  The dialog is configured with resources
+	 * loaded from this Tasks's ResourceMap.
+	 */
+	@Override
+	protected void failed(final Throwable e) {
+		logger.log(Level.WARNING, "couldn't load " + getURL(), e);
+		final String msg = getResourceMap().getString("loadFailedMessage", getURL());
+		final String title = getResourceMap().getString("loadFailedTitle");
+		final int type = JOptionPane.ERROR_MESSAGE;
+		ImageFlowView.getProgressBar().setIndeterminate(false);
+		ImageFlowView.getProgressBar().setVisible(false);
+		JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), msg, title, type);
+	}
 
 }

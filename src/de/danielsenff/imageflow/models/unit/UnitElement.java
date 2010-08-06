@@ -985,6 +985,10 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	public boolean isDisplay() {
 		return this.display;
 	}
+	
+	public void toggleDisplay() {
+		setDisplay(!isDisplay());
+	}
 
 	/**
 	 * Returns true if any {@link Output} connects to a unit that is set as displayable.
@@ -1007,8 +1011,6 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		}
 		return false;
 	}
-
-
 
 
 }

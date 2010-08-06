@@ -25,6 +25,9 @@ import de.danielsenff.imageflow.ImageFlowView;
 public abstract class SaveFileTask<T, V> extends Task<T, V> {
 	
 	protected boolean modified = false;
+    /**
+     * File to which the workflow is saved and that is set in the view.
+     */
     protected final File file;
     protected ImageFlowView view;
     private static final Logger logger = Logger.getLogger(ImageFlowView.class.getName());

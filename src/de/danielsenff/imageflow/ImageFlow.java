@@ -78,7 +78,7 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	@Override
 	protected void shutdown() {
 		// TODO clean imagej shutdown
-		//imageJ.
+		
 		super.shutdown();
 	}
 	

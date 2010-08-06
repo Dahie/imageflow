@@ -66,7 +66,7 @@ public class WorkflowXMLBuilder {
 
 	/**
 	 * Reads the contents of a flow-XML input stream.
-	 * @param in S flow-XML input stream
+	 * @param url 
 	 */
 	public void read(URL url) {
 		try {
@@ -80,6 +80,7 @@ public class WorkflowXMLBuilder {
 			// read units
 			Element unitsElement = root.getChild("Units");
 
+			// TODO newNodes can be removed
 			readUnits(newNodes, url, unitsElement);
 			
 			// at this point we have all units in the workflow, however no connections

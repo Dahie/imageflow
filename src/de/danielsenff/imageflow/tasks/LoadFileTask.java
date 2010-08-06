@@ -32,12 +32,13 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
     protected final File file;
     protected ImageFlowView view;
 	
-    /* Construct the LoadFileTask object.  The constructor
+    /** Construct the LoadFileTask object.  The constructor
      * will run on the EDT, so we capture a reference to the 
      * File to be loaded here.  To keep things simple, the 
      * resources for this Task are specified to be in the same 
      * ResourceMap as the DocumentEditorView class's resources.
      * They're defined in resources/DocumentEditorView.properties.
+     * @param file 
      */
     public LoadFileTask(final File file) {
     	super(ImageFlow.getApplication());

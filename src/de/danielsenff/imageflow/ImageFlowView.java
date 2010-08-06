@@ -1,26 +1,21 @@
 package de.danielsenff.imageflow;
 
 import ij.IJ;
+import ij.ImageJ;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.Point;
 import java.awt.ScrollPane;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
@@ -42,13 +37,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
-import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-import javax.swing.undo.UndoManager;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
@@ -70,9 +62,9 @@ import de.danielsenff.imageflow.gui.InsertUnitMenu;
 import de.danielsenff.imageflow.gui.MacOSAboutHandler;
 import de.danielsenff.imageflow.gui.StatusBar;
 import de.danielsenff.imageflow.models.Delegate;
+import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
-import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.Selectable;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.SelectionListener;
@@ -83,7 +75,6 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
-import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
@@ -178,7 +169,7 @@ public class ImageFlowView extends FrameView {
 		
 		// register listeners
 		registerModelListeners();
-//		getApplication().addExitListener(new ConfirmExit());
+		getApplication().addExitListener(new ConfirmExit());
 	}
 	
 
@@ -553,8 +544,7 @@ public class ImageFlowView extends FrameView {
     public void setFile(final File file) {
     	File oldValue = this.file;
     	this.file = file;
-    	String appId = getResourceString("Application.id");
-    	getFrame().setTitle(file.getName() + " - " + appId);
+    	setTitleFilename(this.file.getName());
     	firePropertyChange("file", oldValue, this.file);	
     }
     
@@ -580,6 +570,14 @@ public class ImageFlowView extends FrameView {
         return this.selected;
     }
    
+    /**
+     * Set filename displayed in the the frame title.
+     * @param filename
+     */
+    public void setTitleFilename(String filename) {
+    	String appId = getResourceString("Application.id");
+    	getFrame().setTitle(filename + " - " + appId);
+    }
     
     /**
      * Sets the modified flag.
@@ -588,13 +586,11 @@ public class ImageFlowView extends FrameView {
     public void setModified(final boolean modified) {
         boolean oldValue = this.modified;
         this.modified = modified;
-        // on program start, file may not be initialised
-        if(file != null){
-        	String appId = getResourceString("Application.id");
-            String changed = modified ? "*" : "";
-        	getFrame().setTitle(file.getName() + changed +" - " + appId);	
+        // on program start, file may not be initialized
+        if(getFile() != null){
+        	String changed = modified ? "*" : "";
+        	setTitleFilename(getFile().getName() + changed);
         }
-        
         
         firePropertyChange("modified", oldValue, this.modified);
     }
@@ -652,7 +648,7 @@ public class ImageFlowView extends FrameView {
 	 * @return
 	 */
 	public File getFile() {
-		return file;
+		return this.file;
 	}
 	
 
@@ -671,6 +667,7 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * convenient Example workflow
 	 * @return 
+	 * @throws MalformedURLException 
 	 */
 	@Action public LoadFlowGraphTask exampleFlow1() throws MalformedURLException {
 		return new LoadFlowGraphTask(
@@ -680,6 +677,7 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * convenient Example workflow
 	 * @return 
+	 * @throws MalformedURLException 
 	 */
 	@Action public LoadFlowGraphTask exampleFlow2() throws MalformedURLException {
 		return new LoadFlowGraphTask(
@@ -689,6 +687,7 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * convenient Example workflow
 	 * @return 
+	 * @throws MalformedURLException 
 	 */
 	@Action public LoadFlowGraphTask exampleFlow3() throws MalformedURLException {
 		return new LoadFlowGraphTask(
@@ -772,6 +771,7 @@ public class ImageFlowView extends FrameView {
 	 * Import workflow from XML. 
 	 * The current workflow will remain and the second workflow will be added without replacement
 	 * @return
+	 * @throws MalformedURLException 
 	 */
 	@Action public ImportGraphTask importGraph() throws MalformedURLException {
 	    final JFileChooser fc = new JFileChooser();
@@ -782,22 +782,20 @@ public class ImageFlowView extends FrameView {
 	    ImportGraphTask task = null;
 	    final int option = fc.showOpenDialog(null);
 	    if (option == JFileChooser.APPROVE_OPTION) {
-		task = new ImportGraphTask(fc.getSelectedFile().toURL());
+	    	task = new ImportGraphTask(fc.getSelectedFile().toURI().toURL());
 	    }
 	    return task;
 	}
 	
 	/**
 	 * Action that toggles the display-status of a {@link UnitElement}
-	 * TODO use interface displayable
 	 */
 	@Action(enabledProperty = "selected")
 	public void setDisplayUnit() {
 		for (Object selectedElement : getSelections()) {
-			if(selectedElement instanceof UnitElement) {
-				final UnitElement unit = (UnitElement) selectedElement;
-				boolean newDisplayStatus = unit.isDisplay() ? false : true;
-				unit.setDisplay(newDisplayStatus);	
+			if(selectedElement instanceof Displayable) {
+				final Displayable node = (Displayable) selectedElement;
+				node.toggleDisplay();
 			}
 		}
 		graphPanel.repaint();
@@ -998,6 +996,7 @@ public class ImageFlowView extends FrameView {
 	/**
 	 * Open a workflow file from hard drive.
 	 * @return
+	 * @throws MalformedURLException 
 	 */
 	@Action public LoadFlowGraphTask open() throws MalformedURLException {
 		if(isModified()) {
@@ -1017,8 +1016,8 @@ public class ImageFlowView extends FrameView {
 		LoadFlowGraphTask task = null;
 		final int option = fc.showOpenDialog(null);
 		if (option == JFileChooser.APPROVE_OPTION) {
-			this.setModified(false);
-			task = new LoadFlowGraphTask(fc.getSelectedFile().toURL());
+			File file = fc.getSelectedFile();
+			task = new LoadFlowGraphTask(file.toURI().toURL());
 		}
 		return task;			
 	}
@@ -1040,8 +1039,7 @@ public class ImageFlowView extends FrameView {
      * is executed when the "save" Action's actionPerformed method runs.
      * The SaveFlowGraphTask is responsible for updating the GUI after it
      * has successfully completed saving the file.
-
-     * 
+	 * @return 
      * @see #getFile
      */
     @Action(enabledProperty = "modified")
@@ -1169,8 +1167,8 @@ public class ImageFlowView extends FrameView {
     }
     
     /**
-     * Simulates the cloning if Workflows.
-     * This is convinient for work on the {@link MacroFlowRunner} and
+     * Simulates the cloning of workflows.
+     * This is convenient for work on the {@link MacroFlowRunner} and
      * the {@link MacroGenerator}, because they use only a cloned 
      * version of the actual workflow. This simulates the cloning to 
      * check if the clone is identical.
@@ -1335,6 +1333,11 @@ public class ImageFlowView extends FrameView {
                 	return false;
                 }  
             }
+            
+            System.out.println("shutdown, please");
+    		if (ImageJ.getWindows().length > 0) {
+    			System.out.println("there are windows open");
+    		}
             return true;
         }
         public void willExit(EventObject e) { }

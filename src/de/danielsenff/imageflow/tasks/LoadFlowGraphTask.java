@@ -1,9 +1,9 @@
 package de.danielsenff.imageflow.tasks;
 
 
-import java.net.URL;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -30,7 +30,7 @@ public class LoadFlowGraphTask extends LoadURLTask<GraphController, Void> {
 	public LoadFlowGraphTask(final URL url) {
 		super(url);
 	}
-
+	
     /**
      * If this task is cancelled before the entire file has been
      * read, null is returned.
@@ -47,7 +47,7 @@ public class LoadFlowGraphTask extends LoadURLTask<GraphController, Void> {
         
         graphController.getUnitElements().clear();
         try {
-		graphController.read(url);
+        	graphController.read(url);
         } catch(OutOfMemoryError ex) {
         	ex.printStackTrace();
 			JOptionPane.showMessageDialog(mainFrame, 

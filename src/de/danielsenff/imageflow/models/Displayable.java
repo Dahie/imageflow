@@ -22,4 +22,9 @@ public interface Displayable {
 	 */
 	public void setDisplay(boolean display);
 	
+	/**
+	 * If activate deactivate and vice versa.
+	 */
+	public void toggleDisplay();
+	
 }
