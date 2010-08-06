@@ -47,14 +47,13 @@ public class SaveFlowGraphTask extends SaveFileTask<GraphController, Void> {
 		graphController.write(tmpFile);
 		
 		if (!isCancelled()) {
-			backupFile.delete();
 			if (file.exists()) {
 				renameFile(file, backupFile);
 			}
 			renameFile(tmpFile, file);
+			backupFile.delete();
 			return graphController;
-		}
-		else {
+		} else {
 			tmpFile.delete();
 			return null;
 		}
