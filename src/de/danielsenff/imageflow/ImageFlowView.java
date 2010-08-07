@@ -158,8 +158,6 @@ public class ImageFlowView extends FrameView {
 			System.setProperty("apple.awt.brushMetalRounded", "true");
 		}
 		
-		initAppIcon();
-		
 		initComponents();
 		
 		setFile(new File("new document"));
@@ -180,13 +178,16 @@ public class ImageFlowView extends FrameView {
 
 
 	private void initComponents() {
+		initAppIcon();
+		
 		addComponents();
 		
 		setMenuBar(addMenu());
 		
 		// register listeners
 		registerModelListeners();
-		getApplication().addExitListener(new ConfirmExit());
+		if(!IJ.isMacOSX())
+			getApplication().addExitListener(new ConfirmExit());
 	}
 	
 
@@ -420,6 +421,10 @@ public class ImageFlowView extends FrameView {
 		mainPanel.add(splitPane, BorderLayout.CENTER);
 		mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 		setComponent(mainPanel);
+		
+		// for the moment unused, stub for making the app multi-document on osx
+		//if (IJ.isMacOSX())
+		//	getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
 
 

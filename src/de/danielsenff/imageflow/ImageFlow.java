@@ -22,11 +22,15 @@ import ij.ImageJ;
 import ij.plugin.PlugIn;
 
 import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.Vector;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+
+import de.danielsenff.imageflow.controller.MacApplication;
 
 
 /**
@@ -41,35 +45,49 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	 */
 	protected ImageJ imageJ;
 	private ImageFlowView imageFlowView;
-	
+
 	Vector<Window> windows;
-	
+
 
 	/**
 	 * Main, start of the application
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+	
+		
 		launch(ImageFlow.class, args);
 	}
-	
 
-    /**
-     * A convenient static getter for the application instance.
-     * @return the instance of DocumentEditorApp
-     */
-    public static ImageFlow getApplication() {
-        return Application.getInstance(ImageFlow.class);
-    }
 
-    @Override
-    protected void initialize(String[] args) {
-    	super.initialize(args);
-    	windows = new Vector<Window>();
-    	
-    	
-    	// open workflow by argument
-    	/*String workflowPath = args != null ? args[0] : "none";
+	/**
+	 * A convenient static getter for the application instance.
+	 * @return the instance of DocumentEditorApp
+	 */
+	public static ImageFlow getApplication() {
+		return Application.getInstance(ImageFlow.class);
+	}
+
+	@Override
+	protected void initialize(String[] args) {
+		super.initialize(args);
+		windows = new Vector<Window>();
+
+		if(System.getProperty("mrj.version") == null){
+			/*addWindowListener(new WindowAdapter(){
+				public void windowClosing(WindowEvent we){
+					//not on a mac cleanup
+					System.exit(0);
+				}});*/
+		} else {
+			System.out.println("bli");
+			MacApplication macApplication = new MacApplication(getApplication());
+//			macApplication.
+		}
+
+		// open workflow by argument
+		/*String workflowPath = args != null ? args[0] : "none";
     	System.out.println(workflowPath);
     	GraphController graphController = new GraphController();
     	try {
@@ -78,13 +96,14 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		};*/
-    	
-    }
-    
-    
+
+	}
+
+
 	@Override
 	protected void startup() {
 		imageFlowView = new ImageFlowView(this);
+
 		show(imageFlowView);
 		addWindow(imageFlowView.getFrame());
 	}
@@ -92,17 +111,17 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	@Override
 	protected void shutdown() {
 		// TODO clean imagej shutdown
-		
+
 		super.shutdown();
 	}
-	
+
 	/*
 	 * Start-method for starting the app from within ImageJ as plugin.
 	 */
 	public void run(String args) {
 		String oldPath = System.getProperty("user.dir");
 		System.setProperty("user.dir", oldPath + File.separator + "plugins" + File.separator + "Imageflow");
-		
+
 		launch(ImageFlow.class, null);
 	}
 
@@ -115,9 +134,16 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 			this.imageJ = new ImageJ();
 		return this.imageJ;
 	}
-	
+
 	public void addWindow(final Window window) {
 		this.windows.add(window);
 	}
-	
+
+	private class MainFrameListener extends WindowAdapter {
+		public void windowClosing(WindowEvent e) {
+			System.out.println("caught you");
+			getInstance().exit();
+		}
+	}
+
 }
