@@ -54,6 +54,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
@@ -352,6 +353,7 @@ public class ImageFlowView extends FrameView {
 		graphPanel.setSelections(getSelections());
 		if(IJ.isMacOSX())
 			graphPanel.setBorder(BorderFactory.createLoweredBevelBorder());
+//		graphPanel.setDropTarget(dt);
 		
 		ScrollPane graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
@@ -406,8 +408,11 @@ public class ImageFlowView extends FrameView {
 		sidePane.setLayout(new BorderLayout());
 		DelegatesPanel delegatesPanel = new DelegatesPanel(this.getNodes());
 		DelegatesTreeListener delegatesTreeListener = new DelegatesTreeListener(getInstance());
-		delegatesPanel.getDelegatesTree().addMouseListener(delegatesTreeListener);
-		delegatesPanel.getDelegatesTree().addKeyListener(delegatesTreeListener);
+		JTree delegatesTree = delegatesPanel.getDelegatesTree();
+		delegatesTree.addMouseListener(delegatesTreeListener);
+		delegatesTree.addKeyListener(delegatesTreeListener);
+		delegatesTree.setDragEnabled(true);
+		delegatesTree.setTransferHandler(new DelegateTransferHandler());
 		
 		sidePane.add(delegatesPanel, BorderLayout.CENTER);
 		
