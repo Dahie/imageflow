@@ -217,8 +217,9 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 
 		//	e.consume();
 
-		// handling of selection rectangle 
+		// handling of selection rectangle
 		currentRect = new Rectangle(x, y, 0, 0);
+		// update for smoother repaint
 		updateDrawableRect(getWidth(), getHeight());
 		repaint();
 	}
@@ -313,7 +314,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 				repaint();
 				e.consume();
 			}
-			// handling of selection rectange
+			// handling of selection rectangle
 			else if (currentRect != null) updateSize(e);
 		}
 	}
@@ -340,8 +341,10 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		currentRect.setSize(x - currentRect.x, y - currentRect.y);
 		updateDrawableRect(getWidth(), getHeight());
 		Rectangle totalRepaint = rectToDraw.union(previousRectDrawn);
-		repaint(totalRepaint.x, totalRepaint.y,
-				totalRepaint.width, totalRepaint.height);
+		// FIXME here is a transparency bug, when called the repaint method for an area, 
+		// units outside the area are redrawn aswell
+		//repaint(totalRepaint.x, totalRepaint.y, totalRepaint.width, totalRepaint.height);
+		repaint();
 	}
 
 	protected void updateDrawableRect(int compWidth, int compHeight) {
