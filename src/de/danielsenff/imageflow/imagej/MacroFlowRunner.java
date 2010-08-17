@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package de.danielsenff.imageflow.controller;
+package de.danielsenff.imageflow.imagej;
 
 import java.util.Collection;
 import java.util.Vector;
@@ -24,6 +24,8 @@ import javax.swing.JOptionPane;
 
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.controller.FlowRunner;
+import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
@@ -40,10 +42,10 @@ import de.danielsenff.imageflow.models.unit.UnitElement.Type;
  * created. Since for example unconnected units shall be discarded by the {@link MacroGenerator}
  * but not deleted, this creates a temporary {@link UnitList} with only the 
  * units and connections valid and useful without destroying the original workflow.
- * @author danielsenff
+ * @author Daniel Senff
  *
  */
-public class MacroFlowRunner {
+public class MacroFlowRunner implements FlowRunner {
 
 	private UnitList macroUnitList;
 
@@ -55,12 +57,6 @@ public class MacroFlowRunner {
 	}
 
 	
-	/**
-	 * Verification and generation of the ImageJ macro for the full graph.
-	 * UnitElements has to be ordered according to the correct processing sequence
-	 * @param extendedMacro determines if callback functions are put into macro code
-	 * @return 
-	 */
 	public String generateMacro(boolean extendedMacro) {
 		/*
 		 *  analysis and verification of the connection network 
@@ -232,7 +228,7 @@ public class MacroFlowRunner {
 		UnitList orderedList = new UnitList();
 
 		// the unitElements can contain grouped units
-		// those need to be destroyed and reintergrated into 
+		// those need to be destroyed and reintegrated into 
 		// the regular workflow
 		
 		

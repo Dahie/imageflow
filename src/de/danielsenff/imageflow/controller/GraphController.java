@@ -31,6 +31,7 @@ import javax.swing.event.UndoableEditListener;
 
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.imagej.MacroFlowRunner;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;

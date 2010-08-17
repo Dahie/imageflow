@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 package de.danielsenff.imageflow.models.unit;
-import imagej.GenericDialog;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,6 +30,7 @@ import java.util.ArrayList;
 
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.imagej.GenericDialog;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.Positionable;

@@ -3,7 +3,7 @@ package models;
 
 import java.awt.Dimension;
 
-import de.danielsenff.imageflow.controller.MacroFlowRunner;
+import de.danielsenff.imageflow.imagej.MacroFlowRunner;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.unit.UnitElement;

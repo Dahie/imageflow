@@ -1,4 +1,4 @@
-package imagej;
+package de.danielsenff.imageflow.imagej;
 import ij.CompositeImage;
 import ij.IJ;
 import ij.ImagePlus;
