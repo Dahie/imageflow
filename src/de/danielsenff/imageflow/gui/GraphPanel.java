@@ -1,5 +1,19 @@
 /**
+ * Copyright (C) 2008-2010 Daniel Senff
  * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 package de.danielsenff.imageflow.gui;
 
@@ -27,12 +41,12 @@ import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -47,8 +61,8 @@ import visualap.GPanel;
 import visualap.GPanelListener;
 import visualap.Node;
 import visualap.Pin;
-import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.controller.DelegatesController;
+import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -60,7 +74,6 @@ import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
-import de.danielsenff.imageflow.utils.Tools;
 
 /**
  * Graphical workspace on which the units are drawn and which handles the mouse actions.

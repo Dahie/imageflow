@@ -1,8 +1,6 @@
 package de.danielsenff.imageflow.utils;
 
 import java.net.URL;
-import java.net.MalformedURLException;
-import java.io.InputStream;
 
 import org.jdom.Document;
 import org.jdom.Element;
