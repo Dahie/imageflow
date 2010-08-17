@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2008-2010 Daniel Senff
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package de.danielsenff.imageflow.models.parameter;
 
 import java.util.ArrayList;
@@ -9,14 +26,16 @@ import java.util.ArrayList;
  *
  */
 public class ChoiceParameter extends StringParameter {
-
+	/**
+	 * Delimiter that splits the StringArray
+	 */
 	public static final String DELIMITER = ";";
 	private final ArrayList<String> choiceValues;
 	
 	/**
 	 * @param displayName
 	 * @param choices
-	 * @param choiceParameter
+	 * @param choiceValue
 	 * @param helpString
 	 */
 	public ChoiceParameter(final String displayName, 
@@ -46,8 +65,12 @@ public class ChoiceParameter extends StringParameter {
 		}
 	}
 
+	/**
+	 * Returns an array of strings in this {@link ChoiceParameter}.
+	 * @return
+	 */
 	public String[] getChoicesArray() {
-		String[] array = new String[getChoices().size()];
+		final String[] array = new String[getChoices().size()];
 		for (int i = 0; i < array.length; i++) {
 			array[i] = getChoices().get(i);
 		}
@@ -62,7 +85,10 @@ public class ChoiceParameter extends StringParameter {
 		return this.choiceValues.indexOf(this.stringValue);
 	}
 
-
+	/**
+	 * Returns one String with the choices delimited by the DELIMITER.
+	 * @return
+	 */
 	public String getChoicesString() {
 		String choiceString = "";
 		for (String choice : getChoices()) {

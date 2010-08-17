@@ -1,9 +1,27 @@
+/**
+ * Copyright (C) 2008-2010 Daniel Senff
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package de.danielsenff.imageflow.models.connection;
 
 import java.awt.Point;
 
 import visualap.Node;
 import visualap.Pin;
+import de.danielsenff.imageflow.models.Lockable;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory.Image;
@@ -16,7 +34,7 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
  * @author danielsenff
  *
  */
-public class Input extends Pin {
+public class Input extends Pin implements Lockable {
 	
 	
 	/**
@@ -48,8 +66,14 @@ public class Input extends Pin {
 	protected Connection connection;
 	
 	/**
+	 * @param displayName 
+	 * @param shortDisplayName 
+	 * @param dataType 
+	 * @param parentNode 
 	 * @param fromUnit
 	 * @param inputNumber
+	 * @param required 
+	 * @param needToCopyInput 
 	 */
 	public Input(
 			final String displayName,
@@ -65,8 +89,9 @@ public class Input extends Pin {
 	
 	
 	/**
-	 * @param fromUnit
-	 * @param inputNumber
+	 * @param dataType 
+	 * @param parentNode 
+	 * @param inputNumber 
 	 */
 	public Input(final DataType dataType, 
 			final UnitElement parentNode, 
@@ -75,7 +100,8 @@ public class Input extends Pin {
 	}
 	
 	/**
-	 * @param nodeParent
+	 * @param dataType 
+	 * @param nodeParent 
 	 * @param inputNumber
 	 * @param requiredInput
 	 */
@@ -102,7 +128,12 @@ public class Input extends Pin {
 		this.inputID = "ID_Unit_" + fromUnitNumber + "_Output_" + fromOutputNumber;
 	}
 
-	public void setConnection(Connection connection) {
+	/**
+	 * Set a new {@link Connection} for this Input. 
+	 * The input may not be locked to be successful.
+	 * @param connection
+	 */
+	public void setConnection(final Connection connection) {
 		if(!isLocked()) {
 			this.connection = connection;
 			generateID(connection.getOutput().getParent().getUnitID(), 
@@ -128,6 +159,11 @@ public class Input extends Pin {
 		this.setNeedToCopyInput(needToCopyInput);
 	}
 	
+	/**
+	 * @param displayName
+	 * @param shortDisplayName
+	 * @param needToCopyInput
+	 */
 	public void setupInput(final String displayName, 
 			final String shortDisplayName, 
 			final boolean needToCopyInput) {
@@ -199,6 +235,7 @@ public class Input extends Pin {
 	/* (non-Javadoc)
 	 * @see graph.Pin#getLocation()
 	 */
+	@Override
 	public Point getLocation() {
 		int height = parent.getDimension().height;
 		int nump = ((UnitElement) parent).getInputsCount();

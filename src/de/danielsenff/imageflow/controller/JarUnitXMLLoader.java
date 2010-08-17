@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2008-2010 Daniel Senff
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package de.danielsenff.imageflow.controller;
 
 import java.net.MalformedURLException;
@@ -19,14 +36,17 @@ import javax.swing.tree.MutableTreeNode;
 
 /**
  * XMLLoader to load Unit-Definitions from within the launchable jar. 
- * @author dahie
+ * @author Daniel Senff
  *
  */
 public class JarUnitXMLLoader implements UnitDelegateLoader {
 
 	private DelegatesController delegatesController;
 	
-	public JarUnitXMLLoader(DelegatesController delegatesController) {
+	/**
+	 * @param delegatesController
+	 */
+	public JarUnitXMLLoader(final DelegatesController delegatesController) {
 		this.delegatesController = delegatesController;
 	}
 	
@@ -47,8 +67,8 @@ public class JarUnitXMLLoader implements UnitDelegateLoader {
 			Set<String> relevantXmlFiles = new HashSet<String>();
 			while (entries.hasMoreElements()) {
 				String absoluteName = entries.nextElement().getName();
-				if (absoluteName.startsWith(delegatesController.getUnitFolder())) { // filter specified path
-					String fileName = absoluteName.substring(delegatesController.getUnitFolder().length());
+				if (absoluteName.startsWith(DelegatesController.getUnitFolder())) { // filter specified path
+					String fileName = absoluteName.substring(DelegatesController.getUnitFolder().length());
 
 					if (fileName.startsWith(".")) // ignore hidden files and folders
 						continue;

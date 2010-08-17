@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2008-2010 Daniel Senff
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package de.danielsenff.imageflow.models.connection;
 
 import java.awt.Point;
@@ -15,7 +32,7 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
 /**
  * Outputs are Pins that pass data to other units.
  * An Output can be connected to an arbitrary number of inputs.
- * @author danielsenff
+ * @author Daniel Senff
  *
  */
 public class Output extends Pin {
@@ -211,6 +228,12 @@ public class Output extends Pin {
 			this.connections.clear();
 	}
 	
+	/**
+	 * Returns the {@link Connection} to the given {@link Pin} or null if 
+	 * there is no connection to the pin.
+	 * @param toInput
+	 * @return
+	 */
 	public Connection getConnectionTo(Pin toInput) {
 		for (Connection connection : getConnections()) {
 			if(connection.getInput().equals(toInput)) 
@@ -219,10 +242,18 @@ public class Output extends Pin {
 		return null;
 	}
 	
+	/**
+	 * Disconnects this Output from the given {@link Input}.
+	 * Obviously, the output has to be connected with input to be successful. 
+	 * The output may not be locked.
+	 * @param input
+	 */
 	public void disconnectFrom(Pin input) {
 		if(!isLocked()) {
-			Connection oldConnection = getConnectionTo(input);
-			this.connections.remove(oldConnection);
+			if(isConnectedWith(input)) {
+				Connection oldConnection = getConnectionTo(input);
+				this.connections.remove(oldConnection);
+			}
 		}
 		
 	}

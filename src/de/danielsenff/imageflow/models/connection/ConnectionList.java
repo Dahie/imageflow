@@ -1,5 +1,19 @@
 /**
+ * Copyright (C) 2008-2010 Daniel Senff
  * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 package de.danielsenff.imageflow.models.connection;
 
@@ -17,7 +31,7 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
 
 /**
  * List that holds all {@link Connection}s.
- * @author danielsenff
+ * @author Daniel Senff
  *
  */
 public class ConnectionList extends Vector<Connection> implements Model, Cloneable {
@@ -105,6 +119,7 @@ public class ConnectionList extends Vector<Connection> implements Model, Cloneab
 	 * @param connection
 	 * @return
 	 */
+	@Override
 	public boolean add(final Connection connection) {
 		final Input input = connection.getInput();
 		final Output output = connection.getOutput();
@@ -230,6 +245,11 @@ public class ConnectionList extends Vector<Connection> implements Model, Cloneab
 		return cloneList;
 	}
 	
+	/**
+	 * Finds a connection based on the given id
+	 * @param id
+	 * @return
+	 */
 	public Connection getConnectionByID(final int id) {
 		for (final Connection connection : this) {
 			if(connection.id == id)
