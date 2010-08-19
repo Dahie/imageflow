@@ -25,7 +25,6 @@ import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.Vector;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
@@ -45,9 +44,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	 */
 	protected ImageJ imageJ;
 	private ImageFlowView imageFlowView;
-
-	Vector<Window> windows;
-
 
 	/**
 	 * Main, start of the application
@@ -72,7 +68,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	@Override
 	protected void initialize(String[] args) {
 		super.initialize(args);
-		windows = new Vector<Window>();
 
 		if(System.getProperty("mrj.version") == null){
 			/*addWindowListener(new WindowAdapter(){
@@ -83,7 +78,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 		} else {
 			System.out.println("bli");
 			MacApplication macApplication = new MacApplication(getApplication());
-//			macApplication.
 		}
 
 		// open workflow by argument
@@ -105,7 +99,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 		imageFlowView = new ImageFlowView(this);
 
 		show(imageFlowView);
-		addWindow(imageFlowView.getFrame());
 	}
 
 	@Override
@@ -134,16 +127,13 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 			this.imageJ = new ImageJ();
 		return this.imageJ;
 	}
-
-	public void addWindow(final Window window) {
-		this.windows.add(window);
+	
+	public static Window[] getWindows() {
+		return Window.getWindows();
 	}
-
-	private class MainFrameListener extends WindowAdapter {
-		public void windowClosing(WindowEvent e) {
-			System.out.println("caught you");
-			getInstance().exit();
-		}
+	
+	public static int getWindowsCount() {
+		return Window.getWindows().length;
 	}
 
 }

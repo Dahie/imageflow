@@ -1,5 +1,9 @@
 package de.danielsenff.imageflow.controller;
 
+import ij.IJ;
+
+import java.awt.Window;
+
 import com.apple.eawt.Application;
 import com.apple.eawt.ApplicationAdapter;
 import com.apple.eawt.ApplicationEvent;
@@ -21,6 +25,12 @@ public class MacApplication extends Application {
                 public void handleQuit( ApplicationEvent event ) {
                     //do something here...
                 	System.out.println("caught this");
+                	// window count >1 means we have an imagej window open
+                	// that is as long as we don't support multidocument
+					if(Window.getWindows().length > 1) {
+                		System.out.println("has windows");
+                		imageflow.getImageJInstance().quit();
+					}
                     System.exit(0);
                 }
                 public void handleAbout(ApplicationEvent event){
@@ -30,6 +40,7 @@ public class MacApplication extends Application {
     }
 
 	public MacApplication(ImageFlow imageFlow) {
+		this();
 		this.imageflow = imageFlow;
 	}
 }
