@@ -22,8 +22,6 @@ import ij.ImageJ;
 import ij.plugin.PlugIn;
 
 import java.awt.Window;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 
 import org.jdesktop.application.Application;
@@ -44,14 +42,13 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	 */
 	protected ImageJ imageJ;
 	private ImageFlowView imageFlowView;
+	private boolean actsAsImagejPlugin = true;
 
 	/**
 	 * Main, start of the application
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-	
 		
 		launch(ImageFlow.class, args);
 	}
@@ -104,7 +101,14 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	@Override
 	protected void shutdown() {
 		// TODO clean imagej shutdown
-
+		System.out.println("imageflow.shutdown");
+		// window count >1 means we have an imagej window open
+    	// that is as long as we don't support multidocument
+		if(hasImageJInstance() && !actsAsImagejPlugin) {
+			//getImageJInstance().quit();
+			//getImageJInstance().runUserPlugIn("Quit", className, arg, createNewLoader)
+			IJ.doCommand("Quit");
+		}
 		super.shutdown();
 	}
 
@@ -123,9 +127,15 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	 * @return
 	 */
 	public ImageJ getImageJInstance() {
-		if(IJ.getInstance() == null)
+		if(!hasImageJInstance()) {
 			this.imageJ = new ImageJ();
+			this.actsAsImagejPlugin =  false;
+		}
 		return this.imageJ;
+	}
+	
+	public boolean hasImageJInstance() {
+		return IJ.getInstance() != null;
 	}
 	
 	public static Window[] getWindows() {

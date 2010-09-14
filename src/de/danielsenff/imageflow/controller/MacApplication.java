@@ -23,15 +23,7 @@ public class MacApplication extends Application {
                 }
                 
                 public void handleQuit( ApplicationEvent event ) {
-                    //do something here...
-                	System.out.println("caught this");
-                	// window count >1 means we have an imagej window open
-                	// that is as long as we don't support multidocument
-					if(Window.getWindows().length > 1) {
-                		System.out.println("has windows");
-                		imageflow.getImageJInstance().quit();
-					}
-                    System.exit(0);
+					imageflow.exit();
                 }
                 public void handleAbout(ApplicationEvent event){
 
