@@ -94,7 +94,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	@Override
 	protected void startup() {
 		imageFlowView = new ImageFlowView(this);
-
 		show(imageFlowView);
 	}
 
@@ -102,8 +101,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	protected void shutdown() {
 		// TODO clean imagej shutdown
 		System.out.println("imageflow.shutdown");
-		// window count >1 means we have an imagej window open
-    	// that is as long as we don't support multidocument
 		if(hasImageJInstance() && !actsAsImagejPlugin) {
 			//getImageJInstance().quit();
 			//getImageJInstance().runUserPlugIn("Quit", className, arg, createNewLoader)
@@ -134,6 +131,10 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 		return this.imageJ;
 	}
 	
+	/**
+	 * Return true if an instance of ImageJ is running.
+	 * @return
+	 */
 	public boolean hasImageJInstance() {
 		return IJ.getInstance() != null;
 	}
