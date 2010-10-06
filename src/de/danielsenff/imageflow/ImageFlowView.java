@@ -18,7 +18,6 @@
 package de.danielsenff.imageflow;
 
 import ij.IJ;
-import ij.ImageJ;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -132,11 +131,25 @@ public class ImageFlowView extends FrameView {
 	private StatusBar statusBar = null;
 	
 	
-
+	/**
+	 * Document has been modified.
+	 */
 	private boolean modified = false;
+	/**
+	 * Any number of nodes has been selected.
+	 */
 	private boolean selected = false;
+	/**
+	 * Something is in the internal clipboard.
+	 */
 	private boolean paste = false;
+	/**
+	 * Option to display the generated macro code is activated.
+	 */
 	private boolean showCode = false;
+	/**
+	 * Option to close any existing windows before executing the workflow.
+	 */
 	private boolean closeAll = false;
 
 	private JCheckBoxMenuItem chkBoxDisplayUnit;
@@ -159,7 +172,7 @@ public class ImageFlowView extends FrameView {
 		}
 		
 		initComponents();
-		
+		getApplication().addExitListener(new ConfirmExit());
 		setFile(new File("new document"));
 	}
 
@@ -1356,10 +1369,6 @@ public class ImageFlowView extends FrameView {
                 }  
             }
             
-            System.out.println("shutdown, please");
-    		if (ImageJ.getWindows().length > 0) {
-    			System.out.println("there are windows open");
-    		}
             return true;
         }
         public void willExit(EventObject e) { }

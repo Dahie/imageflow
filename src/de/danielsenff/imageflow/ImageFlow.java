@@ -23,6 +23,7 @@ import ij.plugin.PlugIn;
 
 import java.awt.Window;
 import java.io.File;
+import java.util.EventObject;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
@@ -42,14 +43,13 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	 */
 	protected ImageJ imageJ;
 	private ImageFlowView imageFlowView;
-	private boolean actsAsImagejPlugin = true;
+	private boolean actsAsImagejPlugin = false;
 
 	/**
 	 * Main, start of the application
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
 		launch(ImageFlow.class, args);
 	}
 
@@ -66,6 +66,11 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	protected void initialize(String[] args) {
 		super.initialize(args);
 
+		if(hasImageJInstance()) {
+			this.actsAsImagejPlugin = true;
+		}
+		this.addExitListener(new ImageJExitListener());
+		
 		if(System.getProperty("mrj.version") == null){
 			/*addWindowListener(new WindowAdapter(){
 				public void windowClosing(WindowEvent we){
@@ -73,7 +78,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 					System.exit(0);
 				}});*/
 		} else {
-			System.out.println("bli");
 			MacApplication macApplication = new MacApplication(getApplication());
 		}
 
@@ -95,18 +99,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	protected void startup() {
 		imageFlowView = new ImageFlowView(this);
 		show(imageFlowView);
-	}
-
-	@Override
-	protected void shutdown() {
-		// TODO clean imagej shutdown
-		System.out.println("imageflow.shutdown");
-		if(hasImageJInstance() && !actsAsImagejPlugin) {
-			//getImageJInstance().quit();
-			//getImageJInstance().runUserPlugIn("Quit", className, arg, createNewLoader)
-			IJ.doCommand("Quit");
-		}
-		super.shutdown();
 	}
 
 	/*
@@ -147,4 +139,34 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 		return Window.getWindows().length;
 	}
 
+	/**
+	 * ExitListener to manage exit behavior with ImageJ.
+	 * @author dahie
+	 *
+	 */
+	class ImageJExitListener implements ExitListener {
+
+		public boolean canExit(EventObject arg0) {
+			/*
+			 * This prohibits the exit of the application when it is
+			 * started as ImageJ Plugin. It will only dispose of the window 
+			 * and leave ImageJ running.
+			 */
+			if(actsAsImagejPlugin) {
+				getMainFrame().dispose();
+				return false;
+			}
+			
+			return true;
+		}
+
+		public void willExit(EventObject arg0) {
+			if(hasImageJInstance() && !actsAsImagejPlugin) {
+				//getImageJInstance().quit();
+				//getImageJInstance().runUserPlugIn("Quit", className, arg, createNewLoader)
+				IJ.doCommand("Quit");
+			}
+		}
+		
+	}
 }
