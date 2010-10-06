@@ -16,11 +16,32 @@ Feedback of any kind is well appreciated.
 
 ## Quick Start
 
+### Run from compiled Binaries
+
 Delete the previous version, download Imageflow-binaries and extract somewhere on your hard drive. Start the jar to run the program.
 
 To start Imageflow from ImageJ you have to move "Imageflow"-folder into ImageJ's plugin directory. After restarting ImageJ you will find a menu-item in the Plugins-Menu to start the plugin.
 
+### Compile from Sources
+
+Checkout the source code from [github][github]. The current stable version is on the Master-Branch, the latest Version is on the Development-Branch.
+Compile the sources to executable jars by running the build-script.
+
+    $ ant build
+
+The resulting build will be in "build/ImageFlow/", there are two differen jar variants: 
+
+1. in `executable` is the Standalone executable Jar
+2. in `plugin` is the All-In-One ImageJ Plugin Jar
+
+Both can be used as ImageJ Plugins, the latter is more compact.
+
+### Contribution
+
+I welcome any feedback: ideas, use cases, bugs as well as code contribution. Just fork and play around.
+
 ## More Information
+
 Please see the [wiki][wiki]
 
 ## Author
@@ -34,5 +55,6 @@ Released under a [Gnu General Public License v2][license].
 
 [dahie]: http://github.com/Dahie
 [imagej]: http://rsb.info.nih.gov/ij/
+[github]: http://www.github.com/Dahie/imageflow
 [wiki]: http://wiki.github.com/Dahie/imageflow
 [license]: http://github.com/Dahie/imageflow/blob/master/LICENSE.md
