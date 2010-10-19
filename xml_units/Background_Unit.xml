@@ -27,10 +27,10 @@
   		<HelpString>Height of the background</HelpString>
   	</Parameter>
   	<Parameter>
-  		<Name>Bitdepth</Name>
+  		<Name>Bit depth</Name>
   		<DataType>StringArray</DataType>
   		<Value>8-bit;16-bit;32-bit;RGB</Value>
-  		<HelpString>Defines the bitdepth of the new image background.</HelpString>
+  		<HelpString>Defines the bit depth of the new image background.</HelpString>
   		<ChoiceNumber>0</ChoiceNumber>
 	</Parameter>
   	<Parameter>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Variance by Daniel Senff -->
+<!-- Filter by Daniel Senff -->
             
 <UnitDescription>
 
 <General>
   <UnitName>Filter</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("PARA_STRING_1...", "radius=PARA_DOUBLE_1 STACK");</ImageJSyntax> 
+  <ImageJSyntax>run("PARA_STRING_1...", "radius="+ATTRIBUTE_INPUT_2_PARAMETER_2+" STACK");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Performs a selected Filter</HelpString>
   	  
@@ -36,6 +36,14 @@
 		<DataType>Image</DataType>
 		<ImageType>63</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+	
+	<Input>
+		<Name>Radius</Name>
+		<ShortName>R</ShortName>	
+		<Required>false</Required>
+		<DataType>double</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
 </Inputs>
 

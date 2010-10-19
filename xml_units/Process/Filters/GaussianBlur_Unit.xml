@@ -6,9 +6,9 @@
 <General>
   <UnitName>Gaussian Blur</UnitName> 
   <PathToIcon>GaussianBlur_Unit.png</PathToIcon> 
-  <ImageJSyntax>run("Gaussian Blur...", "sigma=PARA_DOUBLE_1 STACK");</ImageJSyntax> 
+  <ImageJSyntax>run("Gaussian Blur...", "sigma="+ATTRIBUTE_INPUT_2_PARAMETER_1+" STACK");</ImageJSyntax> 
   <Color>0x6e91de</Color>
-  <HelpString>Performs a gaussian blur</HelpString>
+  <HelpString>Performs a Gaussian blur</HelpString>
   	  
 </General>
 
@@ -17,7 +17,7 @@
   		<Name>Radius</Name>
   		<DataType>double</DataType>
   		<Value>4</Value>
-  		<HelpString>Radius of the gaussian kernel</HelpString>
+  		<HelpString>Radius of the Gaussian kernel</HelpString>
   	</Parameter> 
 </Parameters>
 
@@ -28,6 +28,14 @@
 		<DataType>Image</DataType>
 		<ImageType>63</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+	
+	<Input>
+		<Name>Radius</Name>
+		<ShortName>R</ShortName>	
+		<Required>false</Required>
+		<DataType>double</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
 </Inputs>
 

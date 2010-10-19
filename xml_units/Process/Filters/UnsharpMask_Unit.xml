@@ -6,7 +6,7 @@
 <General>
   <UnitName>Unsharp Mask</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Unsharp Mask...", "radius=PARA_DOUBLE_1 mask=PARA_DOUBLE_2 STACK");</ImageJSyntax> 
+  <ImageJSyntax>run("Unsharp Mask...", "radius="+ATTRIBUTE_INPUT_2_PARAMETER_1+" mask="+ATTRIBUTE_INPUT_3_PARAMETER_2+" STACK");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Performs an Unsharp Mask</HelpString>
   	  
@@ -34,6 +34,22 @@
 		<DataType>Image</DataType>
 		<ImageType>63</ImageType>
 		<NeedToCopyInput>true</NeedToCopyInput>
+	</Input>
+	
+	<Input>
+		<Name>Radius</Name>
+		<ShortName>R</ShortName>	
+		<Required>false</Required>
+		<DataType>double</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+	</Input>
+	
+	<Input>
+		<Name>Mask Weight</Name>
+		<ShortName>W</ShortName>	
+		<Required>false</Required>
+		<DataType>double</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
 </Inputs>
 
