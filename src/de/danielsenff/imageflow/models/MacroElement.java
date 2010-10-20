@@ -18,6 +18,8 @@
 package de.danielsenff.imageflow.models;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
@@ -99,55 +101,58 @@ public class MacroElement {
 	}
 
 	private static String parseParameters(ArrayList<Parameter> parameters, String command) {
-//		int unitID = unit.getUnitID();
-
+		/**
+		 * my gut says, this should be refactored
+		 */
 		int parameterIndex = 0, pc = 0, pd = 0, ps = 0, pi = 0, pb = 0;
 		String searchString, paraType;
 		String parameterString;
 		Parameter parameter;
+		Matcher matcher;
 		while (parameterIndex < parameters.size()) {
 			
 			parameter = parameters.get(parameterIndex);
 
-			searchString = "PARA_DOUBLE_" + (pd+1);
 			paraType = parameter.getParaType().toLowerCase();
-			if(command.contains(searchString) && paraType.equals("double")) { 
+			searchString = "(PARA_DOUBLE_" + (pd+1) + ")(\\D)";
+			matcher = compileMatcherBy(searchString, command);
+			if(matcher.find() && paraType.equalsIgnoreCase("double")) { 
 				parameterString = "" + ((DoubleParameter)parameter).getValue();
-//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Double Parameter: " + parameterString);
-				command = Tools.replace(command, searchString, parameterString);
+				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
 				pd++;
 				parameterIndex++;
 			}
-			searchString = "PARA_STRING_" + (ps+1);
-			if(command.contains(searchString) && (paraType.equals("string") || paraType.equals("stringarray"))) {
+			searchString = "(PARA_STRING_" + (ps+1) + ")(\\D)";
+			matcher = compileMatcherBy(searchString, command);
+			if(matcher.find() && (paraType.equalsIgnoreCase("string") || paraType.equalsIgnoreCase("stringarray"))) {
 				parameterString = "" + ((StringParameter)parameter).getValue();
-//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
-				command = Tools.replace(command, searchString, parameterString);
+				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
 				ps++;
 				parameterIndex++;
 			}
-			searchString = "PARA_INTEGER_" + (pi+1);
-			if(command.contains(searchString) && paraType.equals("integer")) {
-				String parameterInteger = "" + ((IntegerParameter)parameter).getValue();
-//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " Integer Parameter: " + parameterInteger);
-				command = Tools.replace(command, searchString, parameterInteger);
+			searchString = "(PARA_INTEGER_" + (pi+1) + ")(\\D)";
+			matcher = compileMatcherBy(searchString, command);
+			if(matcher.find() && paraType.equalsIgnoreCase("integer")) {
+				parameterString = "" + ((IntegerParameter)parameter).getValue();
+				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
 				pi++;
 				parameterIndex++;
 			}
-			searchString = "PARA_BOOLEAN_" + (pb+1);
-			if(command.contains(searchString) && paraType.equals("boolean")) {
+			searchString = "(PARA_BOOLEAN_" + (pb+1) + ")(\\D)";
+			matcher = compileMatcherBy(searchString, command);
+			if(matcher.find() && paraType.equals("boolean")) {
+			//if(command.contains(searchString) && paraType.equals("boolean")) {
 				boolean bool = ((BooleanParameter)parameter).getValue();
 				parameterString =  (bool) ? ((BooleanParameter)parameter).getTrueString() : ""; 
-				//String parameterString = "" + ((BooleanParameter)parameter).getValue();
-//				System.out.println("Unit: " + unitID + " Parameter: " + parameterIndex + " String Parameter: " + parameterString);
-				command = Tools.replace(command, searchString, parameterString);
+				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
 				pb++;
 				parameterIndex++;
 			}
 			pc++;
 			if (parameterIndex != pc) {
 				searchString = "_PARAMETER_" + (parameterIndex+1);
-				if(command.contains(searchString) && paraType.equals("boolean")) {
+				matcher = compileMatcherBy(searchString, command);
+				if(matcher.find() && paraType.equals("boolean")) {
 					// This parameter is used as an "attibute" somewhere
 					// Go ahead and increment parameter index, so subsequent parameters are still read
 					parameterIndex++;
@@ -161,6 +166,16 @@ public class MacroElement {
 		}
 		// choiceParameter uses the PARA_STRING_x
 		return command;
+	}
+	
+	/**
+	 * Compile a Matcher based on a SearchString and the Region which is to search.
+	 * @param searchString
+	 * @param region
+	 * @return
+	 */
+	private static Matcher compileMatcherBy(final String searchString, final String region) {
+		return Pattern.compile(searchString).matcher(region);
 	}
 	
 	/**

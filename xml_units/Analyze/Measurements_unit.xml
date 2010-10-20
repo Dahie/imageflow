@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--by Daniel Senff-->
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Measurements</UnitName> 
+  <PathToIcon>ShowInfo_Unit.png</PathToIcon> 
+  <ImageJSyntax>run("Set Measurements...", "PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3 PARA_BOOLEAN_4 PARA_BOOLEAN_5 PARA_BOOLEAN_6 PARA_BOOLEAN_7 PARA_BOOLEAN_8 PARA_BOOLEAN_9 PARA_BOOLEAN_10 PARA_BOOLEAN_11 PARA_BOOLEAN_12 PARA_BOOLEAN_13 PARA_BOOLEAN_14 PARA_BOOLEAN_15 PARA_BOOLEAN_16 PARA_BOOLEAN_17 PARA_BOOLEAN_18 PARA_BOOLEAN_19 PARA_BOOLEAN_20 PARA_BOOLEAN_21 PARA_BOOLEAN_22 redirect=None decimal=3");
+run("Measure");</ImageJSyntax>
+   
+  <Color>0x6e91de</Color>
+  <HelpString>Display the table of measurements for the input Image..</HelpString>
+</General>
+
+<Parameters>
+    <Parameter>
+  		<Name>Area</Name>
+  		<DataType>boolean</DataType><Value>true</Value>
+  		<TrueString>area</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Mean gray value</Name>
+  		<DataType>boolean</DataType><Value>true</Value>
+  		<TrueString>mean</TrueString>
+  	</Parameter> 
+  	<Parameter>
+  		<Name>Standard deviation</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>standard</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Modal gray value</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>modal</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Min &amp; max gray value</Name>
+  		<DataType>boolean</DataType><Value>true</Value>
+  		<TrueString>min</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Centroid</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>centroid</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Center of mass</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>center</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Perimeter</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>perimeter</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Bounding rectangle</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>bounding</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Fit ellipse</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>fit</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Shape descriptors</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>shape</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Feret's diameter</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>feret's</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Integrated Density</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>integrated</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Median</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>median</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Skewness</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>skewness</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Kurtosis</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>kurtosis</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Area fraction</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>area_fraction</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Stack position</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>stack</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Limit to threshold</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>limit</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Display label</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>display</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Limit to threshold</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>invert</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Invert Y coordinates</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>invert</TrueString>
+  	</Parameter>
+  	<Parameter>
+  		<Name>Scientific notation</Name>
+  		<DataType>boolean</DataType><Value>false</Value>
+  		<TrueString>scientific</TrueString>
+  	</Parameter>
+  	
+  	<Parameter>
+  		<Name>Decimal places (0-9)</Name>
+  		<DataType>integer</DataType><Value>3</Value>
+  	</Parameter>
+</Parameters>
+
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>63</ImageType>
+		<NeedToCopyInput>false</NeedToCopyInput>
+	</Input>
+</Inputs>
+
+
+</UnitDescription>

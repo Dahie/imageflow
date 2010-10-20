@@ -89,7 +89,7 @@ public class UnitDescription implements NodeDescription {
 			helpString = elementGeneral.getChild("HelpString").getValue();
 			colorString = elementGeneral.getChild("Color").getValue();
 			if(elementGeneral.getChild("DoDisplay") != null)
-				isDisplayUnit = elementGeneral.getChild("DoDisplay").getValue().toLowerCase().equals("true") ? true : false;
+				isDisplayUnit = elementGeneral.getChild("DoDisplay").getValue().equalsIgnoreCase("true") ? true : false;
 			
 			try {
 				color = Color.decode(colorString);
@@ -192,11 +192,11 @@ public class UnitDescription implements NodeDescription {
 			Input actInput = input[num] = new Input();
 			actInput.name = inputElement.getChild("Name").getValue();
 			if(inputElement.getChild("Required") != null)
-				actInput.required = inputElement.getChild("Required").getValue().equals("true") ? true : false;
+				actInput.required = inputElement.getChild("Required").getValue().equalsIgnoreCase("true") ? true : false;
 			actInput.shortName = inputElement.getChild("ShortName").getValue();
 			
 			if(inputElement.getChild("Required") != null)
-				actInput.required = inputElement.getChild("Required").getValue().equals("true") ? true : false;
+				actInput.required = inputElement.getChild("Required").getValue().equalsIgnoreCase("true") ? true : false;
 			
 			
 			// legacy: in case no type is given, assume DataTypeFactory.Image
@@ -205,7 +205,7 @@ public class UnitDescription implements NodeDescription {
 			} else 
 				actInput.dataType = DataTypeFactory.createDataType("Image");
 			
-			actInput.needToCopyInput = inputElement.getChild("NeedToCopyInput").getValue().equals("true") ? true : false;
+			actInput.needToCopyInput = inputElement.getChild("NeedToCopyInput").getValue().equalsIgnoreCase("true") ? true : false;
 			
 			if(actInput.dataType instanceof DataTypeFactory.Image) {
 				int imageType = Integer.valueOf(inputElement.getChild("ImageType").getValue());
@@ -248,7 +248,7 @@ public class UnitDescription implements NodeDescription {
 			}
 			
 			
-			actOutput.doDisplay = outputElement.getChild("DoDisplay").getValue().equals("true")? true : false;
+			actOutput.doDisplay = outputElement.getChild("DoDisplay").getValue().equalsIgnoreCase("true")? true : false;
 			isDisplayUnit = actOutput.doDisplay;
 			num++;
 		}
@@ -260,7 +260,10 @@ public class UnitDescription implements NodeDescription {
 		Para actPara = para[num] = new Para();
 		
 		actPara.name = actualParameterElement.getChild("Name").getValue();
-		actPara.helpString = actualParameterElement.getChild("HelpString").getValue();
+		if(actualParameterElement.getChild("HelpString") != null)
+			actPara.helpString = actualParameterElement.getChild("HelpString").getValue();
+		else
+			actPara.helpString = actualParameterElement.getChild("Name").getValue();
 		String dataTypeString = actPara.dataTypeString = actualParameterElement.getChild("DataType").getValue();
 		String valueString = actualParameterElement.getChild("Value").getValue();
 		
@@ -326,6 +329,10 @@ public class UnitDescription implements NodeDescription {
 		return new URL(context, path);
 	}
 
+	public boolean hasHelpString() {
+		return (helpString != null);
+	}
+	
 	public String getHelpString() {
 		return helpString;
 	}

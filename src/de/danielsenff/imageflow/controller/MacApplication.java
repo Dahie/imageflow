@@ -1,8 +1,6 @@
 package de.danielsenff.imageflow.controller;
 
-import ij.IJ;
-
-import java.awt.Window;
+import org.jdesktop.application.FrameView;
 
 import com.apple.eawt.Application;
 import com.apple.eawt.ApplicationAdapter;
@@ -18,8 +16,13 @@ public class MacApplication extends Application {
     public MacApplication() {
         addApplicationListener( new ApplicationAdapter(){
                 public void handleReOpenApplication(ApplicationEvent event) {
-                	 ImageFlowView imageFlowView = new ImageFlowView(imageflow);
-                	 imageflow.show(imageFlowView.getFrame());
+                	FrameView imageFlowView;
+                	if (!imageflow.hasImageFlowView()) {
+                		imageFlowView = new ImageFlowView(imageflow);	
+                	} else {
+                		imageFlowView = imageflow.getMainView();
+                	}
+                	imageflow.show(imageFlowView.getFrame());
                 }
                 
                 public void handleQuit( ApplicationEvent event ) {
