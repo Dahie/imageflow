@@ -483,11 +483,8 @@ public class ImageFlowView extends FrameView {
 	 * Returns a Singleton-Instance of a {@link CodePreviewDialog}.
 	 * @return
 	 */
-	public CodePreviewDialog getCodePreviewBox() {
-		if(codePreviewBox == null) {
-			this.codePreviewBox  = new CodePreviewDialog(ImageFlow.getApplication().getMainFrame(), "generated Macro");
-		}
-		return this.codePreviewBox;
+	public CodePreviewDialog showCodePreviewBox() {
+		return new CodePreviewDialog(ImageFlow.getApplication().getMainFrame(), "Generated Macro");
 	}
 	
 	/**
@@ -502,6 +499,7 @@ public class ImageFlowView extends FrameView {
 			setPreferredSize(new Dimension(350,150));
 			ta = new JTextArea();
 			setLayout(new BorderLayout());
+			setTitle(title);
 
 			final JScrollPane scrollPane = new JScrollPane(ta);
 			add(scrollPane, BorderLayout.CENTER);

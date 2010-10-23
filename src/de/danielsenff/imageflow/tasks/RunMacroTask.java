@@ -77,16 +77,15 @@ public class RunMacroTask extends GenerateMacroTask {
 		String macro = super.doInBackground(); 
 		
 		setMessage("Executing Macro...");
-		
-		if(closeAll) {
-			String closeAllCommand = "while (nImages>0) { \n selectImage(nImages);\n close(); } ";
-			macro = closeAllCommand + macro;
-		}
-		
-		
+
 		// if the graph checks turn out false, the resulting macro will be just a null-pointer
 		if(macro != null) {
 		
+			if(closeAll) {
+				String closeAllCommand = "while (nImages>0) { \n selectImage(nImages);\n close(); } ";
+				macro = closeAllCommand + macro;
+			}
+			
 			ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
 			Macro_Runner mr = new Macro_Runner();
 			return mr.runMacro(macro, "");

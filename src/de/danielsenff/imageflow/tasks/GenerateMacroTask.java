@@ -17,11 +17,14 @@
  */
 package de.danielsenff.imageflow.tasks;
 
+import javax.swing.JDialog;
+
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
+import de.danielsenff.imageflow.ImageFlowView.CodePreviewDialog;
 import de.danielsenff.imageflow.controller.GraphController;
 
 /**
@@ -45,37 +48,31 @@ public class GenerateMacroTask extends Task<Object, String> {
 		this.showCode = true;
 	}
 	
-	@Override 
-	protected String doInBackground() throws InterruptedException {
-
-		final String macro = generateMacro();
-
-		return macro;
-	}
-
 	/**
 	 * Create macro from the {@link GraphController} stored in this Task.
 	 * @return
 	 */
-	protected String generateMacro() {
-		
+	@Override 
+	protected String doInBackground() throws InterruptedException {
+
 		ImageFlowView.getProgressBar().setIndeterminate(true);
 		ImageFlowView.getProgressBar().setVisible(true);
     	// generates Macro with callback function (for progressBar)
     	final String macro = graphController.generateMacro(true);
 		
-		if(this.showCode) {
-//			System.out.println(macro);
+		if(this.showCode && macro != null) {
 			// generates cleaner Macro without callback function (for progressBar)
 			final String extendedMacro = graphController.generateMacro(false);
-			((ImageFlowView)((ImageFlow)ImageFlow.getApplication()).getMainView())
-				.getCodePreviewBox().setMacroCode(extendedMacro);
+			CodePreviewDialog previewBox = ((ImageFlowView)((ImageFlow)ImageFlow.getApplication()).getMainView()).showCodePreviewBox();
+			previewBox.setVisible(true);
+			previewBox.setMacroCode(extendedMacro);
 						
 		}
 		ImageFlowView.getProgressBar().setIndeterminate(false);
 		return macro;
 	}
-    
+
+	
 	/*@Override
 	protected void succeeded(final Object superclass) {
     	ImageFlowView.getProgressBar().setVisible(false);
