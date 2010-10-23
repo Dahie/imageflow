@@ -25,7 +25,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.tree.MutableTreeNode;
@@ -38,7 +37,7 @@ import de.danielsenff.imageflow.models.delegates.UnitMutableTreeNode;
  *
  */
 public class FolderUnitXMLLoader extends BasicUnitXMLLoader {
-
+	
 	public FolderUnitXMLLoader() {
 		super();
 	}
@@ -51,30 +50,26 @@ public class FolderUnitXMLLoader extends BasicUnitXMLLoader {
 		} catch (final URISyntaxException e) {
 			folder = new File(url.getPath());
 		}
-		final File[] listOfFiles = folder.listFiles();
-
-
-		// get all relevant files
-		Set<String> relevantXmlFiles = new HashSet<String>();
 
 		try {
-			retrieveRelevantXMLPaths(makeEnumeration(listOfFiles), relevantXmlFiles);
+			// get all relevant files
+			retrieveRelevantXMLPaths(makeEnumeration(folder.listFiles()), relevantXmlFiles);
 		
-			String[] paths = populateMenu(relevantXmlFiles);
+			String[] paths = sortPaths(relevantXmlFiles);
 	
 			for (String unitPath : paths) {
-				reflectUnitsInMenu(unitGroups, node, unitPath, "", url);
+				reflectUnitsInMenu(getEntries(), node, unitPath, "", url);
 			}
-		
+			
+			System.out.println("done");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	protected void retrieveRelevantXMLPaths(Enumeration files,
-			Set<String> relevantXmlFiles) throws IOException {
-
+	protected void retrieveRelevantXMLPaths(Enumeration files, Set<String> relevantXmlFiles) throws IOException {
 		while (files.hasMoreElements()) {
 			File file = (File) files.nextElement();
 
@@ -101,7 +96,7 @@ public class FolderUnitXMLLoader extends BasicUnitXMLLoader {
 	 * @return
 	 */
 	static private Enumeration makeEnumeration(final Object obj) {
-		Class type = obj.getClass();
+		Class<? extends Object> type = obj.getClass();
 		if (!type.isArray()) {
 			throw new IllegalArgumentException(obj.getClass().toString());
 		} else {

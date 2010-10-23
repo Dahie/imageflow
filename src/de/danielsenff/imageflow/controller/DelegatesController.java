@@ -21,22 +21,23 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.controller.BasicUnitXMLLoader.UnitDelegateInfo;
 import de.danielsenff.imageflow.models.delegates.Delegate;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
-import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.delegates.UnitMutableTreeNode;
-import de.danielsenff.imageflow.utils.Tools;
 
 
 /**
@@ -58,8 +59,11 @@ public class DelegatesController {
 	public static String unitIconFolder = "xml_icons";
 
 	private static DelegatesController controller;
-//	HashMap<TreeNode, Delegate> delegates;
-	public DefaultTreeModel delegatesModel;
+	/**
+	 * Used to create the unit insert menu 
+	 */
+	public DefaultTreeModel delegatesTreeModel;
+	protected UnitMutableTreeNode top;
 
 	/**
 	 * Get a list of all Units that can be added to the workflow.
@@ -68,29 +72,58 @@ public class DelegatesController {
 //	public HashMap<TreeNode, Delegate> getDelegates() {
 //		return  delegates;
 //	}
+	
+	protected HashMap<String, Delegate> delegatesMapByName;
+	public HashMap<String, Delegate> mapDelegatesByName() {
+		return  delegatesMapByName;
+	}
 
+	protected HashMap<String, Delegate> delegatesMapByPath;
+	public HashMap<String, Delegate> mapDelegatesByPath() {
+		return  delegatesMapByPath;
+	}
+	
+	protected HashSet<String> delegateNames;
+	public HashSet<String> getDelegateNames() {
+		return  delegateNames;
+	}
+	
 	/**
 	 * The URL from where the initial units have been loaded.
 	 */
 	public URL resourcesBase;
+	private Hashtable<String, UnitDelegateInfo> unitEntries;
 
 	/**
 	 * Get a TreeModel with the delegates and their tree structure
 	 * @return
 	 */
 	public DefaultTreeModel getDelegatesModel() {
-		return delegatesModel;
+		return delegatesTreeModel;
 	}
-
+	
+	public void addDelegate(final UnitDelegate delegate) {
+		this.delegatesMapByName.put(delegate.getName(), delegate);
+		this.delegatesMapByPath.put(delegate.getXMLPath(), delegate);
+		this.delegateNames.add(delegate.getName());
+	}
+	
 	protected DelegatesController() {
 //		delegates = new HashMap<TreeNode, Delegate>();
 
-		UnitMutableTreeNode top = new UnitMutableTreeNode("Insert unit");
-		delegatesModel = new DefaultTreeModel(top);
-
-		fillDelegatesModelFromJar(top);
+		this.delegatesMapByName = new HashMap<String, Delegate>();
+		this.delegatesMapByPath = new HashMap<String, Delegate>();
+		this.delegateNames = new HashSet<String>();
+		this.unitEntries = new Hashtable<String, UnitDelegateInfo>();
+		
+		this.top = new UnitMutableTreeNode("Insert unit");
+		delegatesTreeModel = new DefaultTreeModel(top);
 	}
 	
+	
+	public void initializeDelegatesModel() {
+		fillDelegatesModelFromJar(top);
+	}
 	
 	/**
 	 * @param top
@@ -108,12 +141,10 @@ public class DelegatesController {
 			
 			// see if there is a unit xml folder and load those as well
 			//File unitFolderFile = new File(getAbsolutePathToFolder(""));
-//			File unitFolderFile = new File(getAbsolutePathToUnitFolder());
-//			System.out.println(unitFolderFile);
-//			System.out.println(unitFolderFile.exists());
-//			if(unitFolderFile.exists()) {
-//				readDelegatesFromFolder(top, unitFolderFile.toURI().toURL());
-//			}
+			File unitFolderFile = new File(getAbsolutePathToUnitFolder());
+			if(unitFolderFile.exists()) {
+				readDelegatesFromFolder(top, unitFolderFile.toURI().toURL());
+			}
 			
 		} catch (MalformedURLException e) {
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(),
@@ -188,13 +219,20 @@ public class DelegatesController {
 		return unitFolder;
 	}
 
-	/**
-	 * @return
-	 */
 	public static String getUnitIconFolderName() {
 		return unitIconFolder;
 	}
-
+	
+	public boolean containsUnitXML(String xmlPath) {
+		Enumeration<MutableTreeNode> children = ((MutableTreeNode) getDelegatesModel().getRoot()).children();
+		while (children.hasMoreElements()) {
+			UnitDelegate delegate = (UnitDelegate) children.nextElement();
+			//delegate.getXMLPath();
+			
+		}
+		return false;
+	}
+	
 
 	/**
 	 * Gets the resource base url of the initially loaded units.
@@ -227,28 +265,36 @@ public class DelegatesController {
 		return System.getProperty("user.dir") + File.separator + folderName;
 	}
 	
+	/**
+	 * Returns the absolute path to the xml units folder.
+	 * @param folderName
+	 * @return
+	 */
 	public static String getAbsolutePathToUnitFolder() {
 		return getAbsolutePathToFolder(getUnitFolderName());
 	}
 
 	/**
-	 * Find a UnitDelegate by name.
+	 * Find a UnitDelegate by unique name.
 	 * @param unitName 
 	 * @return
 	 */
 	public UnitDelegate getDelegate(final String unitName) {
 		UnitDelegate unitDelegate = null; 
 		
-		/*
-		for (final Delegate delegate : getDelegates().values()) {
+		for (final Delegate delegate : mapDelegatesByName().values()) {
 			if(delegate instanceof UnitDelegate) {
 				unitDelegate = (UnitDelegate) delegate;
 				if (unitDelegate.getName().equals(unitName))
 					return unitDelegate;		
 			}
-		}*/
+		}
 		return null;
 
+	}
+
+	public Dictionary<String, UnitDelegateInfo> getUnitEntries() {
+		return this.unitEntries;
 	}
 
 }

@@ -22,7 +22,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Dictionary;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -58,15 +57,14 @@ public class JarUnitXMLLoader extends BasicUnitXMLLoader {
 			Enumeration<JarEntry> entries = jar.entries();
 
 			// get all relevant files
-			Set<String> relevantXmlFiles = new HashSet<String>();
+//			Set<String> relevantXmlFiles = new HashSet<String>();
 			retrieveRelevantXMLPaths(entries, relevantXmlFiles);
 
 			// populate the menu
-			String[] paths = populateMenu(relevantXmlFiles);
+			String[] paths = sortPaths(relevantXmlFiles);
 
 			for (String unitPath : paths) {
-				System.out.println(unitPath);
-				reflectUnitsInMenu(unitGroups, node, unitPath, "", url);
+				reflectUnitsInMenu(getEntries(), node, unitPath, "", url);
 			}
 		}
 		catch (java.io.UnsupportedEncodingException e) {
@@ -78,8 +76,7 @@ public class JarUnitXMLLoader extends BasicUnitXMLLoader {
 	}
 
 	@Override
-	protected void retrieveRelevantXMLPaths(Enumeration entries,
-			Set<String> relevantXmlFiles) {
+	protected void retrieveRelevantXMLPaths(Enumeration entries, Set<String> relevantXmlFiles) {
 		while (entries.hasMoreElements()) {
 			JarEntry entry = (JarEntry) entries.nextElement();
 			String absoluteName = entry.getName();

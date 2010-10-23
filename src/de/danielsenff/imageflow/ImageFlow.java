@@ -73,7 +73,7 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 		this.addExitListener(new ImageJExitListener());
 		
 		final DelegatesController delegatesController = DelegatesController.getInstance();
-		//delegatesController.f
+		delegatesController.initializeDelegatesModel();
 		
 		if(System.getProperty("mrj.version") == null){
 			/*addWindowListener(new WindowAdapter(){

@@ -21,7 +21,6 @@ package de.danielsenff.imageflow.gui;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -33,7 +32,6 @@ import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.NodeListener;
-import de.danielsenff.imageflow.models.delegates.Delegate;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -107,7 +105,7 @@ public class InsertUnitMenu extends JMenu {
 			mi.setToolTipText("Insert Notes or Comments to the graph.");
 			add(mi).addActionListener(newAction);		
 
-			final TreeModel tree = DelegatesController.getInstance().delegatesModel;
+			final TreeModel tree = DelegatesController.getInstance().delegatesTreeModel;
 
 			final MutableTreeNode root =  (MutableTreeNode) tree.getRoot();
 			createMenu(this, newAction, root);

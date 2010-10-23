@@ -48,7 +48,6 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	private String xmlPath;
 	private boolean withinJar;
 	
-	private JMenu menuItem;
 	private Vector<MutableTreeNode> treenodes;
 	private MutableTreeNode parent;
 	
@@ -66,12 +65,10 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	/**
 	 * @param unitDescription
 	 */
-	public UnitDelegate(final NodeDescription unitDescription) {
+	public UnitDelegate(final NodeDescription unitDescription, boolean withinJar) {
 		this(unitDescription.getUnitName(), unitDescription.getHelpString());
 		this.unitDescription = unitDescription;
-		
-		
-		this.menuItem = new JMenu(unitDescription.getUnitName());
+		this.withinJar = withinJar;
 	}
 
 	/**
@@ -83,10 +80,6 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 		return UnitFactory.createProcessingUnit(unitDescription, origin);
 	}
 	
-	public JMenuItem getMenu() {
-		return this.menuItem;
-	}
-
 	/**
 	 * Set the name.
 	 * @param name
@@ -195,6 +188,10 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 
 	public boolean isLeaf() {
 		return treenodes.isEmpty();
+	}
+
+	public String getXMLPath() {
+		return this.xmlPath;
 	}
 	
 }

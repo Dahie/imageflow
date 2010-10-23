@@ -6,9 +6,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
-import java.util.jar.JarEntry;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
@@ -20,13 +20,15 @@ import de.danielsenff.imageflow.utils.Tools;
 
 public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 
-	protected Dictionary<String, UnitDelegateInfo> unitGroups;
+	protected Set<String> relevantXmlFiles;
+	//protected Dictionary<String, UnitDelegateInfo> unitEntries;
 
 	public BasicUnitXMLLoader() {
-		this.unitGroups = new Hashtable<String, UnitDelegateInfo>();
+		//this.unitEntries = new Hashtable<String, UnitDelegateInfo>();
+		this.relevantXmlFiles = new HashSet<String>();
 	}
 	
-	protected String[] populateMenu(Set<String> relevantXmlFiles) {
+	protected String[] sortPaths(Set<String> relevantXmlFiles) {
 		String[] paths = relevantXmlFiles.toArray(new String[relevantXmlFiles.size()]);
 
 		Arrays.sort(paths, new Comparator<String>() {
@@ -46,13 +48,22 @@ public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 	/**
 	 * Adds a XML unit to the unit tree and the menu.
 	 */
-	static void addUnitDelegate(MutableTreeNode node, URL url) {
+	static void addUnitDelegate(MutableTreeNode parentNode, URL url) {
+		boolean withinJar = url.getProtocol().equals("jar");
 		final UnitDescription unitDescription = new UnitDescription(url, Tools.getXMLRoot(url));
-		final UnitDelegate unitDelegate = new UnitDelegate(unitDescription);
+		final UnitDelegate unitDelegate = new UnitDelegate(unitDescription, withinJar);
 		
-		((DefaultMutableTreeNode) node).add(unitDelegate);
+		if (DelegatesController.getInstance().getDelegate(unitDelegate.getName()) == null) {
+			((DefaultMutableTreeNode) parentNode).add(unitDelegate);
+			unitDelegate.setParent(parentNode);
+			DelegatesController.getInstance().addDelegate(unitDelegate);
+		}
 	}
 
+	public Dictionary<String, UnitDelegateInfo> getEntries() {
+		return DelegatesController.getInstance().getUnitEntries();
+	}
+	
 	protected abstract void retrieveRelevantXMLPaths(Enumeration entries,
 			Set<String> relevantXmlFiles) throws IOException;
 	
