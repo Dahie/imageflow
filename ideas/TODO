@@ -1,5 +1,3 @@
-- add sample images to the example workflows
-
 Compare nodes, comparing and choosing one
 
 Quick jobs:
@@ -26,8 +24,6 @@ Functions:
 
 Graph:
 - read all images from folder and process them
-- stack-support
-- MeasurementUnits -> erzeugen Tabellen, Dialoge, Histogram, Daten etc, nur keine Bilder
 
 
 Nice-to-have:
