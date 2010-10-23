@@ -63,54 +63,29 @@ public class DelegatesController {
 	 * Used to create the unit insert menu 
 	 */
 	public DefaultTreeModel delegatesTreeModel;
-	protected UnitMutableTreeNode top;
-
 	/**
-	 * Get a list of all Units that can be added to the workflow.
-	 * @return
+	 * All unique UnitDelegates names.
 	 */
-//	public HashMap<TreeNode, Delegate> getDelegates() {
-//		return  delegates;
-//	}
-	
-	protected HashMap<String, Delegate> delegatesMapByName;
-	public HashMap<String, Delegate> mapDelegatesByName() {
-		return  delegatesMapByName;
-	}
-
-	protected HashMap<String, Delegate> delegatesMapByPath;
-	public HashMap<String, Delegate> mapDelegatesByPath() {
-		return  delegatesMapByPath;
-	}
-	
 	protected HashSet<String> delegateNames;
-	public HashSet<String> getDelegateNames() {
-		return  delegateNames;
-	}
+	/**
+	 * All UnitDelegates mapped by unique name.
+	 */
+	protected HashMap<String, Delegate> delegatesMapByName;
+	/**
+	 * All UnitDelegates mapped by File Path.
+	 * TODO check consistency
+	 */
+	protected HashMap<String, Delegate> delegatesMapByPath;
+	protected UnitMutableTreeNode top;
+	private Hashtable<String, UnitDelegateInfo> unitEntries;
+	
 	
 	/**
 	 * The URL from where the initial units have been loaded.
 	 */
 	public URL resourcesBase;
-	private Hashtable<String, UnitDelegateInfo> unitEntries;
 
-	/**
-	 * Get a TreeModel with the delegates and their tree structure
-	 * @return
-	 */
-	public DefaultTreeModel getDelegatesModel() {
-		return delegatesTreeModel;
-	}
-	
-	public void addDelegate(final UnitDelegate delegate) {
-		this.delegatesMapByName.put(delegate.getName(), delegate);
-		this.delegatesMapByPath.put(delegate.getXMLPath(), delegate);
-		this.delegateNames.add(delegate.getName());
-	}
-	
 	protected DelegatesController() {
-//		delegates = new HashMap<TreeNode, Delegate>();
-
 		this.delegatesMapByName = new HashMap<String, Delegate>();
 		this.delegatesMapByPath = new HashMap<String, Delegate>();
 		this.delegateNames = new HashSet<String>();
@@ -297,4 +272,39 @@ public class DelegatesController {
 		return this.unitEntries;
 	}
 
+	
+	/**
+	 * Get a list of all Units that can be added to the workflow.
+	 * @return
+	 */
+	public HashMap<String, Delegate> mapDelegatesByName() {
+		return  delegatesMapByName;
+	}
+
+	public HashMap<String, Delegate> mapDelegatesByPath() {
+		return  delegatesMapByPath;
+	}
+	
+	public HashSet<String> getDelegateNames() {
+		return  delegateNames;
+	}
+
+	/**
+	 * Get a TreeModel with the delegates and their tree structure
+	 * @return
+	 */
+	public DefaultTreeModel getDelegatesModel() {
+		return delegatesTreeModel;
+	}
+	
+	public void addDelegate(final UnitDelegate delegate) {
+		this.delegatesMapByName.put(delegate.getName(), delegate);
+		this.delegatesMapByPath.put(delegate.getXMLPath(), delegate);
+		this.delegateNames.add(delegate.getName());
+	}
+
+	public void replaceDelegate(UnitDelegate delegate) {
+		this.delegatesMapByName.put(delegate.getName(), delegate);
+		this.delegatesMapByPath.put(delegate.getXMLPath(), delegate);
+	}
 }

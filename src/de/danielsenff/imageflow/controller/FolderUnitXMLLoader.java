@@ -61,8 +61,6 @@ public class FolderUnitXMLLoader extends BasicUnitXMLLoader {
 				reflectUnitsInMenu(getEntries(), node, unitPath, "", url);
 			}
 			
-			System.out.println("done");
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

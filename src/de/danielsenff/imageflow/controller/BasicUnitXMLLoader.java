@@ -54,9 +54,22 @@ public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 		final UnitDelegate unitDelegate = new UnitDelegate(unitDescription, withinJar);
 		
 		if (DelegatesController.getInstance().getDelegate(unitDelegate.getName()) == null) {
+			// if we don't know this unit yet, we add it to the controller
 			((DefaultMutableTreeNode) parentNode).add(unitDelegate);
 			unitDelegate.setParent(parentNode);
 			DelegatesController.getInstance().addDelegate(unitDelegate);
+		} else {
+			// if a unit delegate by this name already exists, we replace it with a new 
+			for (int i = 0; i < parentNode.getChildCount(); i++) {
+				if (parentNode.getChildAt(i) instanceof UnitDelegate) {
+					UnitDelegate child = (UnitDelegate) parentNode.getChildAt(i);
+					if (child.getName().equals(unitDelegate.getName())) {
+						parentNode.remove(i);
+						parentNode.insert(unitDelegate, i);
+					}
+				}
+			}
+			DelegatesController.getInstance().replaceDelegate(unitDelegate);
 		}
 	}
 
@@ -78,6 +91,7 @@ public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 			this.name = name;
 			this.treeNode = (DefaultMutableTreeNode) node;
 		}
+		
 		public UnitDelegateInfo(String name, DefaultMutableTreeNode node) {
 			this.name = name;
 			this.treeNode = node;
