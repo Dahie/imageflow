@@ -33,8 +33,10 @@ import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.delegates.NodeDescription;
+import de.danielsenff.imageflow.models.delegates.UnitDescription;
+import de.danielsenff.imageflow.models.delegates.UnitDescription.Para;
 import de.danielsenff.imageflow.models.parameter.ParameterFactory;
-import de.danielsenff.imageflow.models.unit.UnitDescription.Para;
 
 
 

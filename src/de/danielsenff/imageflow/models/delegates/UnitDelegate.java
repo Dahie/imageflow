@@ -15,34 +15,43 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package de.danielsenff.imageflow.models.unit;
+package de.danielsenff.imageflow.models.delegates;
 
 import java.awt.Color;
 import java.awt.Point;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import de.danielsenff.imageflow.models.Delegate;
+import de.danielsenff.imageflow.models.unit.UnitElement;
+import de.danielsenff.imageflow.models.unit.UnitFactory;
 
 
 /**
  * This class is a Meta-Class for the {@link UnitElement}.
  * Basically what this does is describe a UnitElement 
- * and give the interface to instantiate a new UnitElement-Object. 
- * the GPanel requires it, but nothing else
+ * and give the interface to instantiate a new UnitElement-Object.
  * @author Daniel Senff
  *
  */
 public class UnitDelegate extends Delegate implements MutableTreeNode {
 
 	/**
-	 * default startpoint of nodes
+	 * default starting point of nodes
 	 */
 	public static Point POINT = new Point(40, 40);
 	private NodeDescription unitDescription;
+	private String xmlPath;
+	private boolean withinJar;
+	
+	private JMenu menuItem;
+	private Vector<MutableTreeNode> treenodes;
+	private MutableTreeNode parent;
+	
 	
 	/**
 	 * @param unitName 
@@ -60,6 +69,9 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	public UnitDelegate(final NodeDescription unitDescription) {
 		this(unitDescription.getUnitName(), unitDescription.getHelpString());
 		this.unitDescription = unitDescription;
+		
+		
+		this.menuItem = new JMenu(unitDescription.getUnitName());
 	}
 
 	/**
@@ -71,6 +83,9 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 		return UnitFactory.createProcessingUnit(unitDescription, origin);
 	}
 	
+	public JMenuItem getMenu() {
+		return this.menuItem;
+	}
 
 	/**
 	 * Set the name.
@@ -126,10 +141,6 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 		return super.name;
 	}
 
-	
-	private Vector<MutableTreeNode> treenodes;
-	private MutableTreeNode parent;
-	
 	public void insert(MutableTreeNode arg0, int arg1) {
 		this.treenodes.add(arg1, arg0);
 	}
@@ -146,12 +157,11 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 		this.parent.remove(this);
 	}
 
-	public void setParent(MutableTreeNode arg0) {
-		this.parent = arg0;
+	public void setParent(MutableTreeNode node) {
+		this.parent = node;
 	}
 
 	public void setUserObject(Object arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -160,15 +170,15 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	}
 
 	public boolean getAllowsChildren() {
-		return false;
+		return true;
 	}
 
-	public TreeNode getChildAt(int arg0) {
-		return null;
+	public TreeNode getChildAt(int index) {
+		return this.treenodes.get(index);
 	}
 
 	public int getChildCount() {
-		return 0;
+		return this.treenodes.size();
 	}
 
 	public int getIndex(TreeNode arg0) {

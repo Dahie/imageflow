@@ -46,17 +46,16 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
-import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.delegates.Delegate;
 
 import static de.danielsenff.imageflow.utils.Reversed.reversed;
 
 public class GPanel extends JPanel implements Printable, MouseListener, MouseMotionListener  {
 
-	protected ArrayList<Delegate> beans;
 	protected GPanelListener parentPanel;
 
 	protected Point pick = null;
@@ -80,9 +79,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			BasicStroke.JOIN_MITER, 
 			10.0f, dash1, 0.0f);
 
-	public GPanel(ArrayList<Delegate> beans, 
-			GPanelListener parent) {
-		this.beans = beans;
+	public GPanel(GPanelListener parent) {
 		this.parentPanel = parent;
 		addMouseListener(this);
 		addMouseMotionListener(this);

@@ -21,7 +21,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.JMenu;
-import javax.swing.tree.MutableTreeNode;
+
+import de.danielsenff.imageflow.models.delegates.UnitMutableTreeNode;
 
 /**
  * Interface for UnitXMLLoader, different methods of loading XML-unit-definitions into the system. 
@@ -37,5 +38,5 @@ public interface UnitDelegateLoader {
 	 * @param url
 	 * @throws MalformedURLException
 	 */
-	void readDelegates(MutableTreeNode node, JMenu menu, URL url) throws MalformedURLException;
+	void readDelegates(UnitMutableTreeNode node, URL url) throws MalformedURLException;
 }

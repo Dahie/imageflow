@@ -32,10 +32,10 @@ import visualap.GPanel;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.DelegatesController;
-import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.NodeListener;
+import de.danielsenff.imageflow.models.delegates.Delegate;
+import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.CommentNode;
-import de.danielsenff.imageflow.models.unit.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 /**
@@ -54,9 +54,8 @@ public class InsertUnitMenu extends JMenu {
 	/**
 	 * 
 	 * @param gpanel
-	 * @param availableUnits
 	 */
-	public InsertUnitMenu(final GPanel gpanel, final Collection<Delegate> availableUnits) {
+	public InsertUnitMenu(final GPanel gpanel) {
 		this("Insert", gpanel, new Point(75, 75));
 	}
 

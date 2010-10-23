@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package de.danielsenff.imageflow.models;
+package de.danielsenff.imageflow.models.delegates;
 
 import java.awt.Image;
 import java.net.URL;

@@ -29,17 +29,16 @@ public class UnitXMLLoaderFactory {
 	 * @param controller
 	 * @return
 	 */
-	public static UnitDelegateLoader createFolderUnitXMLLoader(DelegatesController controller) {
-		return new FolderUnitXMLLoader(controller);
+	public static UnitDelegateLoader createFolderUnitXMLLoader() {
+		return new FolderUnitXMLLoader();
 	}
 	
 	/**
 	 * Creates a new JarUnitXMLLoader.
-	 * @param controller
 	 * @return
 	 */
-	public static UnitDelegateLoader createJarUnitXMLLoader(DelegatesController controller) {
-		return new JarUnitXMLLoader(controller);
+	public static UnitDelegateLoader createJarUnitXMLLoader() {
+		return new JarUnitXMLLoader();
 	}
 
 	/**
@@ -48,12 +47,11 @@ public class UnitXMLLoaderFactory {
 	 * @param protocol
 	 * @return
 	 */
-	public static UnitDelegateLoader createUnitXMLLoaderByProtocol(DelegatesController controller, 
-			final String protocol) {
+	public static UnitDelegateLoader createUnitXMLLoaderByProtocol(final String protocol) {
 		if (protocol.equals("file")) {
-			return UnitXMLLoaderFactory.createFolderUnitXMLLoader(controller);
+			return UnitXMLLoaderFactory.createFolderUnitXMLLoader();
 		} else if (protocol.equals("jar")) {
-			return UnitXMLLoaderFactory.createJarUnitXMLLoader(controller);
+			return UnitXMLLoaderFactory.createJarUnitXMLLoader();
 		} else {
 			throw new RuntimeException("Currenty only jar and file are valid resource protocols!");
 		}

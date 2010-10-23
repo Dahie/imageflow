@@ -28,6 +28,7 @@ import java.util.EventObject;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
+import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.MacApplication;
 
 
@@ -70,6 +71,9 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 			this.actsAsImagejPlugin = true;
 		}
 		this.addExitListener(new ImageJExitListener());
+		
+		final DelegatesController delegatesController = DelegatesController.getInstance();
+		//delegatesController.f
 		
 		if(System.getProperty("mrj.version") == null){
 			/*addWindowListener(new WindowAdapter(){

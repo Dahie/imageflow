@@ -77,7 +77,6 @@ import de.danielsenff.imageflow.gui.MacOSAboutHandler;
 import de.danielsenff.imageflow.gui.StatusBar;
 import de.danielsenff.imageflow.imagej.MacroFlowRunner;
 import de.danielsenff.imageflow.imagej.MacroGenerator;
-import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
@@ -89,6 +88,7 @@ import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.delegates.Delegate;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -119,7 +119,7 @@ public class ImageFlowView extends FrameView {
 	private CodePreviewDialog codePreviewBox;
 	
 	private GraphController graphController;
-	private HashMap<TreeNode,Delegate> delegates;
+//	private HashMap<TreeNode,Delegate> delegates;
 	private File file;
 
 	private JPanel mainPanel;
@@ -163,7 +163,7 @@ public class ImageFlowView extends FrameView {
 	public ImageFlowView(final Application app) {
 		super(app);
 		
-		this.delegates = DelegatesController.getInstance().getDelegates();
+//		this.delegates = DelegatesController.getInstance().getDelegates();
 		this.graphController = new GraphController();
 		
 		if (IJ.isMacOSX()) {
@@ -298,7 +298,7 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(getAction("exampleFlow2"));
 		debugMenu.add(getAction("exampleFlow3"));
 		
-		JMenu insertMenu = new InsertUnitMenu(graphPanel, getDelegates().values());
+		JMenu insertMenu = new InsertUnitMenu(graphPanel);
 		
 		/*JMenu windowMenu = new JMenu(getResourceString("window.menu"));
 		windowMenu.add(getAction("minimize"));*/
@@ -349,11 +349,9 @@ public class ImageFlowView extends FrameView {
 		
 		
 		//working area aka graphpanel
-		ArrayList<Delegate> delegatesArrayList = new ArrayList<Delegate>();
-		delegatesArrayList.addAll(getDelegates().values());
 		GPanelPopup popup = new GPanelPopup(getGraphController());
 		
-		graphPanel = new GraphPanel(delegatesArrayList, popup);
+		graphPanel = new GraphPanel(popup);
 		resourceMap.injectComponent(graphPanel);
 		popup.setActivePanel(graphPanel);
 		graphPanel.setGraphController(getGraphController());
@@ -480,13 +478,6 @@ public class ImageFlowView extends FrameView {
 		firePropertyChange("graphController", oldValue, graphController);
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	protected HashMap<TreeNode, Delegate> getDelegates() {
-		return delegates;
-	}
 	
 	/**
 	 * Returns a Singleton-Instance of a {@link CodePreviewDialog}.

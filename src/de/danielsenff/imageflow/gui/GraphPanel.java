@@ -63,14 +63,14 @@ import visualap.Node;
 import visualap.Pin;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
-import de.danielsenff.imageflow.models.Delegate;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.delegates.Delegate;
+import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.SourceUnitElement;
-import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
@@ -103,27 +103,15 @@ public class GraphPanel extends GPanel {
 	protected boolean align = false;
 
 	private BufferedImage iwIcon;
-	
-	
-	
-	
-
 	private String iwFilePath;
 
-	/**
-	 * @param panel
-	 */
-	public GraphPanel(final GPanelListener panel) {
-		this(new ArrayList<Delegate>(), panel);
-	}
 	
 	/**
 	 * @param panel
 	 * @param graphController
 	 */
 	public GraphPanel(final GPanelListener panel, final GraphController graphController) {
-		this(new ArrayList<Delegate>(), panel);
-		
+		this(panel);
 		setGraphController(graphController);
 	}
 	
@@ -131,8 +119,8 @@ public class GraphPanel extends GPanel {
 	 * @param delegates 
 	 * @param parent
 	 */
-	public GraphPanel(final ArrayList<Delegate> delegates, final GPanelListener parent) {
-		super(delegates, parent);
+	public GraphPanel(final GPanelListener parent) {
+		super(parent);
 		
 		this.iwFilePath = 
 			"/de/danielsenff/imageflow/resources/iw-logo.png";

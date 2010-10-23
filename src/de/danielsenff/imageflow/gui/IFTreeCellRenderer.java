@@ -30,7 +30,7 @@ import javax.swing.JTree;
 import javax.swing.ToolTipManager;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import de.danielsenff.imageflow.models.unit.UnitDelegate;
+import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 
 /**
  * CellRenderer in the Delegates-JTree

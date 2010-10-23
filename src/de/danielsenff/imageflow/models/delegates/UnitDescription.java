@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package de.danielsenff.imageflow.models.unit;
+package de.danielsenff.imageflow.models.delegates;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -37,12 +37,16 @@ import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
+import de.danielsenff.imageflow.models.unit.NodeIcon;
+import de.danielsenff.imageflow.models.unit.UnitElement;
+import de.danielsenff.imageflow.models.unit.UnitFactory;
+import de.danielsenff.imageflow.models.unit.UnitModelComponent;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 import de.danielsenff.imageflow.utils.Tools;
 
 
 /**
- * UnitDescription reads the single pieces a UnitElement is made of from an
+ * UnitDescription stores the single pieces a UnitElement is made of from an
  * XML-file. The {@link UnitFactory} can construct an {@link UnitElement}-Instance based
  * on this description.
  * @author Daniel Senff
@@ -50,30 +54,27 @@ import de.danielsenff.imageflow.utils.Tools;
  */
 public class UnitDescription implements NodeDescription {
 
-	public UnitDescription() {
-	}
-
-	protected String unitName;
+	public String unitName;
 	public String helpString;
-	protected String pathToIcon;
-	protected String colorString;
-	protected String componentSizeString;
-	protected Size componentSize;
-	protected Color color;
-	protected String imageJSyntax;
-	protected int    argbDefault =  (0xFF<<24)|(128<<16)|(128<<8)|128;
+	public String pathToIcon;
+	public String colorString;
+	public String componentSizeString;
+	public Size componentSize;
+	public Color color;
+	public String imageJSyntax;
+	public int    argbDefault =  (0xFF<<24)|(128<<16)|(128<<8)|128;
 
-	protected int numParas;
-	protected Para[] para;
+	public int numParas;
+	public Para[] para;
 
-	protected int numInputs;
-	protected Input[] input;
+	public int numInputs;
+	public Input[] input;
 
-	protected int numOutputs;
-	protected Output[] output;
-	protected boolean isDisplayUnit;
-	protected BufferedImage icon = null;
-	protected URL iconURL;
+	public int numOutputs;
+	public Output[] output;
+	public boolean isDisplayUnit;
+	public BufferedImage icon = null;
+	public URL iconURL;
 	
 	
 	public UnitDescription(URL url) {
@@ -81,6 +82,8 @@ public class UnitDescription implements NodeDescription {
 	}
 	
 	public UnitDescription(URL url, Element root) {
+		System.out.println(root.getText());
+		// TODO save XML in model 
 		try {
 			// read general infos about this unit
 			Element elementGeneral = root.getChild("General");
@@ -93,12 +96,12 @@ public class UnitDescription implements NodeDescription {
 			
 			try {
 				color = Color.decode(colorString);
+				if (color == null)
+					color = new Color(argbDefault);
 			} catch (NumberFormatException e) {
 				System.out.println("Wrong color string ");
 			}
 
-			if (color == null)
-				color = new Color(argbDefault);
 
 			if(elementGeneral.getChild("IconSize") != null) {
 				componentSizeString = elementGeneral.getChild("IconSize").getValue();
@@ -111,8 +114,7 @@ public class UnitDescription implements NodeDescription {
 				// get icon
 				iconURL = getIconURL(url, pathToIcon);
 				icon = ImageIO.read(iconURL.openStream());
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// no exception handling is needed here, since it is often
 				// the case that icons are missing. Most of the units are
 				// not even intended to have icons.
@@ -121,21 +123,20 @@ public class UnitDescription implements NodeDescription {
 			// parameters
 			Element parametersElement = root.getChild("Parameters");
 			if (parametersElement != null) {
-				processParameter(parametersElement);
+				parseParameter(parametersElement);
 			}
 
 			// Inputs
 			Element inputsElement = root.getChild("Inputs");
 			if (inputsElement != null) {
-				processInputs(inputsElement);
+				parseInputs(inputsElement);
 			}
 
 			// Outputs
 			Element outputsElement = root.getChild("Outputs");
 			if (outputsElement != null) {
-				processOutputs(outputsElement);
+				parseOutputs(outputsElement);
 			}
-			
 		}
 
 		catch (Exception e) {
@@ -156,7 +157,7 @@ public class UnitDescription implements NodeDescription {
 	 * @param parametersElement
 	 * @throws Exception
 	 */
-	private void processParameter(Element parametersElement) throws Exception {
+	private void parseParameter(Element parametersElement) throws Exception {
 		List<Element> parametersList = parametersElement.getChildren();
 		Iterator<Element> parametersIterator = parametersList.iterator();
 		
@@ -178,7 +179,7 @@ public class UnitDescription implements NodeDescription {
 	 * process a single input
 	 * @param inputsElement
 	 */
-	private void processInputs(Element inputsElement) {
+	private void parseInputs(Element inputsElement) {
 		List<Element> inputsList = inputsElement.getChildren();
 		Iterator<Element> inputsIterator = inputsList.iterator();
 		
@@ -221,7 +222,7 @@ public class UnitDescription implements NodeDescription {
 	/**
 	 * @param outputsElement
 	 */
-	private void processOutputs(Element outputsElement) {
+	private void parseOutputs(Element outputsElement) {
 		List<Element> outputsList = outputsElement.getChildren();
 		Iterator<Element> outputIterator = outputsList.iterator();
 		numOutputs = outputsList.size();
@@ -315,7 +316,7 @@ public class UnitDescription implements NodeDescription {
 	private URL getIconURL(URL context, String relativeIconPath) throws MalformedURLException {
 		String path;
 		if(relativeIconPath != null && relativeIconPath.length() > 0) {
-			String iconFolder = DelegatesController.getUnitIconFolder();
+			String iconFolder = DelegatesController.getUnitIconFolderName();
 
 			if (context.getProtocol().equals("jar"))
 				path = "/" + iconFolder + "/" + relativeIconPath;
@@ -368,9 +369,9 @@ public class UnitDescription implements NodeDescription {
 	}
 
 	public class Para {
-		String name;
+		public String name;
 
-		String dataTypeString;
+		public String dataTypeString;
 		/*double doubleValue;
 	int integerValue;
 	String stringValue;
@@ -386,37 +387,37 @@ public class UnitDescription implements NodeDescription {
 		 * String
 		 * Boolean
 		 */
-		Object value;
+		public Object value;
 
 		/**
 		 * Enumeration of possible values, the actual value has to be 
 		 * element in this list.
 		 */
-		int choiceIndex;
+		public int choiceIndex;
 
 		/**
 		 * String used when value true for {@link BooleanParameter}
 		 */
 		public String trueString;
 
-		String helpString;
+		public String helpString;
 	}
 
 	public class Input {
-		String name;
-		String shortName;
-		DataType dataType;
-		boolean required = true;
-		int imageType;
-		boolean needToCopyInput;
+		public String name;
+		public String shortName;
+		public DataType dataType;
+		public boolean required = true;
+		public int imageType;
+		public boolean needToCopyInput;
 	}
 
 	public class Output {
-		String name;
-		String shortName;
-		DataType dataType;
-		int imageType;
-		boolean doDisplay;
+		public String name;
+		public String shortName;
+		public DataType dataType;
+		public int imageType;
+		public boolean doDisplay;
 	}
 
 	public Color getColor() {

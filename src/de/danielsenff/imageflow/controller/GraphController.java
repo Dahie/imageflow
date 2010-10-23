@@ -41,9 +41,9 @@ import de.danielsenff.imageflow.models.connection.ProxyInput;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory.Image;
+import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
-import de.danielsenff.imageflow.models.unit.UnitDescription;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
@@ -309,7 +309,13 @@ public class GraphController{
 		workflowbuilder.write(file);
 	}
 	
-	private URL getExampleURL(String unitPath) throws MalformedURLException {
+	/**
+	 * Give URL to given unitPath.
+	 * @param unitPath
+	 * @return
+	 * @throws MalformedURLException
+	 */
+	private static URL getExampleURL(String unitPath) throws MalformedURLException {
 		return new URL(DelegatesController.getInstance().getResourcesBase(), unitPath);
 	}
 

@@ -18,31 +18,32 @@
 package de.danielsenff.imageflow.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.swing.JMenu;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+
+import de.danielsenff.imageflow.models.delegates.UnitMutableTreeNode;
 
 /**
  * Read Unit-XML from hard disc.
  * @author Daniel Senff
  *
  */
-public class FolderUnitXMLLoader implements UnitDelegateLoader {
+public class FolderUnitXMLLoader extends BasicUnitXMLLoader {
 
-	private final DelegatesController delegatesController;
-	
-	/**
-	 * @param delegatesController
-	 */
-	public FolderUnitXMLLoader(final DelegatesController delegatesController) {
-		this.delegatesController = delegatesController;
+	public FolderUnitXMLLoader() {
+		super();
 	}
-	
-	public void readDelegates(final MutableTreeNode node, final JMenu menu, final URL url)
+
+	public void readDelegates(final UnitMutableTreeNode node, final URL url)
 	throws MalformedURLException {
 		File folder;
 		try {
@@ -52,25 +53,120 @@ public class FolderUnitXMLLoader implements UnitDelegateLoader {
 		}
 		final File[] listOfFiles = folder.listFiles();
 
-		for (int i = 0; i < listOfFiles.length; i++) {
-			final File file = listOfFiles[i];
+
+		// get all relevant files
+		Set<String> relevantXmlFiles = new HashSet<String>();
+
+		try {
+			retrieveRelevantXMLPaths(makeEnumeration(listOfFiles), relevantXmlFiles);
+		
+			String[] paths = populateMenu(relevantXmlFiles);
+	
+			for (String unitPath : paths) {
+				reflectUnitsInMenu(unitGroups, node, unitPath, "", url);
+			}
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void retrieveRelevantXMLPaths(Enumeration files,
+			Set<String> relevantXmlFiles) throws IOException {
+
+		while (files.hasMoreElements()) {
+			File file = (File) files.nextElement();
+
 			if(file.isDirectory()
 					&& !file.isHidden()
 					&& !file.getName().startsWith(".")) {
-				final DefaultMutableTreeNode subNode = new DefaultMutableTreeNode(file.getName());
-				final JMenu subMenu = new JMenu(file.getName());
-				readDelegates(subNode, subMenu, file.toURI().toURL());
-				((DefaultMutableTreeNode) node).add(subNode);
-				menu.add(subMenu);
+
+				retrieveRelevantXMLPaths(makeEnumeration(file.listFiles()), relevantXmlFiles);
+
 			} else if (file.isFile()
 					&& isXML(file)
 					&& !file.getName().startsWith(".")) {
-				final URL fileURL = file.toURI().toURL();
-				delegatesController.addUnitDelegate(node, menu, fileURL);
+				String resourceBase = DelegatesController.getAbsolutePathToUnitFolder();
+				String fileName = file.getAbsolutePath().substring(resourceBase.length());
+				relevantXmlFiles.add(fileName);
+			}
+		}
+
+	}
+
+	/**
+	 * Simple conversion from Object-Array to Enumeration.
+	 * @param obj
+	 * @return
+	 */
+	static private Enumeration makeEnumeration(final Object obj) {
+		Class type = obj.getClass();
+		if (!type.isArray()) {
+			throw new IllegalArgumentException(obj.getClass().toString());
+		} else {
+			return (new Enumeration() {
+				int size = Array.getLength(obj);
+				int cursor;
+
+				public boolean hasMoreElements() {
+					return (cursor < size);
+				}
+
+				public Object nextElement() {
+					return Array.get(obj, cursor++);
+				}
+			});
+		}
+	}
+
+	/**
+	 * Goes through a given resource and creates menu and tree items when necessary.
+	 */
+	private void reflectUnitsInMenu(Dictionary<String, UnitDelegateInfo> entries, MutableTreeNode node,
+			String resource, String basePath, URL url) {
+		int slash = resource.indexOf("/");
+		if (slash >= 0) { // is it a directory?
+			String name = resource.substring(0, slash);
+
+			resource = resource.substring(slash + 1);
+			basePath = basePath + name + "/";
+
+			// make no new items for files in relative root ("/", if applicable)
+			if (basePath.length() > 1) {
+				UnitDelegateInfo ud = entries.get(basePath);
+				if (ud == null) {
+					ud = addUnitDelegateGroup(name, node);
+					entries.put(basePath, ud);
+				}
+				reflectUnitsInMenu(entries, ud.treeNode, resource, basePath, url);
+			} else if (resource.length() > 0) {
+				reflectUnitsInMenu(entries, node, resource, basePath, url);
+			}
+		} else {
+			if (resource.length() == 0) // stop if there is no file to add
+				return;
+
+			try {
+				String xmlPath = basePath + resource;
+				URL fileURL = new URL(url, xmlPath);
+
+				if (basePath.length() > 1) {
+					UnitDelegateInfo ud = entries.get(basePath);
+					if (ud == null) {
+						ud = addUnitDelegateGroup(basePath, node);
+						entries.put(basePath, ud);
+					}
+					addUnitDelegate(ud.treeNode, fileURL);
+				} else {
+					addUnitDelegate(node, fileURL);
+				}
+			}
+			catch (MalformedURLException e){
+				e.printStackTrace();
 			}
 		}
 	}
-	
 
 	/**
 	 * Returns true if the checked file file has the ,xml-extension.
@@ -80,5 +176,5 @@ public class FolderUnitXMLLoader implements UnitDelegateLoader {
 	private boolean isXML(final File file) {
 		return file.getName().toLowerCase().contains(".xml");
 	}
-	
+
 }

@@ -8,7 +8,7 @@ import visualap.Node;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.NodeListener;
-import de.danielsenff.imageflow.models.unit.UnitDelegate;
+import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 

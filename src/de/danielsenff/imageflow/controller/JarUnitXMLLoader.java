@@ -20,42 +20,36 @@ package de.danielsenff.imageflow.controller;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import javax.swing.JMenu;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+
+import de.danielsenff.imageflow.models.delegates.UnitMutableTreeNode;
 
 /**
  * XMLLoader to load Unit-Definitions from within the launchable jar. 
  * @author Daniel Senff
  *
  */
-public class JarUnitXMLLoader implements UnitDelegateLoader {
+public class JarUnitXMLLoader extends BasicUnitXMLLoader {
 
-	private DelegatesController delegatesController;
-	
-	/**
-	 * @param delegatesController
-	 */
-	public JarUnitXMLLoader(final DelegatesController delegatesController) {
-		this.delegatesController = delegatesController;
+	public JarUnitXMLLoader() {
+		super();
 	}
 	
 	/**
 	 * Reads contents of a jar file and manages the traversal of the file tree.
+	 * @param node 
+	 * @param url 
+	 * @throws MalformedURLException 
 	 */
-	public void readDelegates(MutableTreeNode node, JMenu menu, URL url)
-	throws MalformedURLException {
-		Dictionary<String, UnitDelegateInfo> unitGroups = new Hashtable<String, UnitDelegateInfo>();
+	public void readDelegates(UnitMutableTreeNode node, URL url) throws MalformedURLException {
+		
 		// strip out the jar file
 		String jarPath = url.getPath().substring(5, url.getPath().indexOf("!"));
 		try {
@@ -65,39 +59,14 @@ public class JarUnitXMLLoader implements UnitDelegateLoader {
 
 			// get all relevant files
 			Set<String> relevantXmlFiles = new HashSet<String>();
-			while (entries.hasMoreElements()) {
-				String absoluteName = entries.nextElement().getName();
-				if (absoluteName.startsWith(DelegatesController.getUnitFolder())) { // filter specified path
-					String fileName = absoluteName.substring(DelegatesController.getUnitFolder().length());
-
-					if (fileName.startsWith(".")) // ignore hidden files and folders
-						continue;
-
-					if (fileName.endsWith("/")) // ignore pure folder entries
-						continue;
-
-					relevantXmlFiles.add(fileName);
-				}
-			}
+			retrieveRelevantXMLPaths(entries, relevantXmlFiles);
 
 			// populate the menu
-			String[] paths =
-				relevantXmlFiles.toArray(new String[relevantXmlFiles.size()]);
+			String[] paths = populateMenu(relevantXmlFiles);
 
-			Arrays.sort(paths, new Comparator<String>() {
-				public int compare(String s1, String s2) {
-					int slash1 = s1.lastIndexOf('/');
-					int slash2 = s2.lastIndexOf('/');
-					return s1.substring(slash1 + 1).compareTo(s2.substring(slash2 + 1));
-				}
-				@Override
-				public boolean equals(Object o) {
-					return false;
-				}
-			});
-
-			for (String p : paths) {
-				reflectJarUnitsInMenu(unitGroups, node, menu, p, "", url);
+			for (String unitPath : paths) {
+				System.out.println(unitPath);
+				reflectUnitsInMenu(unitGroups, node, unitPath, "", url);
 			}
 		}
 		catch (java.io.UnsupportedEncodingException e) {
@@ -107,14 +76,33 @@ public class JarUnitXMLLoader implements UnitDelegateLoader {
 			e.printStackTrace();
 		}
 	}
-	
+
+	@Override
+	protected void retrieveRelevantXMLPaths(Enumeration entries,
+			Set<String> relevantXmlFiles) {
+		while (entries.hasMoreElements()) {
+			JarEntry entry = (JarEntry) entries.nextElement();
+			String absoluteName = entry.getName();
+			if (absoluteName.startsWith(DelegatesController.getUnitFolderName())) { // filter specified path
+				String fileName = absoluteName.substring(DelegatesController.getUnitFolderName().length());
+
+				if (fileName.startsWith(".")) // ignore hidden files and folders
+					continue;
+
+				if (fileName.endsWith("/")) // ignore pure folder entries
+					continue;
+
+				relevantXmlFiles.add(fileName);
+			}
+		}
+	}
 
 
 	/**
 	 * Goes through a given resource and creates menu and tree items when necessary.
 	 */
-	private void reflectJarUnitsInMenu(Dictionary<String, UnitDelegateInfo> entries, MutableTreeNode node,
-			JMenu menu, String resource, String basePath, URL url) {
+	private void reflectUnitsInMenu(Dictionary<String, UnitDelegateInfo> entries, MutableTreeNode node,
+			String resource, String basePath, URL url) {
 		int slash = resource.indexOf("/");
 		if (slash >= 0) { // is it a directory?
 			String name = resource.substring(0, slash);
@@ -126,30 +114,30 @@ public class JarUnitXMLLoader implements UnitDelegateLoader {
 			if (basePath.length() > 1) {
 				UnitDelegateInfo ud = entries.get(basePath);
 				if (ud == null) {
-					ud = addUnitDelegateGroup(name, node, menu);
+					ud = addUnitDelegateGroup(name, node);
 					entries.put(basePath, ud);
 				}
-				reflectJarUnitsInMenu(entries, ud.treeNode, ud.subMenu, resource, basePath, url);
+				reflectUnitsInMenu(entries, ud.treeNode, resource, basePath, url);
 			} else if (resource.length() > 0) {
-				reflectJarUnitsInMenu(entries, node, menu, resource, basePath, url);
+				reflectUnitsInMenu(entries, node, resource, basePath, url);
 			}
 		} else {
 			if (resource.length() == 0) // stop if there is no file to add
 				return;
 
 			try {
-				String xmlPath = "/" + delegatesController.getUnitFolder() + basePath + resource;
+				String xmlPath = "/" + DelegatesController.getUnitFolderName() + basePath + resource;
 				URL fileURL = new URL(url, xmlPath);
 
 				if (basePath.length() > 1) {
 					UnitDelegateInfo ud = entries.get(basePath);
 					if (ud == null) {
-						ud = addUnitDelegateGroup(basePath, node, menu);
+						ud = addUnitDelegateGroup(basePath, node);
 						entries.put(basePath, ud);
 					}
-					delegatesController.addUnitDelegate(ud.treeNode, ud.subMenu, fileURL);
+					addUnitDelegate(ud.treeNode, fileURL);
 				} else {
-					delegatesController.addUnitDelegate(node, menu, fileURL);
+					addUnitDelegate(node, fileURL);
 				}
 			}
 			catch (MalformedURLException e){
@@ -158,47 +146,5 @@ public class JarUnitXMLLoader implements UnitDelegateLoader {
 		}
 	}
 
-
-	/**
-	 * Creates a menu item and a tree node for a given file name. These objects are
-	 * added to the given parents and returned within a new UnitDelegateInfo object.
-	 */
-	private UnitDelegateInfo addUnitDelegateGroup(String fileName, MutableTreeNode node, JMenu menu) {
-		// cut away leading and trailing slashs
-		String displayName = fileName;
-		if (displayName.startsWith("/"))
-			displayName = displayName.substring(1);
-		if (displayName.endsWith("/"))
-			displayName = displayName.substring(0, displayName.length() - 1);
-
-		DefaultMutableTreeNode subNode = new DefaultMutableTreeNode(displayName);
-		((DefaultMutableTreeNode) node).add(subNode);
-
-		JMenu subMenu = new JMenu(displayName);
-		menu.add(subMenu);
-
-		UnitDelegateInfo udi = new UnitDelegateInfo(displayName, subMenu, subNode);
-		return udi;
-	}
-	
-	/**
-	 * An inner class for convenience. It represents some information about unit delegates.
-	 */
-	private class UnitDelegateInfo {
-		public String name;
-		public JMenu subMenu;
-		public DefaultMutableTreeNode treeNode;
-
-		public UnitDelegateInfo(String name, JMenu submenu, MutableTreeNode node) {
-			this.name = name;
-			this.subMenu = submenu;
-			this.treeNode = (DefaultMutableTreeNode) node;
-		}
-		public UnitDelegateInfo(String name, JMenu submenu, DefaultMutableTreeNode node) {
-			this.name = name;
-			this.subMenu = submenu;
-			this.treeNode = node;
-		}
-	}
 	
 }
