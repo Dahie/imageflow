@@ -91,16 +91,16 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	 * @param g
 	 */
 	public void paintPrintable(Graphics g) {
-		updatePreferredSize();
+		updatePreferredSize(g);
 		for (Connection aEdge : connectionList) {
 			paintPrintableConnection(g, aEdge);
 		}
 	}
 
-	public void updatePreferredSize() {
+	public void updatePreferredSize(Graphics g) {
 		rect = new Rectangle();
 		for (Node t : getNodeL()) {
-			rect = rect.union(t.paint(this.getGraphics(), this));
+			rect = rect.union(t.paint(g, this));
 		}
 		this.setPreferredSize(rect.getSize());
 		this.getParent().setPreferredSize(rect.getSize());

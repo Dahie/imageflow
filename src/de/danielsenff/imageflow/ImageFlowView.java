@@ -466,7 +466,6 @@ public class ImageFlowView extends FrameView {
 		this.graphController = graphController;
 		graphPanel.setGraphController(this.graphController);
 		registerModelListeners();
-		graphPanel.updatePreferredSize();
 		
 		firePropertyChange("graphController", oldValue, graphController);
 	}

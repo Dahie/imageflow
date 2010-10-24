@@ -225,7 +225,6 @@ public class GraphPanel extends GPanel {
 	@Override
 	public void paintComponent(final Graphics g) {
 		super.paintComponent(g);
-//		System.out.println(getSize());
 
 		final Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(
@@ -283,7 +282,7 @@ public class GraphPanel extends GPanel {
 				g2.setColor(new Color(0,0,255, 40));
 				g2.fillRect(rectToDraw.x, rectToDraw.y, 
 						rectToDraw.width - 1, rectToDraw.height - 1);
-			}	
+			}
 		} else {
 			//draw a nice message to promote creating a graph
 			drawWelcome(g2);
