@@ -30,7 +30,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.EventObject;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.imageio.ImageIO;
@@ -56,7 +55,6 @@ import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.tree.TreeNode;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
@@ -73,7 +71,6 @@ import de.danielsenff.imageflow.gui.DelegatesTreeListener;
 import de.danielsenff.imageflow.gui.GPanelPopup;
 import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.gui.InsertUnitMenu;
-import de.danielsenff.imageflow.gui.MacOSAboutHandler;
 import de.danielsenff.imageflow.gui.StatusBar;
 import de.danielsenff.imageflow.imagej.MacroFlowRunner;
 import de.danielsenff.imageflow.imagej.MacroGenerator;
@@ -88,7 +85,6 @@ import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
-import de.danielsenff.imageflow.models.delegates.Delegate;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -119,7 +115,6 @@ public class ImageFlowView extends FrameView {
 	private CodePreviewDialog codePreviewBox;
 	
 	private GraphController graphController;
-//	private HashMap<TreeNode,Delegate> delegates;
 	private File file;
 
 	private JPanel mainPanel;
@@ -308,9 +303,7 @@ public class ImageFlowView extends FrameView {
 		if(!IJ.isMacintosh()) {
 			helpMenu.add(new JSeparator());
 	        helpMenu.add(getAction("showAboutBox"));	
-		}else {                                               
-            new MacOSAboutHandler(getFrame());            
-	     }  
+		}
 		
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
