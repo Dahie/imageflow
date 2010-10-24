@@ -110,7 +110,8 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	 */
 	public void run(String args) {
 		String oldPath = System.getProperty("user.dir");
-		System.setProperty("user.dir", oldPath + File.separator + "plugins" + File.separator + "Imageflow");
+		// FIXME this ain't very nice
+		System.setProperty("user.dir", oldPath + File.separator + "plugins" + File.separator + "ImageFlow");
 
 		launch(ImageFlow.class, null);
 	}

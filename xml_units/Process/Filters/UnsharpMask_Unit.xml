@@ -40,7 +40,7 @@
 		<Name>Radius</Name>
 		<ShortName>R</ShortName>	
 		<Required>false</Required>
-		<DataType>double</DataType>
+		<DataType>number</DataType>
 		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
 	
@@ -48,7 +48,7 @@
 		<Name>Mask Weight</Name>
 		<ShortName>W</ShortName>	
 		<Required>false</Required>
-		<DataType>double</DataType>
+		<DataType>number</DataType>
 		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
 </Inputs>
