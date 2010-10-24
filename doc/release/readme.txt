@@ -43,6 +43,7 @@ Tested with Windows XP, Linux Debian distro (KDE and Gnome) and MacOS X 10.4
 
 Releases notes
 
+Version 1.2: stable release
 Version 1.1: stable release
 Version 1.0: stable release
 Version 0.9: is the first public beta. It works, but it is not yet stable.
