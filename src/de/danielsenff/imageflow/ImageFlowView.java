@@ -194,8 +194,6 @@ public class ImageFlowView extends FrameView {
 		
 		// register listeners
 		registerModelListeners();
-		if(!IJ.isMacOSX())
-			getApplication().addExitListener(new ConfirmExit());
 	}
 	
 
