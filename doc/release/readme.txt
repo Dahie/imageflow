@@ -1,7 +1,7 @@
 =================================================================================
 
-ImageFlow 1.1, 26 August 2009, 
-authors: 
+ImageFlow 1.2pre, 27 October 2010, 
+Contributors: 
 Daniel Senff (mail@danielsenff.de)
 Kai-Uwe Barthel (k.barthel@fhtw-berlin.de)
 Friedrich Maiwald (friedrich.maiwald@gmx.de)
@@ -51,28 +51,34 @@ Version 0.9: is the first public beta. It works, but it is not yet stable.
 
 Known issues
 
-- ColorHistogram unit does not work (in ImageFlow as standalone application)
+http://github.com/dahie/imageflow/issues
+
 - parameters window has at its borders a repaint problem in WinXP
-- input pins don't show their compatible datatypes (you have to guess and try if you don't know the units)
 - CombineStacks leaves a temporary window opened
 - imageJ window sometimes doesn't close properly on Mac OSX and Linux
 
 ----------------------------------------
 
+Related Links:
+
+Source Code: http://github.com/dahie/imageflow
+Wiki: http://github.com/dahie/imageflow/wiki
+XML-Specification: http://github.com/Dahie/imageflow/wiki/Unit-XML-Specification
+
+----------------------------------------
+
 Credits
+
+Author: Daniel Senff
+Contributions:
+- Kai-Uwe Barthel
+- Friedrich Maiwald 
+
+----------------------------------------
+
+License
 
 ImageFlow is build on top of VisualAp, a visual-programming application by Livio. 
 VisualAp is licensed under the GPL V2.
 https://visualap.dev.java.net/
-
-
-
-Thanks by Daniel to:
-- family, who survived me working on this project for half a year now
-- my testers
-- everyone, who had no idea what I was talking about, when I explained this concept
-- David for giving me the idea to make this my final thesis
-
-Special thanks to Kai-Uwe Barthel for allowing me to pursue this project for my bachelor-thesis.
-Another thanks to Andreas Jahnen for allowing me to continue the development at CRP Tudor.
 

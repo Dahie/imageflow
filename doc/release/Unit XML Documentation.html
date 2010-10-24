@@ -67,157 +67,104 @@ img.right {
 
 <h1>ImageFlow - Node-based Macro Editing</h1>
 
-<p>Imageflow comes with a selection of unit-elements that can be already used in the
-application to build your own workflows. Of course ImageJ has a much richer inventory of
-Plugins and Commandos, that can be translated to Imageflow. This can be done quite easily
-by defining a XML-file, which serves as a description of the elements capabilities.</p>
-
-<p>Everyone is invited to add more units and to submit them, so they can be included in future versions.
-Of course, feel free to use the existing Units as examples and as reference.</p>
-
-<h2>XML Documentation</h2>
-
-<h3>General</h3>
-
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+ <div class="content wikistyle gollum textile"> 
+      <p>Imageflow comes with a selection of unit-elements that can be already used in the application to build your own workflows. Of course ImageJ has a much richer inventory of Plugins and Commandos, that can be translated to Imageflow. This can be done quite easily by defining a <span class="caps">XML</span>-file, which serves as a description of the elements capabilities.</p> 
+<p>Everyone is invited to add more units and to submit them, so they can be included in future versions. Of course, feel free to use the existing Units as examples and as reference.</p> 
+<h2> 
+<span class="caps">XML</span> Documentation</h2> 
+<h3>General</h3> 
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;UnitDescription&gt;
 &lt;General&gt;
-    &lt;UnitName&gt;Image Calculator&lt;/UnitName&gt;
-</code></pre>
-  
-<p>Typename of the defined unit. This is also used as the default-label when the unit is inserted in
-the workflow.</p>
-	
-<pre><code>    &lt;PathToIcon&gt;ImageCalculator_Unit.png&lt;/PathToIcon&gt;</code></pre>
-
-<p>You can add an icon to your unit, either simply by creating an PNG with the same name as the unit-XML or by defining a name here.
-The icon file is placed in the xml_icons/ folder.</p>
-  
-<pre><code>    &lt;ImageJSyntax&gt;run(&quot;Image Calculator...&quot;, &quot;image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create PARA_BOOLEAN_1&quot;);&lt;/ImageJSyntax&gt;</code></pre>
-<p>The syntax is the heart of the unit. This is an abstract form of the Macro-Command called in ImageJ.</p>
-
-<pre><code>    &lt;Color&gt;0x6e91de&lt;/Color&gt;</code></pre>
-
-<p>The color is in Hex-format. The unit will be drawn in this color in the workflow.</p>
-
-<pre><code>    &lt;HelpString&gt;Performs a mathematical calculation of two images&lt;/HelpString&gt;</code></pre>
-
-<p>The HelpString describes what this unit does in roughly one sentence.</p>
-
-<pre><code>    &lt;IconSize&gt;big&lt;/IconSize&gt;</code></pre>
-
-<p>The representation icon on the workflow can be of different sizes. Possible are big, medium and small. 
-Only big and small are implemented right now. This is handy to save screen real estate.</p>
-
-<pre><code>    &lt;DoDisplay&gt;false&lt;/DoDisplay&gt;</code></pre>
-
-<p>Defines this unit as Display. Usually all outputs will be displayed. However this setting also works for units who have no outputs</p>
-
-<pre>&lt;/General&gt;</pre>
-
-<h4>Wildcards</h4>
-
-<p>The Variables in the <code>&lt;ImageJSyntax&gt;</code> define wildcards for the Parameters, Inputs and Outputs defined later in this XML. The wildcards for the placeholders have a certain structure.
-The number denotes the number of Parameter-wildcards of this datatype. This counting index starts with 1. The different Parameter-wildcards are:<p>
-
-<ul>
-<li>PARA_INTEGER_x</li>
-<li>PARA_DOUBLE_x</li>
-<li>PARA_STRING_x</li>
-<li>PARA_BOOLEAN_x</li>
-</ul>
-
-<p>It is also possible to address Inputs in a similar way. The following Input-wildcards are possible:</p>
-
-<ul>
-<li>INPUT_INTEGER_x</li>
-<li>INPUT_DOUBLE_x</li>
-<li>INPUT_NUMBER_x</li>
-<li>INPUT_IMAGE_x</li>
-<li>TITLE_x</li>
-</ul>
-
-<p>In this case NUMBER is a general datatype for any numbers, superior to Integer and Double. So a unit with this input can handle Integer values as well as Double values.
-The wildcards <code>INPUT_IMAGE_x</code> and <code>TITLE_x</code> refer to an image input and will do exactly the same.</p>
-
-<p>To use several macros for Stacks it is necessary to add a flag to their method-arguments. The wildcard is simply called <code>STACK</code>.
-If the workflow is handling regular images, this is simply empty, when we are dealing with stacks, it is replaced with the necessary flag.</p>
-
-<p>Output-wildcards:</p>
-
-<ul>
-<li>OUTPUT_INTEGER_x</li>
-<li>OUTPUT_DOUBLE_x</li>
-<li>OUTPUT_IMAGE_x</li>
-</ul>
-
-<p>An Attribute-wildcard provides the option to take a value either from a parameter or a input. If an input is connected, the value of the input will be chosen, else the value is taken from the parameter.</p>
-
-<ul>
-<li>ATTRIBUTE_INPUT_x_PARAMETER_x</li>
-</ul>
-
-<p>If the number in the wildcard is higher than the actual number of parameters/inputs/outputs, this wildcard is ignored and cannot be replaced.</p>
-
-<p>ImageFlow can also process stacks. Some command syntaxes need therefore the special "stack" parameter, which replaces the following wildcard:</p>
-
-<ul>
-<li>STACK</li>
-</ul>
-
-<h3>Parameters</h3>
-
-<p>Parameters are values, that influence the processing the unit does.</p>
-
+    &lt;UnitName&gt;Image Calculator&lt;/UnitName&gt;</code></pre> 
+<p>Typename of the defined unit. This is also used as the default-label when the unit is inserted in the workflow.</p> 
+<pre><code>   &lt;PathToIcon&gt;ImageCalculator_Unit.png&lt;/PathToIcon&gt;</code></pre> 
+<p>You can add an icon to your unit, either simply by creating an <span class="caps">PNG</span> with the same name as the unit-<span class="caps">XML</span> or by defining a name here.<br> 
+The icon file is placed in the xml_icons/ folder.</p> 
+<pre><code>   &lt;ImageJSyntax&gt;run("Image Calculator...", "image1=TITLE_1 operation=PARA_STRING_1 image2=TITLE_2 create PARA_BOOLEAN_1");&lt;/ImageJSyntax&gt;</code></pre> 
+<p>The syntax is the heart of the unit. This is an abstract form of the Macro-Command called in ImageJ.</p> 
+<pre><code>   &lt;Color&gt;0x6e91de&lt;/Color&gt;</code></pre> 
+<p>The color is in Hex-format. The unit will be drawn in this color in the workflow.</p> 
+<pre><code>   &lt;HelpString&gt;Performs a mathematical calculation of two images&lt;/HelpString&gt;</code></pre> 
+<p>The HelpString describes what this unit does in roughly one sentence.</p> 
+<pre><code>   &lt;IconSize&gt;big&lt;/IconSize&gt;</code></pre> 
+<p>The representation icon on the workflow can be of different sizes. Possible are big, medium and small. Only big and small are implemented right now. This is handy to save screen real estate.</p> 
+<pre><code>   &lt;DoDisplay&gt;false&lt;/DoDisplay&gt;</code></pre> 
+<p>Defines this unit as Display. Usually all outputs will be displayed. However this setting also works for units who have no outputs</p> 
+<pre><code>&lt;/General&gt;</code></pre> 
+<h4>Wildcards</h4> 
+<p>The Variables in the  define wildcards for the Parameters, Inputs and Outputs defined later in this <span class="caps">XML</span>. The wildcards for the placeholders have a certain structure. The number denotes the number of Parameter-wildcards of this datatype. This counting index starts with 1. The different Parameter-wildcards are:</p> 
+<ul> 
+<li>PARA_INTEGER_x</li> 
+	<li>PARA_DOUBLE_x</li> 
+	<li>PARA_STRING_x</li> 
+	<li>PARA_BOOLEAN_x</li> 
+</ul><p>It is also possible to address Inputs in a similar way. The following Input-wildcards are possible:</p> 
+<ul> 
+<li>INPUT_INTEGER_x</li> 
+	<li>INPUT_DOUBLE_x</li> 
+	<li>INPUT_NUMBER_x</li> 
+	<li>INPUT_IMAGE_x</li> 
+	<li>TITLE_x</li> 
+</ul><p>In this case <span class="caps">NUMBER</span> is a general datatype for any numbers, superior to Integer and Double. So a unit with this input can handle Integer values as well as Double values. The wildcards INPUT_IMAGE_x and TITLE_x refer to an image input and will do exactly the same.</p> 
+<p>To use several macros for Stacks it is necessary to add a flag to their method-arguments. The wildcard is simply called <span class="caps">STACK</span>. If the workflow is handling regular images, this is simply empty, when we are dealing with stacks, it is replaced with the necessary flag.</p> 
+<p>Output-wildcards:</p> 
+<ul> 
+<li>OUTPUT_INTEGER_x</li> 
+	<li>OUTPUT_DOUBLE_x</li> 
+	<li>OUTPUT_IMAGE_x</li> 
+</ul><p>An Attribute-wildcard provides the option to take a value either from a parameter or a input. If an input is connected, the value of the input will be chosen, else the value is taken from the parameter.</p> 
+<ul> 
+<li>ATTRIBUTE_INPUT_x_PARAMETER_x</li> 
+</ul><p>If the number in the wildcard is higher than the actual number of parameters/inputs/outputs, this wildcard is ignored and cannot be replaced.</p> 
+<p>ImageFlow can also process stacks. Some command syntaxes need therefore the special “stack” parameter, which replaces the following wildcard:</p> 
+<ul> 
+<li><span class="caps">STACK</span></li> 
+</ul><h3>Parameters</h3> 
+<p>Parameters are values, that influence the processing the unit does.</p> 
 <pre><code>&lt;Parameters&gt;
     &lt;Parameter&gt;
-        &lt;Name&gt;Math&lt;/Name&gt;</code></pre>
-<p>The name will be displayed in the titel of this unit's properties window.</p>
-  		
-<pre><code>        &lt;DataType&gt;StringArray&lt;/DataType&gt;</code></pre>
-
-<p>The DataType defines the Type of the Parameter. There are a few, which are used for different purposes and have different requirements to the XML-syntax.<p>
-	
-	<table>
-	<thead>
-		<th>Parameter</th>
-		<th>Description</th>
-		<th>XML-Requirements</th>
-	</thead>
-	<tbody>
-		<tr>
-			<td>String</td>
-			<td>Stores a single String-Object</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>StringArray</td>
-			<td>Stores an Array of Strings seperated by semicolons 
-			  and the index of the selected item, beginning with 0.<br />
-			  The wildcard for a StringArray is also <code>PARA_STRING_x</code></td>
-			<td><pre>&lt;Value&gt;Red;Black;Blue;Green;Yellow&lt;/Value&gt;
-&lt;ChoiceNumber&gt;0&lt;/ChoiceNumber&gt;</pre></td>
-		</tr>
-		<tr>
-			<td>boolean</td>
-			<td>Stores the boolean values and a String. ImageJ-Macros can have this string inserted into the command if true.</td>
-			<td><pre>&lt;Value&gt;true&lt;/Value&gt;
-&lt;TrueString&gt;32-bit&lt;/TrueString&gt;</pre></td>
-		</tr>
-		<tr>
-			<td>integer</td>
-			<td>Stores a simple integer value.</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>double</td>
-			<td>Stores a simple double value.</td>
-			<td></td>
-		</tr>
-	</tbody>
-	</table>
-			
-<pre><code>        &lt;Value&gt;Add;Subtract;Multiply;Divide;AND;OR;XOR&lt;/Value&gt;
+        &lt;Name&gt;Math&lt;/Name&gt;</code></pre> 
+<p>The name will be displayed in the titel of this unit’s properties window.</p> 
+<pre><code>       &lt;DataType&gt;StringArray&lt;/DataType&gt;</code></pre> 
+<p>The DataType defines the Type of the Parameter. There are a few, which are used for different purposes and have different requirements to the <span class="caps">XML</span>-syntax.</p> 
+<table> 
+<thead> 
+<th>Parameter</th> 
+		<th>Description</th> 
+		<th> 
+<span class="caps">XML</span>-Requirements</th> 
+</thead> 
+<tbody> 
+<tr> 
+<td>String</td> 
+			<td>Stores a single String-Object</td> 
+			<td></td> 
+</tr> 
+<tr> 
+<td>StringArray</td> 
+			<td>Stores an Array of Strings seperated by semicolons <br> 
+			  and the index of the selected item, beginning with 0.<br> 
+			  The wildcard for a StringArray is also PARA_STRING_x</td> 
+			<td>Red;Black;Blue;Green;Yellow0</td> 
+</tr> 
+<tr> 
+<td>boolean</td> 
+			<td>Stores the boolean values and a String. ImageJ-Macros can have this string inserted into the command if true.</td> 
+			<td>true32-bit</td> 
+</tr> 
+<tr> 
+<td>integer</td> 
+			<td>Stores a simple integer value.</td> 
+			<td></td> 
+</tr> 
+<tr> 
+<td>double</td> 
+			<td>Stores a simple double value.</td> 
+			<td></td> 
+</tr> 
+</tbody> 
+</table><pre><code>       &lt;Value&gt;Add;Subtract;Multiply;Divide;AND;OR;XOR&lt;/Value&gt;
         &lt;HelpString&gt;Defines what math should be used to merge both images&lt;/HelpString&gt;
         &lt;ChoiceNumber&gt;1&lt;/ChoiceNumber&gt;
     &lt;/Parameter&gt;
@@ -228,96 +175,71 @@ If the workflow is handling regular images, this is simply empty, when we are de
         &lt;HelpString&gt;create 32 bit result?&lt;/HelpString&gt;
         &lt;TrueString&gt;32-bit&lt;/TrueString&gt;
     &lt;/Parameter&gt; 
-&lt;/Parameters&gt;
-</code></pre>
-
-<h3>Inputs</h3>
-
-<p>Inputs are pins, which return receive the data that will be processed in this unit.
-The unit can have multiple inputs.</p>
-
+&lt;/Parameters&gt;</code></pre> 
+<h3>Inputs</h3> 
+<p>Inputs are pins, which return receive the data that will be processed in this unit. The unit can have multiple inputs.</p> 
 <pre><code>&lt;Inputs&gt;
     &lt;Input&gt;
         &lt;Name&gt;Input1&lt;/Name&gt;
-        &lt;ShortName&gt;I1&lt;/ShortName&gt;</code></pre>
-
-<p>Name and Shortname are currently not used in the interface, but exist as wildcards for possible additions to the User interface later on.</p>
-
-<pre><code>        &lt;ImageType&gt;31&lt;/ImageType&gt;</code></pre>
-		
-<p>An input can either have one ore more defined imagetypes. 
-If you want to predefine the type, use the ImageType constants defined in ImageJ:</p>
-<table>
-	<thead>
-	<tr>
-		<th>Image Type</th>
-		<th>Constant</th>
-	</tr>
-	</thead>
-	<tbody>
-	<tr>
-		<td>8 bit greyscale</td>
-		<td>1</td>
-	</tr>
-	<tr>
-		<td>8 bit Color</td>
-		<td>2</td>
-	</tr>
-	<tr>
-		<td>16 bit greyscale</td>
-		<td>4</td>
-	</tr>
-	<tr>
-		<td>32 bit greyscale</td>
-		<td>8</td>
-	</tr>
-	<tr>
-		<td>RGB Color</td>
-		<td>16</td>
-	</tr>
-	<tr>
-		<td>Stack</td>
-		<td>32</td>
-	</tr>
-	<tr>
-		<td>All</td>
-		<td>31</td>
-	</tr>
-	<tr>
-		<td>Stacks</td>
-		<td>32</td>
-	</tr>
-	</tbody>
-</table>
-
-
-<p>More constants are currently not supported. To combine different ImageTypes, add the constants. For example:</p>
-<ul>
-	<li>13 permits 8bit greyscale, 16bit greyscale and 32bit greyscale</li>
-	<li>18 permits RGB Color and 8bit RGB indexed</li>
-	<li>31 permits everything supported</li>
-</ul>
-
-<p><strong>Only for Outputs</strong> exist 2 more types:</p>
-<ul>
-	<li>-1: The Output assumes the ImageType taken from the first incoming Input</li>
-	<li>-2: The Output assumes the ImageType taken from the first incoming Input and converts this from a Stack to a regular Image.</li>
-</ul>
-
-<pre><code>        &lt;NeedToCopyInput&gt;false&lt;/NeedToCopyInput&gt;</code></pre>
-
-<p>Certain macro commands in ImageJ require this option to work. This creates a copy of the image which is processed
-in the following units. This is required when you get the error message "Image -xx not found or no image open."</p>
-
-<pre><code>        &lt;Required&gt;true&lt;/Required&gt;</code></pre>
-
-<p>Inputs don't have to be mandatory. They can be defined as optional. It is useful when combining Inputs with Parameters to Attributes.</p>
-
-<pre><code>        &lt;Protected&gt;false&lt;/Protected&gt;</code></pre>
-
-<p>Pins can be locked if necessary. This means, changing the connections on this input will be prohibited. 
-They can be defined as optional.</p>
-		
+        &lt;ShortName&gt;I1&lt;/ShortName&gt;</code></pre> 
+<p>Name and Shortname are currently not used in the interface, but exist as wildcards for possible additions to the User interface later on.</p> 
+<pre><code>       &lt;ImageType&gt;31&lt;/ImageType&gt;</code></pre> 
+<p>An input can either have one ore more defined imagetypes. If you want to predefine the type, use the ImageType constants defined in ImageJ:</p> 
+<table> 
+<thead><tr> 
+<th>Image Type</th> 
+		<th>Constant</th> 
+</tr></thead> 
+<tbody> 
+<tr> 
+<td>8 bit greyscale</td> 
+		<td>1</td> 
+</tr> 
+<tr> 
+<td>8 bit Color</td> 
+		<td>2</td> 
+</tr> 
+<tr> 
+<td>16 bit greyscale</td> 
+		<td>4</td> 
+</tr> 
+<tr> 
+<td>32 bit greyscale</td> 
+		<td>8</td> 
+</tr> 
+<tr> 
+<td> 
+<span class="caps">RGB</span> Color</td> 
+		<td>16</td> 
+</tr> 
+<tr> 
+<td>Stack</td> 
+		<td>32</td> 
+</tr> 
+<tr> 
+<td>All</td> 
+		<td>31</td> 
+</tr> 
+<tr> 
+<td>Stacks</td> 
+		<td>32</td> 
+</tr> 
+</tbody> 
+</table><p>More constants are currently not supported. To combine different ImageTypes, add the constants. For example:</p> 
+<ul> 
+<li>13 permits 8bit greyscale, 16bit greyscale and 32bit greyscale</li> 
+	<li>18 permits <span class="caps">RGB</span> Color and 8bit <span class="caps">RGB</span> indexed</li> 
+	<li>31 permits everything supported</li> 
+</ul><p><strong>Only for Outputs</strong> exist 2 more types:</p> 
+<ul> 
+<li>-1: The Output assumes the ImageType taken from the first incoming Input</li> 
+	<li>-2: The Output assumes the ImageType taken from the first incoming Input and converts this from a Stack to a regular Image.</li> 
+</ul><pre><code>       &lt;NeedToCopyInput&gt;false&lt;/NeedToCopyInput&gt;</code></pre> 
+<p>Certain macro commands in ImageJ require this option to work. This creates a copy of the image which is processed in the following units. This is required when you get the error message “Image -xx not found or no image open.”</p> 
+<pre><code>       &lt;Required&gt;true&lt;/Required&gt;</code></pre> 
+<p>Inputs don’t have to be mandatory. They can be defined as optional. It is useful when combining Inputs with Parameters to Attributes.</p> 
+<pre><code>       &lt;Protected&gt;false&lt;/Protected&gt;</code></pre> 
+<p>Pins can be locked if necessary. This means, changing the connections on this input will be prohibited. They can be defined as optional.</p> 
 <pre><code>&lt;/Inputs&gt;
     &lt;Input&gt;
         &lt;Name&gt;Input2&lt;/Name&gt;
@@ -325,57 +247,41 @@ They can be defined as optional.</p>
         &lt;ImageType&gt;31&lt;/ImageType&gt;
         &lt;NeedToCopyInput&gt;false&lt;/NeedToCopyInput&gt;
     &lt;/Input&gt;
-&lt;/Inputs&gt;</code></pre>
-
-<h3>Outputs</h3>
-
-<p>Outputs are pins, which return the result of the processing done by the unit.<br />
-Theoretically more than one output is supported, but not completely tested. Having no output is fine as well.</p>
-
+&lt;/Inputs&gt;</code></pre> 
+<h3>Outputs</h3> 
+<p>Outputs are pins, which return the result of the processing done by the unit.<br> 
+Theoretically more than one output is supported, but not completely tested. Having no output is fine as well.</p> 
 <pre><code>&lt;Outputs&gt;
     &lt;Output&gt;
         &lt;Name&gt;Output&lt;/Name&gt;
-        &lt;ShortName&gt;O&lt;/ShortName&gt;</code></pre>
-		
-<p>Name and Shortname are currently not used in the interface, but exist as wildcards for possible additions to the User interface later on.</p>
-		
-<pre>        &lt;ImageType&gt;-1&lt;/ImageType&gt;</pre>
-
-<p>An output can either have one ore more defined imagetypes or allow any kind of type.
-If you want to predefine the type, use the ImageType constants defined in ImageJ as listed above.</p>
-
-<p>You don't have to specify an output type. In most cases the output type depends on the
-input type. In this case you define -1. This will return the imagetype it gets from
-the first input.</p>
-
-<pre>        &lt;DoDisplay&gt;false&lt;/DoDisplay&gt;</pre>
-
-<p>Defines this Output as Display. In the application, at the moment only a unit is set as display.
-This is because with one output there is no difference whether the option is attached
-to the unit or the output. Since there is the possibility of requiring multiple outputs
-in later versions and the option to display only selected outputs, this setting is defined here.</p>
-<pre><code>        &lt;Protected&gt;false&lt;/Protected&gt;</code></pre>
-
-<p>Pins can be locked if necessary. This means, changing the connections on this input will be prohibited. 
-They can be defined as optional.</p>
-
-<pre><code>    &lt;/Output&gt;
+        &lt;ShortName&gt;O&lt;/ShortName&gt;</code></pre> 
+<p>Name and Shortname are currently not used in the interface, but exist as wildcards for possible additions to the User interface later on.</p> 
+<pre><code>       &lt;ImageType&gt;-1&lt;/ImageType&gt;</code></pre> 
+<p>An output can either have one ore more defined imagetypes or allow any kind of type. If you want to predefine the type, use the ImageType constants defined in ImageJ as listed above.</p> 
+<p>You don’t have to specify an output type. In most cases the output type depends on the input type. In this case you define -1. This will return the imagetype it gets from the first input.</p> 
+<pre><code>       &lt;DoDisplay&gt;false&lt;/DoDisplay&gt;</code></pre> 
+<p>Defines this Output as Display. In the application, at the moment only a unit is set as display. This is because with one output there is no difference whether the option is attached to the unit or the output. Since there is the possibility of requiring multiple outputs in later versions and the option to display only selected outputs, this setting is defined here.</p> 
+<pre><code>       &lt;Protected&gt;false&lt;/Protected&gt;</code></pre> 
+<p>Pins can be locked if necessary. This means, changing the connections on this input will be prohibited. They can be defined as optional.</p> 
+<pre><code>   &lt;/Output&gt;
 &lt;/Outputs&gt;
-
-&lt;/UnitDescription&gt;	
-</code></pre>
-
-<hr />
-
-<h2>Troubleshooting</h2>
-
-<p>Q: I build an unit-xml and when I execute it in the graph ImageJ returns the error message "Image -xx not found or no images open."</p>
-<p>A: Your unit's input requires the setting <code>&lt;NeedToCopyInput&gt;</code> set to true. Read above why.</p>
+&lt;/UnitDescription&gt;	</code></pre> 
+<hr><h2>Troubleshooting</h2> 
+<p>Q: I build an unit-xml and when I execute it in the graph ImageJ returns the error message “Image -xx not found or no images open.”<br> 
+A: Your unit’s input requires the setting  set to true. Read above why.</p> 
+    </div> 
+ 
+      </div> 
+ 
+  
+</div> 
+ 
+    </div> 
 
 <hr />
 
 <h2>Document History</h2>
-<p>Current Version 12/08/2009</p>
+<p>Current Version 10/24/2010</p>
 <table>
 <thead>
 <tr>
@@ -384,6 +290,15 @@ They can be defined as optional.</p>
 </tr>
 </thead>
 <tbody>
+
+<tr>
+<td>10/24/10</td>
+<td>
+<ul>
+	<li>Updated based on the XML Spec in the <a href="view-source:http://github.com/Dahie/imageflow/wiki/Unit-XML-Specification">Wiki</a>.</li>
+</ul>
+</tr>
+
 
 <tr>
 <td>12/08/09</td>
