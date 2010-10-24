@@ -17,17 +17,14 @@
 	<property name="doc.dir" location="${basedir}/doc/release" />
 	<property name="example.dir" location="${basedir}/xml_flows" />
 	<tstamp>
-	  <format property="TODAY" pattern="d-MMMM-yyyy" />
-  </tstamp>
+	    <format property="TODAY" pattern="d-MMMM-yyyy" />
+     </tstamp>
   
   
 	<path id="classpath">
 		<pathelement location="${ij.path}" />
 		<fileset dir="${lib.dir}" includes="**/*.jar"/>
 	</path>
-	
-	
-	
 	
 	<target name="clean" description="Clean and delete exisinst folders">
 		<delete dir="${release.dir}"/>
@@ -37,6 +34,7 @@
 	 <target name="copy" description="Copy stuff for plugin creation" depends="clean">
 		<mkdir dir="${bin.dir}" />
 		<mkdir dir="${release.dir}" />
+	 	<mkdir dir="${release.dir}/executable" />
     
 		<!-- copy folder for example flows and unit xml -->
 		<mkdir dir="${bin.dir}/xml_units" />
@@ -49,10 +47,12 @@
 			<fileset dir="${icons.dir}" />
 		</copy>
 
-		<!--<mkdir dir="${release.dir}/doc" />
+		<mkdir dir="${release.dir}/executable/doc" />
 		<copy todir="${release.dir}/executable/doc">
 				<fileset dir="${doc.dir}" />
-		</copy>-->
+		</copy>
+	 	
+	 	<copy todir="${release.dir}/executable" file="${basedir}/ImageFlow" />
 
 		<mkdir dir="${bin.dir}/xml_flows" />
 		<copy todir="${bin.dir}/xml_flows">
@@ -86,7 +86,7 @@
 	</target>
   
   <target name="create_run_jar" depends="copy, compile">
-    <mkdir dir="${release.dir}/executable" />
+    <!--<mkdir dir="${release.dir}/executable" />-->
 		<jar destfile="${release.dir}/executable/${project-name}_.jar" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}"/>
