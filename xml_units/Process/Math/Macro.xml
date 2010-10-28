@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Macro</UnitName> 
+  <PathToIcon>Math_Unit.png</PathToIcon> 
+  <ImageJSyntax><![CDATA[
+  run("Macro...", "code=PARA_STRING_1");]]></ImageJSyntax> 
+  <Color>0x6e91de</Color>
+  <HelpString>Performs a mathematical operation on the pixels of an image</HelpString>
+  <IconSize>BIG</IconSize>  
+</General>
+
+<Parameters>
+  <Parameter>
+  	<Name>Formula</Name>
+  	<DataType>String</DataType>
+  	<Value>v=v+30*sin(d/10)</Value>
+  	<HelpString>Defines what math operation will be performed</HelpString>
+  	<ChoiceNumber>0</ChoiceNumber>
+  </Parameter>
+</Parameters>
+
+<Inputs> 
+  <Input>
+	<Name>Image</Name>
+	<ShortName>I</ShortName>
+	<DataType>Image</DataType>	
+	<ImageType>63</ImageType>
+	<NeedToCopyInput>true</NeedToCopyInput>
+	<Required>true</Required>
+  </Input>
+</Inputs>
+
+<Outputs> 
+  <Output>
+	<Name>Output</Name>
+	<ShortName>O</ShortName>
+	<DataType>Image</DataType>	
+	<ImageType>-1</ImageType>
+	<DoDisplay>false</DoDisplay>
+  </Output>
+</Outputs>
+
+</UnitDescription>
