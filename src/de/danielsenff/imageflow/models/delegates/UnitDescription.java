@@ -20,18 +20,19 @@ package de.danielsenff.imageflow.models.delegates;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 
 import org.jdom.Element;
+import org.jdom.JDOMException;
 
-import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
@@ -40,7 +41,6 @@ import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 import de.danielsenff.imageflow.models.unit.NodeIcon;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
-import de.danielsenff.imageflow.models.unit.UnitModelComponent;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 import de.danielsenff.imageflow.utils.Tools;
 
@@ -53,6 +53,8 @@ import de.danielsenff.imageflow.utils.Tools;
  *
  */
 public class UnitDescription implements NodeDescription {
+
+	public URL unitURL;
 
 	public String unitName;
 	public String helpString;
@@ -75,92 +77,106 @@ public class UnitDescription implements NodeDescription {
 	public boolean isDisplayUnit;
 	public BufferedImage icon = null;
 	public URL iconURL;
-	
-	
+
+
 	public UnitDescription(URL url) {
-		this(url, Tools.getXMLRoot(url));
+		this.unitURL = url;
+	}
+
+	/** 
+	 * Read Unit Properties from XML-Element 
+	 * @param root
+	 * @throws IOException 
+	 * @throws JDOMException 
+	 * @throws DataFormatException 
+	 */
+	public void readXML() throws JDOMException, IOException, DataFormatException {
+		final Element root = Tools.getXMLRoot(this.unitURL);
+		readXML(root);
 	}
 	
-	public UnitDescription(URL url, Element root) {
-		System.out.println(root.getText());
-		// TODO save XML in model 
+	/** 
+	 * Read Unit Properties from XML URL
+	 * @param root
+	 * @throws DataFormatException 
+	 */
+	public void readXML(final Element root) throws DataFormatException {
+		// TODO save XML in model
+		// read general info about this unit
+		Element elementGeneral = root.getChild("General");
+		unitName = elementGeneral.getChild("UnitName").getValue();
+		pathToIcon = elementGeneral.getChild("PathToIcon").getValue();
+		helpString = elementGeneral.getChild("HelpString").getValue();
+		colorString = elementGeneral.getChild("Color").getValue();
+		if(elementGeneral.getChild("DoDisplay") != null)
+			isDisplayUnit = elementGeneral.getChild("DoDisplay").getValue().equalsIgnoreCase("true") ? true : false;
+
 		try {
-			// read general infos about this unit
-			Element elementGeneral = root.getChild("General");
-			unitName = elementGeneral.getChild("UnitName").getValue();
-			pathToIcon = elementGeneral.getChild("PathToIcon").getValue();
-			helpString = elementGeneral.getChild("HelpString").getValue();
-			colorString = elementGeneral.getChild("Color").getValue();
-			if(elementGeneral.getChild("DoDisplay") != null)
-				isDisplayUnit = elementGeneral.getChild("DoDisplay").getValue().equalsIgnoreCase("true") ? true : false;
-			
-			try {
-				color = Color.decode(colorString);
-				if (color == null)
-					color = new Color(argbDefault);
-			} catch (NumberFormatException e) {
-				System.out.println("Wrong color string ");
-			}
-
-
-			if(elementGeneral.getChild("IconSize") != null) {
-				componentSizeString = elementGeneral.getChild("IconSize").getValue();
-				componentSize = NodeIcon.getSizeFromString(componentSizeString);
-			}
-		    
-			imageJSyntax = elementGeneral.getChild("ImageJSyntax").getValue() + "\n";
-
-			try {
-				// get icon
-				iconURL = getIconURL(url, pathToIcon);
-				icon = ImageIO.read(iconURL.openStream());
-			} catch (Exception e) {
-				// no exception handling is needed here, since it is often
-				// the case that icons are missing. Most of the units are
-				// not even intended to have icons.
-			}
-			
-			// parameters
-			Element parametersElement = root.getChild("Parameters");
-			if (parametersElement != null) {
-				parseParameter(parametersElement);
-			}
-
-			// Inputs
-			Element inputsElement = root.getChild("Inputs");
-			if (inputsElement != null) {
-				parseInputs(inputsElement);
-			}
-
-			// Outputs
-			Element outputsElement = root.getChild("Outputs");
-			if (outputsElement != null) {
-				parseOutputs(outputsElement);
-			}
+			color = Color.decode(colorString);
+			if (color == null)
+				color = new Color(argbDefault);
+		} catch (NumberFormatException e) {
+			System.out.println("Wrong color string ");
 		}
 
-		catch (Exception e) {
-			System.err.println("Invalid XML-File!");
-			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
-					"There has been a problem loading a XML unit description." +'\n' 
-					+ "The error ocures in " + url + "." + '\n'
-					+ "The programm start will continue without this unit."
-					,
-					"Missing connections", 
-					JOptionPane.WARNING_MESSAGE);
-			e.printStackTrace();
+
+		if(elementGeneral.getChild("IconSize") != null) {
+			componentSizeString = elementGeneral.getChild("IconSize").getValue();
+			componentSize = NodeIcon.getSizeFromString(componentSizeString);
 		}
+
+		imageJSyntax = elementGeneral.getChild("ImageJSyntax").getValue() + "\n";
+
+		try {
+			// get icon
+			iconURL = getIconURL(this.unitURL, pathToIcon);
+			icon = ImageIO.read(iconURL.openStream());
+		} catch (Exception e) {
+			// no exception handling is needed here, since it is often
+			// the case that icons are missing. Most of the units are
+			// not even intended to have icons.
+		}
+
+		// parameters
+		Element parametersElement = root.getChild("Parameters");
+		if (parametersElement != null) {
+			parseParameter(parametersElement);
+		}
+
+		// Inputs
+		Element inputsElement = root.getChild("Inputs");
+		if (inputsElement != null) {
+			parseInputs(inputsElement);
+		}
+
+		// Outputs
+		Element outputsElement = root.getChild("Outputs");
+		if (outputsElement != null) {
+			parseOutputs(outputsElement);
+		}
+
+		//		catch (Exception e) {
+		//			System.err.println("Invalid XML-File!");
+		//			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+		//					"There has been a problem loading a XML unit description." +'\n' 
+		//					+ "The error ocures in " + url + "." + '\n'
+		//					+ "The programm start will continue without this unit."
+		//					,
+		//					"Missing connections", 
+		//					JOptionPane.WARNING_MESSAGE);
+		//			e.printStackTrace();
+		//		}
 	}
 
 
 	/**
 	 * @param parametersElement
-	 * @throws Exception
+	 * @throws DataFormatException 
 	 */
-	private void parseParameter(Element parametersElement) throws Exception {
+	private void parseParameter(Element parametersElement) throws DataFormatException {
 		List<Element> parametersList = parametersElement.getChildren();
 		Iterator<Element> parametersIterator = parametersList.iterator();
-		
+
 		numParas = parametersList.size();
 		para = new Para[numParas + 1];
 
@@ -168,7 +184,7 @@ public class UnitDescription implements NodeDescription {
 		int num = 1;
 		while (parametersIterator.hasNext()) {
 			Element actualParameterElement = (Element) parametersIterator.next();
-			
+
 			processParameters(num, actualParameterElement);
 			num++;
 		}
@@ -182,38 +198,38 @@ public class UnitDescription implements NodeDescription {
 	private void parseInputs(Element inputsElement) {
 		List<Element> inputsList = inputsElement.getChildren();
 		Iterator<Element> inputsIterator = inputsList.iterator();
-		
+
 		numInputs = inputsList.size();
 		input = new Input[numInputs+1];
 		// loop over all Inputs
 		int num = 1;
 		while (inputsIterator.hasNext()) {
 			Element inputElement = (Element) inputsIterator.next();
-			
+
 			Input actInput = input[num] = new Input();
 			actInput.name = inputElement.getChild("Name").getValue();
 			if(inputElement.getChild("Required") != null)
 				actInput.required = inputElement.getChild("Required").getValue().equalsIgnoreCase("true") ? true : false;
 			actInput.shortName = inputElement.getChild("ShortName").getValue();
-			
+
 			if(inputElement.getChild("Required") != null)
 				actInput.required = inputElement.getChild("Required").getValue().equalsIgnoreCase("true") ? true : false;
-			
-			
+
+
 			// legacy: in case no type is given, assume DataTypeFactory.Image
 			if(inputElement.getChild("DataType") != null) {
 				actInput.dataType = DataTypeFactory.createDataType(inputElement.getChild("DataType").getValue());	
 			} else 
 				actInput.dataType = DataTypeFactory.createDataType("Image");
-			
+
 			actInput.needToCopyInput = inputElement.getChild("NeedToCopyInput").getValue().equalsIgnoreCase("true") ? true : false;
-			
+
 			if(actInput.dataType instanceof DataTypeFactory.Image) {
 				int imageType = Integer.valueOf(inputElement.getChild("ImageType").getValue());
 				actInput.imageType = imageType;
 				((DataTypeFactory.Image)actInput.dataType).setImageBitDepth(imageType);
 			}
-					
+
 			num++;
 		}
 	}
@@ -234,21 +250,21 @@ public class UnitDescription implements NodeDescription {
 			Output actOutput = output[num] = new Output();
 			actOutput.name = outputElement.getChild("Name").getValue();
 			actOutput.shortName = outputElement.getChild("ShortName").getValue();
-			
+
 			// legacy: in case no type is given, assume DataTypeFactory.Image
 			if(outputElement.getChild("DataType") != null) {
 				actOutput.dataType = DataTypeFactory.createDataType(outputElement.getChild("DataType").getValue());
 			} else {
 				actOutput.dataType = DataTypeFactory.createDataType("Image");
 			}
-			
+
 			if(actOutput.dataType instanceof DataTypeFactory.Image) {
 				int imageType = Integer.valueOf(outputElement.getChild("ImageType").getValue());
 				actOutput.imageType = imageType;
 				((DataTypeFactory.Image)actOutput.dataType).setImageBitDepth(imageType);
 			}
-			
-			
+
+
 			actOutput.doDisplay = outputElement.getChild("DoDisplay").getValue().equalsIgnoreCase("true")? true : false;
 			isDisplayUnit = actOutput.doDisplay;
 			num++;
@@ -257,9 +273,9 @@ public class UnitDescription implements NodeDescription {
 
 
 	private void processParameters(int num, Element actualParameterElement)
-			throws Exception {
+	throws DataFormatException {
 		Para actPara = para[num] = new Para();
-		
+
 		actPara.name = actualParameterElement.getChild("Name").getValue();
 		if(actualParameterElement.getChild("HelpString") != null)
 			actPara.helpString = actualParameterElement.getChild("HelpString").getValue();
@@ -267,7 +283,7 @@ public class UnitDescription implements NodeDescription {
 			actPara.helpString = actualParameterElement.getChild("Name").getValue();
 		String dataTypeString = actPara.dataTypeString = actualParameterElement.getChild("DataType").getValue();
 		String valueString = actualParameterElement.getChild("Value").getValue();
-		
+
 		if (dataTypeString.toLowerCase().equals("double")) 
 			actPara.value = Double.valueOf(valueString);
 		else if (dataTypeString.toLowerCase().equals("file"))
@@ -296,7 +312,7 @@ public class UnitDescription implements NodeDescription {
 					choicesList.add(strings[i]);
 				}
 			}
-			
+
 			actPara.value = choicesList;
 			actPara.choiceIndex = Integer.valueOf(choiceNumber);
 		}
@@ -304,7 +320,7 @@ public class UnitDescription implements NodeDescription {
 			actPara.value = Boolean.valueOf(valueString);
 			actPara.trueString = actualParameterElement.getChild("TrueString").getValue();
 		} else 
-			throw new Exception("invalid datatype");
+			throw new DataFormatException("invalid datatype");
 	}
 
 	/**
@@ -322,7 +338,7 @@ public class UnitDescription implements NodeDescription {
 				path = "/" + iconFolder + "/" + relativeIconPath;
 			else
 				path = System.getProperty("user.dir") + File.separator 
-					+ iconFolder + File.separator + relativeIconPath;
+				+ iconFolder + File.separator + relativeIconPath;
 		} else {
 			// search for unitname.png in same directory as xml
 			path = context.getPath().replace(".xml", ".png");
@@ -333,7 +349,7 @@ public class UnitDescription implements NodeDescription {
 	public boolean hasHelpString() {
 		return (helpString != null);
 	}
-	
+
 	public String getHelpString() {
 		return helpString;
 	}
@@ -350,15 +366,15 @@ public class UnitDescription implements NodeDescription {
 	public boolean hasInputs() {
 		return this.input != null && this.input.length > 0;
 	}
-	
+
 	public boolean hasOutputs() {
 		return this.output != null && this.output.length > 0;
 	}
-	
+
 	public boolean hasParameters() {
 		return this.para != null && this.para.length > 0;
 	}
-	
+
 	/**
 	 * Returns the previously read in icon
 	 * or null if no icon was found

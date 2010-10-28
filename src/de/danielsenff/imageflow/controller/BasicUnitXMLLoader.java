@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2008-2010 Daniel Senff
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package de.danielsenff.imageflow.controller;
 
 import java.io.IOException;
@@ -9,15 +26,23 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.zip.DataFormatException;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+
+import org.jdom.JDOMException;
 
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.delegates.UnitMutableTreeNode;
 import de.danielsenff.imageflow.utils.Tools;
 
+/**
+ * Shared methods for reading XML Unit Definitions from Jar and from Folder.
+ * @author dahie
+ *
+ */
 public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 
 	protected Set<String> relevantXmlFiles;
@@ -28,17 +53,17 @@ public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 		this.relevantXmlFiles = new HashSet<String>();
 	}
 	
-	protected String[] sortPaths(Set<String> relevantXmlFiles) {
-		String[] paths = relevantXmlFiles.toArray(new String[relevantXmlFiles.size()]);
+	protected String[] sortPaths(final Set<String> relevantXmlFiles) {
+		final String[] paths = relevantXmlFiles.toArray(new String[relevantXmlFiles.size()]);
 
 		Arrays.sort(paths, new Comparator<String>() {
-			public int compare(String s1, String s2) {
-				int slash1 = s1.lastIndexOf('/');
-				int slash2 = s2.lastIndexOf('/');
+			public int compare(final String s1, final String s2) {
+				final int slash1 = s1.lastIndexOf('/');
+				final int slash2 = s2.lastIndexOf('/');
 				return s1.substring(slash1 + 1).compareTo(s2.substring(slash2 + 1));
 			}
 			@Override
-			public boolean equals(Object o) {
+			public boolean equals(final Object o) {
 				return false;
 			}
 		});
@@ -48,9 +73,31 @@ public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 	/**
 	 * Adds a XML unit to the unit tree and the menu.
 	 */
-	static void addUnitDelegate(MutableTreeNode parentNode, URL url) {
-		boolean withinJar = url.getProtocol().equals("jar");
-		final UnitDescription unitDescription = new UnitDescription(url, Tools.getXMLRoot(url));
+	static void addUnitDelegate(final MutableTreeNode parentNode, final URL url) {
+		final boolean withinJar = url.getProtocol().equals("jar");
+		final UnitDescription unitDescription = new UnitDescription(url);
+		try {
+			unitDescription.readXML();
+		} catch (JDOMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DataFormatException e) {
+			// TODO Auto-generated catch block
+//			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
+//										"There has been a problem loading a XML unit description." +'\n' 
+//										+ "The error ocures in " + url + "." + '\n'
+//										+ "The programm start will continue without this unit."
+//										,
+//										"Missing connections", 
+//										JOptionPane.WARNING_MESSAGE);
+			e.printStackTrace();
+		}
+		
+		
+		
 		final UnitDelegate unitDelegate = new UnitDelegate(unitDescription, withinJar);
 		
 		if (DelegatesController.getInstance().getDelegate(unitDelegate.getName()) == null) {
@@ -62,7 +109,7 @@ public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 			// if a unit delegate by this name already exists, we replace it with a new 
 			for (int i = 0; i < parentNode.getChildCount(); i++) {
 				if (parentNode.getChildAt(i) instanceof UnitDelegate) {
-					UnitDelegate child = (UnitDelegate) parentNode.getChildAt(i);
+					final UnitDelegate child = (UnitDelegate) parentNode.getChildAt(i);
 					if (child.getName().equals(unitDelegate.getName())) {
 						parentNode.remove(i);
 						parentNode.insert(unitDelegate, i);
@@ -87,12 +134,12 @@ public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 		public String name;
 		public DefaultMutableTreeNode treeNode;
 
-		public UnitDelegateInfo(String name, MutableTreeNode node) {
+		public UnitDelegateInfo(final String name, final MutableTreeNode node) {
 			this.name = name;
 			this.treeNode = (DefaultMutableTreeNode) node;
 		}
 		
-		public UnitDelegateInfo(String name, DefaultMutableTreeNode node) {
+		public UnitDelegateInfo(final String name, final DefaultMutableTreeNode node) {
 			this.name = name;
 			this.treeNode = node;
 		}
@@ -103,7 +150,7 @@ public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 	 * Creates a menu item and a tree node for a given file name. These objects are
 	 * added to the given parents and returned within a new UnitDelegateInfo object.
 	 */
-	protected UnitDelegateInfo addUnitDelegateGroup(String fileName, MutableTreeNode node) {
+	protected UnitDelegateInfo addUnitDelegateGroup(final String fileName, final MutableTreeNode node) {
 		// cut away leading and trailing slashs
 		String displayName = fileName;
 		if (displayName.startsWith("/"))
@@ -111,10 +158,10 @@ public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 		if (displayName.endsWith("/"))
 			displayName = displayName.substring(0, displayName.length() - 1);
 
-		UnitMutableTreeNode subNode = new UnitMutableTreeNode(displayName);
+		final UnitMutableTreeNode subNode = new UnitMutableTreeNode(displayName);
 		((UnitMutableTreeNode) node).add(subNode);
 
-		UnitDelegateInfo udi = new UnitDelegateInfo(displayName, subNode);
+		final UnitDelegateInfo udi = new UnitDelegateInfo(displayName, subNode);
 		return udi;
 	}
 	

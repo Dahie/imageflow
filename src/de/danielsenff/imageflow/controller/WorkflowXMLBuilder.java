@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.zip.DataFormatException;
 
 import javax.swing.JOptionPane;
 
@@ -178,18 +179,33 @@ public class WorkflowXMLBuilder {
 	}
 
 
+	/**
+	 * Create the unit element described in the workflow xml file.
+	 * the Unit definition is the same as the XML Unit Definition.
+	 * @param actualUnitElement
+	 * @param url
+	 * @param position
+	 * @param label
+	 * @param unitDescriptionElement
+	 * @return
+	 */
 	protected Node createUnitElement(final Element actualUnitElement,
 			final URL url, 
 			final Point position, 
 			final String label,
 			final Element unitDescriptionElement) {
 		int unitID 	= Integer.parseInt(actualUnitElement.getChild("UnitID").getValue());
-		UnitDescription unitDescription = new UnitDescription(url, unitDescriptionElement);
+		UnitDescription unitDescription = new UnitDescription(url);
+		try {
+			unitDescription.readXML(unitDescriptionElement);
+		} catch (DataFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		UnitElement unitElement;
 
 		Element unitsElement = unitDescriptionElement.getChild("Units");
-
+		UnitElement unitElement;
 		Element internalConnectionsElement = unitDescriptionElement.getChild("InternalConnections");
 		Element externalConnectionsElement = unitDescriptionElement.getChild("ExternalConnections");
 		Element originalConnectionsElement = unitDescriptionElement.getChild("OriginalConnections");
