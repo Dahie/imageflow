@@ -21,6 +21,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.io.OpenDialog;
 import ij.plugin.filter.PlugInFilter;
+import ij.plugin.frame.Recorder;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -153,15 +154,6 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		setOutputImageType(imageType);
 	}
 
-	private BufferedImage scaleThumbnail(int width, int height) {
-		BufferedImage thumbnail = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2 = (Graphics2D) thumbnail.getGraphics();
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g2.drawImage(getImagePlus().getImage(), 0, 0, width, height, null);
-		g2.dispose();
-		return thumbnail;
-	}
-
 	/**
 	 * Display the default file chooser.
 	 */
@@ -182,8 +174,9 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	    final int option = fc.showOpenDialog(null);
 	    if (option == JFileChooser.APPROVE_OPTION) {
 	    	filepath = fc.getSelectedFile().getAbsolutePath();
+	    	System.out.println(filepath);
 	    	// backslashes need to be escaped
-	    	filepath = filepath.replace("\\", "\\\\"); // \ to \\
+	    	//filepath = filepath.replace("\\", "\\\\"); // \ to \\
 	    	setFilePath(filepath);
 	    }
 	}
@@ -243,7 +236,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		int imageType =0;
 		if(imp != null) {
 			final int type = imp.getType();
-			boolean isStack = imp.getStackSize() > 1 ? true : false;
+			boolean isStack = imp.getStackSize() > 1;
 
 			imp.close();
 			imp = null;
@@ -305,7 +298,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * @return
 	 */
 	public String getFilePath() {
-		return ((StringParameter)parameters.get(0)).getValue();
+		return ((StringParameter)parameters.get(FILE_PARAMETER_INDEX)).getValue();
 	}
 	
 	/**
@@ -367,6 +360,15 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		}
 		final Rectangle paint = super.paint(g, io);
 		return paint;
+	}
+	
+	private BufferedImage scaleThumbnail(int width, int height) {
+		BufferedImage thumbnail = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = (Graphics2D) thumbnail.getGraphics();
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2.drawImage(getImagePlus().getImage(), 0, 0, width, height, null);
+		g2.dispose();
+		return thumbnail;
 	}
 	
 }

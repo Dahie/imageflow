@@ -125,7 +125,8 @@ public class MacroElement {
 			searchString = "(PARA_STRING_" + (ps+1) + ")(\\D)";
 			matcher = compileMatcherBy(searchString, command);
 			if(matcher.find() && (paraType.equalsIgnoreCase("string") || paraType.equalsIgnoreCase("stringarray"))) {
-				parameterString = "" + ((StringParameter)parameter).getValue();
+				parameterString = fixPath("" + ((StringParameter)parameter).getValue());
+				System.out.println(parameterString);
 				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
 				ps++;
 				parameterIndex++;
@@ -166,6 +167,20 @@ public class MacroElement {
 		}
 		// choiceParameter uses the PARA_STRING_x
 		return command;
+	}
+	
+	/*
+	 * from ImageJ.Recorder
+	 */
+	static String fixPath (String path) {
+		StringBuffer sb = new StringBuffer();
+		char c;
+		for (int i=0; i<path.length(); i++) {
+			sb.append(c=path.charAt(i));
+			if (c=='\\')
+				sb.append("\\\\\\");
+		}
+		return new String(sb);
 	}
 	
 	/**

@@ -224,19 +224,17 @@ public class MacroGenerator {
 		macroElement.parseAttributes(unit.getInputs(), unit.getParameters(), i);
 		
 		
-		// parse the command string for TITLE tags that need to be replaced
+		// parse the command string for TITLE_x tags that need to be replaced
 		String parameterString, searchString;
 		Input input;
 		for (int in = 0; in < unit.getInputsCount(); in++) {
 			input = unit.getInput(in);
 			searchString = "TITLE_" + (in+1);
 			parameterString = input.isNeedToCopyInput() ? getNeedCopyTitle(input.getImageID()+"_"+i) : input.getImageTitle()+"_"+i;
-//			System.out.println(input.getImageTitle());
-			System.out.println("Unit: " + unit.getUnitID() + " Input: " + in + " Title: " + parameterString);
+//			System.out.println("Unit: " + unit.getUnitID() + " Input: " + in + " Title: " + parameterString);
 			macroElement.replace(searchString, parameterString);
 		}
-		
-		// andere Module brauchen manchmal die ID (dieser Teil fehlt noch)
+		// if a module needs the image id, just use ID_TITLE_x
 		
 		macroText += macroElement.getCommandSyntax();
 	}

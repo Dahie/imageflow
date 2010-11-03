@@ -1038,8 +1038,8 @@ public class ImageFlowView extends FrameView {
 	
 	private int showSaveConfirmation() {
 		return JOptionPane.showConfirmDialog(this.getFrame(), 
-				"The workflow has modifications which were not yet saved."
-				+'\n'+"Save changes now?",
+				"The workflow has modifications that haven not been saved yet."
+				+'\n'+"Do you want to save changes now?",
 				"Save changes?", 
 				JOptionPane.INFORMATION_MESSAGE);
 	}
