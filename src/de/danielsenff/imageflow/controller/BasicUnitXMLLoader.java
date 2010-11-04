@@ -24,19 +24,20 @@ import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Set;
 import java.util.zip.DataFormatException;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
 import org.jdom.JDOMException;
 
+import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.delegates.UnitMutableTreeNode;
-import de.danielsenff.imageflow.utils.Tools;
 
 /**
  * Shared methods for reading XML Unit Definitions from Jar and from Folder.
@@ -78,46 +79,56 @@ public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 		final UnitDescription unitDescription = new UnitDescription(url);
 		try {
 			unitDescription.readXML();
-		} catch (JDOMException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DataFormatException e) {
-			// TODO Auto-generated catch block
-//			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
-//										"There has been a problem loading a XML unit description." +'\n' 
-//										+ "The error ocures in " + url + "." + '\n'
-//										+ "The programm start will continue without this unit."
-//										,
-//										"Missing connections", 
-//										JOptionPane.WARNING_MESSAGE);
-			e.printStackTrace();
-		}
-		
-		
-		
-		final UnitDelegate unitDelegate = new UnitDelegate(unitDescription, withinJar);
-		
-		if (DelegatesController.getInstance().getDelegate(unitDelegate.getName()) == null) {
-			// if we don't know this unit yet, we add it to the controller
-			((DefaultMutableTreeNode) parentNode).add(unitDelegate);
-			unitDelegate.setParent(parentNode);
-			DelegatesController.getInstance().addDelegate(unitDelegate);
-		} else {
-			// if a unit delegate by this name already exists, we replace it with a new 
-			for (int i = 0; i < parentNode.getChildCount(); i++) {
-				if (parentNode.getChildAt(i) instanceof UnitDelegate) {
-					final UnitDelegate child = (UnitDelegate) parentNode.getChildAt(i);
-					if (child.getName().equals(unitDelegate.getName())) {
-						parentNode.remove(i);
-						parentNode.insert(unitDelegate, i);
+			
+			final UnitDelegate unitDelegate = new UnitDelegate(unitDescription, withinJar);
+			
+			if (DelegatesController.getInstance().getDelegate(unitDelegate.getName()) == null) {
+				// if we don't know this unit yet, we add it to the controller
+				((DefaultMutableTreeNode) parentNode).add(unitDelegate);
+				unitDelegate.setParent(parentNode);
+				DelegatesController.getInstance().addDelegate(unitDelegate);
+			} else {
+				// if a unit delegate by this name already exists, we replace it with a new 
+				for (int i = 0; i < parentNode.getChildCount(); i++) {
+					if (parentNode.getChildAt(i) instanceof UnitDelegate) {
+						final UnitDelegate child = (UnitDelegate) parentNode.getChildAt(i);
+						if (child.getName().equals(unitDelegate.getName())) {
+							parentNode.remove(i);
+							parentNode.insert(unitDelegate, i);
+						}
 					}
 				}
+				DelegatesController.getInstance().replaceDelegate(unitDelegate);
 			}
-			DelegatesController.getInstance().replaceDelegate(unitDelegate);
+			
+			
+		} catch (JDOMException e) {
+			String message = "There has been a problem parsing a XML unit description." +'\n' 
+				+ e.getMessage() + '\n'
+				+ "The program start will continue without this unit.";
+			showErrorDialog("XML parsing error", message);
+		} catch (IOException e) {
+			String message = "There has been a problem opening the xml definition for file " 
+				+ url + "." + '\n'
+				+ "The program start will continue without this unit.";
+		showErrorDialog("XML dataformat error", message);
+		} catch (DataFormatException e) {
+			String message = "There has been a data format problem in a XML unit description." +'\n' 
+				+ "The error ocures in " + url + "." + '\n'
+				+ "The program start will continue without this unit.";
+			showErrorDialog("XML dataformat error", message);
 		}
+	}
+
+	private static void showErrorDialog(String title, String message) {
+		JOptionPane pane = new JOptionPane(message, JOptionPane.ERROR_MESSAGE) {
+			public int getMaxCharactersPerLineCount() {
+				return 80;
+			}
+		};
+		JDialog dialog = pane.createDialog(ImageFlow.getApplication().getMainFrame(),title);
+		dialog.setResizable(false);
+		dialog.setVisible(true);
 	}
 
 	public Dictionary<String, UnitDelegateInfo> getEntries() {
