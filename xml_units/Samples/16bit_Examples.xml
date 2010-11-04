@@ -3,11 +3,11 @@
 <UnitDescription>
 
 <General>
-  <UnitName>8-bit Images</UnitName> 
+  <UnitName>16-bit Images</UnitName> 
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>run("PARA_STRING_1");</ImageJSyntax> 
   <Color>0x9cba92</Color>
-  <HelpString>Opens one of ImageJ's 8-bit Image Examples</HelpString>
+  <HelpString>Opens one of ImageJ's 16-bit Image Examples</HelpString>
   	  
 </General>
 
@@ -15,7 +15,7 @@
   	<Parameter>
   		<Name>Sample</Name>
   		<DataType>StringArray</DataType>
-  		<Value>Boats (356K);Bridge (174K);Dot Blot (7K);Fly Brain (1MB);Gel (105K);Particles (75K);TEM Filter (112K)</Value>
+  		<Value>CT (420K, 16-bit DICOM)</Value>
   		<HelpString>Selects the Images that will be loaded.</HelpString>
   		<ChoiceNumber>0</ChoiceNumber>
 	</Parameter>
@@ -26,7 +26,7 @@
 		<Name>Output</Name>
 		<ShortName>O</ShortName>	
 		<DataType>Image</DataType>
-		<ImageType>2</ImageType>
+		<ImageType>4</ImageType>
 		<DoDisplay>false</DoDisplay>
 	</Output>
 </Outputs>

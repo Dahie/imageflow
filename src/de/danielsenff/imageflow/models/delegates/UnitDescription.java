@@ -298,20 +298,10 @@ public class UnitDescription implements NodeDescription {
 			int choiceNumber = Integer.valueOf(actualParameterElement.getChild("ChoiceNumber").getValue());
 			String[] strings = valueString.split(ChoiceParameter.DELIMITER);
 			ArrayList<String> choicesList;
-			if(strings.length > 1) {
-				choicesList = new ArrayList<String>(strings.length);
-				for (int i = 0; i < strings.length; i++) {
-					choicesList.add(strings[i]);
-				}	
-			} else {
-				// in the first beta the delimiter was a space, 
-				// so to be able to read old workflows, this construct exists
-				strings = valueString.split(" ");
-				choicesList = new ArrayList<String>(strings.length);
-				for (int i = 0; i < strings.length; i++) {
-					choicesList.add(strings[i]);
-				}
-			}
+			choicesList = new ArrayList<String>(strings.length);
+			for (int i = 0; i < strings.length; i++) {
+				choicesList.add(strings[i]);
+			}	
 
 			actPara.value = choicesList;
 			actPara.choiceIndex = Integer.valueOf(choiceNumber);
