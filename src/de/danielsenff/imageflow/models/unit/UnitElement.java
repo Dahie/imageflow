@@ -793,10 +793,10 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	protected void cloneParameter(UnitElement clone, Parameter parameter) {
 		Parameter clonedParameter;
 		if(parameter instanceof ChoiceParameter) {
-			clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
+			clonedParameter =	ParameterFactory.createChoiceParameter(parameter.getDisplayName(), 
 					parameter.getParaType(),
-					parameter.getValue(), 
-					parameter.getHelpString(), null, 
+					((ChoiceParameter)parameter).getChoices(), 
+					parameter.getHelpString(), 
 					((ChoiceParameter)parameter).getChoiceIndex());
 		} else if (parameter instanceof BooleanParameter){
 			clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 

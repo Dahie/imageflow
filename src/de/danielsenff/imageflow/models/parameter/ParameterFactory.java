@@ -42,17 +42,39 @@ public class ParameterFactory {
 	}
 	
 	/**
-	 * Creates a {@link Parameter}-Implemenation for the Type of the value.
+	 * Create a new ChoiceParameter.
+	 * @param displayName
+	 * @param dataTypeName
+	 * @param value
+	 * @param helpString
+	 * @param choiceIndex
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	public static Parameter createChoiceParameter(final String displayName, 
+			final String dataTypeName,
+			final ArrayList<String> value,
+			final String helpString, 
+			final int choiceIndex) throws IllegalArgumentException {
+		ArrayList<String> values = (ArrayList<String>) value; // bah, what a construct
+		return new ChoiceParameter(displayName, values, 
+				values.get(choiceIndex), helpString);
+	}
+	
+	/**
+	 * Creates a {@link Parameter}-Implementation for the Type of the value.
 	 * Certain Parameters require additional arguments.
 	 * BooleanParameter: String used when condition/value is true.
 	 * ChoiceParameter: List of choices
 	 * @param displayName
+	 * @param dataTypeName 
 	 * @param value
 	 * @param chosenValue 
 	 * @param helpString
 	 * @param boolTrueString	This can be any other type that maybe required for certain parameters, like TrueString or chosenValue
 	 * @param choiceIndex	Selected index from the list of choices. 
 	 * @return
+	 * @throws IllegalArgumentException 
 	 */
 	public static Parameter createParameter(final String displayName, 
 			final String dataTypeName,
