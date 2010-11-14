@@ -99,9 +99,8 @@ public class GroupUnitElement extends UnitElement {
 			}
 
 			/*
-			 * determine position
+			 * determine position for group unit on workflow
 			 */
-
 			int x = (int) getUnit(0).getOrigin().getX();
 			int y = (int) getUnit(0).getOrigin().getY();
 			setOrigin(new Point(x, y));
@@ -112,12 +111,10 @@ public class GroupUnitElement extends UnitElement {
 		/*
 		 * remove original units from workflow
 		 */
-
-		
 		for (Node node : this.units) {
-			// this removes not only the node from the unitList
-			// but also disconnects all connections to this unit.
-			// Therefore all connections are backuped before doing this.
+			/* this removes not only the node from the unitList
+			 but also disconnects all connections to this unit.
+			 Therefore all connections are stored before doing this. */
 			allUnits.remove(node);
 		}
 
@@ -127,9 +124,9 @@ public class GroupUnitElement extends UnitElement {
 		}
 
 		
-		// uh, reconnect the external connections
-		// if the target-unit is contained in the group
-		// just not sure why not connecting from-units
+		/* uh, reconnect the external connections
+		if the target-unit is contained in the group
+		just not sure why not connecting from-units */
 		for (Connection connection : externalConnections) {
 			if(this.units.contains(connection.getToUnit())
 					//|| this.units.contains(connection.getFromUnit())
@@ -150,11 +147,12 @@ public class GroupUnitElement extends UnitElement {
 		
 		int lowestX = 3000, lowestY = 3000;
 		for (Node node : getNodes()) {
-			if(node.getOrigin().x < lowestX
-				&& node.getOrigin().y < lowestY) {
+			if(node.getOrigin().x < lowestX) {
 				lowestX = node.getOrigin().x;
-				lowestY = node.getOrigin().y;
 			}
+			if(node.getOrigin().y < lowestY) {
+				lowestY = node.getOrigin().y;
+			} 
 		}
 		
 		// offset from original

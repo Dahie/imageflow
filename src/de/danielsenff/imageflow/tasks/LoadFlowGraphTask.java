@@ -68,7 +68,7 @@ public class LoadFlowGraphTask extends LoadURLTask<GraphController, Void> {
         	ex.printStackTrace();
 			JOptionPane.showMessageDialog(mainFrame, 
     				"The images are too large."	+'\n'+"I'm out of memory.",
-    				"Of of memory", 
+    				"Out of memory", 
     				JOptionPane.ERROR_MESSAGE);
         }
         
