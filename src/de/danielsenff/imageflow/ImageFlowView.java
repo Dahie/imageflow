@@ -709,7 +709,18 @@ public class ImageFlowView extends FrameView {
 	}
 
 	private URL getFlowURL(String path) throws MalformedURLException {
-		return new URL(DelegatesController.getInstance().getResourcesBase(), path);
+		URL resourcePath = DelegatesController.class.getClassLoader().getResource("");
+		System.out.println(resourcePath);
+		String protocol = resourcePath.getProtocol();
+		URL resourcesBase = null;
+		if (protocol.equals("file")) {
+			resourcesBase = new URL(resourcePath, DelegatesController.getAbsolutePathToWorkingFolder());
+		} else if (protocol.equals("jar")) {
+			resourcesBase = new URL(resourcePath, "/");
+		}
+		System.out.println(resourcesBase);
+		System.out.println(path);
+		return new URL(resourcesBase, path);
 	}
 
 	/**

@@ -101,7 +101,6 @@ public class WorkflowXMLBuilder {
 			
 			// at this point we have all units in the workflow, however no connections
 			// groups are missing their inputs and outputs
-			//
 
 			System.out.println("Process Connection Delegates ...");
 

@@ -22,16 +22,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
 
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.controller.BasicUnitXMLLoader.UnitDelegateInfo;
@@ -96,6 +92,9 @@ public class DelegatesController {
 	}
 	
 	
+	/**
+	 * Initialize the DelegatesModel and load the available unit xml definitions.
+	 */
 	public void initializeDelegatesModel() {
 		fillDelegatesModelFromJar(top);
 	}
@@ -115,7 +114,6 @@ public class DelegatesController {
 			} else throw new IOException("The resource has no content!");
 			
 			// see if there is a unit xml folder and load those as well
-			//File unitFolderFile = new File(getAbsolutePathToFolder(""));
 			File unitFolderFile = new File(getAbsolutePathToUnitFolder());
 			if(unitFolderFile.exists()) {
 				readDelegatesFromFolder(top, unitFolderFile.toURI().toURL());
@@ -135,13 +133,6 @@ public class DelegatesController {
 		}
 	}
 	
-	/**
-	 * Gets the base path of the resources contained in this jar.
-	 */
-	private static String getClassResourceBase() {
-		return DelegatesController.class.getName().replace(".", "/") + ".class";
-	}
-
 	private void readDelegatesFromURL(UnitMutableTreeNode node, URL url)
 		throws RuntimeException, MalformedURLException {
 		UnitDelegateLoader loader = UnitXMLLoaderFactory.createUnitXMLLoaderByProtocol(url.getProtocol()); 
@@ -153,26 +144,6 @@ public class DelegatesController {
 		UnitDelegateLoader loader = UnitXMLLoaderFactory.createFolderUnitXMLLoader(); 
 		loader.readDelegates(node, url);
 	}
-	
-    public static boolean containsMenuItem(final JMenu menu, final JMenuItem item) {
-    	JMenuItem existingItem;
-    	for (int i = 0; i < menu.getItemCount(); i++) {
-			existingItem = menu.getItem(i);
-    		if (existingItem.getText().equalsIgnoreCase(item.getText()))
-    			return true;
-		}
-    	return false;
-    }
-    
-    public static JMenuItem findMenuItem(final JMenu menu, final JMenuItem item) {
-    	JMenuItem existingItem;
-    	for (int i = 0; i < menu.getItemCount(); i++) {
-			existingItem = menu.getItem(i);
-    		if (existingItem.getText().equalsIgnoreCase(item.getText()))
-    			return existingItem;
-		}
-    	return null;
-    }
 	
 	/**
 	 * {@link DelegatesController} is a Singleton, 
@@ -198,17 +169,13 @@ public class DelegatesController {
 		return unitIconFolder;
 	}
 	
-	public boolean containsUnitXML(String xmlPath) {
-		Enumeration<MutableTreeNode> children = ((MutableTreeNode) getDelegatesModel().getRoot()).children();
-		while (children.hasMoreElements()) {
-			UnitDelegate delegate = (UnitDelegate) children.nextElement();
-			//delegate.getXMLPath();
-			
-		}
-		return false;
+	/**
+	 * Gets the base path of the resources contained in this jar.
+	 */
+	private static String getClassResourceBase() {
+		return DelegatesController.class.getName().replace(".", "/") + ".class";
 	}
 	
-
 	/**
 	 * Gets the resource base url of the initially loaded units.
 	 * This could be a folder or a jar file.
@@ -230,6 +197,11 @@ public class DelegatesController {
 			resourcesBase = new URL(path, "/");
 		}
 	}
+
+	public static String getAbsolutePathToWorkingFolder() {
+		return System.getProperty("user.dir") + File.separator;
+	}
+
 
 	/**
 	 * Returns the absolute path to the executed jar and a folder of a given name.
