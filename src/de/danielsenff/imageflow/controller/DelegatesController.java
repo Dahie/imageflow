@@ -108,6 +108,7 @@ public class DelegatesController {
 		try {
 			// try to load xml units from surrounding jar by default
 			unitsLocation = getClassResourceBase();
+			System.out.println("unitslocation: " + unitsLocation);
 			setResourcesBase(DelegatesController.class.getClassLoader().getResource(unitsLocation));
 			if (resourcesBase != null && resourcesBase.openConnection().getContentLength() > 0) {
 				readDelegatesFromURL(top, resourcesBase);
@@ -172,7 +173,7 @@ public class DelegatesController {
 	/**
 	 * Gets the base path of the resources contained in this jar.
 	 */
-	private static String getClassResourceBase() {
+	public static String getClassResourceBase() {
 		return DelegatesController.class.getName().replace(".", "/") + ".class";
 	}
 	
