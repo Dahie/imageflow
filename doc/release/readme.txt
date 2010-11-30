@@ -37,7 +37,7 @@ Feedback of any kind is well appreciated.
 Please read the imageflow.html for further information. 
 
 Imageflow requires either JRE or JDK, version 1.5 or later
-Tested with Windows XP, Linux Debian distro (KDE and Gnome) and MacOS X 10.4
+Tested with Windows XP, Linux Debian distro (KDE and Gnome) and MacOS X 10.6
 
 ----------------------------------------
 
