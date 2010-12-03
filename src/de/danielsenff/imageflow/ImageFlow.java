@@ -174,7 +174,7 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 		}
 		
 	}
-
+	
 	/**
 	 * Returns true if Imageflow is running, and has a workflow window.
 	 * @return

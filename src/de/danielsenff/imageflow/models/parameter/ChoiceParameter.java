@@ -82,6 +82,9 @@ public class ChoiceParameter extends StringParameter {
 	 * @return
 	 */
 	public int getChoiceIndex() {
+		if (this.choiceValues.isEmpty()) {
+			return 0;
+		}
 		return this.choiceValues.indexOf(this.stringValue);
 	}
 

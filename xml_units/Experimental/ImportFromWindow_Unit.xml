@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UnitDescription>
+
+<General>
+  <UnitName>Import from Window</UnitName>
+  <Class>ImportWindowUnit</Class> 
+  <PathToIcon></PathToIcon> 
+  <ImageJSyntax>selectWindow("PARA_STRING_1");</ImageJSyntax> 
+  <Color>0x9cba92</Color>
+  <HelpString>Imports an Image from ImageJ window</HelpString>
+  	  
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Import from window</Name>
+  		<DataType>StringArray</DataType>
+  		<Value></Value>
+  		<HelpString>Selects the Images that is imported into the workflow by window title.</HelpString>
+  		<ChoiceNumber>0</ChoiceNumber>
+	</Parameter>
+</Parameters>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>

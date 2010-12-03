@@ -453,32 +453,10 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		gd.addStringField("Unit label", this.getLabel(),40);
 		gd.addCheckbox("Display", this.isDisplay());
 
-		final ArrayList<Parameter> parameterList = getParameters();
-
-		if (parameterList.isEmpty()) {
-			gd.addMessage("No parameters that can be set");
-		} else {
-			for (final Parameter parameter : parameterList) {
-
-				if(parameter instanceof DoubleParameter) {
-					gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
-				} else if(parameter instanceof IntegerParameter) {
-					gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
-				} else if(parameter instanceof BooleanParameter) {
-					gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
-				} else if(parameter instanceof ChoiceParameter) {
-					gd.addChoice(parameter.getDisplayName(), 
-							((ChoiceParameter)parameter).getChoicesArray(), 
-							((ChoiceParameter)parameter).getValue());
-				} else if(parameter instanceof StringParameter) {
-					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
-					//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
-				} else if(parameter instanceof TextParameter) {
-					gd.addTextField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
-					//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
-				} 				
-			}
-		}
+		addCustomWidgets(gd);
+		
+		// add Parameter Widgets
+		addParameterWidgets(gd);
 		
 		if(hasInputs()) {
 			gd.addMessage("Inputs");
@@ -509,6 +487,48 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		if( gd.wasCanceled())
 			return;
 
+		// process changes from the Parameter Widgets
+		updateParameters(gd);	
+
+		notifyModelListeners();
+	}
+
+	protected void addParameterWidgets(final GenericDialog gd) {
+		final ArrayList<Parameter> parameterList = getParameters();
+		
+		if (parameterList.isEmpty()) {
+			gd.addMessage("This unit has no parameters and can not be adjusted.");
+		} else {
+			for (final Parameter parameter : parameterList) {
+				
+				if(parameter instanceof DoubleParameter) {
+					gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
+				} else if(parameter instanceof IntegerParameter) {
+					gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
+				} else if(parameter instanceof BooleanParameter) {
+					gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
+				} else if(parameter instanceof ChoiceParameter) {
+					gd.addChoice(parameter.getDisplayName(), 
+							((ChoiceParameter)parameter).getChoicesArray(), 
+							((ChoiceParameter)parameter).getValue());
+				} else if(parameter instanceof StringParameter) {
+					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
+					//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
+				} else if(parameter instanceof TextParameter) {
+					gd.addTextField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
+					//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
+				} 				
+			}
+		}
+	}
+
+	/**
+	 * Called after GenericDialog was closed with ok, to write back changes to the model. 
+	 * @param gd
+	 */
+	protected void updateParameters(final GenericDialog gd) {
+		final ArrayList<Parameter> parameterList = getParameters();
+		
 		String newLabel = (String) (gd.getNextString()).trim();
 		setLabel(newLabel);
 		boolean isNewDisplay = gd.getNextBoolean();
@@ -528,10 +548,14 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 				String newString = (String) (gd.getNextString()).trim();
 				((StringParameter) parameter).setValue(newString);
 			} 
-		}	
-
-		notifyModelListeners();
+		}
 	}
+
+	/**
+	 * Hook for adding Custom Widgets.
+	 * @param gd
+	 */
+	protected void addCustomWidgets(GenericDialog gd) {	}
 
 	/**
 	 * Returns whether this unit has parameters or not.

@@ -92,8 +92,9 @@ public class UnitFactory {
 		// usual case, we deal with a UnitElement
 
 		// if we have a SourceUnit, we have to take the according class
-		
-		if(unitName.equals("Image Source")) {
+		if(unitName.equals("Import from Window")) {
+			unitElement = new ImportUnitElement(new Point(origin), unitName, imageJSyntax);
+		} else if(unitName.equals("Image Source")) {
 			unitElement = new SourceUnitElement(new Point(origin), unitName, imageJSyntax);
 		} else if(unitName.equals("Background")) {
 			unitElement = new BackgroundUnitElement(new Point(origin), unitName, imageJSyntax);

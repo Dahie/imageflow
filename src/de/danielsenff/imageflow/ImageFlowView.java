@@ -18,12 +18,16 @@
 package de.danielsenff.imageflow;
 
 import ij.IJ;
+import ij.ImageJ;
+import ij.ImagePlus;
+import ij.WindowManager;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.ScrollPane;
+import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -286,6 +290,7 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(getAction("debugPrintNodeDetails"));
 		debugMenu.add(getAction("debugPrintEdges"));
 		debugMenu.add(getAction("debugDrawClonedWorkflow"));
+		debugMenu.add(getAction("debugDisplayImages"));
 		debugMenu.add(new JSeparator());
 		debugMenu.add(getAction("exampleFlow1"));
 		debugMenu.add(getAction("exampleFlow2"));
@@ -1166,6 +1171,26 @@ public class ImageFlowView extends FrameView {
     	final DefaultListModel lm = new DefaultListModel();
     	for (final Node node : getNodes()) {
     		lm.addElement(node);	
+    	}
+    	final JList list = new JList(lm);
+    	
+		dialog.add(new ScrollPane().add(list));
+		dialog.pack();
+		dialog.setVisible(true);
+    }
+    
+    @Action public void debugDisplayImages() {
+    	
+    	final JDialog dialog = new JDialog();
+
+    	final DefaultListModel lm = new DefaultListModel();
+    	int imageID;
+    	for (int i = 1; i < WindowManager.getImageCount()+1; i++) {
+    		imageID = WindowManager.getNthImageID(i);
+			ImagePlus ip = WindowManager.getImage(imageID);
+			if (ip != null) {
+				lm.addElement(ip);
+			}
     	}
     	final JList list = new JList(lm);
     	

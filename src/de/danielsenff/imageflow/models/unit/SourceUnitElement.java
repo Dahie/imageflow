@@ -42,6 +42,7 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
+import de.danielsenff.imageflow.utils.ImageJHelper;
 import de.danielsenff.imageflow.utils.UrlCheck;
 
 /**
@@ -169,7 +170,6 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	    final int option = fc.showOpenDialog(null);
 	    if (option == JFileChooser.APPROVE_OPTION) {
 	    	filepath = fc.getSelectedFile().getAbsolutePath();
-	    	System.out.println(filepath);
 	    	// backslashes need to be escaped
 	    	//filepath = filepath.replace("\\", "\\\\"); // \ to \\
 	    	setFilePath(filepath);
@@ -227,37 +227,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * @return
 	 */
 	public int getImageType() {
-		ImagePlus imp = getImagePlus();
-		int imageType =0;
-		if(imp != null) {
-			final int type = imp.getType();
-			boolean isStack = imp.getStackSize() > 1;
-
-			imp.close();
-			imp = null;
-
-			switch (type) {
-			case ImagePlus.GRAY8:
-				imageType = PlugInFilter.DOES_8G;
-				break;
-			case ImagePlus.COLOR_256:
-				imageType = PlugInFilter.DOES_8C;
-				break;
-			case ImagePlus.GRAY16:
-				imageType = PlugInFilter.DOES_16;
-				break;
-			case ImagePlus.GRAY32:
-				imageType = PlugInFilter.DOES_32;
-				break;
-			case ImagePlus.COLOR_RGB:
-				imageType = PlugInFilter.DOES_RGB;
-				break;
-			}
-
-			imageType += isStack ? PlugInFilter.DOES_STACKS : 0;
-
-		}
-		return imageType; 
+		return ImageJHelper.getImageType(getImagePlus());
 	}
 	
 	
@@ -354,13 +324,10 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	}
 	
 	private void setExistsFile(String path) {
-		if (path.indexOf("://")>0) {
-			// is url
+		if (path.indexOf("://")>0)  // is url
 			this.exists = UrlCheck.existsFile(path);
-		} else {
-			// is file
+		else // is file
 			this.exists = this.getFile().exists();
-		}
 	}
 
 	
