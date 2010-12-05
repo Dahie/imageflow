@@ -40,6 +40,7 @@ import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
 import de.danielsenff.imageflow.utils.UrlCheck;
 
@@ -108,12 +109,6 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		setFilePath(filepath);
 	}
 
-	@Override
-	public UnitElement clone() {
-		return super.clone();
-	}
-	
-	
 	@Override
 	public void showProperties() {
 		
@@ -278,7 +273,35 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	}
 	
 	
-	
+	@Override
+	public SourceUnitElement clone() {
+		// clone the object
+		String imageJSyntax;
+		try {
+			imageJSyntax = (String) cloneNonClonableObject(this.obj);
+		} catch (CloneNotSupportedException e) {
+			imageJSyntax = ((MacroElement)this.obj).getImageJSyntax();
+		}
+
+		SourceUnitElement clone = new SourceUnitElement(new Point(origin.x+15, origin.y+15), 
+				this.label, 
+				imageJSyntax);
+		for (int j = 0; j < getInputsCount(); j++) {
+			cloneInput(clone, j);
+		}
+		for (int i = 0; i < getOutputsCount(); i++) {
+			cloneOutput(clone, i);
+		}
+		for (Parameter parameter : parameters) {
+			cloneParameter(clone, parameter);
+		}
+		clone.setDisplay(isDisplay());
+		clone.setColor(this.color);
+		clone.setIcon(this.icon);
+		clone.setHelpString(this.infoText);
+		clone.setCompontentSize(this.getCompontentSize());
+		return clone;
+	}
 	
 	/*
 	 * Handling File

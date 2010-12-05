@@ -81,7 +81,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	/**
 	 * unit color
 	 */
-	private Color color = new Color(0xA0A0A0);
+	protected Color color = new Color(0xA0A0A0);
 	/**
 	 * help text, describing the unit's functionality
 	 */
