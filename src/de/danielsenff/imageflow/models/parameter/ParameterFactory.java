@@ -57,12 +57,7 @@ public class ParameterFactory {
 			final String helpString, 
 			final int choiceIndex) throws IllegalArgumentException {
 		ArrayList<String> values = (ArrayList<String>) value; // bah, what a construct
-		if (values.isEmpty())
-			return new ChoiceParameter(displayName, values, 
-					"", helpString);
-		else
-			return new ChoiceParameter(displayName, values, 
-					values.get(choiceIndex), helpString);
+		return new ChoiceParameter(displayName, values, choiceIndex, helpString);
 	}
 	
 	/**
@@ -100,13 +95,7 @@ public class ParameterFactory {
 			return new BooleanParameter(displayName, (Boolean) value, boolTrueString, helpString);
 		} else if (value instanceof ArrayList) {
 			ArrayList<String> values = (ArrayList) value; // bah, what a construct
-			if (values.isEmpty()) {
-				return new ChoiceParameter(displayName, values, 
-						"", helpString);
-			} else {
-				return new ChoiceParameter(displayName, values, 
-						values.get(choiceIndex), helpString);
-			}
+			return new ChoiceParameter(displayName, values, choiceIndex, helpString);
 			
 		} else throw new IllegalArgumentException(
 				"Parameter "+value+" of type not recognized or not all required arguments");

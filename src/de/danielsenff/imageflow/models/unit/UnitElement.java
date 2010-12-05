@@ -814,7 +814,11 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		return clone;
 	}
 
-	protected void cloneParameter(UnitElement clone, Parameter parameter) {
+	/**
+	 * @param clone
+	 * @param parameter
+	 */
+	protected void cloneParameter(final UnitElement clone, final Parameter parameter) {
 		Parameter clonedParameter;
 		if(parameter instanceof ChoiceParameter) {
 			clonedParameter =	ParameterFactory.createChoiceParameter(parameter.getDisplayName(), 
@@ -837,7 +841,11 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		clone.addParameter(clonedParameter);
 	}
 
-	protected void cloneOutput(UnitElement clone, int i) {
+	/**
+	 * @param clone
+	 * @param i
+	 */
+	protected void cloneOutput(final UnitElement clone, final int i) {
 		Output output = getOutput(i);
 		Output clonedOutput = new Output(output.getDataType().clone(), clone, i+1);
 		clonedOutput.setupOutput(output.getName(), output.getShortDisplayName());
@@ -845,7 +853,11 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		clone.addOutput(clonedOutput);
 	}
 
-	protected void cloneInput(UnitElement clone, int j) {
+	/**
+	 * @param clone
+	 * @param j
+	 */
+	protected void cloneInput(final UnitElement clone, final int j) {
 		Input input = getInput(j);				
 		Input clonedInput = new Input(input.getDataType().clone(), clone, j+1, input.isRequired());
 		clonedInput.setupInput(input.getName(), input.getShortDisplayName(), input.isNeedToCopyInput());
