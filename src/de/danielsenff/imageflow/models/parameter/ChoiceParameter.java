@@ -47,6 +47,12 @@ public class ChoiceParameter extends StringParameter {
 		this.paraType = "StringArray";
 	}
 	
+	/**
+	 * @param displayName
+	 * @param choices
+	 * @param choiceIndex
+	 * @param helpString
+	 */
 	public ChoiceParameter(final String displayName, 
 			final ArrayList<String> choices,
 			final int choiceIndex,

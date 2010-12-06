@@ -28,7 +28,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -36,13 +35,8 @@ import de.danielsenff.imageflow.imagej.GenericDialog;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
-import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
-import de.danielsenff.imageflow.models.parameter.DoubleParameter;
-import de.danielsenff.imageflow.models.parameter.IntegerParameter;
 import de.danielsenff.imageflow.models.parameter.Parameter;
-import de.danielsenff.imageflow.models.parameter.StringParameter;
-import de.danielsenff.imageflow.models.parameter.TextParameter;
 import de.danielsenff.imageflow.utils.ImageJHelper;
 
 /**
@@ -109,8 +103,31 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 	}
 
 	@Override
-	public UnitElement clone() {
-		return super.clone();
+	public ImportUnitElement clone() {
+		// clone the object
+		String imageJSyntax;
+		try {
+			imageJSyntax = (String) cloneNonClonableObject(this.obj);
+		} catch (CloneNotSupportedException e) {
+			imageJSyntax = ((MacroElement)this.obj).getImageJSyntax();
+		}
+
+		ImportUnitElement clone = new ImportUnitElement(new Point(origin.x+15, origin.y+15), this.label, imageJSyntax);
+		for (int j = 0; j < getInputsCount(); j++) {
+			cloneInput(clone, j);
+		}
+		for (int i = 0; i < getOutputsCount(); i++) {
+			cloneOutput(clone, i);
+		}
+		for (Parameter parameter : parameters) {
+			cloneParameter(clone, parameter);
+		}
+		clone.setDisplay(isDisplay());
+		clone.setColor(this.color);
+		clone.setIcon(this.icon);
+		clone.setHelpString(this.infoText);
+		clone.setCompontentSize(this.getCompontentSize());
+		return clone;
 	}
 	
 	
@@ -136,13 +153,11 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 
 	private ChoiceParameter getWindowChoiceParameter(
 			final ArrayList<Parameter> parameterList) {
-		ChoiceParameter windowChoice = (ChoiceParameter) parameterList.get(WINDOW_PARAMETER_INDEX);
-		return windowChoice;
+		return (ChoiceParameter) parameterList.get(WINDOW_PARAMETER_INDEX);
 	}
 			
 	
 	@Override protected void updateParameters(final GenericDialog gd) {
-		
 		setLabel((String) (gd.getNextString()).trim());
 		setDisplay(gd.getNextBoolean());
 		
@@ -157,14 +172,12 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 	}
 
 	private Vector<String> getImageWindows() {
-		//String[] imagelist = new String[WindowManager.getImageCount()];
 		Vector<String> imagelist = new Vector<String>();
 		int imageID;
 		for (int i = 1; i < WindowManager.getImageCount()+1; i++) {
     		imageID = WindowManager.getNthImageID(i);
 			ImagePlus ip = WindowManager.getImage(imageID);
 			if (ip != null) {
-				//imagelist[i-1] = ip.getTitle();
 				imagelist.add(ip.getTitle());
 			}
     	}

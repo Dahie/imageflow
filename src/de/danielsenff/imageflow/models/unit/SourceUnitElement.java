@@ -80,36 +80,6 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		super(origin, unitName, macroString);
 	}
 	
-	/**
-	 * @param origin
-	 * @param unitName
-	 * @param macroElement
-	 * @param filepath 
-	 */
-	public SourceUnitElement(final Point origin, 
-			final String unitName,
-			final MacroElement macroElement, 
-			final String filepath) 
-	{
-		super(origin, unitName, macroElement);
-		setFilePath(filepath);
-	}
-	
-	/**
-	 * @param origin
-	 * @param unitName
-	 * @param macroString
-	 * @param filepath 
-	 */
-	public SourceUnitElement(final Point origin, 
-			final String unitName,
-			final String macroString, 
-			final String filepath) 
-	{
-		super(origin, unitName, macroString);
-		setFilePath(filepath);
-	}
-
 	@Override
 	public void showProperties() {
 		
@@ -254,8 +224,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		}
 
 		SourceUnitElement clone = new SourceUnitElement(new Point(origin.x+15, origin.y+15), 
-				this.label, 
-				imageJSyntax);
+				this.label, imageJSyntax);
 		for (int j = 0; j < getInputsCount(); j++) {
 			cloneInput(clone, j);
 		}
@@ -265,6 +234,11 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		for (Parameter parameter : parameters) {
 			cloneParameter(clone, parameter);
 		}
+		
+		// set filepath
+		clone.setFilePath(this.getFilePath());
+		
+		
 		clone.setDisplay(isDisplay());
 		clone.setColor(this.color);
 		clone.setIcon(this.icon);
@@ -291,7 +265,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * @return
 	 */
 	public String getFilePath() {
-		return ((StringParameter)parameters.get(FILE_PARAMETER_INDEX)).getValue();
+		return ((StringParameter)getParameter(FILE_PARAMETER_INDEX)).getValue();
 	}
 	
 	/**
@@ -300,8 +274,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 * @return
 	 */
 	public File getFile() {
-		final String path = getFilePath();
-		return new File(path);
+		return new File(getFilePath());
 	}
 	
 	/**
@@ -310,8 +283,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 */
 	public void setFilePath(String filepath) {
 		((StringParameter)getParameter(FILE_PARAMETER_INDEX)).setValue(filepath);
-		String filename = filepath.substring(filepath.lastIndexOf(File.separator)+1);
-		setLabel(filename);
+		setLabel(filepath.substring(filepath.lastIndexOf(File.separator)+1));
 		setExistsFile(filepath);
 	}
 
