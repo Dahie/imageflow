@@ -138,15 +138,29 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 			gd.addMessage("This unit has no parameters and can not be adjusted.");
 		} else {
 			ChoiceParameter windowChoice = getWindowChoiceParameter(parameterList);
-			// reset Choices list
-			windowChoice.getChoices().clear();
-			windowChoice.getChoices().addAll(getImageWindows());
 			if(WindowManager.getCurrentImage() != null) {
-				gd.addChoice(windowChoice.getDisplayName(), 
-						windowChoice.getChoicesArray(), 
-						windowChoice.getValue());
-			} else 
+				
+				Vector<String> imageWindows = getImageWindows();
+//				if(imageWindows.contains(windowChoice.getValue())) {
+//					// if same window is opened as before
+//					gd.addMessage("Expected opened Image by the name "+windowChoice.getValue()+".");
+//				} else {
+					// the original window is not opened
+					
+					// reset Choices list
+					windowChoice.getChoices().clear();
+					
+					windowChoice.getChoices().addAll(imageWindows);
+					gd.addChoice(windowChoice.getDisplayName(), 
+							windowChoice.getChoicesArray(), 
+							windowChoice.getValue());
+//				}
+				
+			} else {
 				gd.addMessage("There are no images opened in ImageJ.");
+			} 
+			if (windowChoice.getValue().length() > 0)
+				gd.addMessage("Expected opened Image by the name "+windowChoice.getValue()+".");
 			
 		}
 	}
