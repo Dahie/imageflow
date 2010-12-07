@@ -8,7 +8,7 @@
   <PathToIcon>ImageCalculator_Unit.png</PathToIcon> 
   <ImageJSyntax>run("Make Montage...", "columns=PARA_INTEGER_1 rows=PARA_INTEGER_2 scale=PARA_DOUBLE_1 first=PARA_INTEGER_3 last=PARA_INTEGER_4 increment=PARA_INTEGER_5 border=PARA_INTEGER_6 font=PARA_INTEGER_6 PARA_BOOLEAN_1");</ImageJSyntax>
   <Color>0x6e91de</Color>
-  <HelpString>Combines two images.</HelpString>  
+  <HelpString>Display the slices of a stack in a grid.</HelpString>  
 </General>
 
 <Parameters>

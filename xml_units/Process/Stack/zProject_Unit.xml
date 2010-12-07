@@ -6,7 +6,7 @@
 <General>
   <UnitName>Z Project</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Z Project...", "start=PARA_INTEGER_1 stop=PARA_INTEGER_2 projection=[Max Intensity]");</ImageJSyntax> 
+  <ImageJSyntax>run("Z Project...", "start="+ATTRIBUTE_INPUT_2_PARAMETER_1+" stop="+ATTRIBUTE_INPUT_3_PARAMETER_2+" projection=[PARA_STRING_1]");</ImageJSyntax> 
   <Color>0x6e91de</Color>
   <HelpString>Projects all slices in one image.</HelpString>  
 </General>
@@ -41,6 +41,20 @@
 		<ImageType>63</ImageType>
 		<NeedToCopyInput>false</NeedToCopyInput>
 	</Input>
+	<Input>
+    	<Name>First Slice</Name>
+    	<ShortName>F</ShortName>
+    	<Required>false</Required>
+    	<DataType>Integer</DataType>
+    	<NeedToCopyInput>false</NeedToCopyInput>
+  	</Input>
+  	<Input>
+    	<Name>Last Slice</Name>
+    	<ShortName>L</ShortName>
+    	<Required>false</Required>
+    	<DataType>Integer</DataType>
+    	<NeedToCopyInput>false</NeedToCopyInput>
+  	</Input>
 </Inputs>
 
 <Outputs> 

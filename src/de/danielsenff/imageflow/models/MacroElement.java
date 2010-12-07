@@ -104,7 +104,9 @@ public class MacroElement {
 		/**
 		 * my gut says, this should be refactored
 		 */
-		int parameterIndex = 0, pc = 0, pd = 0, ps = 0, pi = 0, pb = 0;
+		int parameterIndex = 0; // index of parameter in parameters collection
+		int parameterCount = 0; // count of processed parameters
+		int pd = 0, ps = 0, pi = 0, pb = 0;
 		String searchString, paraType;
 		String parameterString;
 		Parameter parameter;
@@ -122,9 +124,11 @@ public class MacroElement {
 				pd++;
 				parameterIndex++;
 			}
+			// choiceParameter uses the PARA_STRING_x
 			searchString = "(PARA_STRING_" + (ps+1) + ")(\\D)";
 			matcher = compileMatcherBy(searchString, command);
-			if(matcher.find() && (paraType.equalsIgnoreCase("string") || paraType.equalsIgnoreCase("stringarray"))) {
+			boolean find = matcher.find();
+			if(find && (paraType.equalsIgnoreCase("string") || paraType.equalsIgnoreCase("stringarray"))) {
 				parameterString = fixPath("" + ((StringParameter)parameter).getValue());
 				System.out.println(parameterString);
 				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
@@ -142,33 +146,38 @@ public class MacroElement {
 			searchString = "(PARA_BOOLEAN_" + (pb+1) + ")(\\D)";
 			matcher = compileMatcherBy(searchString, command);
 			if(matcher.find() && paraType.equals("boolean")) {
-			//if(command.contains(searchString) && paraType.equals("boolean")) {
 				boolean bool = ((BooleanParameter)parameter).getValue();
 				parameterString =  (bool) ? ((BooleanParameter)parameter).getTrueString() : ""; 
 				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
 				pb++;
 				parameterIndex++;
 			}
-			pc++;
-			if (parameterIndex != pc) {
+			parameterCount++;
+			if (parameterIndex != parameterCount) {
 				searchString = "_PARAMETER_" + (parameterIndex+1);
 				matcher = compileMatcherBy(searchString, command);
-				if(matcher.find() && paraType.equals("boolean")) {
+				if(matcher.find() && knownParameterType(paraType)) {
 					// This parameter is used as an "attibute" somewhere
 					// Go ahead and increment parameter index, so subsequent parameters are still read
 					parameterIndex++;
 				}
 			} 
-			if (parameterIndex != pc) {
+			if (parameterIndex != parameterCount) {
+				// means, we have a parameter, that wasn't used
 //				System.err.println("Error in parameters or ImageJ-syntax");
 				return command;
 			}
 				
 		}
-		// choiceParameter uses the PARA_STRING_x
 		return command;
 	}
 	
+	private static boolean knownParameterType(final String paraType) {
+		return paraType.equals("boolean") 
+			|| paraType.equals("integer") || paraType.equals("string") 
+			|| paraType.equals("stringarray") || paraType.equals("double");
+	}
+
 	/*
 	 * from ImageJ.Recorder
 	 */

@@ -6,10 +6,10 @@
 <General>
   <UnitName>Reslice</UnitName> 
   <PathToIcon></PathToIcon> 
-  <ImageJSyntax>run("Reslice [/]...", "slice=PARA_DOUBLE_1 start=PARA_STRING_1 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3");</ImageJSyntax>
+  <ImageJSyntax>run("Reslice [/]...", "slice="+ATTRIBUTE_INPUT_2_PARAMETER_1+" start=PARA_STRING_1 PARA_BOOLEAN_1 PARA_BOOLEAN_2 PARA_BOOLEAN_3");</ImageJSyntax>
    
   <Color>0x6e91de</Color>
-  <HelpString>Projects all slices in one image.</HelpString>  
+  <HelpString>Rearrange dimensions of the stack thereby changing the projection axis of the slices.</HelpString>  
 </General>
 
 <Parameters>
@@ -56,6 +56,13 @@
 	<DataType>Image</DataType>
 	<ImageType>63</ImageType>
 	<NeedToCopyInput>false</NeedToCopyInput>
+  </Input>
+  <Input>
+    <Name>Slice Spacing</Name>
+    <ShortName>Sp</ShortName>
+    <Required>false</Required>
+    <DataType>Number</DataType>
+    <NeedToCopyInput>false</NeedToCopyInput>
   </Input>
 </Inputs>
 
