@@ -71,6 +71,8 @@ import visualap.Node;
 import visualap.Selection;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.controller.ParameterWidgetController;
+import de.danielsenff.imageflow.gui.Dashboard;
 import de.danielsenff.imageflow.gui.DelegatesPanel;
 import de.danielsenff.imageflow.gui.DelegatesTreeListener;
 import de.danielsenff.imageflow.gui.GPanelPopup;
@@ -151,6 +153,7 @@ public class ImageFlowView extends FrameView {
 
 	private JCheckBoxMenuItem chkBoxDisplayUnit;
 	private JCheckBoxMenuItem chkBoxCollapseIcon;
+	private Dashboard dashboardPanel;
 	
 	
 	
@@ -160,7 +163,6 @@ public class ImageFlowView extends FrameView {
 	public ImageFlowView(final Application app) {
 		super(app);
 		
-//		this.delegates = DelegatesController.getInstance().getDelegates();
 		this.graphController = new GraphController();
 		
 		if (IJ.isMacOSX()) {
@@ -266,6 +268,7 @@ public class ImageFlowView extends FrameView {
 		editMenu.add(getAction("delete"));
 //		editMenu.add(getAction("clear"));
 		editMenu.add(getAction("selectAll"));
+		editMenu.add(getAction("addToDashboard"));
 		
 		editMenu.add(new JSeparator());
 
@@ -402,6 +405,10 @@ public class ImageFlowView extends FrameView {
 		progressPanel.add(statusBar);
 		
 		bottomPanel.add(progressPanel, BorderLayout.LINE_END);
+		
+		dashboardPanel = new Dashboard();
+		
+		bottomPanel.add(dashboardPanel, BorderLayout.PAGE_START);
 		
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
@@ -831,6 +838,17 @@ public class ImageFlowView extends FrameView {
 			}
 		}
 		graphPanel.repaint();
+	}
+	
+	@Action(enabledProperty = "selected")
+	public void addToDashboard() {
+		for (Object selectedElement : getSelections()) {
+			if(selectedElement instanceof UnitElement) {
+				// TODO allow adding only once
+				dashboardPanel.addToolbar((UnitElement) selectedElement);
+				dashboardPanel.revalidate();
+			}
+		}
 	}
 	
 	/**
