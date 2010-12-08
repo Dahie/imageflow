@@ -33,11 +33,9 @@ public class DoubleParameter extends AbstractParameter {
 	 * @param helpString 
 	 */
 	public DoubleParameter(String displayName, double doubleParameter, String helpString) {
-		this.displayName = displayName;
+		super("double", displayName, helpString);
 		this.doubleValue = doubleParameter;
 		this.doubleValueDefault = doubleParameter;
-		this.helpString = helpString;
-		this.paraType = "double";
 	}
 
 	/**

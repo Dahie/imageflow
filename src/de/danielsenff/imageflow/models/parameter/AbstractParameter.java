@@ -47,7 +47,10 @@ public abstract class AbstractParameter implements Parameter {
 	/**
 	 * 
 	 */
-	public AbstractParameter() {
+	public AbstractParameter(String paraType, String displayName, String helpString) {
+		this.displayName = displayName;
+		this.paraType = paraType;
+		this.helpString = helpString;
 	}
 
 	/**
@@ -57,6 +60,9 @@ public abstract class AbstractParameter implements Parameter {
 		this.parameterNumber = parameterNumber;
 	}
 
+	
+	
+	//public void onChange();
 	
 	/**
 	 * Returns the name of the Parameter. 

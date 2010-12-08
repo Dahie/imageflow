@@ -47,12 +47,10 @@ public class BooleanParameter extends AbstractParameter {
 			final boolean boolParameter, 
 			final String trueString,
 			final String helpString) {
-		this.displayName = displayName;
+		super("boolean", displayName, helpString);
 		this.booleanValue = boolParameter;
 		this.booleanValueDefault = boolParameter;
 		this.trueString = trueString;
-		this.helpString = helpString;
-		this.paraType = "boolean";
 	}
 
 	/**

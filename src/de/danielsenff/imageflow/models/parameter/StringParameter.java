@@ -44,11 +44,9 @@ public class StringParameter extends AbstractParameter {
 			String stringValue, 
 			String defaultValue, 
 			String helpString) {
-		this.displayName = displayName;
+		super("String", displayName, helpString);
 		this.stringValue = stringValue;
 		this.stringValueDefault = defaultValue;
-		this.helpString = helpString;
-		this.paraType = "String";
 	}
 
 	/**
@@ -76,7 +74,9 @@ public class StringParameter extends AbstractParameter {
 	 * @param stringValue
 	 */
 	public void setValue(final String stringValue) {
+		String oldValue = this.stringValue;
 		this.stringValue = stringValue;
+		// TODO onchange
 	}
 
 	

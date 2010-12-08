@@ -46,12 +46,12 @@ public class IntegerParameter extends AbstractParameter {
 	 * @param integerParameter
 	 * @param string2
 	 */
-	public IntegerParameter(String displayName, int integerParameter, String helpString) {
-		this.displayName = displayName;
+	public IntegerParameter(String displayName, 
+			int integerParameter, 
+			String helpString) {
+		super("integer", displayName, helpString);
 		this.integerValue = integerParameter;
 		this.integerValueDefault = integerParameter;
-		this.helpString = helpString;
-		this.paraType = "integer";
 	}
 
 	public void setParameter(String displayName, int integerParameter, String helpString) {
