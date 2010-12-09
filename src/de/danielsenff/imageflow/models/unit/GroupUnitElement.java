@@ -24,11 +24,11 @@ import java.util.Vector;
 
 import visualap.GList;
 import visualap.Node;
-import visualap.Pin;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.connection.Pin;
 import de.danielsenff.imageflow.models.connection.ProxyInput;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
 

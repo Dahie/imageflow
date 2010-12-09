@@ -27,6 +27,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
 
+import de.danielsenff.imageflow.models.ChangeListener;
+
 import visualap.Node;
 
 

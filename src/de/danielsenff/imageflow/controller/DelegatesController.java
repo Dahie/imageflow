@@ -108,7 +108,6 @@ public class DelegatesController {
 		try {
 			// try to load xml units from surrounding jar by default
 			unitsLocation = getClassResourceBase();
-			System.out.println("unitslocation: " + unitsLocation);
 			setResourcesBase(DelegatesController.class.getClassLoader().getResource(unitsLocation));
 			if (resourcesBase != null && resourcesBase.openConnection().getContentLength() > 0) {
 				readDelegatesFromURL(top, resourcesBase);

@@ -18,11 +18,11 @@ This class supports a list of selectable items
 javalc6
 */
 package visualap;
-import java.util.*;
+import java.util.ArrayList;
 
-interface Selectable {
-	public void setSelected(boolean sel);
-}
+import de.danielsenff.imageflow.models.Selectable;
+
+
 
 public class Selection<E extends Selectable> extends ArrayList<E> {
 	public boolean add(E element) {

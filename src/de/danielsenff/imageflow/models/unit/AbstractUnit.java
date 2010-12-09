@@ -135,4 +135,8 @@ public abstract class AbstractUnit extends NodeAbstract implements Model {
 		super.setLabel(label);
 		notifyModelListeners();
 	}
+	
+	public boolean isSelected() {
+		return this.selected;
+	}
 }

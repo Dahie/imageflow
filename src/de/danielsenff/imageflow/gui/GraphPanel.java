@@ -60,13 +60,13 @@ import visualap.GList;
 import visualap.GPanel;
 import visualap.GPanelListener;
 import visualap.Node;
-import visualap.Pin;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.connection.Pin;
 import de.danielsenff.imageflow.models.delegates.Delegate;
 import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.unit.CommentNode;
@@ -193,8 +193,8 @@ public class GraphPanel extends GPanel {
 
 	@Override
 	protected void paintPrintableConnection(final Graphics g, final Connection connection) {
-		final Point from = connection.getInput().getLocation();
-		final Point to = connection.getOutput().getLocation();
+		final Point from = connection.getInput().getOrigin();
+		final Point to = connection.getOutput().getOrigin();
 		g.setColor(  (connection.isCompatible()) ? Color.BLACK : Color.RED );
 		g.drawLine(from.x, from.y, to.x, to.y);
 		
@@ -265,7 +265,7 @@ public class GraphPanel extends GPanel {
 					}
 				}
 
-				final Point origin = drawEdge.getLocation();
+				final Point origin = drawEdge.getOrigin();
 				g2.setColor(Color.BLACK);
 //				g2.drawLine(origin.x, origin.y, mouse.x, mouse.y);
 				g2.draw(new Line2D.Double(origin.x, origin.y, mouse.x, mouse.y));
@@ -402,12 +402,12 @@ public class GraphPanel extends GPanel {
 
 	private void drawCompatbilityIndicator(final Graphics2D g2, final int margin, final Pin pin) {
 		final int diameter = 15;
-		final Point pinLocation = pin.getLocation();
+		final Point pinLocation = pin.getOrigin();
 		final int pinX = pinLocation.x - (diameter/2); 
 		final int pinY = pinLocation.y - (diameter/2);
 
 		// draw pin marker if mouse within inner range
-		if(isWithin2DRange(mouse, pin.getLocation(), new Dimension(0,0), margin)) {
+		if(isWithin2DRange(mouse, pin.getOrigin(), new Dimension(0,0), margin)) {
 
 			boolean isCompatible = false;
 			boolean isLoop = false;
@@ -446,7 +446,7 @@ public class GraphPanel extends GPanel {
 					errorMessage += "Pin is locked\n";
 
 				if(errorMessage.length() != 0) 
-					drawErrorMessage(g2, errorMessage, pin.getLocation());
+					drawErrorMessage(g2, errorMessage, pin.getOrigin());
 			}
 		}
 	}

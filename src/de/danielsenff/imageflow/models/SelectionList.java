@@ -17,28 +17,27 @@
  */
 package de.danielsenff.imageflow.models;
 
-import visualap.Selection;
-
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import visualap.Node;
+import visualap.Selection;
+
 
 /**
+ * SelectionList is a data container storing Selectable elements of the workflow.
  * @author danielsenff
  *
  */
-public class SelectionList extends Selection<Node> 
-	implements Selectable 
-{
+public class SelectionList extends Selection<Node> {
 
-	private final ArrayList<SelectionListener> listeners;
+	private final HashSet<SelectionListListener> listeners;
 	
 	/**
 	 * 
 	 */
 	public SelectionList() {
-		this.listeners = new ArrayList<SelectionListener>();
+		this.listeners = new HashSet<SelectionListListener>();
 	}
 	
 	/*
@@ -46,77 +45,104 @@ public class SelectionList extends Selection<Node>
 	 */
 	
 	@Override
-	public boolean add(Node element) {
-		boolean add = super.add(element);
-		this.notifySelectionListeners();
+	public boolean add(final Node element) {
+		final boolean add = super.add(element);
+		this.notifySelectionListListeners();
 		return add;
 	}
 	
 	@Override
-	public void add(int index, Node element) {
+	public void add(final int index, final Node element) {
 		super.add(index, element);
-		this.notifySelectionListeners();
+		this.notifySelectionListListeners();
 	}
 	
 	@Override
-	public boolean addAll(Collection<? extends Node> c) {
-		boolean addAll = super.addAll(c);
-		this.notifySelectionListeners();
+	public boolean addAll(final Collection<? extends Node> c) {
+		final boolean addAll = super.addAll(c);
+		this.notifySelectionListListeners();
 		return addAll;
 	}
 	
 	@Override
-	public boolean remove(Object o) {
-		boolean remove = super.remove(o);
-		this.notifySelectionListeners();
+	public boolean remove(final Object o) {
+		final boolean remove = super.remove(o);
+		this.notifySelectionListListeners();
 		return remove;
 	}
 	
 	@Override
-	public Node remove(int index) {
-		Node remove = super.remove(index);
-		this.notifySelectionListeners();
+	public Node remove(final int index) {
+		final Node remove = super.remove(index);
+		this.notifySelectionListListeners();
 		return remove;
 	}
 	
 	@Override
 	public void clear() {
 		super.clear();
-		this.notifySelectionListeners();
+		this.notifySelectionListListeners();
 	}
 	
 	/*
 	 * Listener registration methods
 	 */
 	
-	
-	public void addSelectionListener(final SelectionListener listener) {
+	/**
+	 * Add the given a {@link SelectionListListener} to this SelectionList.
+	 * @param listener 
+	 */
+	public void addSelectionListListener(final SelectionListListener listener) {
 		if (! this.listeners.contains(listener)) {
 			this.listeners.add(listener);
-			notifySelectionListener(listener);
+			notifySelectionListListener(listener);
 		}
 	}
 
-	public void notifySelectionListener(final SelectionListener listener) {
+	/**
+	 * Notify the given {@link SelectionListListener} that selections have changed.
+	 * @param listener
+	 */
+	public void notifySelectionListListener(final SelectionListListener listener) {
 		listener.selectionChanged(this);
 	}
 
-	public void notifySelectionListeners() {
-		for (final SelectionListener listener : this.listeners) {
-			notifySelectionListener(listener);
+	/**
+	 * Notify the all {@link SelectionListListener}s that selections have changed.
+	 */
+	public void notifySelectionListListeners() {
+		for (final SelectionListListener listener : this.listeners) {
+			notifySelectionListListener(listener);
 		}
 	}
 
-	public void removeSelectionListener(final SelectionListener listener) {
-		this.listeners.remove(listener);
+	/**
+	 * Remove the given a {@link SelectionListListener} to this SelectionList.
+	 * @param listener
+	 * @return 
+	 */
+	public boolean removeSelectionListener(final ChangeListener listener) {
+		return this.listeners.remove(listener);
 	}
 
-	public boolean isSelected() {
+	/**
+	 * This SelectionList contains Selectable items.
+	 * @return
+	 */
+	public boolean hasSelections() {
 		return !this.isEmpty();
 	}
-
-	public void setSelected(boolean sel) {
-		// FIXME empty, actually senseless
+	
+	/**
+	 * SelectionListener reports changes in the {@link SelectionList}
+	 * @author Daniel Senff
+	 *
+	 */
+	public interface SelectionListListener {
+		/**
+		 * Called when selections in the associated SelectionList change.  
+		 * @param list
+		 */
+		public void selectionChanged(SelectionList list);
 	}
-
 }

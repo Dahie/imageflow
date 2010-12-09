@@ -33,7 +33,6 @@ import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.imagej.GenericDialog;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.MacroElement;
-import de.danielsenff.imageflow.models.Positionable;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
@@ -66,7 +65,7 @@ import de.danielsenff.imageflow.utils.PaintUtil;
  * @author danielsenff
  *
  */
-public class UnitElement extends AbstractUnit implements ProcessingUnit, Displayable, Positionable {
+public class UnitElement extends AbstractUnit implements ProcessingUnit, Displayable {
 
 	/**
 	 * Pixel radius of tolerance round the pins  
@@ -1063,7 +1062,6 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		}
 		return false;
 	}
-
 
 }
 

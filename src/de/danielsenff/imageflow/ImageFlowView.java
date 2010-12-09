@@ -18,7 +18,6 @@
 package de.danielsenff.imageflow;
 
 import ij.IJ;
-import ij.ImageJ;
 import ij.ImagePlus;
 import ij.WindowManager;
 
@@ -27,7 +26,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.ScrollPane;
-import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -81,9 +79,8 @@ import de.danielsenff.imageflow.imagej.MacroGenerator;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
-import de.danielsenff.imageflow.models.Selectable;
 import de.danielsenff.imageflow.models.SelectionList;
-import de.danielsenff.imageflow.models.SelectionListener;
+import de.danielsenff.imageflow.models.SelectionList.SelectionListListener;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
@@ -223,9 +220,10 @@ public class ImageFlowView extends FrameView {
 			}
 		});
 		
-		getSelections().addSelectionListener(new SelectionListener() {
-			public void selectionChanged(Selectable selections) {
-				setSelected(selections.isSelected());
+		
+		getSelections().addSelectionListListener(new SelectionListListener() {
+			public void selectionChanged(SelectionList selections) {
+				setSelected(selections.hasSelections());
 			}
 		});
 		

@@ -22,7 +22,6 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import visualap.Pin;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;

@@ -18,9 +18,8 @@
 package de.danielsenff.imageflow.models;
 
 
-public interface SelectionListener {
+public interface ChangeListener {
 
-
-	public void selectionChanged(Selectable selection);
+	public void onChange(Selectable selection);
 	
 }

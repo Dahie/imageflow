@@ -31,9 +31,6 @@ interface Labelable {
 	public String getLabel();
 }
 
-interface Clearable {
-	public void clear();
-}
 
 public class GList<E extends Changeable&Labelable> extends Vector<E> {
 	private transient boolean changed=false;

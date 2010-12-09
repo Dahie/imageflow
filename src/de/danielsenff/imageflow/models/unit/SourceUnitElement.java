@@ -20,8 +20,6 @@ package de.danielsenff.imageflow.models.unit;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.io.OpenDialog;
-import ij.plugin.filter.PlugInFilter;
-import ij.plugin.frame.Recorder;
 
 import java.awt.Color;
 import java.awt.Graphics;

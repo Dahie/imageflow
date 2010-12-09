@@ -154,11 +154,6 @@ public class UnitFactory {
 		}
 		return unitElement;
 	}
-
-	public static void createGroupUnit() {
-		// TODO Auto-generated method stub
-
-	}
 	
 	
 	/**
@@ -205,15 +200,22 @@ public class UnitFactory {
 		}
 	}
 	
+	/**
+	 * Create a {@link IOutput} for the given {@link UnitElement}.
+	 * @param outputDescription
+	 * @param unitElement
+	 * @param i
+	 * @return
+	 */
 	public static Output createOutput(UnitDescription.Output outputDescription, 
 			UnitElement unitElement, int i) {
 		String name = outputDescription.name;
 		String shortName = outputDescription.shortName;
 		DataType dataType = outputDescription.dataType;
 		
-		if(unitElement instanceof SourceUnitElement
+		if(unitElement instanceof ImageSourceUnit
 				&& dataType instanceof DataTypeFactory.Image) {
-			int imageType = ((SourceUnitElement)unitElement).getImageType();
+			int imageType = ((ImageSourceUnit)unitElement).getImageType();
 			((DataTypeFactory.Image)dataType).setImageBitDepth(imageType);
 		} 
 		// imagetype -1 means output will be the same type as the input
@@ -233,8 +235,15 @@ public class UnitFactory {
 		}
 	}
 
+	/**
+	 * Create a {@link Input} for the given {@link UnitElement}.
+	 * @param inputDescription
+	 * @param unitElement
+	 * @param i
+	 * @return
+	 */
 	public static Input createInput(final UnitDescription.Input inputDescription,
-			UnitElement unitElement, int i) {
+			final UnitElement unitElement, final int i) {
 		String name = inputDescription.name;
 		String shortName = inputDescription.shortName;
 		boolean needToCopyInput = inputDescription.needToCopyInput;
@@ -266,12 +275,12 @@ public class UnitFactory {
 	 * @param node
 	 */
 	public static void registerModelListener(Node node) {
+		// if we ever go multi-document, this will have to be addressed here
 		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
 		final GraphPanel graphPanel = ifView.getGraphPanel();
 		if(node instanceof CommentNode) {
 			((CommentNode)node).addModelListener(new NodeListener(graphPanel, ifView));
-		} else if (node instanceof UnitElement) 
-		{
+		} else if (node instanceof UnitElement) {
 			((UnitElement)node).addModelListener(new NodeListener(graphPanel, ifView));	
 		}
 	}

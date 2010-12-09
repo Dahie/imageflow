@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.Vector;
 
 import visualap.Node;
-import visualap.Pin;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory.Image;
@@ -181,7 +180,7 @@ public class Output extends Pin {
 	 * @see graph.Pin#getLocation()
 	 */
 	@Override
-	public Point getLocation() {
+	public Point getOrigin() {
 		int height = parent.getDimension().height;
 		int nump = ((UnitElement) parent).getOutputsCount();
 		int y =  (index*height / nump ) - (height/(2*nump)) + parent.getOrigin().y;

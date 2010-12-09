@@ -18,9 +18,9 @@
 package de.danielsenff.imageflow.models.datatype;
 
 import ij.plugin.filter.PlugInFilter;
-import visualap.Pin;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.connection.Pin;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 

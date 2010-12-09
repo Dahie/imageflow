@@ -17,6 +17,26 @@
  */
 package de.danielsenff.imageflow.models;
 
+import java.awt.Point;
+
+/**
+ * 
+ * @author dahie
+ *
+ */
 public interface Positionable {
 
+	public Point getOrigin();
+	
+	public void setOrigin();
+	
+	public void addPositionListener(final ChangeListener listener);
+
+	public void notifyPositionListener(final ChangeListener listener);
+
+	public void notifyPositionListeners();
+
+	public void removePositionListener(final ChangeListener listener);
 }
+
+

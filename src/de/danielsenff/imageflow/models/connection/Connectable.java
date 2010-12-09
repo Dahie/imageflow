@@ -17,7 +17,6 @@
  */
 package de.danielsenff.imageflow.models.connection;
 
-import visualap.Pin;
 
 /**
  * Interface for {@link Pin} to connect to other pins

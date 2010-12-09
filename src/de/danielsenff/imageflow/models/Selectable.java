@@ -34,12 +34,12 @@ public interface Selectable {
 	 */
 	public boolean isSelected();
 	
-	public void addSelectionListener(final SelectionListener listener);
+	/*public void addSelectionListener(final ChangeListener listener);
 
-	public void notifySelectionListener(final SelectionListener listener);
+	public void notifySelectionListener(final ChangeListener listener);
 
 	public void notifySelectionListeners();
 
-	public void removeSelectionListener(final SelectionListener listener);
+	public void removeSelectionListener(final ChangeListener listener);*/
 
 }

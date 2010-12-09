@@ -17,7 +17,7 @@
  */
 package de.danielsenff.imageflow.models.datatype;
 
-import visualap.Pin;
+import de.danielsenff.imageflow.models.connection.Pin;
 
 /**
  * A DataType only describes what kind of data can be used on a {@link Pin}

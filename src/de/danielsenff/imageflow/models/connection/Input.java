@@ -20,7 +20,6 @@ package de.danielsenff.imageflow.models.connection;
 import java.awt.Point;
 
 import visualap.Node;
-import visualap.Pin;
 import de.danielsenff.imageflow.models.Lockable;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
@@ -236,7 +235,7 @@ public class Input extends Pin implements Lockable {
 	 * @see graph.Pin#getLocation()
 	 */
 	@Override
-	public Point getLocation() {
+	public Point getOrigin() {
 		int height = parent.getDimension().height;
 		int nump = ((UnitElement) parent).getInputsCount();
 		int y =  (index*height / nump ) - (height/(2*nump)) + parent.getOrigin().y;

@@ -164,7 +164,7 @@ public class WorkflowXMLBuilder {
 		if(actualUnitElement.getChild("Label") != null)
 			label = actualUnitElement.getChild("Label").getValue();
 
-		System.out.println("Read unit: " +label);
+//		System.out.println("Read unit: " +label);
 
 		Element unitDescriptionElement = actualUnitElement.getChild("UnitDescription");
 		Node node;
@@ -198,7 +198,6 @@ public class WorkflowXMLBuilder {
 		try {
 			unitDescription.readXML(unitDescriptionElement);
 		} catch (DataFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -231,8 +230,18 @@ public class WorkflowXMLBuilder {
 		return new CommentNode(position, label);
 	}
 
-	protected UnitElement createProcessingUnit(final Point position, String label,
-			int unitID, UnitDescription unitDescription) {
+	/**
+	 * Create a regular processing {@link UnitElement}.
+	 * @param position
+	 * @param label
+	 * @param unitID
+	 * @param unitDescription
+	 * @return
+	 */
+	protected UnitElement createProcessingUnit(final Point position, 
+			final String label,
+			final int unitID, 
+			final UnitDescription unitDescription) {
 		UnitElement unitElement = UnitFactory.createProcessingUnit(unitDescription, position);
 		unitElement.setDisplay(unitDescription.getIsDisplayUnit());
 		unitElement.setHelpString(unitDescription.helpString);
@@ -241,11 +250,28 @@ public class WorkflowXMLBuilder {
 		return unitElement;
 	}
 
-	protected UnitElement readGroup(final URL url, final Point position,
-			String label, int unitID, UnitDescription unitDescription,
-			Element unitsElement, Element internalConnectionsElement,
-			Element externalConnectionsElement,
-			Element originalConnectionsElement) {
+	/**
+	 * Read {@link GroupUnitElement} from XML.
+	 * @param url
+	 * @param position
+	 * @param label
+	 * @param unitID
+	 * @param unitDescription
+	 * @param unitsElement
+	 * @param internalConnectionsElement
+	 * @param externalConnectionsElement
+	 * @param originalConnectionsElement
+	 * @return
+	 */
+	protected UnitElement readGroup(final URL url, 
+			final Point position,
+			final String label, 
+			final int unitID, 
+			final UnitDescription unitDescription,
+			final Element unitsElement, 
+			final Element internalConnectionsElement,
+			final Element externalConnectionsElement,
+			final Element originalConnectionsElement) {
 		System.out.println("Process group..");
 
 		UnitElement unitElement = new GroupUnitElement(position, label);

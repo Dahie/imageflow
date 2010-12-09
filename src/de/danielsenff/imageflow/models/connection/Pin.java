@@ -1,40 +1,43 @@
-/*
-Version 1.0, 30-12-2007, First release
-
-IMPORTANT NOTICE, please read:
-
-This software is licensed under the terms of the GNU GENERAL PUBLIC LICENSE,
-please read the enclosed file license.txt or http://www.gnu.org/licenses/licenses.html
-
-Note that this software is freeware and it is not designed, licensed or intended
-for use in mission critical, life support and military purposes.
-
-The use of this software is at the risk of the user.
-*/
-
-/* class Pin
-
-This class is used for pins (part of Node)
-
-javalc6
-*/
-package visualap;
+/**
+ * Copyright (C) 2008-2010 Daniel Senff
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+package de.danielsenff.imageflow.models.connection;
 import java.awt.Point;
 
+import visualap.Node;
+
 import de.danielsenff.imageflow.models.Lockable;
-import de.danielsenff.imageflow.models.connection.Connectable;
-import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
 
 /**
  * Pin is the connecting point on a UnitElement between Connections.
- * @author senff
+ * @author Daniel Senff
  *
  */
 public abstract class Pin implements Connectable, Cloneable, Lockable {
-	protected Node parent; // node that contains this Pin
+	/**
+	 * Node that contains this Pin
+	 */
+	protected Node parent;
 	protected int index;
-	transient protected int mark; // used only for analysis of graph
+	/**
+	 * Integer value used only for analysis of graph
+	 */
+	transient protected int mark; 
 
 	/**
 	 * the name to be displayed in the context help
@@ -63,7 +66,6 @@ public abstract class Pin implements Connectable, Cloneable, Lockable {
 	public Pin (DataType type, int index, Node parent) {
 		this.dataType = type;
 		this.index = index;
-		
 		this.parent = parent;
 	}
 
@@ -121,12 +123,17 @@ public abstract class Pin implements Connectable, Cloneable, Lockable {
 	 */
 	
 	/**
+	 * Get the value of the mark.
 	 * @return
 	 */
 	public int getMark () {
 		return mark;
 	}
 
+	/**
+	 * Set the value of the mark.
+	 * @param mark
+	 */
 	public void setMark (int mark) {
 		this.mark = mark;
 	}
@@ -137,7 +144,7 @@ public abstract class Pin implements Connectable, Cloneable, Lockable {
 	 * @return
 	 */
 	public boolean isMarked() {
-		return (this.mark == 0) ? false : true;
+		return (this.mark == 0);
 	}
 
 	/**
@@ -146,7 +153,7 @@ public abstract class Pin implements Connectable, Cloneable, Lockable {
 	 * @return
 	 */
 	public boolean isUnmarked() {
-		return (this.mark == 0) ? true : false;
+		return (this.mark == 0);
 	}
 
 
@@ -154,7 +161,7 @@ public abstract class Pin implements Connectable, Cloneable, Lockable {
 	 * Coordinates of this pin on the Panel.
 	 * @return
 	 */
-	public abstract Point getLocation();
+	public abstract Point getOrigin();
 
 	/**
 	 * Convenience for calling DataType.isCompatible(DataType);

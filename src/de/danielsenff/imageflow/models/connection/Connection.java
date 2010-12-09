@@ -18,7 +18,6 @@
 package de.danielsenff.imageflow.models.connection;
 
 import visualap.Node;
-import visualap.Pin;
 import de.danielsenff.imageflow.models.Lockable;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
@@ -33,6 +32,9 @@ public class Connection implements Lockable {
 	 */
 	public int id; 
 	
+	/**
+	 * Target and origin Pin.
+	 */
 	protected Pin from, to;
 	
 	/**
@@ -59,8 +61,8 @@ public class Connection implements Lockable {
 	/**
 	 * Creates a Connection between the two defined pins.
 	 * The order for Input and Output is irrelevant.
-	 * @param fromOutput
-	 * @param toInput
+	 * @param pin1 
+	 * @param pin2 
 	 */
 	public Connection(final Pin pin1, final Pin pin2) {
 		

@@ -31,16 +31,20 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
-import de.danielsenff.imageflow.models.Model;
-import de.danielsenff.imageflow.models.ModelListener;
+import de.danielsenff.imageflow.models.Selectable;
 
 public abstract class Node implements Selectable, Changeable, Labelable, Cloneable {
 	protected Rectangle dragging=null;
+	/**
+	 * Origin/Position of this Node on the workspace.
+	 */
 	protected Point origin = new Point(0, 0);
 	private Dimension dimension = new Dimension(0, 0);
     protected boolean selected=false, changed=false;
+    /**
+     * Displayed label of the node.
+     */
     protected String label;
 
 // constructor not to be used, XMLEncoder/XMLDecoder
@@ -61,7 +65,10 @@ public abstract class Node implements Selectable, Changeable, Labelable, Cloneab
 		this.label = label;
 	}
 
-
+	/**
+	 * Position on the workspace.
+	 * @return
+	 */
 	public Point getOrigin() {
 		return(origin);
 	}

@@ -50,6 +50,7 @@ import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Pin;
 import de.danielsenff.imageflow.models.delegates.Delegate;
 
 import static de.danielsenff.imageflow.utils.Reversed.reversed;
@@ -110,8 +111,8 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 
 
 	protected void paintPrintableConnection(Graphics g, Connection aEdge) {
-		Point from = aEdge.getInput().getLocation();
-		Point to = aEdge.getOutput().getLocation();
+		Point from = aEdge.getInput().getOrigin();
+		Point to = aEdge.getOutput().getOrigin();
 		g.drawLine(from.x, from.y, to.x, to.y);
 	}
 
