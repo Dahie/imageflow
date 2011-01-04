@@ -31,6 +31,7 @@ import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import de.danielsenff.imageflow.gui.PropertiesDialog;
 import de.danielsenff.imageflow.imagej.GenericDialog;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Output;
@@ -131,7 +132,7 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 	}
 	
 	
-	@Override protected void addParameterWidgets(final GenericDialog gd) {
+	@Override protected void addParameterWidgets(final PropertiesDialog gd) {
 		final ArrayList<Parameter> parameterList = getParameters();
 		
 		if (parameterList.isEmpty()) {
@@ -151,15 +152,15 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 					windowChoice.getChoices().clear();
 					
 					windowChoice.getChoices().addAll(imageWindows);
-					gd.addChoice(windowChoice.getDisplayName(), 
+					/*gd.addChoice(windowChoice.getDisplayName(), 
 							windowChoice.getChoicesArray(), 
-							windowChoice.getValue());
+							windowChoice.getValue());*/
 //				}
 				
 			} else {
 				gd.addMessage("There are no images opened in ImageJ.");
 			} 
-			if (windowChoice.getValue().length() > 0)
+			if (windowChoice.isChoicesEmpty())
 				gd.addMessage("Expected opened Image by the name "+windowChoice.getValue()+".");
 			
 		}

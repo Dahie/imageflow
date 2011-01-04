@@ -21,11 +21,7 @@ package de.danielsenff.imageflow.models.parameter;
  * @author danielsenff
  *
  */
-public class DoubleParameter extends AbstractParameter {
-
-	protected double  doubleValue;
-	protected double  doubleValueDefault;
-
+public class DoubleParameter extends AbstractParameter<Double> {
 
 	/**
 	 * @param displayName 
@@ -34,8 +30,8 @@ public class DoubleParameter extends AbstractParameter {
 	 */
 	public DoubleParameter(String displayName, double doubleParameter, String helpString) {
 		super("double", displayName, helpString);
-		this.doubleValue = doubleParameter;
-		this.doubleValueDefault = doubleParameter;
+		this.value = doubleParameter;
+		this.defaultValue = doubleParameter;
 	}
 
 	/**
@@ -47,24 +43,9 @@ public class DoubleParameter extends AbstractParameter {
 			final double doubleParameter, 
 			final String helpString) {
 		this.displayName = displayName;
-		this.doubleValue = doubleParameter;
-		this.doubleValueDefault = doubleParameter;
+		this.value = doubleParameter;
+		this.defaultValue = doubleParameter;
 		this.helpString = helpString;
 	}
 	
-	public Double getValue() {
-		return this.doubleValue;
-	}
-
-	/**
-	 * @param doubleValue
-	 */
-	public void setValue(double doubleValue) {
-		this.doubleValue = doubleValue;
-	}
-
-	public Double getDefaultValue() {
-		return this.doubleValueDefault;
-	}
-
 }

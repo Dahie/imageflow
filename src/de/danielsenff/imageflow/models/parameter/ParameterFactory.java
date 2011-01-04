@@ -51,7 +51,7 @@ public class ParameterFactory {
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public static Parameter createChoiceParameter(final String displayName, 
+	public static ChoiceParameter createChoiceParameter(final String displayName, 
 			final String dataTypeName,
 			final ArrayList<String> value,
 			final String helpString, 

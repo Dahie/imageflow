@@ -69,8 +69,11 @@ public class ChoiceParameter extends StringParameter {
 	public ArrayList<String> getChoices() {
 		return this.choiceValues;
 	}
-	
-	@Override
+
+	/**
+	 * 
+	 * @param stringValue
+	 */
 	public void setValue(String stringValue) {
 		if(this.choiceValues.contains(stringValue)) {
 			super.setValue(stringValue);	
@@ -99,7 +102,7 @@ public class ChoiceParameter extends StringParameter {
 		if (this.choiceValues.isEmpty()) {
 			return 0;
 		}
-		return this.choiceValues.indexOf(this.stringValue);
+		return this.choiceValues.indexOf(this.value);
 	}
 
 	/**
@@ -112,6 +115,14 @@ public class ChoiceParameter extends StringParameter {
 			choiceString += choice+DELIMITER;
 		}
 		return choiceString;
+	}
+
+	/**
+	 * Returns true, if no choices are available.
+	 * @return
+	 */
+	public boolean isChoicesEmpty() {
+		return  choiceValues.size() > 0;
 	}
 	
 }

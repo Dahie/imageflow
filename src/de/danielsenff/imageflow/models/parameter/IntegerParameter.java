@@ -21,16 +21,16 @@ package de.danielsenff.imageflow.models.parameter;
  * @author danielsenff
  *
  */
-public class IntegerParameter extends AbstractParameter {
+public class IntegerParameter extends AbstractParameter<Integer> {
 
 	/**
 	 * Actual Integer value
 	 */
-	protected int  integerValue;
+	//protected int  integerValue;
 	/**
 	 * Default Integer value
 	 */
-	protected int  integerValueDefault;
+	//protected int  integerValueDefault;
 
 	
 	/**
@@ -38,41 +38,34 @@ public class IntegerParameter extends AbstractParameter {
 	 */
 	public IntegerParameter(int parameterNumber) {
 		super(parameterNumber);
-//		super.paraType = 0;
 	}
 
 	/**
-	 * @param string
-	 * @param integerParameter
-	 * @param string2
+	 * @param displayName
+	 * @param integerParameter 
+	 * @param helpString 
 	 */
 	public IntegerParameter(String displayName, 
-			int integerParameter, 
+			final int integerParameter, 
 			String helpString) {
 		super("integer", displayName, helpString);
-		this.integerValue = integerParameter;
-		this.integerValueDefault = integerParameter;
+		this.value = integerParameter;
+		this.defaultValue = integerParameter;
 	}
 
-	public void setParameter(String displayName, int integerParameter, String helpString) {
+	/**
+	 * @param displayName
+	 * @param integerParameter
+	 * @param helpString
+	 */
+	public void setParameter(final String displayName, 
+			final int integerParameter, 
+			final String helpString) {
 		this.displayName = displayName;
-		this.integerValue = integerParameter;
-		this.integerValueDefault = integerParameter;
+		this.value = integerParameter;
+		this.defaultValue = integerParameter;
 		this.helpString = helpString;
 		this.paraType = "integer";
 	}
-	
-	public Integer getValue() {
-		return this.integerValue;
-	}
-
-	public void setValue(int value) {
-		this.integerValue = value;
-	}
-
-	public Integer getDefaultValue() {
-		return this.integerValueDefault;
-	}
-
 	
 }

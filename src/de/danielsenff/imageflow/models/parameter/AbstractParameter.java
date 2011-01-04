@@ -22,16 +22,24 @@ package de.danielsenff.imageflow.models.parameter;
  * @author Daniel Senff
  *
  */
-public abstract class AbstractParameter implements Parameter {
+public abstract class AbstractParameter<T> implements Parameter<T> {
 	
 	/**
 	 * Index of the parameter in the Unit.
 	 */
 	protected int parameterNumber;
 	/**
-	 * parameter name that is shown in the unit
+	 * Parameter name that is shown in the unit
 	 */
 	protected String displayName; 
+	/**
+	 * Value of this Parameter
+	 */
+	protected T value;
+	/**
+	 * Default value of this Parameter
+	 */
+	protected T defaultValue;
 	
 	/**
 	 * Name of the parameter type
@@ -42,7 +50,6 @@ public abstract class AbstractParameter implements Parameter {
 	 * help text describing the functionality of this parameter
 	 */
 	protected String helpString;
-
 
 	/**
 	 * 
@@ -60,7 +67,20 @@ public abstract class AbstractParameter implements Parameter {
 		this.parameterNumber = parameterNumber;
 	}
 
+	public T getValue() {
+		return this.value;
+	}
+
+	/**
+	 * @param value
+	 */
+	public void setValue(final T value) {
+		this.value = value;
+	}
 	
+	public T getDefaultValue() {
+		return this.defaultValue;
+	}
 	
 	//public void onChange();
 	

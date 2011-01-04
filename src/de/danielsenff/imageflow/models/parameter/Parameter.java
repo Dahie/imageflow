@@ -22,15 +22,19 @@ package de.danielsenff.imageflow.models.parameter;
  * @author Daniel Senff
  *
  */
-public interface Parameter {
+public interface Parameter<T> {
 
 	/**
-	 * Returns the Value of this Parameter as an {@link Object}.
+	 * Returns the Value of this Parameter
 	 * @return
 	 */
-	public abstract Object getValue();
+	public abstract T getValue();
 	
-	public abstract Object getDefaultValue();
+	/**
+	 * Returns the default value of this Parameter
+	 * @return
+	 */
+	public abstract T getDefaultValue();
 	
 	/**
 	 * Returns the name of the Parameter. 

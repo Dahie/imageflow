@@ -21,16 +21,16 @@ package de.danielsenff.imageflow.models.parameter;
  * @author danielsenff
  *
  */
-public class StringParameter extends AbstractParameter {
+public class StringParameter extends AbstractParameter<String> {
 
 	/**
 	 * Actual String value
 	 */
-	protected String  stringValue;
+	//protected String  stringValue;
 	/**
 	 * Default String value
 	 */
-	protected String  stringValueDefault;
+	//protected String  stringValueDefault;
 
 	
 
@@ -45,8 +45,8 @@ public class StringParameter extends AbstractParameter {
 			String defaultValue, 
 			String helpString) {
 		super("String", displayName, helpString);
-		this.stringValue = stringValue;
-		this.stringValueDefault = defaultValue;
+		this.value = stringValue;
+		this.defaultValue = defaultValue;
 	}
 
 	/**
@@ -62,38 +62,15 @@ public class StringParameter extends AbstractParameter {
 	
 	
 	/**
-	 * Get the String parameter value
-	 * @return
-	 */
-	public String getValue() {
-		return this.stringValue;
-	}
-
-	/**
-	 * Set String parameter.
-	 * @param stringValue
-	 */
-	public void setValue(final String stringValue) {
-		String oldValue = this.stringValue;
-		this.stringValue = stringValue;
-		// TODO onchange
-	}
-
-	
-	/**
 	 * @param displayName
 	 * @param stringParameter
 	 * @param helpString
 	 */
 	public void setParameter(String displayName, String stringParameter, String helpString) {
 		this.displayName = displayName;
-		this.stringValue = stringParameter;
-		this.stringValueDefault = stringParameter;
+		this.value = stringParameter;
+		this.defaultValue = stringParameter;
 		this.helpString = helpString;
 	}
 
-	public String getDefaultValue() {
-		return this.stringValueDefault;
-	}
-	
 }

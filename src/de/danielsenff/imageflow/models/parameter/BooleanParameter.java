@@ -21,16 +21,16 @@ package de.danielsenff.imageflow.models.parameter;
  * @author Daniel Senff
  *
  */
-public class BooleanParameter extends AbstractParameter {
+public class BooleanParameter extends AbstractParameter<Boolean> {
 
 	/**
 	 * The actual value of this Parameter;
 	 */
-	protected boolean booleanValue;
+	//protected boolean booleanValue;
 	/**
 	 * The default value of this Parameter.
 	 */
-	protected boolean booleanValueDefault;
+	//protected boolean booleanValueDefault;
 	
 	/**
 	 * The string that is inserted in the imagej-syntax if the condidation is true.
@@ -48,8 +48,8 @@ public class BooleanParameter extends AbstractParameter {
 			final String trueString,
 			final String helpString) {
 		super("boolean", displayName, helpString);
-		this.booleanValue = boolParameter;
-		this.booleanValueDefault = boolParameter;
+		this.value = boolParameter;
+		this.defaultValue = boolParameter;
 		this.trueString = trueString;
 	}
 
@@ -60,30 +60,13 @@ public class BooleanParameter extends AbstractParameter {
 	 */
 	public void setParameter(String displayName, boolean boolParameter, String helpString) {
 		this.displayName = displayName;
-		this.booleanValue = boolParameter;
-		this.booleanValueDefault = boolParameter;
+		this.value = boolParameter;
+		this.defaultValue = boolParameter;
 		this.helpString = helpString;
 		this.paraType = "boolean";
 	}
 	
 
-	/**
-	 * Get the value.
-	 * @return
-	 */
-	public Boolean getValue() {
-		return this.booleanValue;
-	}
-
-	/**
-	 * Set the value.
-	 * @param booleanValue
-	 */
-	public void setValue(final boolean booleanValue) {
-		this.booleanValue = booleanValue;
-	}
-	
-	
 	/**
 	 * This is the string to insert in the macro-syntax, if the condition is true
 	 * @return
@@ -91,9 +74,4 @@ public class BooleanParameter extends AbstractParameter {
 	public String getTrueString() {
 		return trueString;
 	}
-
-	public Boolean getDefaultValue() {
-		return this.booleanValueDefault;
-	}
-
 }
