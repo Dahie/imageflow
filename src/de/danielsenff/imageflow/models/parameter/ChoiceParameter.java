@@ -124,5 +124,13 @@ public class ChoiceParameter extends StringParameter {
 	public boolean isChoicesEmpty() {
 		return  choiceValues.size() > 0;
 	}
+
+	/**
+	 * Choose the new value at the given index.
+	 * @param newindex
+	 */
+	public void setValue(int newindex) {
+		this.value = this.choiceValues.get(newindex);
+	}
 	
 }

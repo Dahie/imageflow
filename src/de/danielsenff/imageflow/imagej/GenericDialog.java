@@ -92,16 +92,15 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     private boolean wasCanceled, wasOKed;
     private int y;
     private int nfIndex, sfIndex, cbIndex, choiceIndex, textAreaIndex;
-	private GridBagLayout grid;
-	private GridBagConstraints c;
+	private final GridBagLayout grid;
+	private final GridBagConstraints c;
 	private boolean firstNumericField=true;
 	private boolean firstSlider=true;
 	private boolean invalidNumber;
 	private String errorMessage;
-	private boolean firstPaint = true;
 	private Hashtable labels;
-	private boolean macro;
-	private String macroOptions;
+	private final boolean macro;
+	private final String macroOptions;
 	private int topInset, leftInset, bottomInset;
     private boolean customInsets;
     private int[] sliderIndexes;
@@ -112,32 +111,16 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     private final static String previewRunning = "wait...";
     private boolean recorderOn;         // whether recording is allowed
     private boolean yesNoCancel;
-    private char echoChar;
     private boolean hideCancelButton;
     private boolean centerDialog = true;
 
-    /** Creates a new GenericDialog with the specified title. Uses the current image
-    	image window as the parent frame or the ImageJ frame if no image windows
-    	are open. Dialog parameters are recorded by ImageJ's command recorder but
-    	this requires that the first word of each label be unique. */
-	/*public GenericDialog(String title) {
-		this(title, WindowManager.getCurrentImage()!=null?
-			(JFrame)WindowManager.getCurrentImage().getWindow():IJ.getInstance()!=null?IJ.getInstance():new JFrame());
-	}*/
-
-    /** Creates a new GenericDialog using the specified title and parent frame. */
-    public GenericDialog(String title, JFrame parent) {
+    /** Creates a new GenericDialog using the specified title and parent frame. 
+     * @param title 
+     * @param parent */
+    public GenericDialog(final String title, final JFrame parent) {
 		super(parent==null?new JFrame():parent, title, true);
-		/*if (Prefs.blackCanvas) {
-			setForeground(SystemColor.controlText);
-			setBackground(SystemColor.control);
-		}
-		if (IJ.isLinux())
-			setBackground(new Color(238, 238, 238));*/
 		
-		
-		
-		Container contentPane = getRootPane();
+		final Container contentPane = getRootPane();
         contentPane.setBackground(Color.black);
 		
 		grid = new GridBagLayout();
@@ -151,21 +134,13 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		pack();
     }
     
-	//void showFields(String id) {
-	//	String s = id+": ";
-	//	for (int i=0; i<maxItems; i++)
-	//		if (numberField[i]!=null)
-	//			s += i+"='"+numberField[i].getText()+"' ";
-	//	IJ.write(s);
-	//}
-
 	/** Adds a numeric field. The first word of the label must be
 		unique or command recording will not work.
 	* @param label			the label
 	* @param defaultValue	value to be initially displayed
 	* @param digits			number of digits to right of decimal point
 	*/
-	public void addNumericField(String label, double defaultValue, int digits) {
+	public void addNumericField(final String label, final double defaultValue, final int digits) {
 		addNumericField(label, defaultValue, digits, 6, null);
 	}
 
@@ -177,11 +152,11 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 	* @param columns		width of field in characters
 	* @param units			a string displayed to the right of the field
 	*/
-   public void addNumericField(String label, double defaultValue, int digits, int columns, String units) {
+   public void addNumericField(final String label, final double defaultValue, final int digits, int columns, final String units) {
    		String label2 = label;
    		if (label2.indexOf('_')!=-1)
    			label2 = label2.replace('_', ' ');
-		JLabel theLabel = makeLabel(label2);
+		final JLabel theLabel = makeLabel(label2);
 		c.gridx = 0; c.gridy = y;
 		c.anchor = GridBagConstraints.EAST;
 		c.gridwidth = 1;
@@ -198,7 +173,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		}
 		if (IJ.isWindows()) columns -= 2;
 		if (columns<1) columns = 1;
-		JTextField tf = new JTextField(IJ.d2s(defaultValue, digits), columns);
+		final JTextField tf = new JTextField(IJ.d2s(defaultValue, digits), columns);
 		if (IJ.isLinux()) tf.setBackground(Color.white);
 		tf.addActionListener(this);
 //		tf.addTextListener(this);
@@ -216,7 +191,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 			grid.setConstraints(tf, c);
 			add(tf);
 		} else {
-    		JPanel panel = new JPanel();
+    		final JPanel panel = new JPanel();
 			panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
     		panel.add(tf);
 			panel.add(new JLabel(" "+units));
@@ -234,7 +209,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		return new JLabel(label);
     }
     
-    private void saveLabel(JComponent component, String label) {
+    private void saveLabel(final JComponent component, String label) {
     	if (labels==null)
     		labels = new Hashtable();
     	if (label.length()>0) {
@@ -248,7 +223,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 	* @param label			the label
 	* @param defaultText		the text initially displayed
 	*/
-	public void addStringField(String label, String defaultText) {
+	public void addStringField(final String label, final String defaultText) {
 		addStringField(label, defaultText, 8);
 	}
 
@@ -257,15 +232,15 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 	* @param defaultText		text initially displayed
 	* @param columns			width of the text field
 	*/
-	public void addStringField(String label, String defaultText, int columns) {
+	public void addStringField(final String label, final String defaultText, final int columns) {
    		String label2 = label;
    		if (label2.indexOf('_')!=-1)
    			label2 = label2.replace('_', ' ');
-		JLabel theLabel = makeLabel(label2);
+		final JLabel theLabel = makeLabel(label2);
 		c.gridx = 0; c.gridy = y;
 		c.anchor = GridBagConstraints.EAST;
 		c.gridwidth = 1;
-		boolean custom = customInsets;
+		final boolean custom = customInsets;
 		if (stringField==null) {
 			stringField = new Vector(4);
 			c.insets = getInsets(5, 0, 5, 0);
@@ -279,10 +254,8 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 			else
 				c.insets = getInsets(0, 0, 5, 0);
 		}
-		JTextField tf = new JTextField(defaultText, columns);
+		final JTextField tf = new JTextField(defaultText, columns);
 		if (IJ.isLinux()) tf.setBackground(Color.white);
-//		tf.setEchoChar(echoChar);
-		echoChar = 0;
 		tf.addActionListener(this);
 //		tf.addTextListener(this);
 		tf.addFocusListener(this);
@@ -304,15 +277,15 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 	* @param defaultText		text initially displayed
 	* @param columns			width of the text field
 	*/
-	public void addTextField(String label, String defaultText, int columns) {
+	public void addTextField(final String label, final String defaultText, final int columns) {
    		String label2 = label;
    		if (label2.indexOf('_')!=-1)
    			label2 = label2.replace('_', ' ');
-		JLabel theLabel = makeLabel(label2);
+		final JLabel theLabel = makeLabel(label2);
 		c.gridx = 0; c.gridy = y;
 		c.anchor = GridBagConstraints.EAST;
 		c.gridwidth = 1;
-		boolean custom = customInsets;
+		final boolean custom = customInsets;
 		if (stringField==null) {
 			stringField = new Vector(4);
 			c.insets = getInsets(5, 0, 5, 0);
@@ -326,11 +299,10 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 			else
 				c.insets = getInsets(0, 0, 5, 0);
 		}
-		JTextArea tf = new JTextArea(defaultText);
+		final JTextArea tf = new JTextArea(defaultText);
 		tf.setPreferredSize(new Dimension(350, 150));
 		if (IJ.isLinux()) tf.setBackground(Color.white);
 //		tf.setEchoChar(echoChar);
-		echoChar = 0;
 //		tf.addActionListener(this);
 //		tf.addTextListener(this);
 		tf.addFocusListener(this);
@@ -346,18 +318,11 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		y++;
     }
     
-	
-    
-    /** Sets the echo character for the next string field. */
-    public void setEchoChar(char echoChar) {
-    	this.echoChar = echoChar;
-    }
-    
 	/** Adds a checkbox.
 	* @param label			the label
 	* @param defaultValue	the initial state
 	*/
-    public void addCheckbox(String label, boolean defaultValue) {
+    public void addCheckbox(final String label, final boolean defaultValue) {
         addCheckbox(label, defaultValue, false);
     }
 
@@ -365,7 +330,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
      * With isPreview true, the checkbox can be referred to as previewCheckbox
      * from hereon.
      */
-    private void addCheckbox(String label, boolean defaultValue, boolean isPreview) {
+    private void addCheckbox(final String label, final boolean defaultValue, final boolean isPreview) {
     	String label2 = label;
    		if (label2.indexOf('_')!=-1)
    			label2 = label2.replace('_', ' ');
@@ -377,15 +342,13 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		c.gridx = 0; c.gridy = y;
 		c.gridwidth = 2;
 		c.anchor = GridBagConstraints.WEST;
-		JCheckBox cb = new JCheckBox(label2);
+		final JCheckBox cb = new JCheckBox(label2);
 		grid.setConstraints(cb, c);
-//		cb.setState(defaultValue);
 		cb.setSelected(defaultValue);
 		cb.addItemListener(this);
 		cb.addKeyListener(this);
 		add(cb);
 		checkbox.addElement(cb);
-		//ij.IJ.write("addCheckbox: "+ y+" "+cbIndex);
         if (!isPreview &&(Recorder.record || macro)) //preview checkbox is not recordable
 			saveLabel(cb, label);
         if (isPreview) previewCheckbox = cb;
@@ -409,10 +372,10 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
      * @param pfr A reference to the PlugInFilterRunner calling the PlugInFilter
      * if automatic preview is desired, null otherwise.
      */
-    public void addPreviewCheckbox(PlugInFilterRunner pfr) {
+    public void addPreviewCheckbox(final PlugInFilterRunner pfr) {
         if (previewCheckbox != null)
         	return;
-    	ImagePlus imp = WindowManager.getCurrentImage();
+    	final ImagePlus imp = WindowManager.getCurrentImage();
 		if (imp!=null && imp.isComposite() && ((CompositeImage)imp).getMode()==CompositeImage.COMPOSITE)
 			return;
         this.pfr = pfr;
@@ -425,7 +388,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
      * in "Composite" mode, unlike the one argument version.
      * Note that a GenericDialog can have only one PreviewCheckbox.
      */
-    public void addPreviewCheckbox(PlugInFilterRunner pfr, String label) {
+    public void addPreviewCheckbox(final PlugInFilterRunner pfr, final String label) {
         if (previewCheckbox!=null)
         	return;
     	//ImagePlus imp = WindowManager.getCurrentImage();
@@ -442,24 +405,24 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 	* @param labels			the labels
 	* @param defaultValues	the initial states
 	*/
-    public void addCheckboxGroup(int rows, int columns, String[] labels, boolean[] defaultValues) {
-    	JPanel panel = new JPanel();
+    public void addCheckboxGroup(final int rows, final int columns, final String[] labels, final boolean[] defaultValues) {
+    	final JPanel panel = new JPanel();
     	panel.setLayout(new GridLayout(rows,columns, 5, 0));
-    	int startCBIndex = cbIndex;
+    	final int startCBIndex = cbIndex;
     	int i1 = 0;
-    	int[] index = new int[labels.length];
+    	final int[] index = new int[labels.length];
     	if (checkbox==null)
     		checkbox = new Vector(12);
-    	boolean addListeners = labels.length<=4;
+    	final boolean addListeners = labels.length<=4;
     	for (int row=0; row<rows; row++) {
 			for (int col=0; col<columns; col++) {
-				int i2 = col*rows+row;
+				final int i2 = col*rows+row;
 				if (i2>=labels.length) break;
 				index[i1] = i2;
 				String label = labels[i1];
 				if (label.indexOf('_')!=-1)
    					label = label.replace('_', ' ');
-				JCheckBox cb = new JCheckBox(label);
+				final JCheckBox cb = new JCheckBox(label);
 				checkbox.addElement(cb);
 				cb.setSelected(defaultValues[i1]);
 				if (addListeners) cb.addItemListener(this);
@@ -483,11 +446,11 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
    * @param items	the menu items
    * @param defaultItem	the menu item initially selected
    */
-   public void addChoice(String label, String[] items, String defaultItem) {
+   public void addChoice(final String label, final String[] items, final String defaultItem) {
    		String label2 = label;
    		if (label2.indexOf('_')!=-1)
    			label2 = label2.replace('_', ' ');
-		JLabel theLabel = makeLabel(label2);
+		final JLabel theLabel = makeLabel(label2);
 		c.gridx = 0; c.gridy = y;
 		c.anchor = GridBagConstraints.EAST;
 		c.gridwidth = 1;
@@ -499,7 +462,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		grid.setConstraints(theLabel, c);
 		add(theLabel);
 //		Choice thisChoice = new Choice();
-		JComboBox thisChoice = new JComboBox();
+		final JComboBox thisChoice = new JComboBox();
 		thisChoice.addKeyListener(this);
 		thisChoice.addItemListener(this);
 		for (int i=0; i<items.length; i++)
@@ -516,7 +479,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     }
     
     /** Adds a message consisting of one or more lines of text. */
-    public void addMessage(String text) {
+    public void addMessage(final String text) {
     	if (text.indexOf('\n')>=0)
 //			theLabel = new MultiLineLabel(text);
     		theLabel = new JLabel(text);
@@ -538,9 +501,9 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 	* @param rows	the number of rows
 	* @param rows	the number of columns
 	*/
-    public void addTextAreas(String text1, String text2, int rows, int columns) {
+    public void addTextAreas(final String text1, final String text2, final int rows, final int columns) {
     	if (textArea1!=null) return;
-    	JPanel panel = new JPanel();
+    	final JPanel panel = new JPanel();
 		textArea1 = new JTextArea(text1,rows,columns);
 		if (IJ.isLinux()) textArea1.setBackground(Color.white);
 //		textArea1.addTextListener(this);
@@ -559,13 +522,13 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		y++;
     }
     
-   public void addSlider(String label, double minValue, double maxValue, double defaultValue) {
+   public void addSlider(final String label, final double minValue, final double maxValue, final double defaultValue) {
 		int columns = 4;
-		int digits = 0;
+		final int digits = 0;
    		String label2 = label;
    		if (label2.indexOf('_')!=-1)
    			label2 = label2.replace('_', ' ');
-		JLabel theLabel = makeLabel(label2);
+		final JLabel theLabel = makeLabel(label2);
 		c.gridx = 0; c.gridy = y;
 		c.anchor = GridBagConstraints.EAST;
 		c.gridwidth = 1;
@@ -577,7 +540,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 			slider = new Vector(5);
 			sliderIndexes = new int[MAX_SLIDERS];
 		}
-		JScrollBar s = new JScrollBar(JScrollBar.HORIZONTAL, (int)defaultValue, 1, (int)minValue, (int)maxValue+1);
+		final JScrollBar s = new JScrollBar(JScrollBar.HORIZONTAL, (int)defaultValue, 1, (int)minValue, (int)maxValue+1);
 		slider.addElement(s);
 		s.addAdjustmentListener(this);
 		s.setUnitIncrement(1);
@@ -589,7 +552,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		}
 		if (IJ.isWindows()) columns -= 2;
 		if (columns<1) columns = 1;
-		JTextField tf = new JTextField(IJ.d2s(defaultValue, digits), columns);
+		final JTextField tf = new JTextField(IJ.d2s(defaultValue, digits), columns);
 		if (IJ.isLinux()) tf.setBackground(Color.white);
 		tf.addActionListener(this);
 //		tf.addTextListener(this);
@@ -603,9 +566,9 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		//if (firstNumericField && firstSlider) tf.selectAll();
 		firstSlider = false;
 		
-    	JPanel panel = new JPanel();
-		GridBagLayout pgrid = new GridBagLayout();
-		GridBagConstraints pc  = new GridBagConstraints();
+    	final JPanel panel = new JPanel();
+		final GridBagLayout pgrid = new GridBagLayout();
+		final GridBagConstraints pc  = new GridBagConstraints();
 		panel.setLayout(pgrid);
 		// label
 		//pc.insets = new Insets(5, 0, 0, 0);
@@ -642,14 +605,14 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     }
 
     /** Adds a Panel to the dialog. */
-    public void addPanel(JPanel panel) {
+    public void addPanel(final JPanel panel) {
     	addPanel(panel , GridBagConstraints.WEST, new Insets(5, 0, 0, 0));
     }
 
     /** Adds a Panel to the dialog with custom contraint and insets. The
     	defaults are GridBagConstraints.WEST (left justified) and 
     	"new Insets(5, 0, 0, 0)" (5 pixels of padding at the top). */
-    public void addPanel(JPanel panel, int contraints, Insets insets) {
+    public void addPanel(final JPanel panel, final int contraints, final Insets insets) {
 		c.gridx = 0; c.gridy = y;
 		c.gridwidth = 2;
 		c.anchor = contraints;
@@ -671,7 +634,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
         addChoice: 5,0,5 (first field) or 0,0,5
      </pre>
     */
-    public void setInsets(int top, int left, int bottom) {
+    public void setInsets(final int top, final int left, final int bottom) {
     	topInset = top;
     	leftInset = left;
     	bottomInset = bottom;
@@ -679,7 +642,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     }
     
     /** Sets a replacement label for the "OK" button. */
-    public void setOKLabel(String label) {
+    public void setOKLabel(final String label) {
     	okLabel = label;
     }
 
@@ -693,7 +656,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     	hideCancelButton = true;
     }
 
-	Insets getInsets(int top, int left, int bottom, int right) {
+	Insets getInsets(final int top, final int left, final int bottom, final int right) {
 		if (customInsets) {
 			customInsets = false;
 			return new Insets(topInset, leftInset, bottomInset, 0);
@@ -710,7 +673,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
      * the CANCEL button will never cause such a call.
      * @param dl the Object that wants to listen.
      */    
-    public void addDialogListener(DialogListener dl) {
+    public void addDialogListener(final DialogListener dl) {
         if (dialogListeners == null)
             dialogListeners = new Vector();
         dialogListeners.addElement(dl);
@@ -733,7 +696,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
    public double getNextNumber() {
 		if (numberField==null)
 			return -1.0;
-		JTextField tf = (JTextField)numberField.elementAt(nfIndex);
+		final JTextField tf = (JTextField)numberField.elementAt(nfIndex);
 		String theText = tf.getText();
         String label=null;
 		if (macro) {
@@ -741,13 +704,13 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 			theText = Macro.getValue(macroOptions, label, theText);
 			//IJ.write("getNextNumber: "+label+"  "+theText);
 		}	
-		String originalText = (String)defaultText.elementAt(nfIndex);
-		double defaultValue = ((Double)(defaultValues.elementAt(nfIndex))).doubleValue();
+		final String originalText = (String)defaultText.elementAt(nfIndex);
+		final double defaultValue = ((Double)(defaultValues.elementAt(nfIndex))).doubleValue();
 		double value;
 		if (theText.equals(originalText))
 			value = defaultValue;
 		else {
-			Double d = getValue(theText);
+			final Double d = getValue(theText);
 			if (d!=null)
 				value = d.doubleValue();
 			else {
@@ -776,14 +739,14 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		return value;
 	}
 
-	private void recordOption(JComponent component, String value) {
-		String label = (String)labels.get((Object)component);
+	private void recordOption(final JComponent component, String value) {
+		final String label = (String)labels.get((Object)component);
 		if (value.equals("")) value = "[]";
 		Recorder.recordOption(label, value);
 	}
 
-	private void recordCheckboxOption(JCheckBox cb) {
-		String label = (String)labels.get((Object)cb);
+	private void recordCheckboxOption(final JCheckBox cb) {
+		final String label = (String)labels.get((Object)cb);
 		if (label!=null) {
 			if (cb.isSelected()) // checked
 				Recorder.recordOption(label);
@@ -792,10 +755,10 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		}
 	}
 
- 	protected Double getValue(String text) {
+ 	protected Double getValue(final String text) {
  		Double d;
  		try {d = new Double(text);}
-		catch (NumberFormatException e){
+		catch (final NumberFormatException e){
 			d = null;
 		}
 		return d;
@@ -804,7 +767,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 	/** Returns true if one or more of the numeric fields contained an  
 		invalid number. Must be called after one or more calls to getNextNumber(). */
    public boolean invalidNumber() {
-    	boolean wasInvalid = invalidNumber;
+    	final boolean wasInvalid = invalidNumber;
     	invalidNumber = false;
     	return wasInvalid;
     }
@@ -820,10 +783,10 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
    		String theText;
 		if (stringField==null)
 			return "";
-		JTextField tf = (JTextField)(stringField.elementAt(sfIndex));
+		final JTextField tf = (JTextField)(stringField.elementAt(sfIndex));
 		theText = tf.getText();
 		if (macro) {
-			String label = (String)labels.get((Object)tf);
+			final String label = (String)labels.get((Object)tf);
 			theText = Macro.getValue(macroOptions, label, theText);
 			//IJ.write("getNextString: "+label+"  "+theText);
 		}	
@@ -837,13 +800,13 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     public boolean getNextBoolean() {
 		if (checkbox==null)
 			return false;
-		JCheckBox cb = (JCheckBox)(checkbox.elementAt(cbIndex));
+		final JCheckBox cb = (JCheckBox)(checkbox.elementAt(cbIndex));
 		if (recorderOn)
 			recordCheckboxOption(cb);
 		boolean state = cb.isSelected();
 		if (macro) {
-			String label = (String)labels.get((Object)cb);
-			String key = Macro.trimKey(label);
+			final String label = (String)labels.get((Object)cb);
+			final String key = Macro.trimKey(label);
 			state = isMatch(macroOptions, key+" ");
 		}
 		cbIndex++;
@@ -851,12 +814,12 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     }
     
     // Returns true if s2 is in s1 and not in a bracketed literal (e.g., "[literal]")
-    boolean isMatch(String s1, String s2) {
+    boolean isMatch(final String s1, String s2) {
     	if (s1.startsWith(s2))
     		return true;
     	s2 = " " + s2;
-    	int len1 = s1.length();
-    	int len2 = s2.length();
+    	final int len1 = s1.length();
+    	final int len2 = s2.length();
     	boolean match, inLiteral=false;
     	char c;
     	for (int i=0; i<len1-len2+1; i++) {
@@ -881,10 +844,10 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     public String getNextChoice() {
 		if (choice==null)
 			return "";
-		JComboBox thisChoice = (JComboBox)(choice.elementAt(choiceIndex));
+		final JComboBox thisChoice = (JComboBox)(choice.elementAt(choiceIndex));
 		String item = thisChoice.getSelectedItem().toString();
 		if (macro) {
-			String label = (String)labels.get((Object)thisChoice);
+			final String label = (String)labels.get((Object)thisChoice);
 			item = Macro.getValue(macroOptions, label, item);
 			//IJ.write("getNextChoice: "+label+"  "+item);
 		}	
@@ -898,13 +861,13 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     public int getNextChoiceIndex() {
 		if (choice==null)
 			return -1;
-		JComboBox thisChoice = (JComboBox)(choice.elementAt(choiceIndex));
+		final JComboBox thisChoice = (JComboBox)(choice.elementAt(choiceIndex));
 		int index = thisChoice.getSelectedIndex();
 		if (macro) {
-			String label = (String)labels.get((Object)thisChoice);
-			String oldItem = thisChoice.getSelectedItem().toString();
-			int oldIndex = thisChoice.getSelectedIndex();
-			String item = Macro.getValue(macroOptions, label, oldItem);
+			final String label = (String)labels.get((Object)thisChoice);
+			final String oldItem = thisChoice.getSelectedItem().toString();
+			final int oldIndex = thisChoice.getSelectedIndex();
+			final String item = Macro.getValue(macroOptions, label, oldItem);
 			thisChoice.setSelectedItem(item);
 			index = thisChoice.getSelectedIndex();
 			if (index==oldIndex && !item.equals(oldItem))
@@ -927,7 +890,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 				text = Macro.getValue(macroOptions, "text1", text);
 			if (recorderOn) {
 				String text2 = text;
-				String cmd = Recorder.getCommand();
+				final String cmd = Recorder.getCommand();
 				if (cmd!=null && cmd.equals("Convolve...")) {
 					text2 = text.replaceAll("\n","\\\\n");
 					if (!text.endsWith("\n")) text2 = text2 + "\\n";
@@ -960,7 +923,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 			//	TextField tf = (TextField)(stringField.elementAt(0));
 			//	tf.selectAll();
 			//}
-			JPanel buttons = new JPanel();
+			final JPanel buttons = new JPanel();
 			buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 			cancel = new JButton("Cancel");
 			cancel.addActionListener(this);
@@ -1068,7 +1031,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     /** Used by PlugInFilterRunner to provide visable feedback whether preview
     	is running or not by switching from "Preview" to "wait..."
      */
-    public void previewRunning(boolean isRunning) {
+    public void previewRunning(final boolean isRunning) {
         if (previewCheckbox!=null) {
             previewCheckbox.setLabel(isRunning ? previewRunning : previewLabel);
             if (IJ.isMacOSX()) repaint();   //workaround OSX 10.4 refresh bug
@@ -1076,15 +1039,15 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     }
     
     /** Display dialog centered on the primary screen? */
-    public void centerDialog(boolean b) {
+    public void centerDialog(final boolean b) {
     	centerDialog = b;
     }
 
     protected void setup() {
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		Object source = e.getSource();
+	public void actionPerformed(final ActionEvent e) {
+		final Object source = e.getSource();
 		if (source==okay || source==cancel | source==no) {
 			wasCanceled = source==cancel;
 			wasOKed = source==okay;
@@ -1093,17 +1056,17 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
             notifyListeners(e);
 	}
 
-	public void textValueChanged(TextEvent e) {
+	public void textValueChanged(final TextEvent e) {
         notifyListeners(e); 
 		if (slider==null) return;
-		Object source = e.getSource();
+		final Object source = e.getSource();
 		for (int i=0; i<slider.size(); i++) {
-			int index = sliderIndexes[i];
+			final int index = sliderIndexes[i];
 			if (source==numberField.elementAt(index)) {
-				JTextField tf = (JTextField)numberField.elementAt(index);
-				double value = Tools.parseDouble(tf.getText());
+				final JTextField tf = (JTextField)numberField.elementAt(index);
+				final double value = Tools.parseDouble(tf.getText());
 				if (!Double.isNaN(value)) {
-					JScrollBar sb = (JScrollBar)slider.elementAt(i);
+					final JScrollBar sb = (JScrollBar)slider.elementAt(i);
 					sb.setValue((int)value);
 				}	
 				//IJ.log(i+" "+tf.getText());
@@ -1111,24 +1074,24 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		}
 	}
 
-	public void itemStateChanged(ItemEvent e) {
+	public void itemStateChanged(final ItemEvent e) {
         notifyListeners(e); 
 	}
 
-	public void focusGained(FocusEvent e) {
-		JComponent c = (JComponent) e.getComponent();
+	public void focusGained(final FocusEvent e) {
+		final JComponent c = (JComponent) e.getComponent();
 		if (c instanceof JTextField)
 			((JTextField)c).selectAll();
 	}
 
-	public void focusLost(FocusEvent e) {
-		JComponent c = (JComponent) e.getComponent();
+	public void focusLost(final FocusEvent e) {
+		final JComponent c = (JComponent) e.getComponent();
 		if (c instanceof JTextField)
 			((JTextField)c).select(0,0);
 	}
 
-	public void keyPressed(KeyEvent e) { 
-		int keyCode = e.getKeyCode(); 
+	public void keyPressed(final KeyEvent e) { 
+		final int keyCode = e.getKeyCode(); 
 		IJ.setKeyDown(keyCode); 
 		if (keyCode==KeyEvent.VK_ENTER && textArea1==null) {
 			wasOKed = true;
@@ -1153,30 +1116,30 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		}
 	}
 
-	public void keyReleased(KeyEvent e) {
-		int keyCode = e.getKeyCode();
+	public void keyReleased(final KeyEvent e) {
+		final int keyCode = e.getKeyCode();
 		IJ.setKeyUp(keyCode);
-		int flags = e.getModifiers();
-		boolean control = (flags & KeyEvent.CTRL_MASK) != 0;
-		boolean meta = (flags & KeyEvent.META_MASK) != 0;
-		boolean shift = (flags & e.SHIFT_MASK) != 0;
+		final int flags = e.getModifiers();
+		final boolean control = (flags & KeyEvent.CTRL_MASK) != 0;
+		final boolean meta = (flags & KeyEvent.META_MASK) != 0;
+		final boolean shift = (flags & e.SHIFT_MASK) != 0;
 		if (keyCode==KeyEvent.VK_G && shift && (control||meta))
 			new ScreenGrabber().run(""); 
 	}
 		
-	public void keyTyped(KeyEvent e) {}
+	public void keyTyped(final KeyEvent e) {}
 
 	public Insets getInsets() {
-    	Insets i= super.getInsets();
+    	final Insets i= super.getInsets();
     	return new Insets(i.top+10, i.left+10, i.bottom+10, i.right+10);
 	}
 
-	public synchronized void adjustmentValueChanged(AdjustmentEvent e) {
-		Object source = e.getSource();
+	public synchronized void adjustmentValueChanged(final AdjustmentEvent e) {
+		final Object source = e.getSource();
 		for (int i=0; i<slider.size(); i++) {
 			if (source==slider.elementAt(i)) {
-				JScrollBar sb = (JScrollBar)source;
-				JTextField tf = (JTextField)numberField.elementAt(sliderIndexes[i]);
+				final JScrollBar sb = (JScrollBar)source;
+				final JTextField tf = (JTextField)numberField.elementAt(sliderIndexes[i]);
 				tf.setText(""+sb.getValue());
 			}
 		}
@@ -1190,21 +1153,21 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
      *  detected invalid parameters. Thus, unnecessary calling the run(ip) method
      *  of the PlugInFilter for preview is avoided in that case.
      */
-    private void notifyListeners(AWTEvent e) {
+    private void notifyListeners(final AWTEvent e) {
         if (dialogListeners == null) return;
-        boolean everythingOk = true;
+        final boolean everythingOk = true;
         for (int i=0; everythingOk && i<dialogListeners.size(); i++)
             try {
                 resetCounters();
 //                if (!((DialogListener)dialogListeners.elementAt(i)).dialogItemChanged(this, e))
 //                    everythingOk = false;        // disable further listeners if false (invalid parameters) returned 
             }  
-            catch (Exception err) {                 // for exceptions, don't cover the input by a window but
+            catch (final Exception err) {                 // for exceptions, don't cover the input by a window but
                 IJ.beep();                          // show them at in the "Log"
                 IJ.log("ERROR: "+err+"\nin DialogListener of "+dialogListeners.elementAt(i)+
                 "\nat "+(err.getStackTrace()[0])+"\nfrom "+(err.getStackTrace()[1]));  //requires Java 1.4
             }
-        boolean workaroundOSXbug = IJ.isMacOSX() && !okay.isEnabled() && everythingOk;
+        final boolean workaroundOSXbug = IJ.isMacOSX() && !okay.isEnabled() && everythingOk;
         if (previewCheckbox!=null)
             previewCheckbox.setEnabled(everythingOk);
         okay.setEnabled(everythingOk);
@@ -1224,16 +1187,16 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		}
 	}*/
     	
-    public void windowClosing(WindowEvent e) {
+    public void windowClosing(final WindowEvent e) {
 		wasCanceled = true; 
 		dispose(); 
     }
     
-    public void windowActivated(WindowEvent e) {}
-    public void windowOpened(WindowEvent e) {}
-    public void windowClosed(WindowEvent e) {}
-    public void windowIconified(WindowEvent e) {}
-    public void windowDeiconified(WindowEvent e) {}
-    public void windowDeactivated(WindowEvent e) {}
+    public void windowActivated(final WindowEvent e) {}
+    public void windowOpened(final WindowEvent e) {}
+    public void windowClosed(final WindowEvent e) {}
+    public void windowIconified(final WindowEvent e) {}
+    public void windowDeiconified(final WindowEvent e) {}
+    public void windowDeactivated(final WindowEvent e) {}
 
 }

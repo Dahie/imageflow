@@ -26,13 +26,19 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
+
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.gui.PropertiesDialog;
 import de.danielsenff.imageflow.imagej.GenericDialog;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.MacroElement;
@@ -448,20 +454,42 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
 	 */
 	public void showProperties() {
-		final GenericDialog gd = new GenericDialog(
-				getLabel() + " - Parameters", 
-				ImageFlow.getApplication().getMainFrame()) ;
-		if(getHelpString() != null)
+		//final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters", ImageFlow.getApplication().getMainFrame()) ;
+		final PropertiesDialog gd = new PropertiesDialog(getLabel() + " - Parameters", ImageFlow.getApplication().getMainFrame()) ;
+		if(getHelpString() != null) {
+			
 			gd.addMessage(getHelpString());
+		}
 		
 		// label field 
-		gd.addStringField("Unit label", this.getLabel(),40);
-		gd.addCheckbox("Display", this.isDisplay());
+		//gd.addStringField("Unit label", this.getLabel(),40);
+		JTextField fldName = new JTextField(getLabel());
+		fldName.addKeyListener(new KeyListener() {
+			
+			public void keyTyped(KeyEvent event) {
+				
+			}
+			
+			public void keyReleased(KeyEvent event) {
+				String newLabel = ((JTextComponent) event.getSource()).getText();
+				setLabel(newLabel);
+			}
+			
+			public void keyPressed(KeyEvent event) {
+				
+			}
+		});
+		gd.addForm("Name", fldName);
+		gd.addSeparator();
+		
+//		gd.addCheckbox("Display", this.isDisplay());
 
 		addCustomWidgets(gd);
 		
 		// add Parameter Widgets
 		addParameterWidgets(gd);
+		
+		gd.addSeparator();
 		
 		if(hasInputs()) {
 			gd.addMessage("Inputs");
@@ -487,18 +515,18 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 
 		// show properties window
 		gd.showDialog();
-		gd.invalidate();
+		//gd.invalidate();
 
-		if( gd.wasCanceled())
-			return;
+		//if( gd.wasCanceled())
+			//return;
 
 		// process changes from the Parameter Widgets
-		updateParameters(gd);	
+		//updateParameters(gd);	
 
 		notifyModelListeners();
 	}
 
-	protected void addParameterWidgets(final GenericDialog gd) {
+	protected void addParameterWidgets(final PropertiesDialog gd) {
 		final ArrayList<Parameter> parameterList = getParameters();
 		
 		if (parameterList.isEmpty()) {
@@ -506,21 +534,24 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		} else {
 			for (final Parameter parameter : parameterList) {
 				
+				gd.add(parameter);
+				
 				if(parameter instanceof DoubleParameter) {
-					gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
+					
+					//gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
 				} else if(parameter instanceof IntegerParameter) {
-					gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
+					//gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
 				} else if(parameter instanceof BooleanParameter) {
-					gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
+					//gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
 				} else if(parameter instanceof ChoiceParameter) {
-					gd.addChoice(parameter.getDisplayName(), 
+					/*gd.addChoice(parameter.getDisplayName(), 
 							((ChoiceParameter)parameter).getChoicesArray(), 
-							((ChoiceParameter)parameter).getValue());
+							((ChoiceParameter)parameter).getValue());*/
 				} else if(parameter instanceof StringParameter) {
-					gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
+					//gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
 					//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
 				} else if(parameter instanceof TextParameter) {
-					gd.addTextField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
+					//gd.addTextField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
 					//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
 				} 				
 			}
@@ -560,7 +591,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * Hook for adding Custom Widgets.
 	 * @param gd
 	 */
-	protected void addCustomWidgets(GenericDialog gd) {	}
+	protected void addCustomWidgets(PropertiesDialog gd) {	}
 
 	/**
 	 * Returns whether this unit has parameters or not.
