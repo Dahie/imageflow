@@ -4,6 +4,10 @@
 package de.danielsenff.imageflow.gui;
 
 import java.awt.Component;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;

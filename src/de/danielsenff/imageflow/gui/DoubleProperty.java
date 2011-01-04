@@ -1,14 +1,9 @@
 package de.danielsenff.imageflow.gui;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-import de.danielsenff.imageflow.controller.ParameterWidgetController;
 import de.danielsenff.imageflow.models.parameter.DoubleParameter;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.ParameterWidgetFactory;

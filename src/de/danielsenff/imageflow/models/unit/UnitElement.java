@@ -465,6 +465,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		JTextField fldName = new JTextField(getLabel());
 		fldName.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent event) {}
+
 			public void keyReleased(KeyEvent event) {
 				String newLabel = ((JTextComponent) event.getSource()).getText();
 				setLabel(newLabel);
@@ -494,6 +495,8 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		
 			gd.addSeparator();
 		}
+		
+		gd.addSeparator();
 		
 		if(hasInputs()) {
 			gd.addMessage("Inputs");
