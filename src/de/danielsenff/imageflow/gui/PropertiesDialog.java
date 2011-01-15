@@ -31,7 +31,7 @@ public class PropertiesDialog extends JDialog {
 	GridBagConstraints c;
 	int rows;
 	
-	public PropertiesDialog(final String title, JFrame parent) {
+	public PropertiesDialog(final String title, final JFrame parent) {
 		super(parent);
 		setTitle(title);
 		
@@ -46,11 +46,11 @@ public class PropertiesDialog extends JDialog {
 		
 		addKeyListener(new KeyListener() {
 			
-			public void keyTyped(KeyEvent e) {}
+			public void keyTyped(final KeyEvent e) {}
 			
-			public void keyReleased(KeyEvent e) {}
+			public void keyReleased(final KeyEvent e) {}
 			
-			public void keyPressed(KeyEvent e) {
+			public void keyPressed(final KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					System.out.println("off");
 				}
@@ -77,15 +77,23 @@ public class PropertiesDialog extends JDialog {
 	 * Add a message line.
 	 * @param message
 	 */
-	public void addMessage(String message) {
+	public void addMessage(final String message) {
 		add(new JLabel(message));
 	}
 	
+	/**
+	 * Add a {@link JSeparator} to the dialog.
+	 */
 	public void addSeparator() {
 		add(new JSeparator());
 	}
 	
-	public void addForm(String label, final Component component) {
+	/**
+	 * Adds a new Form-Element using the label and the component.
+	 * @param label
+	 * @param component
+	 */
+	public void addForm(final String label, final Component component) {
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		
@@ -105,22 +113,22 @@ public class PropertiesDialog extends JDialog {
 	 * add Widget to Dialog
 	 * @param property
 	 */
-	public void add(Property property) {
+	public void add(final Property property) {
 		addForm(property.getLabel(), property.getComponent());
 	}
 	
-	public void add(Parameter parameter) {
+	public void add(final Parameter parameter) {
 		addForm(parameter.getDisplayName(), ParameterWidgetFactory.createForm(parameter));
 	}
 	
-	public void addFormset(String title, ArrayList<Property> group) {
-		JPanel panel = new JPanel();
+	public void addFormset(final String title, final ArrayList<Property> group) {
+		final JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createTitledBorder(title));
 		panel.setLayout(new GridBagLayout());
 		int r = 1;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-		for (Property property : group) {
+		for (final Property property : group) {
 			c.gridwidth = 1;
 			c.gridheight = 1;
 			c.gridx = 0;
@@ -141,15 +149,15 @@ public class PropertiesDialog extends JDialog {
 	}
 	
 	
-	public static void main(String[] args) {
-		PropertiesDialog dia = new PropertiesDialog("Properties", null);
+	public static void main(final String[] args) {
+		final PropertiesDialog dia = new PropertiesDialog("Properties", null);
 		
-		Property doublePro = new DoubleProperty(new DoubleParameter("Double",	 2.1, "a double is a great number"));
-		DoubleParameter param = new DoubleParameter("Double2",	 2.2, "a double is a great number");
-		Property doublePro2 = new DoubleProperty(param);
-		Property doublePro3 = new DoubleProperty(new DoubleParameter("Double3",	 2.3, "a double is a great number"));
+		final Property doublePro = new DoubleProperty(new DoubleParameter("Double",	 2.1, "a double is a great number"));
+		final DoubleParameter param = new DoubleParameter("Double2",	 2.2, "a double is a great number");
+		final Property doublePro2 = new DoubleProperty(param);
+		final Property doublePro3 = new DoubleProperty(new DoubleParameter("Double3",	 2.3, "a double is a great number"));
 		
-		ArrayList<Property> group = new ArrayList<Property>();
+		final ArrayList<Property> group = new ArrayList<Property>();
 		group.add(doublePro);
 		group.add(doublePro2);
 		

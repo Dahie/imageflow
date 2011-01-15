@@ -35,6 +35,7 @@ public class ParameterWidgetFactory {
 	 */
 	public static JComponent createTextField(final Parameter parameter) {
 		JComponent component = new JTextField(parameter.getValue().toString());
+		component.setEnabled(!parameter.isReadOnly());
 		component.addKeyListener(new KeyListener() {
 
 			public void keyTyped(KeyEvent e) {}

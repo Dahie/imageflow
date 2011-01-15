@@ -60,5 +60,17 @@ public interface Parameter<T> {
 	 * @param parameterNumber
 	 */
 	public void setParameterNumber(final int parameterNumber);
+
+	/**
+	 * Returns true if this parameter can not be changed.
+	 * @return
+	 */
+	public boolean isReadOnly();
+	
+	/**
+	 * Returns true if this parameter should be invisible in the generated parameter forms.
+	 * @return
+	 */
+	public boolean isHidden();
 	
 }

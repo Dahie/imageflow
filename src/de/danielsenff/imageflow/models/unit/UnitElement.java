@@ -33,7 +33,10 @@ import java.awt.image.ImageObserver;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.JCheckBox;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.JTextComponent;
 
 import visualap.Node;
@@ -454,35 +457,35 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
 	 */
 	public void showProperties() {
-		//final GenericDialog gd = new GenericDialog(getLabel() + " - Parameters", ImageFlow.getApplication().getMainFrame()) ;
 		final PropertiesDialog gd = new PropertiesDialog(getLabel() + " - Parameters", ImageFlow.getApplication().getMainFrame()) ;
 		if(getHelpString() != null) {
-			
 			gd.addMessage(getHelpString());
 		}
 		
 		// label field 
-		//gd.addStringField("Unit label", this.getLabel(),40);
 		JTextField fldName = new JTextField(getLabel());
 		fldName.addKeyListener(new KeyListener() {
-			
-			public void keyTyped(KeyEvent event) {
-				
-			}
-			
+			public void keyTyped(KeyEvent event) {}
 			public void keyReleased(KeyEvent event) {
 				String newLabel = ((JTextComponent) event.getSource()).getText();
 				setLabel(newLabel);
 			}
-			
-			public void keyPressed(KeyEvent event) {
-				
-			}
+			public void keyPressed(KeyEvent event) {}
 		});
 		gd.addForm("Name", fldName);
-		gd.addSeparator();
 		
-//		gd.addCheckbox("Display", this.isDisplay());
+		JCheckBox chkDisplay = new JCheckBox("Display result");
+		chkDisplay.setToolTipText("After the workflow has been executed, nodes that are set to 'display' are displayed as a result.");
+		chkDisplay.setSelected(isDisplay());
+		chkDisplay.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent event) {
+				boolean newValue = ((JCheckBox)event.getSource()).isSelected();
+				setDisplay(newValue);
+			}
+		});
+		gd.addForm("", chkDisplay);
+		
+		gd.addSeparator();		
 
 		addCustomWidgets(gd);
 		
@@ -515,13 +518,6 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 
 		// show properties window
 		gd.showDialog();
-		//gd.invalidate();
-
-		//if( gd.wasCanceled())
-			//return;
-
-		// process changes from the Parameter Widgets
-		//updateParameters(gd);	
 
 		notifyModelListeners();
 	}

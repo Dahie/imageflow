@@ -20,6 +20,7 @@ package de.danielsenff.imageflow.models.parameter;
 /**
  * Parameter is a defined variable in the ImageJ-syntax, which has an expected type
  * @author Daniel Senff
+ * @param <T> Class of the value stored in the Parameter
  *
  */
 public abstract class AbstractParameter<T> implements Parameter<T> {
@@ -52,7 +53,19 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 	protected String helpString;
 
 	/**
-	 * 
+	 * Hide this parameter in the generated parameter forms.
+	 */
+	protected boolean hidden = false;
+	
+	/**
+	 * Disable this parameter in the generated parameter forms.
+	 */
+	protected boolean readOnly = false;
+	
+	/**
+	 * @param paraType 
+	 * @param displayName 
+	 * @param helpString 
 	 */
 	public AbstractParameter(String paraType, String displayName, String helpString) {
 		this.displayName = displayName;
@@ -109,5 +122,29 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 	 */
 	public void setParameterNumber(final int parameterNumber) {
 		this.parameterNumber = parameterNumber;
+	}
+	
+	public boolean isReadOnly() {
+		return this.readOnly;
+	}
+	
+	/**
+	 * Set the value of the hidden-member.
+	 * @param value
+	 */
+	public void setReadOnly(boolean value) {
+		this.readOnly = value;
+	}
+	
+	public boolean isHidden() {
+		return this.hidden;
+	}
+	
+	/**
+	 * Set the value of the readOnly-member.
+	 * @param value
+	 */
+	public void setHidden(boolean value) {
+		this.hidden = value;
 	}
 }
