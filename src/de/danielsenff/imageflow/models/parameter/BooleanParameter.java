@@ -24,15 +24,6 @@ package de.danielsenff.imageflow.models.parameter;
 public class BooleanParameter extends AbstractParameter<Boolean> {
 
 	/**
-	 * The actual value of this Parameter;
-	 */
-	//protected boolean booleanValue;
-	/**
-	 * The default value of this Parameter.
-	 */
-	//protected boolean booleanValueDefault;
-	
-	/**
 	 * The string that is inserted in the imagej-syntax if the condidation is true.
 	 */
 	protected String trueString;
@@ -47,7 +38,7 @@ public class BooleanParameter extends AbstractParameter<Boolean> {
 			final boolean boolParameter, 
 			final String trueString,
 			final String helpString) {
-		super("boolean", displayName, helpString);
+		super("boolean", displayName, helpString, null);
 		this.value = boolParameter;
 		this.defaultValue = boolParameter;
 		this.trueString = trueString;

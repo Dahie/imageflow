@@ -17,6 +17,8 @@
  */
 package de.danielsenff.imageflow.models.parameter;
 
+import java.util.HashMap;
+
 /**
  * Parameter Interface
  * @author Daniel Senff
@@ -72,5 +74,11 @@ public interface Parameter<T> {
 	 * @return
 	 */
 	public boolean isHidden();
+
+	/**
+	 * Special options hash to configure parameters more flexible.
+	 * @return
+	 */
+	public abstract HashMap<String, Object> getOptions();
 	
 }

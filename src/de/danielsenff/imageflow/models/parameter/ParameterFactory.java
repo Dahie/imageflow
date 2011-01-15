@@ -18,6 +18,7 @@
 package de.danielsenff.imageflow.models.parameter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author danielsenff
@@ -37,8 +38,9 @@ public class ParameterFactory {
 	public static Parameter createParameter(final String displayName, 
 			final String dataTypeName,
 			Object value, 
-			String helpString) {
-		return createParameter(displayName, dataTypeName, value, helpString, null, 0);
+			String helpString, 
+			HashMap<String, Object> options) {
+		return createParameter(displayName, dataTypeName, value, helpString, null, 0, options);
 	}
 	
 	/**
@@ -72,6 +74,7 @@ public class ParameterFactory {
 	 * @param helpString
 	 * @param boolTrueString	This can be any other type that maybe required for certain parameters, like TrueString or chosenValue
 	 * @param choiceIndex	Selected index from the list of choices. 
+	 * @param options 
 	 * @return
 	 * @throws IllegalArgumentException 
 	 */
@@ -80,17 +83,18 @@ public class ParameterFactory {
 			final Object value,
 			final String helpString, 
 			final String boolTrueString,
-			final int choiceIndex) throws IllegalArgumentException {
+			final int choiceIndex,
+			final HashMap<String, Object> options) throws IllegalArgumentException {
 		
 		// see what parameter instance has to be created
 		if(value instanceof String) {
 			return new StringParameter(displayName, (String) value, helpString);
-		} else if(value instanceof String && dataTypeName.toLowerCase().equals("text")) {
+		} else if(value instanceof String && dataTypeName.equalsIgnoreCase("text")) {
 			return new TextParameter(displayName, (String) value, helpString);
 		} else if (value instanceof Double ) {
 			return new DoubleParameter(displayName, (Double) value, helpString);
 		} else if (value instanceof Integer) {
-			return new IntegerParameter(displayName, (Integer) value, helpString);
+			return new IntegerParameter(displayName, (Integer) value, helpString, options);
 		} else if (value instanceof Boolean && boolTrueString != null) {
 			return new BooleanParameter(displayName, (Boolean) value, boolTrueString, helpString);
 		} else if (value instanceof ArrayList) {

@@ -179,7 +179,8 @@ public class UnitFactory {
 													para.value, 
 													para.helpString, 
 													para.trueString, 
-													para.choiceIndex));
+													para.choiceIndex, 
+													para.options));
 		}
 	}
 

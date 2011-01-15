@@ -895,12 +895,12 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 					parameter.getParaType(),
 					parameter.getValue(), 
 					parameter.getHelpString(), 
-					((BooleanParameter)parameter).getTrueString(), 0);
+					((BooleanParameter)parameter).getTrueString(), 0, parameter.getOptions());
 		} else {
 			clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
 					parameter.getParaType(),
 					parameter.getValue(), 
-					parameter.getHelpString());	
+					parameter.getHelpString(), parameter.getOptions());	
 		}
 		clone.addParameter(clonedParameter);
 	}

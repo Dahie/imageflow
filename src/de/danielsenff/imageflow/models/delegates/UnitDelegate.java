@@ -22,8 +22,6 @@ import java.awt.Point;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
@@ -45,7 +43,6 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	 */
 	public static Point POINT = new Point(40, 40);
 	private NodeDescription unitDescription;
-	private String xmlPath;
 	private boolean withinJar;
 	
 	private Vector<MutableTreeNode> treenodes;
@@ -190,8 +187,12 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 		return treenodes.isEmpty();
 	}
 
+	/**
+	 * Returns the name of the xml-definition of this node.
+	 * @return
+	 */
 	public String getXMLPath() {
-		return this.xmlPath;
+		return this.unitDescription.getXMLName();
 	}
 	
 }

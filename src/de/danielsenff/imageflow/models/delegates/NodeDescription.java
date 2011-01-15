@@ -26,15 +26,48 @@ import java.awt.Color;
  */
 public interface NodeDescription {
 
+	/**
+	 * Returns true if the described node has any inputs.
+	 * @return
+	 */
 	boolean hasInputs();
+	/**
+	 * Returns true if the described node has any outputs.
+	 * @return
+	 */
 	boolean hasOutputs();
+	/**
+	 * Returns true if the described node has any parameters.
+	 * @return
+	 */
 	boolean hasParameters();
 	
+	/**
+	 * Returns the Help string used for displaying a description of the unit.
+	 * @return
+	 */
 	public String getHelpString();
 
+	/**
+	 * Returns the unique unit name.
+	 * @return
+	 */
 	String getUnitName();
+	/**
+	 * Returns the xml file name of the unit definition.
+	 * @return
+	 */
+	String getXMLName();
 
+	/**
+	 * 
+	 * @return
+	 */
 	boolean getIsDisplayUnit();
 
+	/**
+	 * Returns the Color predefined for the node.
+	 * @return
+	 */
 	Color getColor();
 }

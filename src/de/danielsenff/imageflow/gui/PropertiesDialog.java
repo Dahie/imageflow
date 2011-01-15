@@ -94,19 +94,21 @@ public class PropertiesDialog extends JDialog {
 	 * @param component
 	 */
 	public void addForm(final String label, final Component component) {
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		
-		c.gridx = 0;
-		c.gridy = rows+1;
-		add(new JLabel(label), c);
-		
-		c.gridx = 1;
-		c.gridy = rows+1;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		
-		add(component, c);
-		rows++;
+		if (component != null) {
+			c.gridwidth = 1;
+			c.gridheight = 1;
+			
+			c.gridx = 0;
+			c.gridy = rows+1;
+			add(new JLabel(label), c);
+			
+			c.gridx = 1;
+			c.gridy = rows+1;
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			add(component, c);
+			rows++;
+		}
 	}
 	
 	/**

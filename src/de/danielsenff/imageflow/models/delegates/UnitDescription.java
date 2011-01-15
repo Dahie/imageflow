@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -154,18 +155,6 @@ public class UnitDescription implements NodeDescription {
 		if (outputsElement != null) {
 			parseOutputs(outputsElement);
 		}
-
-		//		catch (Exception e) {
-		//			System.err.println("Invalid XML-File!");
-		//			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
-		//					"There has been a problem loading a XML unit description." +'\n' 
-		//					+ "The error ocures in " + url + "." + '\n'
-		//					+ "The programm start will continue without this unit."
-		//					,
-		//					"Missing connections", 
-		//					JOptionPane.WARNING_MESSAGE);
-		//			e.printStackTrace();
-		//		}
 	}
 
 
@@ -271,30 +260,52 @@ public class UnitDescription implements NodeDescription {
 		}
 	}
 
-
+	/** 
+	 * Read parameter definition
+	 * @param num
+	 * @param actualParameterElement
+	 * @throws DataFormatException
+	 */
 	private void processParameters(int num, Element actualParameterElement)
-	throws DataFormatException {
+		throws DataFormatException {
 		Para actPara = para[num] = new Para();
+		actPara.options = new HashMap<String, Object>();
 
 		actPara.name = actualParameterElement.getChild("Name").getValue();
 		if(actualParameterElement.getChild("HelpString") != null)
 			actPara.helpString = actualParameterElement.getChild("HelpString").getValue();
 		else
 			actPara.helpString = actualParameterElement.getChild("Name").getValue();
-		String dataTypeString = actPara.dataTypeString = actualParameterElement.getChild("DataType").getValue();
-		String valueString = actualParameterElement.getChild("Value").getValue();
+		Element dataTypeElement = actualParameterElement.getChild("DataType");
+		String dataTypeString = actPara.dataTypeString = dataTypeElement.getValue();
+		Element valueElement = actualParameterElement.getChild("Value");
+		String valueString = valueElement.getValue();
 
 		if (dataTypeString.toLowerCase().equals("double")) 
 			actPara.value = Double.valueOf(valueString);
-		else if (dataTypeString.toLowerCase().equals("file"))
+		else if (dataTypeString.equalsIgnoreCase("file"))
 			actPara.value = valueString;
-		else if (dataTypeString.toLowerCase().equals("string")) 
+		else if (dataTypeString.equalsIgnoreCase("string")) 
 			actPara.value = valueString;
-		else if (dataTypeString.toLowerCase().equals("text")) 
+		else if (dataTypeString.equalsIgnoreCase("text")) 
 			actPara.value = valueString;
-		else if (dataTypeString.toLowerCase().equals("integer")) 
+		else if (dataTypeString.equalsIgnoreCase("integer")) {
+			
 			actPara.value = Integer.valueOf(valueString);
-		else if (dataTypeString.toLowerCase().equals("stringarray")) { 
+			
+			if (dataTypeElement.getAttribute("as") != null 
+					&& dataTypeElement.getAttribute("as").getValue().equalsIgnoreCase("slider") 
+					&& (valueElement.getAttribute("min") != null
+						&& valueElement.getAttribute("max") != null) ) {
+				actPara.options.put("as", "slider");
+				actPara.options.put("min", Integer.valueOf(valueElement.getAttribute("min").getValue()));
+				actPara.options.put("max", Integer.valueOf(valueElement.getAttribute("max").getValue()));
+			} else {
+				actPara.dataTypeAs = "textfield";
+			}
+		
+		} 
+		else if (dataTypeString.equalsIgnoreCase("stringarray")) { 
 			int choiceNumber = Integer.valueOf(actualParameterElement.getChild("ChoiceNumber").getValue());
 			String[] strings = valueString.split(ChoiceParameter.DELIMITER);
 			ArrayList<String> choicesList;
@@ -306,7 +317,7 @@ public class UnitDescription implements NodeDescription {
 			actPara.value = choicesList;
 			actPara.choiceIndex = Integer.valueOf(choiceNumber);
 		}
-		else if (dataTypeString.toLowerCase().equals("boolean")) {
+		else if (dataTypeString.equalsIgnoreCase("boolean")) {
 			actPara.value = Boolean.valueOf(valueString);
 			actPara.trueString = actualParameterElement.getChild("TrueString").getValue();
 		} else 
@@ -348,6 +359,9 @@ public class UnitDescription implements NodeDescription {
 		return unitName;
 	}
 
+	public String getXMLName() {
+		return this.unitURL.getFile();
+	}
 
 	public boolean getIsDisplayUnit() {
 		return isDisplayUnit;
@@ -378,12 +392,12 @@ public class UnitDescription implements NodeDescription {
 		public String name;
 
 		public String dataTypeString;
-		/*double doubleValue;
-	int integerValue;
-	String stringValue;
-	String[] comboStringValues;
-	int choiceNumber;
-	boolean booleanValue;*/
+		public String dataTypeAs;
+		/*
+		 * for storing special options, 
+		 * in the long run the help class could be replaced by this, we'll see - ds
+		 */
+		public HashMap<String, Object> options;
 
 		/**
 		 * can be
@@ -405,7 +419,10 @@ public class UnitDescription implements NodeDescription {
 		 * String used when value true for {@link BooleanParameter}
 		 */
 		public String trueString;
-
+		
+		/**
+		 * String used as description for the Parameter.
+		 */
 		public String helpString;
 	}
 

@@ -17,6 +17,8 @@
  */
 package de.danielsenff.imageflow.models.parameter;
 
+import java.util.HashMap;
+
 /**
  * Parameter is a defined variable in the ImageJ-syntax, which has an expected type
  * @author Daniel Senff
@@ -62,15 +64,23 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 	 */
 	protected boolean readOnly = false;
 	
+	protected HashMap<String, Object> options;
+	
 	/**
 	 * @param paraType 
 	 * @param displayName 
 	 * @param helpString 
+	 * @param options2 
 	 */
-	public AbstractParameter(String paraType, String displayName, String helpString) {
+	public AbstractParameter(String paraType, 
+			String displayName, 
+			String helpString, 
+			HashMap<String, Object> options) {
 		this.displayName = displayName;
 		this.paraType = paraType;
 		this.helpString = helpString;
+		this.options = options;
+		
 	}
 
 	/**
@@ -146,5 +156,9 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 	 */
 	public void setHidden(boolean value) {
 		this.hidden = value;
+	}
+	
+	public HashMap<String, Object> getOptions() {
+		return this.options;
 	}
 }

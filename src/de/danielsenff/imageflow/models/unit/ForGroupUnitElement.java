@@ -61,13 +61,13 @@ public class ForGroupUnitElement extends GroupUnitElement {
 	}
 
 	private void initParameters() {
-		Parameter paraBegin = ParameterFactory.createParameter("Initialize value", "integer", new Integer(0), "Begining of the loop.");
+		Parameter paraBegin = ParameterFactory.createParameter("Initialize value", "integer", new Integer(0), "Begining of the loop.", null);
 		addParameter(paraBegin);
 		
-		Parameter paraStep = ParameterFactory.createParameter("Step size", "integer", new Integer(10), "Step of increments in the loop.");
+		Parameter paraStep = ParameterFactory.createParameter("Step size", "integer", new Integer(10), "Step of increments in the loop.", null);
 		addParameter(paraStep);
 		
-		Parameter paraEnd = ParameterFactory.createParameter("End condition", "integer", new Integer(0), "End of the loop");
+		Parameter paraEnd = ParameterFactory.createParameter("End condition", "integer", new Integer(0), "End of the loop", null);
 		addParameter(paraEnd);
 	}
 	

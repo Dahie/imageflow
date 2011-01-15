@@ -32,20 +32,20 @@
   	
   	<Parameter>
   		<Name>Red value</Name>
-  		<DataType>integer</DataType>
-  		<Value>256</Value>
+  		<DataType as="slider">integer</DataType>
+  		<Value min="0" max="255">255</Value>
   		<HelpString>Red color value of the new image.</HelpString>
   	</Parameter>
   	<Parameter>
   		<Name>Green value</Name>
-  		<DataType>integer</DataType>
-  		<Value>256</Value>
+  		<DataType as="slider">integer</DataType>
+  		<Value min="0" max="255">255</Value>
   		<HelpString>Green color value of the new image.</HelpString>
   	</Parameter>
   	<Parameter>
   		<Name>Blue value</Name>
-  		<DataType>integer</DataType>
-  		<Value>256</Value>
+  		<DataType as="slider">integer</DataType>
+  		<Value min="0" max="255">255</Value>
   		<HelpString>Blue color value of the new image.</HelpString>
   	</Parameter>
 

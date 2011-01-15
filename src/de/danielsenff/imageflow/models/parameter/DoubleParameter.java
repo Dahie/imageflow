@@ -29,7 +29,7 @@ public class DoubleParameter extends AbstractParameter<Double> {
 	 * @param helpString 
 	 */
 	public DoubleParameter(String displayName, double doubleParameter, String helpString) {
-		super("double", displayName, helpString);
+		super("double", displayName, helpString, null);
 		this.value = doubleParameter;
 		this.defaultValue = doubleParameter;
 	}

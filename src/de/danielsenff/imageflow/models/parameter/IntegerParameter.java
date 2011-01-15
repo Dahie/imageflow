@@ -17,22 +17,14 @@
  */
 package de.danielsenff.imageflow.models.parameter;
 
+import java.util.HashMap;
+
 /**
  * @author danielsenff
  *
  */
 public class IntegerParameter extends AbstractParameter<Integer> {
 
-	/**
-	 * Actual Integer value
-	 */
-	//protected int  integerValue;
-	/**
-	 * Default Integer value
-	 */
-	//protected int  integerValueDefault;
-
-	
 	/**
 	 * @param parameterNumber
 	 */
@@ -44,11 +36,13 @@ public class IntegerParameter extends AbstractParameter<Integer> {
 	 * @param displayName
 	 * @param integerParameter 
 	 * @param helpString 
+	 * @param options 
 	 */
 	public IntegerParameter(String displayName, 
 			final int integerParameter, 
-			String helpString) {
-		super("integer", displayName, helpString);
+			String helpString, 
+			HashMap<String, Object> options) {
+		super("integer", displayName, helpString, options);
 		this.value = integerParameter;
 		this.defaultValue = integerParameter;
 	}

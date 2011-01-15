@@ -44,7 +44,7 @@ public class StringParameter extends AbstractParameter<String> {
 			String stringValue, 
 			String defaultValue, 
 			String helpString) {
-		super("String", displayName, helpString);
+		super("String", displayName, helpString, null);
 		this.value = stringValue;
 		this.defaultValue = defaultValue;
 	}
