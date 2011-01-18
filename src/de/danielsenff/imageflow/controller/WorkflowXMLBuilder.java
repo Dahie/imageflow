@@ -49,6 +49,7 @@ import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
+import de.danielsenff.imageflow.models.parameter.IntegerParameter;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
@@ -579,6 +580,11 @@ public class WorkflowXMLBuilder {
 			Element dataType = new Element("DataType");
 			dataType.addContent(parameter.getParaType());
 			parameterElement.addContent(dataType);
+			if(parameter.getOptions().get("as") != null) {
+				String dataTypeAs = (String) parameter.getOptions().get("as");
+				dataType.setAttribute("as", dataTypeAs);
+			}
+			
 
 			Element value = new Element("Value");
 			value.addContent(parameter.getValue()+"");
@@ -602,6 +608,18 @@ public class WorkflowXMLBuilder {
 			}
 			parameterElement.addContent(value);
 
+			if(parameter instanceof IntegerParameter) {
+				if(parameter.getOptions().get("min") != null) {
+					int min = (Integer) parameter.getOptions().get("min");
+					value.setAttribute("min", Integer.toString(min));
+				}
+				if(parameter.getOptions().get("max") != null) {
+					int max = (Integer) parameter.getOptions().get("max");
+					value.setAttribute("max", Integer.toString(max));
+				}
+				
+			}
+			
 			if(parameter instanceof BooleanParameter) {
 				Element trueString = new Element("TrueString");
 				trueString.addContent(((BooleanParameter)parameter).getTrueString());

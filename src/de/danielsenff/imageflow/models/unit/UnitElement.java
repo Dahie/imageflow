@@ -56,7 +56,6 @@ import de.danielsenff.imageflow.models.parameter.IntegerParameter;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.ParameterFactory;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
-import de.danielsenff.imageflow.models.parameter.TextParameter;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 import de.danielsenff.imageflow.utils.PaintUtil;
 
