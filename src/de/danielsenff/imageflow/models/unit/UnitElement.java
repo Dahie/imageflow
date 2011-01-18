@@ -489,9 +489,11 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		addCustomWidgets(gd);
 		
 		// add Parameter Widgets
-		addParameterWidgets(gd);
+		if (!getParameters().isEmpty()) {
+			addParameterWidgets(gd);
 		
-		gd.addSeparator();
+			gd.addSeparator();
+		}
 		
 		if(hasInputs()) {
 			gd.addMessage("Inputs");
@@ -523,13 +525,8 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 
 	protected void addParameterWidgets(final PropertiesDialog gd) {
 		final ArrayList<Parameter> parameterList = getParameters();
-		
-		if (parameterList.isEmpty()) {
-			gd.addMessage("This unit has no parameters and can not be adjusted.");
-		} else {
-			for (final Parameter parameter : parameterList) {
-				gd.add(parameter);
-			}
+		for (final Parameter parameter : parameterList) {
+			gd.add(parameter);
 		}
 	}
 

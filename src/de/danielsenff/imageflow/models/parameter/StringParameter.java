@@ -26,17 +26,6 @@ import java.util.HashMap;
 public class StringParameter extends AbstractParameter<String> {
 
 	/**
-	 * Actual String value
-	 */
-	//protected String  stringValue;
-	/**
-	 * Default String value
-	 */
-	//protected String  stringValueDefault;
-
-	
-
-	/**
 	 * @param displayName
 	 * @param stringValue 
 	 * @param defaultValue 

@@ -95,7 +95,7 @@ public class UnitDescription implements NodeDescription {
 		final Element root = Tools.getXMLRoot(this.unitURL);
 		readXML(root);
 	}
-	
+
 	/** 
 	 * Read Unit Properties from XML URL
 	 * @param root
@@ -267,7 +267,7 @@ public class UnitDescription implements NodeDescription {
 	 * @throws DataFormatException
 	 */
 	private void processParameters(int num, Element actualParameterElement)
-		throws DataFormatException {
+	throws DataFormatException {
 		Para actPara = para[num] = new Para();
 		actPara.options = new HashMap<String, Object>();
 
@@ -283,26 +283,33 @@ public class UnitDescription implements NodeDescription {
 
 		if (dataTypeString.toLowerCase().equals("double")) 
 			actPara.value = Double.valueOf(valueString);
-		else if (dataTypeString.equalsIgnoreCase("file"))
+		else if (dataTypeString.equalsIgnoreCase("file")) {
 			actPara.value = valueString;
-		else if (dataTypeString.equalsIgnoreCase("string")) 
+
+			if (hasAttribute(dataTypeElement, "as", "openfilechooser") 
+					|| hasAttribute(dataTypeElement, "as", "savefilechooser") ) {
+				actPara.options.put("as", dataTypeElement.getAttribute("as").getValue());
+			} else {
+				actPara.options.put("as", "textfield");
+			}		
+		} else if (dataTypeString.equalsIgnoreCase("string")) 
 			actPara.value = valueString;
-		else if (dataTypeString.equalsIgnoreCase("text")) 
+		else if (dataTypeString.equalsIgnoreCase("text")) { 
 			actPara.value = valueString;
-		else if (dataTypeString.equalsIgnoreCase("integer")) {
-			
+		} else if (dataTypeString.equalsIgnoreCase("integer")) {
+
 			actPara.value = Integer.valueOf(valueString);
-			
+
 			if (hasAttribute(dataTypeElement, "as", "slider") 
 					&& (valueElement.getAttribute("min") != null
-					&& valueElement.getAttribute("max") != null) ) {
+							&& valueElement.getAttribute("max") != null) ) {
 				actPara.options.put("as", "slider");
 				actPara.options.put("min", Integer.valueOf(valueElement.getAttribute("min").getValue()));
 				actPara.options.put("max", Integer.valueOf(valueElement.getAttribute("max").getValue()));
 			} else {
-				actPara.dataTypeAs = "textfield";
+				actPara.options.put("as", "textfield");
 			}
-		
+
 		} 
 		else if (dataTypeString.equalsIgnoreCase("stringarray")) {
 			int choiceNumber = Integer.valueOf(actualParameterElement.getChild("ChoiceNumber").getValue());
@@ -319,7 +326,7 @@ public class UnitDescription implements NodeDescription {
 			if (hasAttribute(dataTypeElement, "as", "radio") ){
 				actPara.options.put("as", "radio");
 			}
-			
+
 		}
 		else if (dataTypeString.equalsIgnoreCase("boolean")) {
 			actPara.value = Boolean.valueOf(valueString);
@@ -330,7 +337,7 @@ public class UnitDescription implements NodeDescription {
 
 	private boolean hasAttribute(Element dataTypeElement, String attributeName, String value) {
 		return dataTypeElement.getAttribute(attributeName) != null 
-				&& dataTypeElement.getAttribute(attributeName).getValue().equalsIgnoreCase(value);
+		&& dataTypeElement.getAttribute(attributeName).getValue().equalsIgnoreCase(value);
 	}
 
 	/**
@@ -401,7 +408,6 @@ public class UnitDescription implements NodeDescription {
 		public String name;
 
 		public String dataTypeString;
-		public String dataTypeAs;
 		/*
 		 * for storing special options, 
 		 * in the long run the help class could be replaced by this, we'll see - ds
@@ -428,7 +434,7 @@ public class UnitDescription implements NodeDescription {
 		 * String used when value true for {@link BooleanParameter}
 		 */
 		public String trueString;
-		
+
 		/**
 		 * String used as description for the Parameter.
 		 */

@@ -20,7 +20,7 @@
   	</Parameter>
   	<Parameter>
   		<Name>Filepath</Name>
-  		<DataType>File</DataType>
+  		<DataType as="savefilechooser">File</DataType>
   		<Value></Value>
   		<HelpString>The save unit needs the path of the future image file.</HelpString>
   	</Parameter>  

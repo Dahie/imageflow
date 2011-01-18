@@ -73,7 +73,6 @@ public class ParameterFactory {
 	 * @param chosenValue 
 	 * @param helpString
 	 * @param boolTrueString	This can be any other type that maybe required for certain parameters, like TrueString or chosenValue
-	 * @param choiceIndex	Selected index from the list of choices. 
 	 * @param options 
 	 * @return
 	 * @throws IllegalArgumentException 

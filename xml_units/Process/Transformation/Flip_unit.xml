@@ -16,7 +16,7 @@
 <Parameters>
   	<Parameter>
   		<Name>Direction</Name>
-  		<DataType>StringArray</DataType>
+  		<DataType as="radio">StringArray</DataType>
   		<Value>Horizontally;Vertically</Value>
   		<HelpString>Defines along which axis the images is flipped.</HelpString>
   		<ChoiceNumber>0</ChoiceNumber>
