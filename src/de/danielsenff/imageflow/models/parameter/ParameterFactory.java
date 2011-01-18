@@ -40,7 +40,7 @@ public class ParameterFactory {
 			Object value, 
 			String helpString, 
 			HashMap<String, Object> options) {
-		return createParameter(displayName, dataTypeName, value, helpString, null, 0, options);
+		return createParameter(displayName, dataTypeName, value, helpString, null, options);
 	}
 	
 	/**
@@ -57,9 +57,9 @@ public class ParameterFactory {
 			final String dataTypeName,
 			final ArrayList<String> value,
 			final String helpString, 
-			final int choiceIndex) throws IllegalArgumentException {
+			final HashMap<String, Object> options) throws IllegalArgumentException {
 		ArrayList<String> values = (ArrayList<String>) value; // bah, what a construct
-		return new ChoiceParameter(displayName, values, choiceIndex, helpString);
+		return new ChoiceParameter(displayName, values, helpString, options);
 	}
 	
 	/**
@@ -83,14 +83,13 @@ public class ParameterFactory {
 			final Object value,
 			final String helpString, 
 			final String boolTrueString,
-			final int choiceIndex,
 			final HashMap<String, Object> options) throws IllegalArgumentException {
 		
 		// see what parameter instance has to be created
 		if(value instanceof String) {
-			return new StringParameter(displayName, (String) value, helpString);
-		} else if(value instanceof String && dataTypeName.equalsIgnoreCase("text")) {
-			return new TextParameter(displayName, (String) value, helpString);
+			return new StringParameter(displayName, (String) value, helpString, options);
+		} else if(value instanceof String && dataTypeName.equalsIgnoreCase("text")) { //TODO use string as text
+			return new TextParameter(displayName, (String) value, helpString, options);
 		} else if (value instanceof Double ) {
 			return new DoubleParameter(displayName, (Double) value, helpString);
 		} else if (value instanceof Integer) {
@@ -99,7 +98,7 @@ public class ParameterFactory {
 			return new BooleanParameter(displayName, (Boolean) value, boolTrueString, helpString);
 		} else if (value instanceof ArrayList) {
 			ArrayList<String> values = (ArrayList) value; // bah, what a construct
-			return new ChoiceParameter(displayName, values, choiceIndex, helpString);
+			return new ChoiceParameter(displayName, values, helpString, options);
 			
 		} else throw new IllegalArgumentException(
 				"Parameter "+value+" of type not recognized or not all required arguments");

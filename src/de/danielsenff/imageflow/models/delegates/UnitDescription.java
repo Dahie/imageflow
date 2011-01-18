@@ -293,10 +293,9 @@ public class UnitDescription implements NodeDescription {
 			
 			actPara.value = Integer.valueOf(valueString);
 			
-			if (dataTypeElement.getAttribute("as") != null 
-					&& dataTypeElement.getAttribute("as").getValue().equalsIgnoreCase("slider") 
+			if (hasAttribute(dataTypeElement, "as", "slider") 
 					&& (valueElement.getAttribute("min") != null
-						&& valueElement.getAttribute("max") != null) ) {
+					&& valueElement.getAttribute("max") != null) ) {
 				actPara.options.put("as", "slider");
 				actPara.options.put("min", Integer.valueOf(valueElement.getAttribute("min").getValue()));
 				actPara.options.put("max", Integer.valueOf(valueElement.getAttribute("max").getValue()));
@@ -305,7 +304,7 @@ public class UnitDescription implements NodeDescription {
 			}
 		
 		} 
-		else if (dataTypeString.equalsIgnoreCase("stringarray")) { 
+		else if (dataTypeString.equalsIgnoreCase("stringarray")) {
 			int choiceNumber = Integer.valueOf(actualParameterElement.getChild("ChoiceNumber").getValue());
 			String[] strings = valueString.split(ChoiceParameter.DELIMITER);
 			ArrayList<String> choicesList;
@@ -315,13 +314,23 @@ public class UnitDescription implements NodeDescription {
 			}	
 
 			actPara.value = choicesList;
-			actPara.choiceIndex = Integer.valueOf(choiceNumber);
+			//actPara.choiceIndex = Integer.valueOf(choiceNumber);
+			actPara.options.put("choiceIndex", choiceNumber);
+			if (hasAttribute(dataTypeElement, "as", "radio") ){
+				actPara.options.put("as", "radio");
+			}
+			
 		}
 		else if (dataTypeString.equalsIgnoreCase("boolean")) {
 			actPara.value = Boolean.valueOf(valueString);
 			actPara.trueString = actualParameterElement.getChild("TrueString").getValue();
 		} else 
 			throw new DataFormatException("invalid datatype");
+	}
+
+	private boolean hasAttribute(Element dataTypeElement, String attributeName, String value) {
+		return dataTypeElement.getAttribute(attributeName) != null 
+				&& dataTypeElement.getAttribute(attributeName).getValue().equalsIgnoreCase(value);
 	}
 
 	/**
@@ -413,7 +422,7 @@ public class UnitDescription implements NodeDescription {
 		 * Enumeration of possible values, the actual value has to be 
 		 * element in this list.
 		 */
-		public int choiceIndex;
+		//public int choiceIndex;
 
 		/**
 		 * String used when value true for {@link BooleanParameter}

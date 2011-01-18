@@ -529,27 +529,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 			gd.addMessage("This unit has no parameters and can not be adjusted.");
 		} else {
 			for (final Parameter parameter : parameterList) {
-				
 				gd.add(parameter);
-				
-				if(parameter instanceof DoubleParameter) {
-					
-					//gd.addNumericField(parameter.getDisplayName(), (Double) parameter.getValue(), 2);
-				} else if(parameter instanceof IntegerParameter) {
-					//gd.addNumericField(parameter.getDisplayName(), (Integer) parameter.getValue(), 0);
-				} else if(parameter instanceof BooleanParameter) {
-					//gd.addCheckbox(parameter.getDisplayName(), (Boolean)parameter.getValue());
-				} else if(parameter instanceof ChoiceParameter) {
-					/*gd.addChoice(parameter.getDisplayName(), 
-							((ChoiceParameter)parameter).getChoicesArray(), 
-							((ChoiceParameter)parameter).getValue());*/
-				} else if(parameter instanceof StringParameter) {
-					//gd.addStringField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
-					//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
-				} else if(parameter instanceof TextParameter) {
-					//gd.addTextField(parameter.getDisplayName(), (String)parameter.getValue(), 40);
-					//					gd.addTextAreas(parameter.getDisplayName(), (String)parameter.getValue(), 4, 40);
-				} 				
 			}
 		}
 	}
@@ -889,18 +869,20 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 					parameter.getParaType(),
 					((ChoiceParameter)parameter).getChoices(), 
 					parameter.getHelpString(), 
-					((ChoiceParameter)parameter).getChoiceIndex());
+					parameter.getOptions());
 		} else if (parameter instanceof BooleanParameter){
 			clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
 					parameter.getParaType(),
 					parameter.getValue(), 
 					parameter.getHelpString(), 
-					((BooleanParameter)parameter).getTrueString(), 0, parameter.getOptions());
+					((BooleanParameter)parameter).getTrueString(), 
+					parameter.getOptions());
 		} else {
 			clonedParameter =	ParameterFactory.createParameter(parameter.getDisplayName(), 
 					parameter.getParaType(),
 					parameter.getValue(), 
-					parameter.getHelpString(), parameter.getOptions());	
+					parameter.getHelpString(), 
+					parameter.getOptions());	
 		}
 		clone.addParameter(clonedParameter);
 	}
@@ -961,7 +943,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 
 
 	/**
-	 * Checks a unit, if it's inputs have already been registered in the algorithm.
+	 * Checks a unit, if its inputs have already been registered in the algorithm.
 	 * It's marked, when it's not 0. The int is conjecture to the order.
 	 * TODO: this method name may be confusing: it doesn't check if all inputs of this unit are marked
 	 * @param unit

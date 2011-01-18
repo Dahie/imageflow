@@ -17,6 +17,8 @@
  */
 package de.danielsenff.imageflow.models.parameter;
 
+import java.util.HashMap;
+
 /**
  * @author danielsenff
  *
@@ -43,8 +45,9 @@ public class StringParameter extends AbstractParameter<String> {
 	public StringParameter(String displayName, 
 			String stringValue, 
 			String defaultValue, 
-			String helpString) {
-		super("String", displayName, helpString, null);
+			String helpString,
+			final HashMap<String, Object> options) {
+		super("String", displayName, helpString, options);
 		this.value = stringValue;
 		this.defaultValue = defaultValue;
 	}
@@ -56,8 +59,9 @@ public class StringParameter extends AbstractParameter<String> {
 	 */
 	public StringParameter(final String displayName, 
 			final String stringValue, 
-			final String helpString) {
-		this(displayName, stringValue, stringValue, helpString);
+			final String helpString,
+			final HashMap<String, Object> options) {
+		this(displayName, stringValue, stringValue, helpString, options);
 	}
 	
 	

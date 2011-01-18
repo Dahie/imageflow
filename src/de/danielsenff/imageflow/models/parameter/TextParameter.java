@@ -17,6 +17,8 @@
  */
 package de.danielsenff.imageflow.models.parameter;
 
+import java.util.HashMap;
+
 /**
  * unused right now, at the moment we have only Strings.
  * @author dahie
@@ -24,9 +26,11 @@ package de.danielsenff.imageflow.models.parameter;
  */
 public class TextParameter extends StringParameter {
 
-	public TextParameter(String displayName, String stringValue,
-			String helpString) {
-		super(displayName, stringValue, helpString);
+	public TextParameter(String displayName, 
+			final String stringValue,
+			final String helpString,
+			final HashMap<String, Object> options) {
+		super(displayName, stringValue, helpString, options);
 		this.paraType = "Text";
 	}
 

@@ -6,28 +6,35 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Hashtable;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ * Creates form elements based on {@link Parameter}
+ * @author dahie
+ *
+ */
 public class ParameterWidgetFactory {
 
 
 	public static JComponent createForm(final Parameter parameter) {
 		try {
 			if (parameter instanceof ChoiceParameter) {
-				return createComboBox((ChoiceParameter)parameter);
+				if(optionsContainString(parameter, "as", "radio")) {
+					return createRadios((ChoiceParameter)parameter);
+				} else 
+					return createComboBox((ChoiceParameter)parameter);
 			} else if (parameter instanceof IntegerParameter) {
-				if (parameter.getOptions() != null 
-						&& parameter.getOptions().get("as") != null 
-						&& parameter.getOptions().get("as") instanceof String
-						&& ((String)parameter.getOptions().get("as")).equalsIgnoreCase("slider")) {
+				if (optionsContainString(parameter, "as", "slider")) {
 					return createSlider((IntegerParameter)parameter);
 				} else {
 					return createTextField(parameter);
@@ -40,25 +47,34 @@ public class ParameterWidgetFactory {
 				return createCheckBox((BooleanParameter)parameter);
 			}
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.err.println("caugh error, skip form");
 		}
 		return null;
 	}
 
+	private static boolean optionsContainString(final Parameter parameter, 
+			final String key, 
+			final String value) {
+		return parameter.getOptions() != null 
+				&& parameter.getOptions().get(key) != null 
+				&& parameter.getOptions().get(key) instanceof String
+				&& ((String)parameter.getOptions().get(key)).equalsIgnoreCase(value);
+	}
+
 	private static JComponent createSlider(final IntegerParameter parameter) throws IllegalArgumentException {
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		
 		final JTextField component = new JTextField(parameter.getValue().toString());
 		component.setEnabled(!parameter.isReadOnly());
 		component.setColumns(5);
 		
 		
-		int min = (Integer) parameter.getOptions().get("min");
-		int max = (Integer) parameter.getOptions().get("max");
-		int value = (Integer) parameter.getValue();
+		final int min = (Integer) parameter.getOptions().get("min");
+		final int max = (Integer) parameter.getOptions().get("max");
+		final int value = (Integer) parameter.getValue();
 
-		Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
+		final Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
 		labels.put(min, new JLabel(Integer.toString(min)));
 		labels.put(max, new JLabel(Integer.toString(max)));
 		
@@ -69,8 +85,8 @@ public class ParameterWidgetFactory {
 		slider.setEnabled(!parameter.isReadOnly());
 		slider.addChangeListener(new ChangeListener() {
 			
-			public void stateChanged(ChangeEvent event) {
-				int newValue = ((JSlider) event.getSource()).getValue();
+			public void stateChanged(final ChangeEvent event) {
+				final int newValue = ((JSlider) event.getSource()).getValue();
 				component.setText(Integer.toString(newValue));
 				parameter.setValue(newValue);
 				slider.setValue(newValue);
@@ -78,11 +94,11 @@ public class ParameterWidgetFactory {
 		});
 		component.addKeyListener(new KeyListener() {
 
-			public void keyTyped(KeyEvent e) {}
-			public void keyReleased(KeyEvent e) {}
-			public void keyPressed(KeyEvent e) {
+			public void keyTyped(final KeyEvent e) {}
+			public void keyReleased(final KeyEvent e) {}
+			public void keyPressed(final KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					String string = ((JTextField)e.getSource()).getText();
+					final String string = ((JTextField)e.getSource()).getText();
 					// TODO strip non number characters
 					parameter.setValue(Integer.valueOf(string));
 					slider.setValue(Integer.valueOf(string));
@@ -98,21 +114,61 @@ public class ParameterWidgetFactory {
 		return panel;
 	}
 
+	
 	/**
 	 * 
 	 * @param parameter
 	 * @return
 	 */
+	public static JComponent createRadios(final ChoiceParameter parameter) {
+		final JPanel panel = new JPanel();
+		
+		JRadioButton radioButton;
+		ButtonGroup group = new ButtonGroup();
+		for (final String choice : parameter.getChoices()) {
+			radioButton = new JRadioButton(choice);
+			radioButton.setActionCommand(choice);
+			radioButton.addActionListener(new RadioActionListener(parameter));
+			if (parameter.getValue().equals(choice)) {
+				radioButton.setSelected(true);
+			}
+			group.add(radioButton);
+			panel.add(radioButton);
+		}
+		
+		
+		
+		return panel;
+	}
+	
+	static class RadioActionListener implements ActionListener {
+
+		final private ChoiceParameter parameter;
+		public RadioActionListener(ChoiceParameter parameter) {
+			this.parameter = parameter;
+		}
+		
+		public void actionPerformed(ActionEvent event) {
+			parameter.setValue(event.getActionCommand());
+		}
+		
+	}
+	
+	/**
+	 * Creates a Textfield form element based on the {@link Parameter}
+	 * @param parameter
+	 * @return
+	 */
 	public static JComponent createTextField(final Parameter parameter) {
-		JComponent component = new JTextField(parameter.getValue().toString());
+		final JComponent component = new JTextField(parameter.getValue().toString());
 		component.setEnabled(!parameter.isReadOnly());
 		component.addKeyListener(new KeyListener() {
 
-			public void keyTyped(KeyEvent e) {}
-			public void keyReleased(KeyEvent e) {}
-			public void keyPressed(KeyEvent e) {
+			public void keyTyped(final KeyEvent e) {}
+			public void keyReleased(final KeyEvent e) {}
+			public void keyPressed(final KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					String string = ((JTextField)e.getSource()).getText();
+					final String string = ((JTextField)e.getSource()).getText();
 					// TODO strip non number characters
 					if(parameter instanceof StringParameter) {
 						((StringParameter)parameter).setValue(string);
@@ -132,12 +188,12 @@ public class ParameterWidgetFactory {
 	 * @return
 	 */
 	public static JComponent createCheckBox(final BooleanParameter parameter) {
-		JCheckBox chkBox = new JCheckBox(parameter.getDisplayName());
+		final JCheckBox chkBox = new JCheckBox(parameter.getDisplayName());
 		chkBox.setSelected(parameter.getValue());
 		chkBox.addChangeListener(new ChangeListener() {
 
-			public void stateChanged(ChangeEvent event) {
-				boolean newValue = ((JCheckBox)event.getSource()).isSelected();
+			public void stateChanged(final ChangeEvent event) {
+				final boolean newValue = ((JCheckBox)event.getSource()).isSelected();
 				parameter.setValue(newValue);
 			}
 		});

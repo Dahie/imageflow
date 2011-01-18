@@ -18,6 +18,7 @@
 package de.danielsenff.imageflow.models.parameter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Works like an Enumeration. Contains a List of possible values.
@@ -41,8 +42,9 @@ public class ChoiceParameter extends StringParameter {
 	public ChoiceParameter(final String displayName, 
 			final ArrayList<String> choices,
 			final String choiceValue,
-			final String helpString) {
-		super(displayName, choiceValue, helpString);
+			final String helpString, 
+			final HashMap<String, Object> options) {
+		super(displayName, choiceValue, helpString, options);
 		this.choiceValues = choices;
 		this.paraType = "StringArray";
 	}
@@ -50,14 +52,14 @@ public class ChoiceParameter extends StringParameter {
 	/**
 	 * @param displayName
 	 * @param choices
-	 * @param choiceIndex
 	 * @param helpString
+	 * @param options 
 	 */
 	public ChoiceParameter(final String displayName, 
 			final ArrayList<String> choices,
-			final int choiceIndex,
-			final String helpString) {
-		super(displayName, choices.isEmpty() ? "" : choices.get(choiceIndex) , helpString);
+			final String helpString,
+			final HashMap<String, Object> options) {
+		super(displayName, choices.isEmpty() ? "" : choices.get((Integer) options.get("choiceIndex")) , helpString, options);
 		this.choiceValues = choices;
 		this.paraType = "StringArray";
 	}
@@ -74,7 +76,8 @@ public class ChoiceParameter extends StringParameter {
 	 * 
 	 * @param stringValue
 	 */
-	public void setValue(String stringValue) {
+	@Override
+	public void setValue(final String stringValue) {
 		if(this.choiceValues.contains(stringValue)) {
 			super.setValue(stringValue);	
 		} else {
@@ -131,6 +134,7 @@ public class ChoiceParameter extends StringParameter {
 	 */
 	public void setValue(int newindex) {
 		this.value = this.choiceValues.get(newindex);
+		this.options.put("choicesIndex", newindex);
 	}
 	
 }
