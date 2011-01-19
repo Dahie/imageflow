@@ -99,8 +99,6 @@ import de.danielsenff.imageflow.tasks.ImportGraphTask;
 import de.danielsenff.imageflow.tasks.LoadFlowGraphTask;
 import de.danielsenff.imageflow.tasks.RunMacroTask;
 import de.danielsenff.imageflow.tasks.SaveFlowGraphTask;
-import de.danielsenff.imageflow.utils.FileDrop;
-import de.danielsenff.imageflow.utils.FileDropListener;
 
 
 
@@ -358,7 +356,7 @@ public class ImageFlowView extends FrameView {
 		ScrollPane graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
 		graphScrollpane.setPreferredSize(new Dimension(400, 300));
-		new FileDrop( null, graphPanel,  new FileDropListener(graphPanel, getInstance())); // end FileDrop.Listener
+		//new FileDrop( null, graphPanel,  new FileDropListener(graphPanel, getInstance())); // end FileDrop.Listener
 		
 //		graphScrollpane.add(workspacePanel);
 
@@ -412,7 +410,7 @@ public class ImageFlowView extends FrameView {
 		delegatesTree.addMouseListener(delegatesTreeListener);
 		delegatesTree.addKeyListener(delegatesTreeListener);
 		delegatesTree.setDragEnabled(true);
-		delegatesTree.setTransferHandler(new DelegateTransferHandler());
+		//delegatesTree.setTransferHandler(new DelegateTransferHandler());
 		
 		sidePane.add(delegatesPanel, BorderLayout.CENTER);
 		

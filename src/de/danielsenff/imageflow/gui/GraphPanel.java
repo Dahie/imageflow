@@ -30,6 +30,7 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
@@ -130,58 +131,7 @@ public class GraphPanel extends GPanel {
     	if(!IJ.isMacintosh())
     		this.setBorder(BorderFactory.createLoweredBevelBorder());
 		
-		final DropTargetListener dropTargetListener = new DropTargetListener() {
-			// Die Maus betritt die Komponente mit
-			// einem Objekt
-			public void dragEnter(final DropTargetDragEvent e) {}
-
-			// Die Komponente wird verlassen 
-			public void dragExit(final DropTargetEvent e) {}
-
-			// Die Maus bewegt sich �ber die Komponente
-			public void dragOver(final DropTargetDragEvent e) {}
-
-			public void drop(final DropTargetDropEvent e) {
-				try {
-					final Transferable tr = e.getTransferable();
-					final DataFlavor[] flavors = tr.getTransferDataFlavors();
-					final List files;
-					File file;
-					for (int i = 0; i < flavors.length; i++)
-						if (flavors[i].isFlavorJavaFileListType()) {
-							// Zun�chst annehmen
-							e.acceptDrop (e.getDropAction());
-							files = (List) tr.getTransferData(flavors[i]);
-
-							/*
-							 * TODO unused
-							 */
-							for (int j = 0; j < files.size(); j++) {
-								file = (File) files.get(j);
-								
-								UnitDescription sourceUnitDescription = 
-									new UnitDescription(
-										new URL(DelegatesController.getInstance().getResourcesBase(),
-											"xml_units/ImageSource_Unit.xml"));
-								final SourceUnitElement sourceUnit = 
-									(SourceUnitElement) UnitFactory.createProcessingUnit(sourceUnitDescription, new Point(30,100));
-								sourceUnit.setFilePath(file.getAbsolutePath());
-								getNodeL().add(sourceUnit);
-							}
-							
-							e.dropComplete(true);
-							return;
-						}
-				} catch (final Throwable t) { t.printStackTrace(); }
-				// a problem happend
-				e.rejectDrop();
-			}
-
-			public void dropActionChanged(final DropTargetDragEvent e) {}
-
-		};
-		final DropTarget dropTarget = new DropTarget(this, dropTargetListener);
-		this.setDropTarget(dropTarget);
+		this.setDropTarget(new DropTarget(this, new GraphPanelDropHandler(this)));
 		
 		try {
 			this.iwIcon = ImageIO.read(this.getClass().getResourceAsStream(iwFilePath));
