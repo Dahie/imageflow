@@ -288,6 +288,7 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(getAction("debugPrintEdges"));
 		debugMenu.add(getAction("debugDrawClonedWorkflow"));
 		debugMenu.add(getAction("debugDisplayImages"));
+		debugMenu.add(getAction("debugUnitSubgraph"));
 		debugMenu.add(new JSeparator());
 		debugMenu.add(getAction("exampleFlow1"));
 		debugMenu.add(getAction("exampleFlow2"));
@@ -1003,6 +1004,34 @@ public class ImageFlowView extends FrameView {
 		}
 	}
 
+	
+	@Action(enabledProperty = "selected")
+	public void debugUnitSubgraph() {
+		for (Node node : getSelections()) {
+			if(node instanceof UnitElement) {
+				UnitList subgraph = graphController.getSubgraph((UnitElement)node);
+				showSimpleListOfUnits(subgraph);
+			}
+		}
+		
+    	
+	}
+
+
+
+	private void showSimpleListOfUnits(UnitList unitList) {
+		final JDialog dialog = new JDialog();
+
+    	final DefaultListModel lm = new DefaultListModel();
+    	for (final Node node : unitList) {
+    		lm.addElement(node);	
+    	}
+    	final JList list = new JList(lm);
+    	
+		dialog.add(new ScrollPane().add(list));
+		dialog.pack();
+		dialog.setVisible(true);
+	}
 
 	/**
 	 * Creates a new document and an empty workflow.
@@ -1167,17 +1196,7 @@ public class ImageFlowView extends FrameView {
      * Opens a dialog with the list of {@link UnitElement}s in the workflow.
      */
     @Action public void debugPrintNodes() {
-    	final JDialog dialog = new JDialog();
-
-    	final DefaultListModel lm = new DefaultListModel();
-    	for (final Node node : getNodes()) {
-    		lm.addElement(node);	
-    	}
-    	final JList list = new JList(lm);
-    	
-		dialog.add(new ScrollPane().add(list));
-		dialog.pack();
-		dialog.setVisible(true);
+    	showSimpleListOfUnits(getNodes());
     }
     
     @Action public void debugDisplayImages() {

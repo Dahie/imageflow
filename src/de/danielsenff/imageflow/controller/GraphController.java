@@ -292,9 +292,8 @@ public class GraphController{
 	 * Reads the contents of a flow-XML-document.
 	 * @param url The document to load.
 	 */
-	public void read(URL url) {
+	public void read(final URL url) {
 		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(nodes);
-		System.out.println(url);
 		workflowbuilder.read(url);
 	}
 	
@@ -351,11 +350,44 @@ public class GraphController{
 		nodes.addConnection(con);
 	}
 
-	private void showExampleLoadError(Exception e) {
+	private void showExampleLoadError(final Exception e) {
 		final int type = JOptionPane.ERROR_MESSAGE;
 		JOptionPane.showMessageDialog(
 			ImageFlow.getApplication().getMainFrame(),
 			"An error occured while loading the example!", "Could not load example", type);
+	}
+
+	/**
+	 * Given the node is part of the workflow, return the subgraph
+	 * hat fulfills all dependencies of this node.
+	 * @param node
+	 */
+	public UnitList getSubgraph(UnitElement unit) {
+		GraphController subgraph = new GraphController();
+		UnitList subgraphList = new UnitList();
+		UnitElement dependentUnit;
+		try {
+			recursiveAddUnitDependencies(unit, subgraphList);
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return subgraphList;
+		
+	}
+
+	private void recursiveAddUnitDependencies(UnitElement unit,
+			UnitList subgraphList) throws CloneNotSupportedException {
+		UnitElement dependentUnit;
+		if (unit.hasRequiredInputsConnected()) {
+			subgraphList.add(unit.clone());
+			System.out.println("added " + unit);
+			for (Input input : unit.getInputs()) {
+				dependentUnit = input.getFromUnit();
+				recursiveAddUnitDependencies(dependentUnit, subgraphList);
+			}
+		} else {
+			System.err.println("subgraph not complete");
+		}
 	}
 }
 
