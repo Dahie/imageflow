@@ -156,7 +156,7 @@ public class MacroGenerator {
 		 * for-header 
 		 */
 		
-		macroText += "// For-Loop /n";
+		macroText += "// For-Loop \n";
 		
 		// duplicate input images if necessary
 		macroText += duplicateImages(unit);
@@ -185,7 +185,6 @@ public class MacroGenerator {
 				 * a unique image/data, which can be read multiple times by later units. 
 				 */
 				renameOutputImages(unit, i);
-//				openedImages.add(new ImageJImage(output, j));
 			}
 			
 		}
