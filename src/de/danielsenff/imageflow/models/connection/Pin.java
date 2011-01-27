@@ -144,7 +144,7 @@ public abstract class Pin implements Connectable, Cloneable, Lockable {
 	 * @return
 	 */
 	public boolean isMarked() {
-		return (this.mark == 0);
+		return (this.mark != 0);
 	}
 
 	/**
