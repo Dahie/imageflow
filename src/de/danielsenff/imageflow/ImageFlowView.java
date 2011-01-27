@@ -842,7 +842,7 @@ public class ImageFlowView extends FrameView {
 		for (Object selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
 				// TODO allow adding only once
-				dashboardPanel.addToolbar((UnitElement) selectedElement);
+				dashboardPanel.addWidget((UnitElement) selectedElement);
 				dashboardPanel.revalidate();
 			}
 		}

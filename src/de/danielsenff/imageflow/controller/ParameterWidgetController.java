@@ -2,6 +2,7 @@ package de.danielsenff.imageflow.controller;
 
 import java.util.Collection;
 
+import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import de.danielsenff.imageflow.gui.FormPanel;
@@ -33,5 +34,19 @@ public class ParameterWidgetController {
 		return dash;
 	}
 	
-	
+	public static JPanel createWidgetFromUnit(UnitElement unit) {
+		
+		JPanel dash = new JPanel();
+		
+		FormPanel formPanel = new FormPanel();
+		formPanel.setBackground(unit.getColor());
+		Collection<Parameter> parameters = unit.getParameters();
+		
+		for (final Parameter parameter : parameters) {
+			formPanel.add(parameter);
+		}
+		
+		dash.add(formPanel);
+		return dash;
+	}
 }

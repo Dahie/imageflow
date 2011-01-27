@@ -1,30 +1,30 @@
 package de.danielsenff.imageflow.gui;
 
-import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
-import javax.swing.JToolBar;
 
 import de.danielsenff.imageflow.controller.ParameterWidgetController;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 public class Dashboard extends JPanel {
 
-	HashMap<String, JToolBar> dashs;
+	HashMap<String, JPanel> dashs;
 	
 	public Dashboard() {
-		this.dashs = new HashMap<String, JToolBar>();
+		this.dashs = new HashMap<String, JPanel>();
 		//this.setFloatable(false);
 		setLayout(//new FlowLayout(//FlowLayout.LEFT, 1, 1));
-              new WrapLayout());
+              //new WrapLayout());
+		new GraphPaperLayout());
 	}
 	
-	public void addToolbar(UnitElement unit) {
+	public void addWidget(UnitElement unit) {
 		if(!dashs.containsKey(unit.getLabel())) {
-			JToolBar dash = ParameterWidgetController.createToolbarFromUnit(unit);
+			JPanel dash = ParameterWidgetController.createWidgetFromUnit(unit);
 			dashs.put(unit.getLabel(), dash);
-			this.add(dash);
+			this.add(dash, new Rectangle());
 		}
 	}
 	
