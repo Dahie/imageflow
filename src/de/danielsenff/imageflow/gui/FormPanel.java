@@ -1,11 +1,26 @@
+/**
+ * Copyright (C) 2008-2010 Daniel Senff
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package de.danielsenff.imageflow.gui;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -30,19 +45,6 @@ public class FormPanel extends JPanel implements ComponentForm {
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		rows = 0;
-		
-		addKeyListener(new KeyListener() {
-			
-			public void keyTyped(final KeyEvent e) {}
-			
-			public void keyReleased(final KeyEvent e) {}
-			
-			public void keyPressed(final KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					System.out.println("off");
-				}
-			}
-		});
 	}
 	
 	/**
@@ -106,6 +108,9 @@ public class FormPanel extends JPanel implements ComponentForm {
 		addForm(property.getLabel(), property.getComponent());
 	}
 	
+	/**
+	 * 
+	 */
 	public void add(final Parameter parameter) {
 		addForm(parameter.getDisplayName(), ParameterWidgetFactory.createForm(parameter));
 	}
