@@ -34,7 +34,7 @@ import java.io.ObjectOutputStream;
 
 import de.danielsenff.imageflow.models.Selectable;
 
-public abstract class Node implements Selectable, Changeable, Labelable, Cloneable {
+public abstract class Node implements Selectable, Cloneable {
 	protected Rectangle dragging=null;
 	/**
 	 * Origin/Position of this Node on the workspace.
@@ -47,12 +47,12 @@ public abstract class Node implements Selectable, Changeable, Labelable, Cloneab
      */
     protected String label;
 
-// constructor not to be used, XMLEncoder/XMLDecoder
+    // constructor not to be used, XMLEncoder/XMLDecoder
 	public Node() {
 	}
 
 
-// basic constructor
+	// basic constructor
 	public Node(Point origin) {
 		this.origin = origin;
 	}

@@ -58,6 +58,10 @@ public class MacroFlowRunner implements FlowRunner {
 
 	
 	public String generateMacro(boolean extendedMacro) {
+		return getMacroGenerator().generateMacro(extendedMacro);
+	}
+	
+	public MacroGenerator getMacroGenerator() {
 		/*
 		 *  analysis and verification of the connection network 
 		 */
@@ -71,7 +75,7 @@ public class MacroFlowRunner implements FlowRunner {
 		 *  generation of the ImageJ macro
 		 */
 		MacroGenerator macGen = new MacroGenerator(macroUnitList);
-		return macGen.generateMacro(extendedMacro);
+		return macGen;
 	}
 
 	/**
@@ -237,7 +241,6 @@ public class MacroFlowRunner implements FlowRunner {
 		Collection<GroupUnitElement> foundGroups = new Vector<GroupUnitElement>();
 		for (Node node : unitElements) {
 			if(node instanceof GroupUnitElement && !(node instanceof ForGroupUnitElement)) {
-				System.out.println(node);
 				addFoundGroup(foundGroups, node);
 			}
 		}
@@ -260,9 +263,7 @@ public class MacroFlowRunner implements FlowRunner {
 			// TODO I don't like this condition, daniel
 			while(!unitElements.isEmpty()) {
 				index = i % unitElements.getSize();
-				Node node =  unitElements.get(index); 
-//				System.out.println(index + " at length "+ unitElements.getSize());
-//				System.out.println(node);
+				Node node =  unitElements.get(index);
 
 				// find out what kind of node is stored
 				if(node instanceof CommentNode) {
@@ -281,7 +282,6 @@ public class MacroFlowRunner implements FlowRunner {
 						// unit itself is not a display and
 						// if it doesn't have any unit in its outputs that has
 						// then it can be removed without consequences
-						System.out.println("rm "+unit);
 						unitElements.remove(index);
 					}
 					else if(unit.hasAllInputsMarked()) {
@@ -297,7 +297,6 @@ public class MacroFlowRunner implements FlowRunner {
 					} else if (!unit.hasRequiredInputsConnected() 
 							&& unit.getUnitType() != Type.SOURCE) {
 						// if unit has no connections actually, it can be discarded right away
-						System.out.println(unitElements.getSize());
 						unitElements.remove(index);
 						// if there is a branch with two units connected, the first one will be discarded, 
 						// the second will still exist, but as the input is now missing, it will 

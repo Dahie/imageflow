@@ -17,7 +17,7 @@
  */
 package de.danielsenff.imageflow.tasks;
 
-import javax.swing.JDialog;
+import java.util.ArrayList;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
@@ -26,6 +26,9 @@ import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.ImageFlowView.CodePreviewDialog;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.imagej.MacroFlowRunner;
+import de.danielsenff.imageflow.imagej.MacroGenerator;
+import de.danielsenff.imageflow.imagej.MacroGenerator.ImageJImage;
 
 /**
  * Generate and display the macro based on the workflow.
@@ -36,6 +39,7 @@ public class GenerateMacroTask extends Task<Object, String> {
 
 	protected GraphController graphController;
 	protected boolean showCode;
+	protected ArrayList<ImageJImage> openedImages;
 	
 	/**
 	 * @param app
@@ -58,7 +62,14 @@ public class GenerateMacroTask extends Task<Object, String> {
 		ImageFlowView.getProgressBar().setIndeterminate(true);
 		ImageFlowView.getProgressBar().setVisible(true);
     	// generates Macro with callback function (for progressBar)
-    	final String macro = graphController.generateMacro(true);
+    	//final String macro = graphController.generateMacro(true);
+    	
+    	final MacroFlowRunner macroFlowRunner = new MacroFlowRunner(graphController.getUnitElements());
+    	MacroGenerator macroGenerator = macroFlowRunner.getMacroGenerator();
+    	macroGenerator.generateMacro(this.showCode);
+    	openedImages = macroGenerator.getOpenedImages();
+    	
+		final String macro = macroFlowRunner.generateMacro(this.showCode);
 		
 		if(this.showCode && macro != null) {
 			// generates cleaner Macro without callback function (for progressBar)

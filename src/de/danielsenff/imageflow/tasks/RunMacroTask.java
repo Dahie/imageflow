@@ -17,13 +17,17 @@
  */
 package de.danielsenff.imageflow.tasks;
 
+import ij.IJ;
 import ij.ImageJ;
+import ij.ImagePlus;
 import ij.plugin.Macro_Runner;
 
 import org.jdesktop.application.Application;
 
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.imagej.MacroGenerator.ImageJImage;
+import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
 /**
@@ -56,7 +60,7 @@ public class RunMacroTask extends GenerateMacroTask {
 		super(app, graphController);
 		this.showCode = showCode;
 		this.closeAll = closeAll;
-		this.progressObserver = new ProgressObserver(new ProgListener());
+		progressObserver = new ProgressObserver(new ProgListener());
 	}
 	
 	/**
@@ -88,7 +92,7 @@ public class RunMacroTask extends GenerateMacroTask {
 			
 			ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
 			Macro_Runner mr = new Macro_Runner();
-			return mr.runMacro(macro, "");
+			String result = mr.runMacro(macro, "");
 			
 			/*
 			 * TODO FIXME
@@ -120,9 +124,17 @@ public class RunMacroTask extends GenerateMacroTask {
 				
 				System.out.println("unit "+unitID+ " and output "+ outputID);
 			}*/
+			
+			for (ImageJImage image : openedImages) {
+				//Image icon = ImageFlow.getApplication().getImageJInstance().getW;
+				IJ.selectWindow(image.parentOutput.getDisplayName());
+				ImagePlus ip = IJ.getImage();
+				((UnitElement) image.node).setIconScaled(ip.getImage());
+			}
+			
+			return result;
 		}
 		
-		System.out.println("we are done");
 		return macro;
 	}
 	

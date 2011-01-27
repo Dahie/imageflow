@@ -20,10 +20,13 @@ package de.danielsenff.imageflow.models.unit;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.net.URL;
 import java.util.ArrayList;
@@ -94,7 +97,8 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	/**
 	 * function icon, illustrates the purpose of the element
 	 */
-	protected Image icon; 
+	protected Image preview; 
+	public static int ICON_SIZE = 48;
 
 	/**
 	 * unused, status of this unit
@@ -110,6 +114,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 */
 	protected Status status;
 
+	Node originalNode = null;
 
 
 	/**
@@ -224,7 +229,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	}
 
 	/**
-	 * Get one {@link Output} at the index. Indecies start with 0;
+	 * Get one {@link Output} at the index. Indices start with 0;
 	 * @param index
 	 * @return
 	 */
@@ -599,7 +604,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * @return the icon
 	 */
 	public Image getIcon() {
-		return this.icon;
+		return this.preview;
 	}
 
 	/**
@@ -624,13 +629,18 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 
 	public void setIconURL(URL iconURL) {
 		this.iconURL = iconURL;
+		//notifyModelListeners(); no notify, since this is not save worthy
+	}
+	
+	public void setIconScaled(final Image icon) {
+		setIcon(scaleThumbnail(ICON_SIZE, ICON_SIZE, icon));
 	}
 
 	/**
 	 * @param image the icon to set
 	 */
 	public void setIcon(Image image) {
-		this.icon = image;
+		this.preview = image;
 		this.unitComponentIcon.setIcon(image);
 		notifyModelListeners();
 	}
@@ -764,6 +774,15 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		return new Rectangle(origin, getDimension());
 	}
 
+	protected BufferedImage scaleThumbnail(int width, int height, Image image) {
+		BufferedImage thumbnail = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = (Graphics2D) thumbnail.getGraphics();
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2.drawImage(image, 0, 0, width, height, null);
+		g2.dispose();
+		return thumbnail;
+	}
+	
 
 	/*
 	 * Object
@@ -786,16 +805,18 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	@Override
 	public UnitElement clone() {
 		// clone the object
-		String imageJSyntax;
+		String macroSyntax;
 		try {
-			imageJSyntax = (String) cloneNonClonableObject(this.obj);
+			macroSyntax = (String) cloneNonClonableObject(this.obj);
 		} catch (CloneNotSupportedException e) {
-			imageJSyntax = ((MacroElement)this.obj).getImageJSyntax();
+			macroSyntax = ((MacroElement)this.obj).getImageJSyntax();
 		}
 
 		UnitElement clone = new UnitElement(new Point(origin.x+15, origin.y+15), 
 				this.label, 
-				imageJSyntax);
+				macroSyntax);
+		clone.setOriginalUnit(this);
+		
 		for (int j = 0; j < getInputsCount(); j++) {
 			cloneInput(clone, j);
 		}
@@ -807,10 +828,26 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		}
 		clone.setDisplay(isDisplay());
 		clone.setColor(this.color);
-		clone.setIcon(this.icon);
+		clone.setIcon(this.preview);
 		clone.setHelpString(this.infoText);
 		clone.setCompontentSize(this.getCompontentSize());
 		return clone;
+	}
+
+	void setOriginalUnit(UnitElement unitElement) {
+		this.originalNode = unitElement;
+	}
+	
+	public Node getOriginalUnit() {
+		return this.originalNode;
+	}
+	
+	public boolean hasOriginalUnit() {
+		return this.originalNode != null;
+	}
+	
+	public boolean isClonedUnit() {
+		return this.originalNode != null;
 	}
 
 	/**
@@ -952,7 +989,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * @param helpString
 	 */
 	public void setHelpString(final String helpString) {
-		this.infoText = helpString;		
+		this.infoText = helpString;
 	}
 
 
@@ -979,7 +1016,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * @return
 	 */
 	public boolean isNorthOfUnit(Node node) {
-		return (node.getOrigin().y > this.getOrigin().y) ? true : false;
+		return (node.getOrigin().y > this.getOrigin().y);
 	}
 
 	/**
@@ -988,7 +1025,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * @return
 	 */
 	public boolean isEastOfUnit(Node node) {
-		return (node.getOrigin().x < this.getOrigin().x) ? true : false;
+		return (node.getOrigin().x < this.getOrigin().x);
 	}
 
 	/**
@@ -997,7 +1034,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * @return
 	 */
 	public boolean isSouthOfUnit(Node node) {
-		return (node.getOrigin().y < this.getOrigin().y) ? true : false;
+		return (node.getOrigin().y < this.getOrigin().y);
 	}
 
 	/**
@@ -1006,7 +1043,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * @return
 	 */
 	public boolean isWestOfUnit(Node node) {
-		return (node.getOrigin().x > this.getOrigin().x) ? true : false;
+		return (node.getOrigin().x > this.getOrigin().x);
 	}
 
 
@@ -1023,16 +1060,11 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	public void setDisplay(final boolean isDisplay) {
 		this.display = isDisplay;
 		for (Output output : getOutputs()) {
-			setOutputDisplay(isDisplay, output);
+			output.setDoDisplay(isDisplay);
 		}
 		notifyModelListeners();
 	}
 
-	protected void setOutputDisplay(final boolean isDisplay, Output output) {
-		output.setDoDisplay(isDisplay);
-	}
-	
-	
 	public boolean isDisplay() {
 		return this.display;
 	}

@@ -17,6 +17,9 @@
  */
 package de.danielsenff.imageflow.imagej;
 
+import ij.IJ;
+import ij.ImagePlus;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -65,6 +68,14 @@ public class MacroGenerator {
 	
 	
 	/**
+	 * @return the openedImages
+	 */
+	public final ArrayList<ImageJImage> getOpenedImages() {
+		return openedImages;
+	}
+
+
+	/**
 	 * Generates a macro.
 	 * @param extendedMacro determines if callback functions are put into macro code
 	 * @return
@@ -94,7 +105,6 @@ public class MacroGenerator {
 		
 		this.macroText += "\nsetBatchMode(\"exit and display\"); ";
 		
-		System.out.println("finished generation");
 		return macroText;
 	}
 
@@ -105,7 +115,6 @@ public class MacroGenerator {
 	 * @param extendedMacro
 	 */
 	private void generateUnitMacroCode(Node node, int i, boolean extendedMacro) {
-		System.out.println(node);
 		
 		macroText += " \n";
 		macroText += "// " + node.getLabel() + "\n";
@@ -383,16 +392,18 @@ public class MacroGenerator {
 	 *
 	 */
 	public class ImageJImage {
-		String id;
-		String title;
-		Output parentOutput;
-		boolean display;
+		public String id;
+		public String title;
+		public Output parentOutput;
+		public Node node;
+		public boolean display;
 		
 		public ImageJImage(Output output, int i) {
 			this.id 	= output.getOutputID()+"_"+i;
 			this.title 	= output.getOutputTitle()+"_"+i;
 			this.parentOutput = output;
 			this.display = output.isDoDisplay();
+			this.node = output.getParent().getOriginalUnit();
 		}
 		
 	}

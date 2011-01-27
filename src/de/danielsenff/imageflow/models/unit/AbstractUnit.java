@@ -69,6 +69,7 @@ public abstract class AbstractUnit extends NodeAbstract implements Model {
 	public int getUnitID() {
 		return this.unitID;
 	}
+	
 
 	@Override
 	protected Object cloneNonClonableObject(Object obj) throws CloneNotSupportedException {

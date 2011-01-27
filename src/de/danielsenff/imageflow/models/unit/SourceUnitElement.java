@@ -101,10 +101,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		
 		if(existsFile()) {
 			imageType = getImageType();
-			int width = 48, height = 48;
-			BufferedImage thumbnail = scaleThumbnail(width, height);
-			
-			this.unitComponentIcon.setIcon(thumbnail);
+			setIconScaled(getImagePlus().getImage());
 		} else {
 			this.setIcon(null);
 			JOptionPane.showMessageDialog(ImageFlow.getApplication().getMainFrame(), 
@@ -239,7 +236,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		
 		clone.setDisplay(isDisplay());
 		clone.setColor(this.color);
-		clone.setIcon(this.icon);
+		clone.setIcon(this.preview);
 		clone.setHelpString(this.infoText);
 		clone.setCompontentSize(this.getCompontentSize());
 		return clone;
@@ -320,15 +317,6 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		}
 		final Rectangle paint = super.paint(g, io);
 		return paint;
-	}
-	
-	private BufferedImage scaleThumbnail(int width, int height) {
-		BufferedImage thumbnail = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2 = (Graphics2D) thumbnail.getGraphics();
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g2.drawImage(getImagePlus().getImage(), 0, 0, width, height, null);
-		g2.dispose();
-		return thumbnail;
 	}
 	
 }

@@ -124,7 +124,7 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 		}
 		clone.setDisplay(isDisplay());
 		clone.setColor(this.color);
-		clone.setIcon(this.icon);
+		clone.setIcon(this.preview);
 		clone.setHelpString(this.infoText);
 		clone.setCompontentSize(this.getCompontentSize());
 		return clone;

@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
 
-import visualap.GList;
 import visualap.Node;
+import de.danielsenff.imageflow.models.NodeList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
@@ -320,7 +320,7 @@ public class GroupUnitElement extends UnitElement {
 	 * Returns a Collection of Units embedded in this Group.
 	 * @return
 	 */
-	public GList<Node> getNodes() {
+	public NodeList<Node> getNodes() {
 		return this.units;
 	}
 

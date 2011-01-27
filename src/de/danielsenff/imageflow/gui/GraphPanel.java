@@ -57,12 +57,12 @@ import javax.swing.JPopupMenu;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
 
-import visualap.GList;
 import visualap.GPanel;
 import visualap.GPanelListener;
 import visualap.Node;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.models.NodeList;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
@@ -502,7 +502,7 @@ public class GraphPanel extends GPanel {
 	 * @param units
 	 */
 	@Override
-	public void setNodeL(final GList<Node> units) {
+	public void setNodeL(final NodeList<Node> units) {
 		super.nodeL = units;
 	}
 

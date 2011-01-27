@@ -20,13 +20,14 @@ package de.danielsenff.imageflow.models.unit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Vector;
 
-import visualap.GList;
 import visualap.Node;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.ModelListener;
+import de.danielsenff.imageflow.models.NodeList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
@@ -40,7 +41,7 @@ import de.danielsenff.imageflow.models.unit.UnitElement.Type;
  * @author danielsenff
  *
  */
-public class UnitList extends GList<Node> implements Model, Cloneable {
+public class UnitList extends NodeList<Node> implements Model, Cloneable {
 
 	private ConnectionList connections;
 
@@ -48,13 +49,13 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	 * 
 	 */
 	private static final long serialVersionUID = -8204689428123811757L;
-	private ArrayList<ModelListener> listeners;
+	private HashSet<ModelListener> listeners;
 
 	/**
 	 * 
 	 */
 	public UnitList() {
-		this.listeners = new ArrayList<ModelListener>();
+		this.listeners = new HashSet<ModelListener>();
 		this.connections = new ConnectionList();
 	}
 
@@ -142,12 +143,6 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 	}
 
 	@Override
-	public boolean add(Node node, String label) {
-		notifyModelListeners();
-		return super.add(node, label);
-	}
-
-	@Override
 	public boolean add(Node o) {
 		notifyModelListeners();
 		return super.add(o);
@@ -194,21 +189,6 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		}
 		return true;
 	}
-
-	/**
-	 * Iterates over all units in the list to find the given ID.
-	 * @param id
-	 * @return
-	 */
-	public Node getUnit(final int id) {
-		for (Node node : this) {
-			AbstractUnit unit = (AbstractUnit) node;
-			if(unit.getUnitID() == id) 
-				return unit;
-		}
-		return null;
-	}
-
 
 	/**
 	 * Remove this Unit from the workflow.
@@ -410,14 +390,6 @@ public class UnitList extends GList<Node> implements Model, Cloneable {
 		super.clear();
 		connections.clear();
 		notifyModelListeners();
-	}
-
-	/**
-	 * Number of units in this List.
-	 * @return
-	 */
-	public int getSize() {
-		return super.size();
 	}
 
 	/**

@@ -46,6 +46,7 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
+import de.danielsenff.imageflow.models.NodeList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Output;
@@ -62,7 +63,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	protected Point pick = null;
 	protected Pin drawEdge;
 	protected Selection<Node> selection = new Selection<Node>();
-	protected GList<Node> nodeL = new GList<Node>();
+	protected NodeList<Node> nodeL = new NodeList<Node>();
 	protected Collection<Connection> connectionList = new ConnectionList();
 	protected Point mouse;
 
@@ -439,7 +440,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	/**
 	 * @param nodeL the nodeL to set
 	 */
-	public void setNodeL(GList<Node> nodeL) {
+	public void setNodeL(NodeList<Node> nodeL) {
 		this.nodeL = nodeL;
 	}
 

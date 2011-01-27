@@ -395,4 +395,7 @@ public class NodeIcon implements UnitModelComponent {
 		} else
 			return null;
 	}
+
+
+	
 }
