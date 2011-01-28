@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            
+<UnitDescription>
+
+<General>
+  <UnitName>Contour Map</UnitName> 
+  <HelpString>Applies a lookup table with contour lines at a given interval.</HelpString>  
+  <PathToIcon>LookupTable_Unit.png</PathToIcon> 
+  <ImageJSyntax><![CDATA[
+n = ATTRIBUTE_INPUT_2_PARAMETER_1;
+getLut(r,g,b);
+for (i=0;i<r.length;i++) {
+	if (i%n==0) {
+		r[i] = 255;
+		g[i] = 0;
+		b[i] = 0;
+	} else {
+		r[i] = i;
+		g[i] = i;
+		b[i] = i;
+	}
+}
+setLut(r,g,b);
+  ]]></ImageJSyntax> 
+  <Color>0xbe91de</Color>
+</General>
+
+<Parameters>
+  	<Parameter>
+  		<Name>Contour lines interval</Name>
+  		<DataType>Integer</DataType>
+  		<Value>20</Value>
+  		<HelpString>Interval of contour lines in the lookup table.</HelpString>
+  	</Parameter>
+ </Parameters>
+
+<Inputs> 
+	<Input>
+		<Name>Input</Name>
+		<ShortName>I</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>13</ImageType>
+		<NeedToCopyInput>true</NeedToCopyInput></Input>	
+	<Input>
+		<Name>Contour lines interval</Name>
+		<ShortName>C</ShortName>
+		<Required>false</Required>
+		<DataType>Integer</DataType>
+		<NeedToCopyInput>false</NeedToCopyInput></Input>
+</Inputs>
+
+<Outputs> 
+	<Output>
+		<Name>Output</Name>
+		<ShortName>O</ShortName>	
+		<DataType>Image</DataType>
+		<ImageType>-1</ImageType>
+		<DoDisplay>false</DoDisplay>
+	</Output>
+</Outputs>
+
+</UnitDescription>
