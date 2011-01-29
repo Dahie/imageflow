@@ -126,10 +126,10 @@ public class RunMacroTask extends GenerateMacroTask {
 			}*/
 			
 			for (ImageJImage image : openedImages) {
-				//Image icon = ImageFlow.getApplication().getImageJInstance().getW;
 				IJ.selectWindow(image.parentOutput.getDisplayName());
 				ImagePlus ip = IJ.getImage();
-				((UnitElement) image.node).setIconScaled(ip.getImage());
+				if (ip != null)
+					((UnitElement) image.node).setIconScaled(ip.getImage());
 			}
 			
 			return result;

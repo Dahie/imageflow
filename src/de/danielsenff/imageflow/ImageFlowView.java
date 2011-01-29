@@ -26,6 +26,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.ScrollPane;
+import java.awt.dnd.DnDConstants;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -38,6 +39,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.DropMode;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
@@ -352,12 +354,10 @@ public class ImageFlowView extends FrameView {
 		graphPanel.setSelections(getSelections());
 		if(IJ.isMacOSX())
 			graphPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-//		graphPanel.setDropTarget(dt);
 		
 		ScrollPane graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
 		graphScrollpane.setPreferredSize(new Dimension(400, 300));
-		//new FileDrop( null, graphPanel,  new FileDropListener(graphPanel, getInstance())); // end FileDrop.Listener
 		
 //		graphScrollpane.add(workspacePanel);
 
@@ -411,7 +411,7 @@ public class ImageFlowView extends FrameView {
 		delegatesTree.addMouseListener(delegatesTreeListener);
 		delegatesTree.addKeyListener(delegatesTreeListener);
 		delegatesTree.setDragEnabled(true);
-		//delegatesTree.setTransferHandler(new DelegateTransferHandler());
+
 		
 		sidePane.add(delegatesPanel, BorderLayout.CENTER);
 		

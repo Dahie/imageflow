@@ -86,9 +86,6 @@ public class UnitFactory {
 		UnitElement unitElement;
 		String unitName = unitDescription.getUnitName();
 		String imageJSyntax = unitDescription.imageJSyntax;
-System.out.println(unitName);
-System.out.println(unitDescription);
-
 
 		// usual case, we deal with a UnitElement
 

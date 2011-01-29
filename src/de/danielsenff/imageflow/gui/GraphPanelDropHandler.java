@@ -9,20 +9,21 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.DataFormatException;
+import java.util.StringTokenizer;
 
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
-import de.danielsenff.imageflow.models.delegates.UnitDescription;
-import de.danielsenff.imageflow.models.unit.SourceUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 
 public class GraphPanelDropHandler implements DropTargetListener {
 
 	private GraphPanel gPanel;
+	private static final String URI_LIST_MIME_TYPE = "text/uri-list;class=java.lang.String";
 	
 	public GraphPanelDropHandler(final GraphPanel panel) {
 		this.gPanel = panel;
@@ -37,57 +38,98 @@ public class GraphPanelDropHandler implements DropTargetListener {
 	// mouse over component
 	public void dragOver(final DropTargetDragEvent e) {}
 
-	public void drop(final DropTargetDropEvent e) {
-		Point point = e.getLocation();
+	public void drop(final DropTargetDropEvent event) {
+		Point point = event.getLocation();
 		point.translate(-50, -50);
 		gPanel.getSelection().clear();
 		
 		try {
-			final Transferable tr = e.getTransferable();
-			final DataFlavor[] flavors = tr.getTransferDataFlavors();
-			final List files;
-			File file;
-			for (int i = 0; i < flavors.length; i++)
+			final Transferable transferable = event.getTransferable();
+			final DataFlavor[] flavors = transferable.getTransferDataFlavors();
+			// accept for now
+			event.acceptDrop (event.getDropAction());
+			
+			// solution for dragging files on linux: 
+			// http://www.davidgrant.ca/drag_drop_from_linux_kde_gnome_file_managers_konqueror_nautilus_to_java_applications
+			DataFlavor uriListFlavor = null;
+		    try {
+		      uriListFlavor = new DataFlavor(URI_LIST_MIME_TYPE);
+		    } catch (ClassNotFoundException e) {
+		      e.printStackTrace();
+		    } 
+			
+			for (int i = 0; i < flavors.length; i++) {
 				if (flavors[i].isFlavorJavaFileListType()) {
-					// accept for now
-					e.acceptDrop (e.getDropAction());
-					files = (List) tr.getTransferData(flavors[i]);
+					final List files = (List) transferable.getTransferData(flavors[i]);
 
-					/*
-					 * TODO unused
-					 */
-					for (int j = 0; j < files.size(); j++) {
-						file = (File) files.get(j);
-						
-						UnitDelegate delegate= DelegatesController.getInstance().getDelegate("Image Source");
-						String[] args = {file.getAbsolutePath()};
-						UnitElement unit = UnitFactory.createProcessingUnit(delegate.getUnitDescription(), point, args);
-						gPanel.getNodeL().add(unit);
-						point.x += 100;
-						point.y += 100;
-					}
+					processDroppedFiles(point, files);
 
-					e.dropComplete(true);
+					event.dropComplete(true);
 					return;
+				 } else if (transferable.isDataFlavorSupported(uriListFlavor)) {
+					 String data = (String) transferable.getTransferData(uriListFlavor);
+					 final List files = textURIListToFileList(data);
+
+					 processDroppedFiles(point, files);
+
+					 event.dropComplete(true);
+					 return;
 				} else if (flavors[i].isFlavorSerializedObjectType()) {
-					e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-					Object o = tr.getTransferData(flavors[i]);
+					String o = (String)transferable.getTransferData(flavors[i]);
 					
-					UnitDelegate delegate = DelegatesController.getInstance().getDelegate((String) o);
-					UnitElement unit = UnitFactory.createProcessingUnit(delegate.getUnitDescription(), point);
-					gPanel.getNodeL().add(unit);
+					UnitDelegate delegate = DelegatesController.getInstance().getDelegate( o);
+					// this can return null if no unit by this name is found
+					if (delegate != null) {
+						UnitElement unit = UnitFactory.createProcessingUnit(delegate.getUnitDescription(), point);
+						gPanel.getNodeL().add(unit);
+					}
 					
-					e.dropComplete(true);
+					event.dropComplete(true);
 					return;
 				}
-
+			}
 
 
 		} catch (final Throwable t) { t.printStackTrace(); }
 		// a problem happened
-		e.rejectDrop();
+		event.rejectDrop();
+	}
+
+	private void processDroppedFiles(Point point, final List files) {
+		File file;
+		for (int j = 0; j < files.size(); j++) {
+			file = (File) files.get(j);
+			
+			UnitDelegate delegate= DelegatesController.getInstance().getDelegate("Image Source");
+			String[] args = {file.getAbsolutePath()};
+			UnitElement unit = UnitFactory.createProcessingUnit(delegate.getUnitDescription(), point, args);
+			gPanel.getNodeL().add(unit);
+			point.x += 100;
+			point.y += 100;
+		}
 	}
 
 	public void dropActionChanged(final DropTargetDragEvent e) {}
 
+	
+	private static List textURIListToFileList(String data) {
+	    List list = new ArrayList(1);
+	    for (StringTokenizer st = new StringTokenizer(data, "\r\n"); st.hasMoreTokens();) {
+	      String s = st.nextToken();
+	      if (s.startsWith("#")) {
+	        // the line is a comment (as per the RFC 2483)
+	        continue;
+	      }
+	      try {
+	        URI uri = new URI(s);
+	        File file = new File(uri);
+	        list.add(file);
+	      } catch (URISyntaxException e) {
+	        e.printStackTrace();
+	      } catch (IllegalArgumentException e) {
+	        e.printStackTrace();
+	      }
+	    }
+	    return list;
+	  }
 }

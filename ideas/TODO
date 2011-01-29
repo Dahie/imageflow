@@ -11,7 +11,6 @@ Bugs:
 GUI:
 - filter images in filechooser
 - cursor keys -> move or select?
-- improved selections: shift, strg
 - Unit parameters window padding is not drawn correctly 
 
 
@@ -33,10 +32,8 @@ Nice-to-have:
 - labels of inputs and outputs
 - insert new units not right on existing units
 
-- drag and drop from delegatespanel
 - list of steps to create a full graph
 - disable start-workflow button for invalid workflows
-- XML improvement: proper error handling
 
 
 V2:
