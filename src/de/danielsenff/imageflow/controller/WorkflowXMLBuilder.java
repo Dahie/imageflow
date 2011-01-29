@@ -45,7 +45,7 @@ import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
@@ -665,9 +665,9 @@ public class WorkflowXMLBuilder {
 		dataTypeElement.addContent(dataType.getClass().getSimpleName());
 		inputElement.addContent(dataTypeElement);
 
-		if(dataType instanceof DataTypeFactory.Image) {
+		if(dataType instanceof ImageDataType) {
 			Element imageType = new Element("ImageType");
-			imageType.addContent(""+((DataTypeFactory.Image)dataType).getImageBitDepth());
+			imageType.addContent(""+((ImageDataType)dataType).getImageBitDepth());
 			inputElement.addContent(imageType);	
 		}
 
@@ -695,9 +695,9 @@ public class WorkflowXMLBuilder {
 		dataType.addContent(output.getDataType().getClass().getSimpleName());
 		outputElement.addContent(dataType);
 
-		if(output.getDataType() instanceof DataTypeFactory.Image) {
+		if(output.getDataType() instanceof ImageDataType) {
 			Element imageType = new Element("ImageType");
-			imageType.addContent(""+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
+			imageType.addContent(""+((ImageDataType)output.getDataType()).getImageBitDepth());
 			outputElement.addContent(imageType);	
 		}
 

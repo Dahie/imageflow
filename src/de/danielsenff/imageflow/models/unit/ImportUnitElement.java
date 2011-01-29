@@ -35,7 +35,7 @@ import de.danielsenff.imageflow.gui.PropertiesDialog;
 import de.danielsenff.imageflow.imagej.GenericDialog;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Output;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.utils.ImageJHelper;
@@ -226,8 +226,8 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 	 */
 	public void setOutputImageType(final int imageType) {
 		for (final Output output : outputs) {
-			if(output.getDataType() instanceof DataTypeFactory.Image)
-				((DataTypeFactory.Image)output.getDataType()).setImageBitDepth(imageType);
+			if(output.getDataType() instanceof ImageDataType)
+				((ImageDataType)output.getDataType()).setImageBitDepth(imageType);
 		}
 	}
 

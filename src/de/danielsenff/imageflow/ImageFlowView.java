@@ -26,7 +26,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.ScrollPane;
-import java.awt.dnd.DnDConstants;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -39,7 +38,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
-import javax.swing.DropMode;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
@@ -71,7 +69,6 @@ import visualap.Node;
 import visualap.Selection;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
-import de.danielsenff.imageflow.controller.ParameterWidgetController;
 import de.danielsenff.imageflow.gui.Dashboard;
 import de.danielsenff.imageflow.gui.DelegatesPanel;
 import de.danielsenff.imageflow.gui.DelegatesTreeListener;
@@ -90,7 +87,7 @@ import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -1300,9 +1297,9 @@ public class ImageFlowView extends FrameView {
             		lm.addElement(input);
             		lm.addElement("name:"+input.getName());
             		lm.addElement("datatype: "+input.getDataType());
-            		if(input.getDataType() instanceof DataTypeFactory.Image)
+            		if(input.getDataType() instanceof ImageDataType)
             			lm.addElement("imagetype def:"
-            					+((DataTypeFactory.Image)input.getDataType()).getImageBitDepth());
+            					+((ImageDataType)input.getDataType()).getImageBitDepth());
             		lm.addElement("connected to:");
             		lm.addElement(input.getConnection());
             	}
@@ -1310,9 +1307,9 @@ public class ImageFlowView extends FrameView {
             		lm.addElement(output);
             		lm.addElement("name:"+output.getName());
             		lm.addElement("datatype:"+output.getDataType());
-            		if(output.getDataType() instanceof DataTypeFactory.Image)
+            		if(output.getDataType() instanceof ImageDataType)
             			lm.addElement("imagetype:"
-            					+((DataTypeFactory.Image)output.getDataType()).getImageBitDepth());
+            					+((ImageDataType)output.getDataType()).getImageBitDepth());
             		lm.addElement("connected to:");
             		for (Connection conn : output.getConnections()) {
             			lm.addElement(conn);

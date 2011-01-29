@@ -37,6 +37,7 @@ import org.jdom.JDOMException;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 import de.danielsenff.imageflow.models.unit.NodeIcon;
@@ -213,10 +214,10 @@ public class UnitDescription implements NodeDescription {
 
 			actInput.needToCopyInput = inputElement.getChild("NeedToCopyInput").getValue().equalsIgnoreCase("true") ? true : false;
 
-			if(actInput.dataType instanceof DataTypeFactory.Image) {
+			if(actInput.dataType instanceof ImageDataType) {
 				int imageType = Integer.valueOf(inputElement.getChild("ImageType").getValue());
 				actInput.imageType = imageType;
-				((DataTypeFactory.Image)actInput.dataType).setImageBitDepth(imageType);
+				((ImageDataType)actInput.dataType).setImageBitDepth(imageType);
 			}
 
 			num++;
@@ -247,10 +248,10 @@ public class UnitDescription implements NodeDescription {
 				actOutput.dataType = DataTypeFactory.createDataType("Image");
 			}
 
-			if(actOutput.dataType instanceof DataTypeFactory.Image) {
+			if(actOutput.dataType instanceof ImageDataType) {
 				int imageType = Integer.valueOf(outputElement.getChild("ImageType").getValue());
 				actOutput.imageType = imageType;
-				((DataTypeFactory.Image)actOutput.dataType).setImageBitDepth(imageType);
+				((ImageDataType)actOutput.dataType).setImageBitDepth(imageType);
 			}
 
 

@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.DoubleParameter;
 import de.danielsenff.imageflow.models.parameter.IntegerParameter;
@@ -364,8 +365,8 @@ public class MacroElement {
 		String stackParameter = "";
 		int binaryComparison, bitdepth;
 		for (Input input : inputs) {
-			if (input.isConnected() && (input.getDataType() instanceof DataTypeFactory.Image) ) {
-				bitdepth = ((DataTypeFactory.Image)input.getFromOutput().getDataType()).getImageBitDepth();
+			if (input.isConnected() && (input.getDataType() instanceof ImageDataType) ) {
+				bitdepth = ((ImageDataType)input.getFromOutput().getDataType()).getImageBitDepth();
 				binaryComparison = bitdepth	& (ij.plugin.filter.PlugInFilter.DOES_STACKS);
 				if (binaryComparison != 0) 
 					stackParameter = "stack";

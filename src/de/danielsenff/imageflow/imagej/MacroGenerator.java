@@ -17,9 +17,6 @@
  */
 package de.danielsenff.imageflow.imagej;
 
-import ij.IJ;
-import ij.ImagePlus;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -28,6 +25,7 @@ import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.unit.ForGroupUnitElement;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -294,7 +292,7 @@ public class MacroGenerator {
 			outputTitle = output.getOutputTitle()+"_"+0;
 			outputID = output.getOutputID()+"_"+i;
 			
-			 if((output.getDataType() instanceof DataTypeFactory.Image)) {
+			 if((output.getDataType() instanceof ImageDataType)) {
 				macroText +=  
 					"rename(\"" + outputTitle  + "\"); \n"
 					+ outputID + " = getImageID(); \n"
@@ -347,12 +345,12 @@ public class MacroGenerator {
 		String inputID;
 		int binaryComparison;
 		for (final Input input : unit.getInputs()) {
-			if (input.getDataType() instanceof DataTypeFactory.Image) {
+			if (input.getDataType() instanceof ImageDataType) {
 				inputID = input.getImageID()+"_"+0;
 				code += "selectImage(" + inputID + "); \n";
 				if(input.isNeedToCopyInput()) {
 					// Stacks need an additional Parameter 'duplicate' in the Duplicate-command
-					binaryComparison = ((DataTypeFactory.Image)input.getFromOutput().getDataType()).getImageBitDepth() 
+					binaryComparison = ((ImageDataType)input.getFromOutput().getDataType()).getImageBitDepth() 
 						& (ij.plugin.filter.PlugInFilter.DOES_STACKS);
 					if (binaryComparison != 0)
 						code += "run(\"Duplicate...\", \"title="+ getNeedCopyTitle(inputID) +" duplicate\"); \n";

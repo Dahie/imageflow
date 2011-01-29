@@ -23,7 +23,7 @@ import visualap.Node;
 import de.danielsenff.imageflow.models.Lockable;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory.Image;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.unit.AbstractUnit;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
@@ -110,9 +110,9 @@ public class Input extends Pin implements Lockable {
 			boolean requiredInput) {
 		super(dataType, inputNumber, nodeParent);
 		setRequiredInput(requiredInput);
-		if(getDataType() instanceof DataTypeFactory.Image) {
-			((Image)getDataType()).setParentUnitElement((UnitElement) getParent());
-			((Image)getDataType()).setParentPin(this);
+		if(getDataType() instanceof ImageDataType) {
+			((ImageDataType)getDataType()).setParentUnitElement((UnitElement) getParent());
+			((ImageDataType)getDataType()).setParentPin(this);
 		}
 	}
 

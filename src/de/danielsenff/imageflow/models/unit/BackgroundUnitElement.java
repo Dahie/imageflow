@@ -23,7 +23,7 @@ import java.awt.Point;
 
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Output;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 
 /**
  * Background specialization of the {@link UnitElement}.
@@ -90,7 +90,7 @@ public class BackgroundUnitElement extends UnitElement implements ImageSourceUni
 	 */
 	public void setOutputImageType(final int imageType) {
 		for (final Output output : outputs) {
-			((DataTypeFactory.Image)output.getDataType()).setImageBitDepth(imageType);
+			((ImageDataType)output.getDataType()).setImageBitDepth(imageType);
 		}
 	}
 

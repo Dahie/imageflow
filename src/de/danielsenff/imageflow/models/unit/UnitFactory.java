@@ -33,6 +33,7 @@ import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.delegates.NodeDescription;
 import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.delegates.UnitDescription.Para;
@@ -212,9 +213,9 @@ public class UnitFactory {
 		DataType dataType = outputDescription.dataType;
 		
 		if(unitElement instanceof ImageSourceUnit
-				&& dataType instanceof DataTypeFactory.Image) {
+				&& dataType instanceof ImageDataType) {
 			int imageType = ((ImageSourceUnit)unitElement).getImageType();
-			((DataTypeFactory.Image)dataType).setImageBitDepth(imageType);
+			((ImageDataType)dataType).setImageBitDepth(imageType);
 		} 
 		// imagetype -1 means output will be the same type as the input
 		
@@ -247,8 +248,8 @@ public class UnitFactory {
 		boolean needToCopyInput = inputDescription.needToCopyInput;
 		boolean required = inputDescription.required;
 		DataType dataType = inputDescription.dataType;
-		if(dataType instanceof DataTypeFactory.Image) {
-			((DataTypeFactory.Image)dataType).setImageBitDepth(inputDescription.imageType);
+		if(dataType instanceof ImageDataType) {
+			((ImageDataType)dataType).setImageBitDepth(inputDescription.imageType);
 		}
 		
 		Input input = new Input(dataType, unitElement, i, required);

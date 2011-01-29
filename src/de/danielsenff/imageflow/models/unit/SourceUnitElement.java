@@ -23,11 +23,8 @@ import ij.io.OpenDialog;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 
@@ -37,7 +34,7 @@ import javax.swing.JOptionPane;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Output;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
 import de.danielsenff.imageflow.utils.ImageJHelper;
@@ -167,8 +164,8 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	 */
 	public void setOutputImageType(final int imageType) {
 		for (final Output output : outputs) {
-			if(output.getDataType() instanceof DataTypeFactory.Image)
-				((DataTypeFactory.Image)output.getDataType()).setImageBitDepth(imageType);
+			if(output.getDataType() instanceof ImageDataType)
+				((ImageDataType)output.getDataType()).setImageBitDepth(imageType);
 		}
 	}
 

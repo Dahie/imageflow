@@ -23,8 +23,7 @@ import java.util.Vector;
 
 import visualap.Node;
 import de.danielsenff.imageflow.models.datatype.DataType;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory.Image;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
@@ -83,9 +82,9 @@ public class Output extends Pin {
 			final int outputNumber) {
 		super(dataType, outputNumber, nodeParent);
 		this.connections = new Vector<Connection>();
-		if(getDataType() instanceof DataTypeFactory.Image) {
-			((Image)getDataType()).setParentUnitElement((UnitElement) getParent());
-			((Image)getDataType()).setParentPin(this);
+		if(getDataType() instanceof ImageDataType) {
+			((ImageDataType)getDataType()).setParentUnitElement((UnitElement) getParent());
+			((ImageDataType)getDataType()).setParentPin(this);
 		}
 		generateID(((UnitElement)this.parent).getUnitID(), getIndex());
 	}

@@ -332,7 +332,7 @@ public class DataTypeTests extends UnitElementTests{
 		
 		
 		ProxyOutput groupOutput = (ProxyOutput)group.getOutput(0);
-		DataTypeFactory.Image dtImage = (DataTypeFactory.Image)groupOutput.getDataType();
+		DataTypeFactory.ImageDataType dtImage = (DataTypeFactory.Image)groupOutput.getDataType();
 		assertEquals(8, dtImage.getImageBitDepth());
 		assertTrue(dtImage.isImageBitDepthCompatible(8));
 		units.add(group);
