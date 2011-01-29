@@ -3,7 +3,7 @@
 <UnitDescription>
 
 <General>
-  <UnitName>BfromRGB</UnitName> 
+  <UnitName>B from RGB</UnitName> 
   <HelpString>Extracts the blue channel from an RGB image</HelpString>  
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>setRGBWeights(0,0,1);run('8-bit');</ImageJSyntax> 

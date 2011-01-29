@@ -3,7 +3,7 @@
 <UnitDescription>
 
 <General>
-  <UnitName>RfromRGB</UnitName> 
+  <UnitName>R from RGB</UnitName> 
   <HelpString>Extracts the red channel from an RGB image</HelpString>  
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>setRGBWeights(1,0,0);run('8-bit');</ImageJSyntax> 

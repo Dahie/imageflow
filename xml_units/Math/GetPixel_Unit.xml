@@ -7,7 +7,7 @@
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>OUTPUT_INTEGER_1 = getPixel(ATTRIBUTE_INPUT_2_PARAMETER_1, ATTRIBUTE_INPUT_3_PARAMETER_2);</ImageJSyntax> 
   <Color>0x9cba92</Color>
-  <HelpString>Get the Pixelvalue at the specified coordinates of an input image.</HelpString>
+  <HelpString>Get the Pixel value at the specified coordinates of an input image.</HelpString>
 </General>
 
 <Parameters>

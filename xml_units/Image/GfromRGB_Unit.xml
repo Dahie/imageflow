@@ -3,7 +3,7 @@
 <UnitDescription>
 
 <General>
-  <UnitName>GfromRGB</UnitName> 
+  <UnitName>G from RGB</UnitName> 
   <HelpString>Extracts the green channel from an RGB image</HelpString>  
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>setRGBWeights(0,1,0);run('8-bit');</ImageJSyntax> 
