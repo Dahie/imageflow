@@ -580,7 +580,8 @@ public class WorkflowXMLBuilder {
 			Element dataType = new Element("DataType");
 			dataType.addContent(parameter.getParaType());
 			parameterElement.addContent(dataType);
-			if(parameter.getOptions().get("as") != null) {
+			// FIXME look why getOptions can return null
+			if(parameter.getOptions() != null && parameter.getOptions().get("as") != null) {
 				String dataTypeAs = (String) parameter.getOptions().get("as");
 				dataType.setAttribute("as", dataTypeAs);
 			}
