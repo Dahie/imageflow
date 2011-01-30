@@ -1,7 +1,13 @@
 package de.danielsenff.imageflow.gui;
 
+
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
@@ -17,12 +23,9 @@ public class Dashboard extends JPanel {
 	public Dashboard(GraphController controller) {
 		this.graphController = controller;
 		this.dashs = new HashMap<String, JPanel>();
-		setLayout(//new FlowLayout(//FlowLayout.LEFT, 1, 1));
-              //new WrapLayout()
-              new MigLayout("left, wrap 3, debug, flowx, ",
-                      "[110,fill]",
-                      "[fill]")
-		);
+		this.setPreferredSize(new Dimension(500, 200));
+		setLayout(null);
+
 	}
 	
 	public void removeWidget(UnitElement unit) {
@@ -42,14 +45,30 @@ public class Dashboard extends JPanel {
 			dashs.remove(dashKey);
 			this.remove(dash);
 		}
+
 	}
 	
 	public void addWidget(UnitElement unit) {
 		if(!dashs.containsKey(unit.getLabel())) {
-			JPanel dash = ParameterWidgetController.createWidgetFromUnit(unit);
+			final JPanel dash = ParameterWidgetController.createWidgetFromUnit(unit);
 			dashs.put(unit.getLabel(), dash);
 			unit.setWidget(dash);
-			this.add(dash, "flowy");
+			dash.setBounds(30, 30, 250, 150);
+			dash.setBorder(BorderFactory.createTitledBorder(unit.getLabel()));
+			dash.addMouseMotionListener(new MouseMotionListener() {
+				
+				public void mouseMoved(MouseEvent e) {
+				}
+				
+				public void mouseDragged(MouseEvent e) {
+					int offsetX = e.getPoint().x - dash.getLocation().x;  
+					int offsetY = e.getPoint().y - dash.getLocation().y;
+					
+					//e.translatePoint(offsetX, offsetY);
+					dash.setLocation(new Point(e.getPoint()));
+				}
+			});
+			this.add(dash);
 		}
 	}
 
