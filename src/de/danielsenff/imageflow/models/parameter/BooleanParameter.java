@@ -24,7 +24,7 @@ package de.danielsenff.imageflow.models.parameter;
 public class BooleanParameter extends AbstractParameter<Boolean> {
 
 	/**
-	 * The string that is inserted in the imagej-syntax if the condidation is true.
+	 * The string that is inserted in the ImageJ-syntax if the condition is true.
 	 */
 	protected String trueString;
 

@@ -143,6 +143,7 @@ public class GraphController{
 	 * @return
 	 */
 	public boolean removeNode(final Node node) {
+		// TODO remove from dashboard
 		return nodes.remove(node);
 	}
 	

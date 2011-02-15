@@ -18,6 +18,7 @@
 package de.danielsenff.imageflow.models.parameter;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 /**
  * Parameter is a defined variable in the ImageJ-syntax, which has an expected type
@@ -64,13 +65,21 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 	 */
 	protected boolean readOnly = false;
 	
+	/**
+	 * HashMap of optional values required for certain functionalities of a Parameter.
+	 */
 	protected HashMap<String, Object> options;
+	
+	/**
+	 * Registered {@link ParamChangeListener}s
+	 */
+	protected Vector<ParamChangeListener> changeListener = new Vector<ParamChangeListener>();
 	
 	/**
 	 * @param paraType 
 	 * @param displayName 
 	 * @param helpString 
-	 * @param options2 
+	 * @param options
 	 */
 	public AbstractParameter(String paraType, 
 			String displayName, 
@@ -99,6 +108,7 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 	 */
 	public void setValue(final T value) {
 		this.value = value;
+		notifyParamChangeListener();
 	}
 	
 	public T getDefaultValue() {
@@ -160,5 +170,19 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 	
 	public HashMap<String, Object> getOptions() {
 		return this.options;
+	}
+	
+	public void addParamChangeListener(ParamChangeListener listener) {
+		changeListener.add(listener);
+	}
+
+	public void removeParamChangeListener(ParamChangeListener listener) {
+		changeListener.remove(listener);
+	}
+	
+	public void notifyParamChangeListener() {
+		for (int i = 0; i < changeListener.size(); i++) {
+			changeListener.get(i).parameterChanged(this);
+		}
 	}
 }
