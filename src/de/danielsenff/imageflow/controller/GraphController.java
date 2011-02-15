@@ -389,5 +389,15 @@ public class GraphController{
 			System.err.println("subgraph not complete");
 		}
 	}
+
+	public void setOutputData(String outputId, Object data) {
+		
+		// get the Output object with the given id
+		System.out.println(outputId);
+		
+		
+		// write the data into the output object
+		
+	}
 }
 

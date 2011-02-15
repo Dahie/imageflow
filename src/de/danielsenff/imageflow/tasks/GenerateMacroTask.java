@@ -28,7 +28,7 @@ import de.danielsenff.imageflow.ImageFlowView.CodePreviewDialog;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.imagej.MacroFlowRunner;
 import de.danielsenff.imageflow.imagej.MacroGenerator;
-import de.danielsenff.imageflow.imagej.MacroGenerator.ImageJImage;
+import de.danielsenff.imageflow.imagej.MacroGenerator.ImageJResult;
 
 /**
  * Generate and display the macro based on the workflow.
@@ -39,7 +39,7 @@ public class GenerateMacroTask extends Task<Object, String> {
 
 	protected GraphController graphController;
 	protected boolean showCode;
-	protected ArrayList<ImageJImage> openedImages;
+	protected ArrayList<ImageJResult> openedImages;
 	
 	/**
 	 * @param app

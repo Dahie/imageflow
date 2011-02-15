@@ -48,10 +48,11 @@ public class MacroGenerator {
 	// which are source, but no output and no display
 	
 	private Collection<Node> unitList;
-	private ArrayList<ImageJImage> openedImages;
+	private ArrayList<ImageJResult> openedImages;
 	private String  macroText;
 	private int unitAmount;
 	private int currentUnit;
+	private boolean extendedMacro = true;
 
 	/**
 	 * MacroGenerator based on a List of unitElements.
@@ -60,7 +61,7 @@ public class MacroGenerator {
 	public MacroGenerator(final Collection<Node> unitElements) {
 		this.unitList = unitElements;
 		this.unitAmount = unitList.size();
-		this.openedImages = new ArrayList<ImageJImage>();
+		this.openedImages = new ArrayList<ImageJResult>();
 		this.macroText = "";
 	}
 	
@@ -68,7 +69,7 @@ public class MacroGenerator {
 	/**
 	 * @return the openedImages
 	 */
-	public final ArrayList<ImageJImage> getOpenedImages() {
+	public final ArrayList<ImageJResult> getOpenedImages() {
 		return openedImages;
 	}
 
@@ -82,6 +83,7 @@ public class MacroGenerator {
 		// reset in case somebody has the mad idea to run this twice
 		this.macroText = ""; 
 		this.macroText += "setBatchMode(true); \n";
+		this.extendedMacro = extendedMacro;
 		// reset progressBar to 0%
 		if (extendedMacro) {
 			this.macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setProgress\", \"0\")";
@@ -90,7 +92,7 @@ public class MacroGenerator {
 		// loop over all units
 		// they have to be presorted so they are in the right order
 		for (Node node : this.unitList) {
-			generateUnitMacroCode(node, 0, extendedMacro); 
+			generateUnitMacroCode(node, 0); 
 		}
 
 		
@@ -112,7 +114,7 @@ public class MacroGenerator {
 	 * @param i
 	 * @param extendedMacro
 	 */
-	private void generateUnitMacroCode(Node node, int i, boolean extendedMacro) {
+	private void generateUnitMacroCode(Node node, int i) {
 		
 		macroText += " \n";
 		macroText += "// " + node.getLabel() + "\n";
@@ -174,7 +176,7 @@ public class MacroGenerator {
 		for (Node node : unit.getNodes()) {
 			System.out.println("process nodes in loop");
 			// process unit as usual
-			generateUnitMacroCode(node, i, extendedMacro);
+			generateUnitMacroCode(node, i);
 			
 			for (int j = begin; j < end; i+= step) {
 
@@ -291,14 +293,18 @@ public class MacroGenerator {
 		for (Output output : unit.getOutputs()) {
 			outputTitle = output.getOutputTitle()+"_"+0;
 			outputID = output.getOutputID()+"_"+i;
-			
-			 if((output.getDataType() instanceof ImageDataType)) {
+
+			if((output.getDataType() instanceof ImageDataType)) {
 				macroText +=  
 					"rename(\"" + outputTitle  + "\"); \n"
 					+ outputID + " = getImageID(); \n"
 					+ "selectImage("+outputID+"); \n";
-				openedImages.add(new ImageJImage(output, 0));
+				openedImages.add(new ImageJResult(output, 0));
 			}
+			if (false) {
+				macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputData\", \""+output.getParent().getOriginalUnit()+"\", \""+output.getIndex()+"\")";
+			}
+
 		}
 	}
 
@@ -311,9 +317,9 @@ public class MacroGenerator {
 	private String renameImages() {
 		String macroText = "";
 
-		for (ImageJImage image : this.openedImages) {
-			macroText += "selectImage("+ image.id +"); \n" 
-				+ "rename(\"" + image.parentOutput.getDisplayName()  + "\"); \n";
+		for (ImageJResult result : this.openedImages) {
+			macroText += "selectImage("+ result.id +"); \n" 
+				+ "rename(\"" + result.parentOutput.getDisplayName()  + "\"); \n";
 		}
 		return macroText;
 	}
@@ -322,16 +328,16 @@ public class MacroGenerator {
 	private String deleteImages() {
 		String macroText = "";
 
-		ArrayList<ImageJImage> removeAfterwards = new ArrayList<ImageJImage>();
+		ArrayList<ImageJResult> removeAfterwards = new ArrayList<ImageJResult>();
 		
-		for (ImageJImage image : this.openedImages) {
-			if (!image.display) {
-				macroText += "selectImage("+ image.id +"); \n" 
+		for (ImageJResult result : this.openedImages) {
+			if (!result.display) {
+				macroText += "selectImage("+ result.id +"); \n" 
 					+ "close(); \n";
-				removeAfterwards.add(image);
+				removeAfterwards.add(result);
 			} 
 		}
-		for (ImageJImage image : removeAfterwards) {
+		for (ImageJResult image : removeAfterwards) {
 			this.openedImages.remove(image);
 		}
 		
@@ -379,6 +385,7 @@ public class MacroGenerator {
 					|| output.getDataType() instanceof DataTypeFactory.Number)
 					&& output.getParent().isDisplay()) {
 				macroText += "print (" + output.getOutputTitle() + "_" + i + "); \n";
+				this.openedImages.add(new ImageJResult(output, i));
 			}
 		}
 	}
@@ -388,20 +395,19 @@ public class MacroGenerator {
 	 * @author dahie
 	 *
 	 */
-	public class ImageJImage {
+	public class ImageJResult {
 		public String id;
 		public String title;
 		public Output parentOutput;
 		public Node node;
 		public boolean display;
 		
-		public ImageJImage(Output output, int i) {
+		public ImageJResult(Output output, int i) {
 			this.id 	= output.getOutputID()+"_"+i;
 			this.title 	= output.getOutputTitle()+"_"+i;
 			this.parentOutput = output;
 			this.display = output.isDoDisplay();
 			this.node = output.getParent().getOriginalUnit();
 		}
-		
 	}
 }

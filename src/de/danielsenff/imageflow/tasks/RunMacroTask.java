@@ -26,7 +26,9 @@ import org.jdesktop.application.Application;
 
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.controller.GraphController;
-import de.danielsenff.imageflow.imagej.MacroGenerator.ImageJImage;
+import de.danielsenff.imageflow.imagej.MacroGenerator.ImageJResult;
+import de.danielsenff.imageflow.models.connection.Output;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
@@ -60,7 +62,7 @@ public class RunMacroTask extends GenerateMacroTask {
 		super(app, graphController);
 		this.showCode = showCode;
 		this.closeAll = closeAll;
-		progressObserver = new ProgressObserver(new ProgListener());
+		progressObserver = new ProgressObserver(new MacroCallbackListener());
 	}
 	
 	/**
@@ -92,7 +94,7 @@ public class RunMacroTask extends GenerateMacroTask {
 			
 			ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
 			Macro_Runner mr = new Macro_Runner();
-			String result = mr.runMacro(macro, "");
+			String resultString = mr.runMacro(macro, "");
 			
 			/*
 			 * TODO FIXME
@@ -125,14 +127,21 @@ public class RunMacroTask extends GenerateMacroTask {
 				System.out.println("unit "+unitID+ " and output "+ outputID);
 			}*/
 			
-			for (ImageJImage image : openedImages) {
-				IJ.selectWindow(image.parentOutput.getDisplayName());
-				ImagePlus ip = IJ.getImage();
-				if (ip != null)
-					((UnitElement) image.node).setIconScaled(ip.getImage());
+			for (ImageJResult result : openedImages) {
+				
+				Output parentOutput = result.parentOutput;
+				if (parentOutput.getDataType() instanceof ImageDataType) {
+					IJ.selectWindow(parentOutput.getDisplayName());
+					ImagePlus ip = IJ.getImage();
+					if (ip != null) {
+						UnitElement unitElement = (UnitElement) result.node;
+						unitElement.setIconScaled(ip.getImage());
+						unitElement.getOutput(parentOutput.getIndex()-1).setOutputObject(ip);
+					}
+				}
 			}
 			
-			return result;
+			return resultString;
 		}
 		
 		return macro;
@@ -152,6 +161,12 @@ public class RunMacroTask extends GenerateMacroTask {
 		progressObserver.setValue(progressValue);
 	}
 	
+	public static void setOutputData(String outputId, Object data) {
+		// write the data as DataObject for the output of the given ID
+		if (data != null && data instanceof ImagePlus) {
+			
+		}
+	}
 	
 	@Override protected void succeeded(final Object superclass) {
 	    setMessage("Done");
@@ -160,18 +175,39 @@ public class RunMacroTask extends GenerateMacroTask {
 	    setMessage("Canceled");
 	}
 	
-	private class ProgListener {
+	private class MacroCallbackListener {
 		public void fireProgressChanged(float value) {
 			setProgress(value);
 		}
+
+		public void fireOutputData(String outputId, Object data) {
+			graphController.setOutputData(outputId, data);
+		}
+	}
+	
+	static class OutputDataObserver {
+		Object data;
+		MacroCallbackListener progListener;
+		private String outputIDvalue;
+		private Object dataValue;
+		
+		public OutputDataObserver(MacroCallbackListener listener) {
+			this.progListener = listener;
+		}
+		
+		public void setValue(String outputId, Object data) {
+			outputIDvalue = outputId; 
+			dataValue = data;
+			progListener.fireOutputData(outputIDvalue, dataValue);
+		} 
 	}
 	
 	static class ProgressObserver {
 		public static float value = 0;
 		
-		ProgListener progListener;
+		MacroCallbackListener progListener;
 		
-		public ProgressObserver(ProgListener listener) {
+		public ProgressObserver(MacroCallbackListener listener) {
 			this.progListener = listener;
 		}
 

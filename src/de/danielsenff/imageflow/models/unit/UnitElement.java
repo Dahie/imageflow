@@ -603,7 +603,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 */
 	@Override
 	public String toString() {
-		return super.toString() + " Name:"+this.label + " Type:" + this.getUnitType();
+		return super.toString() + " Name:"+this.label + " Type:" + this.getUnitType() + " ID:" + this.unitID;
 	}
 
 	/**

@@ -266,6 +266,7 @@ public class ImageFlowView extends FrameView {
 //		editMenu.add(getAction("clear"));
 		editMenu.add(getAction("selectAll"));
 		editMenu.add(getAction("addToDashboard"));
+		editMenu.add(getAction("addOutputToDashboard"));
 		
 		editMenu.add(new JSeparator());
 
@@ -843,6 +844,17 @@ public class ImageFlowView extends FrameView {
 			if(selectedElement instanceof UnitElement) {
 				// TODO allow adding only once
 				dashboardPanel.addWidget((UnitElement) selectedElement);
+				dashboardPanel.revalidate();
+			}
+		}
+	}
+	
+	@Action(enabledProperty = "selected")
+	public void addOutputToDashboard() {
+		for (Object selectedElement : getSelections()) {
+			if(selectedElement instanceof UnitElement) {
+				// TODO allow adding only once
+				dashboardPanel.addPreviewWidget((UnitElement) selectedElement);
 				dashboardPanel.revalidate();
 			}
 		}

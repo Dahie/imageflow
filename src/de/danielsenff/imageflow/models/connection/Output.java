@@ -17,6 +17,8 @@
  */
 package de.danielsenff.imageflow.models.connection;
 
+import ij.ImagePlus;
+
 import java.awt.Point;
 import java.util.Collection;
 import java.util.Vector;
@@ -24,6 +26,7 @@ import java.util.Vector;
 import visualap.Node;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.ImageDataType;
+import de.danielsenff.imageflow.models.parameter.ParamChangeListener;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 
@@ -48,12 +51,19 @@ public class Output extends Pin {
 	 */
 	protected boolean doDisplay;
 	
-	Vector<Connection> connections;
+	protected Vector<Connection> connections;
+	
+	Object outputData;
 	
 	/**
 	 * write protection
 	 */
 	protected boolean locked = false;
+	
+	/**
+	 * Registered {@link ParamChangeListener}s
+	 */
+	protected Vector<OutputObjectChangeListener> changeListener = new Vector<OutputObjectChangeListener>();
 	
 	/**
 	 * @param name
@@ -154,7 +164,7 @@ public class Output extends Pin {
 	}
 
 	/**
-	 * Title with which the ouput is referred to in the macro. Like a variable-name.
+	 * Title with which the output is referred to in the macro. Like a variable-name.
 	 * @return
 	 */
 	public String getOutputTitle() {
@@ -284,6 +294,30 @@ public class Output extends Pin {
 
 	public void setLocked(boolean isLocked) {
 		this.locked = isLocked;
+	}
+	
+	public void setOutputObject(Object outputObject) {
+		this.outputData = outputObject;
+		// notify object changed
+		notifyOutputObjectChangeListener();
+	}
+
+	public Object getOutputObject() {
+		return this.outputData;
+	}
+	
+	public void addOutputObjectListener(OutputObjectChangeListener listener) {
+		changeListener.add(listener);
+	}
+
+	public void removeOutputObjectListener(OutputObjectChangeListener listener) {
+		changeListener.remove(listener);
+	}
+	
+	public void notifyOutputObjectChangeListener() {
+		for (int i = 0; i < changeListener.size(); i++) {
+			changeListener.get(i).outputObjectChanged(this);
+		}
 	}
 	
 }

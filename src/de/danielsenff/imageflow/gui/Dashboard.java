@@ -29,5 +29,13 @@ public class Dashboard extends JPanel {
 			this.add(dash, "flowy");
 		}
 	}
+
+	public void addPreviewWidget(UnitElement unit) {
+		if(!dashs.containsKey(unit.getLabel())) {
+			JPanel dash = ParameterWidgetController.createPreviewWidgetFromUnit(unit);
+			dashs.put(unit.getLabel(), dash);
+			this.add(dash, "flowy");
+		}
+	}
 	
 }
