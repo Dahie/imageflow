@@ -78,7 +78,9 @@ public class NodeIcon implements UnitModelComponent {
 	 * icon for the display indicator
 	 */
 	protected Image displayIcon;
+	protected Image displaySilentIcon;
 	String displayIconFile = "/de/danielsenff/imageflow/resources/display16.png";
+	String displaySilentIconFile = "/de/danielsenff/imageflow/resources/dashboard-icon.png";
 
 	/**
 	 * Associated unit of to this icon
@@ -95,7 +97,7 @@ public class NodeIcon implements UnitModelComponent {
 	 */
 	public NodeIcon(final UnitElement unit) {
 		this.unit = unit;
-		this.unitID = unit.getUnitID();
+		this.unitID = unit.getNodeID();
 		this.dimension = largeComponentDimension;
 		
 		initDimension();
@@ -116,7 +118,7 @@ public class NodeIcon implements UnitModelComponent {
 	protected void initDisplayIcon() {
 		try {
 			this.displayIcon = ImageIO.read(this.getClass().getResourceAsStream(displayIconFile));
-//			this.displayIcon = ImageIO.read(new File(displayIconFile));
+			this.displaySilentIcon = ImageIO.read(this.getClass().getResourceAsStream(displaySilentIconFile));
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -187,7 +189,7 @@ public class NodeIcon implements UnitModelComponent {
 		int width = largeComponentDimension.width-2*padding;
 		int height = largeComponentDimension.height-2*padding;
 		
-		drawElement(g2, width, height, unit.isDisplay(), true, false);
+		drawElement(g2, width, height, true, false);
 		return g2;
 	}
 
@@ -195,7 +197,6 @@ public class NodeIcon implements UnitModelComponent {
 	private void drawElement(final Graphics2D g2, 
 			int widthBg,
 			int heightBg, 
-			boolean isDisplayUnit, 
 			boolean displayIcon, 
 			boolean displayIndex) {
 		// location and dimension
@@ -218,9 +219,7 @@ public class NodeIcon implements UnitModelComponent {
 	    drawTexts(g2, widthBg, heightBg, displayIndex);
 	    
 	    // draw icon for display
-	    if(isDisplayUnit) {
-	    	drawDisplayIndicator(g2, widthBg);
-	    }
+	    drawDisplayIndicator(g2, widthBg, unit.isDisplay(), unit.isDisplaySilent());
 	}
 
 
@@ -229,11 +228,17 @@ public class NodeIcon implements UnitModelComponent {
 	 * @param g2
 	 * @param widthBg
 	 */
-	protected void drawDisplayIndicator(final Graphics2D g2, final int widthBg) {
+	protected void drawDisplayIndicator(final Graphics2D g2, 
+			final int widthBg, 
+			final boolean isDisplay,
+			final boolean isSilentDisplay) {
 		int xDisplay = this.x+(widthBg/2)+30;
 		int yDisplay = this.y+5;
-//			g2.drawImage(this.displayIcon, xDisplay, yDisplay, null);
-		g2.drawImage(this.displayIcon, xDisplay, yDisplay, xDisplay+12,yDisplay+12, 0, 0, 18, 18, null);
+		if (isDisplay) 
+			g2.drawImage(this.displayIcon, xDisplay, yDisplay, xDisplay+12,yDisplay+12, 0, 0, 18, 18, null);
+		
+		if(isSilentDisplay) 
+			g2.drawImage(this.displaySilentIcon, xDisplay-20, yDisplay, xDisplay-20+16,yDisplay+16, 0, 0, 18, 18, null);
 	}
 	
 	
@@ -361,7 +366,7 @@ public class NodeIcon implements UnitModelComponent {
 	public Graphics2D paintSmallIcon(Graphics2D g2) {
 		int width = smallComponentDimension.width-2*padding;
 		int height = smallComponentDimension.height-2*padding;
-		drawElement(g2, width, height, unit.isDisplay(), false, false);
+		drawElement(g2, width, height, false, false);
 		return g2;
 	}
 

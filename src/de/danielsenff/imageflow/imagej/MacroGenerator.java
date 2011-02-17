@@ -301,8 +301,9 @@ public class MacroGenerator {
 					+ "selectImage("+outputID+"); \n";
 				openedImages.add(new ImageJResult(output, 0));
 			}
-			if (false) {
-				macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputData\", \""+output.getParent().getOriginalUnit()+"\", \""+output.getIndex()+"\")";
+			if (output.isDoDisplayAny() && output.getDataType() instanceof ImageDataType) {
+				UnitElement originalUnit = output.getParent().getOriginalUnit();
+				macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputImage\", "+originalUnit.getNodeID()+", "+output.getIndex()+");";
 			}
 
 		}
@@ -384,8 +385,10 @@ public class MacroGenerator {
 					|| output.getDataType() instanceof DataTypeFactory.Integer
 					|| output.getDataType() instanceof DataTypeFactory.Number)
 					&& output.getParent().isDisplay()) {
-				macroText += "print (" + output.getOutputTitle() + "_" + i + "); \n";
-				this.openedImages.add(new ImageJResult(output, i));
+				String outputTitle = output.getOutputTitle()+ "_" + i;
+				macroText += "print (" + outputTitle + "); \n";
+				UnitElement originalUnit = output.getParent().getOriginalUnit();
+				macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputData\", "+originalUnit.getNodeID()+", "+output.getIndex()+", "+outputTitle+");";
 			}
 		}
 	}
@@ -401,12 +404,14 @@ public class MacroGenerator {
 		public Output parentOutput;
 		public Node node;
 		public boolean display;
+		public boolean displaySilent;
 		
 		public ImageJResult(Output output, int i) {
 			this.id 	= output.getOutputID()+"_"+i;
 			this.title 	= output.getOutputTitle()+"_"+i;
 			this.parentOutput = output;
 			this.display = output.isDoDisplay();
+			this.displaySilent = output.isDoDisplaySilent();
 			this.node = output.getParent().getOriginalUnit();
 		}
 	}

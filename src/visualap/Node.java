@@ -35,6 +35,18 @@ import java.io.ObjectOutputStream;
 import de.danielsenff.imageflow.models.Selectable;
 
 public abstract class Node implements Selectable, Cloneable {
+	
+
+	/**
+	 * number of units instantiated, incremented with each new object
+	 */
+	static int ids;
+
+	/**
+	 * the id of this node
+	 */
+	protected int nodeID;
+	
 	protected Rectangle dragging=null;
 	/**
 	 * Origin/Position of this Node on the workspace.
@@ -49,11 +61,14 @@ public abstract class Node implements Selectable, Cloneable {
 
     // constructor not to be used, XMLEncoder/XMLDecoder
 	public Node() {
+		ids++;
+		this.nodeID = ids;
 	}
 
 
 	// basic constructor
 	public Node(Point origin) {
+		this();
 		this.origin = origin;
 	}
 
@@ -64,6 +79,17 @@ public abstract class Node implements Selectable, Cloneable {
 	public void setLabel(String label) {
 		this.label = label;
 	}
+	
+
+	/**
+	 * Returns the ID of this Unit.
+	 * @return
+	 */
+	public int getNodeID() {
+		return this.nodeID;
+	}
+	
+
 
 	/**
 	 * Position on the workspace.

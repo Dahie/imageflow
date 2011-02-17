@@ -299,8 +299,8 @@ public class UnitList extends NodeList<Node> implements Model, Cloneable {
 	 */
 	public boolean hasUnitAsDisplay() {
 		for (Node node : this) {
-			if(node instanceof Displayable) {
-				if(((Displayable)node).isDisplay()) 
+			if(node instanceof UnitElement) {
+				if(((UnitElement)node).isDisplayAny()) 
 					return true;
 			}
 		}
@@ -315,7 +315,7 @@ public class UnitList extends NodeList<Node> implements Model, Cloneable {
 		UnitElement unit;
 		for (int i = 0; i < size(); i++) {
 			unit = (UnitElement) get(i);
-			if(unit.getUnitType() == Type.SOURCE && unit.isDisplay()) 
+			if(unit.getUnitType() == Type.SOURCE && unit.isDisplayAny()) 
 				return true;
 		}
 		return false;

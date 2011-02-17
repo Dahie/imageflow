@@ -27,7 +27,6 @@ import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.ImageFlowView.CodePreviewDialog;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.imagej.MacroFlowRunner;
-import de.danielsenff.imageflow.imagej.MacroGenerator;
 import de.danielsenff.imageflow.imagej.MacroGenerator.ImageJResult;
 
 /**
@@ -61,15 +60,12 @@ public class GenerateMacroTask extends Task<Object, String> {
 
 		ImageFlowView.getProgressBar().setIndeterminate(true);
 		ImageFlowView.getProgressBar().setVisible(true);
-    	// generates Macro with callback function (for progressBar)
-    	//final String macro = graphController.generateMacro(true);
     	
     	final MacroFlowRunner macroFlowRunner = new MacroFlowRunner(graphController.getUnitElements());
-    	MacroGenerator macroGenerator = macroFlowRunner.getMacroGenerator();
-    	macroGenerator.generateMacro(this.showCode);
-    	openedImages = macroGenerator.getOpenedImages();
+    	// generates Macro with callback function (for progressBar)
+    	final String macro = macroFlowRunner.generateMacro(this.showCode);
+    	openedImages = macroFlowRunner.getOpenedImages();
     	
-		final String macro = macroFlowRunner.generateMacro(this.showCode);
 		
 		if(this.showCode && macro != null) {
 			// generates cleaner Macro without callback function (for progressBar)

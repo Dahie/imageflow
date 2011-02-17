@@ -37,8 +37,8 @@ interface Labelable {
 public class NodeList<E extends Node> extends Vector<E> {
     private transient HashMap<Integer, Node> nodeMap = new HashMap<Integer, Node>();
 
-	public boolean add(E aNode, int id) {
-		//aNode.setLabel(id, aNode);
+    public boolean add(E aNode) {
+		getNodeMap().put(aNode.getNodeID(), aNode);
 		return super.add(aNode);
 	}
 
@@ -50,16 +50,16 @@ public class NodeList<E extends Node> extends Vector<E> {
 
 	public void clear() {
 		super.clear();
-		nodeMap.clear();
+		getNodeMap().clear();
 	}	
 
 	public boolean remove(E aNode) {
-		nodeMap.remove(aNode.getLabel());
+		getNodeMap().remove(aNode.getLabel());
 		return super.remove(aNode);
 	}
 
 	/**
-	 * Returns a map of all uniue node IDs and their corresponding {@link Node}.
+	 * Returns a map of all unique node IDs and their corresponding {@link Node}.
 	 * @return
 	 */
 	public HashMap<Integer, Node> getNodeMap() {

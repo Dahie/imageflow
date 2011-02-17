@@ -12,13 +12,17 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import visualap.Node;
 
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
+import de.danielsenff.imageflow.models.unit.UnitList;
 
 public class GraphPanelDropHandler implements DropTargetListener {
 
@@ -81,7 +85,7 @@ public class GraphPanelDropHandler implements DropTargetListener {
 					// this can return null if no unit by this name is found
 					if (delegate != null) {
 						UnitElement unit = UnitFactory.createProcessingUnit(delegate.getUnitDescription(), point);
-						gPanel.getNodeL().add(unit);
+						getUnitList().add(unit);
 					}
 					
 					event.dropComplete(true);
@@ -95,6 +99,10 @@ public class GraphPanelDropHandler implements DropTargetListener {
 		event.rejectDrop();
 	}
 
+	private UnitList getUnitList() {
+		return gPanel.getNodeL();
+	}
+
 	private void processDroppedFiles(Point point, final List files) {
 		File file;
 		for (int j = 0; j < files.size(); j++) {
@@ -103,7 +111,7 @@ public class GraphPanelDropHandler implements DropTargetListener {
 			UnitDelegate delegate= DelegatesController.getInstance().getDelegate("Image Source");
 			String[] args = {file.getAbsolutePath()};
 			UnitElement unit = UnitFactory.createProcessingUnit(delegate.getUnitDescription(), point, args);
-			gPanel.getNodeL().add(unit);
+			getUnitList().add(unit);
 			point.x += 100;
 			point.y += 100;
 		}

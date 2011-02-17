@@ -35,6 +35,7 @@ import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.UnitElement;
+import de.danielsenff.imageflow.models.unit.UnitList;
 
 /**
  * ContextMenu of the {@link GraphPanel}.
@@ -71,6 +72,7 @@ public class InsertUnitMenu extends JMenu {
 		this.setText(name);
 		this.activePanel = gpanel;
 		final ActionListener newAction = new ActionListener() {
+			UnitList units = activePanel.getNodeL();
 			public void actionPerformed(final ActionEvent e) {
 				final JMenuItem source = (JMenuItem)(e.getSource());
 				final String action = source.getText();
@@ -79,7 +81,7 @@ public class InsertUnitMenu extends JMenu {
 					final CommentNode node = new CommentNode(new Point(savedPoint.x, savedPoint.y), "Newly added comment"); 
 					node.addModelListener(new NodeListener(activePanel, ifView));
 					savedPoint.translate(4, 4);
-					activePanel.getNodeL().add(node);
+					units.add(node);
 					activePanel.getSelection().clear();
 					activePanel.getSelection().add(node);
 					activePanel.repaint();
@@ -91,7 +93,7 @@ public class InsertUnitMenu extends JMenu {
 					try {
 						final UnitElement node = unitDelegate.createUnit(savedPoint);
 						node.addModelListener(new NodeListener(activePanel, ifView));
-						activePanel.getNodeL().add(node);
+						units.add(node);
 						activePanel.getSelection().clear();
 						activePanel.getSelection().add(node);
 						activePanel.repaint();

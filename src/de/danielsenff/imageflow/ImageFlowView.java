@@ -839,6 +839,17 @@ public class ImageFlowView extends FrameView {
 	}
 	
 	@Action(enabledProperty = "selected")
+	public void setSilentDisplayUnit() {
+		for (Object selectedElement : getSelections()) {
+			if(selectedElement instanceof UnitElement) {
+				final UnitElement node = (UnitElement) selectedElement;
+				node.toggleDisplaySilent();
+			}
+		}
+		graphPanel.repaint();
+	}
+	
+	@Action(enabledProperty = "selected")
 	public void addToDashboard() {
 		for (Object selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {

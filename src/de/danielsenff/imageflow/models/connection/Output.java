@@ -50,6 +50,11 @@ public class Output extends Pin {
 	 * indicates that this output should be shown
 	 */
 	protected boolean doDisplay;
+	/**
+	 * indicates that this output should be displayed, 
+	 * however silently without launching windows
+	 */
+	protected boolean doDisplaySilent;
 	
 	protected Vector<Connection> connections;
 	
@@ -96,7 +101,7 @@ public class Output extends Pin {
 			((ImageDataType)getDataType()).setParentUnitElement((UnitElement) getParent());
 			((ImageDataType)getDataType()).setParentPin(this);
 		}
-		generateID(((UnitElement)this.parent).getUnitID(), getIndex());
+		generateID(((UnitElement)this.parent).getNodeID(), getIndex());
 	}
 
 	/**
@@ -153,16 +158,36 @@ public class Output extends Pin {
 	public void setDoDisplay(final boolean doDisplay) {
 		this.doDisplay = doDisplay;
 	}
+	
+	/**
+	 * Activates to display the image at this output.
+	 * @param doDisplay
+	 */
+	public void setDoDisplaySilent(final boolean doDisplay) {
+		this.doDisplaySilent = doDisplay;
+	}
 
 
 	/**
-	 * Returns whether or not this output displays it's image. 
+	 * Returns whether or not this output displays it's result. 
 	 * @return
 	 */
 	public boolean isDoDisplay() {
 		return doDisplay;
 	}
 
+	/**
+	 * Returns whether or not this output should generate it's result. 
+	 * @return
+	 */
+	public boolean isDoDisplaySilent() {
+		return doDisplaySilent;
+	}
+	
+	public boolean isDoDisplayAny() {
+		return doDisplaySilent || doDisplay;
+	}
+	
 	/**
 	 * Title with which the output is referred to in the macro. Like a variable-name.
 	 * @return

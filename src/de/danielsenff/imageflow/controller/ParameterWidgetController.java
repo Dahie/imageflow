@@ -70,12 +70,12 @@ public class ParameterWidgetController {
 			
 			if (output.getDataType() instanceof ImageDataType) {
 				
-				//final ImageCanvas imageCanvas = new ImageCanvas((ImagePlus) object);
 				final JLabel imagePreview = new JLabel();
 				imagePreview.setPreferredSize(new Dimension(200, 200));
 				output.addOutputObjectListener(new OutputObjectChangeListener() {
 					
 					public void outputObjectChanged(Output output) {
+						System.out.println("output changed" + output);
 						if (output.getDataType() instanceof ImageDataType
 								&& output.getOutputObject() instanceof ImagePlus) {
 							ImagePlus imageplus = (ImagePlus) output.getOutputObject();
@@ -86,8 +86,7 @@ public class ParameterWidgetController {
 					}
 				});
 				
-				Object object = output.getOutputObject();
-				if (object != null) {
+				if (output.getOutputObject() == null) {
 					imagePreview.setText("starts empty");
 				}
 				formPanel.add(imagePreview);

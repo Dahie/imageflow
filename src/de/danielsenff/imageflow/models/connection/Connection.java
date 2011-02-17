@@ -78,8 +78,8 @@ public class Connection implements Lockable {
 		UnitElement fromUnit = (UnitElement) getOutput().getParent();
 		UnitElement toUnit = (UnitElement) getInput().getParent();
 		
-		id = getID(fromUnit.getUnitID(), getOutput().getIndex(), 
-				toUnit.getUnitID(), getInput().getIndex());
+		id = getID(fromUnit.getNodeID(), getOutput().getIndex(), 
+				toUnit.getNodeID(), getInput().getIndex());
 	}
 
 	/**

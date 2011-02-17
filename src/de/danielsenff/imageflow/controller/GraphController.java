@@ -390,14 +390,18 @@ public class GraphController{
 		}
 	}
 
-	public void setOutputData(String outputId, Object data) {
-		
-		// get the Output object with the given id
-		System.out.println(outputId);
-		
-		
-		// write the data into the output object
-		
+	public void setOutputData(int nodeID, int outputId, Object data) {
+		// get the Node and Output object with the given IDs
+		Node node = getUnitElements().getNodeByID(nodeID);
+		System.out.println(nodeID);
+		System.out.println(node);
+		if (node instanceof UnitElement) {
+			Output output = ((UnitElement)node).getOutput(outputId-1);
+			// write the data into the output object
+			System.out.println(output);
+			System.out.println(data);
+			output.setOutputObject(data);
+		}
 	}
 }
 

@@ -36,15 +36,6 @@ import de.danielsenff.imageflow.models.ModelListener;
 public abstract class AbstractUnit extends NodeAbstract implements Model {
 
 
-	/**
-	 * number of units instantiated, incremented with each new object
-	 */
-	static int ids;
-
-	/**
-	 * the id of this unit
-	 */
-	protected int unitID;
 	
 	private ArrayList<ModelListener> listeners;
 
@@ -55,21 +46,9 @@ public abstract class AbstractUnit extends NodeAbstract implements Model {
 	public AbstractUnit(final Point origin, final Object object) {
 		super(origin, object);
 
-		ids++;
-		this.unitID = ids;
-		
 		this.listeners = new ArrayList<ModelListener>();
 	}
 
-
-	/**
-	 * Returns the ID of this Unit.
-	 * @return
-	 */
-	public int getUnitID() {
-		return this.unitID;
-	}
-	
 
 	@Override
 	protected Object cloneNonClonableObject(Object obj) throws CloneNotSupportedException {

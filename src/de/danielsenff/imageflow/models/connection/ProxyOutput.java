@@ -29,6 +29,7 @@ public class ProxyOutput extends Output {
 				embeddedOutput.getDataType(), 
 				parentNode, i);
 		setDoDisplay(embeddedOutput.isDoDisplay());
+		setDoDisplaySilent(embeddedOutput.isDoDisplaySilent());
 		this.embeddedOutput = embeddedOutput;
 	}
 	

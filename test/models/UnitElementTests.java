@@ -252,8 +252,8 @@ public class UnitElementTests {
 		assertEquals("number of max parameters", 
 				mergeUnit.getParametersCount(), clone.getParametersCount());
 		assertEquals("unit name", mergeUnit.getUnitName(), clone.getUnitName());
-		assertNotSame("unit id", mergeUnit.getUnitID(), clone.getUnitID());
-		assertFalse("Unitid not the same",(mergeUnit.getUnitID() == clone.getUnitID()));
+		assertNotSame("unit id", mergeUnit.getNodeID(), clone.getNodeID());
+		assertFalse("Unitid not the same",(mergeUnit.getNodeID() == clone.getNodeID()));
 
 		// assert Object
 		MacroElement mergeObject = (MacroElement) mergeUnit.getObject(); 

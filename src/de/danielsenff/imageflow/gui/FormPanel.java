@@ -18,20 +18,28 @@
 package de.danielsenff.imageflow.gui;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
+
+import visualap.Node;
 
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.ParameterWidgetFactory;
 
-public class FormPanel extends JPanel implements ComponentForm {
+public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 
 	GridBagConstraints c;
 	int rows;
@@ -45,6 +53,8 @@ public class FormPanel extends JPanel implements ComponentForm {
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		rows = 0;
+		
+		
 	}
 	
 	/**
@@ -140,6 +150,38 @@ public class FormPanel extends JPanel implements ComponentForm {
 		c.gridy = rows+1;
 		add(panel, c);
 		rows++;
+	}
+
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mousePressed(MouseEvent event) {
+		if(event.isPopupTrigger()) {
+			JPopupMenu popup = new JPopupMenu();
+			/*for (iterable_type iterable_element : iterable) {
+				
+			}*/
+			popup.add("Form elements");
+			
+			popup.show(event.getComponent(), event.getX(), event.getY());
+		}
+	}
+
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

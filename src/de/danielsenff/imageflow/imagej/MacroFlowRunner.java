@@ -17,6 +17,7 @@
  */
 package de.danielsenff.imageflow.imagej;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -26,6 +27,7 @@ import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.controller.FlowRunner;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.imagej.MacroGenerator.ImageJResult;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
@@ -48,20 +50,18 @@ import de.danielsenff.imageflow.models.unit.UnitElement.Type;
 public class MacroFlowRunner implements FlowRunner {
 
 	private UnitList macroUnitList;
-
+	private MacroGenerator macroGenerator;
+	
 	/**
 	 * @param units
 	 */
 	public MacroFlowRunner(final UnitList units) {
 		this.macroUnitList = sortList(units.clone());
+		this.macroGenerator = new MacroGenerator(macroUnitList);
 	}
 
 	
 	public String generateMacro(boolean extendedMacro) {
-		return getMacroGenerator().generateMacro(extendedMacro);
-	}
-	
-	public MacroGenerator getMacroGenerator() {
 		/*
 		 *  analysis and verification of the connection network 
 		 */
@@ -69,13 +69,12 @@ public class MacroFlowRunner implements FlowRunner {
 			System.out.println("Error in node network.");
 			return null;
 		}
-
 		
-		/*
-		 *  generation of the ImageJ macro
-		 */
-		MacroGenerator macGen = new MacroGenerator(macroUnitList);
-		return macGen;
+		return getMacroGenerator().generateMacro(extendedMacro);
+	}
+	
+	public MacroGenerator getMacroGenerator() {
+		return this.macroGenerator;
 	}
 
 	/**
@@ -97,7 +96,6 @@ public class MacroFlowRunner implements FlowRunner {
 	 * @return
 	 */
 	public UnitList getSubUnitList(UnitElement endUnit) {
-
 		UnitList subgraph = new UnitList();
 		subgraph.add(endUnit);
 
@@ -303,7 +301,7 @@ public class MacroFlowRunner implements FlowRunner {
 						// be deleted in the next lap
 					} else if (!unit.hasOutputsConnected() 
 							&& unit.getUnitType() == Type.SOURCE 
-							&& !unit.isDisplay()) {
+							&& !unit.isDisplayAny()) {
 						// if source has no connected outputs and is not visible
 						unitElements.remove(index);
 					} 
@@ -337,6 +335,15 @@ public class MacroFlowRunner implements FlowRunner {
 			}
 		}
 		
+	}
+
+
+	public ArrayList<ImageJResult> getOpenedImages() {
+		if (getMacroGenerator() != null) {
+			return getMacroGenerator().getOpenedImages();
+		} else {
+			return new ArrayList<ImageJResult>();
+		}
 	}
 
 }

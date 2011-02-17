@@ -127,9 +127,12 @@ public class GPanelPopup implements GPanelListener {
 				
 			
 			JCheckBoxMenuItem chkBoxDisplayUnit = new JCheckBoxMenuItem(getAction("setDisplayUnit")); 
-			boolean isDisplayUnit = unit.isDisplay();
-			chkBoxDisplayUnit.setSelected(isDisplayUnit);
+			chkBoxDisplayUnit.setSelected(unit.isDisplay());
 			popup.add(chkBoxDisplayUnit);
+			chkBoxDisplayUnit = new JCheckBoxMenuItem(getAction("setSilentDisplayUnit")); 
+			chkBoxDisplayUnit.setSelected(unit.isDisplaySilent());
+			popup.add(chkBoxDisplayUnit);
+			
 			
 			JCheckBoxMenuItem chkBoxCollapseIcon = new JCheckBoxMenuItem(getAction("setUnitComponentSize"));
 			boolean isCollapsedIcon = unit.getCompontentSize() == Size.SMALL ? true : false;

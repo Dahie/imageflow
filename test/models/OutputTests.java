@@ -42,9 +42,9 @@ public class OutputTests {
 		// the imagetitle is constructed from the unit and pin the 
 		// connection comes from and the 
 		assertEquals("imagetitle for output 1 at unit 1", 
-				"Unit_"+sourceUnit.getUnitID()+"_Output_1", sourceOutput.getOutputTitle());
+				"Unit_"+sourceUnit.getNodeID()+"_Output_1", sourceOutput.getOutputTitle());
 		assertEquals("imagetitle for input 1 at unit 2", 
-				"Unit_"+sourceUnit.getUnitID()+"_Output_1", filter1Input.getImageTitle());
+				"Unit_"+sourceUnit.getNodeID()+"_Output_1", filter1Input.getImageTitle());
 		
 		assertNotNull("imagetitle for output 1 at unit 2", filter1Output.getOutputTitle());
 	}

@@ -122,7 +122,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 */
 	protected Status status;
 
-	Node originalNode = null;
+	UnitElement originalNode = null;
 
 
 	/**
@@ -474,16 +474,8 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		});
 		gd.addForm("Name", fldName);
 		
-		JCheckBox chkDisplay = new JCheckBox("Display result");
-		chkDisplay.setToolTipText("After the workflow has been executed, nodes that are set to 'display' are displayed as a result.");
-		chkDisplay.setSelected(isDisplay());
-		chkDisplay.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent event) {
-				boolean newValue = ((JCheckBox)event.getSource()).isSelected();
-				setDisplay(newValue);
-			}
-		});
-		gd.addForm("", chkDisplay);
+		addDisplayCheckbox(gd);
+		addDisplaySilentCheckbox(gd);
 		
 		gd.addSeparator();		
 
@@ -495,8 +487,6 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		
 			gd.addSeparator();
 		}
-		
-		gd.addSeparator();
 		
 		if(hasInputs()) {
 			gd.addMessage("Inputs");
@@ -524,6 +514,32 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		gd.showDialog();
 
 		notifyModelListeners();
+	}
+
+	private void addDisplayCheckbox(final PropertiesDialog gd) {
+		JCheckBox chkDisplay = new JCheckBox("Display result");
+		chkDisplay.setToolTipText("After the workflow has been executed, nodes that are set to 'display' are displayed as a result.");
+		chkDisplay.setSelected(isDisplay());
+		chkDisplay.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent event) {
+				boolean newValue = ((JCheckBox)event.getSource()).isSelected();
+				setDisplay(newValue);
+			}
+		});
+		gd.addForm("", chkDisplay);
+	}
+	
+	private void addDisplaySilentCheckbox(final PropertiesDialog gd) {
+		JCheckBox chkDisplay = new JCheckBox("Display result silently");
+		chkDisplay.setToolTipText("After the workflow has been executed, nodes that are set to 'display' are displayed as a result.");
+		chkDisplay.setSelected(isDisplaySilent());
+		chkDisplay.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent event) {
+				boolean newValue = ((JCheckBox)event.getSource()).isSelected();
+				setDisplaySilent(newValue);
+			}
+		});
+		gd.addForm("", chkDisplay);
 	}
 
 	protected void addParameterWidgets(final PropertiesDialog gd) {
@@ -603,7 +619,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 */
 	@Override
 	public String toString() {
-		return super.toString() + " Name:"+this.label + " Type:" + this.getUnitType() + " ID:" + this.unitID;
+		return super.toString() + " Name:"+this.label + " Type:" + this.getUnitType() + " ID:" + this.nodeID;
 	}
 
 	/**
@@ -834,6 +850,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 			cloneParameter(clone, parameter);
 		}
 		clone.setDisplay(isDisplay());
+		clone.setDisplaySilent(isDisplaySilent());
 		clone.setColor(this.color);
 		clone.setIcon(this.preview);
 		clone.setHelpString(this.infoText);
@@ -845,7 +862,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		this.originalNode = unitElement;
 	}
 	
-	public Node getOriginalUnit() {
+	public UnitElement getOriginalUnit() {
 		return this.originalNode;
 	}
 	
@@ -895,6 +912,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		Output clonedOutput = new Output(output.getDataType().clone(), clone, i+1);
 		clonedOutput.setupOutput(output.getName(), output.getShortDisplayName());
 		clonedOutput.setDoDisplay(output.isDoDisplay());
+		clonedOutput.setDoDisplaySilent(output.isDoDisplaySilent());
 		clone.addOutput(clonedOutput);
 	}
 
@@ -1064,7 +1082,8 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * boolean indicating if this unit is a display unit
 	 * The result of DisplayUnits will be shown after executing the workflow.  
 	 */
-	private boolean display = false;  
+	private boolean display = false;
+	private boolean displaySilent = false;  
 	
 	public void setDisplay(final boolean isDisplay) {
 		this.display = isDisplay;
@@ -1074,20 +1093,44 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		notifyModelListeners();
 	}
 
+	public void setDisplaySilent(final boolean isDisplay) {
+		this.displaySilent = isDisplay;
+		for (Output output : getOutputs()) {
+			output.setDoDisplaySilent(isDisplay);
+		}
+		notifyModelListeners();
+	}
+	
 	public boolean isDisplay() {
 		return this.display;
+	}
+	
+	/**
+	 * Returns true if the unit is either displayed or silently displayed.
+	 * @return
+	 */
+	public boolean isDisplayAny() {
+		return this.display || this.displaySilent;
+	}
+	
+	public boolean isDisplaySilent() {
+		return this.displaySilent;
 	}
 	
 	public void toggleDisplay() {
 		setDisplay(!isDisplay());
 	}
 
+	public void toggleDisplaySilent() {
+		setDisplaySilent(!isDisplaySilent());
+	}
+	
 	/**
 	 * Returns true if any {@link Output} connects to a unit that is set as displayable.
 	 * @return
 	 */
 	public boolean hasDisplayBranch() {
-		if(isDisplay())
+		if(isDisplayAny())
 			return true;
 
 		for (Output output : getOutputs()) {

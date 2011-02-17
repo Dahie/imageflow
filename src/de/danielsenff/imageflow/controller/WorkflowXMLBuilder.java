@@ -303,9 +303,9 @@ public class WorkflowXMLBuilder {
 				((GroupUnitElement)unitElement).getNodes().add(embeddedNode);
 				if(embeddedNode instanceof UnitElement) {
 					System.out.println("put in embeddedNodes: " + embeddedNode 
-							+ " unitid: "+ ((UnitElement)embeddedNode).getUnitID());
-					newNodes.put(((UnitElement)embeddedNode).getUnitID(), (UnitElement) embeddedNode);
-					embeddedNodes.put(((UnitElement)embeddedNode).getUnitID(), (UnitElement) embeddedNode);
+							+ " unitid: "+ ((UnitElement)embeddedNode).getNodeID());
+					newNodes.put(((UnitElement)embeddedNode).getNodeID(), (UnitElement) embeddedNode);
+					embeddedNodes.put(((UnitElement)embeddedNode).getNodeID(), (UnitElement) embeddedNode);
 				}
 			}
 		}
@@ -526,7 +526,7 @@ public class WorkflowXMLBuilder {
 
 	private Element writeXMLUnitElement(UnitElement unit, Element unitElement) {
 		Element unitID = new Element("UnitID");
-		unitID.addContent(unit.getUnitID()+"");
+		unitID.addContent(unit.getNodeID()+"");
 		unitElement.addContent(unitID);
 
 		// unit description analog to the Unit-XML
@@ -564,7 +564,8 @@ public class WorkflowXMLBuilder {
 		Element doDisplayU = new Element("DoDisplay");
 		doDisplayU.addContent(unit.isDisplay() ? "true" : "false");
 		general.addContent(doDisplayU);
-
+		
+		// TODO write silentdisplay
 
 		// deal with all parameters
 		Element parameters = new Element("Parameters");
@@ -708,6 +709,7 @@ public class WorkflowXMLBuilder {
 		String boolIsDisplay = output.isDoDisplay() ? "true" : "false"; 
 		doDisplay.addContent(boolIsDisplay);
 		outputElement.addContent(doDisplay);
+		// TODO save silent dodisplay
 	}
 
 
@@ -718,7 +720,7 @@ public class WorkflowXMLBuilder {
 		connectionsElement.addContent(connectionElement);
 
 		Element fromUnitID = new Element("FromUnitID");
-		fromUnitID.addContent(""+ ((UnitElement)conn.getFromUnit()).getUnitID());
+		fromUnitID.addContent(""+ ((UnitElement)conn.getFromUnit()).getNodeID());
 		connectionElement.addContent(fromUnitID);
 
 		Element fromOutputNumber = new Element("FromOutputNumber");
@@ -726,7 +728,7 @@ public class WorkflowXMLBuilder {
 		connectionElement.addContent(fromOutputNumber);
 
 		Element toUnitID = new Element("ToUnitID");
-		toUnitID.addContent(""+((UnitElement)conn.getToUnit()).getUnitID());
+		toUnitID.addContent(""+((UnitElement)conn.getToUnit()).getNodeID());
 		connectionElement.addContent(toUnitID);
 
 		Element toInputNumber = new Element("ToInputNumber");

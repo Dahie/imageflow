@@ -53,6 +53,7 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Pin;
 import de.danielsenff.imageflow.models.delegates.Delegate;
+import de.danielsenff.imageflow.models.unit.UnitList;
 
 import static de.danielsenff.imageflow.utils.Reversed.reversed;
 
@@ -433,8 +434,8 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	/**
 	 * @return the nodeL
 	 */
-	public Collection<Node> getNodeL() {
-		return this.nodeL;
+	public UnitList getNodeL() {
+		return (UnitList) this.nodeL;
 	}
 
 	/**

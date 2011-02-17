@@ -46,7 +46,7 @@ public class RunMacroTask extends GenerateMacroTask {
 	 * We need to convert this to a synchronized object to 
 	 * be able to get the status in realtime.
 	 */
-	private static ProgressObserver progressObserver;
+	private static CallbackObserver callbackObserver;
 	
 	/**
 	 * @param app
@@ -62,7 +62,8 @@ public class RunMacroTask extends GenerateMacroTask {
 		super(app, graphController);
 		this.showCode = showCode;
 		this.closeAll = closeAll;
-		progressObserver = new ProgressObserver(new MacroCallbackListener());
+		MacroCallbackListener listener = new MacroCallbackListener();
+		callbackObserver = new CallbackObserver(listener);
 	}
 	
 	/**
@@ -136,7 +137,6 @@ public class RunMacroTask extends GenerateMacroTask {
 					if (ip != null) {
 						UnitElement unitElement = (UnitElement) result.node;
 						unitElement.setIconScaled(ip.getImage());
-						unitElement.getOutput(parentOutput.getIndex()-1).setOutputObject(ip);
 					}
 				}
 			}
@@ -158,14 +158,34 @@ public class RunMacroTask extends GenerateMacroTask {
 		if (progressValue < 0) {progressValue = 0.0f;}
 		else if(progressValue > 1) {progressValue = 1.0f;}
 		
-		progressObserver.setValue(progressValue);
+		callbackObserver.setProgressValue(progressValue);
 	}
 	
-	public static void setOutputData(String outputId, Object data) {
+	public static void setOutputData(int nodeID, int outputID, double data) {
 		// write the data as DataObject for the output of the given ID
-		if (data != null && data instanceof ImagePlus) {
-			
-		}
+		callbackObserver.setOutputData(nodeID, outputID, data);
+	}
+	
+	public static void setOutputData(int nodeID, int outputID, int data) {
+		// write the data as DataObject for the output of the given ID
+		callbackObserver.setOutputData(nodeID, outputID, data);
+	}
+	
+	public static void setOutputData(int nodeID, int outputID, String data) {
+		// write the data as DataObject for the output of the given ID
+		callbackObserver.setOutputData(nodeID, outputID, data);
+	}
+	
+	/**
+	 * Does not need to pass the object as an argument. Takes the current
+	 * selected Image from ImageJ.
+	 * @param nodeID
+	 * @param outputId
+	 */
+	public static void setOutputImage(int nodeID, int outputID) {
+		// get ImagePlus by imageTitle from ImageJ instance
+		ImagePlus ip = IJ.getImage();
+		callbackObserver.setOutputData(nodeID, outputID, ip);
 	}
 	
 	@Override protected void succeeded(final Object superclass) {
@@ -180,41 +200,26 @@ public class RunMacroTask extends GenerateMacroTask {
 			setProgress(value);
 		}
 
-		public void fireOutputData(String outputId, Object data) {
-			graphController.setOutputData(outputId, data);
+		public void fireOutputData(int nodeID, int outputID,  Object data) {
+			graphController.setOutputData(nodeID, outputID, data);
 		}
 	}
 	
-	static class OutputDataObserver {
-		Object data;
-		MacroCallbackListener progListener;
-		private String outputIDvalue;
-		private Object dataValue;
-		
-		public OutputDataObserver(MacroCallbackListener listener) {
-			this.progListener = listener;
-		}
-		
-		public void setValue(String outputId, Object data) {
-			outputIDvalue = outputId; 
-			dataValue = data;
-			progListener.fireOutputData(outputIDvalue, dataValue);
-		} 
-	}
 	
-	static class ProgressObserver {
-		public static float value = 0;
-		
+	static class CallbackObserver {
 		MacroCallbackListener progListener;
 		
-		public ProgressObserver(MacroCallbackListener listener) {
+		public CallbackObserver(MacroCallbackListener listener) {
 			this.progListener = listener;
 		}
 
-		public void setValue(float progressValue) {
-			value = progressValue;
-			progListener.fireProgressChanged(value);
+		public void setProgressValue(float progressValue) {
+			progListener.fireProgressChanged(progressValue);
 		} 
+		
+		public void setOutputData(int nodeID, int outputID, Object data) {
+			progListener.fireOutputData(nodeID, outputID, data);
+		}
 	}
 }
 

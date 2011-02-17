@@ -43,10 +43,10 @@ public class InputTests {
 		// the imagetitle is constructed from the unit and pin the 
 		// connection comes from and the 
 		assertEquals("imagetitle for input 1 at unit 2", 
-				"Unit_"+sourceUnit.getUnitID()+"_Output_1", filter1Input.getImageTitle());
+				"Unit_"+sourceUnit.getNodeID()+"_Output_1", filter1Input.getImageTitle());
 		
 		assertEquals("imagetitle for input 1 at unit 3", 
-				"Unit_"+sourceUnit.getUnitID()+"_Output_1", filter2Input.getImageTitle());
+				"Unit_"+sourceUnit.getNodeID()+"_Output_1", filter2Input.getImageTitle());
 	}
 	
 	@Test public void testIsConnected() {

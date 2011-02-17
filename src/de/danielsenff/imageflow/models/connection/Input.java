@@ -135,7 +135,7 @@ public class Input extends Pin implements Lockable {
 	public void setConnection(final Connection connection) {
 		if(!isLocked()) {
 			this.connection = connection;
-			generateID(connection.getOutput().getParent().getUnitID(), 
+			generateID(connection.getOutput().getParent().getNodeID(), 
 					connection.getOutput().getIndex());	
 		}
 		
@@ -263,7 +263,7 @@ public class Input extends Pin implements Lockable {
 	 * @return
 	 */
 	public int getFromUnitNumber() {
-		return ((AbstractUnit) this.connection.getFromUnit()).getUnitID();
+		return ((AbstractUnit) this.connection.getFromUnit()).getNodeID();
 	}
 
 	/**
