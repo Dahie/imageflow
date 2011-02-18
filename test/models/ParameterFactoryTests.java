@@ -34,7 +34,7 @@ public class ParameterFactoryTests extends TestCase {
 	 */
 	public void testBooleanParameter() {
 		boolean paramValue = true;
-		Parameter parameter = ParameterFactory.createParameter("testParameter","boolean", paramValue, "helpString", "truestring", 0);
+		Parameter parameter = ParameterFactory.createParameter("testParameter","boolean", paramValue, "helpString", "truestring");
 		
 		boolean classInstance = (parameter instanceof BooleanParameter);
 		assertTrue("is right class", classInstance);

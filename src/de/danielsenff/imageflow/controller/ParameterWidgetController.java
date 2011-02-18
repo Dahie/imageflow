@@ -75,7 +75,6 @@ public class ParameterWidgetController {
 				output.addOutputObjectListener(new OutputObjectChangeListener() {
 					
 					public void outputObjectChanged(Output output) {
-						System.out.println("output changed" + output);
 						if (output.getDataType() instanceof ImageDataType
 								&& output.getOutputObject() instanceof ImagePlus) {
 							ImagePlus imageplus = (ImagePlus) output.getOutputObject();

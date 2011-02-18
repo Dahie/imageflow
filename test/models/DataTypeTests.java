@@ -9,7 +9,6 @@ import java.awt.Point;
 
 import org.junit.Test;
 
-import visualap.Node;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
@@ -18,6 +17,7 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
@@ -332,7 +332,7 @@ public class DataTypeTests extends UnitElementTests{
 		
 		
 		ProxyOutput groupOutput = (ProxyOutput)group.getOutput(0);
-		DataTypeFactory.ImageDataType dtImage = (DataTypeFactory.Image)groupOutput.getDataType();
+		ImageDataType dtImage = (ImageDataType)groupOutput.getDataType();
 		assertEquals(8, dtImage.getImageBitDepth());
 		assertTrue(dtImage.isImageBitDepthCompatible(8));
 		units.add(group);

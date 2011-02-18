@@ -37,8 +37,8 @@ public class ParameterFactory {
 	 */
 	public static Parameter createParameter(final String displayName, 
 			final String dataTypeName,
-			Object value, 
-			String helpString, 
+			final Object value, 
+			final String helpString, 
 			HashMap<String, Object> options) {
 		return createParameter(displayName, dataTypeName, value, helpString, null, options);
 	}
@@ -62,6 +62,21 @@ public class ParameterFactory {
 		return new ChoiceParameter(displayName, values, helpString, options);
 	}
 	
+	public static Parameter createParameter(final String displayName, 
+			final String dataTypeName,
+			final Object value,
+			final String helpString) throws IllegalArgumentException {
+		return createParameter(displayName, dataTypeName, value, helpString, new HashMap<String, Object>());
+	}
+	
+	public static Parameter createParameter(final String displayName, 
+			final String dataTypeName,
+			final Object value,
+			final String helpString, 
+			final String boolTrueString) throws IllegalArgumentException {
+		return createParameter(displayName, dataTypeName, value, helpString, new HashMap<String, Object>());
+	}
+	
 	/**
 	 * Creates a {@link Parameter}-Implementation for the Type of the value.
 	 * Certain Parameters require additional arguments.
@@ -73,7 +88,7 @@ public class ParameterFactory {
 	 * @param chosenValue 
 	 * @param helpString
 	 * @param boolTrueString	This can be any other type that maybe required for certain parameters, like TrueString or chosenValue
-	 * @param options 
+	 * @param options Optional options hash
 	 * @return
 	 * @throws IllegalArgumentException 
 	 */
@@ -82,7 +97,10 @@ public class ParameterFactory {
 			final Object value,
 			final String helpString, 
 			final String boolTrueString,
-			final HashMap<String, Object> options) throws IllegalArgumentException {
+			HashMap<String, Object> options) throws IllegalArgumentException {
+		
+		if (options == null)
+			options = new HashMap<String, Object>(); 
 		
 		// see what parameter instance has to be created
 		if(value instanceof String) {

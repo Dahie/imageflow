@@ -1,6 +1,9 @@
 package models;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import ij.plugin.filter.PlugInFilter;
 
 import java.awt.Dimension;
@@ -13,6 +16,7 @@ import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
+import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 public class OutputTests {
@@ -233,13 +237,13 @@ public class OutputTests {
 
 		Connection conn1 = new Connection(unit1, 1, unit2, 1);
 		conn1.connect();
-		DataTypeFactory.ImageDataType o1dT = ((DataTypeFactory.Image)output1.getDataType());
+		ImageDataType o1dT = ((ImageDataType)output1.getDataType());
 		assertTrue("travers from DOES_32", 
 				o1dT.isImageBitDepthCompatible(PlugInFilter.DOES_32));
 		assertTrue("travers from DOES_16", 
 				o1dT.isImageBitDepthCompatible(PlugInFilter.DOES_16));
 		
-		DataTypeFactory.ImageDataType o2dT = ((DataTypeFactory.Image)output2.getDataType());
+		ImageDataType o2dT = ((ImageDataType)output2.getDataType());
 		assertTrue("travers from DOES_32 via DOES_ALL to -1",
 				o2dT.isImageBitDepthCompatible(PlugInFilter.DOES_32));
 		

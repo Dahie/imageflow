@@ -164,7 +164,7 @@ public class UnitFactoryExt extends UnitFactory {
 		
 		unit.addParameter(
 				new ChoiceParameter("Math", mathChoices, "Add",
-				"Defines what math should be used to merge both images"));
+				"Defines what math should be used to merge both images", null));
 		
 		// setup of the inputs
 		
@@ -256,7 +256,7 @@ public class UnitFactoryExt extends UnitFactory {
 					"String",
 					path, // parameter value
 					"The source unit needs the path of an image file." // help text for this parameter
-					));
+				));
 		
 		// setup of the output of the (source) unit 0
 		int bitDepth = unit.getBitDepth();
