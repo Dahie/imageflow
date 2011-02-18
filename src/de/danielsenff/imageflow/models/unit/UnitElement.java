@@ -34,6 +34,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -123,8 +124,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	protected Status status;
 
 	UnitElement originalNode = null;
-
-
+	
 	/**
 	 * input array
 	 */
@@ -456,7 +456,9 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
 	 */
 	public void showProperties() {
-		final PropertiesDialog gd = new PropertiesDialog(getLabel() + " - Parameters", ImageFlow.getApplication().getMainFrame()) ;
+		final PropertiesDialog gd = 
+			new PropertiesDialog(getLabel() + " - Parameters", 
+					ImageFlow.getApplication().getMainFrame()) ;
 		if(getHelpString() != null) {
 			gd.addMessage(getHelpString());
 		}
@@ -1137,7 +1139,6 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 			if(output.isConnected()) {
 				for (Connection connection : output.getConnections()) {
 					UnitElement next = (UnitElement)connection.getToUnit();
-					//					System.out.println(next +" tested by "+ this);
 					if(next.hasDisplayBranch()) {
 						return true;
 					}
@@ -1147,5 +1148,32 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		return false;
 	}
 
+	
+	private JComponent widget;
+	private JComponent previewWidget;
+	
+	public void setWidget(JComponent component) {
+		this.widget = component;
+	}
+
+	public void setPreviewWidget(JComponent component) {
+		this.previewWidget = component;
+	}
+	
+	public JComponent getWidget() {
+		return this.widget;
+	}
+	
+	public boolean hasWidget() {
+		return this.widget != null;
+	}
+	
+	public JComponent getPreviewWidget() {
+		return this.previewWidget;
+	}
+	
+	public boolean hasPreviewWidget() {
+		return this.previewWidget != null;
+	}
 }
 

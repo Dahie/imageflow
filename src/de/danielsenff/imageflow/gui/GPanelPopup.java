@@ -84,7 +84,12 @@ public class GPanelPopup implements GPanelListener {
 				if (!graphController.getCopyNodesList().isEmpty()) 
 					popup.add(getAction("paste"));
 			} else {
+				popup.add(getAction("showUnitParameters"));
+				
 				showSingleUnitActions(popup, selections);
+
+				popup.addSeparator();
+				
 				popup.add(getAction("cut"));
 				popup.add(getAction("copy"));
 				popup.add(getAction("paste"));
@@ -138,10 +143,19 @@ public class GPanelPopup implements GPanelListener {
 			boolean isCollapsedIcon = unit.getCompontentSize() == Size.SMALL ? true : false;
 			chkBoxCollapseIcon.setSelected(isCollapsedIcon);
 			popup.add(chkBoxCollapseIcon);
-//					popup.add(getAction("preview"));
 			
-			popup.add(getAction("showUnitParameters"));
 			popup.addSeparator();
+			
+			if(unit.hasWidget()) {
+				popup.add(getAction("removeFromDashboard"));
+			} else {
+				popup.add(getAction("addToDashboard"));
+			}
+			if(unit.hasPreviewWidget()) {
+				popup.add(getAction("removeOutputFromDashboard"));
+			} else {
+				popup.add(getAction("addOutputToDashboard"));
+			}
 		}
 	}
 

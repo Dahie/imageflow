@@ -18,23 +18,18 @@
 package de.danielsenff.imageflow.gui;
 
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
-
-import visualap.Node;
 
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.ParameterWidgetFactory;
@@ -47,14 +42,12 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 	public FormPanel() {
 		setLayout(new GridBagLayout());
 		c = new GridBagConstraints();
-		c.insets = new Insets(4,4,4,4);  //top padding
+		c.insets = new Insets(2,2,2,2);  //top padding
 		c.anchor = GridBagConstraints.LINE_START;
 		c.ipady = 0;
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		rows = 0;
-		
-		
 	}
 	
 	/**

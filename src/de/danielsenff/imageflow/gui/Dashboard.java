@@ -22,18 +22,40 @@ public class Dashboard extends JPanel {
 		);
 	}
 	
+	public void removeWidget(UnitElement unit) {
+		if(dashs.containsKey(unit.getLabel())) {
+			JPanel dash = dashs.get(unit.getLabel());
+			unit.setWidget(null);
+			dashs.remove(unit.getLabel());
+			this.remove(dash);
+		}
+	}
+	
+	public void removePreviewWidget(UnitElement unit) {
+		String dashKey = unit.getLabel()+"_preview";
+		if(dashs.containsKey(dashKey)) {
+			JPanel dash = dashs.get(dashKey);
+			unit.setPreviewWidget(null);
+			dashs.remove(dashKey);
+			this.remove(dash);
+		}
+	}
+	
 	public void addWidget(UnitElement unit) {
 		if(!dashs.containsKey(unit.getLabel())) {
 			JPanel dash = ParameterWidgetController.createWidgetFromUnit(unit);
 			dashs.put(unit.getLabel(), dash);
+			unit.setWidget(dash);
 			this.add(dash, "flowy");
 		}
 	}
 
 	public void addPreviewWidget(UnitElement unit) {
-		if(!dashs.containsKey(unit.getLabel())) {
+		String dashKey = unit.getLabel()+"_preview";
+		if(!dashs.containsKey(dashKey)) {
 			JPanel dash = ParameterWidgetController.createPreviewWidgetFromUnit(unit);
-			dashs.put(unit.getLabel(), dash);
+			dashs.put(dashKey, dash);
+			unit.setPreviewWidget(dash);
 			this.add(dash, "flowy");
 		}
 	}

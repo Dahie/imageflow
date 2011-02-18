@@ -842,7 +842,7 @@ public class ImageFlowView extends FrameView {
 	 */
 	@Action(enabledProperty = "selected")
 	public void setDisplayUnit() {
-		for (Object selectedElement : getSelections()) {
+		for (Node selectedElement : getSelections()) {
 			if(selectedElement instanceof Displayable) {
 				final Displayable node = (Displayable) selectedElement;
 				node.toggleDisplay();
@@ -853,7 +853,7 @@ public class ImageFlowView extends FrameView {
 	
 	@Action(enabledProperty = "selected")
 	public void setSilentDisplayUnit() {
-		for (Object selectedElement : getSelections()) {
+		for (Node selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
 				final UnitElement node = (UnitElement) selectedElement;
 				node.toggleDisplaySilent();
@@ -864,24 +864,42 @@ public class ImageFlowView extends FrameView {
 	
 	@Action(enabledProperty = "selected")
 	public void addToDashboard() {
-		for (Object selectedElement : getSelections()) {
+		for (Node selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
-				// TODO allow adding only once
 				dashboardPanel.addWidget((UnitElement) selectedElement);
-				dashboardPanel.revalidate();
 			}
 		}
+		dashboardPanel.revalidate();
+	}
+	
+	@Action(enabledProperty = "selected")
+	public void removeFromDashboard() {
+		for (Node selectedElement : getSelections()) {
+			if(selectedElement instanceof UnitElement) {
+				dashboardPanel.removeWidget((UnitElement) selectedElement);
+			}
+		}
+		dashboardPanel.revalidate();
 	}
 	
 	@Action(enabledProperty = "selected")
 	public void addOutputToDashboard() {
-		for (Object selectedElement : getSelections()) {
+		for (Node selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
-				// TODO allow adding only once
 				dashboardPanel.addPreviewWidget((UnitElement) selectedElement);
-				dashboardPanel.revalidate();
 			}
 		}
+		dashboardPanel.revalidate();
+	}
+	
+	@Action(enabledProperty = "selected")
+	public void removeOutputFromDashboard() {
+		for (Node selectedElement : getSelections()) {
+			if(selectedElement instanceof UnitElement) {
+				dashboardPanel.removePreviewWidget((UnitElement) selectedElement);
+			}
+		}
+		dashboardPanel.revalidate();
 	}
 	
 	/**
@@ -939,8 +957,13 @@ public class ImageFlowView extends FrameView {
 	@Action(enabledProperty = "selected")
 	public void delete() {
 		final Selection<Node> selection = getSelections();
-		for (final Node unit : selection) {
-			graphController.removeNode(unit);
+		for (final Node node : selection) {
+			graphController.removeNode(node);
+			if (node instanceof UnitElement) {
+				dashboardPanel.removeWidget((UnitElement) node);
+				dashboardPanel.removePreviewWidget((UnitElement) node);
+				dashboardPanel.revalidate();
+			}
 		}
 		graphPanel.repaint();
 	}
