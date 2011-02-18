@@ -40,6 +40,7 @@ import de.danielsenff.imageflow.models.unit.UnitElement;
 public class RunMacroTask extends GenerateMacroTask {
 	
 	private boolean closeAll;
+	private boolean showImageJ;
 	/**
 	 * ProgressObserver is a workaround.
 	 * We get the status of the progress from ImageJ from a static class.
@@ -57,10 +58,12 @@ public class RunMacroTask extends GenerateMacroTask {
 	 */
 	public RunMacroTask(final Application app, 
 			final GraphController graphController, 
+			final boolean showImageJ,
 			final boolean showCode, 
 			final boolean closeAll) {
 		super(app, graphController);
 		this.showCode = showCode;
+		this.showImageJ = showImageJ;
 		this.closeAll = closeAll;
 		MacroCallbackListener listener = new MacroCallbackListener();
 		callbackObserver = new CallbackObserver(listener);
@@ -74,7 +77,7 @@ public class RunMacroTask extends GenerateMacroTask {
 	public RunMacroTask(final Application app, 
 			final GraphController graphController, 
 			final boolean showCode) {
-		this(app, graphController, showCode, false);
+		this(app, graphController, true, showCode, false);
 	}
 
 	@Override 
@@ -93,40 +96,10 @@ public class RunMacroTask extends GenerateMacroTask {
 				macro = closeAllCommand + macro;
 			}
 			
-			ImageJ imagej = ((ImageFlow)ImageFlow.getInstance()).getImageJInstance();
+			ImageFlow imageFlow = (ImageFlow)ImageFlow.getInstance();
+			ImageJ imagej = imageFlow.getImageJInstance();
 			Macro_Runner mr = new Macro_Runner();
 			String resultString = mr.runMacro(macro, "");
-			
-			/*
-			 * TODO FIXME
-			 * This Task has one major problem.
-			 * We create/use an instance of ImageJ. The tasks expects ImageJ to terminate at some point.
-			 * Therefore as ImageJ is kept alive and the task is never closed.
-			 * In MacOS X this causes ImageFlow to not shutdown on close.
-			 * In Linux it can cause problems with ImageJ not wanting to close.
-			 */
-			
-			/* beginning for new functions, but not today, daniel */
-			/*int[] imageIDs = WindowManager.getIDList();
-			for (int i = 0; i < WindowManager.getImageCount(); i++) {
-				ImagePlus image = WindowManager.getImage(imageIDs[i]);
-				String imagetitle = image.getTitle(); 
-				System.out.println(imagetitle);
-				
-				if(imagetitle.contains("-"))
-					imagetitle.substring(0, imagetitle.indexOf('-'));
-					
-				String[] titleStrings = imagetitle.split("_");
-				int unitID = Integer.valueOf(titleStrings[1]);
-				int outputID = Integer.valueOf(titleStrings[3]);;			
-				
-				if(nodes.getUnit(unitID) instanceof UnitElement) {
-					UnitElement unit = (UnitElement) nodes.getUnit(unitID);
-					unit.setIcon(image.getImage().getScaledInstance(48, 48, Image.SCALE_FAST));
-				}
-				
-				System.out.println("unit "+unitID+ " and output "+ outputID);
-			}*/
 			
 			for (ImageJResult result : openedImages) {
 				
@@ -140,6 +113,7 @@ public class RunMacroTask extends GenerateMacroTask {
 					}
 				}
 			}
+			imageFlow.setImageJVisible(this.showImageJ);
 			
 			return resultString;
 		}

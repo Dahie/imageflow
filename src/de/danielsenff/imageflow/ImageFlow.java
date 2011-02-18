@@ -122,10 +122,15 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	 */
 	public ImageJ getImageJInstance() {
 		if(!hasImageJInstance()) {
-			this.imageJ = new ImageJ();
+			this.imageJ = new ImageJ(ImageJ.NO_SHOW);
 			this.actsAsImagejPlugin =  false;
 		}
 		return this.imageJ;
+	}
+	
+	public void setImageJVisible(boolean value) {
+		getImageJInstance().pack();
+		getImageJInstance().setVisible(value);
 	}
 	
 	/**
@@ -134,14 +139,6 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 	 */
 	public boolean hasImageJInstance() {
 		return IJ.getInstance() != null;
-	}
-	
-	public static Window[] getWindows() {
-		return Window.getWindows();
-	}
-	
-	public static int getWindowsCount() {
-		return Window.getWindows().length;
 	}
 
 	/**

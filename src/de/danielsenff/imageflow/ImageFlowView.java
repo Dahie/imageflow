@@ -144,6 +144,10 @@ public class ImageFlowView extends FrameView {
 	 */
 	private boolean showCode = false;
 	/**
+	 * Option to display the ImageJ main windows on workflow execution.
+	 */
+	private boolean showImageJ = true;
+	/**
 	 * Option to close any existing windows before executing the workflow.
 	 */
 	private boolean closeAll = false;
@@ -370,6 +374,15 @@ public class ImageFlowView extends FrameView {
 		
 		JButton buttonRun = new JButton(getAction("runMacro"));
 		buttonPanel.add(buttonRun);
+		
+		JCheckBox chkShowImageJ = new JCheckBox(getResourceString("showImageJ"));
+		chkShowImageJ.setSelected(this.showImageJ);
+		resourceMap.injectComponent(chkShowImageJ);
+		chkShowImageJ.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				showImageJ= ((JCheckBox)e.getSource()).isSelected();
+			}});
+		buttonPanel.add(chkShowImageJ);
 		
 		JCheckBox chkShowCode = new JCheckBox(getResourceString("showLog"));
 		resourceMap.injectComponent(chkShowCode);
@@ -742,7 +755,7 @@ public class ImageFlowView extends FrameView {
     @Action
     (block = BlockingScope.ACTION)
     public RunMacroTask runMacro() {
-        return new RunMacroTask(this.getApplication(), graphController, this.showCode, this.closeAll);
+        return new RunMacroTask(this.getApplication(), graphController, this.showImageJ, this.showCode, this.closeAll);
     }
 
     /**
