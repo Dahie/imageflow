@@ -6,10 +6,13 @@ package de.danielsenff.imageflow.gui;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JPopupMenu;
 
 import de.danielsenff.imageflow.models.parameter.Parameter;
 
@@ -27,7 +30,6 @@ public class PropertiesDialog extends JDialog implements ComponentForm, KeyListe
 		
 		formPanel = new FormPanel();
 		setContentPane(formPanel);
-		
 		addKeyListener(this);
 	}
 	
@@ -35,9 +37,9 @@ public class PropertiesDialog extends JDialog implements ComponentForm, KeyListe
 		formPanel.add(param);
 	}
 
-	public void addFormset(String title, ArrayList<Property> group) {
+	/*public void addFormset(String title, ArrayList<Property> group) {
 		formPanel.addFormset(title, group);
-	}
+	}*/
 
 
 	public void addMessage(String string) {
@@ -57,15 +59,14 @@ public class PropertiesDialog extends JDialog implements ComponentForm, KeyListe
 		formPanel.addForm(label, component);
 	}
 
-	public void add(Property property) {
+	/*public void add(Property property) {
 		formPanel.add(property);
-	}
+	}*/
 
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode(); 
 		
 		if(keyCode == KeyEvent.VK_ESCAPE) {
-			System.out.println("off");
 			dispose(); 
 		}
 	}

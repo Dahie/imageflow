@@ -36,7 +36,9 @@ public class ParameterWidgetController {
 		Collection<Parameter> parameters = unit.getParameters();
 		
 		for (final Parameter parameter : parameters) {
-			formPanel.add(parameter);
+			if (!parameter.isHidden()) {
+				formPanel.add(parameter);
+			}
 		}
 		
 		dash.add(formPanel);
@@ -51,7 +53,9 @@ public class ParameterWidgetController {
 		Collection<Parameter> parameters = unit.getParameters();
 		
 		for (final Parameter parameter : parameters) {
-			formPanel.add(parameter);
+			if (!parameter.isHidden()) {
+				formPanel.add(parameter);
+			}
 		}
 		
 		dash.add(formPanel);

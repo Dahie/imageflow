@@ -33,11 +33,11 @@ public interface ComponentForm {
 	 * add Widget to Dialog
 	 * @param property
 	 */
-	public void add(final Property property);
+	//public void add(final Property property);
 	
 	public void add(final Parameter parameter);
 	
-	public void addFormset(final String title, final ArrayList<Property> group);
+	//public void addFormset(final String title, final ArrayList<Property> group);
 		
 	
 	

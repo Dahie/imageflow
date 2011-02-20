@@ -23,9 +23,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
+import java.util.HashSet;
 
-import javax.swing.BorderFactory;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -38,9 +38,13 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 
 	GridBagConstraints c;
 	int rows;
+	HashSet<Parameter> properties;
 	
 	public FormPanel() {
 		setLayout(new GridBagLayout());
+		addMouseListener(this);
+		properties = new HashSet<Parameter>();
+		
 		c = new GridBagConstraints();
 		c.insets = new Insets(2,2,2,2);  //top padding
 		c.anchor = GridBagConstraints.LINE_START;
@@ -107,18 +111,22 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 	 * add Widget to Dialog
 	 * @param property
 	 */
-	public void add(final Property property) {
-		addForm(property.getLabel(), property.getComponent());
-	}
+	/*public void add(final Property property) {
+		properties.add(property);
+		if (property.getParameter().isHidden()) {
+			addForm(property.getLabel(), property.getComponent());
+		}
+	}*/
 	
 	/**
 	 * 
 	 */
 	public void add(final Parameter parameter) {
+		properties.add(parameter);
 		addForm(parameter.getDisplayName(), ParameterWidgetFactory.createForm(parameter));
 	}
 	
-	public void addFormset(final String title, final ArrayList<Property> group) {
+	/*public void addFormset(final String title, final ArrayList<Property> group) {
 		final JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createTitledBorder(title));
 		panel.setLayout(new GridBagLayout());
@@ -143,7 +151,7 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 		c.gridy = rows+1;
 		add(panel, c);
 		rows++;
-	}
+	}*/
 
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
@@ -163,10 +171,10 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 	public void mousePressed(MouseEvent event) {
 		if(event.isPopupTrigger()) {
 			JPopupMenu popup = new JPopupMenu();
-			/*for (iterable_type iterable_element : iterable) {
-				
-			}*/
-			popup.add("Form elements");
+			for (Parameter parameter : properties) {
+				JCheckBoxMenuItem item = new JCheckBoxMenuItem(parameter.getDisplayName(), !parameter.isHidden());
+				popup.add(item);
+			}
 			
 			popup.show(event.getComponent(), event.getX(), event.getY());
 		}
