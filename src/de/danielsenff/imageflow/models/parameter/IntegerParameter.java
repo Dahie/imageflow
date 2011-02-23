@@ -26,13 +26,6 @@ import java.util.HashMap;
 public class IntegerParameter extends AbstractParameter<Integer> {
 
 	/**
-	 * @param parameterNumber
-	 */
-	public IntegerParameter(int parameterNumber) {
-		super(parameterNumber);
-	}
-
-	/**
 	 * @param displayName
 	 * @param integerParameter 
 	 * @param helpString 

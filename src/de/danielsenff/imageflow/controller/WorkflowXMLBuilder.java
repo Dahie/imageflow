@@ -92,8 +92,6 @@ public class WorkflowXMLBuilder {
 
 			Element root = doc.getRootElement();
 
-			System.out.println("Read nodes ...");
-
 			// read units
 			Element unitsElement = root.getChild("Units");
 
@@ -103,21 +101,15 @@ public class WorkflowXMLBuilder {
 			// at this point we have all units in the workflow, however no connections
 			// groups are missing their inputs and outputs
 
-			System.out.println("Process Connection Delegates ...");
-
 			// process ConnectionDelegates
 			for (ConnectionDelegate conndel : connectionDelegates) {
 				conndel.list.add(readConnection(newNodes, conndel));
 			}
 
-			System.out.println("Process Groups and add inputs and outputs ...");
-
 			// process groups
 			for (GroupUnitElement unit : groupUnits) {
 				unit.dealWithConnections(getConnectionList());
 			}
-
-			System.out.println("Read global connections ...");
 
 			// read connections
 			Element connectionsElement = root.getChild("Connections");
@@ -164,8 +156,6 @@ public class WorkflowXMLBuilder {
 
 		if(actualUnitElement.getChild("Label") != null)
 			label = actualUnitElement.getChild("Label").getValue();
-
-//		System.out.println("Read unit: " +label);
 
 		Element unitDescriptionElement = actualUnitElement.getChild("UnitDescription");
 		Node node;
@@ -273,7 +263,6 @@ public class WorkflowXMLBuilder {
 			final Element internalConnectionsElement,
 			final Element externalConnectionsElement,
 			final Element originalConnectionsElement) {
-		System.out.println("Process group..");
 
 		UnitElement unitElement = new GroupUnitElement(position, label);
 		HashMap<Integer, UnitElement> embeddedNodes = new HashMap<Integer, UnitElement>();

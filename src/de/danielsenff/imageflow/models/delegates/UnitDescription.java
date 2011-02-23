@@ -282,8 +282,8 @@ public class UnitDescription implements NodeDescription {
 		Element valueElement = actualParameterElement.getChild("Value");
 		String valueString = valueElement.getValue();
 
-		if (dataTypeString.toLowerCase().equals("double")) 
-			actPara.value = Double.valueOf(valueString);
+		if (dataTypeString.toLowerCase().equals("double"))
+			processDoubleDataType(actPara, dataTypeElement, valueElement,	valueString);
 		else if (dataTypeString.equalsIgnoreCase("file")) {
 			actPara.value = valueString;
 
@@ -298,21 +298,8 @@ public class UnitDescription implements NodeDescription {
 		else if (dataTypeString.equalsIgnoreCase("text")) { 
 			actPara.value = valueString;
 		} else if (dataTypeString.equalsIgnoreCase("integer")) {
-
-			actPara.value = Integer.valueOf(valueString);
-
-			if (hasAttribute(dataTypeElement, "as", "slider") 
-					&& (valueElement.getAttribute("min") != null
-							&& valueElement.getAttribute("max") != null) ) {
-				actPara.options.put("as", "slider");
-				actPara.options.put("min", Integer.valueOf(valueElement.getAttribute("min").getValue()));
-				actPara.options.put("max", Integer.valueOf(valueElement.getAttribute("max").getValue()));
-			} else {
-				actPara.options.put("as", "textfield");
-			}
-
-		} 
-		else if (dataTypeString.equalsIgnoreCase("stringarray")) {
+			processIntegerDataType(actPara, dataTypeElement, valueElement,	valueString);
+		} else if (dataTypeString.equalsIgnoreCase("stringarray")) {
 			int choiceNumber = Integer.valueOf(actualParameterElement.getChild("ChoiceNumber").getValue());
 			String[] strings = valueString.split(ChoiceParameter.DELIMITER);
 			ArrayList<String> choicesList;
@@ -334,6 +321,39 @@ public class UnitDescription implements NodeDescription {
 			actPara.trueString = actualParameterElement.getChild("TrueString").getValue();
 		} else 
 			throw new DataFormatException("invalid datatype");
+	}
+
+	private void processDoubleDataType(final Para actPara, 
+			final Element dataTypeElement, 
+			final Element valueElement, 
+			final String valueString) {
+		actPara.value = Double.valueOf(valueString);
+		if (hasAttribute(dataTypeElement, "as", "slider") 
+				&& (valueElement.getAttribute("min") != null
+						&& valueElement.getAttribute("max") != null) ) {
+			actPara.options.put("as", "slider");
+			actPara.options.put("min", Double.valueOf(valueElement.getAttribute("min").getValue()));
+			actPara.options.put("max", Double.valueOf(valueElement.getAttribute("max").getValue()));
+		} else {
+			actPara.options.put("as", "textfield");
+		}
+	}
+
+	private void processIntegerDataType(final Para actPara, 
+			final Element dataTypeElement,
+			final Element valueElement, 
+			final String valueString) {
+		actPara.value = Integer.valueOf(valueString);
+
+		if (hasAttribute(dataTypeElement, "as", "slider") 
+				&& (valueElement.getAttribute("min") != null
+						&& valueElement.getAttribute("max") != null) ) {
+			actPara.options.put("as", "slider");
+			actPara.options.put("min", Integer.valueOf(valueElement.getAttribute("min").getValue()));
+			actPara.options.put("max", Integer.valueOf(valueElement.getAttribute("max").getValue()));
+		} else {
+			actPara.options.put("as", "textfield");
+		}
 	}
 
 	private boolean hasAttribute(Element dataTypeElement, String attributeName, String value) {
@@ -425,11 +445,6 @@ public class UnitDescription implements NodeDescription {
 		 */
 		public Object value;
 
-		/**
-		 * Enumeration of possible values, the actual value has to be 
-		 * element in this list.
-		 */
-		//public int choiceIndex;
 
 		/**
 		 * String used when value true for {@link BooleanParameter}

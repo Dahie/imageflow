@@ -108,7 +108,7 @@ public class ParameterFactory {
 		} else if(value instanceof String && dataTypeName.equalsIgnoreCase("text")) { //TODO use string as text
 			return new TextParameter(displayName, (String) value, helpString, options);
 		} else if (value instanceof Double ) {
-			return new DoubleParameter(displayName, (Double) value, helpString);
+			return new DoubleParameter(displayName, (Double) value, helpString, options);
 		} else if (value instanceof Integer) {
 			return new IntegerParameter(displayName, (Integer) value, helpString, options);
 		} else if (value instanceof Boolean && boolTrueString != null) {

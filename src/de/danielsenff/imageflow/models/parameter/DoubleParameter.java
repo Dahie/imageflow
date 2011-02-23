@@ -17,6 +17,8 @@
  */
 package de.danielsenff.imageflow.models.parameter;
 
+import java.util.HashMap;
+
 /**
  * @author danielsenff
  *
@@ -27,9 +29,13 @@ public class DoubleParameter extends AbstractParameter<Double> {
 	 * @param displayName 
 	 * @param doubleParameter 
 	 * @param helpString 
+	 * @param options
 	 */
-	public DoubleParameter(String displayName, double doubleParameter, String helpString) {
-		super("double", displayName, helpString, null);
+	public DoubleParameter(String displayName, 
+			final double doubleParameter, 
+			final String helpString,
+			HashMap<String, Object> options) {
+		super("double", displayName, helpString, options);
 		this.value = doubleParameter;
 		this.defaultValue = doubleParameter;
 	}

@@ -17,14 +17,14 @@
 <Parameters>
   	<Parameter>
   		<Name>X Scale (0.05-25)</Name>
-  		<DataType>double</DataType>
-  		<Value>0.5</Value>
+  		<DataType as="slider">double</DataType>
+  		<Value min="0.05" max="25.00">0.5</Value>
   		<HelpString>Scale to ratio along the x-axis.</HelpString>
   	</Parameter>
   	<Parameter>
   		<Name>Y Scale (0.05-25)</Name>
-  		<DataType>double</DataType>
-  		<Value>0.5</Value>
+  		<DataType as="slider">double</DataType>
+  		<Value min="0.05" max="25.00">0.5</Value>
   		<HelpString>Scale to ratio along the y-axis.</HelpString>
   	</Parameter>
   	

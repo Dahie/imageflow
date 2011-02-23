@@ -6,7 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.spi.DecimalFormatSymbolsProvider;
 import java.util.Hashtable;
+import java.util.Locale;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -46,7 +50,11 @@ public class ParameterWidgetFactory {
 				}
 
 			} else if (parameter instanceof DoubleParameter) {
-				return createTextField(parameter);
+				if (optionsContainString(parameter, "as", "slider")) {
+					return createSlider((DoubleParameter)parameter);
+				} else {
+					return createTextField(parameter);
+				}
 			} else if (parameter instanceof StringParameter) {
 				if (optionsContainString(parameter, "as", "openfilechooser")) {
 					return createFileChooser((StringParameter)parameter, FileChooser.OPEN);
@@ -87,20 +95,19 @@ public class ParameterWidgetFactory {
 
 		final Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
 		labels.put(min, new JLabel(Integer.toString(min)));
-		labels.put(max, new JLabel(Integer.toString(max)));
+		labels.put(max, new JLabel(Integer.toString(max)));	
+		
 		
 		final JSlider slider = new JSlider(min, max, value);
 		slider.setLabelTable(labels);
 		slider.setPaintTicks(true);
-		//slider.setPaintLabels(true);
 		slider.setEnabled(!parameter.isReadOnly());
 		slider.addChangeListener(new ChangeListener() {
 			
 			public void stateChanged(final ChangeEvent event) {
-				final int newValue = ((JSlider) event.getSource()).getValue();
+				int newValue = ((JSlider) event.getSource()).getValue();
 				component.setText(Integer.toString(newValue));
 				parameter.setValue(newValue);
-				slider.setValue(newValue);
 			}
 		});
 		component.addKeyListener(new KeyListener() {
@@ -125,6 +132,69 @@ public class ParameterWidgetFactory {
 		return panel;
 	}
 
+	/**
+	 * @param parameter
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	public static JComponent createSlider(final DoubleParameter parameter) 
+	throws IllegalArgumentException {
+		final JPanel panel = new JPanel();
+		
+		final JTextField component = new JTextField(parameter.getValue().toString());
+		component.setEnabled(!parameter.isReadOnly());
+		component.setColumns(5);
+		
+		final double min = (Double) parameter.getOptions().get("min");
+		final double max = (Double) parameter.getOptions().get("max");
+		final double value = (Double) parameter.getValue();
+
+		final Hashtable<Double, JComponent> labels = new Hashtable<Double, JComponent>();
+		labels.put(min, new JLabel(Double.toString(min)));
+		labels.put(max, new JLabel(Double.toString(max)));	
+		
+		
+		final JSlider slider = new JSlider((int)(min*100), (int)(max*100), (int)(value*100));
+		slider.setLabelTable(labels);
+		slider.setPaintTicks(true);
+		slider.setEnabled(!parameter.isReadOnly());
+		slider.addChangeListener(new ChangeListener() {
+			
+			public void stateChanged(final ChangeEvent event) {
+				double newValue = ((JSlider) event.getSource()).getValue()*0.01;
+				DecimalFormat decimal = new DecimalFormat("0.00");
+				decimal.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
+				component.setText(decimal.format(newValue));
+				parameter.setValue(newValue);
+			}
+		});
+		component.addKeyListener(new KeyListener() {
+
+			public void keyTyped(final KeyEvent e) {}
+			public void keyReleased(final KeyEvent e) {}
+			public void keyPressed(final KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					double oldValue = parameter.getValue();
+					try {
+						final String string = ((JTextField)e.getSource()).getText();
+						// TODO improve strip non number characters
+						double newValue = Double.valueOf(string);
+						slider.setValue((int)(newValue*100));
+						parameter.setValue(newValue);
+					} catch (NumberFormatException ex) {
+						ex.printStackTrace();
+					}
+				}
+			}
+		});
+		
+		panel.add(new JLabel(Double.toString(min)));
+		panel.add(slider);
+		panel.add(new JLabel(Double.toString(max)));
+		panel.add(component);
+		
+		return panel;
+	}
 
 	
 	/**
