@@ -137,16 +137,19 @@ public class RunMacroTask extends GenerateMacroTask {
 	
 	public static void setOutputData(int nodeID, int outputID, double data) {
 		// write the data as DataObject for the output of the given ID
+		System.out.println("received double data");
 		callbackObserver.setOutputData(nodeID, outputID, data);
 	}
 	
 	public static void setOutputData(int nodeID, int outputID, int data) {
 		// write the data as DataObject for the output of the given ID
+		System.out.println("received int data");
 		callbackObserver.setOutputData(nodeID, outputID, data);
 	}
 	
 	public static void setOutputData(int nodeID, int outputID, String data) {
 		// write the data as DataObject for the output of the given ID
+		System.out.println("received string data");
 		callbackObserver.setOutputData(nodeID, outputID, data);
 	}
 	

@@ -129,6 +129,8 @@ public class DataTypeFactory {
 		public String getName() { return this.getClass().getSimpleName();}
 	}
 
+
+	
 	/**
 	 * Double-DataType
 	 * @author danielsenff

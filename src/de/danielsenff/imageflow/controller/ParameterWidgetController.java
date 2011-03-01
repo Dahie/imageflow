@@ -3,7 +3,10 @@ package de.danielsenff.imageflow.controller;
 import ij.ImagePlus;
 
 import java.awt.Dimension;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Collection;
+import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -13,6 +16,7 @@ import javax.swing.JToolBar;
 import de.danielsenff.imageflow.gui.FormPanel;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.OutputObjectChangeListener;
+import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -93,7 +97,48 @@ public class ParameterWidgetController {
 					imagePreview.setText("starts empty");
 				}
 				formPanel.add(imagePreview);
-			}
+			} else if (output.getDataType() instanceof DataTypeFactory.Integer
+					|| output.getDataType() instanceof DataTypeFactory.Double
+					|| output.getDataType() instanceof DataTypeFactory.Number) {
+				final JLabel imagePreview = new JLabel();
+				output.addOutputObjectListener(new OutputObjectChangeListener() {
+					
+					public void outputObjectChanged(Output output) {
+						if (output.getDataType() instanceof ImageDataType
+								&& output.getOutputObject() instanceof ImagePlus) {
+							ImagePlus imageplus = (ImagePlus) output.getOutputObject();
+							imagePreview.setIcon(new ImageIcon(imageplus.getImage()));
+							imagePreview.setText("");
+						} else if (output.getDataType() instanceof DataTypeFactory.Number) {
+							if(output.getOutputObject() instanceof Integer) {
+								Integer value = (Integer) output.getOutputObject();
+								imagePreview.setText("Result:"+  value);
+							} else if(output.getOutputObject() instanceof Double) {
+								Double value = (Double) output.getOutputObject();
+								DecimalFormat decimal = new DecimalFormat("0.00");
+								decimal.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
+								imagePreview.setText("Result:"+  decimal.format(value));
+							}
+						} else if (output.getDataType() instanceof DataTypeFactory.Integer
+								&& output.getOutputObject() instanceof Integer) {
+							Integer value = (Integer) output.getOutputObject();
+							imagePreview.setText("Result:"+  value);
+						}
+						
+					}
+				});
+				
+				if (output.getOutputObject() == null) {
+					imagePreview.setText("No result yet");
+				}
+				formPanel.add(imagePreview);
+				
+				
+			} else if (output.getDataType() instanceof DataTypeFactory.Double) {
+				
+			//} else if (output.getDataType() instanceof DataTypeFactory.String) {
+				
+			} 
 		}
 		
 		dash.add(formPanel);

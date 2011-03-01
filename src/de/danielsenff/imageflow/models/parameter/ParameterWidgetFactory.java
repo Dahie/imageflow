@@ -260,6 +260,7 @@ public class ParameterWidgetFactory {
 						} else if(parameter instanceof IntegerParameter) {	
 							((IntegerParameter)parameter).setValue(Integer.valueOf(string));
 						}
+						component.transferFocus();
 					}
 				} catch (NumberFormatException numEx) {
 					String message = "The value you entered not supported.";

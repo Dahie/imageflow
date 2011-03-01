@@ -63,16 +63,16 @@ public class GenerateMacroTask extends Task<Object, String> {
     	
     	final MacroFlowRunner macroFlowRunner = new MacroFlowRunner(graphController.getUnitElements());
     	// generates Macro with callback function (for progressBar)
-    	final String macro = macroFlowRunner.generateMacro(this.showCode);
+    	final String macro = macroFlowRunner.generateMacro(true);
     	openedImages = macroFlowRunner.getOpenedImages();
     	
 		
 		if(this.showCode && macro != null) {
 			// generates cleaner Macro without callback function (for progressBar)
-			final String extendedMacro = graphController.generateMacro(false);
+			final String reducedMacro = graphController.generateMacro(false);
 			CodePreviewDialog previewBox = ((ImageFlowView)((ImageFlow)ImageFlow.getApplication()).getMainView()).showCodePreviewBox();
 			previewBox.setVisible(true);
-			previewBox.setMacroCode(extendedMacro);
+			previewBox.setMacroCode(reducedMacro);
 						
 		}
 		ImageFlowView.getProgressBar().setIndeterminate(false);

@@ -3,7 +3,7 @@
 <UnitDescription>
 
 <General>
-  <UnitName>Simple Equation</UnitName> 
+  <UnitName>Math Operation</UnitName> 
   <PathToIcon></PathToIcon> 
   <ImageJSyntax>OUTPUT_NUMBER_1 = INPUT_NUMBER_1 PARA_STRING_1 INPUT_NUMBER_2;</ImageJSyntax> 
   <Color>0x9cba92</Color>

@@ -131,7 +131,6 @@ public class MacroElement {
 			boolean find = matcher.find();
 			if(find && (paraType.equalsIgnoreCase("string") || paraType.equalsIgnoreCase("stringarray"))) {
 				parameterString = fixPath("" + ((StringParameter)parameter).getValue());
-				System.out.println(parameterString);
 				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
 				ps++;
 				parameterIndex++;

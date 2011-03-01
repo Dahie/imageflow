@@ -886,7 +886,10 @@ public class ImageFlowView extends FrameView {
 	public void addOutputToDashboard() {
 		for (Node selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
-				dashboardPanel.addPreviewWidget((UnitElement) selectedElement);
+				
+				UnitElement unit = (UnitElement) selectedElement;
+				unit.setDisplaySilent(true);
+				dashboardPanel.addPreviewWidget(unit);
 			}
 		}
 		dashboardPanel.revalidate();
@@ -896,7 +899,9 @@ public class ImageFlowView extends FrameView {
 	public void removeOutputFromDashboard() {
 		for (Node selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
-				dashboardPanel.removePreviewWidget((UnitElement) selectedElement);
+				UnitElement unit = (UnitElement) selectedElement;
+				unit.setDisplaySilent(true);
+				dashboardPanel.removePreviewWidget(unit);
 			}
 		}
 		dashboardPanel.revalidate();

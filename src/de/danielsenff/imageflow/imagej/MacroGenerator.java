@@ -239,7 +239,6 @@ public class MacroGenerator {
 			input = unit.getInput(in);
 			searchString = "TITLE_" + (in+1);
 			parameterString = input.isNeedToCopyInput() ? getNeedCopyTitle(input.getImageID()+"_"+i) : input.getImageTitle()+"_"+i;
-//			System.out.println("Unit: " + unit.getUnitID() + " Input: " + in + " Title: " + parameterString);
 			macroElement.replace(searchString, parameterString);
 		}
 		// if a module needs the image id, just use ID_TITLE_x
@@ -381,14 +380,18 @@ public class MacroGenerator {
 	 */
 	private void printNumbers(UnitElement unit, int i) {
 		for (Output output : unit.getOutputs()) {
-			if ( (output.getDataType() instanceof DataTypeFactory.Double
+			if (output.getDataType() instanceof DataTypeFactory.Double
 					|| output.getDataType() instanceof DataTypeFactory.Integer
-					|| output.getDataType() instanceof DataTypeFactory.Number)
-					&& output.getParent().isDisplay()) {
+					|| output.getDataType() instanceof DataTypeFactory.Number) {
 				String outputTitle = output.getOutputTitle()+ "_" + i;
-				macroText += "print (" + outputTitle + "); \n";
 				UnitElement originalUnit = output.getParent().getOriginalUnit();
-				macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputData\", "+originalUnit.getNodeID()+", "+output.getIndex()+", "+outputTitle+");";
+				if (output.getParent().isDisplay()) {
+					macroText += "print (" + outputTitle + "); \n";
+				}
+				System.out.println(extendedMacro);
+				if (output.getParent().isDisplayAny() && extendedMacro) {
+					macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputData\", "+originalUnit.getNodeID()+", "+output.getIndex()+", "+outputTitle+");";
+				} 
 			}
 		}
 	}
