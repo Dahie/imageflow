@@ -33,16 +33,63 @@ import javax.swing.event.ChangeListener;
  */
 public class ParameterWidgetFactory {
 
+	private static final class TextfieldParamChangeListener implements
+			ParamChangeListener {
+		private final JTextField component;
+
+		private TextfieldParamChangeListener(JTextField component) {
+			this.component = component;
+		}
+
+		public void parameterChanged(Parameter source) {
+			if (source.getValue() instanceof String) {
+				component.setText((String) source.getValue());
+			} else if (source.getValue() instanceof Integer) {
+				component.setText(Integer.toString((Integer) source.getValue()));
+			} else if (source.getValue() instanceof Double) {
+				Double value = (Double) source.getValue();
+				DecimalFormat decimal = new DecimalFormat("0.00");
+				decimal.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
+				component.setText(decimal.format(value));
+			}
+			
+		}
+	}
+
+	private static final class SliderParamChangeListener implements
+	ParamChangeListener {
+		private final JSlider component;
+
+		private SliderParamChangeListener(JSlider component) {
+			this.component = component;
+		}
+
+		public void parameterChanged(Parameter source) {
+			if (source.getValue() instanceof Integer) {
+				component.setValue(Integer.valueOf((Integer) source.getValue()));
+			} else if (source.getValue() instanceof Double) {
+				Integer value = (Integer) source.getValue()*100;
+				DecimalFormat decimal = new DecimalFormat("0.00");
+				decimal.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
+				component.setValue(value);
+			}
+
+		}
+	}
+
 	enum FileChooser { OPEN, SAVE}
 
 	public static JComponent createForm(final Parameter parameter) {
 		try {
 			if (parameter instanceof ChoiceParameter) {
+				// choice can be displayed as dropdown or radio buttons
 				if(optionsContainString(parameter, "as", "radio")) {
 					return createRadios((ChoiceParameter)parameter);
 				} else 
 					return createComboBox((ChoiceParameter)parameter);
 			} else if (parameter instanceof IntegerParameter) {
+				// integer can be displayed as textfield or slider 
+				// TODO add as spinner
 				if (optionsContainString(parameter, "as", "slider")) {
 					return createSlider((IntegerParameter)parameter);
 				} else {
@@ -50,12 +97,17 @@ public class ParameterWidgetFactory {
 				}
 
 			} else if (parameter instanceof DoubleParameter) {
+				// integer can be displayed as textfield or slider 
+				// TODO add as spinner
 				if (optionsContainString(parameter, "as", "slider")) {
 					return createSlider((DoubleParameter)parameter);
 				} else {
 					return createTextField(parameter);
 				}
 			} else if (parameter instanceof StringParameter) {
+				// string can be displayed as textfield
+				// special treatment for paths
+				// TODO textarea
 				if (optionsContainString(parameter, "as", "openfilechooser")) {
 					return createFileChooser((StringParameter)parameter, FileChooser.OPEN);
 				} else if (optionsContainString(parameter, "as", "savefilechooser")) {
@@ -73,6 +125,13 @@ public class ParameterWidgetFactory {
 		return null;
 	}
 
+	/**
+	 * Returns true if the options hash contains the given key with the given value.
+	 * @param parameter
+	 * @param key String key that needs to be included in the options hash
+	 * @param value  value the key has to have
+	 * @return
+	 */
 	public static boolean optionsContainString(final Parameter parameter, 
 			final String key, 
 			final String value) {
@@ -88,6 +147,7 @@ public class ParameterWidgetFactory {
 		final JTextField component = new JTextField(parameter.getValue().toString());
 		component.setEnabled(!parameter.isReadOnly());
 		component.setColumns(5);
+		parameter.addParamChangeListener(new TextfieldParamChangeListener(component));
 		
 		final int min = (Integer) parameter.getOptions().get("min");
 		final int max = (Integer) parameter.getOptions().get("max");
@@ -110,6 +170,7 @@ public class ParameterWidgetFactory {
 				parameter.setValue(newValue);
 			}
 		});
+		parameter.addParamChangeListener(new SliderParamChangeListener(slider));
 		component.addKeyListener(new KeyListener() {
 
 			public void keyTyped(final KeyEvent e) {}
@@ -144,6 +205,7 @@ public class ParameterWidgetFactory {
 		final JTextField component = new JTextField(parameter.getValue().toString());
 		component.setEnabled(!parameter.isReadOnly());
 		component.setColumns(5);
+		parameter.addParamChangeListener(new TextfieldParamChangeListener(component));
 		
 		final double min = (Double) parameter.getOptions().get("min");
 		final double max = (Double) parameter.getOptions().get("max");
@@ -168,6 +230,7 @@ public class ParameterWidgetFactory {
 				parameter.setValue(newValue);
 			}
 		});
+		parameter.addParamChangeListener(new SliderParamChangeListener(slider));
 		component.addKeyListener(new KeyListener() {
 
 			public void keyTyped(final KeyEvent e) {}
@@ -242,8 +305,9 @@ public class ParameterWidgetFactory {
 	 * @return
 	 */
 	public static JComponent createTextField(final Parameter parameter) {
-		final JComponent component = new JTextField(parameter.getValue().toString());
+		final JTextField component = new JTextField(parameter.getValue().toString());
 		component.setEnabled(!parameter.isReadOnly());
+		parameter.addParamChangeListener(new TextfieldParamChangeListener(component));
 		component.addKeyListener(new KeyListener() {
 
 			public void keyTyped(final KeyEvent e) {}
@@ -308,7 +372,12 @@ public class ParameterWidgetFactory {
 		return combo;
 	}
 	
-	public static JComponent createFileChooser(StringParameter parameter, FileChooser chooser) {
+	/**
+	 * @param parameter
+	 * @param chooser
+	 * @return
+	 */
+	public static JComponent createFileChooser(final StringParameter parameter, final FileChooser chooser) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		JTextField textfield = new JTextField(parameter.getValue());
@@ -323,7 +392,7 @@ public class ParameterWidgetFactory {
 		return panel;
 	}
 	
-	static class FileChooserActionListener implements ActionListener {
+	private static class FileChooserActionListener implements ActionListener {
 
 		private StringParameter parameter;
 		private JTextField textfield;

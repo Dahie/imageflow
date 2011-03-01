@@ -80,5 +80,18 @@ public interface Parameter<T> {
 	 * @return
 	 */
 	public abstract HashMap<String, Object> getOptions();
+
+	/** 
+	 * Adds a Parameter ChangeListener, that calls back on changes to the
+	 * parameter properties.
+	 * @param listener
+	 */
+	public void addParamChangeListener(ParamChangeListener listener);
+
+	/** 
+	 * Remove Parameter ChangeListener.
+	 * @param listener
+	 */
+	public void removeParamChangeListener(ParamChangeListener listener);
 	
 }
