@@ -54,6 +54,7 @@ import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 import de.danielsenff.imageflow.models.parameter.DoubleParameter;
 import de.danielsenff.imageflow.models.parameter.IntegerParameter;
+import de.danielsenff.imageflow.models.parameter.ParamChangeListener;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.ParameterFactory;
 import de.danielsenff.imageflow.models.parameter.StringParameter;
@@ -477,7 +478,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		gd.addForm("Name", fldName);
 		
 		addDisplayCheckbox(gd);
-		addDisplaySilentCheckbox(gd);
+		//addDisplaySilentCheckbox(gd);
 		
 		gd.addSeparator();		
 
@@ -1174,6 +1175,12 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	
 	public boolean hasPreviewWidget() {
 		return this.previewWidget != null;
+	}
+	
+	public void addParamChangeListerToAllParameters(ParamChangeListener listener) {
+		for (Parameter parameter : getParameters()) {
+			parameter.addParamChangeListener(listener);
+		}
 	}
 }
 

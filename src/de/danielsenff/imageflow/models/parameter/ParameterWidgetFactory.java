@@ -8,7 +8,6 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.spi.DecimalFormatSymbolsProvider;
 import java.util.Hashtable;
 import java.util.Locale;
 
@@ -25,6 +24,13 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.jdesktop.application.Task;
+import org.jdesktop.application.TaskService;
+
+import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.tasks.RunMacroTask;
 
 /**
  * Creates form elements based on {@link Parameter}

@@ -108,21 +108,13 @@ public class GraphPanel extends GPanel {
 
 	
 	/**
-	 * @param panel
+	 * @param panelListener
 	 * @param graphController
 	 */
-	public GraphPanel(final GPanelListener panel, final GraphController graphController) {
-		this(panel);
+	public GraphPanel(final GPanelListener panelListener, final GraphController graphController) {
+		super(panelListener);
 		setGraphController(graphController);
-	}
 	
-	/**
-	 * @param delegates 
-	 * @param parent
-	 */
-	public GraphPanel(final GPanelListener parent) {
-		super(parent);
-		
 		this.iwFilePath = 
 			"/de/danielsenff/imageflow/resources/iw-logo.png";
 //			getResourceMap().getString("Background.image");
@@ -131,7 +123,7 @@ public class GraphPanel extends GPanel {
     	if(!IJ.isMacintosh())
     		this.setBorder(BorderFactory.createLoweredBevelBorder());
 		
-		this.setDropTarget(new DropTarget(this, new GraphPanelDropHandler(this)));
+		this.setDropTarget(new DropTarget(this, new GraphPanelDropHandler(this, graphController)));
 		
 		try {
 			this.iwIcon = ImageIO.read(this.getClass().getResourceAsStream(iwFilePath));
@@ -545,10 +537,10 @@ public class GraphPanel extends GPanel {
 		this.selection.clear();
 		this.nodeL = graphController.getUnitElements();
 		this.connectionList = graphController.getConnections();
-		this.selection = graphController.getSelections();
+		this.selection = graphController.getSelections(); 
 		invalidate();
 	}
-
+	
 	/**
 	 * 
 	 * @param selections

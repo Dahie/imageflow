@@ -3,7 +3,6 @@ package de.danielsenff.imageflow.gui;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
@@ -12,13 +11,11 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import visualap.Node;
-
 import de.danielsenff.imageflow.controller.DelegatesController;
+import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
@@ -28,9 +25,11 @@ public class GraphPanelDropHandler implements DropTargetListener {
 
 	private GraphPanel gPanel;
 	private static final String URI_LIST_MIME_TYPE = "text/uri-list;class=java.lang.String";
+	private GraphController graphController;
 	
-	public GraphPanelDropHandler(final GraphPanel panel) {
+	public GraphPanelDropHandler(final GraphPanel panel, GraphController graphController) {
 		this.gPanel = panel;
+		this.graphController = graphController;
 	}
 	
 	// mouse enters component
@@ -84,8 +83,7 @@ public class GraphPanelDropHandler implements DropTargetListener {
 					UnitDelegate delegate = DelegatesController.getInstance().getDelegate( o);
 					// this can return null if no unit by this name is found
 					if (delegate != null) {
-						UnitElement unit = UnitFactory.createProcessingUnit(delegate.getUnitDescription(), point);
-						getUnitList().add(unit);
+						this.graphController.addNode(delegate, point);
 					}
 					
 					event.dropComplete(true);

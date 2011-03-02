@@ -27,6 +27,7 @@ import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import de.danielsenff.imageflow.ImageFlowView;
+import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -40,12 +41,14 @@ import de.danielsenff.imageflow.models.unit.UnitList;
 public class DelegatesTreeListener implements MouseListener, KeyListener {
 
 	private ImageFlowView ifView;
+	private GraphController graphController;
 	
 	/**
 	 * @param ifView
 	 */
-	public DelegatesTreeListener(final ImageFlowView ifView) {
+	public DelegatesTreeListener(final ImageFlowView ifView, GraphController graphController) {
 		this.ifView = ifView;
+		this.graphController = graphController;
 	}
 	
 	private UnitList getNodes() {
@@ -67,11 +70,9 @@ public class DelegatesTreeListener implements MouseListener, KeyListener {
 			final int selRow = tree.getRowForLocation(e.getX(), e.getY());
 			final TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 			if(selRow != -1 && selPath.getLastPathComponent() instanceof UnitDelegate) {
-				final UnitDelegate ud = ((UnitDelegate)selPath.getLastPathComponent());
-				Point insertPoint = UnitDelegate.POINT;
-				UnitElement node = ud.createUnit(insertPoint);
-				((UnitElement)node).addModelListener(new NodeListener(getGraphPanel(), getView()));
-				getNodes().add(node);
+				final UnitDelegate delegate = ((UnitDelegate)selPath.getLastPathComponent());
+				Point point = UnitDelegate.POINT;
+				this.graphController.addNode(delegate, point);
 			}
 		}
 	}
@@ -108,11 +109,12 @@ public class DelegatesTreeListener implements MouseListener, KeyListener {
 				
 				for (int i = 0; i < selRows.length; i++) {
 					if(selRows[i] != -1 && selPaths[i].getLastPathComponent() instanceof UnitDelegate) {
-						final UnitDelegate ud = ((UnitDelegate)selPaths[i].getLastPathComponent());
-						UnitElement node = ud.createUnit(new Point(insertPoint.x + realUnitCount * GraphPanel.GRIDSIZE,
-								insertPoint.y + realUnitCount * GraphPanel.GRIDSIZE));
-						((UnitElement)node).addModelListener(new NodeListener(getGraphPanel(), getView()));
-						getNodes().add(node);
+						final UnitDelegate delegate = ((UnitDelegate)selPaths[i].getLastPathComponent());
+						Point point = new Point(insertPoint.x + realUnitCount * GraphPanel.GRIDSIZE,
+								insertPoint.y + realUnitCount * GraphPanel.GRIDSIZE);
+						graphController.addNode(delegate, point);
+						
+						
 						realUnitCount++;
 					}
 				}

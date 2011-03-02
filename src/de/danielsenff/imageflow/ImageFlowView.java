@@ -176,8 +176,6 @@ public class ImageFlowView extends FrameView {
 		setFile(new File("new document"));
 	}
 
-
-
 	private void initAppIcon() {
 		try {
 			this.getFrame().setIconImage(
@@ -187,8 +185,6 @@ public class ImageFlowView extends FrameView {
 			e.printStackTrace();
 		}
 	}
-
-
 
 	private void initComponents() {
 		initAppIcon();
@@ -200,7 +196,6 @@ public class ImageFlowView extends FrameView {
 		// register listeners
 		registerModelListeners();
 	}
-	
 
 	/**
 	 * Register the ModelListeners.
@@ -223,7 +218,6 @@ public class ImageFlowView extends FrameView {
 				setModified(true);
 			}
 		});
-		
 		
 		getSelections().addSelectionListListener(new SelectionListListener() {
 			public void selectionChanged(SelectionList selections) {
@@ -301,7 +295,7 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(getAction("exampleFlow2"));
 		debugMenu.add(getAction("exampleFlow3"));
 		
-		JMenu insertMenu = new InsertUnitMenu(graphPanel);
+		JMenu insertMenu = new InsertUnitMenu(graphPanel, graphController);
 		
 		/*JMenu windowMenu = new JMenu(getResourceString("window.menu"));
 		windowMenu.add(getAction("minimize"));*/
@@ -352,10 +346,9 @@ public class ImageFlowView extends FrameView {
 		//working area aka graphpanel
 		GPanelPopup popup = new GPanelPopup(getGraphController());
 		
-		graphPanel = new GraphPanel(popup);
+		graphPanel = new GraphPanel(popup, graphController);
 		resourceMap.injectComponent(graphPanel);
 		popup.setActivePanel(graphPanel);
-		graphPanel.setGraphController(getGraphController());
 		graphPanel.setSelections(getSelections());
 		if(IJ.isMacOSX())
 			graphPanel.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -417,14 +410,14 @@ public class ImageFlowView extends FrameView {
 		
 		bottomPanel.add(progressPanel, BorderLayout.LINE_END);
 		
-		dashboardPanel = new Dashboard();
+		dashboardPanel = new Dashboard(graphController);
 		
 		bottomPanel.add(dashboardPanel, BorderLayout.PAGE_START);
 		
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
 		DelegatesPanel delegatesPanel = new DelegatesPanel(this.getNodes());
-		DelegatesTreeListener delegatesTreeListener = new DelegatesTreeListener(getInstance());
+		DelegatesTreeListener delegatesTreeListener = new DelegatesTreeListener(getInstance(), graphController);
 		JTree delegatesTree = delegatesPanel.getDelegatesTree();
 		delegatesTree.addMouseListener(delegatesTreeListener);
 		delegatesTree.addKeyListener(delegatesTreeListener);
@@ -735,7 +728,6 @@ public class ImageFlowView extends FrameView {
 
 	private URL getFlowURL(String path) throws MalformedURLException {
 		URL resourcePath = ImageFlowView.class.getClassLoader().getResource(DelegatesController.getClassResourceBase());
-		System.out.println(resourcePath);
 		String protocol = resourcePath.getProtocol();
 		URL resourcesBase = null;
 		if (protocol.equals("file")) {
@@ -743,8 +735,6 @@ public class ImageFlowView extends FrameView {
 		} else if (protocol.equals("jar")) {
 			resourcesBase = new URL(resourcePath, "/");
 		}
-		System.out.println(resourcesBase);
-		System.out.println(path);
 		return new URL(resourcesBase, path);
 	}
 
@@ -1405,7 +1395,7 @@ public class ImageFlowView extends FrameView {
     		dialog.setTitle(group.getLabel());
     		
     		final GPanelPopup popup = new GPanelPopup( graphController);
-        	final GraphPanel gpanel = new GraphPanel(popup);
+        	final GraphPanel gpanel = new GraphPanel(popup, graphController);
     		gpanel.setNodeL(group.getNodes());
     		popup.setActivePanel(gpanel);
         	gpanel.setEdgeL(group.getInternalConnections());

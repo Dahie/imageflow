@@ -36,14 +36,15 @@ import de.danielsenff.imageflow.models.parameter.ParameterWidgetFactory;
 
 public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 
-	GridBagConstraints c;
-	int rows;
-	HashSet<Parameter> properties;
+	private GridBagConstraints c;
+	private int rows;
+	private HashSet<Parameter> properties;
 	
 	public FormPanel() {
+		
 		setLayout(new GridBagLayout());
 		addMouseListener(this);
-		properties = new HashSet<Parameter>();
+		this.properties = new HashSet<Parameter>();
 		
 		c = new GridBagConstraints();
 		c.insets = new Insets(2,2,2,2);  //top padding

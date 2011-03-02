@@ -26,13 +26,14 @@ import javax.imageio.ImageIO;
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
+import de.danielsenff.imageflow.controller.ExecuteWorkflowListener;
+import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataType;
-import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.delegates.NodeDescription;
 import de.danielsenff.imageflow.models.delegates.UnitDescription;
@@ -277,10 +278,13 @@ public class UnitFactory {
 		// if we ever go multi-document, this will have to be addressed here
 		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
 		final GraphPanel graphPanel = ifView.getGraphPanel();
+		final GraphController graphController = ifView.getGraphController();
 		if(node instanceof CommentNode) {
 			((CommentNode)node).addModelListener(new NodeListener(graphPanel, ifView));
 		} else if (node instanceof UnitElement) {
-			((UnitElement)node).addModelListener(new NodeListener(graphPanel, ifView));	
+			UnitElement unit = (UnitElement)node;
+			unit.addModelListener(new NodeListener(graphPanel, ifView));	
+			unit.addParamChangeListerToAllParameters(new ExecuteWorkflowListener(graphController));
 		}
 	}
 }

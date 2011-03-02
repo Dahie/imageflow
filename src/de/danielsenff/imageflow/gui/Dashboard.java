@@ -5,14 +5,17 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
+import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.controller.ParameterWidgetController;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 public class Dashboard extends JPanel {
 
-	HashMap<String, JPanel> dashs;
+	private HashMap<String, JPanel> dashs;
+	private GraphController graphController;
 	
-	public Dashboard() {
+	public Dashboard(GraphController controller) {
+		this.graphController = controller;
 		this.dashs = new HashMap<String, JPanel>();
 		setLayout(//new FlowLayout(//FlowLayout.LEFT, 1, 1));
               //new WrapLayout()

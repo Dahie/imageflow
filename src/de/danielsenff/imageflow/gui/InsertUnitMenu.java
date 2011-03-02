@@ -28,13 +28,15 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 
 import visualap.GPanel;
+import visualap.Node;
+import visualap.Selection;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.DelegatesController;
+import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.CommentNode;
-import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
 /**
@@ -49,13 +51,15 @@ public class InsertUnitMenu extends JMenu {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final GPanel activePanel;
+	private GraphController graphController;
 
 	/**
 	 * 
 	 * @param gpanel
 	 */
-	public InsertUnitMenu(final GPanel gpanel) {
+	public InsertUnitMenu(final GPanel gpanel, GraphController graphController) {
 		this("Insert", gpanel, new Point(75, 75));
+		this.graphController = graphController;
 	}
 
 	/**
@@ -77,13 +81,15 @@ public class InsertUnitMenu extends JMenu {
 				final JMenuItem source = (JMenuItem)(e.getSource());
 				final String action = source.getText();
 				final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
+				Selection<Node> selections = activePanel.getSelection();
+				
 				if (action.equals("Comment")) {	
 					final CommentNode node = new CommentNode(new Point(savedPoint.x, savedPoint.y), "Newly added comment"); 
 					node.addModelListener(new NodeListener(activePanel, ifView));
 					savedPoint.translate(4, 4);
 					units.add(node);
-					activePanel.getSelection().clear();
-					activePanel.getSelection().add(node);
+					selections.clear();
+					selections.add(node);
 					activePanel.repaint();
 					return;
 				}
@@ -91,11 +97,10 @@ public class InsertUnitMenu extends JMenu {
 				UnitDelegate unitDelegate = DelegatesController.getInstance().getDelegate(action);
 				if(unitDelegate != null) {
 					try {
-						final UnitElement node = unitDelegate.createUnit(savedPoint);
-						node.addModelListener(new NodeListener(activePanel, ifView));
-						units.add(node);
-						activePanel.getSelection().clear();
-						activePanel.getSelection().add(node);
+						Node node = graphController.addNode(unitDelegate, savedPoint);
+						
+						selections.clear();
+						selections.add(node);
 						activePanel.repaint();
 					} catch (final Exception ex) {
 					}

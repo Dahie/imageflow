@@ -28,9 +28,13 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.event.UndoableEditListener;
 
+import visualap.GPanel;
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.ImageFlowView;
+import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.imagej.MacroFlowRunner;
+import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
@@ -39,6 +43,9 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.ProxyInput;
 import de.danielsenff.imageflow.models.connection.ProxyOutput;
 import de.danielsenff.imageflow.models.datatype.ImageDataType;
+import de.danielsenff.imageflow.models.delegates.UnitDelegate;
+import de.danielsenff.imageflow.models.parameter.ParamChangeListener;
+import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -135,6 +142,18 @@ public class GraphController{
 	 */
 	public void removeUndoableEditListener(UndoableEditListener l) {
 		listener = null;
+	}
+	
+	public UnitElement addNode(UnitDelegate delegate, Point point) {
+		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
+		final GraphPanel graphPanel = ifView.getGraphPanel();
+		
+		UnitElement unit = delegate.buildUnit(point);
+		unit.addModelListener(new NodeListener(graphPanel, ifView));
+		unit.addParamChangeListerToAllParameters(new ExecuteWorkflowListener(this));
+		
+		getUnitElements().add(unit);
+		return unit;
 	}
 	
 	/**
@@ -316,10 +335,10 @@ public class GraphController{
 		////////////////////////////////////////////////////////
 		DelegatesController delegatesController = DelegatesController.getInstance();
 
-		final UnitElement sourceUnit = delegatesController.getDelegate("Image Source").createUnit(new Point(30, 100));
-		final UnitElement blurUnit = delegatesController.getDelegate("Gaussian Blur").createUnit(new Point(180, 50));
-		final UnitElement mergeUnit = delegatesController.getDelegate("Image Calculator").createUnit(new Point(320, 100));
-		final UnitElement noiseUnit = delegatesController.getDelegate("Add Noise").createUnit(new Point(450, 100));
+		final UnitElement sourceUnit = delegatesController.getDelegate("Image Source").buildUnit(new Point(30, 100));
+		final UnitElement blurUnit = delegatesController.getDelegate("Gaussian Blur").buildUnit(new Point(180, 50));
+		final UnitElement mergeUnit = delegatesController.getDelegate("Image Calculator").buildUnit(new Point(320, 100));
+		final UnitElement noiseUnit = delegatesController.getDelegate("Add Noise").buildUnit(new Point(450, 100));
 		noiseUnit.setDisplay(true);
 		
 		CommentNode comment = UnitFactory.createComment("my usual example", new Point(30, 40));
@@ -380,7 +399,6 @@ public class GraphController{
 		UnitElement dependentUnit;
 		if (unit.hasRequiredInputsConnected()) {
 			subgraphList.add(unit.clone());
-			System.out.println("added " + unit);
 			for (Input input : unit.getInputs()) {
 				dependentUnit = input.getFromUnit();
 				recursiveAddUnitDependencies(dependentUnit, subgraphList);
@@ -390,16 +408,18 @@ public class GraphController{
 		}
 	}
 
+	/**
+	 * Sets the data object as the result output for the Node and Output with the given ID
+	 * @param nodeID
+	 * @param outputId
+	 * @param data
+	 */
 	public void setOutputData(int nodeID, int outputId, Object data) {
 		// get the Node and Output object with the given IDs
 		Node node = getUnitElements().getNodeByID(nodeID);
-		System.out.println(nodeID);
-		System.out.println(node);
 		if (node instanceof UnitElement) {
 			Output output = ((UnitElement)node).getOutput(outputId-1);
 			// write the data into the output object
-			System.out.println(output);
-			System.out.println(data);
 			output.setOutputObject(data);
 		}
 	}

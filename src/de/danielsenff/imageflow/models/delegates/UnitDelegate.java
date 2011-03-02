@@ -61,6 +61,7 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	
 	/**
 	 * @param unitDescription
+	 * @param withinJar 
 	 */
 	public UnitDelegate(final NodeDescription unitDescription, boolean withinJar) {
 		this(unitDescription.getUnitName(), unitDescription.getHelpString());
@@ -73,7 +74,7 @@ public class UnitDelegate extends Delegate implements MutableTreeNode {
 	 * @param origin 
 	 * @return 
 	 */
-	public UnitElement createUnit(final Point origin) {
+	public UnitElement buildUnit(final Point origin) {
 		return UnitFactory.createProcessingUnit(unitDescription, origin);
 	}
 	
