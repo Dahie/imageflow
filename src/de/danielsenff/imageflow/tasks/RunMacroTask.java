@@ -99,8 +99,9 @@ public class RunMacroTask extends GenerateMacroTask {
 			
 			ImageFlow imageFlow = (ImageFlow)ImageFlow.getInstance();
 			ImageJ imagej = imageFlow.getImageJInstance();
-			Macro_Runner mr = new Macro_Runner();
-			String resultString = mr.runMacro(macro, "");
+			/*Macro_Runner mr = new Macro_Runner();
+			String resultString = mr.runMacro(macro, "");*/
+			IJ.runMacro(macro);
 			
 			for (ImageJResult result : openedImages) {
 				
@@ -115,8 +116,6 @@ public class RunMacroTask extends GenerateMacroTask {
 				}
 			}
 			imageFlow.setImageJVisible(this.showImageJ);
-			
-			return resultString;
 		}
 		
 		return macro;

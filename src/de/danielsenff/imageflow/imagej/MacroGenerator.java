@@ -137,7 +137,7 @@ public class MacroGenerator {
 		if (extendedMacro) {
 			currentUnit++;
 			Double currentProgress = (1.0*currentUnit) / unitAmount;
-			macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setProgress\", \""+ currentProgress +"\")";
+			macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setProgress\", \""+ currentProgress +"\");\n";
 		}
 		
 	}
@@ -302,7 +302,7 @@ public class MacroGenerator {
 			}
 			if (output.isDoDisplayAny() && output.getDataType() instanceof ImageDataType) {
 				UnitElement originalUnit = output.getParent().getOriginalUnit();
-				macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputImage\", "+originalUnit.getNodeID()+", "+output.getIndex()+");";
+				macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputImage\", "+originalUnit.getNodeID()+", "+output.getIndex()+");\n";
 			}
 
 		}
@@ -386,11 +386,11 @@ public class MacroGenerator {
 				String outputTitle = output.getOutputTitle()+ "_" + i;
 				UnitElement originalUnit = output.getParent().getOriginalUnit();
 				if (output.getParent().isDisplay()) {
-					macroText += "print (" + outputTitle + "); \n";
+					macroText += "print(" + outputTitle + "); \n";
 				}
 				System.out.println(extendedMacro);
 				if (output.getParent().isDisplayAny() && extendedMacro) {
-					macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputData\", "+originalUnit.getNodeID()+", "+output.getIndex()+", "+outputTitle+");";
+					macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputData\", "+originalUnit.getNodeID()+", "+output.getIndex()+", "+outputTitle+");\n";
 				} 
 			}
 		}

@@ -13,6 +13,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Hashtable;
 import java.util.Locale;
 
+import javax.swing.BoundedRangeModel;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -82,8 +83,6 @@ public class ParameterWidgetFactory {
 
 		public void parameterChanged(Parameter source) {
 			if (source instanceof ChoiceParameter) {
-				System.out.println(((ChoiceParameter) source).getChoiceIndex());
-				System.out.println(((ChoiceParameter) source).getChoicesString());
 				this.component.setSelectedIndex(((ChoiceParameter) source).getChoiceIndex());
 			}
 		}
@@ -196,11 +195,28 @@ public class ParameterWidgetFactory {
 		slider.setPaintTicks(true);
 		slider.setEnabled(!parameter.isReadOnly());
 		slider.addChangeListener(new ChangeListener() {
-
+			
 			public void stateChanged(final ChangeEvent event) {
-				int newValue = ((JSlider) event.getSource()).getValue();
-				component.setText(Integer.toString(newValue));
-				parameter.setValue(newValue);
+				Object source = event.getSource();
+				if (source instanceof BoundedRangeModel) {
+					BoundedRangeModel aModel = (BoundedRangeModel) source;
+					if (!aModel.getValueIsAdjusting()) {
+						int newValue = aModel.getValue();
+						component.setText(Integer.toString(newValue));
+						parameter.setValue(newValue);
+					}
+				} else if (source instanceof JSlider) {
+					JSlider theJSlider = (JSlider) source;
+					if (!theJSlider.getValueIsAdjusting()) {
+						int newValue = theJSlider.getValue();
+						component.setText(Integer.toString(newValue));
+						parameter.setValue(newValue);
+					}
+				} else {
+					System.out.println("Something changed: " + source);
+				}
+
+
 			}
 		});
 		parameter.addParamChangeListener(new SliderParamChangeListener(slider));
