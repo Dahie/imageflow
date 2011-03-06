@@ -87,6 +87,7 @@ public class RunMacroTask extends GenerateMacroTask {
 		String macro = super.doInBackground(); 
 		
 		setMessage("Executing Macro...");
+		System.out.println(macro);
 
 		// if the graph checks turn out false, the resulting macro will be just a null-pointer
 		if(macro != null) {

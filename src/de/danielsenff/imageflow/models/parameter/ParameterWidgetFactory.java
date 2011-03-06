@@ -3,6 +3,8 @@ package de.danielsenff.imageflow.models.parameter;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -25,13 +27,6 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.jdesktop.application.Task;
-import org.jdesktop.application.TaskService;
-
-import de.danielsenff.imageflow.ImageFlow;
-import de.danielsenff.imageflow.controller.GraphController;
-import de.danielsenff.imageflow.tasks.RunMacroTask;
-
 /**
  * Creates form elements based on {@link Parameter}
  * @author dahie
@@ -40,7 +35,7 @@ import de.danielsenff.imageflow.tasks.RunMacroTask;
 public class ParameterWidgetFactory {
 
 	private static final class TextfieldParamChangeListener implements
-			ParamChangeListener {
+	ParamChangeListener {
 		private final JTextField component;
 
 		private TextfieldParamChangeListener(JTextField component) {
@@ -58,7 +53,39 @@ public class ParameterWidgetFactory {
 				decimal.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
 				component.setText(decimal.format(value));
 			}
-			
+		}
+	}
+
+	private static class CheckBoxParamChangeListener implements
+	ParamChangeListener {
+		private JCheckBox component;
+
+		private CheckBoxParamChangeListener(JCheckBox component) {
+			this.component = component;
+		}
+
+		public void parameterChanged(Parameter source) {
+			if (source.getValue() instanceof Boolean) {
+				Boolean selected = (Boolean) source.getValue();
+				component.setSelected(selected);
+			}
+		}
+	}
+
+	private static class ComboBoxParamChangeListener implements
+	ParamChangeListener {
+		private JComboBox component;
+
+		public ComboBoxParamChangeListener(JComboBox component) {
+			this.component = component;
+		}
+
+		public void parameterChanged(Parameter source) {
+			if (source instanceof ChoiceParameter) {
+				System.out.println(((ChoiceParameter) source).getChoiceIndex());
+				System.out.println(((ChoiceParameter) source).getChoicesString());
+				this.component.setSelectedIndex(((ChoiceParameter) source).getChoiceIndex());
+			}
 		}
 	}
 
@@ -142,19 +169,19 @@ public class ParameterWidgetFactory {
 			final String key, 
 			final String value) {
 		return parameter.getOptions() != null 
-				&& parameter.getOptions().get(key) != null 
-				&& parameter.getOptions().get(key) instanceof String
-				&& ((String)parameter.getOptions().get(key)).equalsIgnoreCase(value);
+		&& parameter.getOptions().get(key) != null 
+		&& parameter.getOptions().get(key) instanceof String
+		&& ((String)parameter.getOptions().get(key)).equalsIgnoreCase(value);
 	}
 
 	public static JComponent createSlider(final IntegerParameter parameter) throws IllegalArgumentException {
 		final JPanel panel = new JPanel();
-		
+
 		final JTextField component = new JTextField(parameter.getValue().toString());
 		component.setEnabled(!parameter.isReadOnly());
 		component.setColumns(5);
 		parameter.addParamChangeListener(new TextfieldParamChangeListener(component));
-		
+
 		final int min = (Integer) parameter.getOptions().get("min");
 		final int max = (Integer) parameter.getOptions().get("max");
 		final int value = (Integer) parameter.getValue();
@@ -162,14 +189,14 @@ public class ParameterWidgetFactory {
 		final Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
 		labels.put(min, new JLabel(Integer.toString(min)));
 		labels.put(max, new JLabel(Integer.toString(max)));	
-		
-		
+
+
 		final JSlider slider = new JSlider(min, max, value);
 		slider.setLabelTable(labels);
 		slider.setPaintTicks(true);
 		slider.setEnabled(!parameter.isReadOnly());
 		slider.addChangeListener(new ChangeListener() {
-			
+
 			public void stateChanged(final ChangeEvent event) {
 				int newValue = ((JSlider) event.getSource()).getValue();
 				component.setText(Integer.toString(newValue));
@@ -190,12 +217,12 @@ public class ParameterWidgetFactory {
 				}
 			}
 		});
-		
+
 		panel.add(new JLabel(Integer.toString(min)));
 		panel.add(slider);
 		panel.add(new JLabel(Integer.toString(max)));
 		panel.add(component);
-		
+
 		return panel;
 	}
 
@@ -207,12 +234,12 @@ public class ParameterWidgetFactory {
 	public static JComponent createSlider(final DoubleParameter parameter) 
 	throws IllegalArgumentException {
 		final JPanel panel = new JPanel();
-		
+
 		final JTextField component = new JTextField(parameter.getValue().toString());
 		component.setEnabled(!parameter.isReadOnly());
 		component.setColumns(5);
 		parameter.addParamChangeListener(new TextfieldParamChangeListener(component));
-		
+
 		final double min = (Double) parameter.getOptions().get("min");
 		final double max = (Double) parameter.getOptions().get("max");
 		final double value = (Double) parameter.getValue();
@@ -220,14 +247,14 @@ public class ParameterWidgetFactory {
 		final Hashtable<Double, JComponent> labels = new Hashtable<Double, JComponent>();
 		labels.put(min, new JLabel(Double.toString(min)));
 		labels.put(max, new JLabel(Double.toString(max)));	
-		
-		
+
+
 		final JSlider slider = new JSlider((int)(min*100), (int)(max*100), (int)(value*100));
 		slider.setLabelTable(labels);
 		slider.setPaintTicks(true);
 		slider.setEnabled(!parameter.isReadOnly());
 		slider.addChangeListener(new ChangeListener() {
-			
+
 			public void stateChanged(final ChangeEvent event) {
 				double newValue = ((JSlider) event.getSource()).getValue()*0.01;
 				DecimalFormat decimal = new DecimalFormat("0.00");
@@ -256,16 +283,16 @@ public class ParameterWidgetFactory {
 				}
 			}
 		});
-		
+
 		panel.add(new JLabel(Double.toString(min)));
 		panel.add(slider);
 		panel.add(new JLabel(Double.toString(max)));
 		panel.add(component);
-		
+
 		return panel;
 	}
 
-	
+
 	/**
 	 * 
 	 * @param parameter
@@ -273,7 +300,7 @@ public class ParameterWidgetFactory {
 	 */
 	public static JComponent createRadios(final ChoiceParameter parameter) {
 		final JPanel panel = new JPanel();
-		
+
 		JRadioButton radioButton;
 		ButtonGroup group = new ButtonGroup();
 		for (final String choice : parameter.getChoices()) {
@@ -286,25 +313,24 @@ public class ParameterWidgetFactory {
 			group.add(radioButton);
 			panel.add(radioButton);
 		}
-		
-		
-		
+
+
+
 		return panel;
 	}
-	
+
 	static class RadioActionListener implements ActionListener {
 
 		final private ChoiceParameter parameter;
 		public RadioActionListener(ChoiceParameter parameter) {
 			this.parameter = parameter;
 		}
-		
+
 		public void actionPerformed(ActionEvent event) {
 			parameter.setValue(event.getActionCommand());
 		}
-		
 	}
-	
+
 	/**
 	 * Creates a Textfield form element based on the {@link Parameter}
 	 * @param parameter
@@ -349,9 +375,10 @@ public class ParameterWidgetFactory {
 	public static JCheckBox createCheckBox(final BooleanParameter parameter) {
 		final JCheckBox chkBox = new JCheckBox(parameter.getDisplayName());
 		chkBox.setSelected(parameter.getValue());
-		chkBox.addChangeListener(new ChangeListener() {
+		parameter.addParamChangeListener(new CheckBoxParamChangeListener(chkBox));
+		chkBox.addItemListener(new ItemListener() {
 
-			public void stateChanged(final ChangeEvent event) {
+			public void itemStateChanged(ItemEvent event) {
 				final boolean newValue = ((JCheckBox)event.getSource()).isSelected();
 				parameter.setValue(newValue);
 			}
@@ -369,15 +396,17 @@ public class ParameterWidgetFactory {
 		final String[] choices = parameter.getChoicesArray();
 		combo = new JComboBox(choices);
 		combo.setSelectedItem(parameter.getValue());
-		combo.addActionListener(new ActionListener() {
-			public void actionPerformed(final ActionEvent e) {
+		parameter.addParamChangeListener(new ComboBoxParamChangeListener(combo));
+		combo.addItemListener(new ItemListener() {
+
+			public void itemStateChanged(ItemEvent e) {
 				final int newindex = ((JComboBox)e.getSource()).getSelectedIndex();
 				parameter.setValue(newindex);
 			}
 		});
 		return combo;
 	}
-	
+
 	/**
 	 * @param parameter
 	 * @param chooser
@@ -388,45 +417,45 @@ public class ParameterWidgetFactory {
 		panel.setLayout(new BorderLayout());
 		JTextField textfield = new JTextField(parameter.getValue());
 		textfield.setEnabled(false);
-		
+
 		JButton fileDialogButton = new JButton("Choose");
-			fileDialogButton.addActionListener(new FileChooserActionListener(parameter, textfield, chooser));
-		
+		fileDialogButton.addActionListener(new FileChooserActionListener(parameter, textfield, chooser));
+
 		panel.add(textfield, BorderLayout.CENTER);
 		panel.add(fileDialogButton, BorderLayout.LINE_END);
-		
+
 		return panel;
 	}
-	
+
 	private static class FileChooserActionListener implements ActionListener {
 
 		private StringParameter parameter;
 		private JTextField textfield;
 		FileChooser chooser;
-		
+
 		public FileChooserActionListener(StringParameter parameter, JTextField textfield, FileChooser chooser) {
 			this.parameter = parameter;
 			this.textfield = textfield;
 			this.chooser = chooser;
 		}
-		
+
 		public void actionPerformed(ActionEvent e) {
 			final JFileChooser fc = new JFileChooser();
 			String filepath = parameter.getValue(); 
-		    fc.setSelectedFile(new File(filepath));
-		    final int option;
-		    if(chooser == FileChooser.OPEN) {
-		    	option = fc.showOpenDialog(null);
-		    } else {
-		    	option = fc.showSaveDialog(null);
-		    }
-		    if (option == JFileChooser.APPROVE_OPTION) {
-		    	filepath = fc.getSelectedFile().getAbsolutePath();
-		    	// backslashes need to be escaped
-		    	//filepath = filepath.replace("\\", "\\\\"); // \ to \\
-		    	parameter.setValue(filepath);
-		    	textfield.setText(filepath);
-		    }
+			fc.setSelectedFile(new File(filepath));
+			final int option;
+			if(chooser == FileChooser.OPEN) {
+				option = fc.showOpenDialog(null);
+			} else {
+				option = fc.showSaveDialog(null);
+			}
+			if (option == JFileChooser.APPROVE_OPTION) {
+				filepath = fc.getSelectedFile().getAbsolutePath();
+				// backslashes need to be escaped
+				//filepath = filepath.replace("\\", "\\\\"); // \ to \\
+				parameter.setValue(filepath);
+				textfield.setText(filepath);
+			}
 		}
 	}
 

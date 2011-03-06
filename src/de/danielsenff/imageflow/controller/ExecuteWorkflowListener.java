@@ -46,5 +46,8 @@ public class ExecuteWorkflowListener implements ParamChangeListener {
 			ts.execute(convertTask);
 			lock = false;
 		}
+		else {
+			System.out.println("Execution halted");
+		}
 	}
 }

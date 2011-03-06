@@ -79,7 +79,8 @@ public class ChoiceParameter extends StringParameter {
 	@Override
 	public void setValue(final String stringValue) {
 		if(this.choiceValues.contains(stringValue)) {
-			super.setValue(stringValue);	
+			super.setValue(stringValue);
+			notifyParamChangeListener();
 		} else {
 			System.err.println("Tried setting a value that isn't permitted.");
 		}
@@ -135,6 +136,7 @@ public class ChoiceParameter extends StringParameter {
 	public void setValue(int newindex) {
 		this.value = this.choiceValues.get(newindex);
 		this.options.put("choicesIndex", newindex);
+		notifyParamChangeListener();
 	}
 	
 }

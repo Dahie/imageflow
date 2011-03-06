@@ -26,6 +26,7 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
+import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
 import de.danielsenff.imageflow.models.parameter.DoubleParameter;
 import de.danielsenff.imageflow.models.parameter.IntegerParameter;
 import de.danielsenff.imageflow.models.parameter.Parameter;
@@ -108,18 +109,17 @@ public class MacroElement {
 		int parameterIndex = 0; // index of parameter in parameters collection
 		int parameterCount = 0; // count of processed parameters
 		int pd = 0, ps = 0, pi = 0, pb = 0;
-		String searchString, paraType;
+		String searchString;
 		String parameterString;
 		Parameter parameter;
 		Matcher matcher;
 		while (parameterIndex < parameters.size()) {
-			
 			parameter = parameters.get(parameterIndex);
 
-			paraType = parameter.getParaType().toLowerCase();
+			//paraType = parameter.getParaType().toLowerCase();
 			searchString = "(PARA_DOUBLE_" + (pd+1) + ")(\\D)";
 			matcher = compileMatcherBy(searchString, command);
-			if(matcher.find() && paraType.equalsIgnoreCase("double")) { 
+			if(matcher.find() && parameter instanceof DoubleParameter) { 
 				parameterString = "" + ((DoubleParameter)parameter).getValue();
 				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
 				pd++;
@@ -129,7 +129,7 @@ public class MacroElement {
 			searchString = "(PARA_STRING_" + (ps+1) + ")(\\D)";
 			matcher = compileMatcherBy(searchString, command);
 			boolean find = matcher.find();
-			if(find && (paraType.equalsIgnoreCase("string") || paraType.equalsIgnoreCase("stringarray"))) {
+			if(find && (parameter instanceof StringParameter || parameter instanceof ChoiceParameter)) {
 				parameterString = fixPath("" + ((StringParameter)parameter).getValue());
 				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
 				ps++;
@@ -137,7 +137,7 @@ public class MacroElement {
 			}
 			searchString = "(PARA_INTEGER_" + (pi+1) + ")(\\D)";
 			matcher = compileMatcherBy(searchString, command);
-			if(matcher.find() && paraType.equalsIgnoreCase("integer")) {
+			if(matcher.find() && parameter instanceof IntegerParameter) {
 				parameterString = "" + ((IntegerParameter)parameter).getValue();
 				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
 				pi++;
@@ -145,7 +145,7 @@ public class MacroElement {
 			}
 			searchString = "(PARA_BOOLEAN_" + (pb+1) + ")(\\D)";
 			matcher = compileMatcherBy(searchString, command);
-			if(matcher.find() && paraType.equals("boolean")) {
+			if(matcher.find() && parameter instanceof BooleanParameter) {
 				boolean bool = ((BooleanParameter)parameter).getValue();
 				parameterString =  (bool) ? ((BooleanParameter)parameter).getTrueString() : ""; 
 				command = matcher.replaceAll(parameterString+"$2"); // making sure, that we catch full numbers and not just single digits
@@ -156,7 +156,7 @@ public class MacroElement {
 			if (parameterIndex != parameterCount) {
 				searchString = "_PARAMETER_" + (parameterIndex+1);
 				matcher = compileMatcherBy(searchString, command);
-				if(matcher.find() && knownParameterType(paraType)) {
+				if(matcher.find() && knownParameterType(parameter)) {
 					// This parameter is used as an "attibute" somewhere
 					// Go ahead and increment parameter index, so subsequent parameters are still read
 					parameterIndex++;
@@ -172,10 +172,12 @@ public class MacroElement {
 		return command;
 	}
 	
-	private static boolean knownParameterType(final String paraType) {
-		return paraType.equals("boolean") 
-			|| paraType.equals("integer") || paraType.equals("string") 
-			|| paraType.equals("stringarray") || paraType.equals("double");
+	private static boolean knownParameterType(final Parameter parameter) {
+		return parameter instanceof BooleanParameter 
+			|| parameter instanceof IntegerParameter 
+			|| parameter instanceof StringParameter 
+			|| parameter instanceof ChoiceParameter 
+			|| parameter instanceof DoubleParameter;
 	}
 
 	/*
@@ -328,21 +330,20 @@ public class MacroElement {
 
 					searchString = "ATTRIBUTE_INPUT_" + (inputIndex+1) + "_PARAMETER_" + (parameterIndex+1);
 
-					if (command.contains(searchString) /*
-							&& input.getDataType().getClass().getSimpleName().toLowerCase().equals(parameter.getParaType())*/) {
+					if (command.contains(searchString)) {
 
 						if (input.isConnected()) {
 							String uniqueOutputName = input.getFromOutput().getOutputTitle() + "_" + i;
 							command = Tools.replace(command, searchString, uniqueOutputName);
 						} else {
 							String parameterValue = "";				
-							if (parameter.getParaType().toLowerCase().equals("integer")) 
+							if (parameter instanceof IntegerParameter) 
 								parameterValue += ((IntegerParameter)parameter).getValue(); 
-							if (parameter.getParaType().toLowerCase().equals("double")) 
+							if (parameter instanceof DoubleParameter) 
 								parameterValue += ((DoubleParameter)parameter).getValue();
-							if (parameter.getParaType().toLowerCase().equals("boolean")) 
+							if (parameter instanceof BooleanParameter) 
 								parameterValue += ((BooleanParameter)parameter).getTrueString();
-							if (parameter.getParaType().toLowerCase().equals("string")) 
+							if (parameter instanceof StringParameter) 
 								parameterValue += ((StringParameter)parameter).getValue();
 							command = Tools.replace(command, searchString, parameterValue);
 						}

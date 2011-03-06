@@ -180,7 +180,7 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 		changeListener.remove(listener);
 	}
 	
-	private void notifyParamChangeListener() {
+	protected void notifyParamChangeListener() {
 		for (int i = 0; i < changeListener.size(); i++) {
 			changeListener.get(i).parameterChanged(this);
 		}
