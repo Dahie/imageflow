@@ -53,7 +53,7 @@ public class ExportMacroTask extends SaveFileTask {
 	protected Void doInBackground() throws InterruptedException {
 
 		// generates clean Macro without callback function (for progressBar)
-		String macro = graphController.generateMacro(false);
+		String macro = graphController.generateMacro(false, true);
 		if(macro != null) {
 			try {
 				saveTextFile(macro);

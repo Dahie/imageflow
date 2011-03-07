@@ -52,19 +52,22 @@ public class RunMacroTask extends GenerateMacroTask {
 	/**
 	 * @param app
 	 * @param graphController
+	 * @param showImageJ 
 	 * @param showCode 
 	 * @param closeAll 
-	 * @param doShowLog
+	 * @param silent 
 	 */
 	public RunMacroTask(final Application app, 
 			final GraphController graphController, 
 			final boolean showImageJ,
 			final boolean showCode, 
-			final boolean closeAll) {
+			final boolean closeAll, 
+			final boolean silent) {
 		super(app, graphController);
 		this.showCode = showCode;
 		this.showImageJ = showImageJ;
 		this.closeAll = closeAll;
+		this.silent = silent;
 		MacroCallbackListener listener = new MacroCallbackListener();
 		callbackObserver = new CallbackObserver(listener);
 	}
@@ -77,7 +80,7 @@ public class RunMacroTask extends GenerateMacroTask {
 	public RunMacroTask(final Application app, 
 			final GraphController graphController, 
 			final boolean showCode) {
-		this(app, graphController, true, showCode, false);
+		this(app, graphController, true, showCode, false, false);
 	}
 
 	@Override 

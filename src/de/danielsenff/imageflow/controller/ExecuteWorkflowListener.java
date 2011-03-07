@@ -27,22 +27,28 @@ import de.danielsenff.imageflow.models.parameter.ParamChangeListener;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.tasks.RunMacroTask;
 
+/**
+ * This class is fall callbacks from a changed {@link Parameter} to kick off a 
+ * new execution of the workflow.
+ * @author dahie
+ *
+ */
 public class ExecuteWorkflowListener implements ParamChangeListener {
-	private GraphController graphController;
+	private final GraphController graphController;
 	boolean lock = false;
 	
-	public ExecuteWorkflowListener(GraphController controller) {
+	public ExecuteWorkflowListener(final GraphController controller) {
 		this.graphController = controller;
 	}
 
-	public void parameterChanged(Parameter source) {
+	public void parameterChanged(final Parameter source) {
 		if (!IJ.macroRunning()) {
 			lock = true;
 			System.out.println("reexecute graph");
 			
-			ImageFlow application = ImageFlow.getApplication();
-			Task convertTask = new RunMacroTask(application, graphController, false, false, false);
-			TaskService ts = application.getContext().getTaskService();
+			final ImageFlow application = ImageFlow.getApplication();
+			final Task convertTask = new RunMacroTask(application, graphController, false, false, false, true);
+			final TaskService ts = application.getContext().getTaskService();
 			ts.execute(convertTask);
 			lock = false;
 		}

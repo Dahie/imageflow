@@ -61,7 +61,7 @@ public class MacroFlowRunner implements FlowRunner {
 	}
 
 	
-	public String generateMacro(boolean extendedMacro) {
+	public String generateMacro(boolean extendedMacro, boolean silent) {
 		/*
 		 *  analysis and verification of the connection network 
 		 */
@@ -70,7 +70,7 @@ public class MacroFlowRunner implements FlowRunner {
 			return null;
 		}
 		
-		return getMacroGenerator().generateMacro(extendedMacro);
+		return getMacroGenerator().generateMacro(extendedMacro, silent);
 	}
 	
 	public MacroGenerator getMacroGenerator() {

@@ -79,13 +79,14 @@ public class MacroGenerator {
 	 * @param extendedMacro determines if callback functions are put into macro code
 	 * @return
 	 */
-	public String generateMacro(boolean extendedMacro) {
+	public String generateMacro(boolean extendedMacro, boolean silent) {
 		// reset in case somebody has the mad idea to run this twice
 		this.macroText = ""; 
 		this.macroText += "setBatchMode(true); \n";
 		this.extendedMacro = extendedMacro;
 		// reset progressBar to 0%
 		if (extendedMacro) {
+			// TODO such stuff could be moved to a MacroString Model 
 			this.macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setProgress\", \"0\")";
 		}
 		
@@ -95,13 +96,20 @@ public class MacroGenerator {
 			generateUnitMacroCode(node, 0); 
 		}
 
-		
-		// delete all images that are not to be displayed
-		this.macroText +=  "\n";
-		this.macroText +=  "// delete unwanted images \n";
-		this.macroText += deleteImages();
-		this.macroText +=  "// human understandable names \n";
-		this.macroText += renameImages();
+
+		if (silent) {
+			this.macroText +=  "\n";
+			this.macroText +=  "// delete all images \n";
+			this.macroText += deleteImages();
+		} else {
+			// delete all images that are not to be displayed
+			this.macroText +=  "\n";
+			this.macroText +=  "// delete unwanted images \n";
+			this.macroText += deleteImages();
+			// rename remaining images to a more verbose name
+			this.macroText +=  "// human understandable names \n";
+			this.macroText += renameImages();
+		}
 		
 		this.macroText += "\nsetBatchMode(\"exit and display\"); ";
 		
@@ -112,7 +120,6 @@ public class MacroGenerator {
 	 * Generates the macro code for one node.
 	 * @param node
 	 * @param i
-	 * @param extendedMacro
 	 */
 	private void generateUnitMacroCode(Node node, int i) {
 		
@@ -123,7 +130,7 @@ public class MacroGenerator {
 		try {
 			if (node instanceof GroupUnitElement) {
 				final ForGroupUnitElement unit = (ForGroupUnitElement) node;
-				addForUnitElement(unit, i, extendedMacro);
+				//addForUnitElement(unit, i, extendedMacro);
 			} else if(node instanceof UnitElement) {
 				final UnitElement unit = (UnitElement) node;
 				addProcessingUnit(unit, i);	
@@ -290,7 +297,7 @@ public class MacroGenerator {
 	private void renameOutputImages(UnitElement unit, int i) {
 		String outputTitle, outputID;
 		for (Output output : unit.getOutputs()) {
-			outputTitle = output.getOutputTitle()+"_"+0;
+			outputTitle = output.getOutputTitle()+"_"+0; // FIXME append i?
 			outputID = output.getOutputID()+"_"+i;
 
 			if((output.getDataType() instanceof ImageDataType)) {
@@ -298,11 +305,11 @@ public class MacroGenerator {
 					"rename(\"" + outputTitle  + "\"); \n"
 					+ outputID + " = getImageID(); \n"
 					+ "selectImage("+outputID+"); \n";
-				openedImages.add(new ImageJResult(output, 0));
-			}
-			if (output.isDoDisplayAny() && output.getDataType() instanceof ImageDataType) {
-				UnitElement originalUnit = output.getParent().getOriginalUnit();
-				macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputImage\", "+originalUnit.getNodeID()+", "+output.getIndex()+");\n";
+				openedImages.add(new ImageJResult(output, i));
+				if (output.isDoDisplayAny()) {
+					UnitElement originalUnit = output.getParent().getOriginalUnit();
+					macroText += "call(\"de.danielsenff.imageflow.tasks.RunMacroTask.setOutputImage\", "+originalUnit.getNodeID()+", "+output.getIndex()+");\n";
+				}
 			}
 
 		}
@@ -310,7 +317,7 @@ public class MacroGenerator {
 
 
 	/**
-	 * Rename the remaining displayed images, so they don't have the crypty
+	 * Rename the remaining displayed images, so they don't have the cryptic
 	 * identifier-string, but a human-readable title.
 	 * @return
 	 */
@@ -324,16 +331,24 @@ public class MacroGenerator {
 		return macroText;
 	}
 
+	private String deleteAllImages() {
+		String macroText = "";
 
+		for (final ImageJResult result : this.openedImages) {
+			macroText += "selectImage("+ result.id +"); \n"	+ "close(); \n";
+		}
+		this.openedImages.clear();
+		
+		return macroText;
+	}
+	
 	private String deleteImages() {
 		String macroText = "";
 
 		ArrayList<ImageJResult> removeAfterwards = new ArrayList<ImageJResult>();
-		
 		for (ImageJResult result : this.openedImages) {
 			if (!result.display) {
-				macroText += "selectImage("+ result.id +"); \n" 
-					+ "close(); \n";
+				macroText += "selectImage("+ result.id +"); \n"	+ "close(); \n";
 				removeAfterwards.add(result);
 			} 
 		}

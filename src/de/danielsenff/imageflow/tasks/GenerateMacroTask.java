@@ -39,6 +39,7 @@ public class GenerateMacroTask extends Task<Object, String> {
 	protected GraphController graphController;
 	protected boolean showCode;
 	protected ArrayList<ImageJResult> openedImages;
+	protected boolean silent;
 	
 	/**
 	 * @param app
@@ -49,6 +50,7 @@ public class GenerateMacroTask extends Task<Object, String> {
 		super(app);
 		this.graphController = graphController;
 		this.showCode = true;
+		this.silent = false;
 	}
 	
 	/**
@@ -63,13 +65,13 @@ public class GenerateMacroTask extends Task<Object, String> {
     	
     	final MacroFlowRunner macroFlowRunner = new MacroFlowRunner(graphController.getUnitElements());
     	// generates Macro with callback function (for progressBar)
-    	final String macro = macroFlowRunner.generateMacro(true);
+    	final String macro = macroFlowRunner.generateMacro(true, this.silent);
     	openedImages = macroFlowRunner.getOpenedImages();
     	
 		
 		if(this.showCode && macro != null) {
 			// generates cleaner Macro without callback function (for progressBar)
-			final String reducedMacro = graphController.generateMacro(false);
+			final String reducedMacro = graphController.generateMacro(false, false);
 			CodePreviewDialog previewBox = ((ImageFlowView)((ImageFlow)ImageFlow.getApplication()).getMainView()).showCodePreviewBox();
 			previewBox.setVisible(true);
 			previewBox.setMacroCode(reducedMacro);

@@ -22,9 +22,10 @@ public interface FlowRunner {
 	/**
 	 * Verification and generation of the ImageJ macro for the full graph.
 	 * UnitElements has to be ordered according to the correct processing sequence
-	 * @param extendedMacro determines if callback functions are put into macro code
+	 * @param extendedMacro defines, if callback functions are put into macro code
+	 * @param silent defines, if any results should be displayed after execution, or if the workflow should be executed silently
 	 * @return 
 	 */
-	public String generateMacro(boolean extendedMacro);
+	public String generateMacro(boolean extendedMacro, boolean silent);
 	
 }

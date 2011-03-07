@@ -95,12 +95,13 @@ public class GraphController{
 
 	/**
 	 * Generates the executable Macro based on the current graph.
-	 * @param extendedMacro determines if callback functions are put into macro code 
+	 * @param extendedMacro defines, if callback functions are put into macro code
+	 * @param silent defines, if any results should be displayed after execution, or if the workflow should be executed silently 
 	 * @return
 	 */
-	public String generateMacro(boolean extendedMacro) {
+	public String generateMacro(boolean extendedMacro, boolean silent) {
 		final MacroFlowRunner macroFlowRunner = new MacroFlowRunner(this.nodes);
-		return macroFlowRunner.generateMacro(extendedMacro);
+		return macroFlowRunner.generateMacro(extendedMacro, silent);
 	}
 
 	/**

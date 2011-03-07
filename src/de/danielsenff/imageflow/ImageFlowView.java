@@ -745,7 +745,7 @@ public class ImageFlowView extends FrameView {
     @Action
     (block = BlockingScope.ACTION)
     public RunMacroTask runMacro() {
-        return new RunMacroTask(this.getApplication(), graphController, this.showImageJ, this.showCode, this.closeAll);
+        return new RunMacroTask(this.getApplication(), graphController, this.showImageJ, this.showCode, this.closeAll, false);
     }
 
     /**
