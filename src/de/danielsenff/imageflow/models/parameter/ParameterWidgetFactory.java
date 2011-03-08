@@ -416,8 +416,10 @@ public class ParameterWidgetFactory {
 		combo.addItemListener(new ItemListener() {
 
 			public void itemStateChanged(ItemEvent e) {
-				final int newindex = ((JComboBox)e.getSource()).getSelectedIndex();
-				parameter.setValue(newindex);
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					final int newindex = ((JComboBox)e.getSource()).getSelectedIndex();
+					parameter.setValue(newindex);
+				}
 			}
 		});
 		return combo;

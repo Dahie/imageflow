@@ -283,8 +283,7 @@ public class UnitFactory {
 			((CommentNode)node).addModelListener(new NodeListener(graphPanel, ifView));
 		} else if (node instanceof UnitElement) {
 			UnitElement unit = (UnitElement)node;
-			unit.addModelListener(new NodeListener(graphPanel, ifView));	
-			unit.addParamChangeListerToAllParameters(new ExecuteWorkflowListener(graphController));
+			unit.addModelListener(new NodeListener(graphPanel, ifView));
 		}
 	}
 }

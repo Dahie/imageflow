@@ -31,6 +31,7 @@ public class PropertiesDialog extends JDialog implements ComponentForm, KeyListe
 		formPanel = new FormPanel();
 		setContentPane(formPanel);
 		setResizable(false);
+		setLocationByPlatform(true);
 		addKeyListener(this);
 	}
 	
