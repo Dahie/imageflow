@@ -100,7 +100,7 @@ public class MacroGenerator {
 		if (silent) {
 			this.macroText +=  "\n";
 			this.macroText +=  "// delete all images \n";
-			this.macroText += deleteImages();
+			this.macroText += deleteAllImages();
 		} else {
 			// delete all images that are not to be displayed
 			this.macroText +=  "\n";

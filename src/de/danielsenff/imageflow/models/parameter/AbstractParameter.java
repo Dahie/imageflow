@@ -149,7 +149,7 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 	}
 	
 	/**
-	 * Set the value of the hidden-member.
+	 * Set the value of the readOnly-member.
 	 * @param value
 	 */
 	public void setReadOnly(boolean value) {
@@ -161,7 +161,7 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 	}
 	
 	/**
-	 * Set the value of the readOnly-member.
+	 * Set the value of the hidden-member.
 	 * @param value
 	 */
 	public void setHidden(boolean value) {
