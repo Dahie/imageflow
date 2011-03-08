@@ -60,8 +60,6 @@ public class LoadFlowGraphTask extends LoadURLTask<GraphController, Void> {
         ImageFlowView.getProgressBar().setIndeterminate(true);
     	ImageFlowView.getProgressBar().setVisible(true);
         
-        
-        graphController.getUnitElements().clear();
         try {
         	graphController.read(url);
         } catch(OutOfMemoryError ex) {

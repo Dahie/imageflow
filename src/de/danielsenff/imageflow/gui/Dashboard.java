@@ -62,5 +62,10 @@ public class Dashboard extends JPanel {
 			this.add(dash, "flowy");
 		}
 	}
+
+	public void clear() {
+		this.removeAll();
+		this.dashs.clear();
+	}
 	
 }

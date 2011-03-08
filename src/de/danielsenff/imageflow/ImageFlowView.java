@@ -981,7 +981,7 @@ public class ImageFlowView extends FrameView {
 	 * Clears the workflow from all {@link UnitElement}s
 	 */
 	@Action	public void clear() {
-		getNodes().clear();
+		clearWorkspace();
 	}
 	
 	/**
@@ -991,6 +991,9 @@ public class ImageFlowView extends FrameView {
 	public void cut() {
 		final Selection<Node> selectedNodes = getSelections();
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
+		
+		// TODO think abouut dashboards!
+		
 		if (selectedNodes.size() > 0) {
 			// il problema java.util.ConcurrentModificationException � stato risolto introducendo la lista garbage
 			final HashSet<Connection> garbage = new HashSet<Connection>();
@@ -1116,10 +1119,17 @@ public class ImageFlowView extends FrameView {
 				return;
 			}
 	    }
-		getNodes().clear();
+		clearWorkspace();
+		
 	    setFile(new File("new document"));
 	    this.setModified(false);
 	    graphPanel.repaint();
+	}
+
+	private void clearWorkspace() {
+		getNodes().clear();
+		dashboardPanel.clear();
+		dashboardPanel.revalidate();
 	}
 	
 	/**
@@ -1146,6 +1156,7 @@ public class ImageFlowView extends FrameView {
 		final int option = fc.showOpenDialog(null);
 		if (option == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
+			clearWorkspace();
 			task = new LoadFlowGraphTask(file.toURI().toURL());
 		}
 		return task;			
