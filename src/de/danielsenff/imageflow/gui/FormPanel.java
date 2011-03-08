@@ -36,6 +36,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 
+import sun.misc.FormattedFloatingDecimal.Form;
+
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.ParameterWidgetFactory;
 
@@ -153,6 +155,8 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 		if(parameter.isHidden() && !this.showAllParameters ) {
 			formComponent.setVisible(false);
 			labelComponent.setVisible(false);
+		} else if (parameter.isReadOnly()) {
+			formComponent.setEnabled(false);
 		}
 		
 		parameterComponents.add(formComponent);

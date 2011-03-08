@@ -112,6 +112,10 @@ public class ImageDataType implements DataType {
 		return this.imageBitDepth;
 	}
 	
+	public String getSimpleName() { 
+		return "Image";
+	}
+		
 	public String getName() { 
 		return "Image ("+getVerboseImageFormat()+")";
 	}

@@ -76,7 +76,8 @@ public class UnitDescription implements NodeDescription {
 
 	public int numOutputs;
 	public Output[] output;
-	public boolean isDisplayUnit;
+	public boolean isDisplayUnit = false;
+	public boolean isDisplaySilentUnit = false;
 	public BufferedImage icon = null;
 	public URL iconURL;
 
@@ -112,7 +113,9 @@ public class UnitDescription implements NodeDescription {
 		colorString = elementGeneral.getChild("Color").getValue();
 		if(elementGeneral.getChild("DoDisplay") != null)
 			isDisplayUnit = elementGeneral.getChild("DoDisplay").getValue().equalsIgnoreCase("true") ? true : false;
-
+		if(elementGeneral.getChild("DoDisplaySilent") != null)
+			isDisplaySilentUnit = elementGeneral.getChild("DoDisplaySilent").getValue().equalsIgnoreCase("true") ? true : false;
+		
 		try {
 			color = Color.decode(colorString);
 			if (color == null)
@@ -254,9 +257,13 @@ public class UnitDescription implements NodeDescription {
 				((ImageDataType)actOutput.dataType).setImageBitDepth(imageType);
 			}
 
-
 			actOutput.doDisplay = outputElement.getChild("DoDisplay").getValue().equalsIgnoreCase("true")? true : false;
 			isDisplayUnit = actOutput.doDisplay;
+			
+			if (outputElement.getChild("DoDisplaySilent") != null) {
+				actOutput.doDisplaySilent = outputElement.getChild("DoDisplaySilent").getValue().equalsIgnoreCase("true")? true : false;
+				isDisplaySilentUnit = actOutput.doDisplaySilent;
+			}
 			num++;
 		}
 	}
@@ -277,11 +284,21 @@ public class UnitDescription implements NodeDescription {
 			actPara.helpString = actualParameterElement.getChild("HelpString").getValue();
 		else
 			actPara.helpString = actualParameterElement.getChild("Name").getValue();
+		
 		Element dataTypeElement = actualParameterElement.getChild("DataType");
 		String dataTypeString = actPara.dataTypeString = dataTypeElement.getValue();
+		
 		Element valueElement = actualParameterElement.getChild("Value");
 		String valueString = valueElement.getValue();
 
+		Element readOnlyElement = actualParameterElement.getChild("ReadOnly");
+		if (readOnlyElement != null)
+			actPara.readOnly = readOnlyElement.getValue().equalsIgnoreCase("true")? true : false;;
+		
+		Element hiddenElement = actualParameterElement.getChild("Hidden");
+		if (hiddenElement != null)
+			actPara.hidden = hiddenElement.getValue().equalsIgnoreCase("true")? true : false;;
+		
 		if (dataTypeString.toLowerCase().equals("double"))
 			processDoubleDataType(actPara, dataTypeElement, valueElement,	valueString);
 		else if (dataTypeString.equalsIgnoreCase("file")) {
@@ -455,6 +472,9 @@ public class UnitDescription implements NodeDescription {
 		 * String used as description for the Parameter.
 		 */
 		public String helpString;
+		
+		public boolean readOnly;
+		public boolean hidden;
 	}
 
 	public class Input {
@@ -472,6 +492,7 @@ public class UnitDescription implements NodeDescription {
 		public DataType dataType;
 		public int imageType;
 		public boolean doDisplay;
+		public boolean doDisplaySilent;
 	}
 
 	public Color getColor() {

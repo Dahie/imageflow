@@ -68,6 +68,7 @@ public interface Parameter<T> {
 	 * @return
 	 */
 	public boolean isReadOnly();
+	public void setReadOnly(boolean readOnly);
 	
 	/**
 	 * Returns true, if this parameter should be generally invisible in the generated parameter forms.
@@ -95,6 +96,7 @@ public interface Parameter<T> {
 	 * @param listener
 	 */
 	public void removeParamChangeListener(ParamChangeListener listener);
+
 
 
 	

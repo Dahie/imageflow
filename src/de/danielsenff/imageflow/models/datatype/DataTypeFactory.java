@@ -17,14 +17,7 @@
  */
 package de.danielsenff.imageflow.models.datatype;
 
-import java.awt.Dimension;
-
-import ij.plugin.filter.PlugInFilter;
-import de.danielsenff.imageflow.models.connection.Input;
-import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.Pin;
-import de.danielsenff.imageflow.models.connection.ProxyOutput;
-import de.danielsenff.imageflow.models.unit.UnitElement;
 
 /**
  * The DataTypeFactory is used to create instances of DataTypes.
@@ -105,6 +98,7 @@ public class DataTypeFactory {
 			return new Number();
 		}
 		
+		public String getSimpleName() { return this.getName();}
 		public String getName() { return this.getClass().getSimpleName();}
 	}
 

@@ -38,6 +38,7 @@ import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.delegates.NodeDescription;
 import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.delegates.UnitDescription.Para;
+import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.ParameterFactory;
 
 
@@ -175,13 +176,15 @@ public class UnitFactory {
 		for (int i = 1; i <= numParas; i++) {
 			Para para = unitDescription.para[i];
 			
-			unitElement.addParameter(
-					ParameterFactory.createParameter(para.name, 
-													para.dataTypeString,
-													para.value, 
-													para.helpString, 
-													para.trueString,  
-													para.options));
+			Parameter parameter = ParameterFactory.createParameter(para.name, 
+											para.dataTypeString,
+											para.value, 
+											para.helpString, 
+											para.trueString,  
+											para.options);
+			parameter.setHidden(para.hidden);
+			parameter.setReadOnly(para.readOnly);
+			unitElement.addParameter(parameter);
 		}
 	}
 

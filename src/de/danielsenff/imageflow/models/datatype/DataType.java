@@ -41,7 +41,13 @@ public interface DataType extends Cloneable {
 	public DataType clone();
 	
 	/**
-	 * Returns the simple Class name of this DataType. 
+	 * Returns a simple class name of this DataType.
+	 * @return
+	 */
+	public String getSimpleName();
+	
+	/**
+	 * Returns a verbose name of this DataType. 
 	 * @return
 	 */
 	public String getName();

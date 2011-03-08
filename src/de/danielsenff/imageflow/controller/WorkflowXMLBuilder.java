@@ -550,11 +550,16 @@ public class WorkflowXMLBuilder {
 		helpStringU.addContent(unit.getHelpString());
 		general.addContent(helpStringU);
 
+		// display shows the result in a new window
 		Element doDisplayU = new Element("DoDisplay");
 		doDisplayU.addContent(unit.isDisplay() ? "true" : "false");
 		general.addContent(doDisplayU);
 		
-		// TODO write silentdisplay
+		// silent display will not show the result at all, but still store it internally
+		Element doDisplaySilentU = new Element("DoDisplaySilent");
+		doDisplaySilentU.addContent(unit.isDisplaySilent() ? "true" : "false");
+		general.addContent(doDisplaySilentU);
+		
 
 		// deal with all parameters
 		Element parameters = new Element("Parameters");
@@ -576,7 +581,14 @@ public class WorkflowXMLBuilder {
 				dataType.setAttribute("as", dataTypeAs);
 			}
 			
-
+			Element readOnlyP = new Element("ReadOnly");
+			readOnlyP.addContent(parameter.isReadOnly() ? "true" : "false");
+			parameterElement.addContent(readOnlyP);
+			
+			Element hiddenP = new Element("Hidden");
+			hiddenP.addContent(parameter.isHidden() ? "true" : "false");
+			parameterElement.addContent(hiddenP);
+			
 			Element value = new Element("Value");
 			value.addContent(parameter.getValue()+"");
 
@@ -608,7 +620,6 @@ public class WorkflowXMLBuilder {
 					int max = (Integer) parameter.getOptions().get("max");
 					value.setAttribute("max", Integer.toString(max));
 				}
-				
 			}
 			
 			if(parameter instanceof BooleanParameter) {
@@ -653,7 +664,7 @@ public class WorkflowXMLBuilder {
 
 		Element dataTypeElement = new Element("DataType");
 		DataType dataType = input.getDataType();
-		dataTypeElement.addContent(dataType.getClass().getSimpleName());
+		dataTypeElement.addContent(dataType.getSimpleName());
 		inputElement.addContent(dataTypeElement);
 
 		if(dataType instanceof ImageDataType) {
@@ -683,7 +694,7 @@ public class WorkflowXMLBuilder {
 		outputElement.addContent(shortName);
 
 		Element dataType = new Element("DataType");
-		dataType.addContent(output.getDataType().getClass().getSimpleName());
+		dataType.addContent(output.getDataType().getSimpleName());
 		outputElement.addContent(dataType);
 
 		if(output.getDataType() instanceof ImageDataType) {
@@ -698,7 +709,11 @@ public class WorkflowXMLBuilder {
 		String boolIsDisplay = output.isDoDisplay() ? "true" : "false"; 
 		doDisplay.addContent(boolIsDisplay);
 		outputElement.addContent(doDisplay);
-		// TODO save silent dodisplay
+		
+		Element doDisplaySilent = new Element("DoDisplaySilent");
+		String boolIsDisplaySilent = output.isDoDisplaySilent() ? "true" : "false"; 
+		doDisplay.addContent(boolIsDisplaySilent);
+		outputElement.addContent(doDisplaySilent);
 	}
 
 
