@@ -70,10 +70,12 @@ public interface Parameter<T> {
 	public boolean isReadOnly();
 	
 	/**
-	 * Returns true if this parameter should be invisible in the generated parameter forms.
+	 * Returns true, if this parameter should be generally invisible in the generated parameter forms.
+	 * This can not be overridden
 	 * @return
 	 */
 	public boolean isHidden();
+	public void setHidden(boolean b);
 
 	/**
 	 * Special options hash to configure parameters more flexible.
@@ -93,5 +95,7 @@ public interface Parameter<T> {
 	 * @param listener
 	 */
 	public void removeParamChangeListener(ParamChangeListener listener);
+
+
 	
 }

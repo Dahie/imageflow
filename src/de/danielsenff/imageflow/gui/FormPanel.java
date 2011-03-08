@@ -21,12 +21,17 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
@@ -38,13 +43,19 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 
 	private GridBagConstraints c;
 	private int rows;
-	private HashSet<Parameter> properties;
+	private LinkedHashMap<Parameter, ArrayList<Component>> parameters;
+	private boolean showAllParameters = false;
+	
+	public FormPanel(boolean showAllParameters) {
+		this();
+		this.showAllParameters = showAllParameters;
+	}
 	
 	public FormPanel() {
 		
 		setLayout(new GridBagLayout());
 		addMouseListener(this);
-		this.properties = new HashSet<Parameter>();
+		this.parameters = new LinkedHashMap<Parameter, ArrayList<Component>>();
 		
 		c = new GridBagConstraints();
 		c.insets = new Insets(2,2,2,2);  //top padding
@@ -84,20 +95,29 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 	public void addSeparator() {
 		add(new JSeparator());
 	}
-	
+
 	/**
 	 * Adds a new Form-Element using the label and the component.
 	 * @param label
 	 * @param component
 	 */
 	public void addForm(final String label, final Component component) {
+		addForm(new JLabel(label), component);
+	}
+	
+	/**
+	 * Adds a new Form-Element using the label and the component.
+	 * @param label
+	 * @param component
+	 */
+	public void addForm(final JLabel label, final Component component) {
 		if (component != null) {
 			c.gridwidth = 1;
 			c.gridheight = 1;
 			
 			c.gridx = 0;
 			c.gridy = rows+1;
-			add(new JLabel(label), c);
+			add(label, c);
 			
 			c.gridx = 1;
 			c.gridy = rows+1;
@@ -123,8 +143,22 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 	 * 
 	 */
 	public void add(final Parameter parameter) {
-		properties.add(parameter);
-		addForm(parameter.getDisplayName(), ParameterWidgetFactory.createForm(parameter));
+		ArrayList<Component> parameterComponents = new ArrayList<Component>();
+		parameters.put(parameter, parameterComponents);
+		
+		String parameterName = parameter.getDisplayName();
+		JComponent formComponent = ParameterWidgetFactory.createForm(parameter);
+		JLabel labelComponent = new JLabel(parameterName);
+		
+		if(parameter.isHidden() && !this.showAllParameters ) {
+			formComponent.setVisible(false);
+			labelComponent.setVisible(false);
+		}
+		
+		parameterComponents.add(formComponent);
+		parameterComponents.add(labelComponent);
+		
+		addForm(labelComponent, formComponent);
 	}
 	
 	/*public void addFormset(final String title, final ArrayList<Property> group) {
@@ -170,11 +204,29 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 	}
 
 	public void mousePressed(MouseEvent event) {
-		if(event.isPopupTrigger()) {
+		if(event.isPopupTrigger() && !this.showAllParameters) {
 			JPopupMenu popup = new JPopupMenu();
-			for (Parameter parameter : properties) {
+			for (Parameter parameter : parameters.keySet()) {
 				JCheckBoxMenuItem item = new JCheckBoxMenuItem(parameter.getDisplayName(), !parameter.isHidden());
 				popup.add(item);
+				item.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						JCheckBoxMenuItem jMenuItem = (JCheckBoxMenuItem)e.getSource();
+						String itemName = jMenuItem.getText();
+						for (Parameter parameter : parameters.keySet()) {
+							if (parameter.getDisplayName() == itemName) {
+								ArrayList<Component> components = parameters.get(parameter);
+								for (Component component : components) {
+									component.setVisible(!component.isVisible());
+								}
+								jMenuItem.setSelected(!jMenuItem.isSelected());
+								parameter.setHidden(jMenuItem.isSelected());
+							}
+						}
+					}
+				});
 			}
 			
 			popup.show(event.getComponent(), event.getX(), event.getY());

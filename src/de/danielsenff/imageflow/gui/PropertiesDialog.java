@@ -28,7 +28,7 @@ public class PropertiesDialog extends JDialog implements ComponentForm, KeyListe
 		super(parent);
 		setTitle(title);
 		
-		formPanel = new FormPanel();
+		formPanel = new FormPanel(true);
 		setContentPane(formPanel);
 		setResizable(false);
 		setLocationByPlatform(true);
@@ -38,11 +38,6 @@ public class PropertiesDialog extends JDialog implements ComponentForm, KeyListe
 	public void add(Parameter param) {
 		formPanel.add(param);
 	}
-
-	/*public void addFormset(String title, ArrayList<Property> group) {
-		formPanel.addFormset(title, group);
-	}*/
-
 
 	public void addMessage(String string) {
 		formPanel.addMessage(string);

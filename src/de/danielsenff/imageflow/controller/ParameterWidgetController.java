@@ -57,9 +57,7 @@ public class ParameterWidgetController {
 		Collection<Parameter> parameters = unit.getParameters();
 		
 		for (final Parameter parameter : parameters) {
-			if (!parameter.isHidden()) {
-				formPanel.add(parameter);
-			}
+			formPanel.add(parameter);
 		}
 		
 		dash.add(formPanel);
@@ -73,8 +71,6 @@ public class ParameterWidgetController {
 		formPanel.setBackground(unit.getColor());
 		formPanel.add(new JLabel("Preview"));
 		for (Output output : unit.getOutputs()) {
-			
-			
 			
 			if (output.getDataType() instanceof ImageDataType) {
 				
