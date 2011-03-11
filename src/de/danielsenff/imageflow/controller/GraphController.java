@@ -34,6 +34,7 @@ import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.imagej.MacroFlowRunner;
+import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.SelectionList;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -145,7 +146,20 @@ public class GraphController{
 		listener = null;
 	}
 	
-	public UnitElement addNode(UnitDelegate delegate, Point point) {
+	public Node addNode(Node node, Point point) {
+		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
+		final GraphPanel graphPanel = ifView.getGraphPanel();
+		
+		if (node instanceof UnitElement) {
+			((UnitElement) node).addModelListener(new NodeListener(graphPanel, ifView));
+			((UnitElement) node).addParamChangeListerToAllParameters(new ExecuteWorkflowListener(this));
+		}
+		
+		getUnitElements().add(node);
+		return node;
+	}
+	
+	public Node addNode(UnitDelegate delegate, Point point) {
 		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
 		final GraphPanel graphPanel = ifView.getGraphPanel();
 		
@@ -313,7 +327,7 @@ public class GraphController{
 	 * @param url The document to load.
 	 */
 	public void read(final URL url) {
-		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(nodes);
+		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(this);
 		workflowbuilder.read(url);
 	}
 	
@@ -323,7 +337,7 @@ public class GraphController{
 	 * @throws IOException
 	 */
 	public void write(final File file) throws IOException {
-		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(nodes);
+		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(this);
 		workflowbuilder.write(file);
 	}
 	

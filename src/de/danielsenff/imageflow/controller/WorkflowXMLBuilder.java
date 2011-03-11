@@ -64,7 +64,7 @@ import de.danielsenff.imageflow.models.unit.UnitList;
  */
 public class WorkflowXMLBuilder {
 
-	private UnitList unitList;
+	private GraphController graphController;
 	private Collection<ConnectionDelegate> connectionDelegates;
 	private Collection<GroupUnitElement> groupUnits;
 	private HashMap<Integer, UnitElement> newNodes;
@@ -73,8 +73,8 @@ public class WorkflowXMLBuilder {
 	 * Create a builder object based on a {@link UnitList}
 	 * @param units
 	 */
-	public WorkflowXMLBuilder(final UnitList units) {
-		this.unitList = units;
+	public WorkflowXMLBuilder(final GraphController graphController) {
+		this.graphController = graphController;
 		this.connectionDelegates = new Vector<ConnectionDelegate>();
 		this.newNodes = new HashMap<Integer, UnitElement>();
 		this.groupUnits = new Vector<GroupUnitElement>();
@@ -138,7 +138,7 @@ public class WorkflowXMLBuilder {
 			while (unitsIterator.hasNext()) { 
 				actualUnitElement = unitsIterator.next();
 				node = readNode(actualUnitElement, url);
-				getUnitList().add(node);
+				graphController.addNode(node, node.getOrigin());
 			}
 		}
 	}
@@ -740,15 +740,10 @@ public class WorkflowXMLBuilder {
 		connectionElement.addContent(toInputNumber);
 	}
 
-
-	/**
-	 * Returns the UnitList processed by this Builder.
-	 * @return the unitList
-	 */
 	public UnitList getUnitList() {
-		return unitList;
+		return this.graphController.getUnitElements();
 	}
-
+	
 	/**
 	 * Returns the Connections in the UnitList processed by this Builder.
 	 * @return

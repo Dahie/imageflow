@@ -702,6 +702,7 @@ public class ImageFlowView extends FrameView {
 	 * @throws MalformedURLException 
 	 */
 	@Action public LoadFlowGraphTask exampleFlow1() throws MalformedURLException {
+		clearWorkspace();
 		return new LoadFlowGraphTask(
 			getFlowURL(getResourceString("exampleFlow1.Path")));
 	}
@@ -712,6 +713,7 @@ public class ImageFlowView extends FrameView {
 	 * @throws MalformedURLException 
 	 */
 	@Action public LoadFlowGraphTask exampleFlow2() throws MalformedURLException {
+		clearWorkspace();
 		return new LoadFlowGraphTask(
 			getFlowURL(getResourceString("exampleFlow2.Path")));
 	}
@@ -722,6 +724,7 @@ public class ImageFlowView extends FrameView {
 	 * @throws MalformedURLException 
 	 */
 	@Action public LoadFlowGraphTask exampleFlow3() throws MalformedURLException {
+		clearWorkspace();
 		return new LoadFlowGraphTask(
 			getFlowURL(getResourceString("exampleFlow3.Path")));
 	}
