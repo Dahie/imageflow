@@ -25,6 +25,8 @@ import java.awt.Window;
 import java.io.File;
 import java.util.EventObject;
 
+import javax.swing.UIManager;
+
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
@@ -85,6 +87,8 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 			MacApplication macApplication = new MacApplication(getApplication());
 		}
 
+		UIManager.put("swing.boldMetal", Boolean.FALSE);
+		
 		// open workflow by argument
 		/*String workflowPath = args != null ? args[0] : "none";
     	System.out.println(workflowPath);

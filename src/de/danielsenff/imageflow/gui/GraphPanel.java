@@ -514,8 +514,15 @@ public class GraphPanel extends GPanel {
 		this.drawGrid = drawGrid;
 	}
 	
-	@Override
-	public void properties(final Node node) {
+	public void mouseClicked(MouseEvent e) {
+		if (e.getClickCount() > 1) {
+			if (selection.size() == 1) properties(selection.get(0), e.getLocationOnScreen());
+			else selection.clear(); //zz to be handled in more completed way
+		}
+	}
+	
+	public void properties(final Node node, Point point) {
+	
 		if (node instanceof CommentNode) {
 			final String inputValue = JOptionPane.showInputDialog("Edit text:",((CommentNode)node).getText()); 
 			if ((inputValue != null) && (inputValue.length() != 0)) {
@@ -525,7 +532,7 @@ public class GraphPanel extends GPanel {
 		}
 		else { 
 			final UnitElement unit = (UnitElement) node;
-			unit.showProperties();
+			unit.showProperties(point);
 		}
 	}
 

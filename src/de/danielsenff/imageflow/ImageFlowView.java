@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008-2010 Daniel Senff
+ * Copyright (C) 2008-2011 Daniel Senff
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1072,7 +1072,7 @@ public class ImageFlowView extends FrameView {
 	public void showUnitParameters() {
 		for (Node node : getSelections()) {
 			if(node instanceof UnitElement)
-				((UnitElement)node).showProperties();
+				((UnitElement)node).showProperties(null); // giving null as location centers on screen
 		}
 	}
 

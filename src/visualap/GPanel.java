@@ -24,24 +24,21 @@ todo:
 package visualap;
 
 
+import static de.danielsenff.imageflow.utils.Reversed.reversed;
 import ij.IJ;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Line2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.JPanel;
@@ -49,14 +46,16 @@ import javax.swing.JPanel;
 import de.danielsenff.imageflow.models.NodeList;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
-import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.Input;
+import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.Pin;
-import de.danielsenff.imageflow.models.delegates.Delegate;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
-import static de.danielsenff.imageflow.utils.Reversed.reversed;
-
+/**
+ * Depricated, should be faded out in the future
+ * @author dahie
+ *
+ */
 public class GPanel extends JPanel implements Printable, MouseListener, MouseMotionListener  {
 
 	protected GPanelListener parentPanel;
@@ -150,13 +149,10 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() > 1) {
-			if (selection.size() == 1) properties(selection.get(0));
-			else selection.clear(); //zz to be handled in more completed way
+			//if (selection.size() == 1) properties(selection.get(0));
+			//else selection.clear(); //zz to be handled in more completed way
 		}
 	}
-
-	protected void properties(Node node) {}
-
 
 
 	public void mousePressed(MouseEvent e) {

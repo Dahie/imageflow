@@ -76,13 +76,13 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 	}
 	
 	@Override
-	public void showProperties() {
+	public void showProperties(Point point) {
 		
 		// display file dialog
 		if(!existsFile())
 			showOpenFileChooser();
 		
-		super.showProperties();
+		super.showProperties(point);
 		updateImageType();
 		notifyModelListeners();
 	}

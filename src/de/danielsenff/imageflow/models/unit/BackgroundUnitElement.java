@@ -67,8 +67,8 @@ public class BackgroundUnitElement extends UnitElement implements ImageSourceUni
 
 	
 	@Override
-	public void showProperties() {
-		super.showProperties();
+	public void showProperties(Point point) {
+		super.showProperties(point);
 		
 		final int imageType = getImageType();
 		

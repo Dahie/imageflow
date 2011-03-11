@@ -43,6 +43,7 @@ import javax.swing.text.JTextComponent;
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.gui.PropertiesDialog;
+import de.danielsenff.imageflow.gui.UnitElementInfoPanel;
 import de.danielsenff.imageflow.imagej.GenericDialog;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.MacroElement;
@@ -455,8 +456,9 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 
 	/**
 	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
+	 * @param point leave null to center on screen
 	 */
-	public void showProperties() {
+	public void showProperties(Point point) {
 		final PropertiesDialog gd = 
 			new PropertiesDialog(getLabel() + " - Parameters", 
 					ImageFlow.getApplication().getMainFrame()) ;
@@ -491,31 +493,15 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 			gd.addSeparator();
 		}
 		
-		if(hasInputs()) {
-			gd.addMessage("Inputs");
-			for (Input input : getInputs()) {
-				if(input.isConnected())
-					gd.addMessage(input.getDisplayName() + " of type " + input.getDataType().getName()+ " connected to " + input.getConnection().getFromUnit().getLabel());
-				else
-					gd.addMessage(input.getDisplayName() + " of type " + input.getDataType().getName()+ " is not connected.");
-			}
-		}
-		if(hasOutputs()) {			
-			gd.addMessage("Outputs");
-			for (Output output : getOutputs()) {
-				if(output.isConnected())
-					for (Connection conn : output.getConnections()) {
-						gd.addMessage(output.getDisplayName() + " of type " + output.getDataType().getName()+" connected to " + conn.getToUnit().getLabel());
-					}
-				else
-					gd.addMessage(output.getDisplayName() + " of type " + output.getDataType().getName() + " is not connected.");
-			}
-		}
-		
+		gd.addComponent(new UnitElementInfoPanel(this));
 
 		// show properties window
-		gd.showDialog();
-
+		if (point == null) 
+			gd.showDialog();
+		else
+			gd.showDialog(point);
+		
+		
 		notifyModelListeners();
 	}
 
@@ -798,6 +784,10 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 		}
 
 		return new Rectangle(origin, getDimension());
+	}
+
+	public NodeIcon getUnitComponentIcon() {
+		return unitComponentIcon;
 	}
 
 	protected BufferedImage scaleThumbnail(int width, int height, Image image) {

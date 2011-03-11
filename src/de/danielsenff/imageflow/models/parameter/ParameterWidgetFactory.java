@@ -389,7 +389,8 @@ public class ParameterWidgetFactory {
 	 * @return
 	 */
 	public static JCheckBox createCheckBox(final BooleanParameter parameter) {
-		final JCheckBox chkBox = new JCheckBox(parameter.getDisplayName());
+		final JCheckBox chkBox = new JCheckBox();
+		//chkBox.setText(parameter.getDisplayName());
 		chkBox.setSelected(parameter.getValue());
 		parameter.addParamChangeListener(new CheckBoxParamChangeListener(chkBox));
 		chkBox.addItemListener(new ItemListener() {
