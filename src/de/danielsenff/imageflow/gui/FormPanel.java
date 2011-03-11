@@ -215,7 +215,6 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 				popup.add(item);
 				item.addActionListener(new ActionListener() {
 					
-					@Override
 					public void actionPerformed(ActionEvent e) {
 						JCheckBoxMenuItem jMenuItem = (JCheckBoxMenuItem)e.getSource();
 						String itemName = jMenuItem.getText();
