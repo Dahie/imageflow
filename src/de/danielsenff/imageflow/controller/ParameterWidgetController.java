@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import de.danielsenff.imageflow.gui.FormPanel;
+import de.danielsenff.imageflow.gui.RoundedPanel;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.OutputObjectChangeListener;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
@@ -50,25 +51,27 @@ public class ParameterWidgetController {
 	}
 	
 	public static JPanel createWidgetFromUnit(UnitElement unit) {
-		JPanel dash = new JPanel();
+		JPanel dash = new RoundedPanel();
 		
 		FormPanel formPanel = new FormPanel();
 		formPanel.setBackground(unit.getColor());
+		dash.setBackground(unit.getColor());
+		formPanel.add(new JLabel(unit.getUnitName()));
 		Collection<Parameter> parameters = unit.getParameters();
 		
 		for (final Parameter parameter : parameters) {
 			formPanel.add(parameter);
 		}
-		
 		dash.add(formPanel);
 		return dash;
 	}
 
 	public static JPanel createPreviewWidgetFromUnit(UnitElement unit) {
-		JPanel dash = new JPanel();
+		JPanel dash = new RoundedPanel();
 		
 		FormPanel formPanel = new FormPanel();
 		formPanel.setBackground(unit.getColor());
+		dash.setBackground(unit.getColor());
 		formPanel.add(new JLabel("Preview"));
 		for (Output output : unit.getOutputs()) {
 			

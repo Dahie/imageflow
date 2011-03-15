@@ -175,6 +175,7 @@ public class ParameterWidgetFactory {
 
 	public static JComponent createSlider(final IntegerParameter parameter) throws IllegalArgumentException {
 		final JPanel panel = new JPanel();
+		panel.setOpaque(false);
 
 		final JTextField component = new JTextField(parameter.getValue().toString());
 		component.setEnabled(!parameter.isReadOnly());
@@ -250,6 +251,7 @@ public class ParameterWidgetFactory {
 	public static JComponent createSlider(final DoubleParameter parameter) 
 	throws IllegalArgumentException {
 		final JPanel panel = new JPanel();
+		panel.setOpaque(false);
 
 		final JTextField component = new JTextField(parameter.getValue().toString());
 		component.setEnabled(!parameter.isReadOnly());

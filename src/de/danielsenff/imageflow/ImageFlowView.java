@@ -359,6 +359,11 @@ public class ImageFlowView extends FrameView {
 		
 //		graphScrollpane.add(workspacePanel);
 
+		
+		
+		
+		
+		
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new BorderLayout());
 		
@@ -410,10 +415,6 @@ public class ImageFlowView extends FrameView {
 		
 		bottomPanel.add(progressPanel, BorderLayout.LINE_END);
 		
-		dashboardPanel = new Dashboard(graphController);
-		
-		bottomPanel.add(dashboardPanel, BorderLayout.PAGE_START);
-		
 		JPanel sidePane = new JPanel();
 		sidePane.setLayout(new BorderLayout());
 		DelegatesPanel delegatesPanel = new DelegatesPanel(this.getNodes());
@@ -438,7 +439,14 @@ public class ImageFlowView extends FrameView {
 		
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
-		mainPanel.add(splitPane, BorderLayout.CENTER);
+		
+		dashboardPanel = new Dashboard(graphController);
+		
+		JSplitPane dashWorkflowSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		dashWorkflowSplitPane.add(splitPane);
+		dashWorkflowSplitPane.add(dashboardPanel);
+		
+		mainPanel.add(dashWorkflowSplitPane, BorderLayout.CENTER);
 		mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 		setComponent(mainPanel);
 		

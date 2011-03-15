@@ -19,6 +19,8 @@ public class Dashboard extends JPanel {
 
 	private HashMap<String, JPanel> dashs;
 	private GraphController graphController;
+	public int dragStartX;
+	public int dragStartY;
 	
 	public Dashboard(GraphController controller) {
 		this.graphController = controller;
@@ -53,8 +55,8 @@ public class Dashboard extends JPanel {
 			final JPanel dash = ParameterWidgetController.createWidgetFromUnit(unit);
 			dashs.put(unit.getLabel(), dash);
 			unit.setWidget(dash);
-			dash.setBounds(30, 30, 250, 150);
-			dash.setBorder(BorderFactory.createTitledBorder(unit.getLabel()));
+			
+			dash.setBounds(30, 30, dash.getPreferredSize().width, dash.getPreferredSize().height);
 			dash.addMouseListener(new DragListener(dash));
 			dash.addMouseMotionListener(new DragListener(dash));
 			this.add(dash);
@@ -65,9 +67,12 @@ public class Dashboard extends JPanel {
 		String dashKey = unit.getLabel()+"_preview";
 		if(!dashs.containsKey(dashKey)) {
 			JPanel dash = ParameterWidgetController.createPreviewWidgetFromUnit(unit);
+			dash.setBounds(30, 30, 250, 150);
 			dashs.put(dashKey, dash);
+			dash.addMouseListener(new DragListener(dash));
+			dash.addMouseMotionListener(new DragListener(dash));
 			unit.setPreviewWidget(dash);
-			this.add(dash, "flowy");
+			this.add(dash);
 		}
 	}
 
@@ -102,7 +107,8 @@ public class Dashboard extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent e) {
-			
+			dragStartX = (int)(e.getXOnScreen());
+			dragStartY = (int)(e.getYOnScreen());
 		}
 
 		public void mouseReleased(MouseEvent e) {}
@@ -111,11 +117,15 @@ public class Dashboard extends JPanel {
 			//e.translatePoint(offset.x, offset.y);
 			int offsetX = delta.x - e.getPoint().x;
 			int offsetY = delta.y - e.getPoint().y;
+			int dx = (int)((e.getXOnScreen()) - dragStartX);
+			int dy = (int)((e.getYOnScreen()) - dragStartY);
 			
-			System.out.println(e.getPoint());
-			e.translatePoint(offsetX, offsetY);
-			dash.setLocation(e.getPoint());
-			delta = e.getPoint();
+			e.translatePoint(dx, dy);
+			Point dashLocation = dash.getLocation();
+			dash.setLocation(new Point(dashLocation.x+dx, dashLocation.y+dy));
+			
+			dragStartX = (int)(e.getXOnScreen());
+			dragStartY = (int)(e.getYOnScreen());
 		}
 
 		public void mouseMoved(MouseEvent arg0) {}
