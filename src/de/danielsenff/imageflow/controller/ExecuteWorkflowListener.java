@@ -20,6 +20,8 @@ package de.danielsenff.imageflow.controller;
 import ij.IJ;
 
 import org.jdesktop.application.Task;
+import org.jdesktop.application.TaskEvent;
+import org.jdesktop.application.TaskListener;
 import org.jdesktop.application.TaskService;
 
 import de.danielsenff.imageflow.ImageFlow;
@@ -42,17 +44,41 @@ public class ExecuteWorkflowListener implements ParamChangeListener {
 	}
 
 	public void parameterChanged(final Parameter source) {
-		if (!IJ.macroRunning()) {
+		if (!lock) {
 			lock = true;
 			System.out.println("reexecute graph");
 			
 			final ImageFlow application = ImageFlow.getApplication();
-			final Task convertTask = new RunMacroTask(application, graphController, false, false, false, true);
+			Task workflowExecutionTask = new RunMacroTask(application, graphController, false, false, false, true);
+			workflowExecutionTask.addTaskListener(new TaskListener() {
+
+				public void cancelled(TaskEvent arg0) {
+					lock = false;
+				}
+
+				public void doInBackground(TaskEvent arg0) {}
+
+				public void failed(TaskEvent arg0) {
+					lock = false;
+				}
+
+				public void finished(TaskEvent arg0) {
+					lock = false;
+				}
+
+				public void interrupted(TaskEvent arg0) {
+					lock = false;
+				}
+
+				public void process(TaskEvent arg0) {}
+
+				public void succeeded(TaskEvent arg0) {
+					lock = false;	
+				}
+			});
 			final TaskService ts = application.getContext().getTaskService();
-			ts.execute(convertTask);
-			lock = false;
-		}
-		else {
+			ts.execute(workflowExecutionTask);
+		} else {
 			System.out.println("Execution halted");
 		}
 	}

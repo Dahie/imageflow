@@ -76,6 +76,7 @@ public class GraphController{
 
 	
 	private UndoableEditListener listener;
+	private ExecuteWorkflowListener executionListener;
 	
 	/**
 	 * 
@@ -84,6 +85,7 @@ public class GraphController{
 		this.nodes = new UnitList();
 		this.copyNodesList = new ArrayList<Node>();
 		this.selections = new SelectionList();
+		this.executionListener = new ExecuteWorkflowListener(this);
 	}
 
 	/**
@@ -152,7 +154,7 @@ public class GraphController{
 		
 		if (node instanceof UnitElement) {
 			((UnitElement) node).addModelListener(new NodeListener(graphPanel, ifView));
-			((UnitElement) node).addParamChangeListerToAllParameters(new ExecuteWorkflowListener(this));
+			((UnitElement) node).addParamChangeListerToAllParameters(executionListener);
 		}
 		
 		getUnitElements().add(node);
@@ -165,7 +167,7 @@ public class GraphController{
 		
 		UnitElement unit = delegate.buildUnit(point);
 		unit.addModelListener(new NodeListener(graphPanel, ifView));
-		unit.addParamChangeListerToAllParameters(new ExecuteWorkflowListener(this));
+		unit.addParamChangeListerToAllParameters(executionListener);
 		
 		getUnitElements().add(unit);
 		return unit;
