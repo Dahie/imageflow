@@ -2,6 +2,7 @@ package de.danielsenff.imageflow.controller;
 
 import ij.ImagePlus;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -13,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
+import de.danielsenff.imageflow.gui.DashWidget;
 import de.danielsenff.imageflow.gui.FormPanel;
 import de.danielsenff.imageflow.gui.RoundedPanel;
 import de.danielsenff.imageflow.models.connection.Output;
@@ -50,18 +52,21 @@ public class ParameterWidgetController {
 		return dash;
 	}
 	
-	public static JPanel createWidgetFromUnit(UnitElement unit) {
-		JPanel dash = new RoundedPanel();
+	public static DashWidget createWidgetFromUnit(UnitElement unit) {
 		
 		FormPanel formPanel = new FormPanel();
 		formPanel.setBackground(unit.getColor());
-		dash.setBackground(unit.getColor());
-		formPanel.add(new JLabel(unit.getUnitName()));
-		Collection<Parameter> parameters = unit.getParameters();
 		
-		for (final Parameter parameter : parameters) {
+		JLabel title = new JLabel(unit.getUnitName());
+		title.setForeground(Color.WHITE);
+		title.setAlignmentX(0.5f);
+		formPanel.add(title);
+		for (final Parameter parameter : unit.getParameters()) {
 			formPanel.add(parameter);
 		}
+		
+		DashWidget dash = new DashWidget(formPanel);
+		dash.setBackground(unit.getColor());
 		dash.add(formPanel);
 		return dash;
 	}

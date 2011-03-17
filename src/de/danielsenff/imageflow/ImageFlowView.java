@@ -342,7 +342,6 @@ public class ImageFlowView extends FrameView {
 	private void addComponents() {
 		ResourceMap resourceMap = getResourceMap();
 		
-		
 		//working area aka graphpanel
 		GPanelPopup popup = new GPanelPopup(getGraphController());
 		
@@ -350,18 +349,11 @@ public class ImageFlowView extends FrameView {
 		resourceMap.injectComponent(graphPanel);
 		popup.setActivePanel(graphPanel);
 		graphPanel.setSelections(getSelections());
-		if(IJ.isMacOSX())
-			graphPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		
 		ScrollPane graphScrollpane = new ScrollPane();
 		graphScrollpane.add(graphPanel);
+		graphScrollpane.getInsets().bottom = 5;
 		graphScrollpane.setPreferredSize(new Dimension(400, 300));
-		
-//		graphScrollpane.add(workspacePanel);
-
-		
-		
-		
 		
 		
 		JPanel bottomPanel = new JPanel();

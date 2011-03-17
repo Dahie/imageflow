@@ -3,6 +3,8 @@ package de.danielsenff.imageflow.gui;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -52,14 +54,26 @@ public class Dashboard extends JPanel {
 	
 	public void addWidget(UnitElement unit) {
 		if(!dashs.containsKey(unit.getLabel())) {
-			final JPanel dash = ParameterWidgetController.createWidgetFromUnit(unit);
+			final DashWidget dash = ParameterWidgetController.createWidgetFromUnit(unit);
 			dashs.put(unit.getLabel(), dash);
 			unit.setWidget(dash);
 			
 			dash.setBounds(30, 30, dash.getPreferredSize().width, dash.getPreferredSize().height);
 			dash.addMouseListener(new DragListener(dash));
 			dash.addMouseMotionListener(new DragListener(dash));
+			dash.addContainerListener(new ContainerListener() {
+				
+				public void componentRemoved(ContainerEvent e) {
+					System.out.println(e);
+					dash.setBounds(dash.getLocation().x, dash.getLocation().y, dash.getPreferredSize().width, dash.getPreferredSize().height);
+				}
+				
+				public void componentAdded(ContainerEvent e) {
+					dash.setBounds(dash.getLocation().x, dash.getLocation().y, dash.getPreferredSize().width, dash.getPreferredSize().height);
+				}
+			});
 			this.add(dash);
+			this.repaint();
 		}
 	}
 
@@ -73,6 +87,7 @@ public class Dashboard extends JPanel {
 			dash.addMouseMotionListener(new DragListener(dash));
 			unit.setPreviewWidget(dash);
 			this.add(dash);
+			this.repaint();
 		}
 	}
 
