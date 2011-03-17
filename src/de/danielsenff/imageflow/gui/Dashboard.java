@@ -1,8 +1,27 @@
+/**
+ * Copyright (C) 2008-2011 Daniel Senff
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package de.danielsenff.imageflow.gui;
 
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.MouseEvent;
@@ -61,17 +80,6 @@ public class Dashboard extends JPanel {
 			dash.setBounds(30, 30, dash.getPreferredSize().width, dash.getPreferredSize().height);
 			dash.addMouseListener(new DragListener(dash));
 			dash.addMouseMotionListener(new DragListener(dash));
-			dash.addContainerListener(new ContainerListener() {
-				
-				public void componentRemoved(ContainerEvent e) {
-					System.out.println(e);
-					dash.setBounds(dash.getLocation().x, dash.getLocation().y, dash.getPreferredSize().width, dash.getPreferredSize().height);
-				}
-				
-				public void componentAdded(ContainerEvent e) {
-					dash.setBounds(dash.getLocation().x, dash.getLocation().y, dash.getPreferredSize().width, dash.getPreferredSize().height);
-				}
-			});
 			this.add(dash);
 			this.repaint();
 		}
@@ -81,7 +89,7 @@ public class Dashboard extends JPanel {
 		String dashKey = unit.getLabel()+"_preview";
 		if(!dashs.containsKey(dashKey)) {
 			JPanel dash = ParameterWidgetController.createPreviewWidgetFromUnit(unit);
-			dash.setBounds(30, 30, 250, 150);
+			dash.setBounds(30, 30, dash.getPreferredSize().width, dash.getPreferredSize().height);
 			dashs.put(dashKey, dash);
 			dash.addMouseListener(new DragListener(dash));
 			dash.addMouseMotionListener(new DragListener(dash));
