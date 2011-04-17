@@ -100,6 +100,7 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 		this.setPreferredSize(new Dimension(width, height));
 		this.getParent().setPreferredSize(new Dimension(bi.getWidth(null), bi.getHeight(null)));
 		invalidate();
+		this.repaint();
 	}
 		
 	/**

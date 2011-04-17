@@ -960,7 +960,8 @@ public class ImageFlowView extends FrameView {
 			if (node instanceof UnitElement) {
 				dashboardPanel.removeWidget((UnitElement) node);
 				dashboardPanel.removePreviewWidget((UnitElement) node);
-				dashboardPanel.revalidate();
+				dashboardPanel.invalidate();
+				dashboardPanel.repaint();
 			}
 		}
 		graphPanel.repaint();
@@ -1133,6 +1134,7 @@ public class ImageFlowView extends FrameView {
 		getNodes().clear();
 		dashboardPanel.clear();
 		dashboardPanel.revalidate();
+		dashboardPanel.repaint();
 	}
 	
 	/**

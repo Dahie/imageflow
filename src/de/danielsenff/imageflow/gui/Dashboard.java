@@ -18,6 +18,7 @@
 package de.danielsenff.imageflow.gui;
 
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
@@ -74,6 +75,7 @@ public class Dashboard extends JPanel {
 	public void addWidget(UnitElement unit) {
 		if(!dashs.containsKey(unit.getLabel())) {
 			final DashWidget dash = ParameterWidgetController.createWidgetFromUnit(unit);
+			dash.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 			dashs.put(unit.getLabel(), dash);
 			unit.setWidget(dash);
 			
@@ -91,6 +93,7 @@ public class Dashboard extends JPanel {
 			JPanel dash = ParameterWidgetController.createPreviewWidgetFromUnit(unit);
 			dash.setBounds(30, 30, dash.getPreferredSize().width, dash.getPreferredSize().height);
 			dashs.put(dashKey, dash);
+			dash.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 			dash.addMouseListener(new DragListener(dash));
 			dash.addMouseMotionListener(new DragListener(dash));
 			unit.setPreviewWidget(dash);
