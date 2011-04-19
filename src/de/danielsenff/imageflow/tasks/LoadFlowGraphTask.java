@@ -59,6 +59,8 @@ public class LoadFlowGraphTask extends LoadURLTask<GraphController, Void> {
         JFrame mainFrame = ImageFlow.getApplication().getMainFrame();
         ImageFlowView.getProgressBar().setIndeterminate(true);
     	ImageFlowView.getProgressBar().setVisible(true);
+    	ImageFlowView ifView = (ImageFlowView) ImageFlow.getApplication().getMainView();
+    	graphController.setDashboard(ifView.getDashboard());
         
         try {
         	graphController.read(url);

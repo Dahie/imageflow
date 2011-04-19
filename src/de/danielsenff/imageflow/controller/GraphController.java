@@ -32,6 +32,7 @@ import visualap.GPanel;
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
+import de.danielsenff.imageflow.gui.Dashboard;
 import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.imagej.MacroFlowRunner;
 import de.danielsenff.imageflow.models.Model;
@@ -74,10 +75,10 @@ public class GraphController{
 	 */
 	private SelectionList selections;
 
-	
+
 	private UndoableEditListener listener;
 	private ExecuteWorkflowListener executionListener;
-	
+
 	/**
 	 * 
 	 */
@@ -123,7 +124,7 @@ public class GraphController{
 	public SelectionList getSelections() {
 		return this.selections;
 	}
-	
+
 	/**
 	 * Get the List of copied {@link Node};
 	 * @return
@@ -147,32 +148,32 @@ public class GraphController{
 	public void removeUndoableEditListener(UndoableEditListener l) {
 		listener = null;
 	}
-	
+
 	public Node addNode(Node node, Point point) {
 		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
 		final GraphPanel graphPanel = ifView.getGraphPanel();
-		
+
 		if (node instanceof UnitElement) {
 			((UnitElement) node).addModelListener(new NodeListener(graphPanel, ifView));
 			((UnitElement) node).addParamChangeListerToAllParameters(executionListener);
 		}
-		
+
 		getUnitElements().add(node);
 		return node;
 	}
-	
+
 	public Node addNode(UnitDelegate delegate, Point point) {
 		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
 		final GraphPanel graphPanel = ifView.getGraphPanel();
-		
+
 		UnitElement unit = delegate.buildUnit(point);
 		unit.addModelListener(new NodeListener(graphPanel, ifView));
 		unit.addParamChangeListerToAllParameters(executionListener);
-		
+
 		getUnitElements().add(unit);
 		return unit;
 	}
-	
+
 	/**
 	 * Removes the {@link UnitElement} from the unitList and its Connections.
 	 * @param node 
@@ -182,7 +183,7 @@ public class GraphController{
 		// TODO remove from dashboard
 		return nodes.remove(node);
 	}
-	
+
 	/**
 	 * Ungroup the contents of a GroupUnit
 	 * @param group
@@ -190,19 +191,19 @@ public class GraphController{
 	public void ungroup(final GroupUnitElement group) {
 		ungroup(group, getUnitElements());
 	}
-	
+
 	/**
 	 * @param group
 	 * @param units
 	 */
 	public static void ungroup(final GroupUnitElement group, final UnitList units) {
-		
+
 		int deltaX = group.getOrigin().x - 25;
 		int deltaY = group.getOrigin().y - 25;
 		for (Node node : group.getNodes()) {
 			int x = node.getOrigin().x, y = node.getOrigin().y;
 			node.getOrigin().setLocation(x+deltaX, y+deltaY);
-			
+
 			for (Input input : ((UnitElement)node).getInputs()) {
 				input.setLocked(false);
 			}
@@ -210,12 +211,12 @@ public class GraphController{
 				output.setLocked(false);
 			}
 		}
-		
-		
-		
+
+
+
 		units.addAll(group.getNodes());
 		ConnectionList connections = units.getConnections();
-		
+
 		/*
 		 * reconnect inputs
 		 */
@@ -225,13 +226,13 @@ public class GraphController{
 				if(pInput.isConnected()) {
 					Output connectedOutput = pInput.getFromOutput();
 					Input originalInput = pInput.getEmbeddedInput();
-					
+
 					Connection connection = new Connection(connectedOutput, originalInput);
 					connections.add(connection);
 				}
 			}
 		}
-		
+
 		/*
 		 *  reconnect outputs
 		 */
@@ -246,7 +247,7 @@ public class GraphController{
 						imageDataType.setParentUnitElement(originalOutput.getParent());
 						imageDataType.setParentPin(originalOutput);
 					}
-					
+
 					for (Connection	connection : pOutput.getConnections()) {
 						Connection newConn = new Connection(originalOutput, connection.getInput());
 						tmpConn.add(newConn);
@@ -258,15 +259,15 @@ public class GraphController{
 		for (Connection connection : tmpConn) {
 			connections.add(connection);	
 		}
-		
+
 		/*
 		 * reconnect connection within the group
 		 */
-		
+
 		for (Connection connection : group.getInternalConnections()) {
 			connections.add(connection);
 		}
-		
+
 		units.remove(group);
 	}
 
@@ -308,7 +309,7 @@ public class GraphController{
 
 				public void redo() throws CannotRedoException {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 				public boolean replaceEdit(UndoableEdit anEdit) {
@@ -319,11 +320,11 @@ public class GraphController{
 				public void undo() throws CannotUndoException {
 					ungroup(group);
 				}
-				
+
 			}));
 		}*/
 	}
-	
+
 	/**
 	 * Reads the contents of a flow-XML-document.
 	 * @param url The document to load.
@@ -332,7 +333,7 @@ public class GraphController{
 		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(this);
 		workflowbuilder.read(url);
 	}
-	
+
 	/**
 	 * Write the workflow to a XML-file
 	 * @param file
@@ -342,7 +343,7 @@ public class GraphController{
 		WorkflowXMLBuilder workflowbuilder = new WorkflowXMLBuilder(this);
 		workflowbuilder.write(file);
 	}
-	
+
 	/** 
 	 * TODO remove this, update unit tests
 	 */
@@ -357,7 +358,7 @@ public class GraphController{
 		final UnitElement mergeUnit = delegatesController.getDelegate("Image Calculator").buildUnit(new Point(320, 100));
 		final UnitElement noiseUnit = delegatesController.getDelegate("Add Noise").buildUnit(new Point(450, 100));
 		noiseUnit.setDisplay(true);
-		
+
 		CommentNode comment = UnitFactory.createComment("my usual example", new Point(30, 40));
 
 		// some mixing, so they are not in order
@@ -389,8 +390,8 @@ public class GraphController{
 	private void showExampleLoadError(final Exception e) {
 		final int type = JOptionPane.ERROR_MESSAGE;
 		JOptionPane.showMessageDialog(
-			ImageFlow.getApplication().getMainFrame(),
-			"An error occured while loading the example!", "Could not load example", type);
+				ImageFlow.getApplication().getMainFrame(),
+				"An error occured while loading the example!", "Could not load example", type);
 	}
 
 	/**
@@ -408,7 +409,7 @@ public class GraphController{
 			e.printStackTrace();
 		}
 		return subgraphList;
-		
+
 	}
 
 	private void recursiveAddUnitDependencies(UnitElement unit,
@@ -439,6 +440,47 @@ public class GraphController{
 			// write the data into the output object
 			output.setOutputObject(data);
 		}
+	}
+
+	private Dashboard dashboardPanel = null;
+
+	public Dashboard getDashboard() {
+		return this.dashboardPanel;
+	}
+	public void setDashboard(Dashboard dashboard) {
+		this.dashboardPanel = dashboard;
+	}
+
+	public boolean addWidget(UnitElement selectedElement) {
+		if (this.dashboardPanel != null) {
+			this.dashboardPanel.addWidget(selectedElement);
+			return true;
+		} else
+			return false;
+	}
+
+	public boolean addWidget(UnitElement selectedElement, Point location) {
+		if (this.dashboardPanel != null) {
+			this.dashboardPanel.addWidget(selectedElement, location);
+			return true;
+		} else
+			return false;
+	}
+	
+	public boolean addPreviewWidget(UnitElement selectedElement) {
+		if (this.dashboardPanel != null) {
+			this.dashboardPanel.addPreviewWidget(selectedElement);
+			return true;
+		} else
+			return false;
+	}
+
+	public boolean addPreviewWidget(UnitElement selectedElement, Point location) {
+		if (this.dashboardPanel != null) {
+			this.dashboardPanel.addPreviewWidget(selectedElement, location);
+			return true;
+		} else
+			return false;
 	}
 }
 

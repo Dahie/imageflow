@@ -21,16 +21,11 @@ package de.danielsenff.imageflow.gui;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import de.danielsenff.imageflow.controller.GraphController;
@@ -73,13 +68,17 @@ public class Dashboard extends JPanel {
 	}
 	
 	public void addWidget(UnitElement unit) {
+		addWidget(unit, new Point(30, 30));
+	}
+	
+	public void addWidget(UnitElement unit, final Point location) {
 		if(!dashs.containsKey(unit.getLabel())) {
 			final DashWidget dash = ParameterWidgetController.createWidgetFromUnit(unit);
 			dash.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 			dashs.put(unit.getLabel(), dash);
 			unit.setWidget(dash);
 			
-			dash.setBounds(30, 30, dash.getPreferredSize().width, dash.getPreferredSize().height);
+			dash.setBounds(location.x, location.y, dash.getPreferredSize().width, dash.getPreferredSize().height);
 			dash.addMouseListener(new DragListener(dash));
 			dash.addMouseMotionListener(new DragListener(dash));
 			this.add(dash);
@@ -88,10 +87,14 @@ public class Dashboard extends JPanel {
 	}
 
 	public void addPreviewWidget(UnitElement unit) {
+		addPreviewWidget(unit, new Point(30, 30));
+	}
+	
+	public void addPreviewWidget(UnitElement unit, final Point location) {
 		String dashKey = unit.getLabel()+"_preview";
 		if(!dashs.containsKey(dashKey)) {
 			JPanel dash = ParameterWidgetController.createPreviewWidgetFromUnit(unit);
-			dash.setBounds(30, 30, dash.getPreferredSize().width, dash.getPreferredSize().height);
+			dash.setBounds(location.x, location.y, dash.getPreferredSize().width, dash.getPreferredSize().height);
 			dashs.put(dashKey, dash);
 			dash.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 			dash.addMouseListener(new DragListener(dash));

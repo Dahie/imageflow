@@ -433,6 +433,7 @@ public class ImageFlowView extends FrameView {
 		mainPanel.setLayout(new BorderLayout());
 		
 		dashboardPanel = new Dashboard(graphController);
+		graphController.setDashboard(dashboardPanel);
 		
 		JSplitPane dashWorkflowSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		dashWorkflowSplitPane.add(splitPane);
@@ -859,7 +860,7 @@ public class ImageFlowView extends FrameView {
 	public void addToDashboard() {
 		for (Node selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
-				dashboardPanel.addWidget((UnitElement) selectedElement);
+				graphController.addWidget((UnitElement) selectedElement);
 			}
 		}
 		dashboardPanel.revalidate();
@@ -882,7 +883,7 @@ public class ImageFlowView extends FrameView {
 				
 				UnitElement unit = (UnitElement) selectedElement;
 				unit.setDisplaySilent(true);
-				dashboardPanel.addPreviewWidget(unit);
+				graphController.addPreviewWidget(unit);
 			}
 		}
 		dashboardPanel.revalidate();
@@ -1531,5 +1532,10 @@ public class ImageFlowView extends FrameView {
             return description;
         }
     }
+
+
+	public Dashboard getDashboard() {
+		return this.dashboardPanel;
+	}
     
 }

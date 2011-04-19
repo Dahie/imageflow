@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.zip.DataFormatException;
 
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import org.jdom.Document;
@@ -71,7 +72,7 @@ public class WorkflowXMLBuilder {
 
 	/**
 	 * Create a builder object based on a {@link UnitList}
-	 * @param units
+	 * @param graphController 
 	 */
 	public WorkflowXMLBuilder(final GraphController graphController) {
 		this.graphController = graphController;
@@ -89,31 +90,32 @@ public class WorkflowXMLBuilder {
 		try {
 			SAXBuilder sb = new SAXBuilder();
 			Document doc = sb.build(url);
-
 			Element root = doc.getRootElement();
 
 			// read units
 			Element unitsElement = root.getChild("Units");
-
-			// TODO newNodes can be removed
-			readUnits(newNodes, url, unitsElement);
+			readUnits(url, unitsElement);
 			
 			// at this point we have all units in the workflow, however no connections
 			// groups are missing their inputs and outputs
 
-			// process ConnectionDelegates
+			// read ConnectionDelegates
 			for (ConnectionDelegate conndel : connectionDelegates) {
 				conndel.list.add(readConnection(newNodes, conndel));
 			}
 
-			// process groups
+			// read Groups
 			for (GroupUnitElement unit : groupUnits) {
 				unit.dealWithConnections(getConnectionList());
 			}
 
-			// read connections
+			// read Connections
 			Element connectionsElement = root.getChild("Connections");
 			readConnections(newNodes, connectionsElement);
+			
+			// read Widgets
+			Element widgetsElement = root.getChild("Widgets");
+			readWidgets(widgetsElement);
 		}
 		catch (Exception e) {
 			System.err.println("Invalid XML-File!");
@@ -126,8 +128,36 @@ public class WorkflowXMLBuilder {
 		}	
 	}
 
-	private void readUnits(HashMap<Integer, UnitElement> newNodes,
-			URL url, Element unitsElement) {
+	private void readWidgets(Element widgetsElement) {
+		if (widgetsElement != null) {  
+			List<Element> widgetsList = widgetsElement.getChildren();
+			Iterator<Element> widgetsIterator = widgetsList.iterator();
+
+			// loop over all Widgets
+			Element actualWidgetElement;
+			Node node;
+			while (widgetsIterator.hasNext()) { 
+				actualWidgetElement = widgetsIterator.next();
+				readWidget(actualWidgetElement);
+			}
+		}
+	}
+	
+	private void readWidget(Element actualWidgetElement) {
+		int xPos = Integer.parseInt(actualWidgetElement.getChild("XPos").getValue());
+		int yPos = Integer.parseInt(actualWidgetElement.getChild("YPos").getValue());
+		// id of the unit this widget is attached to
+		int id = Integer.parseInt(actualWidgetElement.getChild("UnitID").getValue());
+		Point position = new Point(xPos, yPos);
+		UnitElement unit = newNodes.get(id);
+		if (actualWidgetElement.getName().equalsIgnoreCase("PreviewWidget"))
+			graphController.addPreviewWidget(unit, position);
+		else if (actualWidgetElement.getName().equalsIgnoreCase("Widget"))
+			graphController.addWidget(unit, position);
+	}
+
+
+	private void readUnits(URL url, Element unitsElement) {
 		if (unitsElement != null) {  
 			List<Element> unitsList = unitsElement.getChildren();
 			Iterator<Element> unitsIterator = unitsList.iterator();
@@ -430,6 +460,8 @@ public class WorkflowXMLBuilder {
 		Element root = new Element("FlowDescription");
 		Document flowGraph = new Document(root);
 
+		// Unit Definitions
+		
 		Element units = new Element("Units");
 		Element unitElement;
 		root.addContent(units);
@@ -438,19 +470,62 @@ public class WorkflowXMLBuilder {
 			units.addContent(unitElement);
 
 			writeXMLNode(node, unitElement);
-		} // end node
+		}
 
-		// now for connections
+		
+		// Connection Definitions
+		
 		Element connectionsElement = new Element("Connections");
 		root.addContent(connectionsElement);
 
 		for (Connection connection : getConnectionList()) {
 			writeXMLConnection(connectionsElement, connection);
 		}
+		
+		// Dash Widget Definitions
+		Element widgets = new Element("Widgets");
+		root.addContent(widgets);
+		Element widgetElement;
+		for (Node node : getUnitList()) {
+			if(node instanceof UnitElement) {
+				UnitElement unit = (UnitElement) node;
+				if(unit.hasWidget()) { // properties widget
+					widgetElement = new Element("Widget");
+					writeXMLWidget(unit, widgetElement);
+					widgets.addContent(widgetElement);
+				} else if(unit.hasPreviewWidget()) { // preview widget
+					widgetElement = new Element("PreviewWidget");
+					writeXMLWidget(unit, widgetElement);
+					widgets.addContent(widgetElement);
+				}
+			}
+		}
+		
 
 		// output
 		FileOutputStream fos = new FileOutputStream(file);
 		new XMLOutputter(Format.getPrettyFormat()).output(flowGraph, fos);
+	}
+
+
+	private void writeXMLWidget(UnitElement unit, Element widgetElement) {
+		JComponent widget = unit.getWidget();
+		
+		// id of the unit this widget is attached to
+		Element unitID = new Element("UnitID");
+		unitID.addContent(unit.getNodeID()+"");
+		widgetElement.addContent(unitID);
+		
+		// id of the unit this widget is attached to
+		Element xPos = new Element("XPos");
+		xPos.addContent(widget.getLocation().y+"");
+		widgetElement.addContent(xPos);
+
+		Element yPos = new Element("YPos");
+		yPos.addContent(widget.getLocation().y+"");
+		widgetElement.addContent(yPos);
+		
+		
 	}
 
 
