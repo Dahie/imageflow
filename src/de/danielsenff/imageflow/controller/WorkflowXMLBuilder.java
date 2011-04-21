@@ -491,11 +491,11 @@ public class WorkflowXMLBuilder {
 				UnitElement unit = (UnitElement) node;
 				if(unit.hasWidget()) { // properties widget
 					widgetElement = new Element("Widget");
-					writeXMLWidget(unit, widgetElement);
+					writeXMLWidget(unit, widgetElement, unit.getWidget());
 					widgets.addContent(widgetElement);
 				} else if(unit.hasPreviewWidget()) { // preview widget
 					widgetElement = new Element("PreviewWidget");
-					writeXMLWidget(unit, widgetElement);
+					writeXMLWidget(unit, widgetElement, unit.getPreviewWidget());
 					widgets.addContent(widgetElement);
 				}
 			}
@@ -508,8 +508,7 @@ public class WorkflowXMLBuilder {
 	}
 
 
-	private void writeXMLWidget(UnitElement unit, Element widgetElement) {
-		JComponent widget = unit.getWidget();
+	private void writeXMLWidget(UnitElement unit, Element widgetElement, JComponent widget) {
 		
 		// id of the unit this widget is attached to
 		Element unitID = new Element("UnitID");
@@ -518,14 +517,12 @@ public class WorkflowXMLBuilder {
 		
 		// id of the unit this widget is attached to
 		Element xPos = new Element("XPos");
-		xPos.addContent(widget.getLocation().y+"");
+		xPos.addContent(widget.getLocation().x+"");
 		widgetElement.addContent(xPos);
 
 		Element yPos = new Element("YPos");
 		yPos.addContent(widget.getLocation().y+"");
 		widgetElement.addContent(yPos);
-		
-		
 	}
 
 
