@@ -79,7 +79,6 @@
 			</manifest>
 			<fileset dir="${bin.dir}"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/jdom.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/miglayout-3.7-swing-java14.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/appframework-1.0.3.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-worker-1.1.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-layout-1.0.3.jar"/>
@@ -97,7 +96,6 @@
 			<fileset dir="${bin.dir}"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/jdom.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/ij.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/miglayout-3.7-swing-java14.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/appframework-1.0.3.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-worker-1.1.jar"/>
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/lib/swing-layout-1.0.3.jar"/>
