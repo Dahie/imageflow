@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008-2010 Daniel Senff
+ * Copyright (C) 2008-2011 Daniel Senff
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,7 +88,7 @@ public class DelegatesController {
 		this.unitEntries = new Hashtable<String, UnitDelegateInfo>();
 		
 		this.top = new UnitMutableTreeNode("Insert unit");
-		delegatesTreeModel = new DefaultTreeModel(top);
+		this.delegatesTreeModel = new DefaultTreeModel(top);
 	}
 	
 	
@@ -96,14 +96,6 @@ public class DelegatesController {
 	 * Initialize the DelegatesModel and load the available unit xml definitions.
 	 */
 	public void initializeDelegatesModel() {
-		fillDelegatesModelFromJar(top);
-	}
-	
-	/**
-	 * @param top
-	 * @param insertMenu
-	 */
-	protected void fillDelegatesModelFromJar(final UnitMutableTreeNode top) {
 		String unitsLocation = "";
 		try {
 			// try to load xml units from surrounding jar by default

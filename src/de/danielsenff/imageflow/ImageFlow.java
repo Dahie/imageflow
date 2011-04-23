@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008-2010 Daniel Senff
+ * Copyright (C) 2008-2011 Daniel Senff
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,6 @@ import ij.IJ;
 import ij.ImageJ;
 import ij.plugin.PlugIn;
 
-import java.awt.Window;
 import java.io.File;
 import java.util.EventObject;
 
@@ -29,9 +28,11 @@ import javax.swing.UIManager;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+import org.jdesktop.application.Task;
+import org.jdesktop.application.TaskService;
 
-import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.MacApplication;
+import de.danielsenff.imageflow.tasks.InitializeDelegatesTask;
 
 
 /**
@@ -74,8 +75,10 @@ public class ImageFlow extends SingleFrameApplication implements PlugIn {
 		}
 		this.addExitListener(new ImageJExitListener());
 		
-		final DelegatesController delegatesController = DelegatesController.getInstance();
-		delegatesController.initializeDelegatesModel();
+		// start thread reading Unit-XML-Definitions
+		Task initializeDelegatesTask = new InitializeDelegatesTask(this);
+		TaskService ts = ImageFlow.getApplication().getContext().getTaskService();
+		ts.execute(initializeDelegatesTask);
 		
 		if(System.getProperty("mrj.version") == null){
 			/*addWindowListener(new WindowAdapter(){
