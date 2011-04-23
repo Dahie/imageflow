@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008-2010 Daniel Senff
+ * Copyright (C) 2008-2011 Daniel Senff
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,12 +31,9 @@ import java.util.LinkedHashMap;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
-
-import sun.misc.FormattedFloatingDecimal.Form;
 
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.ParameterWidgetFactory;
