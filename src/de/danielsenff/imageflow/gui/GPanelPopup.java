@@ -145,15 +145,19 @@ public class GPanelPopup implements GPanelListener {
 			
 			popup.addSeparator();
 			
-			if(unit.hasWidget()) {
-				popup.add(getAction("removeFromDashboard"));
-			} else {
-				popup.add(getAction("addToDashboard"));
+			if(unit.hasParameters()) {
+				if(unit.hasWidget()) {
+					popup.add(getAction("removeFromDashboard"));
+				} else {
+					popup.add(getAction("addToDashboard"));
+				}
 			}
-			if(unit.hasPreviewWidget()) {
-				popup.add(getAction("removeOutputFromDashboard"));
-			} else {
-				popup.add(getAction("addOutputToDashboard"));
+			if(unit.hasOutputs()) {
+				if(unit.hasPreviewWidget()) {
+					popup.add(getAction("removeOutputFromDashboard"));
+				} else {
+					popup.add(getAction("addOutputToDashboard"));
+				}
 			}
 		}
 	}

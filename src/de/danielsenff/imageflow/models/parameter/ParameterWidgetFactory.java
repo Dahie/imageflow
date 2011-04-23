@@ -318,6 +318,7 @@ public class ParameterWidgetFactory {
 	 */
 	public static JComponent createRadios(final ChoiceParameter parameter) {
 		final JPanel panel = new JPanel();
+		panel.setOpaque(false);
 
 		JRadioButton radioButton;
 		ButtonGroup group = new ButtonGroup();
@@ -435,6 +436,7 @@ public class ParameterWidgetFactory {
 	 */
 	public static JComponent createFileChooser(final StringParameter parameter, final FileChooser chooser) {
 		JPanel panel = new JPanel();
+		panel.setOpaque(false);
 		panel.setLayout(new BorderLayout());
 		JTextField textfield = new JTextField(parameter.getValue());
 		textfield.setEnabled(false);

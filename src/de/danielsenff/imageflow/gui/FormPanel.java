@@ -192,20 +192,11 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 		rows++;
 	}*/
 
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseClicked(MouseEvent arg0) {}
 
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent arg0) {}
 
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent arg0) {}
 
 	public void mousePressed(MouseEvent event) {
 		if(event.isPopupTrigger() && !this.showAllParameters) {
@@ -236,9 +227,6 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 		}
 	}
 
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent arg0) {}
 	
 }
