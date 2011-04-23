@@ -25,6 +25,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.Point;
 import java.awt.ScrollPane;
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +37,6 @@ import java.util.HashSet;
 
 import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -1076,8 +1076,12 @@ public class ImageFlowView extends FrameView {
 	@Action(enabledProperty = "selected")
 	public void showUnitParameters() {
 		for (Node node : getSelections()) {
-			if(node instanceof UnitElement)
+			if(node instanceof UnitElement) {
+				//Point position = (Point) node.getOrigin().clone();
+				//position.translate(30, 30);
+				// TODO get absolute px position of requesting unit
 				((UnitElement)node).showProperties(null); // giving null as location centers on screen
+			}
 		}
 	}
 

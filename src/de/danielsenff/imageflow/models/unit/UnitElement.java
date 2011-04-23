@@ -459,50 +459,56 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * @param point leave null to center on screen
 	 */
 	public void showProperties(Point point) {
-		final PropertiesDialog gd = 
-			new PropertiesDialog(getLabel() + " - Parameters", 
-					ImageFlow.getApplication().getMainFrame()) ;
-		if(getHelpString() != null) {
-			gd.addMessage(getHelpString());
-		}
-		
-		// label field 
-		JTextField fldName = new JTextField(getLabel());
-		fldName.addKeyListener(new KeyListener() {
-			public void keyTyped(KeyEvent event) {}
-
-			public void keyReleased(KeyEvent event) {
-				String newLabel = ((JTextComponent) event.getSource()).getText();
-				setLabel(newLabel);
+		if (this.propertiesDialog == null) {
+			
+			propertiesDialog = new PropertiesDialog(getLabel() + " - Parameters", 
+					ImageFlow.getApplication().getMainFrame());
+			if(getHelpString() != null) {
+				propertiesDialog.addMessage(getHelpString());
 			}
-			public void keyPressed(KeyEvent event) {}
-		});
-		gd.addForm("Name", fldName);
-		
-		addDisplayCheckbox(gd);
-		//addDisplaySilentCheckbox(gd);
-		
-		gd.addSeparator();		
-
-		addCustomWidgets(gd);
-		
-		// add Parameter Widgets
-		if (!getParameters().isEmpty()) {
-			addParameterWidgets(gd);
-		
-			gd.addSeparator();
+			
+			// label field 
+			JTextField fldName = new JTextField(getLabel());
+			fldName.addKeyListener(new KeyListener() {
+				public void keyTyped(KeyEvent event) {}
+				
+				public void keyReleased(KeyEvent event) {
+					String newLabel = ((JTextComponent) event.getSource()).getText();
+					setLabel(newLabel);
+				}
+				public void keyPressed(KeyEvent event) {}
+			});
+			propertiesDialog.addForm("Name", fldName);
+			
+			addDisplayCheckbox(propertiesDialog);
+			//addDisplaySilentCheckbox(gd);
+			
+			propertiesDialog.addSeparator();		
+			
+			addCustomWidgets(propertiesDialog);
+			
+			// add Parameter Widgets
+			if (!getParameters().isEmpty()) {
+				addParameterWidgets(propertiesDialog);
+				
+				propertiesDialog.addSeparator();
+			}
+			
+			propertiesDialog.addComponent(new UnitElementInfoPanel(this));
+			
+			// show properties window
+			if (point == null) 
+				propertiesDialog.showDialog();
+			else
+				propertiesDialog.showDialog(point);
+			
+			//notifyModelListeners();
+		} else if (!propertiesDialog.isVisible()) {
+			this.propertiesDialog.setVisible(true);
+		} else {
+			this.propertiesDialog.toFront();
 		}
 		
-		gd.addComponent(new UnitElementInfoPanel(this));
-
-		// show properties window
-		if (point == null) 
-			gd.showDialog();
-		else
-			gd.showDialog(point);
-		
-		
-		notifyModelListeners();
 	}
 
 	private void addDisplayCheckbox(final PropertiesDialog gd) {
@@ -1142,6 +1148,8 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	
 	private JComponent widget;
 	private JComponent previewWidget;
+
+	private PropertiesDialog propertiesDialog;
 	
 	public void setWidget(JComponent component) {
 		this.widget = component;
