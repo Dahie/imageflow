@@ -149,7 +149,12 @@ public class GraphController{
 		listener = null;
 	}
 
-	public Node addNode(Node node, Point point) {
+	/**
+	 * Adds the given {@link Node} to the workspace. 
+	 * @param node
+	 * @return
+	 */
+	public Node addNode(Node node) {
 		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
 		final GraphPanel graphPanel = ifView.getGraphPanel();
 
@@ -162,16 +167,16 @@ public class GraphController{
 		return node;
 	}
 
+	/**
+	 * Creates a new Node based on the given UnitDelegate and 
+	 * adds it at the given location to the workspace.
+	 * @param delegate
+	 * @param point
+	 * @return
+	 */
 	public Node addNode(UnitDelegate delegate, Point point) {
-		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
-		final GraphPanel graphPanel = ifView.getGraphPanel();
-
 		UnitElement unit = delegate.buildUnit(point);
-		unit.addModelListener(new NodeListener(graphPanel, ifView));
-		unit.addParamChangeListerToAllParameters(executionListener);
-
-		getUnitElements().add(unit);
-		return unit;
+		return this.addNode(unit);
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008-2010 Daniel Senff
+ * Copyright (C) 2008-2011 Daniel Senff
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,81 +44,57 @@ import de.danielsenff.imageflow.models.unit.UnitList;
  * @author Daniel Senff
  *
  */
-public class InsertUnitMenu extends JMenu {
+public class InsertUnitMenu extends JMenu implements ActionListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final GPanel activePanel;
+	private final GPanel graphPanel;
 	private GraphController graphController;
+	private UnitList units;
+	private Point location;
 
 	/**
 	 * 
 	 * @param gpanel
+	 * @param graphController 
 	 */
 	public InsertUnitMenu(final GPanel gpanel, GraphController graphController) {
 		this("Insert", gpanel, new Point(75, 75));
 		this.graphController = graphController;
 	}
 
+	public InsertUnitMenu(final GPanel gpanel, GraphController graphController, Point location) {
+		this("Insert", gpanel, location);
+		this.graphController = graphController;
+	}
+	
 	/**
 	 * 
 	 * @param name
 	 * @param gpanel
 	 * @param availableUnits
-	 * @param savedPoint
+	 * @param location
 	 */
-	public InsertUnitMenu(final String name, 
+	private InsertUnitMenu(final String name, 
 			final GPanel gpanel, 
-			final Point savedPoint) {
+			final Point location) {
 		this.setName(name);
 		this.setText(name);
-		this.activePanel = gpanel;
-		final ActionListener newAction = new ActionListener() {
-			UnitList units = activePanel.getNodeL();
-			public void actionPerformed(final ActionEvent e) {
-				final JMenuItem source = (JMenuItem)(e.getSource());
-				final String action = source.getText();
-				final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
-				Selection<Node> selections = activePanel.getSelection();
-				
-				if (action.equals("Comment")) {	
-					final CommentNode node = new CommentNode(new Point(savedPoint.x, savedPoint.y), "Newly added comment"); 
-					node.addModelListener(new NodeListener(activePanel, ifView));
-					savedPoint.translate(4, 4);
-					units.add(node);
-					selections.clear();
-					selections.add(node);
-					activePanel.repaint();
-					return;
-				}
+		this.graphPanel = gpanel;
+		this.location = location;
+		this.units = graphPanel.getNodeL();
 
-				UnitDelegate unitDelegate = DelegatesController.getInstance().getDelegate(action);
-				if(unitDelegate != null) {
-					try {
-						Node node = graphController.addNode(unitDelegate, savedPoint);
-						
-						selections.clear();
-						selections.add(node);
-						activePanel.repaint();
-					} catch (final Exception ex) {
-					}
-				}
+		final JMenuItem mi = new JMenuItem("Comment");
+		mi.setToolTipText("Insert Notes or Comments to the graph.");
+		add(mi).addActionListener(this);		
 
-				return;
-			}}; 
-			final JMenuItem mi = new JMenuItem("Comment");
-			mi.setToolTipText("Insert Notes or Comments to the graph.");
-			add(mi).addActionListener(newAction);		
-
-			final TreeModel tree = DelegatesController.getInstance().delegatesTreeModel;
-
-			final MutableTreeNode root =  (MutableTreeNode) tree.getRoot();
-			createMenu(this, newAction, root);
+		final TreeModel tree = DelegatesController.getInstance().delegatesTreeModel;
+		createMenu(this, (MutableTreeNode) tree.getRoot());
 	}
 
-	private void createMenu(final JMenu menu, final ActionListener newAction, final MutableTreeNode root) {
+	private void createMenu(final JMenu menu, final MutableTreeNode root) {
 		JMenuItem mi;
 		for (int i = 0; i < root.getChildCount(); i++) {
 			final MutableTreeNode node = (MutableTreeNode) root.getChildAt(i);
@@ -126,13 +102,46 @@ public class InsertUnitMenu extends JMenu {
 				final UnitDelegate unitDelegate = (UnitDelegate)node;
 				mi = new JMenuItem(unitDelegate.getName());
 				mi.setToolTipText(unitDelegate.getToolTipText());
-				menu.add(mi).addActionListener(newAction);
+				menu.add(mi).addActionListener(this);
 			} else {
 				final JMenu subMenu = new JMenu(node.toString());
-				createMenu(subMenu, newAction, node);
+				createMenu(subMenu, node);
 				menu.add(subMenu);
 			}
 		}
+	}
+
+	public void actionPerformed(ActionEvent event) {
+		final JMenuItem source = (JMenuItem)(event.getSource());
+		final String action = source.getText();
+		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
+		Selection<Node> selections = graphPanel.getSelection();
+
+		if (action.equals("Comment")) {	
+			final CommentNode node = new CommentNode(new Point(location.x, location.y), "Newly added comment"); 
+			node.addModelListener(new NodeListener(graphPanel, ifView));
+			location.translate(4, 4);
+			units.add(node);
+			selections.clear();
+			selections.add(node);
+			graphPanel.repaint();
+			return;
+		}
+
+		UnitDelegate unitDelegate = DelegatesController.getInstance().getDelegate(action);
+		if(unitDelegate != null) {
+			try {
+				Node node = graphController.addNode(unitDelegate, location);
+
+				selections.clear();
+				selections.add(node);
+				graphPanel.repaint();
+			} catch (final Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return;
 	}
 
 }

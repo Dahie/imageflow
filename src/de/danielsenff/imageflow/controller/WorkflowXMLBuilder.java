@@ -168,7 +168,7 @@ public class WorkflowXMLBuilder {
 			while (unitsIterator.hasNext()) { 
 				actualUnitElement = unitsIterator.next();
 				node = readNode(actualUnitElement, url);
-				graphController.addNode(node, node.getOrigin());
+				graphController.addNode(node);
 			}
 		}
 	}
