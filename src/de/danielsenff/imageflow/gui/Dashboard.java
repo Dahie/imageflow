@@ -28,38 +28,55 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
-import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.controller.ParameterWidgetController;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
+/**
+ * The Dashboard is a special JPanel that displays Widgets. 
+ * Widgets are JComponents that are free-floating.
+ * @author dahie
+ *
+ */
 public class Dashboard extends JPanel {
 
-	private HashMap<String, JPanel> dashs;
-	private GraphController graphController;
-	public int dragStartX;
-	public int dragStartY;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3021893590568590763L;
+	private final HashMap<String, JPanel> dashs;
+	private int dragStartX;
+	private int dragStartY;
 	
-	public Dashboard(GraphController controller) {
-		this.graphController = controller;
+	/**
+	 * 
+	 */
+	public Dashboard() {
 		this.dashs = new HashMap<String, JPanel>();
 		this.setPreferredSize(new Dimension(500, 200));
 		setLayout(null);
-
 	}
 	
-	public void removeWidget(UnitElement unit) {
+	/**
+	 * Removes the FormWidget of the given {@link UnitElement} from the Dashboard.
+	 * @param unit
+	 */
+	public void removeWidget(final UnitElement unit) {
 		if(dashs.containsKey(unit.getLabel())) {
-			JPanel dash = dashs.get(unit.getLabel());
+			final JPanel dash = dashs.get(unit.getLabel());
 			unit.setWidget(null);
 			dashs.remove(unit.getLabel());
 			this.remove(dash);
 		}
 	}
 	
-	public void removePreviewWidget(UnitElement unit) {
-		String dashKey = unit.getLabel()+"_preview";
+	/**
+	 * Removes the PreviewWidget of the given {@link UnitElement} from the Dashboard.
+	 * @param unit
+	 */
+	public void removePreviewWidget(final UnitElement unit) {
+		final String dashKey = unit.getLabel()+"_preview";
 		if(dashs.containsKey(dashKey)) {
-			JPanel dash = dashs.get(dashKey);
+			final JPanel dash = dashs.get(dashKey);
 			unit.setPreviewWidget(null);
 			dashs.remove(dashKey);
 			this.remove(dash);
@@ -67,18 +84,28 @@ public class Dashboard extends JPanel {
 
 	}
 	
-	public void addWidget(UnitElement unit) {
+	/**
+	 * Generate and add a new FormWidget based on the given {@link UnitElement}.
+	 * The Widget is added to an automatic position.
+	 * @param unit
+	 */
+	public void addWidget(final UnitElement unit) {
 		addWidget(unit, new Point(30, 30));
 	}
 	
-	public void addWidget(UnitElement unit, final Point location) {
+	/**
+	 * Generate and add a new FormWidget based on the given {@link UnitElement} added to the given position.
+	 * @param unit
+	 * @param position
+	 */
+	public void addWidget(final UnitElement unit, final Point position) {
 		if(!dashs.containsKey(unit.getLabel())) {
 			final DashWidget dash = ParameterWidgetController.createWidgetFromUnit(unit);
 			dash.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 			dashs.put(unit.getLabel(), dash);
 			unit.setWidget(dash);
 			
-			dash.setBounds(location.x, location.y, dash.getPreferredSize().width, dash.getPreferredSize().height);
+			dash.setBounds(position.x, position.y, dash.getPreferredSize().width, dash.getPreferredSize().height);
 			dash.addMouseListener(new DragListener(dash));
 			dash.addMouseMotionListener(new DragListener(dash));
 			this.add(dash);
@@ -86,15 +113,25 @@ public class Dashboard extends JPanel {
 		}
 	}
 
-	public void addPreviewWidget(UnitElement unit) {
+	/**
+	 * Generate and add a new PreviewWidget based on the given {@link UnitElement}.
+	 * The Widget is added to an automatic position.
+	 * @param unit
+	 */
+	public void addPreviewWidget(final UnitElement unit) {
 		addPreviewWidget(unit, new Point(30, 30));
 	}
 	
-	public void addPreviewWidget(UnitElement unit, final Point location) {
-		String dashKey = unit.getLabel()+"_preview";
+	/**
+	 * Generate and add a new PreviewWidget based on the given {@link UnitElement} added to the given position.
+	 * @param unit
+	 * @param position
+	 */
+	public void addPreviewWidget(final UnitElement unit, final Point position) {
+		final String dashKey = unit.getLabel()+"_preview";
 		if(!dashs.containsKey(dashKey)) {
-			JPanel dash = ParameterWidgetController.createPreviewWidgetFromUnit(unit);
-			dash.setBounds(location.x, location.y, dash.getPreferredSize().width, dash.getPreferredSize().height);
+			final JPanel dash = ParameterWidgetController.createPreviewWidgetFromUnit(unit);
+			dash.setBounds(position.x, position.y, dash.getPreferredSize().width, dash.getPreferredSize().height);
 			dashs.put(dashKey, dash);
 			dash.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 			dash.addMouseListener(new DragListener(dash));
@@ -116,48 +153,37 @@ public class Dashboard extends JPanel {
 		Point offset;
 		Point delta;
 		
-		public DragListener(JPanel dash) {
+		public DragListener(final JPanel dash) {
 			this.dash = dash;
 			this.delta = new Point(0, 0);
 		}
 
-		public void mouseClicked(MouseEvent e) {
-			
-		}
+		public void mouseClicked(final MouseEvent e) {}
 
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseEntered(final MouseEvent e) {}
 
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseExited(final MouseEvent e) {}
 
-		public void mousePressed(MouseEvent e) {
+		public void mousePressed(final MouseEvent e) {
 			dragStartX = (int)(e.getXOnScreen());
 			dragStartY = (int)(e.getYOnScreen());
 		}
 
-		public void mouseReleased(MouseEvent e) {}
+		public void mouseReleased(final MouseEvent e) {}
 
-		public void mouseDragged(MouseEvent e) {
-			//e.translatePoint(offset.x, offset.y);
-			int offsetX = delta.x - e.getPoint().x;
-			int offsetY = delta.y - e.getPoint().y;
-			int dx = (int)((e.getXOnScreen()) - dragStartX);
-			int dy = (int)((e.getYOnScreen()) - dragStartY);
+		public void mouseDragged(final MouseEvent e) {
+			final int dx = (int)((e.getXOnScreen()) - dragStartX);
+			final int dy = (int)((e.getYOnScreen()) - dragStartY);
 			
 			e.translatePoint(dx, dy);
-			Point dashLocation = dash.getLocation();
+			final Point dashLocation = dash.getLocation();
 			dash.setLocation(new Point(dashLocation.x+dx, dashLocation.y+dy));
 			
 			dragStartX = (int)(e.getXOnScreen());
 			dragStartY = (int)(e.getYOnScreen());
 		}
 
-		public void mouseMoved(MouseEvent arg0) {}
+		public void mouseMoved(final MouseEvent arg0) {}
 		
 	}
 }

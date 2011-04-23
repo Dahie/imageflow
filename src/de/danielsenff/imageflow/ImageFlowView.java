@@ -432,7 +432,7 @@ public class ImageFlowView extends FrameView {
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 		
-		dashboardPanel = new Dashboard(graphController);
+		dashboardPanel = new Dashboard();
 		graphController.setDashboard(dashboardPanel);
 		
 		JSplitPane dashWorkflowSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
