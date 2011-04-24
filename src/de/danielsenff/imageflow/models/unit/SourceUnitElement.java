@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008-2010 Daniel Senff
+ * Copyright (C) 2008-2011 Daniel Senff
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -229,7 +229,7 @@ public class SourceUnitElement extends UnitElement implements ImageSourceUnit {
 		
 		// set filepath
 		clone.setFilePath(this.getFilePath());
-		
+		clone.setOriginalUnit(this);
 		
 		clone.setDisplay(isDisplay());
 		clone.setDisplaySilent(isDisplaySilent());

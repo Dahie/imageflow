@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008-2010 Daniel Senff
+ * Copyright (C) 2008-2011 Daniel Senff
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -136,7 +136,7 @@ public class MacroGenerator {
 				addProcessingUnit(unit, i);	
 			}
 		} catch (Exception e) {
-			macroText += "// An Error has occured, this unit will not be processed";
+			macroText += "// An Error has occured for node "+node.getLabel()+", this unit will not be processed \n";
 			e.printStackTrace();
 		}
 		

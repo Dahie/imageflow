@@ -441,6 +441,7 @@ public class GraphController{
 		// get the Node and Output object with the given IDs
 		Node node = getUnitElements().getNodeByID(nodeID);
 		if (node instanceof UnitElement) {
+			System.out.println(node);
 			Output output = ((UnitElement)node).getOutput(outputId-1);
 			// write the data into the output object
 			output.setOutputObject(data);

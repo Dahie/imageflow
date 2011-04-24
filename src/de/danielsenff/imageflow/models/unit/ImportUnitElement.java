@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008-2010 Daniel Senff
+ * Copyright (C) 2008-2011 Daniel Senff
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,6 +123,7 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 		for (Parameter parameter : parameters) {
 			cloneParameter(clone, parameter);
 		}
+		clone.setOriginalUnit(this);
 		clone.setDisplay(isDisplay());
 		clone.setDisplaySilent(isDisplaySilent());
 		clone.setColor(this.color);
@@ -172,7 +173,7 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 		return (ChoiceParameter) parameterList.get(WINDOW_PARAMETER_INDEX);
 	}
 			
-	
+	/*
 	@Override protected void updateParameters(final GenericDialog gd) {
 		setLabel((String) (gd.getNextString()).trim());
 		setDisplay(gd.getNextBoolean());
@@ -180,7 +181,7 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 		String selectedWindow = (String) (gd.getNextChoice());
 		getWindowChoiceParameter(getParameters()).setValue(selectedWindow);
 		setImagePlus(WindowManager.getImage(selectedWindow));
-	}
+	}*/
 	
 	private void setImagePlus(ImagePlus image) {
 		this.image = image;

@@ -894,11 +894,12 @@ public class ImageFlowView extends FrameView {
 		for (Node selectedElement : getSelections()) {
 			if(selectedElement instanceof UnitElement) {
 				UnitElement unit = (UnitElement) selectedElement;
-				unit.setDisplaySilent(true);
+				unit.setDisplaySilent(false);
 				dashboardPanel.removePreviewWidget(unit);
 			}
 		}
 		dashboardPanel.revalidate();
+		dashboardPanel.repaint();
 	}
 	
 	/**

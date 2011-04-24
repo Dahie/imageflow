@@ -545,35 +545,6 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	}
 
 	/**
-	 * Called after GenericDialog was closed with ok, to write back changes to the model. 
-	 * @param gd
-	 */
-	protected void updateParameters(final GenericDialog gd) {
-		final ArrayList<Parameter> parameterList = getParameters();
-		
-		String newLabel = (String) (gd.getNextString()).trim();
-		setLabel(newLabel);
-		boolean isNewDisplay = gd.getNextBoolean();
-		setDisplay(isNewDisplay);
-
-		for (final Parameter parameter : parameterList) {
-			if(parameter instanceof DoubleParameter) {
-				((DoubleParameter) parameter).setValue((double) (gd.getNextNumber()));
-			} else if (parameter instanceof IntegerParameter) {
-				((IntegerParameter) parameter).setValue((int) (gd.getNextNumber()));
-			} else if (parameter instanceof BooleanParameter) {
-				((BooleanParameter) parameter).setValue((boolean) (gd.getNextBoolean()));
-			} else if (parameter instanceof ChoiceParameter) {
-				((ChoiceParameter) parameter).setValue((String) (gd.getNextChoice()));
-				// set the ChoiceNumber to be able to save it
-			} else if (parameter instanceof StringParameter) {
-				String newString = (String) (gd.getNextString()).trim();
-				((StringParameter) parameter).setValue(newString);
-			} 
-		}
-	}
-
-	/**
 	 * Hook for adding Custom Widgets.
 	 * @param gd
 	 */
