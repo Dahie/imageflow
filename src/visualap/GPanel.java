@@ -67,8 +67,6 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	protected Collection<Connection> connectionList = new ConnectionList();
 	protected Point mouse;
 
-
-	boolean cursor=true; // cursor is under control?
 	protected Rectangle rect;
 
 	// handling of selection rectangle
@@ -249,7 +247,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		if (pick != null) {
 			if(!e.isPopupTrigger()) {
 				for (Node iNode : selection) {
-					if (cursor) iNode.translate(x-pick.x, y-pick.y);
+					iNode.translate(x-pick.x, y-pick.y);
 					iNode.drag(false);
 				}
 			}
@@ -315,18 +313,9 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 		}
 	}
 
-	public void mouseMoved(MouseEvent e) {
-		// generato quando il mouse viene spostato senza essere premuto
-	}
-	public void mouseEntered(MouseEvent e) {
-		// generato quando il mouse entra nella finestra
-		cursor = true;
-	}
-	public void mouseExited(MouseEvent e) {
-		// generato quando il mouse esce dalla finestra
-		cursor = false;
-		System.out.println("exit");
-	}
+	public void mouseMoved(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
 
 	protected void changeCursor(int cursor) {
 		setCursor(Cursor.getPredefinedCursor(cursor));

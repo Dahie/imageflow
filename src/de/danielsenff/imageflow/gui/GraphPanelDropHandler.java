@@ -93,7 +93,6 @@ public class GraphPanelDropHandler implements DropTargetListener {
 					processDroppedFiles(point, files);
 
 					event.dropComplete(true);
-					return;
 				 } else if (transferable.isDataFlavorSupported(uriListFlavor)) {
 					 String data = (String) transferable.getTransferData(uriListFlavor);
 					 final List files = textURIListToFileList(data);
@@ -101,7 +100,6 @@ public class GraphPanelDropHandler implements DropTargetListener {
 					 processDroppedFiles(point, files);
 
 					 event.dropComplete(true);
-					 return;
 				} else if (flavors[i].isFlavorSerializedObjectType()) {
 					String o = (String)transferable.getTransferData(flavors[i]);
 					
@@ -112,15 +110,17 @@ public class GraphPanelDropHandler implements DropTargetListener {
 					}
 					
 					event.dropComplete(true);
-					return;
 				}
 			}
 
 			gPanel.repaint();
+			return;
 
-		} catch (final Throwable t) { t.printStackTrace(); }
-		// a problem happened
-		event.rejectDrop();
+		} catch (final Throwable t) { t.printStackTrace(); 
+			// a problem happened
+			event.rejectDrop();
+		}
+		
 	}
 
 	private UnitList getUnitList() {
