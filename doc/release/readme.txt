@@ -1,6 +1,6 @@
 =================================================================================
 
-ImageFlow 1.2pre, 27 October 2010, 
+ImageFlow 1.3, April 2010, 
 Contributors: 
 Daniel Senff (mail@danielsenff.de)
 Kai-Uwe Barthel (k.barthel@fhtw-berlin.de)
@@ -37,12 +37,13 @@ Feedback of any kind is well appreciated.
 Please read the imageflow.html for further information. 
 
 Imageflow requires either JRE or JDK, version 1.5 or later
-Tested with Windows XP, Linux Debian distro (KDE and Gnome) and MacOS X 10.6
+Tested with Windows XP, Linux Debian distribution (KDE and Gnome) and MacOS X 10.6
 
 ----------------------------------------
 
 Releases notes
 
+Version 1.3: stable release
 Version 1.2: stable release
 Version 1.1: stable release
 Version 1.0: stable release
