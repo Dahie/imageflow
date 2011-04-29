@@ -33,8 +33,11 @@ import java.awt.image.ImageObserver;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.ActionMap;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -42,9 +45,9 @@ import javax.swing.text.JTextComponent;
 
 import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.gui.PropertiesDialog;
 import de.danielsenff.imageflow.gui.UnitElementInfoPanel;
-import de.danielsenff.imageflow.imagej.GenericDialog;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -53,12 +56,9 @@ import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.parameter.AbstractParameter;
 import de.danielsenff.imageflow.models.parameter.BooleanParameter;
 import de.danielsenff.imageflow.models.parameter.ChoiceParameter;
-import de.danielsenff.imageflow.models.parameter.DoubleParameter;
-import de.danielsenff.imageflow.models.parameter.IntegerParameter;
 import de.danielsenff.imageflow.models.parameter.ParamChangeListener;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.parameter.ParameterFactory;
-import de.danielsenff.imageflow.models.parameter.StringParameter;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 import de.danielsenff.imageflow.utils.PaintUtil;
 
@@ -512,6 +512,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	}
 
 	private void addDisplayCheckbox(final PropertiesDialog gd) {
+		JPanel panel = new JPanel();
 		JCheckBox chkDisplay = new JCheckBox("Display result");
 		chkDisplay.setToolTipText("After the workflow has been executed, nodes that are set to 'display' are displayed as a result.");
 		chkDisplay.setSelected(isDisplay());
@@ -521,7 +522,21 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 				setDisplay(newValue);
 			}
 		});
-		gd.addForm("", chkDisplay);
+		panel.add(chkDisplay);
+		
+		
+		ActionMap actionMap = ImageFlow.getApplication().getContext().getActionMap(
+				ImageFlowView.class, ImageFlow.getApplication().getMainView());
+		
+		
+		JButton addToDashboard = new JButton(actionMap.get("addToDashboard"));
+		addToDashboard.setPreferredSize(new Dimension(110, 20));
+		panel.add(addToDashboard);
+		
+		JButton addPreviewToDashboard = new JButton(actionMap.get("addOutputToDashboard"));
+		addPreviewToDashboard.setPreferredSize(new Dimension(110, 20));
+		panel.add(addPreviewToDashboard);
+		gd.addForm("", panel);
 	}
 	
 	private void addDisplaySilentCheckbox(final PropertiesDialog gd) {

@@ -116,6 +116,7 @@ public class GraphPanelDropHandler implements DropTargetListener {
 				}
 			}
 
+			gPanel.repaint();
 
 		} catch (final Throwable t) { t.printStackTrace(); }
 		// a problem happened

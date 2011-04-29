@@ -325,6 +325,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 	public void mouseExited(MouseEvent e) {
 		// generato quando il mouse esce dalla finestra
 		cursor = false;
+		System.out.println("exit");
 	}
 
 	protected void changeCursor(int cursor) {

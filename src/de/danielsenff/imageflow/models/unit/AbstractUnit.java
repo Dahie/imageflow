@@ -50,7 +50,6 @@ public abstract class AbstractUnit extends NodeAbstract implements Model {
 	}
 
 
-	@Override
 	protected Object cloneNonClonableObject(Object obj) throws CloneNotSupportedException {
 		Object clobj;
 		try {

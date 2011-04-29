@@ -156,20 +156,4 @@ public abstract class Node implements Selectable, Cloneable {
 		return dimension;
 	}
 
-	protected Object cloneNonClonableObject(Object obj) throws CloneNotSupportedException {
-		Object clobj;
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(bos);
-			oos.writeObject(obj);
-			oos.close();
-			clobj = (new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()))).readObject();
-		} catch (Exception ex) {
-			throw new CloneNotSupportedException(ex.getMessage());
-		}
-		return clobj;
-	}
-	
-
-
 }

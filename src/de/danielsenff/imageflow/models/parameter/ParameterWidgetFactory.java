@@ -198,6 +198,7 @@ public class ParameterWidgetFactory {
 		final JTextField component = new JTextField(parameter.getValue().toString());
 		component.setEnabled(!parameter.isReadOnly());
 		component.setColumns(5);
+		component.setOpaque(false);
 		parameter.addParamChangeListener(new TextfieldParamChangeListener(component));
 
 		final int min = (Integer) parameter.getOptions().get("min");
@@ -211,6 +212,7 @@ public class ParameterWidgetFactory {
 
 		final JSlider slider = new JSlider(min, max, value);
 		slider.setLabelTable(labels);
+		slider.setOpaque(false);
 		slider.setPaintTicks(true);
 		slider.setEnabled(!parameter.isReadOnly());
 		slider.addChangeListener(new ChangeListener() {
@@ -343,6 +345,7 @@ public class ParameterWidgetFactory {
 		for (final String choice : parameter.getChoices()) {
 			radioButton = new JRadioButton(choice);
 			radioButton.setActionCommand(choice);
+			radioButton.setOpaque(false);
 			radioButton.addActionListener(new RadioActionListener(parameter));
 			if (parameter.getValue().equals(choice)) {
 				radioButton.setSelected(true);
@@ -413,6 +416,7 @@ public class ParameterWidgetFactory {
 		final JCheckBox chkBox = new JCheckBox();
 		//chkBox.setText(parameter.getDisplayName());
 		chkBox.setSelected(parameter.getValue());
+		chkBox.setOpaque(false);
 		parameter.addParamChangeListener(new CheckBoxParamChangeListener(chkBox));
 		chkBox.addItemListener(new ItemListener() {
 
