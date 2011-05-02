@@ -104,7 +104,9 @@ public class GraphPanel extends GPanel {
 	protected boolean align = false;
 
 	private BufferedImage iwIcon;
+	private BufferedImage iwIntroduction;
 	private String iwFilePath;
+	private String iwIntroductionFilePath;
 
 	
 	/**
@@ -115,8 +117,8 @@ public class GraphPanel extends GPanel {
 		super(panelListener);
 		setGraphController(graphController);
 	
-		this.iwFilePath = 
-			"/de/danielsenff/imageflow/resources/iw-logo.png";
+		this.iwFilePath = "/de/danielsenff/imageflow/resources/iw-logo.png";
+		this.iwIntroductionFilePath = "/de/danielsenff/imageflow/resources/introduction-graphic.png";
 //			getResourceMap().getString("Background.image");
 
     	JPopupMenu.setDefaultLightWeightPopupEnabled(false);
@@ -127,6 +129,7 @@ public class GraphPanel extends GPanel {
 		
 		try {
 			this.iwIcon = ImageIO.read(this.getClass().getResourceAsStream(iwFilePath));
+			this.iwIcon = ImageIO.read(this.getClass().getResourceAsStream(iwIntroductionFilePath));
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -241,6 +244,7 @@ public class GraphPanel extends GPanel {
 
 		g2.drawImage(this.iwIcon, 25, 25, null);
 		
+		
 		final String headline = "Create your workflow";
 //			getResourceMap().getString("Intro.headline"); 
 		final String description = "Add new units to the graph by using the" + '\n'
@@ -266,6 +270,8 @@ public class GraphPanel extends GPanel {
 			lineOffset +=20;
 			g2.drawString(line, x+5, y+lineOffset);	
 		}
+		
+		g2.drawImage(this.iwIntroduction, 25, y+ lineOffset, null);
 	}
 
 	/**
