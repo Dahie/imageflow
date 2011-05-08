@@ -25,7 +25,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.danielsenff.imageflow.models.connection.Pin;
+import de.danielsenff.imageflow.models.connection.*;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent;
 
@@ -79,14 +79,22 @@ public class UnitElementInfoPanel extends JPanel {
 			final Image unitIcon = unit.getUnitComponentIcon().getImage(UnitModelComponent.Size.BIG);
 			g.drawImage(unitIcon, 0, 0, null);
 		}
-		
-		
 	}
 	
 	class ConnectionLabel extends JLabel {
 		
 		public ConnectionLabel(final Pin pin) {
-			final String datatype = pin.getDataType().getName();
+			String datatype;
+			if (pin instanceof Input) {
+				datatype = pin.isConnected() ? 
+						((Input)pin).getFromOutput().getDataType().getName() 
+						: pin.getDataType().getName();
+			} else if (pin instanceof Output) {
+				datatype = pin.getDataType().getName();
+			} else {
+				datatype = "unknown";
+			}
+			
 			setText("<html><b>"+pin.getDisplayName()+"</b><br>"+datatype+"</html>");
 		}
 		
