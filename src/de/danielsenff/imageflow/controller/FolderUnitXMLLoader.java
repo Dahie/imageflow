@@ -142,6 +142,8 @@ public class FolderUnitXMLLoader extends BasicUnitXMLLoader {
 
 			try {
 				String xmlPath = basePath + resource;
+				// FIXME  when I remove this printout, the SaveAs unit is not found in Linux... #sigh
+				System.out.println(xmlPath);
 				URL fileURL = new URL(url, xmlPath);
 
 				if (basePath.length() > 1) {
