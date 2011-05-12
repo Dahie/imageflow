@@ -2,7 +2,7 @@
 
 An application proving an graphical node-based user interface for creating [ImageJ][imagej] workflows, for Macro creation and image editing in general.
 
-## Imageflow Provides
+## ImageFlow Provides
 
 It provides you with the means to create macros by connecting nodes to form a workflow, which represents the way macro-commands are called by ImageJ. These workflows can be saved and loaded. 
 
@@ -20,7 +20,7 @@ Feedback of any kind is well appreciated.
 
 Delete the previous version, download Imageflow-binaries and extract somewhere on your hard drive. Start the jar to run the program.
 
-To start Imageflow from ImageJ you have to move "Imageflow"-folder into ImageJ's plugin directory. After restarting ImageJ you will find a menu-item in the Plugins-Menu to start the plugin.
+To start Imageflow from ImageJ you have to move "ImageFlow"-folder into ImageJ's plugin directory. After restarting ImageJ you will find a menu-item in the Plugins-Menu to start the plugin.
 
 ### Compile from Sources
 

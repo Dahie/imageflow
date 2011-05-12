@@ -28,6 +28,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
@@ -56,6 +57,10 @@ import javax.swing.JPopupMenu;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
+import org.jfree.text.TextBlock;
+import org.jfree.text.TextBlockAnchor;
+import org.jfree.text.TextUtilities;
+import org.jfree.ui.HorizontalAlignment;
 
 import visualap.GPanel;
 import visualap.GPanelListener;
@@ -102,13 +107,12 @@ public class GraphPanel extends GPanel {
 	 * Auto align nodes
 	 */
 	protected boolean align = false;
-
-	private BufferedImage iwIcon;
-	private BufferedImage iwIntroduction;
-	private String iwFilePath;
-	private String iwIntroductionFilePath;
-
 	
+	/**
+	 * Draw the introduction and help on the empty workspace
+	 */
+	private WelcomeArea welcomeArea;
+
 	/**
 	 * @param panelListener
 	 * @param graphController
@@ -116,23 +120,14 @@ public class GraphPanel extends GPanel {
 	public GraphPanel(final GPanelListener panelListener, final GraphController graphController) {
 		super(panelListener);
 		setGraphController(graphController);
-	
-		this.iwFilePath = "/de/danielsenff/imageflow/resources/iw-logo.png";
-		this.iwIntroductionFilePath = "/de/danielsenff/imageflow/resources/introduction-graphic.png";
-//			getResourceMap().getString("Background.image");
 
+		this.welcomeArea = new WelcomeArea();
+		
     	JPopupMenu.setDefaultLightWeightPopupEnabled(false);
     	if(!IJ.isMacintosh())
     		this.setBorder(BorderFactory.createLoweredBevelBorder());
 		
 		this.setDropTarget(new DropTarget(this, new GraphPanelDropHandler(this, graphController)));
-		
-		try {
-			this.iwIcon = ImageIO.read(this.getClass().getResourceAsStream(iwFilePath));
-			this.iwIntroduction = ImageIO.read(this.getClass().getResourceAsStream(iwIntroductionFilePath));
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 
@@ -230,49 +225,11 @@ public class GraphPanel extends GPanel {
 			}
 		} else {
 			//draw a nice message to promote creating a graph
-			drawWelcome(g2);
+			welcomeArea.draw(g2);
 		}
 	}
 
-	/**
-	 * draw a nice message to promote creating a graph
-	 * @param g2d
-	 */
-	private void drawWelcome(final Graphics2D g2d) {
-		final int x = 50;
-		final int y = 80;
-
-		g2d.drawImage(this.iwIcon, 25, 25, null);
-		
-		
-		final String headline = "Create your workflow";
-//			getResourceMap().getString("Intro.headline"); 
-		final String description = /*"Add new units to the graph by using the" + '\n'
-			+"context menu units on this canvas." + '\n' + "   " + '\n'*/
-			 "A workflow is constructed from a Source-Unit and requires a Display-Unit." + '\n'
-			+ "The Display-Unit is the image that will be displayed after running the workflow.";
-
-		final Vector<String> lines = tokenizeString(description, "\n");
-		
-		g2d.setColor(Color.GRAY);
-		
-		// scale font on big lengths
-		final int fontsize = 24;
-		final int fontsizeOriginal = 12;
-		final Font font = g2d.getFont();
-		final Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
-		g2d.setFont(newFont);
-		// and if even now to small, then cut
-		g2d.drawString(headline, x+250, y+15);
-		g2d.setFont(new Font(font.getFamily(), Font.PLAIN, fontsizeOriginal));
-		int lineOffset = 45;
-		for (final String line : lines) {
-			lineOffset +=20;
-			g2d.drawString(line, x+150, y+lineOffset);	
-		}
-		
-		g2d.drawImage(this.iwIntroduction, x, y+ lineOffset+25, null);
-	}
+	
 
 	/**
 	 * @return the align
