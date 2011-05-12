@@ -17,6 +17,7 @@
  */
 package de.danielsenff.imageflow.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -53,6 +54,10 @@ public class PropertiesDialog extends JDialog implements ComponentForm, KeyListe
 
 	public void addMessage(String string) {
 		formPanel.addMessage(string);
+	}
+	
+	public void addMessage(String string, Color color) {
+		formPanel.addMessage(string, color);
 	}
 	
 	/**

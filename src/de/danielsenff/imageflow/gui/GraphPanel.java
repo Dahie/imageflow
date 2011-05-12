@@ -129,7 +129,7 @@ public class GraphPanel extends GPanel {
 		
 		try {
 			this.iwIcon = ImageIO.read(this.getClass().getResourceAsStream(iwFilePath));
-			this.iwIcon = ImageIO.read(this.getClass().getResourceAsStream(iwIntroductionFilePath));
+			this.iwIntroduction = ImageIO.read(this.getClass().getResourceAsStream(iwIntroductionFilePath));
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -236,42 +236,42 @@ public class GraphPanel extends GPanel {
 
 	/**
 	 * draw a nice message to promote creating a graph
-	 * @param g2
+	 * @param g2d
 	 */
-	private void drawWelcome(final Graphics2D g2) {
+	private void drawWelcome(final Graphics2D g2d) {
 		final int x = 50;
 		final int y = 80;
 
-		g2.drawImage(this.iwIcon, 25, 25, null);
+		g2d.drawImage(this.iwIcon, 25, 25, null);
 		
 		
 		final String headline = "Create your workflow";
 //			getResourceMap().getString("Intro.headline"); 
-		final String description = "Add new units to the graph by using the" + '\n'
-			+"context menu units on this canvas." + '\n' + "   " + '\n'
-			+ "A workflow is constructed from a Source-Unit and requires a Display-Unit." + '\n'
+		final String description = /*"Add new units to the graph by using the" + '\n'
+			+"context menu units on this canvas." + '\n' + "   " + '\n'*/
+			 "A workflow is constructed from a Source-Unit and requires a Display-Unit." + '\n'
 			+ "The Display-Unit is the image that will be displayed after running the workflow.";
 
 		final Vector<String> lines = tokenizeString(description, "\n");
 		
-		g2.setColor(Color.GRAY);
+		g2d.setColor(Color.GRAY);
 		
 		// scale font on big lengths
 		final int fontsize = 24;
 		final int fontsizeOriginal = 12;
-		final Font font = g2.getFont();
+		final Font font = g2d.getFont();
 		final Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
-		g2.setFont(newFont);
+		g2d.setFont(newFont);
 		// and if even now to small, then cut
-		g2.drawString(headline, x+5, y+15);
-		g2.setFont(new Font(font.getFamily(), Font.PLAIN, fontsizeOriginal));
+		g2d.drawString(headline, x+250, y+15);
+		g2d.setFont(new Font(font.getFamily(), Font.PLAIN, fontsizeOriginal));
 		int lineOffset = 45;
 		for (final String line : lines) {
 			lineOffset +=20;
-			g2.drawString(line, x+5, y+lineOffset);	
+			g2d.drawString(line, x+150, y+lineOffset);	
 		}
 		
-		g2.drawImage(this.iwIntroduction, 25, y+ lineOffset, null);
+		g2d.drawImage(this.iwIntroduction, x, y+ lineOffset+25, null);
 	}
 
 	/**

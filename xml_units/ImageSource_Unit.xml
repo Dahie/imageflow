@@ -13,7 +13,7 @@
 <Parameters>
   	<Parameter>
   		<Name>Image</Name>
-  		<DataType>File</DataType>
+  		<DataType as="openfilechooser">File</DataType>
   		<Value></Value>
   		<HelpString>The source unit needs the path of an image file.</HelpString>
   	</Parameter> 

@@ -48,6 +48,7 @@ import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.gui.PropertiesDialog;
 import de.danielsenff.imageflow.gui.UnitElementInfoPanel;
+import de.danielsenff.imageflow.gui.UnitPropertiesDialog;
 import de.danielsenff.imageflow.models.Displayable;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -459,103 +460,17 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * @param point leave null to center on screen
 	 */
 	public void showProperties(Point point) {
+		// PropertiesDialog not yet instantiated
 		if (this.propertiesDialog == null) {
-			
-			propertiesDialog = new PropertiesDialog(getLabel() + " - Parameters", 
-					ImageFlow.getApplication().getMainFrame());
-			if(getHelpString() != null) {
-				propertiesDialog.addMessage(getHelpString());
-			}
-			
-			// label field 
-			JTextField fldName = new JTextField(getLabel());
-			fldName.addKeyListener(new KeyListener() {
-				public void keyTyped(KeyEvent event) {}
-				
-				public void keyReleased(KeyEvent event) {
-					String newLabel = ((JTextComponent) event.getSource()).getText();
-					setLabel(newLabel);
-				}
-				public void keyPressed(KeyEvent event) {}
-			});
-			propertiesDialog.addForm("Name", fldName);
-			
-			addDisplayCheckbox(propertiesDialog);
-			//addDisplaySilentCheckbox(gd);
-			
-			propertiesDialog.addSeparator();		
-			
-			addCustomWidgets(propertiesDialog);
-			
-			// add Parameter Widgets
-			if (!getParameters().isEmpty()) {
-				addParameterWidgets(propertiesDialog);
-				
-				propertiesDialog.addSeparator();
-			}
-			
-			propertiesDialog.addComponent(new UnitElementInfoPanel(this));
-			
-			// show properties window
-			if (point == null) 
-				propertiesDialog.showDialog();
-			else
-				propertiesDialog.showDialog(point);
-			
-			//notifyModelListeners();
-		} else if (!propertiesDialog.isVisible()) {
+			this.propertiesDialog = new UnitPropertiesDialog(this, point);
+		} 
+		// PropertiesDialog already exists, but is invisible
+		else if (!propertiesDialog.isVisible()) {
 			this.propertiesDialog.setVisible(true);
-		} else {
+		} 
+		// PropertiesDialog already displayed, but has no focus
+		else {
 			this.propertiesDialog.toFront();
-		}
-		
-	}
-
-	private void addDisplayCheckbox(final PropertiesDialog gd) {
-		JPanel panel = new JPanel();
-		JCheckBox chkDisplay = new JCheckBox("Display result");
-		chkDisplay.setToolTipText("After the workflow has been executed, nodes that are set to 'display' are displayed as a result.");
-		chkDisplay.setSelected(isDisplay());
-		chkDisplay.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent event) {
-				boolean newValue = ((JCheckBox)event.getSource()).isSelected();
-				setDisplay(newValue);
-			}
-		});
-		panel.add(chkDisplay);
-		
-		
-		ActionMap actionMap = ImageFlow.getApplication().getContext().getActionMap(
-				ImageFlowView.class, ImageFlow.getApplication().getMainView());
-		
-		
-		JButton addToDashboard = new JButton(actionMap.get("addToDashboard"));
-		addToDashboard.setPreferredSize(new Dimension(110, 20));
-		panel.add(addToDashboard);
-		
-		JButton addPreviewToDashboard = new JButton(actionMap.get("addOutputToDashboard"));
-		addPreviewToDashboard.setPreferredSize(new Dimension(110, 20));
-		panel.add(addPreviewToDashboard);
-		gd.addForm("", panel);
-	}
-	
-	private void addDisplaySilentCheckbox(final PropertiesDialog gd) {
-		JCheckBox chkDisplay = new JCheckBox("Display result silently");
-		chkDisplay.setToolTipText("After the workflow has been executed, nodes that are set to 'display' are displayed as a result.");
-		chkDisplay.setSelected(isDisplaySilent());
-		chkDisplay.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent event) {
-				boolean newValue = ((JCheckBox)event.getSource()).isSelected();
-				setDisplaySilent(newValue);
-			}
-		});
-		gd.addForm("", chkDisplay);
-	}
-
-	protected void addParameterWidgets(final PropertiesDialog gd) {
-		final ArrayList<Parameter> parameterList = getParameters();
-		for (final Parameter parameter : parameterList) {
-			gd.add(parameter);
 		}
 	}
 
@@ -563,7 +478,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	 * Hook for adding Custom Widgets.
 	 * @param gd
 	 */
-	protected void addCustomWidgets(PropertiesDialog gd) {	}
+	public void addCustomWidgets(final PropertiesDialog dialog) {	}
 
 	/**
 	 * Returns whether this unit has parameters or not.
@@ -1135,7 +1050,7 @@ public class UnitElement extends AbstractUnit implements ProcessingUnit, Display
 	private JComponent widget;
 	private JComponent previewWidget;
 
-	private PropertiesDialog propertiesDialog;
+	protected PropertiesDialog propertiesDialog;
 	
 	public void setWidget(JComponent component) {
 		this.widget = component;

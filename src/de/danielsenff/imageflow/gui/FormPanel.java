@@ -17,6 +17,7 @@
  */
 package de.danielsenff.imageflow.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -86,6 +87,17 @@ public class FormPanel extends JPanel implements ComponentForm, MouseListener {
 	 */
 	public void addMessage(final String message) {
 		add(new JLabel(message));
+	}
+	
+	/**
+	 * Add a message line with text in a specified color
+	 * @param message
+	 * @param color
+	 */
+	public void addMessage(final String message, final Color color) {
+		JLabel component = new JLabel(message);
+		component.setForeground(color);
+		add(component);
 	}
 	
 	/**

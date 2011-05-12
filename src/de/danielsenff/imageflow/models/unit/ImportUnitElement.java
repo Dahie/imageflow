@@ -26,12 +26,15 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import java.util.Vector;
 
 import de.danielsenff.imageflow.gui.PropertiesDialog;
+import de.danielsenff.imageflow.gui.UnitPropertiesDialog;
 import de.danielsenff.imageflow.imagej.GenericDialog;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Output;
@@ -134,55 +137,98 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 	}
 	
 	
-	@Override protected void addParameterWidgets(final PropertiesDialog gd) {
-		final ArrayList<Parameter> parameterList = getParameters();
-		
-		if (parameterList.isEmpty()) {
-			gd.addMessage("This unit has no parameters and can not be adjusted.");
-		} else {
-			ChoiceParameter windowChoice = getWindowChoiceParameter(parameterList);
-			if(WindowManager.getCurrentImage() != null) {
-				
-				Vector<String> imageWindows = getImageWindows();
-//				if(imageWindows.contains(windowChoice.getValue())) {
-//					// if same window is opened as before
-//					gd.addMessage("Expected opened Image by the name "+windowChoice.getValue()+".");
-//				} else {
-					// the original window is not opened
-					
-					// reset Choices list
-					windowChoice.getChoices().clear();
-					
-					windowChoice.getChoices().addAll(imageWindows);
-					/*gd.addChoice(windowChoice.getDisplayName(), 
-							windowChoice.getChoicesArray(), 
-							windowChoice.getValue());*/
-//				}
-				
+	class ImportUnitPropertiesDialog extends UnitPropertiesDialog {
+		public ImportUnitPropertiesDialog(UnitElement unit, Point point) {
+			super(unit, point);
+		}
+
+		@Override protected void addParameterWidgets(final UnitElement unit) {
+			if (unit.getParameters().isEmpty()) {
+				addMessage("This unit has no parameters and can not be adjusted.");
 			} else {
-				gd.addMessage("There are no images opened in ImageJ.");
-			} 
-			if (windowChoice.isChoicesEmpty())
-				gd.addMessage("Expected opened Image by the name "+windowChoice.getValue()+".");
-			
+				ChoiceParameter windowChoice = getWindowChoiceParameter(unit.getParameters());
+				if(WindowManager.getCurrentImage() != null) {
+					
+					Vector<String> imageWindows = getImageWindows();
+//					if(imageWindows.contains(windowChoice.getValue())) {
+//						// if same window is opened as before
+//						gd.addMessage("Expected opened Image by the name "+windowChoice.getValue()+".");
+//					} else {
+						// the original window is not opened
+						
+						// reset Choices list
+						windowChoice.getChoices().clear();
+						
+						windowChoice.getChoices().addAll(imageWindows);
+						this.add(windowChoice);
+//					}
+					
+				} else {
+					addMessage("There are no images opened in ImageJ.");
+				} 
+				if (windowChoice.isChoicesEmpty())
+					addMessage("Expected opened Image by the name "+windowChoice.getValue()+".", Color.RED);
+				
+			}
 		}
 	}
+	
+	/**
+	 * Displays a Popup-Window with the properties, that can be edited for this UnitElement.
+	 * @param point leave null to center on screen
+	 */
+	public void showProperties(Point point) {
+		// PropertiesDialog not yet instantiated
+		if (this.propertiesDialog == null) {
+			this.propertiesDialog = new ImportUnitPropertiesDialog(this, point);
+			this.propertiesDialog.addWindowListener(new WindowListener() {
+				
+				@Override
+				public void windowOpened(WindowEvent e) {}
+				
+				@Override
+				public void windowIconified(WindowEvent e) {}
+				
+				@Override
+				public void windowDeiconified(WindowEvent e) {}
+				
+				@Override
+				public void windowDeactivated(WindowEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void windowClosing(WindowEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void windowClosed(WindowEvent e) {
+					e.getWindow().dispose();
+				}
+				
+				@Override
+				public void windowActivated(WindowEvent e) {}
+			});
+		} 
+		// PropertiesDialog already exists, but is invisible
+		else if (!propertiesDialog.isVisible()) {
+			this.propertiesDialog.show();
+		} 
+		// PropertiesDialog already displayed, but has no focus
+		else {
+			this.propertiesDialog.toFront();
+		}
+	}
+
 
 	private ChoiceParameter getWindowChoiceParameter(
 			final ArrayList<Parameter> parameterList) {
 		return (ChoiceParameter) parameterList.get(WINDOW_PARAMETER_INDEX);
 	}
 			
-	/*
-	@Override protected void updateParameters(final GenericDialog gd) {
-		setLabel((String) (gd.getNextString()).trim());
-		setDisplay(gd.getNextBoolean());
-		
-		String selectedWindow = (String) (gd.getNextChoice());
-		getWindowChoiceParameter(getParameters()).setValue(selectedWindow);
-		setImagePlus(WindowManager.getImage(selectedWindow));
-	}*/
-	
 	private void setImagePlus(ImagePlus image) {
 		this.image = image;
 		updateImageType();

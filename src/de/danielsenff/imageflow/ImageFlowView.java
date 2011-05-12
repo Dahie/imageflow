@@ -422,11 +422,11 @@ public class ImageFlowView extends FrameView {
 		// setting of MinimumSize is required for drag-ability of JSplitPane
 		sidePane.setMinimumSize(new Dimension(150, 100));
 		graphScrollpane.setMinimumSize(new Dimension(100, 100));
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidePane, graphScrollpane);
-		splitPane.setEnabled(true);
-		splitPane.setOneTouchExpandable(true);
+		JSplitPane workspaceSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidePane, graphScrollpane);
+		workspaceSplitPane.setEnabled(true);
+		workspaceSplitPane.setOneTouchExpandable(true);
 		// enables continuous redrawing while moving the JSplitPane-Divider
-		splitPane.setContinuousLayout(true);
+		workspaceSplitPane.setContinuousLayout(true);
 		
 		
 		JPanel mainPanel = new JPanel();
@@ -434,14 +434,20 @@ public class ImageFlowView extends FrameView {
 		
 		dashboardPanel = new Dashboard();
 		graphController.setDashboard(dashboardPanel);
+		JScrollPane dashboardScrollPane = new JScrollPane(dashboardPanel);
 		
 		JSplitPane dashWorkflowSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		dashWorkflowSplitPane.add(splitPane);
-		dashWorkflowSplitPane.add(dashboardPanel);
+		dashWorkflowSplitPane.add(workspaceSplitPane);
+		dashWorkflowSplitPane.add(dashboardScrollPane);
+		
+		workspaceSplitPane.setContinuousLayout(true);
 		
 		mainPanel.add(dashWorkflowSplitPane, BorderLayout.CENTER);
 		mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 		setComponent(mainPanel);
+		
+		dashWorkflowSplitPane.setDividerLocation(520);
+		//dashWorkflowSplitPane.setDividerLocation(0.7);
 		
 		// for the moment unused, stub for making the app multi-document on osx
 		//if (IJ.isMacOSX())

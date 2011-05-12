@@ -36,8 +36,7 @@ public class InitializeDelegatesTask extends Task {
 
 	@Override
 	protected Object doInBackground() throws Exception {
-		final DelegatesController delegatesController = DelegatesController.getInstance();
-		delegatesController.initializeDelegatesModel();
+		DelegatesController.getInstance().initializeDelegatesModel();
 		return null;
 	}
 

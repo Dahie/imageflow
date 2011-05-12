@@ -166,7 +166,11 @@ public class ParameterWidgetFactory {
 					return createTextField(parameter);
 				}
 			} else if (parameter instanceof BooleanParameter) {
-				return createCheckBox((BooleanParameter)parameter);
+				if (optionsContainString(parameter, "as", "openfilechooser")) {
+					// TODO return createToggleButton((BooleanParameter)parameter);
+				} else {
+					return createCheckBox((BooleanParameter)parameter);
+				}
 			}
 
 		} catch (final Exception e) {
