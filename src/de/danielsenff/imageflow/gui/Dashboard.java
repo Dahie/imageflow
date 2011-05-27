@@ -21,17 +21,28 @@ package de.danielsenff.imageflow.gui;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.SystemColor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+
+import org.jfree.text.TextBlock;
+import org.jfree.text.TextBlockAnchor;
+import org.jfree.text.TextUtilities;
+import org.jfree.ui.HorizontalAlignment;
 
 import visualap.Node;
 
@@ -54,12 +65,25 @@ public class Dashboard extends JPanel {
 	private int dragStartX;
 	private int dragStartY;
 	
+	private BufferedImage dashWidgetImage;
+	private BufferedImage dashPreviewImage;
+	
 	/**
 	 * 
 	 */
 	public Dashboard() {
 		this.dashs = new HashMap<String, JPanel>();
-		this.setPreferredSize(new Dimension(500, 200));
+		this.setPreferredSize(new Dimension(800, 200));
+		
+		String defaultPath = "/de/danielsenff/imageflow/resources/";
+		try {
+			this.dashPreviewImage = readResource(defaultPath + "dash_preview.png");
+			this.dashWidgetImage = readResource(defaultPath + "dash_widget.png");
+		} catch (IOException e) {
+			// TODO use dummy image
+			e.printStackTrace();
+		}
+		
 		setLayout(null);
 	}
 	
@@ -76,23 +100,82 @@ public class Dashboard extends JPanel {
 		}
 	}
 	
+	/*
+	 * TODO OPTIMIZE move into helper class
+	 */
+	private BufferedImage readResource(String path) throws IOException {
+		return ImageIO.read(this.getClass().getResourceAsStream(path));
+	}
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		g.setColor(SystemColor.textInactiveText);
-		for (int x = 0; x < this.getWidth(); x+=GraphPanel.GRIDSIZE) {
-			for (int y = 0; y < this.getHeight(); y+=GraphPanel.GRIDSIZE) {
-				g.drawRect(x, y, 1, 1);
+		final Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		g2.setColor(SystemColor.textInactiveText);
+		for (int x = 20; x < this.getWidth(); x+=GraphPanel.GRIDSIZE) {
+			for (int y = 20; y < this.getHeight(); y+=GraphPanel.GRIDSIZE) {
+				g2.drawRect(x, y, 1, 1);
 			}
 		}
 		
 		if(this.dashs.isEmpty()) {
-			// TODO paint info graphic
+			// TODO OPTIMIZE get this out of the paint method
+			int boxWidth = 370;
+			int x = WelcomeArea.margin;
 			
+			// paint info graphic
+			// TODO extrude text to resource locals
+			drawIntroBox(g2, "Add Dashboard", "Add the parameters of your processing node \nand gain easy access to their settings for \nquick manipulation.", 
+					new Point(x, WelcomeArea.margin), new Dimension(boxWidth, 100), this.dashWidgetImage);
+			drawIntroBox(g2, "Add Preview", "Add Previews of your processing Nodes to \nthe Dashboard to see live changes on your \nresulting data and images. ", 
+					new Point(x+boxWidth+WelcomeArea.margin*2, WelcomeArea.margin), new Dimension(boxWidth, 100), this.dashPreviewImage);
 		}
 	}
 	
+	/**
+	 * 
+	 * @param g2d
+	 * @param headline
+	 * @param position
+	 * @param dimension
+	 * @param image
+	 */
+	private void drawIntroBox(final Graphics2D g2d, String headline, String description,
+			Point position, Dimension dimension, BufferedImage image) {
+		
+		g2d.setColor(Color.white);
+		g2d.fillRoundRect(position.x, position.y, dimension.width, dimension.height, 24, 24);
+		g2d.setColor(Color.BLACK);
+		g2d.drawRoundRect(position.x, position.y, dimension.width, dimension.height, 24, 24);
+		
+		g2d.drawImage(image, position.x+WelcomeArea.marginSmall, position.y+WelcomeArea.marginSmall, null);
+		
+		final Font font = g2d.getFont();
+		final Font headlineFont = new Font(font.getFamily(), Font.BOLD, 24);
+		
+		
+		
+		TextBlock headlineText = TextUtilities.createTextBlock(headline, headlineFont, Color.GRAY);
+		headlineText.setLineAlignment(HorizontalAlignment.LEFT);
+		headlineText.draw(g2d, 
+				position.x+WelcomeArea.marginSmall*2+image.getWidth(), 
+				position.y+WelcomeArea.marginSmall, 
+				TextBlockAnchor.TOP_LEFT);
+		
+		g2d.setFont(new Font(font.getFamily(), Font.PLAIN, 12));
+		
+		TextBlock descriptionText = TextUtilities.createTextBlock(description, g2d.getFont(), Color.BLACK);
+		descriptionText.setLineAlignment(HorizontalAlignment.LEFT);
+		descriptionText.draw(g2d, 
+				position.x+WelcomeArea.marginSmall*2+image.getWidth(), 
+				position.y+WelcomeArea.marginSmall*2+25,
+				TextBlockAnchor.TOP_LEFT);
+	}
 	
 	/**
 	 * Removes the PreviewWidget of the given {@link UnitElement} from the Dashboard.

@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2008-2010 Daniel Senff
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package de.danielsenff.imageflow.gui;
 
 import java.awt.Color;
@@ -9,13 +26,17 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.html.HTMLDocument.HTMLReader.BlockAction;
 
 import org.jfree.text.TextBlock;
 import org.jfree.text.TextBlockAnchor;
 import org.jfree.text.TextUtilities;
 import org.jfree.ui.HorizontalAlignment;
 
+/**
+ * Paints the introduction graphics on the empty {@link GraphPanel}.
+ * @author dahie
+ *
+ */
 public class WelcomeArea {
 
 	private BufferedImage iwIcon;
@@ -52,6 +73,7 @@ public class WelcomeArea {
 			this.outerRightEdge = margin*2+boxDimension.width*2;
 		} catch (final IOException e) {
 			e.printStackTrace();
+			// TODO use dummy image 
 		}
 		
 	}
@@ -81,16 +103,13 @@ public class WelcomeArea {
 
 		g2d.setColor(Color.GRAY);
 		
-		// scale font on big lengths
-		final int fontsize = 24;
-		final int fontsizeOriginal = 12;
 		final Font font = g2d.getFont();
-		final Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
-		TextBlock headlineText = TextUtilities.createTextBlock(headline, newFont, Color.GRAY);
+		final Font headlineFont = new Font(font.getFamily(), Font.BOLD, 24);
+		TextBlock headlineText = TextUtilities.createTextBlock(headline, headlineFont, Color.GRAY);
 		headlineText.setLineAlignment(HorizontalAlignment.RIGHT);
 		headlineText.draw(g2d, this.outerRightEdge, margin, TextBlockAnchor.TOP_RIGHT);
-		g2d.setFont(new Font(font.getFamily(), Font.PLAIN, fontsizeOriginal));
-		// TODO you can probably move alot of this out of the paint method
+		g2d.setFont(new Font(font.getFamily(), Font.PLAIN, 12));
+		// TODO you can/should probably move a lot of this out of the paint method
 		
 		TextBlock welcomeText = TextUtilities.createTextBlock(description, g2d.getFont(), Color.BLACK);
 		welcomeText.setLineAlignment(HorizontalAlignment.RIGHT);
