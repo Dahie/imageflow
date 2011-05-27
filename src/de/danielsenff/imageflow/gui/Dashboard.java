@@ -18,15 +18,22 @@
 package de.danielsenff.imageflow.gui;
 
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.SystemColor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+
+import visualap.Node;
 
 import de.danielsenff.imageflow.controller.ParameterWidgetController;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -68,6 +75,24 @@ public class Dashboard extends JPanel {
 			this.remove(dash);
 		}
 	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		g.setColor(SystemColor.textInactiveText);
+		for (int x = 0; x < this.getWidth(); x+=GraphPanel.GRIDSIZE) {
+			for (int y = 0; y < this.getHeight(); y+=GraphPanel.GRIDSIZE) {
+				g.drawRect(x, y, 1, 1);
+			}
+		}
+		
+		if(this.dashs.isEmpty()) {
+			// TODO paint info graphic
+			
+		}
+	}
+	
 	
 	/**
 	 * Removes the PreviewWidget of the given {@link UnitElement} from the Dashboard.
@@ -181,9 +206,26 @@ public class Dashboard extends JPanel {
 			
 			dragStartX = (int)(e.getXOnScreen());
 			dragStartY = (int)(e.getYOnScreen());
+			updatePreferredSize();
 		}
 
 		public void mouseMoved(final MouseEvent arg0) {}
 		
 	}
+	
+	protected Rectangle rect;
+	
+	/*
+	 * TODO OPTIMIZE this method is taken from GPanel and could possibly be done nicer
+	 */
+	public void updatePreferredSize() {
+		rect = new Rectangle();
+		for (JComponent component : this.dashs.values()) {
+			rect = rect.union(component.getBounds());
+		}
+		this.setPreferredSize(rect.getSize());
+		this.getParent().setPreferredSize(rect.getSize());
+		revalidate();
+	}
+	
 }
