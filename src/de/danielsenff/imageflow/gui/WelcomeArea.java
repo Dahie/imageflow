@@ -40,7 +40,6 @@ import org.jfree.ui.HorizontalAlignment;
 public class WelcomeArea {
 
 	private BufferedImage iwIcon;
-	private BufferedImage iwIntroduction;
 	
 	private BufferedImage introStep1;
 	private BufferedImage introStep2;
@@ -60,7 +59,6 @@ public class WelcomeArea {
 		
 		try {
 			this.iwIcon = readResource(defaultPath + "iw-icon.png");
-			this.iwIntroduction = readResource(defaultPath + "introduction-graphic.png");
 			this.introStep1 = readResource(defaultPath + "intro_step1.png");
 			this.introStep2 = readResource(defaultPath + "intro_step2.png");
 			this.introStep3 = readResource(defaultPath + "intro_step3.png");
