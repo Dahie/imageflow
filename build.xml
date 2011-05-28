@@ -17,7 +17,7 @@
 	<property name="doc.dir" location="${basedir}/doc/release" />
 	<property name="example.dir" location="${basedir}/xml_flows" />
 	<tstamp>
-	    <format property="TODAY" pattern="yyyy-MMMM-d" />
+	    <format property="TODAY" pattern="yyyy-MM-d-hh-mm" />
      </tstamp>
   
   
