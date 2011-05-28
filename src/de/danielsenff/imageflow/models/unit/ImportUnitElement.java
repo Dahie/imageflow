@@ -33,9 +33,7 @@ import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import de.danielsenff.imageflow.gui.PropertiesDialog;
 import de.danielsenff.imageflow.gui.UnitPropertiesDialog;
-import de.danielsenff.imageflow.imagej.GenericDialog;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.datatype.ImageDataType;
@@ -183,33 +181,20 @@ public class ImportUnitElement extends UnitElement implements ImageSourceUnit {
 			this.propertiesDialog = new ImportUnitPropertiesDialog(this, point);
 			this.propertiesDialog.addWindowListener(new WindowListener() {
 				
-				@Override
 				public void windowOpened(WindowEvent e) {}
 				
-				@Override
 				public void windowIconified(WindowEvent e) {}
 				
-				@Override
 				public void windowDeiconified(WindowEvent e) {}
 				
-				@Override
-				public void windowDeactivated(WindowEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
+				public void windowDeactivated(WindowEvent e) {}
 				
-				@Override
-				public void windowClosing(WindowEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
+				public void windowClosing(WindowEvent e) {}
 				
-				@Override
 				public void windowClosed(WindowEvent e) {
 					e.getWindow().dispose();
 				}
 				
-				@Override
 				public void windowActivated(WindowEvent e) {}
 			});
 		} 

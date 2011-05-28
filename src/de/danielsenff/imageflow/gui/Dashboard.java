@@ -73,7 +73,7 @@ public class Dashboard extends JPanel {
 	 */
 	public Dashboard() {
 		this.dashs = new HashMap<String, JPanel>();
-		this.setPreferredSize(new Dimension(800, 200));
+		this.setPreferredSize(new Dimension(800, 150));
 		
 		String defaultPath = "/de/danielsenff/imageflow/resources/";
 		try {

@@ -47,7 +47,7 @@ public class WelcomeArea {
 	private BufferedImage introStep3;
 	private BufferedImage introStep4;
 	
-	public static final int margin = 25;
+	public static final int margin = 21;
 	public static final int marginSmall = 9;
 	private Dimension boxDimension;
 	private int yBox;

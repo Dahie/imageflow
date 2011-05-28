@@ -261,7 +261,7 @@ public class ImageFlowView extends FrameView {
 		editMenu.add(getAction("paste"));
 		editMenu.add(getAction("unbind"));
 		editMenu.add(getAction("delete"));
-//		editMenu.add(getAction("clear"));
+//		editMenu.add(getAction("clear")); // make new document instead
 		editMenu.add(getAction("selectAll"));
 		editMenu.add(getAction("addToDashboard"));
 		editMenu.add(getAction("addOutputToDashboard"));
@@ -342,6 +342,62 @@ public class ImageFlowView extends FrameView {
 	private void addComponents() {
 		ResourceMap resourceMap = getResourceMap();
 		
+		
+		ScrollPane graphScrollpane = initWorkspacePanel(resourceMap);
+		
+		JPanel sidePane = initSidebarPanel();
+		
+		
+		JSplitPane workspaceSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidePane, graphScrollpane);
+		workspaceSplitPane.setEnabled(true);
+		workspaceSplitPane.setOneTouchExpandable(true);
+		// enables continuous redrawing while moving the JSplitPane-Divider
+		workspaceSplitPane.setContinuousLayout(true);
+		
+		// init Dashboard
+		
+		dashboardPanel = new Dashboard();
+		graphController.setDashboard(dashboardPanel);
+		JScrollPane dashboardScrollPane = new JScrollPane(dashboardPanel);
+		
+		JSplitPane dashWorkflowSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		dashWorkflowSplitPane.add(workspaceSplitPane);
+		dashWorkflowSplitPane.add(dashboardScrollPane);
+
+		// bottomPanel including start button, options and progress/messages
+		JPanel bottomPanel = initBottomPanel(resourceMap);
+		
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout());
+		mainPanel.add(dashWorkflowSplitPane, BorderLayout.CENTER);
+		mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+		setComponent(mainPanel);
+		
+		dashWorkflowSplitPane.setDividerLocation(460);
+		//dashWorkflowSplitPane.setDividerLocation(0.8);
+		
+		// for the moment unused, stub for making the app multi-document on osx
+		//if (IJ.isMacOSX())
+		//	getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+	}
+
+	private JPanel initSidebarPanel() {
+		DelegatesPanel delegatesPanel = new DelegatesPanel(this.getNodes());
+		DelegatesTreeListener delegatesTreeListener = new DelegatesTreeListener(getInstance(), graphController);
+		JTree delegatesTree = delegatesPanel.getDelegatesTree();
+		delegatesTree.addMouseListener(delegatesTreeListener);
+		delegatesTree.addKeyListener(delegatesTreeListener);
+		delegatesTree.setDragEnabled(true);
+
+		JPanel sidePane = new JPanel();
+		sidePane.setLayout(new BorderLayout());
+		sidePane.add(delegatesPanel, BorderLayout.CENTER);
+		// setting of MinimumSize is required for drag-ability of JSplitPane
+		sidePane.setMinimumSize(new Dimension(190, 100));
+		return sidePane;
+	}
+
+	private ScrollPane initWorkspacePanel(ResourceMap resourceMap) {
 		//working area aka graphpanel
 		GPanelPopup popup = new GPanelPopup(getGraphController());
 		
@@ -354,8 +410,11 @@ public class ImageFlowView extends FrameView {
 		graphScrollpane.add(graphPanel);
 		graphScrollpane.getInsets().bottom = 5;
 		graphScrollpane.setPreferredSize(new Dimension(400, 300));
-		
-		
+		graphScrollpane.setMinimumSize(new Dimension(100, 100));
+		return graphScrollpane;
+	}
+
+	private JPanel initBottomPanel(ResourceMap resourceMap) {
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new BorderLayout());
 		
@@ -406,52 +465,7 @@ public class ImageFlowView extends FrameView {
 		progressPanel.add(statusBar);
 		
 		bottomPanel.add(progressPanel, BorderLayout.LINE_END);
-		
-		JPanel sidePane = new JPanel();
-		sidePane.setLayout(new BorderLayout());
-		DelegatesPanel delegatesPanel = new DelegatesPanel(this.getNodes());
-		DelegatesTreeListener delegatesTreeListener = new DelegatesTreeListener(getInstance(), graphController);
-		JTree delegatesTree = delegatesPanel.getDelegatesTree();
-		delegatesTree.addMouseListener(delegatesTreeListener);
-		delegatesTree.addKeyListener(delegatesTreeListener);
-		delegatesTree.setDragEnabled(true);
-
-		
-		sidePane.add(delegatesPanel, BorderLayout.CENTER);
-		
-		// setting of MinimumSize is required for drag-ability of JSplitPane
-		sidePane.setMinimumSize(new Dimension(150, 100));
-		graphScrollpane.setMinimumSize(new Dimension(100, 100));
-		JSplitPane workspaceSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidePane, graphScrollpane);
-		workspaceSplitPane.setEnabled(true);
-		workspaceSplitPane.setOneTouchExpandable(true);
-		// enables continuous redrawing while moving the JSplitPane-Divider
-		workspaceSplitPane.setContinuousLayout(true);
-		
-		
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BorderLayout());
-		
-		dashboardPanel = new Dashboard();
-		graphController.setDashboard(dashboardPanel);
-		JScrollPane dashboardScrollPane = new JScrollPane(dashboardPanel);
-		
-		JSplitPane dashWorkflowSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		dashWorkflowSplitPane.add(workspaceSplitPane);
-		dashWorkflowSplitPane.add(dashboardScrollPane);
-		
-		workspaceSplitPane.setContinuousLayout(true);
-		
-		mainPanel.add(dashWorkflowSplitPane, BorderLayout.CENTER);
-		mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-		setComponent(mainPanel);
-		
-		dashWorkflowSplitPane.setDividerLocation(520);
-		//dashWorkflowSplitPane.setDividerLocation(0.7);
-		
-		// for the moment unused, stub for making the app multi-document on osx
-		//if (IJ.isMacOSX())
-		//	getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		return bottomPanel;
 	}
 
 
