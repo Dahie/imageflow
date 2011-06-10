@@ -87,19 +87,6 @@ public class Dashboard extends JPanel {
 		setLayout(null);
 	}
 	
-	/**
-	 * Removes the FormWidget of the given {@link UnitElement} from the Dashboard.
-	 * @param unit
-	 */
-	public void removeWidget(final UnitElement unit) {
-		if(dashs.containsKey(unit.getLabel())) {
-			final JPanel dash = dashs.get(unit.getLabel());
-			unit.setWidget(null);
-			dashs.remove(unit.getLabel());
-			this.remove(dash);
-		}
-	}
-	
 	/*
 	 * TODO OPTIMIZE move into helper class
 	 */
@@ -182,14 +169,48 @@ public class Dashboard extends JPanel {
 	 * @param unit
 	 */
 	public void removePreviewWidget(final UnitElement unit) {
-		final String dashKey = unit.getLabel()+"_preview";
-		if(dashs.containsKey(dashKey)) {
+		final String dashKey = unit.getNodeID()+"_preview";
+		if(hasWidget(dashKey)) {
 			final JPanel dash = dashs.get(dashKey);
 			unit.setPreviewWidget(null);
 			dashs.remove(dashKey);
 			this.remove(dash);
 		}
+	}
+	
+	/**
+	 * Removes the FormWidget of the given {@link UnitElement} from the Dashboard.
+	 * @param unit
+	 */
+	public void removeWidget(final UnitElement unit) {
+		if(hasWidget(unit.getNodeID())) {
+			final JPanel dash = dashs.get(unit.getNodeID()+"");
+			unit.setWidget(null);
+			dashs.remove(unit.getNodeID()+"");
+			this.remove(dash);
+		}
+	}
 
+	/**
+	 * Returns true if a PreviewWidget with the given unique dashKey was added to the Dashboard.
+	 * @param dashKey
+	 * @return
+	 */
+	public boolean hasPreviewWidget(final String dashKey) {
+		return dashs.containsKey(dashKey+"_preview");
+	}
+	
+	/**
+	 * Returns true if a Widget with the given unique dashKey was added to the Dashboard.
+	 * @param dashKey
+	 * @return
+	 */
+	public boolean hasWidget(final String dashKey) {
+		return dashs.containsKey(dashKey);
+	}
+	
+	public boolean hasWidget(final Integer dashKey) {
+		return dashs.containsKey(dashKey + "");
 	}
 	
 	/**
@@ -207,10 +228,10 @@ public class Dashboard extends JPanel {
 	 * @param position
 	 */
 	public void addWidget(final UnitElement unit, final Point position) {
-		if(!dashs.containsKey(unit.getLabel())) {
+		if(!hasWidget(unit.getNodeID())) {
 			final DashWidget dash = ParameterWidgetController.createWidgetFromUnit(unit);
 			dash.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-			dashs.put(unit.getLabel(), dash);
+			dashs.put(unit.getNodeID()+"", dash);
 			unit.setWidget(dash);
 			
 			dash.setBounds(position.x, position.y, dash.getPreferredSize().width, dash.getPreferredSize().height);
@@ -236,8 +257,8 @@ public class Dashboard extends JPanel {
 	 * @param position
 	 */
 	public void addPreviewWidget(final UnitElement unit, final Point position) {
-		final String dashKey = unit.getLabel()+"_preview";
-		if(!dashs.containsKey(dashKey)) {
+		final String dashKey = unit.getNodeID()+"_preview";
+		if(!hasWidget(dashKey)) {
 			final JPanel dash = ParameterWidgetController.createPreviewWidgetFromUnit(unit);
 			dash.setBounds(position.x, position.y, dash.getPreferredSize().width, dash.getPreferredSize().height);
 			dashs.put(dashKey, dash);

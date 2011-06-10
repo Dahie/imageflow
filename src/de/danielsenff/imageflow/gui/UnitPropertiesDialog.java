@@ -4,13 +4,13 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.JTextComponent;
@@ -90,11 +90,13 @@ public class UnitPropertiesDialog extends PropertiesDialog {
 				ImageFlowView.class, ImageFlow.getApplication().getMainView());
 		
 		
-		JButton addToDashboard = new JButton(actionMap.get("addToDashboard"));
+		JToggleButton addToDashboard = new JToggleButton(actionMap.get("togglePropertiesOnDashboard"));
 		addToDashboard.setPreferredSize(new Dimension(110, 20));
+		addToDashboard.setSelected(unit.hasWidget());
 		panel.add(addToDashboard);
 		
-		JButton addPreviewToDashboard = new JButton(actionMap.get("addOutputToDashboard"));
+		JToggleButton addPreviewToDashboard = new JToggleButton(actionMap.get("togglePreviewOnDashboard"));
+		addPreviewToDashboard.setSelected(unit.hasPreviewWidget());
 		addPreviewToDashboard.setPreferredSize(new Dimension(110, 20));
 		panel.add(addPreviewToDashboard);
 		addForm("", panel);
