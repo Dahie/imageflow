@@ -7,11 +7,11 @@
 	
 	<property name="bin.dir" location="${basedir}/bin" /> 
 	<property name="src.dir" location="${basedir}/src" /> 
-	<property name="build.dir" location="${basedir}/build" />
+	<property name="dist.dir" location="${basedir}/dist" />
 	<property name="packaging.dir" location="${src.dir}/packaging" />
 	<property name="lib.dir" location="${basedir}/lib" />
 	<property name="ij.path" location="${basedir}/lib/ij.jar" />
-	<property name="release.dir" location="${build.dir}/release/${project-name}" />
+	<property name="release.dir" location="${dist.dir}/release/${project-name}" />
 	<property name="units.dir" location="${basedir}/xml_units" />
 	<property name="icons.dir" location="${basedir}/xml_icons" />
 	<property name="doc.dir" location="${basedir}/doc/release" />
@@ -109,13 +109,13 @@
 	</target>
 	
 	<target name="zip_for_release" depends="create_run_jar">
-		<zip destfile="${build.dir}/Imageflow-${TODAY}.zip"> 
+		<zip destfile="${dist.dir}/Imageflow-${TODAY}.zip"> 
 			<fileset dir="${release.dir}/executable/"/>
 		</zip>
 	</target>
   
 	<target name="zip_plugin_for_release" depends="create_plugin_jar">
-		<zip destfile="${build.dir}/Imageflow-ijplugin-${TODAY}.zip"> 
+		<zip destfile="${dist.dir}/Imageflow-ijplugin-${TODAY}.zip"> 
 			<fileset dir="${release.dir}/plugin/"/>
 		</zip>
 	</target>

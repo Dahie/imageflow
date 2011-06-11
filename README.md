@@ -29,12 +29,12 @@ Compile the sources to executable jars by running the build-script.
 
     $ ant build
 
-The resulting build will be in "build/ImageFlow/", there are two differen jar variants: 
+The resulting build will be in "dist/release/", there are two differen jar variants: 
 
 1. in `executable` is the Standalone executable Jar
 2. in `plugin` is the All-In-One ImageJ Plugin Jar
 
-Both can be used as ImageJ Plugins, the latter is more compact.
+Both can be used as ImageJ plugins, the latter is more compact.
 
 ### Contribution
 
@@ -42,7 +42,7 @@ I welcome any feedback: ideas, use cases, bugs as well as code contribution. Jus
 
 ## More Information
 
-Please see the [wiki][wiki]
+Please see the [wiki][wiki] for technical documentation, structural explanations and project history
 
 ## Author
 Imageflow is written by 
