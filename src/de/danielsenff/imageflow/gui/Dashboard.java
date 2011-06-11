@@ -44,7 +44,6 @@ import org.jfree.text.TextBlockAnchor;
 import org.jfree.text.TextUtilities;
 import org.jfree.ui.HorizontalAlignment;
 
-import visualap.Node;
 
 import de.danielsenff.imageflow.controller.ParameterWidgetController;
 import de.danielsenff.imageflow.models.unit.UnitElement;

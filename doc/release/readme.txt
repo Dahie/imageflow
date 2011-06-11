@@ -1,6 +1,6 @@
 =================================================================================
 
-ImageFlow 1.3, April 2010, 
+ImageFlow 1.3, June 2010, 
 Contributors: 
 Daniel Senff (mail@danielsenff.de)
 Kai-Uwe Barthel (k.barthel@fhtw-berlin.de)
@@ -46,7 +46,7 @@ Releases notes
 Version 1.3: stable release
 Version 1.2: stable release
 Version 1.1: stable release
-Version 1.0: stable release
+Version 1.0: first stable release
 Version 0.9: is the first public beta. It works, but it is not yet stable.
 
 ----------------------------------------
