@@ -34,6 +34,7 @@ import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.controller.GraphControllerManager;
 import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.CommentNode;
@@ -51,23 +52,25 @@ public class InsertUnitMenu extends JMenu implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final GPanel graphPanel;
-	private GraphController graphController;
 	private UnitList units;
 	private Point location;
 
 	/**
 	 * 
 	 * @param gpanel
-	 * @param graphController 
 	 */
-	public InsertUnitMenu(final GPanel gpanel, GraphController graphController) {
+	public InsertUnitMenu(final GPanel gpanel) {
 		this("Insert", gpanel, new Point(75, 75));
-		this.graphController = graphController;
 	}
 
-	public InsertUnitMenu(final GPanel gpanel, GraphController graphController, Point location) {
+	/**
+	 * 
+	 * @param gpanel
+	 * @param graphController
+	 * @param location
+	 */
+	public InsertUnitMenu(final GPanel gpanel, Point location) {
 		this("Insert", gpanel, location);
-		this.graphController = graphController;
 	}
 	
 	/**
@@ -110,6 +113,10 @@ public class InsertUnitMenu extends JMenu implements ActionListener {
 			}
 		}
 	}
+	
+	public GraphController getGraphController() {
+		return GraphControllerManager.getInstance().getController();
+	}
 
 	public void actionPerformed(ActionEvent event) {
 		final JMenuItem source = (JMenuItem)(event.getSource());
@@ -117,6 +124,7 @@ public class InsertUnitMenu extends JMenu implements ActionListener {
 		final ImageFlowView ifView = ((ImageFlowView)ImageFlow.getApplication().getMainView());
 		Selection<Node> selections = graphPanel.getSelection();
 
+		/* TODO don't hardcode this ... */
 		if (action.equals("Comment")) {	
 			final CommentNode node = new CommentNode(new Point(location.x, location.y), "Newly added comment"); 
 			node.addModelListener(new NodeListener(graphPanel, ifView));
@@ -131,8 +139,7 @@ public class InsertUnitMenu extends JMenu implements ActionListener {
 		UnitDelegate unitDelegate = DelegatesController.getInstance().getDelegate(action);
 		if(unitDelegate != null) {
 			try {
-				Node node = graphController.addNode(unitDelegate, location);
-
+				Node node = getGraphController().addNode(unitDelegate, location);
 				selections.clear();
 				selections.add(node);
 				graphPanel.repaint();

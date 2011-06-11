@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
 
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.controller.GraphControllerManager;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
@@ -50,11 +51,9 @@ public class GraphPanelDropHandler implements DropTargetListener {
 
 	private GraphPanel gPanel;
 	private static final String URI_LIST_MIME_TYPE = "text/uri-list;class=java.lang.String";
-	private GraphController graphController;
 	
 	public GraphPanelDropHandler(final GraphPanel panel, GraphController graphController) {
 		this.gPanel = panel;
-		this.graphController = graphController;
 	}
 	
 	// mouse enters component
@@ -101,12 +100,12 @@ public class GraphPanelDropHandler implements DropTargetListener {
 
 					 event.dropComplete(true);
 				} else if (flavors[i].isFlavorSerializedObjectType()) {
-					String o = (String)transferable.getTransferData(flavors[i]);
+					String delegateName = (String)transferable.getTransferData(flavors[i]);
 					
-					UnitDelegate delegate = DelegatesController.getInstance().getDelegate( o);
+					UnitDelegate delegate = DelegatesController.getInstance().getDelegate(delegateName);
 					// this can return null if no unit by this name is found
 					if (delegate != null) {
-						this.graphController.addNode(delegate, point);
+						GraphControllerManager.getInstance().getController().addNode(delegate, point);
 					}
 					
 					event.dropComplete(true);

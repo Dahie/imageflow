@@ -49,7 +49,6 @@ public class DelegatesPanel extends JPanel {
 		final DelegatesController delegatesController = DelegatesController.getInstance();
 		final DefaultTreeModel delegatesModel = delegatesController.getDelegatesModel();
 
-
 		delegatesTree = new JTree(delegatesModel);
 		delegatesTree.setRootVisible(false);
 		delegatesTree.setToggleClickCount(1);

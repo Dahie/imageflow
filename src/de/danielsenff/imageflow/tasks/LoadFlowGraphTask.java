@@ -80,10 +80,4 @@ public class LoadFlowGraphTask extends LoadURLTask<GraphController, Void> {
         }
     }
     
-    @Override
-    protected void succeeded(GraphController graphController) {
-    	this.view.setGraphController(graphController);
-    	super.succeeded(graphController);
-    }
-    
 }

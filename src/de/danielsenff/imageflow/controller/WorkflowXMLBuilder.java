@@ -150,8 +150,10 @@ public class WorkflowXMLBuilder {
 		int id = Integer.parseInt(actualWidgetElement.getChild("UnitID").getValue());
 		Point position = new Point(xPos, yPos);
 		UnitElement unit = newNodes.get(id);
-		if (actualWidgetElement.getName().equalsIgnoreCase("PreviewWidget"))
+		if (actualWidgetElement.getName().equalsIgnoreCase("PreviewWidget")) {
+			unit.setDisplaySilent(true);
 			graphController.addPreviewWidget(unit, position);
+		}
 		else if (actualWidgetElement.getName().equalsIgnoreCase("Widget"))
 			graphController.addWidget(unit, position);
 	}

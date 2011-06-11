@@ -28,6 +28,7 @@ import javax.swing.tree.TreePath;
 
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.controller.GraphControllerManager;
 import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.UnitElement;
@@ -41,14 +42,12 @@ import de.danielsenff.imageflow.models.unit.UnitList;
 public class DelegatesTreeListener implements MouseListener, KeyListener {
 
 	private ImageFlowView ifView;
-	private GraphController graphController;
 	
 	/**
 	 * @param ifView
 	 */
 	public DelegatesTreeListener(final ImageFlowView ifView, GraphController graphController) {
 		this.ifView = ifView;
-		this.graphController = graphController;
 	}
 	
 	private UnitList getNodes() {
@@ -72,7 +71,7 @@ public class DelegatesTreeListener implements MouseListener, KeyListener {
 			if(selRow != -1 && selPath.getLastPathComponent() instanceof UnitDelegate) {
 				final UnitDelegate delegate = ((UnitDelegate)selPath.getLastPathComponent());
 				Point point = UnitDelegate.POINT;
-				this.graphController.addNode(delegate, point);
+				GraphControllerManager.getInstance().getController().addNode(delegate, point);
 			}
 		}
 	}
@@ -112,7 +111,7 @@ public class DelegatesTreeListener implements MouseListener, KeyListener {
 						final UnitDelegate delegate = ((UnitDelegate)selPaths[i].getLastPathComponent());
 						Point point = new Point(insertPoint.x + realUnitCount * GraphPanel.GRIDSIZE,
 								insertPoint.y + realUnitCount * GraphPanel.GRIDSIZE);
-						graphController.addNode(delegate, point);
+						GraphControllerManager.getInstance().getController().addNode(delegate, point);
 						
 						
 						realUnitCount++;

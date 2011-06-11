@@ -33,6 +33,7 @@ import visualap.Selection;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.controller.GraphControllerManager;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
@@ -45,17 +46,12 @@ import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 public class GPanelPopup implements GPanelListener {
 
 	protected GPanel activePanel;
-	protected GraphController graphController;
 
 
 
 	/**
-	 * @param availableUnits
-	 * @param graphController 
-	 * @param copyL
 	 */
-	public GPanelPopup(final GraphController graphController) {
-		this.graphController = graphController;
+	public GPanelPopup() {
 	}
 
 	/**
@@ -80,8 +76,8 @@ public class GPanelPopup implements GPanelListener {
 			JPopupMenu popup = new JPopupMenu();
 			Selection<Node> selections = activePanel.getSelection();
 			if (selections.isEmpty()) { 
-				popup.add(new InsertUnitMenu(activePanel, graphController, savedPoint));
-				if (!graphController.getCopyNodesList().isEmpty()) 
+				popup.add(new InsertUnitMenu(activePanel, savedPoint));
+				if (!getGraphController().getCopyNodesList().isEmpty()) 
 					popup.add(getAction("paste"));
 			} else {
 				popup.add(getAction("showUnitParameters"));
@@ -111,6 +107,10 @@ public class GPanelPopup implements GPanelListener {
 			}
 		}
 		return false;
+	}
+	
+	public GraphController getGraphController() {
+		return GraphControllerManager.getInstance().getController();
 	}
 
 	/**

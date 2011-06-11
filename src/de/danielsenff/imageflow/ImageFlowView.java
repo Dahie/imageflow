@@ -25,7 +25,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.Point;
 import java.awt.ScrollPane;
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +43,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -69,6 +69,7 @@ import visualap.Node;
 import visualap.Selection;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
+import de.danielsenff.imageflow.controller.GraphControllerManager;
 import de.danielsenff.imageflow.gui.Dashboard;
 import de.danielsenff.imageflow.gui.DelegatesPanel;
 import de.danielsenff.imageflow.gui.DelegatesTreeListener;
@@ -165,6 +166,7 @@ public class ImageFlowView extends FrameView {
 		super(app);
 		
 		this.graphController = new GraphController();
+		GraphControllerManager.getInstance().setController(this.graphController);
 		
 		if (IJ.isMacOSX()) {
 			System.setProperty("apple.laf.useScreenMenuBar", "true"); 
@@ -295,7 +297,7 @@ public class ImageFlowView extends FrameView {
 		debugMenu.add(getAction("exampleFlow2"));
 		debugMenu.add(getAction("exampleFlow3"));
 		
-		JMenu insertMenu = new InsertUnitMenu(graphPanel, graphController);
+		JMenu insertMenu = new InsertUnitMenu(graphPanel);
 		
 		/*JMenu windowMenu = new JMenu(getResourceString("window.menu"));
 		windowMenu.add(getAction("minimize"));*/
@@ -399,7 +401,7 @@ public class ImageFlowView extends FrameView {
 
 	private ScrollPane initWorkspacePanel(ResourceMap resourceMap) {
 		//working area aka graphpanel
-		GPanelPopup popup = new GPanelPopup(getGraphController());
+		GPanelPopup popup = new GPanelPopup();
 		
 		graphPanel = new GraphPanel(popup, graphController);
 		resourceMap.injectComponent(graphPanel);
@@ -496,15 +498,16 @@ public class ImageFlowView extends FrameView {
 	}
 	
 	/**
-	 * @param graphController
+	 * @param newGraphController
 	 */
-	public void setGraphController(final GraphController graphController) {
+	public void setGraphController(final GraphController newGraphController) {
 		GraphController oldValue = this.graphController;
-		this.graphController = graphController;
+		this.graphController = newGraphController;
+		GraphControllerManager.getInstance().setController(graphController);
 		graphPanel.setGraphController(this.graphController);
 		registerModelListeners();
 		
-		firePropertyChange("graphController", oldValue, graphController);
+		firePropertyChange("graphController", oldValue, newGraphController);
 	}
 	
 	
@@ -1066,7 +1069,7 @@ public class ImageFlowView extends FrameView {
 		final Selection<Node> selectedNodes = getSelections();
 		final ArrayList<Node> copyUnitsList = graphController.getCopyNodesList();
 		
-		// TODO think abouut dashboards!
+		// TODO think about dashboards!
 		
 		if (selectedNodes.size() > 0) {
 			// il problema java.util.ConcurrentModificationException � stato risolto introducendo la lista garbage
@@ -1355,6 +1358,7 @@ public class ImageFlowView extends FrameView {
      * Opens a dialog with the list of {@link UnitElement}s in the workflow.
      */
     @Action public void debugPrintNodes() {
+    	System.out.println(graphController.toString());
     	showSimpleListOfUnits(getNodes());
     }
     
@@ -1372,7 +1376,6 @@ public class ImageFlowView extends FrameView {
 			}
     	}
     	final JList list = new JList(lm);
-    	
 		dialog.add(new ScrollPane().add(list));
 		dialog.pack();
 		dialog.setVisible(true);
@@ -1405,7 +1408,7 @@ public class ImageFlowView extends FrameView {
     @Action public void debugDrawClonedWorkflow() {
     	final JDialog dialog = new JDialog();
     	
-    	final GPanelPopup popup = new GPanelPopup(graphController);
+    	final GPanelPopup popup = new GPanelPopup();
     	final GraphPanel gpanel = new GraphPanel(popup, graphController);
     	popup.setActivePanel(gpanel);
     	final UnitList cloneUnitList = getNodes().clone();
@@ -1484,7 +1487,7 @@ public class ImageFlowView extends FrameView {
 //    		group.showGroupWindow();
     		dialog.setTitle(group.getLabel());
     		
-    		final GPanelPopup popup = new GPanelPopup( graphController);
+    		final GPanelPopup popup = new GPanelPopup();
         	final GraphPanel gpanel = new GraphPanel(popup, graphController);
     		gpanel.setNodeL(group.getNodes());
     		popup.setActivePanel(gpanel);

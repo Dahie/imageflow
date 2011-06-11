@@ -31,7 +31,6 @@ import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
 
 
-
 /**
  * Abstract Task for loading files.
  * @author tomka
@@ -69,16 +68,17 @@ public abstract class LoadURLTask<T, V> extends Task<T, V> {
 	 * Called on the EDT if doInBackground completes without
 	 * error and this Task isn't cancelled.  We update the
 	 * GUI as well as the file and modified properties here.
-	 * @param fileContents
+	 * @param graphController
 	 */
 	@Override
-	protected void succeeded(final T fileContents) {
-		view.setFile(new File(this.url.getFile()));
-		view.setGraphController((GraphController)fileContents);
+	protected void succeeded(final T graphController) {
+		this.view.setFile(new File(this.url.getFile()));
+		this.view.setGraphController((GraphController)graphController);
+		this.view.setModified(false);
 		ImageFlowView.getProgressBar().setIndeterminate(false);
 		ImageFlowView.getProgressBar().setVisible(false);
 		//textArea.setText(fileContents);
-		view.setModified(false);
+    	super.succeeded(graphController);
 	}
 
 	/**
