@@ -43,7 +43,6 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -57,7 +56,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileFilter;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
@@ -101,6 +99,7 @@ import de.danielsenff.imageflow.tasks.ImportGraphTask;
 import de.danielsenff.imageflow.tasks.LoadFlowGraphTask;
 import de.danielsenff.imageflow.tasks.RunMacroTask;
 import de.danielsenff.imageflow.tasks.SaveFlowGraphTask;
+import de.danielsenff.imageflow.utils.DescriptiveFileFilter;
 
 
 
@@ -1572,43 +1571,6 @@ public class ImageFlowView extends FrameView {
         
         
     }
-
-
-    /** This is a substitute for FileNameExtensionFilter, which is
-     * only available on Java SE 6.
-     */
-    private static class DescriptiveFileFilter extends FileFilter {
-
-        private final String description;
-        private final String extension; 
-
-        public DescriptiveFileFilter(String extension, String description) {
-        	this.extension = extension;
-        	this.description = extension + " - " +description;
-        }
-
-        @Override
-        public boolean accept(File f) {
-            if (f.isDirectory()) {
-                return true;
-            }
-            String fileName = f.getName();
-            int i = fileName.lastIndexOf('.');
-            if ((i > 0) && (i < (fileName.length() - 1))) {
-                String fileExt = fileName.substring(i + 1);
-                if (extension.equalsIgnoreCase(fileExt)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        @Override
-        public String getDescription() {
-            return description;
-        }
-    }
-
 
 	public Dashboard getDashboard() {
 		return this.dashboardPanel;
