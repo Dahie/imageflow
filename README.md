@@ -1,4 +1,4 @@
-# Imageflow
+# ImageFlow
 
 An application proving an graphical node-based user interface for creating [ImageJ][imagej] workflows, for Macro creation and image editing in general.
 
@@ -18,9 +18,9 @@ Feedback of any kind is well appreciated.
 
 ### Run from compiled Binaries
 
-Delete the previous version, download Imageflow-binaries and extract somewhere on your hard drive. Start the jar to run the program.
+Delete the previous version, download ImageFlow-binaries and extract somewhere on your hard drive. Start the jar to run the program.
 
-To start Imageflow from ImageJ you have to move "ImageFlow"-folder into ImageJ's plugin directory. After restarting ImageJ you will find a menu-item in the Plugins-Menu to start the plugin.
+To start ImageFlow from ImageJ you have to move "ImageFlow"-folder into ImageJ's plugin directory. After restarting ImageJ you will find a menu-item in the Plugins-Menu to start the plugin.
 
 ### Compile from Sources
 
@@ -44,13 +44,17 @@ I welcome any feedback: ideas, use cases, bugs as well as code contribution. Jus
 
 Please see the [wiki][wiki] for technical documentation, structural explanations and project history
 
-## Author
-Imageflow is written by 
+## Contributions
+
+ImageFlow is written by 
 [Daniel Senff][dahie].<br>
 Kai Uwe Barthel<br>
 Friedrich Maiwald
 
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=Dahie&url=https://github.com/dahie/imageflow&title=ImageFlow&language=en_GB&tags=github&category=software)
+
 ## License
+
 Released under a [Gnu General Public License v2][license].
 
 [dahie]: http://github.com/Dahie
