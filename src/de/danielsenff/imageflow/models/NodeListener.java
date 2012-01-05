@@ -18,9 +18,9 @@
 package de.danielsenff.imageflow.models;
 
 import visualap.GPanel;
-import visualap.Node;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.gui.GraphPanel;
+import de.danielsenff.imageflow.models.unit.Node;
 
 /**
  * NodeModelListener is an implementation of {@link ModelListener}

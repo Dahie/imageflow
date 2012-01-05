@@ -29,7 +29,6 @@ import javax.swing.JOptionPane;
 import javax.swing.event.UndoableEditListener;
 
 import visualap.GPanel;
-import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.gui.Dashboard;
@@ -50,6 +49,7 @@ import de.danielsenff.imageflow.models.parameter.ParamChangeListener;
 import de.danielsenff.imageflow.models.parameter.Parameter;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
+import de.danielsenff.imageflow.models.unit.Node;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;

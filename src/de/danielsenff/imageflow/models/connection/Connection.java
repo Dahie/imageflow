@@ -17,8 +17,8 @@
  */
 package de.danielsenff.imageflow.models.connection;
 
-import visualap.Node;
 import de.danielsenff.imageflow.models.Lockable;
+import de.danielsenff.imageflow.models.unit.Node;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 /**

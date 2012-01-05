@@ -32,7 +32,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
-import visualap.Node;
 import de.danielsenff.imageflow.gui.BICanvas;
 import de.danielsenff.imageflow.gui.DashWidget;
 import de.danielsenff.imageflow.gui.FormPanel;
@@ -44,6 +43,7 @@ import de.danielsenff.imageflow.models.connection.OutputObjectChangeListener;
 import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.parameter.Parameter;
+import de.danielsenff.imageflow.models.unit.Node;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 // TODO rename

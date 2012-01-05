@@ -28,13 +28,13 @@ import javax.swing.JPopupMenu;
 
 import visualap.GPanel;
 import visualap.GPanelListener;
-import visualap.Node;
-import visualap.Selection;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.controller.GraphControllerManager;
+import de.danielsenff.imageflow.models.Selection;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
+import de.danielsenff.imageflow.models.unit.Node;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
 

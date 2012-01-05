@@ -20,8 +20,8 @@ package de.danielsenff.imageflow.models;
 import java.util.Collection;
 import java.util.HashSet;
 
-import visualap.Node;
-import visualap.Selection;
+import de.danielsenff.imageflow.models.unit.Node;
+
 
 
 /**

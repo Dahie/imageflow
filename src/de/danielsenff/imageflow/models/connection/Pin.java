@@ -18,10 +18,10 @@
 package de.danielsenff.imageflow.models.connection;
 import java.awt.Point;
 
-import visualap.Node;
 
 import de.danielsenff.imageflow.models.Lockable;
 import de.danielsenff.imageflow.models.datatype.DataType;
+import de.danielsenff.imageflow.models.unit.Node;
 
 /**
  * Pin is the connecting point on a UnitElement between Connections.

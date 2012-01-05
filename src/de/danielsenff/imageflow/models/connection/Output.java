@@ -23,10 +23,10 @@ import java.awt.Point;
 import java.util.Collection;
 import java.util.Vector;
 
-import visualap.Node;
 import de.danielsenff.imageflow.models.datatype.DataType;
 import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.parameter.ParamChangeListener;
+import de.danielsenff.imageflow.models.unit.Node;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 
 

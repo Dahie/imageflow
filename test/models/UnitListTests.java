@@ -6,9 +6,9 @@ package models;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import visualap.Node;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
+import de.danielsenff.imageflow.models.unit.Node;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
 

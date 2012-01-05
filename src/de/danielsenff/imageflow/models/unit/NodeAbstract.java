@@ -1,7 +1,7 @@
 /**
  * 
  */
-package visualap;
+package de.danielsenff.imageflow.models.unit;
 
 import java.awt.Point;
 
@@ -12,7 +12,6 @@ import java.awt.Point;
  */
 public abstract class NodeAbstract extends Node {
 	protected Object obj=null;
-	protected long serialUID;
 	protected String version="0.0"; // default value is 0.0
 
 	
@@ -47,14 +46,6 @@ public abstract class NodeAbstract extends Node {
 	public void setObject(Object obj) {
 		this.obj = obj;
 	};
-
-	public long getSerialUID() {
-		return serialUID;
-	}
-
-	public void setSerialUID(long aSerialUID) {
-		serialUID = aSerialUID;
-	}
 
 	public String getVersion() {
 		return version;

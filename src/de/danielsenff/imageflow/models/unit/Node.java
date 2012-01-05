@@ -21,7 +21,7 @@ This class provides support for several features: blabla....
 
 javalc6
 */
-package visualap;
+package de.danielsenff.imageflow.models.unit;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;

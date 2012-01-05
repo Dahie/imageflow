@@ -20,7 +20,6 @@ package de.danielsenff.imageflow.imagej;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import visualap.Node;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
@@ -28,6 +27,7 @@ import de.danielsenff.imageflow.models.datatype.DataTypeFactory;
 import de.danielsenff.imageflow.models.datatype.ImageDataType;
 import de.danielsenff.imageflow.models.unit.ForGroupUnitElement;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
+import de.danielsenff.imageflow.models.unit.Node;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
 import de.danielsenff.imageflow.models.unit.UnitElement.Type;

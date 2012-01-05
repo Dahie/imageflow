@@ -17,10 +17,9 @@ This class supports a list of selectable items
 
 javalc6
 */
-package visualap;
+package de.danielsenff.imageflow.models;
 import java.util.ArrayList;
 
-import de.danielsenff.imageflow.models.Selectable;
 
 
 

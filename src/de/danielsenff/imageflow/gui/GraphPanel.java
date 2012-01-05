@@ -64,7 +64,6 @@ import org.jfree.ui.HorizontalAlignment;
 
 import visualap.GPanel;
 import visualap.GPanelListener;
-import visualap.Node;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.NodeList;
@@ -76,6 +75,7 @@ import de.danielsenff.imageflow.models.connection.Pin;
 import de.danielsenff.imageflow.models.delegates.Delegate;
 import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.unit.CommentNode;
+import de.danielsenff.imageflow.models.unit.Node;
 import de.danielsenff.imageflow.models.unit.SourceUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitFactory;

@@ -28,16 +28,16 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 
 import visualap.GPanel;
-import visualap.Node;
-import visualap.Selection;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.controller.GraphControllerManager;
 import de.danielsenff.imageflow.models.NodeListener;
+import de.danielsenff.imageflow.models.Selection;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.unit.CommentNode;
+import de.danielsenff.imageflow.models.unit.Node;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
 /**

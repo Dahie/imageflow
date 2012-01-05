@@ -44,11 +44,13 @@ import java.util.Collection;
 import javax.swing.JPanel;
 
 import de.danielsenff.imageflow.models.NodeList;
+import de.danielsenff.imageflow.models.Selection;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.Pin;
+import de.danielsenff.imageflow.models.unit.Node;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
 /**

@@ -21,7 +21,8 @@ package de.danielsenff.imageflow.models;
 import java.util.HashMap;
 import java.util.Vector;
 
-import visualap.Node;
+import de.danielsenff.imageflow.models.unit.Node;
+
 
 interface Changeable {
 	public void setChanged(boolean status);

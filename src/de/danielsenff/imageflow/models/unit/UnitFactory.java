@@ -23,7 +23,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.ExecuteWorkflowListener;

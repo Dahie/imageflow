@@ -23,7 +23,6 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import visualap.Node;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.controller.FlowRunner;
 import de.danielsenff.imageflow.controller.GraphController;
@@ -34,6 +33,7 @@ import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.ForGroupUnitElement;
 import de.danielsenff.imageflow.models.unit.GroupUnitElement;
+import de.danielsenff.imageflow.models.unit.Node;
 import de.danielsenff.imageflow.models.unit.SourceUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
 import de.danielsenff.imageflow.models.unit.UnitList;
