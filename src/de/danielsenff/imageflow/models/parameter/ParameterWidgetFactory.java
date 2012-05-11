@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -306,10 +307,8 @@ public class ParameterWidgetFactory {
 			}
 		});
 		parameter.addParamChangeListener(new SliderParamChangeListener(slider));
-		component.addKeyListener(new KeyListener() {
+		component.addKeyListener(new KeyAdapter() {
 
-			public void keyTyped(final KeyEvent e) {}
-			public void keyReleased(final KeyEvent e) {}
 			public void keyPressed(final KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 					double oldValue = parameter.getValue();
@@ -324,6 +323,7 @@ public class ParameterWidgetFactory {
 					}
 				}
 			}
+			
 		});
 
 		panel.add(new JLabel(Double.toString(min)));
@@ -384,10 +384,8 @@ public class ParameterWidgetFactory {
 		final JTextField component = new JTextField(parameter.getValue().toString());
 		component.setEnabled(!parameter.isReadOnly());
 		parameter.addParamChangeListener(new TextfieldParamChangeListener(component));
-		component.addKeyListener(new KeyListener() {
+		component.addKeyListener(new KeyAdapter() {
 
-			public void keyTyped(final KeyEvent e) {}
-			public void keyReleased(final KeyEvent e) {}
 			public void keyPressed(final KeyEvent e) {
 				try {
 					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
