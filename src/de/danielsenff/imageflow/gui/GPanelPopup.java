@@ -27,7 +27,6 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
 
 import visualap.GPanel;
-import visualap.GPanelListener;
 import de.danielsenff.imageflow.ImageFlow;
 import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.controller.GraphController;
@@ -43,10 +42,9 @@ import de.danielsenff.imageflow.models.unit.UnitModelComponent.Size;
  * @author Daniel Senff
  *
  */
-public class GPanelPopup implements GPanelListener {
+public class GPanelPopup {
 
 	protected GPanel activePanel;
-
 
 
 	/**
@@ -161,9 +159,6 @@ public class GPanelPopup implements GPanelListener {
 			}
 		}
 	}
-
-	
-
 	
 	private Action getAction(String actionName) {
 		ActionMap actionMap = ImageFlow.getApplication().getContext().getActionMap(

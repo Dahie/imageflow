@@ -43,6 +43,7 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
+import de.danielsenff.imageflow.gui.GPanelPopup;
 import de.danielsenff.imageflow.models.NodeList;
 import de.danielsenff.imageflow.models.Selection;
 import de.danielsenff.imageflow.models.connection.Connection;
@@ -60,7 +61,7 @@ import de.danielsenff.imageflow.models.unit.UnitList;
  */
 public class GPanel extends JPanel implements Printable, MouseListener, MouseMotionListener  {
 
-	protected GPanelListener parentPanel;
+	protected GPanelPopup parentPanel;
 
 	protected Point pick = null;
 	protected Pin drawEdge;
@@ -81,7 +82,7 @@ public class GPanel extends JPanel implements Printable, MouseListener, MouseMot
 			BasicStroke.JOIN_MITER, 
 			10.0f, dash1, 0.0f);
 
-	public GPanel(GPanelListener parent) {
+	public GPanel(GPanelPopup parent) {
 		this.parentPanel = parent;
 		addMouseListener(this);
 		addMouseMotionListener(this);

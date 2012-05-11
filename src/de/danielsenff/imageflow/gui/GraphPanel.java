@@ -28,43 +28,22 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
-import org.jfree.text.TextBlock;
-import org.jfree.text.TextBlockAnchor;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.HorizontalAlignment;
 
 import visualap.GPanel;
-import visualap.GPanelListener;
-import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.NodeList;
 import de.danielsenff.imageflow.models.SelectionList;
@@ -72,13 +51,9 @@ import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.Input;
 import de.danielsenff.imageflow.models.connection.Output;
 import de.danielsenff.imageflow.models.connection.Pin;
-import de.danielsenff.imageflow.models.delegates.Delegate;
-import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.unit.CommentNode;
 import de.danielsenff.imageflow.models.unit.Node;
-import de.danielsenff.imageflow.models.unit.SourceUnitElement;
 import de.danielsenff.imageflow.models.unit.UnitElement;
-import de.danielsenff.imageflow.models.unit.UnitFactory;
 import de.danielsenff.imageflow.models.unit.UnitList;
 
 /**
@@ -117,7 +92,7 @@ public class GraphPanel extends GPanel {
 	 * @param panelListener
 	 * @param graphController
 	 */
-	public GraphPanel(final GPanelListener panelListener, final GraphController graphController) {
+	public GraphPanel(final GPanelPopup panelListener, final GraphController graphController) {
 		super(panelListener);
 		setGraphController(graphController);
 
