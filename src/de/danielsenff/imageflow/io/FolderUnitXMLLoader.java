@@ -15,85 +15,104 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package de.danielsenff.imageflow.controller;
+package de.danielsenff.imageflow.io;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import javax.swing.tree.MutableTreeNode;
 
+import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.delegates.UnitMutableTreeNode;
 
 /**
- * XMLLoader to load Unit-Definitions from within the launchable jar. 
+ * Read Unit-XML from hard disc.
  * @author Daniel Senff
  *
  */
-public class JarUnitXMLLoader extends BasicUnitXMLLoader {
-
-	public JarUnitXMLLoader() {
+public class FolderUnitXMLLoader extends BasicUnitXMLLoader {
+	
+	public FolderUnitXMLLoader() {
 		super();
 	}
-	
-	/**
-	 * Reads contents of a jar file and manages the traversal of the file tree.
-	 * @param node 
-	 * @param url 
-	 * @throws MalformedURLException 
-	 */
-	public void readDelegates(UnitMutableTreeNode node, URL url) throws MalformedURLException {
-		
-		// strip out the jar file
-		String jarPath = url.getPath().substring(5, url.getPath().indexOf("!"));
+
+	public void readDelegates(final UnitMutableTreeNode node, final URL url)
+	throws MalformedURLException {
+		File folder;
 		try {
-			JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
-			// get _all_ entries in jar
-			Enumeration<JarEntry> entries = jar.entries();
+			folder = new File(url.toURI());
+		} catch (final URISyntaxException e) {
+			folder = new File(url.getPath());
+		}
 
+		try {
 			// get all relevant files
-//			Set<String> relevantXmlFiles = new HashSet<String>();
-			retrieveRelevantXMLPaths(entries, relevantXmlFiles);
-
-			// populate the menu
+			retrieveRelevantXMLPaths(makeEnumeration(folder.listFiles()), relevantXmlFiles);
+		
 			String[] paths = sortPaths(relevantXmlFiles);
-
+	
 			for (String unitPath : paths) {
 				reflectUnitsInMenu(getEntries(), node, unitPath, "", url);
 			}
-		}
-		catch (java.io.UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		catch (java.io.IOException e) {
+			
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	protected void retrieveRelevantXMLPaths(Enumeration entries, Set<String> relevantXmlFiles) {
-		while (entries.hasMoreElements()) {
-			JarEntry entry = (JarEntry) entries.nextElement();
-			String absoluteName = entry.getName();
-			if (absoluteName.startsWith(DelegatesController.getUnitFolderName())) { // filter specified path
-				String fileName = absoluteName.substring(DelegatesController.getUnitFolderName().length());
+	protected void retrieveRelevantXMLPaths(Enumeration files, Set<String> relevantXmlFiles) throws IOException {
+		while (files.hasMoreElements()) {
+			File file = (File) files.nextElement();
 
-				if (fileName.startsWith(".")) // ignore hidden files and folders
-					continue;
+			if(file.isDirectory()
+					&& !file.isHidden()
+					&& !file.getName().startsWith(".")) {
 
-				if (fileName.endsWith("/")) // ignore pure folder entries
-					continue;
+				retrieveRelevantXMLPaths(makeEnumeration(file.listFiles()), relevantXmlFiles);
 
+			} else if (file.isFile()
+					&& isXML(file)
+					&& !file.getName().startsWith(".")) {
+				String resourceBase = DelegatesController.getAbsolutePathToUnitFolder();
+				String fileName = file.getAbsolutePath().substring(resourceBase.length());
 				relevantXmlFiles.add(fileName);
 			}
 		}
+
 	}
 
+	/**
+	 * Simple conversion from Object-Array to Enumeration.
+	 * @param obj
+	 * @return
+	 */
+	static private Enumeration makeEnumeration(final Object obj) {
+		Class<? extends Object> type = obj.getClass();
+		if (!type.isArray()) {
+			throw new IllegalArgumentException(obj.getClass().toString());
+		} else {
+			return (new Enumeration() {
+				int size = Array.getLength(obj);
+				int cursor;
+
+				public boolean hasMoreElements() {
+					return (cursor < size);
+				}
+
+				public Object nextElement() {
+					return Array.get(obj, cursor++);
+				}
+			});
+		}
+	}
 
 	/**
 	 * Goes through a given resource and creates menu and tree items when necessary.
@@ -123,7 +142,9 @@ public class JarUnitXMLLoader extends BasicUnitXMLLoader {
 				return;
 
 			try {
-				String xmlPath = "/" + DelegatesController.getUnitFolderName() + basePath + resource;
+				String xmlPath = basePath + resource;
+				// FIXME  when I remove this printout, the SaveAs unit is not found in Linux... #sigh
+				System.out.println(xmlPath);
 				URL fileURL = new URL(url, xmlPath);
 
 				if (basePath.length() > 1) {
@@ -143,5 +164,13 @@ public class JarUnitXMLLoader extends BasicUnitXMLLoader {
 		}
 	}
 
-	
+	/**
+	 * Returns true if the checked file file has the ,xml-extension.
+	 * @param file
+	 * @return
+	 */
+	private boolean isXML(final File file) {
+		return file.getName().toLowerCase().contains(".xml");
+	}
+
 }

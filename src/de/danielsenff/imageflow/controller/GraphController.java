@@ -34,6 +34,7 @@ import de.danielsenff.imageflow.ImageFlowView;
 import de.danielsenff.imageflow.gui.Dashboard;
 import de.danielsenff.imageflow.gui.GraphPanel;
 import de.danielsenff.imageflow.imagej.MacroFlowRunner;
+import de.danielsenff.imageflow.io.WorkflowXMLBuilder;
 import de.danielsenff.imageflow.models.Model;
 import de.danielsenff.imageflow.models.NodeListener;
 import de.danielsenff.imageflow.models.SelectionList;

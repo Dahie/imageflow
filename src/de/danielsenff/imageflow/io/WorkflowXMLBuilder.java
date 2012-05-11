@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package de.danielsenff.imageflow.controller;
+package de.danielsenff.imageflow.io;
 
 import java.awt.Point;
 import java.io.File;
@@ -39,6 +39,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.controller.GraphController;
 import de.danielsenff.imageflow.models.MacroElement;
 import de.danielsenff.imageflow.models.connection.Connection;
 import de.danielsenff.imageflow.models.connection.ConnectionList;

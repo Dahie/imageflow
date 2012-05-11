@@ -1,5 +1,10 @@
 package de.danielsenff.imageflow.controller;
 
+/**
+ * Helps managing multiple opened {@link GraphController}s.
+ * @author danielsenff
+ *
+ */
 public class GraphControllerManager {
 
 	private static GraphControllerManager manager;

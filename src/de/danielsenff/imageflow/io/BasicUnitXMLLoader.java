@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package de.danielsenff.imageflow.controller;
+package de.danielsenff.imageflow.io;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Set;
 import java.util.zip.DataFormatException;
 
@@ -35,6 +36,7 @@ import javax.swing.tree.MutableTreeNode;
 import org.jdom.JDOMException;
 
 import de.danielsenff.imageflow.ImageFlow;
+import de.danielsenff.imageflow.controller.DelegatesController;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.delegates.UnitDescription;
 import de.danielsenff.imageflow.models.delegates.UnitMutableTreeNode;
@@ -47,10 +49,10 @@ import de.danielsenff.imageflow.models.delegates.UnitMutableTreeNode;
 public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 
 	protected Set<String> relevantXmlFiles;
-	//protected Dictionary<String, UnitDelegateInfo> unitEntries;
+	protected Dictionary<String, UnitDelegateInfo> unitEntries;
 
 	public BasicUnitXMLLoader() {
-		//this.unitEntries = new Hashtable<String, UnitDelegateInfo>();
+		this.unitEntries = new Hashtable<String, UnitDelegateInfo>();
 		this.relevantXmlFiles = new HashSet<String>();
 	}
 	
@@ -132,7 +134,7 @@ public abstract class BasicUnitXMLLoader implements UnitDelegateLoader {
 	}
 
 	public Dictionary<String, UnitDelegateInfo> getEntries() {
-		return DelegatesController.getInstance().getUnitEntries();
+		return this.unitEntries;
 	}
 	
 	protected abstract void retrieveRelevantXMLPaths(Enumeration entries,

@@ -21,16 +21,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultTreeModel;
 
 import de.danielsenff.imageflow.ImageFlow;
-import de.danielsenff.imageflow.controller.BasicUnitXMLLoader.UnitDelegateInfo;
+import de.danielsenff.imageflow.io.UnitDelegateLoader;
+import de.danielsenff.imageflow.io.UnitXMLLoaderFactory;
 import de.danielsenff.imageflow.models.delegates.Delegate;
 import de.danielsenff.imageflow.models.delegates.UnitDelegate;
 import de.danielsenff.imageflow.models.delegates.UnitMutableTreeNode;
@@ -73,7 +72,6 @@ public class DelegatesController {
 	 */
 	protected HashMap<String, Delegate> delegatesMapByPath;
 	protected UnitMutableTreeNode top;
-	private Hashtable<String, UnitDelegateInfo> unitEntries;
 	
 	
 	/**
@@ -85,7 +83,6 @@ public class DelegatesController {
 		this.delegatesMapByName = new HashMap<String, Delegate>();
 		this.delegatesMapByPath = new HashMap<String, Delegate>();
 		this.delegateNames = new HashSet<String>();
-		this.unitEntries = new Hashtable<String, UnitDelegateInfo>();
 		
 		this.top = new UnitMutableTreeNode("Insert unit");
 		this.delegatesTreeModel = new DefaultTreeModel(top);
@@ -232,9 +229,9 @@ public class DelegatesController {
 
 	}
 
-	public Dictionary<String, UnitDelegateInfo> getUnitEntries() {
-		return this.unitEntries;
-	}
+//	public Dictionary<String, UnitDelegateInfo> getUnitEntries() {
+//		return this.unitEntries;
+//	}
 
 	
 	/**
