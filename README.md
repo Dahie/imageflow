@@ -29,7 +29,7 @@ Compile the sources to executable jars by running the build-script.
 
     $ ant build
 
-The resulting build will be in "dist/release/", there are two differen jar variants: 
+The resulting build will be in "dist/release/", there are two different jar variants: 
 
 1. in `executable` is the Standalone executable Jar
 2. in `plugin` is the All-In-One ImageJ Plugin Jar
@@ -55,7 +55,7 @@ Friedrich Maiwald
 
 ## License
 
-Released under a [Gnu General Public License v2][license].
+Released under a [GNU General Public License v2][license].
 
 [dahie]: http://github.com/Dahie
 [imagej]: http://rsb.info.nih.gov/ij/
