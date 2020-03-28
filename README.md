@@ -56,5 +56,5 @@ Released under a [Gnu General Public License v2][license].
 [dahie]: http://github.com/Dahie
 [imagej]: http://rsb.info.nih.gov/ij/
 [github]: http://www.github.com/Dahie/imageflow
-[wiki]: http://wiki.github.com/Dahie/imageflow
+[wiki]: https://github.com/Dahie/imageflow/wiki
 [license]: http://github.com/Dahie/imageflow/blob/master/LICENSE.md
